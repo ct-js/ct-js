@@ -2,7 +2,13 @@
   "notes": "***empty***",
   "libs": {
     "place": {},
-    "keyboard": {}
+    "keyboard": {},
+    "akatemplate": {
+      "[object Object]": "Сосиска",
+      "toptop": "Верх",
+      "botbot": "Низ",
+      "csscss": "body {\n  background-color: rgb(235,235,255);\n}"
+    }
   },
   "graphs": [],
   "types": [
