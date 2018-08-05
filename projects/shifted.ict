@@ -5,120 +5,9 @@
     "akatemplate": {
       "csscss": "body {\n    background: #100222;\n}"
     },
-    "tween": {},
-    "fittoscreen": {
-      "scaleOnly": true
-    }
+    "tween": {}
   },
-  "graphs": [
-    {
-      "name": "lv_01_01",
-      "untill": 0,
-      "grid": [
-        1,
-        1
-      ],
-      "axis": [
-        0,
-        0
-      ],
-      "marginx": 0,
-      "marginy": 0,
-      "imgWidth": 5,
-      "imgHeight": 5,
-      "width": 5,
-      "height": 5,
-      "offx": 0,
-      "offy": 0,
-      "origname": "i1.png",
-      "shape": "rect",
-      "left": 0,
-      "right": 5,
-      "top": 0,
-      "bottom": 5,
-      "lastmod": 1524895845252
-    },
-    {
-      "name": "lv_01_02",
-      "untill": 0,
-      "grid": [
-        1,
-        1
-      ],
-      "axis": [
-        0,
-        0
-      ],
-      "marginx": 0,
-      "marginy": 0,
-      "imgWidth": 5,
-      "imgHeight": 5,
-      "width": 5,
-      "height": 5,
-      "offx": 0,
-      "offy": 0,
-      "origname": "i2.png",
-      "shape": "rect",
-      "left": 0,
-      "right": 5,
-      "top": 0,
-      "bottom": 5,
-      "lastmod": 1524898630793
-    },
-    {
-      "name": "lv_01_03",
-      "untill": 0,
-      "grid": [
-        1,
-        1
-      ],
-      "axis": [
-        0,
-        0
-      ],
-      "marginx": 0,
-      "marginy": 0,
-      "imgWidth": 5,
-      "imgHeight": 5,
-      "width": 5,
-      "height": 5,
-      "offx": 0,
-      "offy": 0,
-      "origname": "i3.png",
-      "shape": "rect",
-      "left": 0,
-      "right": 5,
-      "top": 0,
-      "bottom": 5
-    },
-    {
-      "name": "EnlightLogo",
-      "untill": 0,
-      "grid": [
-        1,
-        1
-      ],
-      "axis": [
-        339,
-        109
-      ],
-      "marginx": 0,
-      "marginy": 0,
-      "imgWidth": 678,
-      "imgHeight": 218,
-      "width": 678,
-      "height": 218,
-      "offx": 0,
-      "offy": 0,
-      "origname": "i4.png",
-      "shape": "rect",
-      "left": 339,
-      "right": 339,
-      "top": 109,
-      "bottom": 109,
-      "lastmod": 1524906049989
-    }
-  ],
+  "graphs": [],
   "types": [
     {
       "name": "Tile",
@@ -138,7 +27,7 @@
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
       "uid": 2,
-      "graph": "i4.png"
+      "graph": -1
     }
   ],
   "sounds": [],
