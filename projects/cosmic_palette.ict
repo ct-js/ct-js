@@ -5,7 +5,10 @@
     "akatemplate": {
       "csscss": "body {\n    background: #100222;\n}"
     },
-    "tween": {}
+    "tween": {},
+    "fittoscreen": {
+      "scaleOnly": true
+    }
   },
   "graphs": [
     {
@@ -166,7 +169,7 @@
   "rooms": [
     {
       "name": "Main",
-      "oncreate": "/**\n * Shuffles array in place. ES6 version\n * @param {Array} a items An array containing the items.\n */\nvar shuffle = function(a) {\n    for (let i = a.length - 1; i > 0; i--) {\n        const j = Math.floor(Math.random() * (i + 1));\n        [a[i], a[j]] = [a[j], a[i]];\n    }\n    return a;\n}\n\nthis.level = 'lv_01_01';\nthis.graph = ct.res.graphs[this.level];\nthis.moves = 0;\nthis.startTime = new Date();\n\nthis.canvas = ct.canvas.create(this.graph.width, this.graph.height);\nct.canvas.drawTile(this.canvas, this.level, 0, 0, 0);\n\nvar tiles = this.canvas.x.getImageData(0, 0, this.canvas.width, this.canvas.height).data;\n\nvar gridX = ct.width / this.canvas.width,\n    gridY = ct.height / this.canvas.height,\n    tilesX = this.canvas.width,\n    tilesY = this.canvas.height;\n\nvar locked = [0, tilesX - 1, tilesX * (tilesY - 1), tilesX * tilesY - 1];\n\nfor (var i = 0, l = tiles.length; i < l; i += 4) {\n    var color = `rgb(${tiles[i]}, ${tiles[i+1]}, ${tiles[i+2]})`;\n    var tile = ct.types.copy('Tile', ((i / 4) % tilesX) * gridX, (~~((i / 4) / tilesY)) * gridY);\n    tile.color = color;\n    tile.colorRaw = [tiles[i], tiles[i+1], tiles[i+2]];\n    tile.locked = locked.indexOf(i / 4) !== -1;\n    tile.width = gridX;\n    tile.height = gridY;\n}\n\nvar toShuffle = ct.types.list['Tile'].filter(tile => !tile.locked),\n    positions = [];\ntoShuffle.forEach(tile => positions.push([tile.x, tile.y]));\n\nshuffle(positions);\n\nfor (var i = 0, l = toShuffle.length; i < l; i++) {\n    var tile = toShuffle[i];\n    tile.x = positions[i][0];\n    tile.y = positions[i][1];\n}",
+      "oncreate": "this.level = 'lv_01_01';\nthis.graph = ct.res.graphs[this.level];\nthis.moves = 0;\nthis.startTime = new Date();\n\ngenerateLevel.apply(this);",
       "onstep": "",
       "ondraw": "",
       "onleave": "",
@@ -176,7 +179,7 @@
       "layers": [],
       "uid": 1,
       "grid": 64,
-      "lastmod": 1524906025654
+      "lastmod": 1533097374609
     },
     {
       "name": "Intro",
@@ -219,5 +222,15 @@
     "fps": 60
   },
   "palette": [],
-  "startroom": 2
+  "startroom": 2,
+  "scripts": [
+    {
+      "name": "Shuffle array function",
+      "code": "/**\n * Shuffles array in place. ES6 version\n * @param {Array} a items An array containing the items.\n */\nvar shuffleArray = function(a) {\n    for (let i = a.length - 1; i > 0; i--) {\n        const j = Math.floor(Math.random() * (i + 1));\n        [a[i], a[j]] = [a[j], a[i]];\n    }\n    return a;\n}"
+    },
+    {
+      "name": "Level Generator",
+      "code": "var generateLevel = function () {\n    this.canvas = ct.canvas.create(this.graph.width, this.graph.height);\n    ct.canvas.drawTile(this.canvas, this.level, 0, 0, 0);\n    \n    var tiles = this.canvas.x.getImageData(0, 0, this.canvas.width, this.canvas.height).data;\n    \n    var gridX = ct.width / this.canvas.width,\n        gridY = ct.height / this.canvas.height,\n        tilesX = this.canvas.width,\n        tilesY = this.canvas.height;\n    \n    var locked = [0, tilesX - 1, tilesX * (tilesY - 1), tilesX * tilesY - 1];\n    \n    for (var i = 0, l = tiles.length; i < l; i += 4) {\n        var color = `rgb(${tiles[i]}, ${tiles[i+1]}, ${tiles[i+2]})`;\n        var tile = ct.types.copy('Tile', ((i / 4) % tilesX) * gridX, (~~((i / 4) / tilesY)) * gridY);\n        tile.color = color;\n        tile.colorRaw = [tiles[i], tiles[i+1], tiles[i+2]];\n        tile.locked = locked.indexOf(i / 4) !== -1;\n        tile.width = gridX;\n        tile.height = gridY;\n    }\n    \n    var toShuffle = ct.types.list['Tile'].filter(tile => !tile.locked),\n        positions = [];\n    toShuffle.forEach(tile => positions.push([tile.x, tile.y]));\n    \n    shuffleArray(positions);\n    \n    for (var i = 0, l = toShuffle.length; i < l; i++) {\n        var tile = toShuffle[i];\n        tile.x = positions[i][0];\n        tile.y = positions[i][1];\n    }\n}"
+    }
+  ]
 }
