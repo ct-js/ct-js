@@ -15,7 +15,6 @@
     "sprite": {
       "spritedef": "ct.sprite('Player_Female', 'Player_Female_Walk', [0, 2, 0, 3]);\nct.sprite('Player_Male', 'Player_Male_Walk', [0, 2, 0, 3]);"
     },
-    "patch": {},
     "tween": {},
     "canvas": {},
     "touch": {
