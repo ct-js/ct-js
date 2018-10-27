@@ -2340,7 +2340,7 @@
       "code": "var drawCategoryCover = function (me) {\n    ct.draw(me);\n    ct.styles.set('Label');\n    ct.x.globalAlpha = me.ta;\n    ct.draw.text(me.category, me.x, me.y + 175);\n    if (me.completed) {\n        ct.styles.set('Meta');\n        ct.x.globalAlpha = me.ta;\n        ct.draw.text(me.completed + '/' + me.total, me.x, me.y);\n    }\n    ct.styles.reset();\n};"
     }
   ],
-  "ctjsVersion": "0.4.1",
+  "ctjsVersion": "0.5.0",
   "fonts": [
     {
       "typefaceName": "OpenSans",
