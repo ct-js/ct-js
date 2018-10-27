@@ -1,5 +1,5 @@
 {
-  "ctjsVersion": "0.4.0",
+  "ctjsVersion": "0.5.0",
   "notes": "/* empty */",
   "libs": {
     "fittoscreen": {
@@ -11,7 +11,10 @@
     "random": {},
     "sound.howler": {},
     "keyboard": {},
-    "place": {},
+    "place": {
+      "gridY": 512,
+      "gridX": 512
+    },
     "sprite": {
       "spritedef": "ct.sprite('Player_Female', 'Player_Female_Walk', [0, 2, 0, 3]);\nct.sprite('Player_Male', 'Player_Male_Walk', [0, 2, 0, 3]);"
     },
@@ -7107,7 +7110,24 @@
   "settings": {
     "minifyhtmlcss": false,
     "minifyjs": false,
-    "fps": 30
+    "fps": 30,
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "versionPostfix": "-postjam",
+    "export": {
+      "windows64": true,
+      "windows32": true,
+      "linux64": true,
+      "linux32": true,
+      "mac64": true,
+      "debug": false
+    },
+    "title": "Among the Wolves",
+    "author": "CoMiGo Games",
+    "site": "https://ctjs.rocks/"
   },
   "scripts": [
     {
@@ -7137,5 +7157,6 @@
   ],
   "startroom": "d29b2cf2-601d-4ca0-b115-20e93cd067fd",
   "palette": [],
-  "styletick": null
+  "styletick": null,
+  "fonts": []
 }
