@@ -5,7 +5,10 @@
       "scaleOnly": true
     },
     "keyboard": {},
-    "place": {},
+    "place": {
+      "gridY": 512,
+      "gridX": 512
+    },
     "random": {},
     "sound.howler": {},
     "akatemplate": {
@@ -39,7 +42,8 @@
       "right": 14,
       "top": 20,
       "bottom": 1,
-      "lastmod": 1534044214696
+      "lastmod": 1534044214696,
+      "uid": "59134e19-0e2f-4285-b238-a3be1c8aacac"
     },
     {
       "name": "FireForm",
@@ -66,7 +70,8 @@
       "right": 14,
       "top": 20,
       "bottom": 1,
-      "lastmod": 1534044217314
+      "lastmod": 1534044217314,
+      "uid": "6d084179-c3bb-4596-81d9-7e7dd71674ec"
     },
     {
       "name": "WindForm",
@@ -93,7 +98,8 @@
       "right": 14,
       "top": 20,
       "bottom": 1,
-      "lastmod": 1534044220123
+      "lastmod": 1534044220123,
+      "uid": "9b356b53-f3fa-4ee0-8bd6-51d4d992cd8a"
     },
     {
       "name": "IceForm",
@@ -120,7 +126,8 @@
       "right": 14,
       "top": 20,
       "bottom": 0,
-      "lastmod": 1534044223595
+      "lastmod": 1534044223595,
+      "uid": "0d998530-0cae-4fa7-b518-ffed87d3a7e1"
     },
     {
       "name": "RockStaff",
@@ -147,7 +154,8 @@
       "right": 5,
       "top": 24,
       "bottom": 25,
-      "lastmod": 1534075527145
+      "lastmod": 1534075527145,
+      "uid": "ca8c7d13-312a-471a-81e4-738e2e06f33f"
     },
     {
       "name": "IcicleStaff",
@@ -174,7 +182,8 @@
       "right": 6,
       "top": 24,
       "bottom": 25,
-      "lastmod": 1534075566474
+      "lastmod": 1534075566474,
+      "uid": "8933cb55-891d-478f-8064-9b95b88518da"
     },
     {
       "name": "WindStaff",
@@ -201,7 +210,8 @@
       "right": 7,
       "top": 25,
       "bottom": 25,
-      "lastmod": 1534075619819
+      "lastmod": 1534075619819,
+      "uid": "18577149-7766-4395-9f98-efacb66761aa"
     },
     {
       "name": "FireStaff",
@@ -228,7 +238,8 @@
       "right": 7,
       "top": 25,
       "bottom": 25,
-      "lastmod": 1534075656164
+      "lastmod": 1534075656164,
+      "uid": "5bdee257-5221-4807-a74e-e93351cc261b"
     },
     {
       "name": "Bg_Earth",
@@ -255,7 +266,8 @@
       "right": 32,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1533883186029
+      "lastmod": 1533883186029,
+      "uid": "a0483638-6855-40c6-a202-50373b05a3cc"
     },
     {
       "name": "Fireball",
@@ -283,7 +295,8 @@
       "top": 16,
       "bottom": 16,
       "r": 16,
-      "lastmod": 1533909312064
+      "lastmod": 1533909312064,
+      "uid": "bf5b308a-ea02-4f59-9725-41210de23906"
     },
     {
       "name": "BG_Stone",
@@ -309,7 +322,8 @@
       "left": 0,
       "right": 32,
       "top": 0,
-      "bottom": 32
+      "bottom": 32,
+      "uid": "3bbe38b3-2697-4125-9aa8-8106d4be3f94"
     },
     {
       "name": "IceShard",
@@ -337,7 +351,8 @@
       "top": 5,
       "bottom": 6,
       "r": 5,
-      "lastmod": 1533895001888
+      "lastmod": 1533895001888,
+      "uid": "3b480669-febf-4e61-ba64-bc2f63ac2b6b"
     },
     {
       "name": "Skeleton",
@@ -364,7 +379,8 @@
       "right": 10,
       "top": 30,
       "bottom": 0,
-      "lastmod": 1533983755294
+      "lastmod": 1533983755294,
+      "uid": "46674f25-95ad-474c-97c4-84eec6572fe8"
     },
     {
       "name": "WallLeft",
@@ -391,7 +407,8 @@
       "right": 10,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534044233600
+      "lastmod": 1534044233600,
+      "uid": "50771d58-2ff3-4ae8-9c62-b26d05d39693"
     },
     {
       "name": "WallTopLeft",
@@ -418,7 +435,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043425931
+      "lastmod": 1534043425931,
+      "uid": "86da61d8-157e-4616-aeb7-24c0506d3505"
     },
     {
       "name": "WallBottomLeft",
@@ -445,7 +463,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043473110
+      "lastmod": 1534043473110,
+      "uid": "7d5e8baf-c41c-4137-a6c4-7e26bd05a790"
     },
     {
       "name": "WallBottom",
@@ -472,7 +491,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043484430
+      "lastmod": 1534043484430,
+      "uid": "a0f900ea-0361-4704-9016-60bbcf073bd1"
     },
     {
       "name": "WallRight",
@@ -499,7 +519,8 @@
       "right": 32,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534043539325
+      "lastmod": 1534043539325,
+      "uid": "1585e8c0-e517-49f7-bd81-fbbf87ee19ca"
     },
     {
       "name": "WallTop",
@@ -526,7 +547,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043492705
+      "lastmod": 1534043492705,
+      "uid": "ca489c47-e076-42a8-b05f-2b0a12bf1e4d"
     },
     {
       "name": "WallTopRight",
@@ -553,7 +575,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043502080
+      "lastmod": 1534043502080,
+      "uid": "ab18286f-020a-40d4-a28d-9d38edbf8ee5"
     },
     {
       "name": "WallBottomRight",
@@ -580,7 +603,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043508656
+      "lastmod": 1534043508656,
+      "uid": "30bda331-61a3-4b4e-8512-9b1d752ea56a"
     },
     {
       "name": "IceEffect",
@@ -607,7 +631,8 @@
       "right": 14,
       "top": 17,
       "bottom": 18,
-      "lastmod": 1533961126074
+      "lastmod": 1533961126074,
+      "uid": "06731242-b6ff-4ce7-becf-aafa1f7a569e"
     },
     {
       "name": "Shadow",
@@ -635,7 +660,8 @@
       "top": 0,
       "bottom": 10,
       "r": 5,
-      "lastmod": 1533892809753
+      "lastmod": 1533892809753,
+      "uid": "1e117159-9aeb-41a1-8e14-2ea639a1e424"
     },
     {
       "name": "BeamStaff",
@@ -662,7 +688,8 @@
       "right": 5,
       "top": 24,
       "bottom": 25,
-      "lastmod": 1533896938682
+      "lastmod": 1533896938682,
+      "uid": "90ec652c-f536-4727-ae91-c2b8a89dd418"
     },
     {
       "name": "Beam",
@@ -689,7 +716,8 @@
       "right": 16,
       "top": 8,
       "bottom": 8,
-      "lastmod": 1533905274838
+      "lastmod": 1533905274838,
+      "uid": "7b339add-93b1-4757-8009-a398f47fc518"
     },
     {
       "name": "BurnEffect",
@@ -716,7 +744,8 @@
       "right": 12,
       "top": 35,
       "bottom": 3,
-      "lastmod": 1533993607543
+      "lastmod": 1533993607543,
+      "uid": "b4ee5bf3-5b4c-48c9-9dbd-3953f1abcd91"
     },
     {
       "name": "Boulder",
@@ -744,7 +773,8 @@
       "top": 0,
       "bottom": 32,
       "r": 15,
-      "lastmod": 1533904248200
+      "lastmod": 1533904248200,
+      "uid": "baee20d0-69be-4fe0-be32-b7b03945d88b"
     },
     {
       "name": "LianeStaff",
@@ -771,7 +801,8 @@
       "right": 5,
       "top": 24,
       "bottom": 25,
-      "lastmod": 1533974096168
+      "lastmod": 1533974096168,
+      "uid": "8309d4df-187c-45e4-8dbd-b2987cd87dbd"
     },
     {
       "name": "PoisonPuddle",
@@ -798,7 +829,8 @@
       "right": 60,
       "top": 40,
       "bottom": 40,
-      "lastmod": 1533906275249
+      "lastmod": 1533906275249,
+      "uid": "fac475c7-a5a0-4478-8330-161b0cf35b4e"
     },
     {
       "name": "PoisonBall",
@@ -826,7 +858,8 @@
       "top": 0,
       "bottom": 12,
       "r": 6,
-      "lastmod": 1533907138470
+      "lastmod": 1533907138470,
+      "uid": "7080159e-4fc5-4afb-b9ee-b89760c01b7d"
     },
     {
       "name": "Impact",
@@ -854,7 +887,8 @@
       "top": 0,
       "bottom": 24,
       "r": 12,
-      "lastmod": 1533909925891
+      "lastmod": 1533909925891,
+      "uid": "943a4d67-6639-4f41-afca-6cf0a86a09d3"
     },
     {
       "name": "Explosion",
@@ -882,7 +916,8 @@
       "top": 0,
       "bottom": 128,
       "r": 32,
-      "lastmod": 1533911854515
+      "lastmod": 1533911854515,
+      "uid": "9e1a102c-aa56-4b6d-825c-bfe2e609350f"
     },
     {
       "name": "LightningZap",
@@ -910,7 +945,8 @@
       "top": 0,
       "bottom": 64,
       "r": 32,
-      "lastmod": 1533956236776
+      "lastmod": 1533956236776,
+      "uid": "ab8c5bed-8966-46a7-afde-2fa4aa3c6943"
     },
     {
       "name": "FireProjectile",
@@ -938,7 +974,8 @@
       "top": 0,
       "bottom": 16,
       "r": 8,
-      "lastmod": 1533960074701
+      "lastmod": 1533960074701,
+      "uid": "5a56f72b-aeaa-4408-8a01-6766395b5a42"
     },
     {
       "name": "IceProjectile",
@@ -966,7 +1003,8 @@
       "top": 0,
       "bottom": 16,
       "r": 8,
-      "lastmod": 1533960082173
+      "lastmod": 1533960082173,
+      "uid": "28481f24-565c-4f23-bf88-fb4859d62e7a"
     },
     {
       "name": "IceBerta",
@@ -994,7 +1032,8 @@
       "top": 44,
       "bottom": -7,
       "r": 19,
-      "lastmod": 1534049514083
+      "lastmod": 1534049514083,
+      "uid": "a4d8d8c2-c151-43d8-8a3e-73812aa49c12"
     },
     {
       "name": "Summoning",
@@ -1022,7 +1061,8 @@
       "top": 0,
       "bottom": 128,
       "r": 32,
-      "lastmod": 1534053202352
+      "lastmod": 1534053202352,
+      "uid": "67ac4ea3-fab5-4103-a643-2f20597516a1"
     },
     {
       "name": "IceMine",
@@ -1050,7 +1090,8 @@
       "top": 0,
       "bottom": 13,
       "r": 14,
-      "lastmod": 1533961239404
+      "lastmod": 1533961239404,
+      "uid": "0ac9640e-ad56-4465-b325-53cc5ac28ac0"
     },
     {
       "name": "Explosion_Ice",
@@ -1078,7 +1119,8 @@
       "top": 0,
       "bottom": 128,
       "r": 32,
-      "lastmod": 1533961490179
+      "lastmod": 1533961490179,
+      "uid": "f85cd5f1-7732-4160-953d-e1af9b93db9a"
     },
     {
       "name": "IceSnake",
@@ -1105,7 +1147,8 @@
       "right": 15,
       "top": 36,
       "bottom": 0,
-      "lastmod": 1533984608946
+      "lastmod": 1533984608946,
+      "uid": "b7509c49-e326-4faf-aea6-0c9e0f45669b"
     },
     {
       "name": "BeamEnd",
@@ -1133,7 +1176,8 @@
       "top": 0,
       "bottom": 32,
       "r": 16,
-      "lastmod": 1533962292655
+      "lastmod": 1533962292655,
+      "uid": "e0061645-c685-4002-ad6d-7cf7d41b0d9e"
     },
     {
       "name": "Skeleton_Cool",
@@ -1160,7 +1204,8 @@
       "right": 12,
       "top": 32,
       "bottom": 1,
-      "lastmod": 1533962692641
+      "lastmod": 1533962692641,
+      "uid": "db3e6cdd-43ad-4699-a9da-2bcae083b590"
     },
     {
       "name": "DeadlyBear",
@@ -1187,7 +1232,8 @@
       "right": 15,
       "top": 44,
       "bottom": 1,
-      "lastmod": 1534051705083
+      "lastmod": 1534051705083,
+      "uid": "b7bf8c52-5547-4fa7-890f-965989351672"
     },
     {
       "name": "KeyboardHint",
@@ -1214,7 +1260,8 @@
       "right": 23,
       "top": 15,
       "bottom": 16,
-      "lastmod": 1533965288688
+      "lastmod": 1533965288688,
+      "uid": "731018a7-de50-41a7-aa6c-3c95ec9ab402"
     },
     {
       "name": "MouseHint",
@@ -1242,7 +1289,8 @@
       "top": 0,
       "bottom": 90,
       "r": 20,
-      "lastmod": 1533965320814
+      "lastmod": 1533965320814,
+      "uid": "a0518152-9364-4312-8cd3-f957114c41c7"
     },
     {
       "name": "Skull",
@@ -1270,7 +1318,8 @@
       "top": 0,
       "bottom": 20,
       "r": 10,
-      "lastmod": 1533965776415
+      "lastmod": 1533965776415,
+      "uid": "acfe8955-9ece-4ce2-9949-81666e334c20"
     },
     {
       "name": "FireWisp",
@@ -1298,7 +1347,8 @@
       "top": 33,
       "bottom": 0,
       "r": 14,
-      "lastmod": 1533972908390
+      "lastmod": 1533972908390,
+      "uid": "5c583221-f726-4679-b6dd-80adb9650628"
     },
     {
       "name": "StaffSparkle",
@@ -1326,7 +1376,8 @@
       "top": 0,
       "bottom": 96,
       "r": 24,
-      "lastmod": 1533972249047
+      "lastmod": 1533972249047,
+      "uid": "044cf269-ca9e-45d9-92f2-7ab38784e386"
     },
     {
       "name": "FireSkull",
@@ -1353,7 +1404,8 @@
       "right": 9,
       "top": 33,
       "bottom": 1,
-      "lastmod": 1534047082903
+      "lastmod": 1534047082903,
+      "uid": "f9c14aec-e656-4bd2-9ad4-ead0cf11bb7d"
     },
     {
       "name": "Boss",
@@ -1381,7 +1433,8 @@
       "top": 69,
       "bottom": 70,
       "r": 39,
-      "lastmod": 1534076898162
+      "lastmod": 1534076898162,
+      "uid": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "Heart",
@@ -1409,7 +1462,8 @@
       "top": 0,
       "bottom": 14,
       "r": 7,
-      "lastmod": 1533983269805
+      "lastmod": 1533983269805,
+      "uid": "93055733-1d40-4dce-80e5-b1f7a4b12781"
     },
     {
       "name": "Carpet",
@@ -1436,7 +1490,8 @@
       "right": 64,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1533986185771
+      "lastmod": 1533986185771,
+      "uid": "e188084b-bf32-4663-84fa-be03411dbe89"
     },
     {
       "name": "Floor_Carpet",
@@ -1463,7 +1518,8 @@
       "right": 96,
       "top": 0,
       "bottom": 96,
-      "lastmod": 1533985426436
+      "lastmod": 1533985426436,
+      "uid": "efd8a297-dda1-4564-bae0-042f848501af"
     },
     {
       "name": "Dialogues",
@@ -1490,7 +1546,8 @@
       "right": 101,
       "top": 28,
       "bottom": 0,
-      "lastmod": 1534055077289
+      "lastmod": 1534055077289,
+      "uid": "542fe16d-f6f0-4cca-a76c-202fc3e803d1"
     },
     {
       "name": "FireForm_Idle",
@@ -1517,7 +1574,8 @@
       "right": 18,
       "top": 20,
       "bottom": 1,
-      "lastmod": 1534044207604
+      "lastmod": 1534044207604,
+      "uid": "6bed81b4-c5cc-4d8c-a763-4120dfc2d1a9"
     },
     {
       "name": "EnemyDeath",
@@ -1545,7 +1603,8 @@
       "top": 0,
       "bottom": 46,
       "lastmod": 1533993056580,
-      "r": 22
+      "r": 22,
+      "uid": "9bf8f77e-3edb-4153-b8e5-62239c32772e"
     },
     {
       "name": "Column",
@@ -1572,7 +1631,8 @@
       "right": 16,
       "top": 20,
       "bottom": 6,
-      "lastmod": 1534043963494
+      "lastmod": 1534043963494,
+      "uid": "599b3d68-4b61-4511-ba05-b8697b34ac22"
     },
     {
       "name": "WallTopLantern",
@@ -1599,7 +1659,8 @@
       "right": 32,
       "top": 0,
       "bottom": 64,
-      "lastmod": 1534043853713
+      "lastmod": 1534043853713,
+      "uid": "ea44322d-e0a3-43a2-a6c1-7212bdf9b887"
     },
     {
       "name": "WallRightFlag",
@@ -1626,7 +1687,8 @@
       "right": 32,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534069575507
+      "lastmod": 1534069575507,
+      "uid": "96d1c7ad-54c0-4484-a2af-2d70c475c7ae"
     },
     {
       "name": "WallLeftFlag",
@@ -1653,7 +1715,8 @@
       "right": 10,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534069585058
+      "lastmod": 1534069585058,
+      "uid": "1554a574-aba4-45e0-bae7-226234656679"
     },
     {
       "name": "WallTopFlag",
@@ -1679,7 +1742,8 @@
       "left": 0,
       "right": 32,
       "top": 0,
-      "bottom": 64
+      "bottom": 64,
+      "uid": "83bcb83d-4eed-446b-bf5a-c69bd90fc820"
     },
     {
       "name": "WallRightLantern",
@@ -1706,7 +1770,8 @@
       "right": 32,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534044241259
+      "lastmod": 1534044241259,
+      "uid": "62dc0ee2-a153-494d-adac-564010fe29ce"
     },
     {
       "name": "WallLeftLantern",
@@ -1733,7 +1798,8 @@
       "right": 10,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534044245513
+      "lastmod": 1534044245513,
+      "uid": "6f3c90d3-e439-483a-aaff-ce19ae7bcbd4"
     },
     {
       "name": "Ceiling",
@@ -1760,7 +1826,8 @@
       "right": 128,
       "top": 0,
       "bottom": 128,
-      "lastmod": 1534045340498
+      "lastmod": 1534045340498,
+      "uid": "a168aa11-5f5e-4ca1-a981-6ae19854924d"
     },
     {
       "name": "CeilingPatch",
@@ -1787,7 +1854,8 @@
       "right": 128,
       "top": 0,
       "bottom": 32,
-      "lastmod": 1534045395779
+      "lastmod": 1534045395779,
+      "uid": "c192cf90-4828-431d-9a82-f3ad913a49c2"
     },
     {
       "name": "Electrocuted",
@@ -1814,7 +1882,8 @@
       "right": 16,
       "top": 48,
       "bottom": 0,
-      "lastmod": 1534047034122
+      "lastmod": 1534047034122,
+      "uid": "eeac0be4-77a5-406c-baee-1655f6a34b55"
     },
     {
       "name": "LightningCloud",
@@ -1842,7 +1911,8 @@
       "top": 40,
       "bottom": 0,
       "r": 16,
-      "lastmod": 1534047414908
+      "lastmod": 1534047414908,
+      "uid": "f2a3ba34-be77-4dc4-9326-7908979198b8"
     },
     {
       "name": "PossibleLogo",
@@ -1870,7 +1940,8 @@
       "top": 55,
       "bottom": 55,
       "r": 55,
-      "lastmod": 1534069514490
+      "lastmod": 1534069514490,
+      "uid": "0ad23fb2-dea3-4248-a067-36b9145e0f83"
     },
     {
       "name": "StartBG",
@@ -1896,7 +1967,8 @@
       "left": 0,
       "right": 236,
       "top": 0,
-      "bottom": 110
+      "bottom": 110,
+      "uid": "bba9f99f-a9f4-421b-a757-35e97d3a67c0"
     },
     {
       "name": "PressSpaceToStart",
@@ -1923,7 +1995,8 @@
       "right": 82,
       "top": 6,
       "bottom": 6,
-      "lastmod": 1534049181512
+      "lastmod": 1534049181512,
+      "uid": "b864a2d3-91e4-492d-bdf3-03af04b261c3"
     },
     {
       "name": "Credits",
@@ -1950,7 +2023,8 @@
       "right": 67,
       "top": 8,
       "bottom": 8,
-      "lastmod": 1534049318510
+      "lastmod": 1534049318510,
+      "uid": "86fb5e71-9307-4780-985f-c9d9edf5d3ba"
     },
     {
       "name": "Bat",
@@ -1978,7 +2052,8 @@
       "top": 20,
       "bottom": 0,
       "r": 10,
-      "lastmod": 1534055166241
+      "lastmod": 1534055166241,
+      "uid": "28d259a1-17e4-4575-968f-51f0289b7faf"
     },
     {
       "name": "Victory",
@@ -2005,7 +2080,8 @@
       "right": 85,
       "top": 45,
       "bottom": 46,
-      "lastmod": 1534057848304
+      "lastmod": 1534057848304,
+      "uid": "63741e58-103d-4c72-912b-3d397a36ab23"
     },
     {
       "name": "EndCredits",
@@ -2032,7 +2108,8 @@
       "right": 49,
       "top": 18,
       "bottom": 19,
-      "lastmod": 1534058762476
+      "lastmod": 1534058762476,
+      "uid": "e819b494-bb00-4321-a0c1-b369458d7cb3"
     },
     {
       "name": "SkeletonArcherWalk",
@@ -2059,7 +2136,8 @@
       "right": 11,
       "top": 30,
       "bottom": 0,
-      "lastmod": 1534058755044
+      "lastmod": 1534058755044,
+      "uid": "22ba804d-0659-46de-ba83-ebb19f22e0a2"
     },
     {
       "name": "SkeletonArcher",
@@ -2086,7 +2164,8 @@
       "right": 11,
       "top": 30,
       "bottom": 0,
-      "lastmod": 1534059103183
+      "lastmod": 1534059103183,
+      "uid": "1e7ac648-1966-4026-9d24-5c0f749b7020"
     },
     {
       "name": "DeathScreen",
@@ -2113,7 +2192,8 @@
       "right": 72,
       "top": 15,
       "bottom": 15,
-      "lastmod": 1534060557374
+      "lastmod": 1534060557374,
+      "uid": "729b0838-255d-44f8-a722-6e60d3e2ebf8"
     },
     {
       "name": "FullscreenToggler",
@@ -2140,7 +2220,8 @@
       "right": 8,
       "top": 8,
       "bottom": 8,
-      "lastmod": 1534060243787
+      "lastmod": 1534060243787,
+      "uid": "6d5062cc-0325-462c-8110-909b0210f881"
     },
     {
       "name": "RockBreak",
@@ -2168,7 +2249,8 @@
       "top": 0,
       "bottom": 40,
       "r": 20,
-      "lastmod": 1534060822367
+      "lastmod": 1534060822367,
+      "uid": "6f32a170-1701-4834-82a2-71f9a76db56c"
     },
     {
       "name": "ThunderProjectile",
@@ -2196,7 +2278,8 @@
       "top": 0,
       "bottom": 16,
       "r": 8,
-      "lastmod": 1534067400944
+      "lastmod": 1534067400944,
+      "uid": "dd454169-6744-4b43-9f5b-09e4e9fda6d8"
     },
     {
       "name": "IcicleStaffBare",
@@ -2223,7 +2306,8 @@
       "right": 8,
       "top": 26,
       "bottom": 26,
-      "lastmod": 1534075691394
+      "lastmod": 1534075691394,
+      "uid": "c22cf152-f7b1-4642-b317-24ede57e6e76"
     },
     {
       "name": "FireStaffBare",
@@ -2250,7 +2334,8 @@
       "right": 6,
       "top": 25,
       "bottom": 25,
-      "lastmod": 1534076135933
+      "lastmod": 1534076135933,
+      "uid": "bde07613-dd83-4b31-8db7-89f4289643ce"
     },
     {
       "name": "RockStaffBare",
@@ -2277,7 +2362,8 @@
       "right": 7,
       "top": 26,
       "bottom": 26,
-      "lastmod": 1534075774549
+      "lastmod": 1534075774549,
+      "uid": "7f63749e-f1db-4e13-a04f-93fad16082f3"
     },
     {
       "name": "WindStaffBare",
@@ -2304,7 +2390,8 @@
       "right": 7,
       "top": 25,
       "bottom": 25,
-      "lastmod": 1534075795530
+      "lastmod": 1534075795530,
+      "uid": "1b36f38a-eebc-4c52-82e1-31d051eec02a"
     },
     {
       "name": "BossDeath",
@@ -2332,7 +2419,8 @@
       "top": 0,
       "bottom": 139,
       "r": 69,
-      "lastmod": 1534076904625
+      "lastmod": 1534076904625,
+      "uid": "ed65c687-caa0-4cc6-b553-cafd87ff87a3"
     }
   ],
   "types": [
@@ -2343,8 +2431,8 @@
       "onstep": "/** Movement **/\n\nif (ct.keyboard.down['left'] || ct.keyboard.down['A']) {\n    this.x -= this.speed;\n}\nif (ct.keyboard.down['right'] || ct.keyboard.down['D']) {\n    this.x += this.speed;\n}\nif (ct.keyboard.down['up'] || ct.keyboard.down['W']) {\n    this.y -= this.speed;\n}\nif (ct.keyboard.down['down'] || ct.keyboard.down['S']) {\n    this.y += this.speed;\n}\n\nvar dir = ct.u.pdn(this.x, this.y, ct.mouse.x, ct.mouse.y);\n\nif (dir > 90 && dir <= 270) {\n    this.tx = 1;\n} else {\n    this.tx = -1;\n}\n\nif (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.x = this.xprev;\n    this.y = this.yprev;\n}\nif (this.x !== this.xprev || this.y !== this.yprev) {\n    this.imgspd = 0.25;\n} else {\n    this.imgspd = 0;\n    this.frame = 0;\n}\n\nthis.depth = this.y;\n\n/** Shooting **/\n\nthis.shootTimer --;\nif (ct.mouse.down) {\n    if (this.shootTimer <= 0) {\n        this.shootTimer = this.shootPeriod;\n        var projectile = ct.types.copy(\n            this.projectile,\n            this.x + ct.u.ldx(this.staffOffset * 2, dir), this.y - 12 + ct.u.ldy(this.staffOffset * 2, dir)\n        );\n        projectile.dir += dir;\n        var overheatPrev = this.overheat;\n        if (this.overheat > 100) {\n                if (this.hp <= 10) {\n                    this.kill = true;\n                    ct.room.startGame = false;\n                    ct.types.copy('FadeOut', 0, 0);\n                    var me = this;\n                    setTimeout(function() {\n                        var reason = ct.types.copy('DeathScreen', ct.room.x + ct.room.width / 2, ct.room.y + ct.room.height / 2);\n                        if (me.form === 'Fire') {\n                            reason.frame = 3;\n                        } else if (me.form === 'Ice') {\n                            reason.frame = 4;\n                        } else if (me.form === 'Rock') {\n                            reason.frame = 6;\n                        } else {\n                            reason.frame = 5;\n                        }\n                    }, 1000);\n                    ct.sound.fade('HackneyLives', 0, 1000, ct.room.music);\n                } else {\n                    this.hp -= 10;\n                    this.overheat = 0;\n                    ct.sound.spawn('Shotgun');\n                    ct.sound.spawn('Hurt3');\n                }\n        }\n        this.overheat += this.overheatCost;\n        catchOverheatStep(overheatPrev, this.overheat);\n    }\n}\n\n/** Overheat **/\n\nthis.overheatDropTimer --;\nif (this.overheatDropTimer <= 0) {\n    this.overheatDropTimer = 20;\n    this.overheat --;\n    if (this.overheat >= 99 && this.overheat < 100) {\n        ct.sound.spawn('Vent');\n    }\n    if (this.overheat < 0) {\n        this.overheat = 0;\n    }\n}\n\n/** Form **/\n\nthis.graph = this.form + 'Form';\n\n/** Regen **/\nthis.hpRegen --;\nif (this.hpRegen <= 0) {\n    if (this.hp < 20) {\n        this.hp++;\n    }\n    this.hpRegen = 60 * 7;   \n}",
       "ondraw": "ct.draw.img('Shadow', 0, this.x, this.y);\nct.draw(this);\n\nvar dir = ct.u.pdn(this.x, this.y, ct.mouse.x, ct.mouse.y);\n\nthis.staffTick ++;\nif (this.staffTick >= 8 * 5) {\n    this.staffTick = 0;\n}\n\nct.draw.imgext(\n    this.staff + 'Staff', Math.floor(this.staffTick / 5), \n    this.x + ct.u.ldx(this.staffOffset, dir), this.y - 12 + ct.u.ldy(this.staffOffset, dir),\n    1, 1, dir - 90, 1);",
       "ondestroy": "ct.types.copy('FX_EnemyDeath', this.x, this.y);",
-      "uid": 1,
-      "graph": "i2.png"
+      "uid": "a8d31139-f01a-4639-bebe-ab90207bbbdc",
+      "graph": "6d084179-c3bb-4596-81d9-7e7dd71674ec"
     },
     {
       "name": "WallTL",
@@ -2353,8 +2441,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 2,
-      "graph": "i19.png"
+      "uid": "fb9f20fb-675c-4142-a0f1-760b8c25c2a1",
+      "graph": "86da61d8-157e-4616-aeb7-24c0506d3505"
     },
     {
       "name": "Fireball",
@@ -2363,8 +2451,8 @@
       "onstep": "ct.types.move(this);\n\nif (ct.place.occupied(this, this.x, this.y, 'Solid') || ct.place.occupied(this, this.x, this.y, 'Enemy')) {\n    this.kill = true;\n}\n\nthis.depth = - this.y + 10;\n",
       "ondraw": "this.tr = this.dir;\nct.draw(this);\nif (this.frame >= 5) {\n    this.frame = 2;\n}",
       "ondestroy": "ct.sound.spawn('FireballExplosion');\nct.types.copy('FX_Explosion', this.x, this.y);\n\nvar me = this;\nct.types.each(function () {\n    if (this.ctype !== 'Enemy') {\n        return;\n    } else if (ct.u.pdc(this.x, this.y, me.x, me.y) < 64) {\n        this.hp -= 7;\n        this.freezeTimer = 0;\n        if (this.form !== 'Fire') {\n            this.burning = true;\n        }\n        if (this.hp < 0) {\n            this.kill = true;\n        }\n        if (this.electrocutedTimer && this.type.indexOf('Boss') === -1) {\n            this.hp -= 20;\n            ct.types.copy('FX_Explosion', ~~(this.x), ~~(this.y - 16));\n        }\n    }\n});",
-      "uid": 5,
-      "graph": "i13.png"
+      "uid": "81ff22c8-8da6-46bc-8a5e-38f9517d4604",
+      "graph": "bf5b308a-ea02-4f59-9725-41210de23906"
     },
     {
       "name": "FireStaff",
@@ -2373,8 +2461,8 @@
       "onstep": "var hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    this.kill = true;\n    hero.projectile = 'Fireball';\n    hero.overheat = 0;\n    hero.shootPeriod = 45;\n    hero.overheatCost = 10;\n    if (hero.form !== 'Fire') {\n        ct.sound.spawn('Transform');\n    }\n    hero.form = 'Fire';\n    hero.staff = 'Fire';\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 8,
-      "graph": "i86.png"
+      "uid": "d969c05e-f4e9-4a7a-8122-4a46ed2a87b4",
+      "graph": "bde07613-dd83-4b31-8db7-89f4289643ce"
     },
     {
       "name": "Icicle",
@@ -2383,8 +2471,8 @@
       "onstep": "if (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.kill = true;\n} else {\n    var enemy = ct.place.occupied(this, this.x, this.y, 'Enemy');\n    if (enemy) {\n        this.kill = true;\n        enemy.hp -= 3;\n        if (enemy.form !== 'Ice') {\n            enemy.freezeTimer = 60 * 3;\n        }\n        enemy.burning = false;\n        if (enemy.hp <= 0) {\n            enemy.kill = true;\n        }\n    } else {\n        this.depth = - this.y + 10;\n        ct.types.move(this);\n        this.tr = this.dir;\n    }\n}\n",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.sound.spawn('IceHit');\nct.types.copy('FX_Impact', this.x, this.y);",
-      "uid": 9,
-      "graph": "i17.png"
+      "uid": "30680475-113c-4e26-9099-5837d5c59852",
+      "graph": "3b480669-febf-4e61-ba64-bc2f63ac2b6b"
     },
     {
       "name": "IcicleStaff",
@@ -2393,8 +2481,8 @@
       "onstep": "var hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    this.kill = true;\n    hero.projectile = 'Icicle';\n    hero.overheat = 0;\n    hero.shootPeriod = 5;\n    hero.overheatCost = 1.5;\n    if (hero.form !== 'Ice') {\n        ct.sound.spawn('Transform');\n    }\n    hero.form = 'Ice';\n    hero.staff = 'Icicle';\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 10,
-      "graph": "i87.png"
+      "uid": "a2cc2bdc-2796-44f6-b7e3-52eebb220d27",
+      "graph": "c22cf152-f7b1-4642-b317-24ede57e6e76"
     },
     {
       "name": "Skeleton",
@@ -2403,8 +2491,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Earth');",
-      "uid": 11,
-      "graph": "i18.png"
+      "uid": "dcb3d829-1565-42dc-b0c7-cc3f75136ec4",
+      "graph": "46674f25-95ad-474c-97c4-84eec6572fe8"
     },
     {
       "name": "WallT",
@@ -2413,8 +2501,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 12,
-      "graph": "i22.png"
+      "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21",
+      "graph": "ca489c47-e076-42a8-b05f-2b0a12bf1e4d"
     },
     {
       "name": "WallTR",
@@ -2423,8 +2511,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 13,
-      "graph": "i23.png"
+      "uid": "abd41381-dddf-4e40-9b7e-c3f2e9586512",
+      "graph": "ab18286f-020a-40d4-a28d-9d38edbf8ee5"
     },
     {
       "name": "WallL",
@@ -2433,8 +2521,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 14,
-      "graph": "i20.png"
+      "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7",
+      "graph": "50771d58-2ff3-4ae8-9c62-b26d05d39693"
     },
     {
       "name": "WallR",
@@ -2443,8 +2531,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 15,
-      "graph": "i21.png"
+      "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26",
+      "graph": "1585e8c0-e517-49f7-bd81-fbbf87ee19ca"
     },
     {
       "name": "WallBL",
@@ -2453,8 +2541,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 16,
-      "graph": "i24.png"
+      "uid": "f5b7a32e-838d-47f7-a3c2-708a6396f348",
+      "graph": "7d5e8baf-c41c-4137-a6c4-7e26bd05a790"
     },
     {
       "name": "WallBR",
@@ -2463,8 +2551,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 17,
-      "graph": "i26.png"
+      "uid": "2b748b53-0d8e-4b50-bdd2-fe95b2cf904e",
+      "graph": "30bda331-61a3-4b4e-8512-9b1d752ea56a"
     },
     {
       "name": "WallB",
@@ -2473,8 +2561,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 18,
-      "graph": "i25.png"
+      "uid": "e35f323b-5571-4ff9-a759-dde630dc1995",
+      "graph": "a0f900ea-0361-4704-9016-60bbcf073bd1"
     },
     {
       "name": "RockStaff",
@@ -2483,8 +2571,8 @@
       "onstep": "var hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    this.kill = true;\n    hero.projectile = 'Boulder';\n    hero.overheat = 0;\n    hero.shootPeriod = 60;\n    hero.overheatCost = 15;\n    if (hero.form !== 'Rock') {\n        ct.sound.spawn('Transform');\n    }\n    hero.form = 'Rock';\n    hero.staff = 'Rock';\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 19,
-      "graph": "i88.png"
+      "uid": "c28ebbd3-f1df-43f3-b4af-808d2a2d32e0",
+      "graph": "7f63749e-f1db-4e13-a04f-93fad16082f3"
     },
     {
       "name": "WindStaff",
@@ -2493,8 +2581,8 @@
       "onstep": "var hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    this.kill = true;\n    hero.projectile = 'LightningZap';\n    hero.shootPeriod = 45;\n    hero.overheatCost = 10;\n    hero.overheat = 0;\n    if (hero.form !== 'Wind') {\n        ct.sound.spawn('Transform');\n    }\n    hero.form = 'Wind';\n    hero.staff = 'Wind';\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 20,
-      "graph": "i89.png"
+      "uid": "2aae7fa7-5811-4389-b940-21a848529891",
+      "graph": "1b36f38a-eebc-4c52-82e1-31d051eec02a"
     },
     {
       "name": "BeamStaff",
@@ -2503,8 +2591,8 @@
       "onstep": "var hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    this.kill = true;\n    hero.projectile = 'Beam';\n    hero.overheat = 0;\n    hero.shootPeriod = 1;\n    hero.overheatCost = 0.25;\n    if (hero.form !== 'Fire') {\n        ct.sound.spawn('Transform');\n    }\n    hero.form = 'Fire';\n    hero.staff = 'Beam';\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 21,
-      "graph": "i29.png"
+      "uid": "2c0f6ee0-b1ae-41b2-a922-646b42c01ee2",
+      "graph": "90ec652c-f536-4727-ae91-c2b8a89dd418"
     },
     {
       "name": "Beam",
@@ -2513,8 +2601,8 @@
       "onstep": "\nvar traceX = this.x + ct.u.ldx(1000, this.dir),\n    traceY = this.y + ct.u.ldy(1000, this.dir);\n\nvar objects = ct.place.trace(this.x, this.y, traceX, traceY);\n\nvar lastInd = objects.findIndex(function (copy) {\n    return copy.ctype === 'Solid';\n});\nthis.transform = true;\nthis.tr = this.dir;\nthis.tx = ct.u.pdc(this.x, this.y, objects[lastInd].x, objects[lastInd].y) / 16;\n\nfor (var i = 0; i < lastInd - 1; i++) {\n    if (objects[i].ctype === 'Enemy') {\n        objects[i].hp -= 0.03;\n        objects[i].burning = true;\n    }\n}\nthis.canKill = true;",
       "ondraw": "if (this.canKill) {\n    ct.draw(this);\n    ct.draw.img('BeamEnd', 0, this.x + ct.u.ldx(16 * this.tx, this.dir), this.y + ct.u.ldy(16 * this.tx, this.dir));\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 22,
-      "graph": "i30.png"
+      "uid": "d1a8cad7-e760-4b75-828f-9485e4185c25",
+      "graph": "7b339add-93b1-4757-8009-a398f47fc518"
     },
     {
       "name": "Boulder",
@@ -2523,8 +2611,8 @@
       "onstep": "this.tr += this.trspeed;\n\nif (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.kill = true;\n} else {\n    var enemy = ct.place.occupied(this, this.x, this.y, 'Enemy');\n    if (enemy) {\n        if (enemy.freezeTimer && enemy.type.indexOf('Boss') === -1) {\n            enemy.kill = true;\n        } else {\n            if (this.hp > enemy.hp) {\n                enemy.kill = true;\n                this.hp -= enemy.hp;\n                ct.sound.spawn('StoneHit');\n            } else if (this.hp === 0) {\n                enemy.kill = true;\n                this.kill = true;\n            } else {\n                enemy.hp -= this.hp;\n                this.kill = true;\n            }\n        }\n    } else {\n        this.depth = this.y + 10;\n        ct.types.move(this);\n    }\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.sound.spawn('StoneHit');\nvar FX = ct.types.copy('FX_RockBreak', this.x, this.y);\nFX.tr = this.tr;",
-      "uid": 23,
-      "graph": "i32.png"
+      "uid": "482180bb-ab92-41b0-8884-695261f87a39",
+      "graph": "baee20d0-69be-4fe0-be32-b7b03945d88b"
     },
     {
       "name": "LianeStaff",
@@ -2533,8 +2621,8 @@
       "onstep": "var hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    this.kill = true;\n    hero.projectile = 'PoisonBall';\n    hero.overheat = 0;\n    hero.shootPeriod = 60;\n    hero.overheatCost = 15;\n    if (hero.form !== 'Rock') {\n        ct.sound.spawn('Transform');\n    }\n    hero.form = 'Rock';\n    hero.staff = 'Liane';\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 24,
-      "graph": "i33.png"
+      "uid": "755167f4-8a41-4780-a392-713d88c63a71",
+      "graph": "8309d4df-187c-45e4-8dbd-b2987cd87dbd"
     },
     {
       "name": "PoisonBall",
@@ -2543,8 +2631,8 @@
       "onstep": "ct.types.move(this);\n\nif (ct.place.occupied(this, this.x, this.y, 'Solid') || ct.place.occupied(this, this.x, this.y, 'Enemy')) {\n    this.kill = true;\n}\n\nthis.depth = this.y + 10;",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.sound.spawn('Poison');\nct.types.copy('PoisonPuddle', this.x, this.y);",
-      "uid": 25,
-      "graph": "i34.png"
+      "uid": "1391f1c4-eabf-47f4-8c2f-0a4cb7ffbdc0",
+      "graph": "7080159e-4fc5-4afb-b9ee-b89760c01b7d"
     },
     {
       "name": "PoisonPuddle",
@@ -2553,8 +2641,8 @@
       "onstep": "this.damageTimer --;\nif (this.damageTimer <= 0) {\n    this.damageTimer = 30;\n    var me = this;\n    ct.types.each(function () {\n        if (this.ctype === 'Enemy' && ct.place.collide(me, this)) {\n            this.hp --;\n            this.poisionTimer = 40;\n            if (this.hp <= 0) {\n                this.kill = true;\n            }\n        }\n    });\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 26,
-      "graph": "i35.png"
+      "uid": "7bd825ad-e2c7-4035-bfd0-a8cbbf34ae72",
+      "graph": "fac475c7-a5a0-4478-8330-161b0cf35b4e"
     },
     {
       "name": "FX_Impact",
@@ -2563,8 +2651,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);\nif (this.frame >= 3) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 27,
-      "graph": "i36.png"
+      "uid": "aead916d-a8a1-4220-a18e-fd3e3e301cfc",
+      "graph": "943a4d67-6639-4f41-afca-6cf0a86a09d3"
     },
     {
       "name": "FX_Explosion",
@@ -2573,8 +2661,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);\n\nif (this.frame >= 7) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 28,
-      "graph": "i37.png"
+      "uid": "c4ce8a43-9d4a-468a-a8b2-4edf88ef844e",
+      "graph": "9e1a102c-aa56-4b6d-825c-bfe2e609350f"
     },
     {
       "name": "LightningZap",
@@ -2583,8 +2671,8 @@
       "onstep": "",
       "ondraw": "if (!this.shifted) {\n    this.shifted = true;\n    this.x += ct.u.ldx(32, this.dir);\n    this.y += ct.u.ldy(30, this.dir);\n    this.tr = this.dir;\n    var me = this;\n    ct.types.each(function () {\n        if (this.ctype === 'Enemy' && ct.place.collide(me, this)) {\n            this.hp -= 10;\n            if (this.hp <= 0) {\n                this.kill = true;\n            } else {\n                this.electrocutedTimer = 60 * 5;\n            }\n        }\n    });\n}\n\nct.draw(this);\n\nif (this.frame >= 6) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 29,
-      "graph": "i38.png"
+      "uid": "80f178d3-e1c2-4ed4-bba2-a57d841aac8d",
+      "graph": "ab8c5bed-8966-46a7-afde-2fa4aa3c6943"
     },
     {
       "name": "Iceberg",
@@ -2593,8 +2681,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;\n\nthis.shootTimer --;\nif (this.shootTimer <= 0) {\n    this.shootTimer = ct.random.range(40, 60) * 3;\n    var hero = ct.types.list['TheWizard'][0],\n        dir = 90;\n    if (hero) {\n        dir = ct.u.pdn(this.x, this.y, hero.x, hero.y);\n    }\n    for (var i = 0; i < 270; i += 120) {\n        var bullet = ct.types.copy('EnemySnowBullet', this.x, this.y);\n        bullet.dir = dir + i;\n    }\n    ct.sound.spawn(ct.random.dice('EnemyZap1', 'EnemyZap2', 'EnemyZap3'));\n}",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Ice');",
-      "uid": 30,
-      "graph": "i41.png"
+      "uid": "30644db1-24c4-4b84-a71c-4543edcff66d",
+      "graph": "a4d8d8c2-c151-43d8-8a3e-73812aa49c12"
     },
     {
       "name": "EnemySnowBullet",
@@ -2603,8 +2691,8 @@
       "onstep": "if (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.kill = true;\n} else {\n    var enemy = ct.place.meet(this, this.x, this.y, 'TheWizard');\n    if (enemy) {\n        this.kill = true;\n        damageHero(enemy, 1);\n    } else {\n        this.depth = - this.y + 10;\n        ct.types.move(this);\n        this.tr = this.dir;\n    }\n}\n",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.types.copy('FX_Impact', this.x, this.y);",
-      "uid": 31,
-      "graph": "i40.png"
+      "uid": "264264bd-8fda-4ff3-aa4d-6cc7574e921f",
+      "graph": "28481f24-565c-4f23-bf88-fb4859d62e7a"
     },
     {
       "name": "FX_Explosion_Ice",
@@ -2613,8 +2701,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);\n\nif (this.frame >= 7) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 32,
-      "graph": "i44.png"
+      "uid": "abb75bfe-b351-40e2-9a07-586960c94ea8",
+      "graph": "f85cd5f1-7732-4160-953d-e1af9b93db9a"
     },
     {
       "name": "EnemySnowMine",
@@ -2623,8 +2711,8 @@
       "onstep": "var enemy = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (enemy) {\n    this.kill = true;\n    damageHero(enemy, 4);\n}\n\nthis.detonateTimer --;\nif (this.detonateTimer <= 0) {\n    this.kill = true;\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.sound.spawn('FireballExplosion');\nct.types.copy('FX_Explosion_Ice', this.x, this.y - 12);",
-      "uid": 33,
-      "graph": "i43.png"
+      "uid": "8f74e298-555c-4afe-9279-95667b45e212",
+      "graph": "0ac9640e-ad56-4465-b325-53cc5ac28ac0"
     },
     {
       "name": "IceSnake",
@@ -2633,8 +2721,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;\n\nthis.shootTimer --;\nif (this.shootTimer <= 0) {\n    this.shootTimer = ct.random.range(40, 60) * 3;\n    ct.types.copy('EnemySnowMine', this.x, this.y);\n    ct.sound.spawn(ct.random.dice('EnemyZap1', 'EnemyZap2', 'EnemyZap3'));\n}",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Ice');",
-      "uid": 34,
-      "graph": "i45.png"
+      "uid": "a0127a11-3a65-443e-b779-2affe8c9f6c9",
+      "graph": "b7509c49-e326-4faf-aea6-0c9e0f45669b"
     },
     {
       "name": "Skeleton_Cool",
@@ -2643,8 +2731,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Earth');",
-      "uid": 35,
-      "graph": "i47.png"
+      "uid": "50a8afce-4842-4499-862e-b480635851fe",
+      "graph": "db3e6cdd-43ad-4699-a9da-2bcae083b590"
     },
     {
       "name": "DeadlyBear",
@@ -2653,8 +2741,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Earth');",
-      "uid": 37,
-      "graph": "i48.png"
+      "uid": "617ef3c5-ceb5-4bd9-971e-ef4464f06ff8",
+      "graph": "b7bf8c52-5547-4fa7-890f-965989351672"
     },
     {
       "name": "Summoner",
@@ -2663,8 +2751,8 @@
       "onstep": "if (this.frame > 5 && !this.summoned) {\n    this.summoned = true;\n    var copy = ct.types.copy(this.toSummon, this.x, this.y+16);\n    ct.room.activeMobs.push(copy);\nct.sound.spawn('AppearEnd');\n}",
       "ondraw": "ct.draw(this);\nif (this.frame >= 7) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 38,
-      "graph": "i42.png"
+      "uid": "aa75ce8d-6b8d-4cdd-a801-5f23d00f2c42",
+      "graph": "67ac4ea3-fab5-4103-a643-2f20597516a1"
     },
     {
       "name": "Hint_Keyboard",
@@ -2673,8 +2761,8 @@
       "onstep": "if (ct.keyboard.down['up'] || ct.keyboard.down['W']) {\n    if (this.mouseDone) {\n        this.kill = true;\n    } else {\n        this.keyboardDone = true;\n    }\n}\nif (ct.mouse.down) {\n    if (this.keyboardDone) {\n        this.kill = true;\n    } else {\n        this.mouseDone = true;\n    }\n}\nthis.killTimer --;\nif (this.killTimer <= 0) {\n    this.kill = true;\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.types.copy('FX_Explosion', this.x, this.y);",
-      "uid": 39,
-      "graph": "i49.png"
+      "uid": "8397b0fb-2ee4-45a7-b6e3-59faa6a3902f",
+      "graph": "731018a7-de50-41a7-aa6c-3c95ec9ab402"
     },
     {
       "name": "Hint_Mouse",
@@ -2683,8 +2771,8 @@
       "onstep": "if (ct.keyboard.down['up'] || ct.keyboard.down['W']) {\n    if (this.mouseDone) {\n        this.kill = true;\n    } else {\n        this.keyboardDone = true;\n    }\n}\nif (ct.mouse.down) {\n    if (this.keyboardDone) {\n        this.kill = true;\n    } else {\n        this.mouseDone = true;\n    }\n}\nthis.killTimer --;\nif (this.killTimer <= 0) {\n    this.kill = true;\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.types.copy('FX_Explosion', this.x, this.y);\n\nct.room.startGame = true;\nct.room.spawnTimer = 60;",
-      "uid": 40,
-      "graph": "i50.png"
+      "uid": "9baa87ed-c6aa-49f4-8cc3-fdb9c8ca8bd0",
+      "graph": "a0518152-9364-4312-8cd3-f957114c41c7"
     },
     {
       "name": "FireWisp",
@@ -2693,8 +2781,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;\n\nthis.shootTimer --;\nif (this.shootTimer <= 0) {\n    this.shootTimer = ct.random.range(40, 80);\n    var hero = ct.types.list['TheWizard'][0],\n        dir = 90;\n    if (hero) {\n        dir = ct.u.pdn(this.x, this.y, hero.x, hero.y);\n    } else {\n        dir = ct.random.deg();\n    }\n    var bullet = ct.types.copy('EnemyFireBullet', this.x, this.y);\n    bullet.dir += dir;\n    ct.sound.spawn(ct.random.dice('EnemyZap1', 'EnemyZap2', 'EnemyZap3'));\n}",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Fire');",
-      "uid": 41,
-      "graph": "i52.png"
+      "uid": "2e2bba17-aef7-4ac7-b78d-f0f363e216e5",
+      "graph": "5c583221-f726-4679-b6dd-80adb9650628"
     },
     {
       "name": "EnemyFireBullet",
@@ -2703,8 +2791,8 @@
       "onstep": "if (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.kill = true;\n} else {\n    var enemy = ct.place.meet(this, this.x, this.y, 'TheWizard');\n    if (enemy) {\n        this.kill = true;\n        damageHero(enemy, 1);\n    } else {\n        this.depth = - this.y + 10;\n        ct.types.move(this);\n        this.tr = this.dir;\n    }\n}\n",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.types.copy('FX_Impact', this.x, this.y);",
-      "uid": 42,
-      "graph": "i39.png"
+      "uid": "480986cc-aafd-4c49-88f8-455c4f5abc1d",
+      "graph": "5a56f72b-aeaa-4408-8a01-6766395b5a42"
     },
     {
       "name": "FX_StaffSparkles",
@@ -2713,8 +2801,8 @@
       "onstep": "if (this.parent.kill) {\n    this.kill = true;\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 43,
-      "graph": "i53.png"
+      "uid": "d1ead912-77d3-4900-9e79-efdf87059afc",
+      "graph": "044cf269-ca9e-45d9-92f2-7ab38784e386"
     },
     {
       "name": "FireSkull",
@@ -2723,8 +2811,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nvar hero = ct.place.meet(this, this.x, this.y, 'TheWizard');\nif (hero) {\n    damageHero(hero, 1);\n    this.kill = true;\n}\n\nthis.depth = this.y;",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Fire');\nct.types.copy('FX_Explosion', this.x, this.y);",
-      "uid": 44,
-      "graph": "i54.png"
+      "uid": "17fed65e-5c6c-4525-95c8-c2279a4b7665",
+      "graph": "f9c14aec-e656-4bd2-9ad4-ead0cf11bb7d"
     },
     {
       "name": "BossFloating",
@@ -2733,8 +2821,8 @@
       "onstep": "if (this.frame > 7) {\n    this.frame -= 7;\n}\n\nif (ct.room.startGame) {\n    this.transformTimer --;\n    if (this.transformTimer <= 0) {\n        if (ct.room.bossCharged) {\n            ct.types.copy('BossDisappear', this.x, this.y);\n            ct.room.bossCharged = false;\n        } else {\n            ct.types.copy('BossCharging', this.x, this.y);\n        }\n        this.kill = true;\n    }\n}\n\nbossDamageHandler(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 45,
-      "graph": "i55.png"
+      "uid": "3dad75d4-beb9-49e2-a0da-c7aaa95cce36",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "BossAppear",
@@ -2743,8 +2831,8 @@
       "onstep": "bossDamageHandler(this);",
       "ondraw": "if (this.frame < 18) {\n    this.kill = true;\n    ct.types.copy('BossFloating', this.x, this.y);\n}   else {\n    ct.draw(this);\n}",
       "ondestroy": "",
-      "uid": 46,
-      "graph": "i55.png"
+      "uid": "b1668d05-8bfb-4a1f-a3ad-67d502f04c21",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "Carpet",
@@ -2753,8 +2841,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 47,
-      "graph": "i58.png"
+      "uid": "029330c6-0ccd-4142-aeb6-7ad74895aa1c",
+      "graph": "efd8a297-dda1-4564-bae0-042f848501af"
     },
     {
       "name": "Dialogue",
@@ -2763,8 +2851,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 48,
-      "graph": "i59.png"
+      "uid": "e5be8775-0a9d-43e8-ac1b-f7b029d4f463",
+      "graph": "542fe16d-f6f0-4cca-a76c-202fc3e803d1"
     },
     {
       "name": "WizardDummy",
@@ -2773,8 +2861,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 49,
-      "graph": "i60.png"
+      "uid": "ed2df0ad-89e9-4062-953e-8031a0599cec",
+      "graph": "6bed81b4-c5cc-4d8c-a763-4120dfc2d1a9"
     },
     {
       "name": "GameStartController",
@@ -2783,7 +2871,7 @@
       "onstep": "if (ct.keyboard.released['space'] || ct.mouse.pressed) {\n    ct.keyboard.clear();\n    ct.mouse.clear();\n    this.dialogue ++;\n    var wizardDummy = ct.types.list['WizardDummy'][0],\n        boss = ct.types.list['BossFloating'][0] || ct.types.list['BossAppear'][0],\n        dialogue = ct.types.list['Dialogue'][0];\n    if (this.dialogue === 5) {\n        boss.kill = true;\n        ct.types.copy('BossDisappear', boss.x, boss.y);\n        \n        wizardDummy.kill = true;\n        ct.types.copy('TheWizard', wizardDummy.x, wizardDummy.y);\n        ct.types.copy('Hint_Mouse', wizardDummy.x - 64, wizardDummy.y - 20);\n        ct.types.copy('Hint_Keyboard', wizardDummy.x + 64, wizardDummy.y - 20);\n        \n        dialogue.kill = true;\n        this.kill = true;\n    } else if (this.dialogue === 1 || this.dialogue === 2) {\n        dialogue.frame = this.dialogue;\n        ct.tween.add({\n            obj: dialogue,\n            fields: {\n                x: wizardDummy.x + 16,\n                y: wizardDummy.y - 32,\n            },\n            duration: 350\n        });\n        ct.sound.spawn('WizardTalk');\n    } else {\n        dialogue.frame = this.dialogue;\n        ct.tween.add({\n            obj: dialogue,\n            fields: {\n                x: boss.x + 24,\n                y: boss.y + 16,\n            },\n            duration: 350\n        });\n        ct.sound.spawn('BossTalk');\n    }\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 50,
+      "uid": "cc270634-7e45-4b06-8db1-e87bf384ced7",
       "graph": -1
     },
     {
@@ -2793,8 +2881,8 @@
       "onstep": "",
       "ondraw": "if (this.frame >= 20) {\n    this.kill = true;\n}   else {\n    ct.draw(this);\n}",
       "ondestroy": "ct.room.boss = false;",
-      "uid": 51,
-      "graph": "i55.png"
+      "uid": "19e174aa-1dcb-4b4d-b12e-eb1534c08184",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "BossCharging",
@@ -2803,8 +2891,8 @@
       "onstep": "bossDamageHandler(this);",
       "ondraw": "if (this.frame >= 15) {\n    this.kill = true;\n    ct.types.copy('BossAttacking', this.x, this.y);\n}   else {\n    ct.draw(this);\n}",
       "ondestroy": "",
-      "uid": 53,
-      "graph": "i55.png"
+      "uid": "74ebf71b-f494-4221-b410-35b78f0e6013",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "BossUncharging",
@@ -2813,8 +2901,8 @@
       "onstep": "bossDamageHandler(this);",
       "ondraw": "if (this.frame <= 8) {\n    this.kill = true;\n    ct.types.copy('BossFloating', this.x, this.y);\n}   else {\n    ct.draw(this);\n}",
       "ondestroy": "",
-      "uid": 54,
-      "graph": "i55.png"
+      "uid": "3a9e0320-73c2-4934-8af7-ac47bb97705e",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "FadeIn",
@@ -2823,7 +2911,7 @@
       "onstep": "",
       "ondraw": "this.fadeInTimer--;\nif (this.fadeInTimer <= 0) {\n    this.fadeInTimer = 30;\n    this.alpha -= 0.2;\n}\nif (this.alpha <= 0) {\n    this.kill = true;\n} else {\n    ct.x.fillStyle = '#000';\n    ct.x.globalAlpha = this.alpha;\n    ct.draw.rectangle(ct.room.x, ct.room.y, ct.room.width, ct.room.height);\n    ct.styles.reset();\n}\n",
       "ondestroy": "",
-      "uid": 55,
+      "uid": "d2e077b8-1b73-48f3-9436-84e55046624a",
       "graph": -1
     },
     {
@@ -2833,8 +2921,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);\nif (this.frame >= 7) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 56,
-      "graph": "i61.png"
+      "uid": "e9714650-6ca3-4aa9-801f-4e137f4e4337",
+      "graph": "9bf8f77e-3edb-4153-b8e5-62239c32772e"
     },
     {
       "name": "BossAttacking",
@@ -2843,8 +2931,8 @@
       "onstep": "if (this.frame > 17) {\n    this.frame -= 3;\n}\nthis.transformTimer --;\nif (this.transformTimer <= 0) {\n    ct.types.copy('BossUncharging', this.x, this.y);\n    this.kill = true;\n}\n\nbossDamageHandler(this);\n\nthis.shootTimer --;\nif (this.shootTimer <= 0) {\n    this.shootTimer = 10;\n    \n    if (this.mode === 0) {\n        var b = ct.types.copy('InfernalBullet', this.x, this.y + 32);\n        b.dir = this.deg;\n        b = ct.types.copy('InfernalBullet', this.x, this.y + 32);\n        b.dir = this.deg + 180;\n        b = ct.types.copy('InfernalBullet', this.x, this.y + 32);\n        b.dir = this.deg + 90;\n        b = ct.types.copy('InfernalBullet', this.x, this.y + 32);\n        b.dir = this.deg + 270;\n        this.deg += 10;   \n    } else {\n        var wizard = ct.types.list['TheWizard'][0];\n        if (wizard) {\n            var dir = ct.u.pdn(this.x, this.y + 32, wizard.x, wizard.y - 16);\n            var b = ct.types.copy('InfernalBullet', this.x, this.y + 32);\n            b.dir = dir + ct.random.range(-35, 35);\n        }\n    }\n    ct.sound.spawn(ct.random.dice('EnemyZap1', 'EnemyZap2', 'EnemyZap3'));\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 57,
-      "graph": "i55.png"
+      "uid": "576e7649-06df-4a67-918b-ce001b9157ad",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "InfernalBullet",
@@ -2853,8 +2941,8 @@
       "onstep": "if (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.kill = true;\n} else {\n    var enemy = ct.place.meet(this, this.x, this.y, 'TheWizard');\n    if (enemy) {\n        this.kill = true;\n        damageHero(enemy, 2);\n    } else {\n        this.depth = - this.y + 10;\n        ct.types.move(this);\n        this.tr = this.dir;\n    }\n}\n",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.types.copy('FX_Impact', this.x, this.y);",
-      "uid": 58,
-      "graph": "i39.png"
+      "uid": "b2860e37-4c4d-4b07-a8a4-23847cae2150",
+      "graph": "5a56f72b-aeaa-4408-8a01-6766395b5a42"
     },
     {
       "name": "Column",
@@ -2863,8 +2951,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 59,
-      "graph": "i62.png"
+      "uid": "1b313bc9-4dbc-49c3-ba8d-9e9c39fa27f4",
+      "graph": "599b3d68-4b61-4511-ba05-b8697b34ac22"
     },
     {
       "name": "LanternTop",
@@ -2873,8 +2961,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 60,
-      "graph": "i63.png"
+      "uid": "2d4646e6-4bca-4dd8-9fd7-e83854c3b549",
+      "graph": "ea44322d-e0a3-43a2-a6c1-7212bdf9b887"
     },
     {
       "name": "LanternLeft",
@@ -2883,8 +2971,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 61,
-      "graph": "i68.png"
+      "uid": "75409787-b527-4056-a3be-9a5dced1d19f",
+      "graph": "6f3c90d3-e439-483a-aaff-ce19ae7bcbd4"
     },
     {
       "name": "LanternRight",
@@ -2893,8 +2981,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 62,
-      "graph": "i67.png"
+      "uid": "5008e24d-8b4d-4733-af7b-b8cc07ae0e2a",
+      "graph": "62dc0ee2-a153-494d-adac-564010fe29ce"
     },
     {
       "name": "WallTFlag",
@@ -2903,8 +2991,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 63,
-      "graph": "i66.png"
+      "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253",
+      "graph": "83bcb83d-4eed-446b-bf5a-c69bd90fc820"
     },
     {
       "name": "WallLFlag",
@@ -2913,8 +3001,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 64,
-      "graph": "i65.png"
+      "uid": "d0b4b5f8-1c03-4f96-a060-e0d7ad63a564",
+      "graph": "1554a574-aba4-45e0-bae7-226234656679"
     },
     {
       "name": "WallRFlag",
@@ -2923,8 +3011,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 65,
-      "graph": "i64.png"
+      "uid": "ec053ca0-cfaf-4e33-9ba5-2f2f32c75efe",
+      "graph": "96d1c7ad-54c0-4484-a2af-2d70c475c7ae"
     },
     {
       "name": "Ceiling",
@@ -2933,8 +3021,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 66,
-      "graph": "i69.png"
+      "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221",
+      "graph": "a168aa11-5f5e-4ca1-a981-6ae19854924d"
     },
     {
       "name": "Ceiling_dup",
@@ -2943,8 +3031,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 67,
-      "graph": "i70.png"
+      "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100",
+      "graph": "c192cf90-4828-431d-9a82-f3ad913a49c2"
     },
     {
       "name": "Logo",
@@ -2953,8 +3041,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 68,
-      "graph": "i73.png"
+      "uid": "3f797123-08cc-4f16-a03f-74096884eee5",
+      "graph": "0ad23fb2-dea3-4248-a067-36b9145e0f83"
     },
     {
       "name": "PressSpaceToStart",
@@ -2963,8 +3051,8 @@
       "onstep": "if (ct.keyboard.released['space']) {\n    ct.rooms.switch('InGame');\n    ct.keyboard.clear();\n}",
       "ondraw": "this.blinkTimer ++;\nif (this.blinkTimer > 90) {\n    this.blinkTimer -= 90;\n}\nif (this.blinkTimer > 45) {\n    ct.draw(this);\n}",
       "ondestroy": "",
-      "uid": 69,
-      "graph": "i75.png"
+      "uid": "33e505bc-2d1a-4cf9-825a-26dded396669",
+      "graph": "b864a2d3-91e4-492d-bdf3-03af04b261c3"
     },
     {
       "name": "Credits",
@@ -2973,8 +3061,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 70,
-      "graph": "i76.png"
+      "uid": "51dceb43-47d2-415e-8530-b5786252ac5c",
+      "graph": "86fb5e71-9307-4780-985f-c9d9edf5d3ba"
     },
     {
       "name": "Cloud",
@@ -2983,8 +3071,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;\n\nthis.shootTimer --;\nif (this.shootTimer <= 0) {\n    this.shootTimer = ct.random.range(40, 60);\n    var bullet = ct.types.copy('EnemyThunderBullet', this.x, this.y);\n    ct.sound.spawn(ct.random.dice('EnemyZap1', 'EnemyZap2', 'EnemyZap3'));\n}",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Wind');",
-      "uid": 71,
-      "graph": "i72.png"
+      "uid": "62bf94c0-ba84-4448-bf96-6400d7d7caae",
+      "graph": "f2a3ba34-be77-4dc4-9326-7908979198b8"
     },
     {
       "name": "BossDeath",
@@ -2993,8 +3081,8 @@
       "onstep": "this.transformTimer --;\nif ((this.transformTimer % 4) === 0) {\n    this.x += 3;\n} else if ((this.transformTimer % 4) === 2) {\n    this.x -= 3;\n}\nif ((this.transformTimer % 10) === 0 && this.transformTimer > 60) {\n    ct.types.copy('FX_EnemyDeath', this.x + ct.random.range(-60, 60), this.y + ct.random.range(-50, 60));\n    ct.sound.spawn('EnemyDeath');\n}\nif (this.transformTimer <= 0) {\n    this.kill = true;\n    ct.sound.spawn('EnemyDeath');\n    ct.types.copy('BossDeathDisintegrate', this.x, this.y);\n    ct.types.copy('GameEndController', 0, 0);\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 72,
-      "graph": "i55.png"
+      "uid": "8a6aae9d-19ad-485e-8063-741399559db4",
+      "graph": "713d9a59-05ea-4a55-9900-dd50e2fc3018"
     },
     {
       "name": "GameEndController",
@@ -3003,7 +3091,7 @@
       "onstep": "if (ct.keyboard.released['space'] || ct.mouse.pressed) {\n    ct.keyboard.clear();\n    ct.mouse.clear();\n    this.dialogue ++;\n    var wizardDummy = ct.types.list['WizardDummy'][0]\n        dialogue = ct.types.list['Dialogue'][0];\n    if (this.dialogue === 9) {\n        ct.rooms.switch('TheEnd')  \n    } else {\n        dialogue.frame = this.dialogue;\n        if (this.dialogue === 7) {\n            ct.types.copy('FadeOut', 0, 0);\n        }\n        ct.sound.spawn('WizardTalk');\n    }\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 73,
+      "uid": "7f209fee-d218-4f81-8437-4132561ad094",
       "graph": -1
     },
     {
@@ -3013,7 +3101,7 @@
       "onstep": "",
       "ondraw": "this.fadeInTimer--;\nif (this.fadeInTimer <= 0) {\n    this.fadeInTimer = 30;\n    this.alpha += 0.2;\n}\nct.x.fillStyle = '#000';\nct.x.globalAlpha = this.alpha;\nct.draw.rectangle(ct.room.x, ct.room.y, ct.room.width, ct.room.height);\nct.styles.reset();",
       "ondestroy": "",
-      "uid": 74,
+      "uid": "41d0a3a1-a492-45f7-bfa8-299f06ef8b28",
       "graph": -1
     },
     {
@@ -3023,8 +3111,8 @@
       "onstep": "enemyBehaviour(this);\nct.types.move(this);\n\nthis.depth = this.y;",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Wind');",
-      "uid": 75,
-      "graph": "i77.png"
+      "uid": "d7d5b899-ea43-495d-8f14-337a69e74982",
+      "graph": "28d259a1-17e4-4575-968f-51f0289b7faf"
     },
     {
       "name": "Victory",
@@ -3033,8 +3121,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 76,
-      "graph": "i78.png"
+      "uid": "cadbcf0a-3329-46f2-9dd5-59283f32878d",
+      "graph": "63741e58-103d-4c72-912b-3d397a36ab23"
     },
     {
       "name": "EndCredits",
@@ -3043,8 +3131,8 @@
       "onstep": "ct.types.move(this);",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 77,
-      "graph": "i79.png"
+      "uid": "2280d30b-44dc-47f7-b4a2-037e7b1b0b12",
+      "graph": "e819b494-bb00-4321-a0c1-b369458d7cb3"
     },
     {
       "name": "Skeleton_Archer",
@@ -3053,8 +3141,8 @@
       "onstep": "if (this.shootTimer <= 0) {\n    this.shootTimer = 60 * 3;\n    this.shootimg = true;\n    this.frame = 0;\n    this.graph = 'SkeletonArcher';\n}\nif (this.shooting) {\n    if (this.frame >= 11) {\n        this.shooting = false;\n        this.graph = 'SkeletonArcher_Walk';\n    }\n}\n\n\nenemyBehaviour(this);\n\nthis.depth = this.y;",
       "ondraw": "enemyDraw(this);",
       "ondestroy": "enemyDeath(this, 'Earth');",
-      "uid": 78,
-      "graph": "i80.png"
+      "uid": "a522c7cd-8f5d-437a-bcf6-fcb12e6ac601",
+      "graph": "22ba804d-0659-46de-ba83-ebb19f22e0a2"
     },
     {
       "name": "DeathScreen",
@@ -3063,8 +3151,8 @@
       "onstep": "if (ct.keyboard.released['space']) {\n    ct.rooms.switch('InGame');\n    ct.keyboard.clear();\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
-      "uid": 79,
-      "graph": "i82.png"
+      "uid": "4478a7b3-34b2-4ea1-a415-285d18af1168",
+      "graph": "729b0838-255d-44f8-a722-6e60d3e2ebf8"
     },
     {
       "name": "FX_RockBreak",
@@ -3073,8 +3161,8 @@
       "onstep": "",
       "ondraw": "ct.draw(this);\n\nif (this.frame >= 6) {\n    this.kill = true;\n}",
       "ondestroy": "",
-      "uid": 80,
-      "graph": "i84.png"
+      "uid": "b1dc6d7e-b3f7-4737-bdff-25494342168b",
+      "graph": "6f32a170-1701-4834-82a2-71f9a76db56c"
     },
     {
       "name": "FullScreenButton",
@@ -3083,8 +3171,8 @@
       "onstep": "this.x = ct.room.x + ct.room.width - 16;\nthis.y = ct.room.y + ct.room.height - 16;\n\nif (ct.u.prect(ct.mouse.x, ct.mouse.y, this)) {\n    if (ct.mouse.pressed) {\n        ct.fittoscreen.toggleFullscreen();\n    }\n}",
       "ondraw": "this.frame = ct.fittoscreen.getIsFullscreen()? 1 : 0;\nct.draw(this);",
       "ondestroy": "",
-      "uid": 81,
-      "graph": "i83.png"
+      "uid": "4eb59e08-c025-462d-9853-57d0200ac23a",
+      "graph": "6d5062cc-0325-462c-8110-909b0210f881"
     },
     {
       "name": "EnemyThunderBullet",
@@ -3093,8 +3181,8 @@
       "onstep": "if (ct.place.occupied(this, this.x, this.y, 'Solid')) {\n    this.kill = true;\n} else {\n    var enemy = ct.place.meet(this, this.x, this.y, 'TheWizard');\n    if (enemy) {\n        this.kill = true;\n        damageHero(enemy, 1);\n    } else {\n        this.depth = - this.y + 10;\n        ct.types.move(this);\n        this.tr = this.dir;\n    }\n}\n",
       "ondraw": "ct.draw(this);",
       "ondestroy": "ct.types.copy('FX_Impact', this.x, this.y);",
-      "uid": 82,
-      "graph": "i85.png"
+      "uid": "858b082b-041b-4cf5-b29a-cdc498e79d69",
+      "graph": "dd454169-6744-4b43-9f5b-09e4e9fda6d8"
     },
     {
       "name": "BossDeathDisintegrate",
@@ -3103,189 +3191,189 @@
       "onstep": "",
       "ondraw": "if (this.frame >= 3) {\n    this.kill = true;\n}   else {\n    ct.draw(this);\n}",
       "ondestroy": "ct.room.boss = false;",
-      "uid": 83,
-      "graph": "i90.png"
+      "uid": "5fad0eae-06d6-4fe1-ba4c-dafcb3088b7a",
+      "graph": "ed65c687-caa0-4cc6-b553-cafd87ff87a3"
     }
   ],
   "sounds": [
     {
       "name": "Overcharge1",
-      "uid": 1,
+      "uid": "9da3dae4-3123-42b8-a40d-e5761e032a15",
       "origname": "s1.wav",
       "lastmod": 1533877904849
     },
     {
       "name": "Overcharge2",
-      "uid": 2,
+      "uid": "999a60ea-31b0-4d6b-97be-11920be74061",
       "origname": "s2.wav",
       "lastmod": 1533877914112
     },
     {
       "name": "Overcharge3",
-      "uid": 3,
+      "uid": "65b1b976-a652-462b-8190-2e152d3f070e",
       "origname": "s3.wav",
       "lastmod": 1533877921104
     },
     {
       "name": "Overcharge4",
-      "uid": 4,
+      "uid": "95c30550-79a3-4acd-8e0b-69de98f6b45c",
       "origname": "s4.wav",
       "lastmod": 1533877928138
     },
     {
       "name": "FireballLaunch",
-      "uid": 5,
+      "uid": "a3e853e1-5093-4597-b39e-5c0a0e4f6214",
       "origname": "s5.wav",
       "lastmod": 1533887956124
     },
     {
       "name": "FireballLaunch_Small",
-      "uid": 6,
+      "uid": "cc4744c6-30f9-46ce-9963-0db96c0f94ac",
       "origname": "s6.wav",
       "lastmod": 1533887964314
     },
     {
       "name": "FireballExplosion",
-      "uid": 7,
+      "uid": "44bb1f8f-f14b-41fa-9982-d8381b23370e",
       "origname": "s7.wav",
       "lastmod": 1533887974171
     },
     {
       "name": "IceHit",
-      "uid": 8,
+      "uid": "20198ae5-92d6-48f0-acc8-e1594a6855f2",
       "origname": "s8.wav",
       "lastmod": 1533888004690
     },
     {
       "name": "StoneHit",
-      "uid": 9,
+      "uid": "7eb44229-a8ac-4656-8f09-1c00bfeb0d22",
       "origname": "s9.wav",
       "lastmod": 1533888012107
     },
     {
       "name": "Thunderchain",
-      "uid": 10,
+      "uid": "12e22e5c-5db9-4ece-8417-f016eda89791",
       "origname": "s10.wav",
       "lastmod": 1533888020019
     },
     {
       "name": "IcicleLaunch",
-      "uid": 11,
+      "uid": "91968f57-55fa-42cc-98a2-6c5f8ef003a1",
       "origname": "s11.wav",
       "lastmod": 1533888830143
     },
     {
       "name": "Transform",
-      "uid": 12,
+      "uid": "1b13335d-b552-42db-8f6e-e97e648fa3a7",
       "origname": "s12.wav",
       "lastmod": 1533895324680
     },
     {
       "name": "Hurt2",
-      "uid": 13,
+      "uid": "7ca90563-e92c-4b75-88cb-a17bd08050f8",
       "origname": "s13.wav",
       "lastmod": 1533895591459
     },
     {
       "name": "Hurt1",
-      "uid": 14,
+      "uid": "fd27b592-e6f5-4302-b570-f26cea1e98c8",
       "origname": "s14.wav",
       "lastmod": 1533895704145
     },
     {
       "name": "Hurt3",
-      "uid": 15,
+      "uid": "9e7f73a0-f5bd-4c17-9eba-e03eeaf0e618",
       "origname": "s15.wav",
       "lastmod": 1533895711197
     },
     {
       "name": "Beam",
-      "uid": 16,
+      "uid": "2091b091-2b5f-4812-b79a-7d4c5177cd62",
       "origname": "s16.wav",
       "lastmod": 1533905504082
     },
     {
       "name": "ThrowBoulder",
-      "uid": 17,
+      "uid": "0aafc0bc-b910-4f57-9ac7-d30260a27b03",
       "origname": "s17.wav",
       "lastmod": 1533904724647
     },
     {
       "name": "Shotgun",
-      "uid": 18,
+      "uid": "dc0f00de-503b-4f6e-9c16-fecdbfd34d6d",
       "origname": "s18.wav",
       "lastmod": 1533906742307
     },
     {
       "name": "Poison",
-      "uid": 19,
+      "uid": "0057d40b-2083-4d0f-837d-667421b5917b",
       "origname": "s19.wav",
       "lastmod": 1533906858567
     },
     {
       "name": "EnemyZap1",
-      "uid": 20,
+      "uid": "b7853ea7-d15c-4e2d-a00b-528300756b3a",
       "origname": "s20.wav",
       "lastmod": 1533960534293
     },
     {
       "name": "EnemyZap2",
-      "uid": 21,
+      "uid": "eb6c1176-9dfe-4f3e-bd8a-3a0011270e20",
       "origname": "s21.wav",
       "lastmod": 1533960541220
     },
     {
       "name": "EnemyZap3",
-      "uid": 22,
+      "uid": "bdcec218-931d-4e8c-acf8-c2b2ebfce2b0",
       "origname": "s22.wav",
       "lastmod": 1533960549853
     },
     {
       "name": "Appear",
-      "uid": 23,
+      "uid": "e1f0dd08-b2eb-493e-ae25-92ba7c3c07c2",
       "origname": "s23.wav",
       "lastmod": 1533990639382
     },
     {
       "name": "AppearEnd",
-      "uid": 24,
+      "uid": "7c27d7b3-0537-421e-b675-f56fdd463165",
       "origname": "s24.wav",
       "lastmod": 1533990666765
     },
     {
       "name": "WizardTalk",
-      "uid": 25,
+      "uid": "52545075-16db-4f1f-8c0d-b85596417c89",
       "origname": "s25.wav",
       "lastmod": 1533991519250
     },
     {
       "name": "BossTalk",
-      "uid": 26,
+      "uid": "b0d72fe6-6755-4bce-9fed-8ba2edf8e213",
       "origname": "s26.wav",
       "lastmod": 1533991525824
     },
     {
       "name": "EnemyDeath",
-      "uid": 27,
+      "uid": "b6480a2c-7dab-4d49-88a1-1d4612261602",
       "origname": "s27.wav",
       "lastmod": 1533992573362
     },
     {
       "name": "Vent",
-      "uid": 28,
+      "uid": "abc65e70-5a88-4f0e-adae-058310903ee5",
       "origname": "s28.wav",
       "lastmod": 1533993368482
     },
     {
       "name": "HackneyLives",
-      "uid": 29,
+      "uid": "56f1a626-6588-4781-8ef8-485a36fc440c",
       "origname": "s29.mp3",
       "lastmod": 1533998416889,
       "isMusic": true
     },
     {
       "name": "VienneseWorlds_Mini",
-      "uid": 30,
+      "uid": "1f87c4fb-c910-4991-99ea-89e0a65b9a1c",
       "isMusic": true,
       "origname": "s30.mp3",
       "lastmod": 1534054053467
@@ -3294,7 +3382,7 @@
   "styles": [
     {
       "name": "OverchargeBase",
-      "uid": 1,
+      "uid": "d0d704b5-288a-4d77-87fc-0e1c72048cc0",
       "origname": "s1",
       "fill": {
         "type": "1",
@@ -3323,7 +3411,7 @@
     },
     {
       "name": "OverchargeBar_Fire",
-      "uid": 2,
+      "uid": "d7d970ad-acf7-41f7-86ef-2bd89d0dda44",
       "origname": "s2",
       "lastmod": 1533884052265,
       "font": {
@@ -3348,7 +3436,7 @@
     },
     {
       "name": "OverchargeBar_Wind",
-      "uid": 4,
+      "uid": "a9280e02-d226-48b3-b18e-b06316d4e56f",
       "origname": "s4",
       "lastmod": 1533893374399,
       "font": {
@@ -3373,7 +3461,7 @@
     },
     {
       "name": "OverchargeBar_Ice",
-      "uid": 5,
+      "uid": "79f46666-18ba-4741-9467-7dda93d94049",
       "origname": "s5",
       "lastmod": 1533893403336,
       "font": {
@@ -3398,7 +3486,7 @@
     },
     {
       "name": "OverchargeBar_Rock",
-      "uid": 6,
+      "uid": "086674a5-c65e-48e4-801e-ea31aeab3453",
       "origname": "s6",
       "lastmod": 1533894205471,
       "font": {
@@ -3434,7 +3522,7 @@
       "backgrounds": [
         {
           "depth": "-10000",
-          "graph": "i57.png"
+          "graph": "e188084b-bf32-4663-84fa-be03411dbe89"
         }
       ],
       "layers": [
@@ -3444,772 +3532,772 @@
             {
               "x": 320,
               "y": 304,
-              "uid": 49
+              "uid": "ed2df0ad-89e9-4062-953e-8031a0599cec"
             },
             {
               "x": 320,
               "y": 176,
-              "uid": 46
+              "uid": "b1668d05-8bfb-4a1f-a3ad-67d502f04c21"
             },
             {
               "x": 208,
               "y": 272,
-              "uid": 50
+              "uid": "cc270634-7e45-4b06-8db1-e87bf384ced7"
             },
             {
               "x": 144,
               "y": 112,
-              "uid": 59
+              "uid": "1b313bc9-4dbc-49c3-ba8d-9e9c39fa27f4"
             },
             {
               "x": 144,
               "y": 272,
-              "uid": 59
+              "uid": "1b313bc9-4dbc-49c3-ba8d-9e9c39fa27f4"
             },
             {
               "x": 496,
               "y": 272,
-              "uid": 59
+              "uid": "1b313bc9-4dbc-49c3-ba8d-9e9c39fa27f4"
             },
             {
               "x": 496,
               "y": 112,
-              "uid": 59
+              "uid": "1b313bc9-4dbc-49c3-ba8d-9e9c39fa27f4"
             },
             {
               "x": -32,
               "y": -64,
-              "uid": 2
+              "uid": "fb9f20fb-675c-4142-a0f1-760b8c25c2a1"
             },
             {
               "x": 0,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 224,
               "y": -64,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 384,
               "y": -64,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 128,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 160,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 192,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 288,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 320,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 416,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 448,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 480,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 608,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 640,
               "y": -64,
-              "uid": 13
+              "uid": "abd41381-dddf-4e40-9b7e-c3f2e9586512"
             },
             {
               "x": -32,
               "y": 0,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 32,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 96,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 128,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 192,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 224,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 320,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": -32,
               "y": 352,
-              "uid": 16
+              "uid": "f5b7a32e-838d-47f7-a3c2-708a6396f348"
             },
             {
               "x": 0,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 64,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 96,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 192,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 224,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 256,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 288,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 320,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 352,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 384,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 416,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 448,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 512,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 544,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 640,
               "y": 352,
-              "uid": 17
+              "uid": "2b748b53-0d8e-4b50-bdd2-fe95b2cf904e"
             },
             {
               "x": 608,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 640,
               "y": 320,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 640,
               "y": 288,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 640,
               "y": 192,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 640,
               "y": 128,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 640,
               "y": 96,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 640,
               "y": 32,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 640,
               "y": 0,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": 32,
               "y": -64,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 576,
               "y": -64,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 96,
               "y": -64,
-              "uid": 60
+              "uid": "2d4646e6-4bca-4dd8-9fd7-e83854c3b549"
             },
             {
               "x": 512,
               "y": -64,
-              "uid": 60
+              "uid": "2d4646e6-4bca-4dd8-9fd7-e83854c3b549"
             },
             {
               "x": 256,
               "y": -64,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 352,
               "y": -64,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 64,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": 544,
               "y": -64,
-              "uid": 12
+              "uid": "bb5125db-a807-4ef2-afa1-6ca292a95c21"
             },
             {
               "x": -32,
               "y": 64,
-              "uid": 61
+              "uid": "75409787-b527-4056-a3be-9a5dced1d19f"
             },
             {
               "x": -32,
               "y": 256,
-              "uid": 61
+              "uid": "75409787-b527-4056-a3be-9a5dced1d19f"
             },
             {
               "x": -32,
               "y": 288,
-              "uid": 14
+              "uid": "4136a9d1-f8ba-453f-aa0a-de549f0d92a7"
             },
             {
               "x": 640,
               "y": 256,
-              "uid": 62
+              "uid": "5008e24d-8b4d-4733-af7b-b8cc07ae0e2a"
             },
             {
               "x": 640,
               "y": 64,
-              "uid": 62
+              "uid": "5008e24d-8b4d-4733-af7b-b8cc07ae0e2a"
             },
             {
               "x": -32,
               "y": 160,
-              "uid": 64
+              "uid": "d0b4b5f8-1c03-4f96-a060-e0d7ad63a564"
             },
             {
               "x": 640,
               "y": 160,
-              "uid": 65
+              "uid": "ec053ca0-cfaf-4e33-9ba5-2f2f32c75efe"
             },
             {
               "x": 640,
               "y": 224,
-              "uid": 15
+              "uid": "0c52d277-c3f7-4134-9b9b-301a9e4cfe26"
             },
             {
               "x": -160,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -160,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -160,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -160,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -160,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -32,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 96,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 224,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 352,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 480,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 608,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 672,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 736,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 800,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 864,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 800,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 672,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 544,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 416,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 288,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 160,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 32,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -96,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -224,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -352,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -160,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -32,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 96,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 224,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 224,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 96,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -32,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -160,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -288,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -416,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 352,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 352,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 480,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 480,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 608,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 608,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 736,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 736,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 672,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 800,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 864,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 864,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 928,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 672,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 800,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 928,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 672,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 800,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 928,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 928,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 928,
               "y": 576,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 992,
               "y": 448,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 992,
               "y": -192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 992,
               "y": -320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": -32,
               "y": 416,
-              "uid": 67
+              "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100"
             },
             {
               "x": 96,
               "y": 416,
-              "uid": 67
+              "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100"
             },
             {
               "x": 224,
               "y": 416,
-              "uid": 67
+              "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100"
             },
             {
               "x": 352,
               "y": 416,
-              "uid": 67
+              "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100"
             },
             {
               "x": 480,
               "y": 416,
-              "uid": 67
+              "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100"
             },
             {
               "x": 608,
               "y": 416,
-              "uid": 67
+              "uid": "b6d4ef52-4f90-4354-9ebd-4cc210bba100"
             },
             {
               "x": 32,
               "y": 352,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 128,
               "y": 352,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 160,
               "y": 352,
-              "uid": 18
+              "uid": "e35f323b-5571-4ff9-a759-dde630dc1995"
             },
             {
               "x": 480,
               "y": 352,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 576,
               "y": 352,
-              "uid": 63
+              "uid": "9e4c4ea7-c983-4bb9-bf98-c5c8bc1be253"
             },
             {
               "x": 1056,
               "y": -64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 1056,
               "y": 64,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 1056,
               "y": 192,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             },
             {
               "x": 1056,
               "y": 320,
-              "uid": 66
+              "uid": "9b48bb1e-a067-427d-a7fa-1656e4d4e221"
             }
           ]
         },
@@ -4219,7 +4307,7 @@
             {
               "x": 336,
               "y": 192,
-              "uid": 48
+              "uid": "e5be8775-0a9d-43e8-ac1b-f7b029d4f463"
             }
           ]
         },
@@ -4229,7 +4317,7 @@
             {
               "x": 80,
               "y": 256,
-              "uid": 55
+              "uid": "d2e077b8-1b73-48f3-9436-84e55046624a"
             }
           ]
         },
@@ -4239,14 +4327,23 @@
             {
               "x": 48,
               "y": 160,
-              "uid": 81
+              "uid": "4eb59e08-c025-462d-9853-57d0200ac23a"
             }
           ]
         }
       ],
-      "uid": 1,
+      "uid": "2791e8c3-de22-4ffd-8edc-4a7bb070ddd8",
       "grid": 16,
-      "lastmod": 1534225138300
+      "lastmod": 1540635237972,
+      "thumbnail": 1,
+      "gridX": 16,
+      "gridY": 16,
+      "tiles": [
+        {
+          "depth": -10,
+          "tiles": []
+        }
+      ]
     },
     {
       "name": "StartScreen",
@@ -4259,7 +4356,7 @@
       "backgrounds": [
         {
           "depth": "-100",
-          "graph": "i74.png"
+          "graph": "bba9f99f-a9f4-421b-a757-35e97d3a67c0"
         }
       ],
       "layers": [
@@ -4269,17 +4366,17 @@
             {
               "x": 320,
               "y": 320,
-              "uid": 70
+              "uid": "51dceb43-47d2-415e-8530-b5786252ac5c"
             },
             {
               "x": 320,
               "y": 120,
-              "uid": 68
+              "uid": "3f797123-08cc-4f16-a03f-74096884eee5"
             },
             {
               "x": 320,
               "y": 200,
-              "uid": 69
+              "uid": "33e505bc-2d1a-4cf9-825a-26dded396669"
             }
           ]
         },
@@ -4289,14 +4386,23 @@
             {
               "x": 80,
               "y": 160,
-              "uid": 81
+              "uid": "4eb59e08-c025-462d-9853-57d0200ac23a"
             }
           ]
         }
       ],
-      "uid": 2,
+      "uid": "90fa05ec-70dd-4a95-911a-d441c21161c1",
       "grid": 40,
-      "lastmod": 1534225141717
+      "lastmod": 1540635241108,
+      "thumbnail": 2,
+      "gridX": 40,
+      "gridY": 40,
+      "tiles": [
+        {
+          "depth": -10,
+          "tiles": []
+        }
+      ]
     },
     {
       "name": "TheEnd",
@@ -4309,7 +4415,7 @@
       "backgrounds": [
         {
           "depth": 0,
-          "graph": "i74.png"
+          "graph": "bba9f99f-a9f4-421b-a757-35e97d3a67c0"
         }
       ],
       "layers": [
@@ -4319,17 +4425,17 @@
             {
               "x": 320,
               "y": 128,
-              "uid": 76
+              "uid": "cadbcf0a-3329-46f2-9dd5-59283f32878d"
             },
             {
               "x": 320,
               "y": 320,
-              "uid": 70
+              "uid": "51dceb43-47d2-415e-8530-b5786252ac5c"
             },
             {
               "x": 320,
               "y": 256,
-              "uid": 77
+              "uid": "2280d30b-44dc-47f7-b4a2-037e7b1b0b12"
             }
           ]
         },
@@ -4339,14 +4445,23 @@
             {
               "x": 128,
               "y": 128,
-              "uid": 81
+              "uid": "4eb59e08-c025-462d-9853-57d0200ac23a"
             }
           ]
         }
       ],
-      "uid": 3,
+      "uid": "a9961cd3-7b41-449b-8bb1-6babad6632da",
       "grid": 64,
-      "lastmod": 1534225143956
+      "lastmod": 1540635243413,
+      "thumbnail": 3,
+      "gridX": 64,
+      "gridY": 64,
+      "tiles": [
+        {
+          "depth": -10,
+          "tiles": []
+        }
+      ]
     }
   ],
   "graphtick": 90,
@@ -4359,7 +4474,21 @@
     "minifyhtmlcss": false,
     "minifyjs": false,
     "fps": 60,
-    "pixelatedrender": true
+    "pixelatedrender": true,
+    "version": [
+      0,
+      0,
+      0
+    ],
+    "versionPostfix": "",
+    "export": {
+      "windows64": true,
+      "windows32": true,
+      "linux64": true,
+      "linux32": true,
+      "mac64": true,
+      "debug": false
+    }
   },
   "scripts": [
     {
@@ -4392,5 +4521,7 @@
     }
   ],
   "palette": [],
-  "startroom": 2
+  "startroom": "90fa05ec-70dd-4a95-911a-d441c21161c1",
+  "ctjsVersion": "0.4.1",
+  "fonts": []
 }
