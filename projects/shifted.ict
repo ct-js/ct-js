@@ -2285,10 +2285,24 @@
   "settings": {
     "minifyhtmlcss": false,
     "minifyjs": false,
-    "title": "Cosmic Palettes",
+    "title": "Shifted",
     "author": "Cosmo Myzrail Gorynych",
     "site": "https://comigogames.ru/",
-    "fps": 60
+    "fps": 60,
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "versionPostfix": "",
+    "export": {
+      "windows64": true,
+      "windows32": true,
+      "linux64": true,
+      "linux32": true,
+      "mac64": true,
+      "debug": false
+    }
   },
   "palette": [],
   "startroom": "41415d82-5b84-4c17-a344-6b1fcac7bc89",
