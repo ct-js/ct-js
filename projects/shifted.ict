@@ -10,7 +10,8 @@
       "scaleOnly": true
     },
     "random": {},
-    "sound.howler": {}
+    "sound.howler": {},
+    "desktop": {}
   },
   "graphs": [
     {
@@ -599,7 +600,7 @@
       "top": 140,
       "bottom": 140,
       "uid": "4d831aa8-9b1b-4c12-934a-dac9628c9b7d",
-      "lastmod": 1537962085274
+      "lastmod": 1540697031610
     },
     {
       "name": "Nature_04",
@@ -1496,6 +1497,528 @@
       "bottom": 64,
       "uid": "c0ada666-2c82-406a-9e18-beee944ae574",
       "lastmod": 1538223421214
+    },
+    {
+      "name": "Mystic_09",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i66d4adca-cb94-4485-a6d9-9ec8314860f5.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_09.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "66d4adca-cb94-4485-a6d9-9ec8314860f5",
+      "lastmod": 1540697143733
+    },
+    {
+      "name": "Mystic_06",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i445b913b-58be-4bad-9352-089c5a7b280d.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_06.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "445b913b-58be-4bad-9352-089c5a7b280d",
+      "lastmod": 1540697133468
+    },
+    {
+      "name": "Mystic_01",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "if70e1c2a-b95b-4955-b857-0c6a399d43e4.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_01.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "f70e1c2a-b95b-4955-b857-0c6a399d43e4",
+      "lastmod": 1540697119797
+    },
+    {
+      "name": "Mystic_02",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "if313a46f-cfad-485c-be4e-8c1e7c297048.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_02.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "f313a46f-cfad-485c-be4e-8c1e7c297048",
+      "lastmod": 1540697112949
+    },
+    {
+      "name": "Mystic_04",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i540441d5-d8c9-4c24-ba18-452e3270c6b5.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_04.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "540441d5-d8c9-4c24-ba18-452e3270c6b5",
+      "lastmod": 1540697123109
+    },
+    {
+      "name": "Mystic_05",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i4f550bd9-0fce-4475-af4f-dba649135d31.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_05.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "4f550bd9-0fce-4475-af4f-dba649135d31",
+      "lastmod": 1540697130380
+    },
+    {
+      "name": "Mystic_08",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i85884dc4-a49b-4c94-8a7a-5551b3a8ffa9.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_08.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "85884dc4-a49b-4c94-8a7a-5551b3a8ffa9",
+      "lastmod": 1540697140348
+    },
+    {
+      "name": "Mystic_07",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i60a7de3b-0c1f-4d1e-baac-19f7bedbcc9e.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_07.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "60a7de3b-0c1f-4d1e-baac-19f7bedbcc9e",
+      "lastmod": 1540697136453
+    },
+    {
+      "name": "Mystic_03",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "ib1c822ae-d415-41ff-85ec-babc0221227c.jpg",
+      "source": "/home/comigo/Загрузки/Mystic_03.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "b1c822ae-d415-41ff-85ec-babc0221227c",
+      "lastmod": 1540697116414
+    },
+    {
+      "name": "Halloween_02",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i8f1adfb8-4771-4469-9ee9-29d0a5bba53a.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_02.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "8f1adfb8-4771-4469-9ee9-29d0a5bba53a",
+      "lastmod": 1540698459836
+    },
+    {
+      "name": "Halloween_03",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "if4e14fd9-0417-4d21-9522-0ee87a056dbe.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_03.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "f4e14fd9-0417-4d21-9522-0ee87a056dbe",
+      "lastmod": 1540698463880
+    },
+    {
+      "name": "Halloween_01",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "iccf453f8-53ca-48bc-837f-0675795be4e7.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_01.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "ccf453f8-53ca-48bc-837f-0675795be4e7",
+      "lastmod": 1540698456941
+    },
+    {
+      "name": "Halloween_04",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "ib923582a-e7f1-44f2-bfab-cccd4aebafde.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_04.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "b923582a-e7f1-44f2-bfab-cccd4aebafde",
+      "lastmod": 1540698466972
+    },
+    {
+      "name": "Halloween_05",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i9450fd76-39c1-4972-8795-3901c60cc901.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_05.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "9450fd76-39c1-4972-8795-3901c60cc901",
+      "lastmod": 1540698469583
+    },
+    {
+      "name": "Halloween_06",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "ia06c2085-5e41-408b-850f-9eae78ba36e8.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_06.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "a06c2085-5e41-408b-850f-9eae78ba36e8",
+      "lastmod": 1540698472665
+    },
+    {
+      "name": "Halloween_07",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i2fa39f4e-31c6-4365-808e-036f1e2667e9.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_07.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "2fa39f4e-31c6-4365-808e-036f1e2667e9",
+      "lastmod": 1540698476619
+    },
+    {
+      "name": "Halloween_09",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "ie8bc3692-a3a0-46fe-9a60-c9842591e847.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_09.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "e8bc3692-a3a0-46fe-9a60-c9842591e847",
+      "lastmod": 1540698482938
+    },
+    {
+      "name": "Halloween_08",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        140,
+        140
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 280,
+      "imgHeight": 280,
+      "width": 280,
+      "height": 280,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i55065062-e6ec-4e48-ae8e-dbf580c5b192.jpg",
+      "source": "/home/comigo/Загрузки/Halloween_08.jpg",
+      "shape": "rect",
+      "left": 140,
+      "right": 140,
+      "top": 140,
+      "bottom": 140,
+      "uid": "55065062-e6ec-4e48-ae8e-dbf580c5b192",
+      "lastmod": 1540698479735
     }
   ],
   "types": [
@@ -1519,7 +2042,7 @@
       "ondestroy": "",
       "uid": "f057c046-5f5b-4214-a0bb-1a323ae7b14f",
       "graph": "644981d4-1dbf-41c1-bbf8-7157b7d50f21",
-      "lastmod": 1537957078032
+      "lastmod": 1540701052399
     },
     {
       "name": "LogoBGTile",
@@ -1568,13 +2091,13 @@
     {
       "name": "ScrollManager",
       "depth": 0,
-      "oncreate": "this.line = 0;",
-      "onstep": "if (ct.mouse.wheel === -1) {\n    if (this.line < Math.ceil(ct.room.levelNumber / 3) - 2) {\n        this.line++;\n        ct.tween.add({\n            obj: ct.room,\n            fields: {\n                y: 108 * (this.line * 3)\n            },\n            duration: 350\n        });\n    }\n}\nif (ct.mouse.wheel === 1) {\n    if (this.line > 0) {\n        this.line--;\n        ct.tween.add({\n            obj: ct.room,\n            fields: {\n                y: 108 * (this.line * 3)\n            },\n            duration: 350\n        });\n    }\n}",
+      "oncreate": "this.line = 0;\nthis.rowHeight = ct.room.name === 'SelectCategory'? 160 : 108;",
+      "onstep": "if (ct.mouse.wheel === -1) {\n    if (this.line < Math.ceil(ct.room.levelNumber / 3) - 2) {\n        this.line++;\n        ct.tween.add({\n            obj: ct.room,\n            fields: {\n                y: this.rowHeight * (this.line * 3)\n            },\n            duration: 350\n        });\n    }\n}\nif (ct.mouse.wheel === 1) {\n    if (this.line > 0) {\n        this.line--;\n        ct.tween.add({\n            obj: ct.room,\n            fields: {\n                y: this.rowHeight * (this.line * 3)\n            },\n            duration: 350\n        });\n    }\n}",
       "ondraw": "ct.draw(this);",
       "ondestroy": "",
       "uid": "aaf0a108-6b8d-4899-ae20-eb9bec21e3a5",
       "graph": -1,
-      "lastmod": 1537952603045
+      "lastmod": 1540698363545
     },
     {
       "name": "ToCategoriesButton",
@@ -1717,7 +2240,7 @@
       "ondestroy": "",
       "uid": "8c35c080-9f89-41df-a352-540c09cc543a",
       "graph": "f2f097b0-ce92-432a-a269-fd6fdd8cd840",
-      "lastmod": 1538038706612
+      "lastmod": 1540699544038
     },
     {
       "name": "ReturnToMMenuHeader",
@@ -1784,6 +2307,39 @@
       "uid": "1703954c-6e5f-4600-8781-8ced63d1a9cf",
       "graph": "c0ada666-2c82-406a-9e18-beee944ae574",
       "lastmod": 1538223521905
+    },
+    {
+      "name": "OpenMystic",
+      "depth": 0,
+      "oncreate": "this.category = 'Mystic';\nanimateFloatIn(this);\ngetSectionStatus(this);\nif (!ct.room.sectionCopies) {\n    ct.room.sectionCopies = [];\n}\nct.room.sectionCopies.push(this);",
+      "onstep": "if (ct.mouse.hovers(this) && ct.mouse.pressed) {\n    ct.game.category = this.category;\n    animateFloatOut(this)\n    .then(() => {\n        ct.rooms.switch('CategoryListing');\n    });\n}",
+      "ondraw": "drawCategoryCover(this, this.category);",
+      "ondestroy": "",
+      "uid": "c101deb4-4a59-4c5f-81b2-eb030b3d80bf",
+      "graph": "4f550bd9-0fce-4475-af4f-dba649135d31",
+      "lastmod": 1540697086747
+    },
+    {
+      "name": "OpenHalloween",
+      "depth": 0,
+      "oncreate": "this.category = 'Halloween';\nanimateFloatIn(this);\ngetSectionStatus(this);\nif (!ct.room.sectionCopies) {\n    ct.room.sectionCopies = [];\n}\nct.room.sectionCopies.push(this);",
+      "onstep": "if (ct.mouse.hovers(this) && ct.mouse.pressed) {\n    ct.game.category = this.category;\n    animateFloatOut(this)\n    .then(() => {\n        ct.rooms.switch('CategoryListing');\n    });\n}",
+      "ondraw": "drawCategoryCover(this, this.category);",
+      "ondestroy": "",
+      "uid": "9efa6727-bb28-4ece-a3e5-244b99b50083",
+      "graph": "8f1adfb8-4771-4469-9ee9-29d0a5bba53a",
+      "lastmod": 1540698502027
+    },
+    {
+      "name": "DesktopExit",
+      "depth": 100,
+      "oncreate": "if (ct.desktop.platform !== 'browser') {\n    animateFloatIn(this);\n} else {\n    this.kill = true;\n    this.transform = true;\n    this.ta = 0;\n}",
+      "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    ct.desktop.quit();\n}",
+      "ondraw": "ct.draw(this);",
+      "ondestroy": "",
+      "uid": "15c9c0ca-3ce0-43e8-b4f3-23ca59863e68",
+      "graph": "f2f097b0-ce92-432a-a269-fd6fdd8cd840",
+      "lastmod": 1540700043104
     }
   ],
   "sounds": [
@@ -1973,7 +2529,7 @@
       ],
       "uid": "7e8e04d0-3d06-41e5-ab2c-d213a3e59983",
       "grid": 64,
-      "lastmod": 1538223892770,
+      "lastmod": 1540701066374,
       "thumbnail": 1,
       "tiles": [
         {
@@ -2012,7 +2568,7 @@
       ],
       "uid": "41415d82-5b84-4c17-a344-6b1fcac7bc89",
       "grid": 64,
-      "lastmod": 1538223904018,
+      "lastmod": 1540701060990,
       "thumbnail": 2,
       "tiles": [
         {
@@ -2025,9 +2581,9 @@
     },
     {
       "name": "SelectCategory",
-      "oncreate": "",
+      "oncreate": "this.levelNumber = 7;",
       "onstep": "",
-      "ondraw": "ct.styles.set('Title');\nct.draw.text('Themes', ct.room.width / 2, 54*1.25);\nct.styles.reset();",
+      "ondraw": "ct.styles.set('Title');\nct.draw.text('Themes', ct.room.width / 2, 128);\nct.styles.reset();",
       "onleave": "",
       "width": 1440,
       "height": 1080,
@@ -2043,53 +2599,78 @@
           "copies": [
             {
               "x": 396,
-              "y": 972,
+              "y": 1458,
               "uid": "59061c90-07fc-4d04-86ec-4366882a8e2e"
             },
             {
               "x": 720,
-              "y": 972,
+              "y": 1458,
               "uid": "75c0885f-6546-40ef-a562-912820f00241"
             },
             {
               "x": 882,
-              "y": 972,
+              "y": 1458,
               "uid": "47cacf5e-1733-4767-9819-0ffc46d2d4da"
             },
             {
               "x": 558,
-              "y": 972,
+              "y": 1458,
               "uid": "b92e4361-4b72-4415-bfc5-c0018dd1e3b1"
             },
             {
               "x": 396,
-              "y": 270,
+              "y": 378,
               "uid": "b3678a2a-7ddf-4dad-af05-2c18e4427d94"
             },
             {
               "x": 396,
-              "y": 648,
+              "y": 756,
               "uid": "c6da40ce-29ed-4584-8ee2-21ac23d14b3d"
             },
             {
               "x": 720,
-              "y": 270,
+              "y": 378,
               "uid": "0022058c-a573-4846-aee2-f0f9f55c2da9"
             },
             {
               "x": 1044,
-              "y": 270,
+              "y": 378,
               "uid": "c6317a4c-05fc-4b56-bbc7-f816069ecd71"
             },
             {
+              "x": 1044,
+              "y": 1458,
+              "uid": "0feacd72-93b7-4f8b-b08d-fd176e0b52e7"
+            },
+            {
               "x": 720,
-              "y": 648,
+              "y": 756,
+              "uid": "c101deb4-4a59-4c5f-81b2-eb030b3d80bf"
+            },
+            {
+              "x": 108,
+              "y": 216,
+              "uid": "aaf0a108-6b8d-4899-ae20-eb9bec21e3a5"
+            },
+            {
+              "x": 720,
+              "y": 1134,
               "uid": "20abd332-8195-4c5c-8eca-98384a5b416b"
             },
             {
               "x": 1044,
-              "y": 972,
-              "uid": "0feacd72-93b7-4f8b-b08d-fd176e0b52e7"
+              "y": 756,
+              "uid": "9efa6727-bb28-4ece-a3e5-244b99b50083"
+            }
+          ]
+        },
+        {
+          "depth": 100,
+          "copies": [
+            {
+              "x": 1381,
+              "y": 61,
+              "uid": "15c9c0ca-3ce0-43e8-b4f3-23ca59863e68"
             }
           ]
         }
@@ -2104,7 +2685,7 @@
       ],
       "gridX": 54,
       "gridY": 54,
-      "lastmod": 1538223916618
+      "lastmod": 1540701005062
     },
     {
       "name": "CategoryListing",
@@ -2162,7 +2743,7 @@
       ],
       "gridX": 64,
       "gridY": 64,
-      "lastmod": 1538223910382
+      "lastmod": 1540697628472
     },
     {
       "name": "ReturnToMMenuScreen",
@@ -2284,14 +2865,14 @@
   "starting": 0,
   "settings": {
     "minifyhtmlcss": false,
-    "minifyjs": false,
+    "minifyjs": true,
     "title": "Shifted",
     "author": "Cosmo Myzrail Gorynych",
     "site": "https://comigogames.ru/",
     "fps": 60,
     "version": [
       1,
-      0,
+      1,
       0
     ],
     "versionPostfix": "",
@@ -2321,7 +2902,7 @@
     },
     {
       "name": "ct.game and Levels",
-      "code": "ct.game = {\n    complexity: localStorage.complexity || 9,\n    namespace: 'rocks.ctjs.shifted_',\n    levels: {\n        Therapy: {\n            '04': {},\n            '02': {},\n            '05': {},\n            '01': {},\n            '06': {},\n            '03': {},\n            '07': {},\n            '08': {},\n            '09': {}\n        },\n        Nature: {\n            '01': {},\n            '03': {},\n            '09': {},\n            '04': {},\n            '05': {},\n            '06': {},\n            '07': {},\n            '08': {},\n            '02': {}\n        },\n        People: {\n            '09': {},\n            '02': {},\n            '03': {},\n            '04': {},\n            '05': {},\n            '06': {},\n            '07': {},\n            '08': {},\n            '01': {}\n        },\n        Urban: {\n            '01': {},\n            '02': {},\n            '03': {},\n            '04': {},\n            '05': {},\n            '06': {},\n            '07': {},\n            '08': {},\n            '09': {}\n        }\n    }\n};"
+      "code": "ct.game = {\n    complexity: localStorage.complexity || 9,\n    namespace: 'rocks.ctjs.shifted_',\n    levels: {\n        Therapy: {\n            '04': {},\n            '02': {},\n            '05': {},\n            '01': {},\n            '06': {},\n            '03': {},\n            '07': {},\n            '08': {},\n            '09': {}\n        },\n        Nature: {\n            '01': {},\n            '03': {},\n            '09': {},\n            '04': {},\n            '05': {},\n            '06': {},\n            '07': {},\n            '08': {},\n            '02': {}\n        },\n        People: {\n            '09': {},\n            '02': {},\n            '03': {},\n            '04': {},\n            '05': {},\n            '06': {},\n            '07': {},\n            '08': {},\n            '01': {}\n        },\n        Urban: {\n            '01': {},\n            '02': {},\n            '03': {},\n            '04': {},\n            '05': {},\n            '06': {},\n            '07': {},\n            '08': {},\n            '09': {}\n        },\n        Mystic: {\n            '07': {},\n            '05': {},\n            '08': {},\n            '04': {},\n            '02': {},\n            '06': {},\n            '09': {},\n            '03': {},\n            '01': {}\n        },\n        Halloween: {\n            '03': {},\n            '02': {},\n            '05': {},\n            '08': {},\n            '04': {},\n            '01': {},\n            '06': {},\n            '07': {},\n            '09': {}\n        },\n    }\n};"
     },
     {
       "name": "checkVictory",
@@ -2340,7 +2921,7 @@
       "code": "var drawCategoryCover = function (me) {\n    ct.draw(me);\n    ct.styles.set('Label');\n    ct.x.globalAlpha = me.ta;\n    ct.draw.text(me.category, me.x, me.y + 175);\n    if (me.completed) {\n        ct.styles.set('Meta');\n        ct.x.globalAlpha = me.ta;\n        ct.draw.text(me.completed + '/' + me.total, me.x, me.y);\n    }\n    ct.styles.reset();\n};"
     }
   ],
-  "ctjsVersion": "0.5.0",
+  "ctjsVersion": "0.5.1",
   "fonts": [
     {
       "typefaceName": "OpenSans",
