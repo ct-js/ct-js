@@ -1,5 +1,5 @@
 {
-  "ctjsVersion": "0.5.0",
+  "ctjsVersion": "0.5.2",
   "notes": "/* empty */",
   "libs": {
     "keyboard": {},
@@ -49,7 +49,8 @@
       "top": 0,
       "bottom": 32,
       "uid": "6ec17dce-83ed-4af5-a185-fa9acc0d1c92",
-      "lastmod": 1538731569419
+      "lastmod": 1542783366104,
+      "tiled": true
     },
     {
       "name": "PlayerShip",
@@ -943,7 +944,7 @@
       "lastmod": 1538913373371
     },
     {
-      "name": "explosion_anim-5",
+      "name": "Explosion",
       "untill": 0,
       "grid": [
         5,
@@ -970,7 +971,7 @@
       "bottom": 48,
       "uid": "fad4b379-7c3d-4ad0-bde7-4674679a3d83",
       "r": 4,
-      "lastmod": 1538814002504
+      "lastmod": 1543061374709
     },
     {
       "name": "Wave",
@@ -1681,178 +1682,178 @@
     {
       "name": "PlayerShip",
       "depth": 5,
-      "oncreate": "this.speed = 1;\nthis.acceleration = 0.05;\nthis.damping = 0.025;\nthis.rotateSpeed = 1.5;\n\nthis.imgspd = 0;\nct.room.follow = this;\n\nthis.attack = true;\n\nthis.shootTimer = 0;",
-      "onstep": "this.spd = Math.max(this.spd - this.damping, 0);\n\nif (ct.keyboard.down.W || ct.keyboard.down.up) {\n    this.spd += this.acceleration;\n} else if (ct.keyboard.down.S || ct.keyboard.down.down) {\n    this.spd -= this.acceleration;\n}\nif (ct.keyboard.down.A || ct.keyboard.down.left) {\n    this.dir += this.rotateSpeed;\n} else if (ct.keyboard.down.D || ct.keyboard.down.right) {\n    this.dir -= this.rotateSpeed;\n}\n\nthis.spd = Math.min(this.speed, Math.max(-this.speed, this.spd));\n\nthis.move();\n\nif (this.spd > 0) {\n    if (ct.place.occupied(this, 'Solid') ||\n        ct.place.tile(this, 10)) {\n        if (this.spd  > 0.2) {\n            ct.sound.spawn('Hit_Alt');\n            ct.game.health -= Math.abs(this.spd * 10);\n            checkOverflows();\n        }\n        this.x = this.xprev;\n        this.y = this.yprev;\n        this.spd = 0;\n    }\n}\n\nvar bullet = ct.place.occupied(this, 'EnemyBullet');\nif (bullet) {\n    bullet.kill = true;\n    ct.sound.spawn('Hit');\n    ct.game.health -= 5;\n    if (ct.game.health > 10 && ct.game.health < 50 && ct.game.sailors > 1) {\n        if (ct.random.chance(15)) {\n            ct.game.sailors --;\n            ct.game.sailorsTotal --;\n            ct.types.copy('FX_LostSailor', this.x, this.y);\n        }\n    }\n    checkOverflows();\n}\n\nthis.shootTimer --;\nif (ct.mouse.down && this.shootTimer <= 0) {\n    this.shootTimer = ct.speed;\n    let dir = ct.u.pdn(this.x, this.y, ct.mouse.x, ct.mouse.y);\n    var bullet = ct.types.copy('Bullet', this.x + ct.u.ldx(12, dir), this.y + ct.u.ldy(12, dir));\n    bullet.ctype = 'HeroBullet';\n    bullet.dir = dir;\n}",
-      "ondraw": "this.frame = ct.victoria.dirTo8(this.dir);\nct.victoria.draw(this);",
+      "oncreate": "this.maxSpeed = 1;\nthis.acceleration = 0.05;\nthis.damping = 0.025;\nthis.rotateSpeed = 1.5;\nthis.orientation = 0;\n\nct.room.follow = this;\n\nthis.attack = true;\n\nthis.shootTimer = 0;",
+      "onstep": "this.speed = Math.max(this.speed - this.damping, 0);\n\nif (ct.keyboard.down.W || ct.keyboard.down.up) {\n    this.speed += this.acceleration * ct.delta;\n} else if (ct.keyboard.down.S || ct.keyboard.down.down) {\n    this.speed -= this.acceleration * ct.delta;\n}\nif (ct.keyboard.down.A || ct.keyboard.down.left) {\n    this.orientation += this.rotateSpeed;\n} else if (ct.keyboard.down.D || ct.keyboard.down.right) {\n    this.orientation -= this.rotateSpeed;\n}\n\nthis.speed = Math.min(this.speed, Math.max(-this.maxSpeed, this.maxSpeed));\nthis.direction = this.orientation;\nthis.move();\n\nif (this.speed > 0) {\n    if (ct.place.occupied(this, 'Solid') ||\n        ct.place.tile(this, 10)) {\n        if (this.speed  > 0.2) {\n            ct.sound.spawn('Hit_Alt');\n            ct.game.health -= Math.abs(this.speed * 10);\n            checkOverflows();\n        }\n        this.x = this.xprev;\n        this.y = this.yprev;\n        this.speed = 0;\n    }\n}\n\nvar bullet = ct.place.occupied(this, 'EnemyBullet');\nif (bullet) {\n    bullet.kill = true;\n    ct.sound.spawn('Hit');\n    ct.game.health -= 5;\n    if (ct.game.health > 10 && ct.game.health < 50 && ct.game.sailors > 1) {\n        if (ct.random.chance(15)) {\n            ct.game.sailors --;\n            ct.game.sailorsTotal --;\n            ct.types.copy('FX_LostSailor', this.x, this.y);\n        }\n    }\n    checkOverflows();\n}\n\nthis.shootTimer -= ct.delta;\nif (ct.mouse.down && this.shootTimer <= 0) {\n    this.shootTimer = 60;\n    let dir = ct.u.pdn(this.x, this.y, ct.mouse.x, ct.mouse.y);\n    var bullet = ct.types.copy('Bullet', this.x + ct.u.ldx(12, dir), this.y + ct.u.ldy(12, dir));\n    bullet.ctype = 'HeroBullet';\n    bullet.direction = dir;\n}",
+      "ondraw": "this.gotoAndStop(ct.victoria.dirTo8(this.orientation));",
       "ondestroy": "",
       "uid": "bb0e9732-833d-4f7c-8b65-c3336aff1de5",
       "graph": "7653be09-b494-4971-a631-f87d990beb60",
-      "lastmod": 1539611684563
+      "lastmod": 1543062171662
     },
     {
       "name": "DebrisSmall",
       "depth": 0,
       "oncreate": "this.imgspd = 0;\nthis.ctype = 'Solid';",
       "onstep": "ct.types.move(this);",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "2adc4bf0-c3ae-462c-a9e6-564833a9efc4",
       "graph": "98c08de0-abf7-46a1-82fd-a1b88b3aed81",
-      "lastmod": 1538740455245
+      "lastmod": 1542694236832
     },
     {
       "name": "Cloud",
       "depth": 12,
       "oncreate": "this.imgspd = 0;\nthis.frame = Math.floor(ct.random(5));",
       "onstep": "ct.types.move(this);",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "4c199a74-df41-4285-bbad-cc3f447167db",
       "graph": "84c7f501-6fbf-4814-8a8f-78833cfd113b",
-      "lastmod": 1538911301685
+      "lastmod": 1542694178614
     },
     {
       "name": "PlayButton",
       "depth": 0,
-      "oncreate": "",
+      "oncreate": "this.text = new PIXI.Text('Play!');\nthis.text.anchor.x = 0.5;\nthis.text.anchor.y = 0.5;\nthis.addChild(this.text);\nthis.text.y = -4;",
       "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    ct.mouse.clear();\n    ct.rooms.switch('Level_01');\n}",
-      "ondraw": "ct.draw(this);\nct.styles.set('LabelBig');\nct.draw.text('Play', this.x, this.y - 4);\nct.styles.reset();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "d7ff01bf-a1f0-4ed4-8219-455431cd9ac6",
       "graph": "8a6e3cfe-2e23-4bf3-975e-f9551813cffa",
-      "lastmod": 1538927796624
+      "lastmod": 1542782112663
     },
     {
       "name": "DebrisBig",
       "depth": 0,
       "oncreate": "this.ctype = 'Solid';",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "acc5471b-1211-41c8-a1f6-2c91b0d1364d",
       "graph": "4ade477b-0510-4b12-9dd4-d6a8bce363fb",
-      "lastmod": 1538740348149
+      "lastmod": 1542694230180
     },
     {
       "name": "DebrisMedium",
       "depth": 0,
       "oncreate": "this.ctype = 'Solid';\nthis.imgspd = 0;\nthis.frame = ct.random.dice(0, 1);",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "c1163d2a-74d6-4ee6-834f-d6805f7a4e17",
       "graph": "466fb493-334a-4b2e-ad3a-33cff062cf3a",
-      "lastmod": 1538740374692
+      "lastmod": 1542694232829
     },
     {
       "name": "Junk",
       "depth": -2,
       "oncreate": "",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "d7928643-e1ec-4899-a74f-d5d1d2c8bb48",
       "graph": "cb5553fc-809d-4676-8111-c352f3b54765",
-      "lastmod": 1538895589585
+      "lastmod": 1542695711742
     },
     {
       "name": "Gull",
       "depth": 12,
-      "oncreate": "this.imgspd = 10 / ct.speed;\nthis.frame = this.period = Math.random() * 10;",
-      "onstep": "",
-      "ondraw": "this.period += 0.005;\nct.x.fillStyle = '#fff';\nct.draw.rectangle(Math.floor(this.x + 90 * Math.sin(this.period)), Math.floor(this.y + 60 * Math.cos(this.period * 1.374)), 2, 1);",
+      "oncreate": "this.texture = PIXI.Texture.EMPTY;\n\nthis.period = ct.random(20);\nthis.rect = new PIXI.Graphics();\n\n// set a fill and line style\nthis.rect.beginFill(0xFFFFFF);\nthis.rect.drawRect(-1, 0, 2, 1);\nthis.rect.endFill();\nthis.addChild(this.rect);",
+      "onstep": "this.period += 0.005 * ct.delta;\nthis.rect.x = Math.floor(90 * Math.sin(this.period));\nthis.rect.y = Math.floor(60 * Math.cos(this.period * 1.374));\n",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "71982d67-0a8e-43de-8f23-221dff07a168",
       "graph": "04fb2b70-e8f0-496d-9d3b-ef1319e89c73",
-      "lastmod": 1538832638177
+      "lastmod": 1543069539659
     },
     {
       "name": "PirateShip",
       "depth": 5,
       "oncreate": "this.spot = pirateEQ(this);\nthis.shootTimer = 5;\nthis.imgspd = 0;\nthis.hp = 5;\nthis.requeryTimer = ct.speed;",
       "onstep": "this.player = ct.types.list.PlayerShip[0];\nif (this.player) {\n    this.spd = 1;\n    \n    if (ct.place.meet(this, this.x, this.y, 'PirateShip')) {\n        this.dir += 5;\n    } else {\n        this.requeryTimer--;\n        if (ct.u.pdc(this.x, this.y, this.spot.x, this.spot.y) < 32 || this.requeryTimer <= 0) {\n            this.spot = pirateEQ(this);\n            this.requeryTimer = ct.speed;\n        }\n        var delta = ct.u.deltaDir(this.dir, ct.u.pdn(this.x, this.y, this.spot.x, this.spot.y));\n        delta = ct.u.clamp(-3, delta, 3);\n        this.dir += delta;\n    }\n    if (ct.u.pdc(this.x, this.y, this.player.x, this.player.y) < 160) {\n        this.shootTimer--;\n        if (this.shootTimer <= 0) {\n            let dir = ct.u.pdn(this.x, this.y, this.player.x, this.player.y) + ct.random.range(-5, 5);\n            var bullet = ct.types.copy('Bullet', this.x + ct.u.ldx(8, dir), this.y + ct.u.ldy(8, dir));\n            bullet.dir = dir;\n            this.shootTimer = ct.speed * 3;\n            if (this.graph === 'PirateShip_Big') {\n                ct.u.wait(200)\n                .then(() => {\n                    let dir = ct.u.pdn(this.x, this.y, this.player.x, this.player.y) + ct.random.range(-5, 5); \n                    bullet = ct.types.copy('Bullet', this.x + ct.u.ldx(8, dir), this.y + ct.u.ldy(8, dir));\n                    bullet.dir = dir;\n                });\n                ct.u.wait(400)\n                .then(() => {\n                    let dir = ct.u.pdn(this.x, this.y, this.player.x, this.player.y) + ct.random.range(-5, 5); \n                    bullet = ct.types.copy('Bullet', this.x + ct.u.ldx(8, dir), this.y + ct.u.ldy(8, dir));\n                    bullet.dir = dir;\n                });\n            }\n        }\n    }\n} else {\n    if (this.spd > 0) {\n        this.spd -= 0.025;\n    }\n}\nthis.move();\n\nvar bullet = ct.place.occupied(this, this.x, this.y, 'HeroBullet');\nif (bullet) {\n    bullet.kill = true;\n    ct.sound.spawn('Hit');\n    this.hp --;\n    if (this.hp <= 0) {\n        this.kill = true;\n    }\n}",
-      "ondraw": "this.frame = ct.victoria.dirTo8(this.dir);\nct.draw(this);\n//pirateEQDebug(this);\n//ct.u.inspect(this, ['spot', 'shootTimer', 'spd', 'x', 'y']);",
+      "ondraw": "this.gotoAndStop(ct.victoria.dirTo8(this.dir));",
       "ondestroy": "ct.types.copy('Explosion', this.x, this.y);",
       "uid": "30d36486-7b75-442b-8325-ac1b1afff396",
       "graph": "94770f35-d542-4037-bfc7-09a35d7654c1",
-      "lastmod": 1539086067800
+      "lastmod": 1542696203781
     },
     {
       "name": "IslandPart_Medium",
       "depth": -1,
       "oncreate": "this.ctype = 'Solid';",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "c5e867e3-544c-4065-91b6-40af8a60aa94",
       "graph": "1bf6642b-4e2b-4ead-8f02-8ac08cf4e36f",
-      "lastmod": 1538812425568
+      "lastmod": 1542695703843
     },
     {
       "name": "IslandPart_Small",
       "depth": -1,
       "oncreate": "this.ctype = 'Solid';",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "47ce1b99-4e3f-4910-aad4-4144b596bc55",
       "graph": "7a31a847-6677-4cd1-b96a-2d004ab64e6f",
-      "lastmod": 1538744859276
+      "lastmod": 1542695707546
     },
     {
       "name": "IslandPart_Big",
       "depth": -1,
       "oncreate": "this.ctype = 'Solid';",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "cabda42c-9543-4f25-b540-b720c995c163",
       "graph": "cee15bbb-e2b3-48e2-8eff-402ebfdc11d7",
-      "lastmod": 1538749526603
+      "lastmod": 1542695699738
     },
     {
       "name": "Tree",
       "depth": 0,
-      "oncreate": "this.ctype = 'Consumable';\nthis.pickup = 'Wood';\nthis.pickupRatio = 1;\nthis.hp = 5;\nthis.imgspd = 0;\nthis.frame = Math.floor(ct.random(6));",
-      "onstep": "ct.types.move(this);",
-      "ondraw": "ct.draw(this);",
+      "oncreate": "this.ctype = 'Consumable';\nthis.pickup = 'Wood';\nthis.pickupRatio = 1;\nthis.hp = 5;\nthis.gotoAndStop(Math.floor(ct.random(6)));",
+      "onstep": "",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "81b0cdf9-1a1c-4b66-b246-b127be01c34c",
       "graph": "14460709-85d7-43a4-b888-9a76c9ee14e6",
-      "lastmod": 1538816718631
+      "lastmod": 1542698318123
     },
     {
       "name": "BerryBush",
       "depth": 0,
       "oncreate": "this.ctype = 'Consumable';\nthis.pickup = 'Food';\nthis.pickupRatio = 3;\nthis.hp = 1;\nthis.imgspd = 0;\nthis.frame = ct.random(3);",
       "onstep": "ct.types.move(this);",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "5f5d2527-136b-48b5-9b18-0ac5db1c57f3",
       "graph": "b6a970e8-5024-4e95-b71f-93f59f03b53b",
-      "lastmod": 1538888467976
+      "lastmod": 1542694165718
     },
     {
       "name": "Sailor",
       "depth": 0,
       "oncreate": "this.state = 'Searching';\nthis.imgspd = 0;",
       "onstep": "if (this.state === 'Searching') {\n    if (!this.toTake || this.toTake.kill) {\n        if (ct.game.health < 100) {\n            this.toTake = ct.place.nearest(this.xstart, this.ystart, 'Tree');\n            if (this.toTake && ct.place.lastdist > 128) {\n                this.toTake = false;\n            }\n        }\n        if (!this.toTake && ct.game.food < 100) {\n            this.toTake = ct.place.nearest(this.xstart, this.ystart, 'BerryBush');\n            if (this.toTake && ct.place.lastdist > 128) {\n                this.toTake = false;\n            }\n        }\n    }\n    if (!this.toTake) {\n        this.state = 'Home';\n    } else {\n        ct.victoria.move8(this, this.toTake.x, this.toTake.y);\n        if (this.x === this.xprev && this.y === this.yprev) {\n            // at locatiom\n            this.toTake.hp --;\n            this.carrying = this.toTake.pickup;\n            this.carryingAmount = this.toTake.pickupRatio;\n            if (this.toTake.hp <= 0) {\n                this.toTake.kill = true;\n            }\n            this.state = 'Return';\n        }\n    }\n} else if (this.state === 'Home' || this.state === 'Return') {\n    ct.victoria.move8(this, this.xstart, this.ystart);\n    if (this.x === this.xstart && this.y === this.ystart) {\n        if (this.state === 'Home') {\n            this.kill = true;\n            ct.game.sailors ++;\n            if (ct.game.sailors === ct.game.sailorsTotal) {\n                ct.sound.spawn('CrewInside');\n            }\n        } else {\n            if (this.carrying === 'Wood') {\n                ct.game.health += this.carryingAmount;\n                ct.sound.spawn(ct.random.dice('Repair_01', 'Repair_02', 'Repair_03'));\n            } else if (this.carrying === 'Food') {\n                ct.game.food += this.carryingAmount;\n                ct.sound.spawn('Gather_01');\n            }\n            this.toTake = false;\n            checkOverflows();\n            this.state = 'Searching';\n        }\n    }\n}",
-      "ondraw": "ct.draw(this);\n//ct.u.inspect(this, ['state', 'toTake', 'carrying', 'carryingAmount']);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "2672322f-ec5a-4743-baf6-76b97be2855e",
       "graph": "0f40718f-193f-47bd-a30b-7e86022520d9",
-      "lastmod": 1538918557533
+      "lastmod": 1542696435584
     },
     {
       "name": "ParkingPlace",
       "depth": -1,
       "oncreate": "",
       "onstep": "if (ct.keyboard.pressed.space) {\n    var player = ct.place.meet(this, 'PlayerShip');\n    if (player) {\n        if (!ct.types.list.PirateShip.length || !ct.types.list.PirateShip.find(pirate => pirate.aggroed)) {\n            player.kill = true;\n            var gatherer = ct.types.copy('PlayerShip_Gather', player.x, player.y);\n            gatherer.dir = player.dir;\n        }\n    }\n}",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "1371d8dd-6f0c-49c4-b6ac-25133f9ac6ce",
       "graph": "f57630bf-cacc-4305-a37b-6a65c8862e26",
-      "lastmod": 1538898052621
+      "lastmod": 1542696139714
     },
     {
       "name": "PlayerShip_Gather",
@@ -1868,35 +1869,35 @@
     {
       "name": "Bullet",
       "depth": 0,
-      "oncreate": "this.spd = 3;\nthis.imgspd = 0.3;\nthis.ctype = 'EnemyBullet';\nct.u.wait(1000 * 3)\n.then(() => {\n    if (!this.kill) {\n        this.kill = true;\n    }\n});\nct.types.copy('Smoke', this.x, this.y);\nct.sound.spawn('Shoot');",
+      "oncreate": "this.speed = 3;\nthis.animationSpeed = 0.3;\nthis.play();\nthis.ctype = 'EnemyBullet';\nct.u.wait(1000 * 3)\n.then(() => {\n    if (!this.kill) {\n        this.kill = true;\n    }\n});\nct.types.copy('Smoke', this.x, this.y);\nct.sound.spawn('Shoot');",
       "onstep": "ct.types.move(this);\nif (ct.place.occupied(this, this.x, this.y, 'Solid') || ct.place.tile(this, this.x, this.y, 10)) {\n    this.kill = true;\n}",
-      "ondraw": "ct.draw(this);",
-      "ondestroy": "var exp = ct.types.copy('Explosion', this.x, this.y);\nexp.transform = true;\nexp.tx = exp.ty = 0.5;",
+      "ondraw": "",
+      "ondestroy": "var exp = ct.types.copy('Explosion', this.x, this.y);\nexp.scale.x /= 2;\nexp.scale.y /= 2;",
       "uid": "c2532f77-8629-4de2-abd5-598e042d812e",
       "graph": "7482f3a7-c690-4197-b6ab-18753d2650d6",
-      "lastmod": 1538834294786
+      "lastmod": 1543067235925
     },
     {
       "name": "Dock",
       "depth": 2,
       "oncreate": "this.ctype = 'Solid';",
       "onstep": "ct.types.move(this);",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "cd5e2a0f-1c05-46fc-af0d-0b618e2f6499",
       "graph": "73bdde31-532e-4823-8bb3-edb0e315dc53",
-      "lastmod": 1538880848107
+      "lastmod": 1542694240794
     },
     {
       "name": "LittleWaves",
       "depth": -3,
-      "oncreate": "this.imgspd = 5 / ct.speed;\nthis.frame = ct.random(2);\n\nif (ct.random.chance(50)) {\n    this.transform = true;\n    this.tx = 1;\n}",
-      "onstep": "ct.types.move(this);",
-      "ondraw": "ct.draw(this);",
+      "oncreate": "this.animationSpeed = 1 / 12;\nthis.gotoAndPlay(ct.random(2));\n\nif (ct.random.chance(50)) {\n    this.scale.x = -1;\n}",
+      "onstep": "",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "13e95d23-d7a9-4aba-94df-4841c311bc1e",
       "graph": "91c45096-6915-4de5-b208-a9689dab10b4",
-      "lastmod": 1538798136769
+      "lastmod": 1542696047246
     },
     {
       "name": "PiratePatrolSpot",
@@ -1906,84 +1907,85 @@
       "ondraw": "",
       "ondestroy": "",
       "uid": "6af0b4f4-e4f6-401d-b5df-673816c596c9",
-      "graph": "be49ff61-f365-4427-b3b7-7572db8ccc0d"
+      "graph": "be49ff61-f365-4427-b3b7-7572db8ccc0d",
+      "lastmod": 1542696175712
     },
     {
       "name": "Smoke",
       "depth": 7,
-      "oncreate": "this.imgspd = 15 / ct.speed;\nct.u.wait(6/16*1000)\n.then(() => {\n    this.kill = true;\n});",
-      "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "oncreate": "this.animationSpeed = 1 / 4;\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;\n};",
+      "onstep": "",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "a223260c-b3b4-4e0b-9c96-54966060d8e4",
       "graph": "21a6d5d0-97fe-4bc9-8abf-688063872bbe",
-      "lastmod": 1538808367497
+      "lastmod": 1543061689376
     },
     {
       "name": "Explosion",
       "depth": 7,
-      "oncreate": "this.imgspd = 15 / ct.speed;\nct.u.wait(5/16*1000)\n.then(() => {\n    this.kill = true;\n});",
+      "oncreate": "this.animationSpeed = 1/4;\nthis.onComplete = () => {\n    this.kill = true;\n}\nthis.loop = false;\nthis.play();",
       "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "e2b2b768-b1bd-4747-8963-3fba6fe71de4",
       "graph": "fad4b379-7c3d-4ad0-bde7-4674679a3d83",
-      "lastmod": 1538814031330
+      "lastmod": 1543061516709
     },
     {
       "name": "Wave_Rising",
       "depth": 0,
-      "oncreate": "this.imgspd = 10 / ct.speed;\nthis.graph = 'Wave_Rising';\nthis.dir = -90;\nthis.spd = 1;",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Rising';\nthis.direction = -90;\nthis.speed = 1;\nthis.loop = false;\nthis.onComplete = () => {\n    ct.types.copy('Wave_Going', this.x, this.y);\n    this.kill = true;  \n};",
       "onstep": "this.move();",
-      "ondraw": "if (this.frame >= 5) {\n    this.kill = true;\n    this.frame = 0;\n    ct.types.copy('Wave_Going', this.x, this.y);\n}\nthis.draw();\n",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "569aa690-2b69-4b4f-bfb2-a32fa02721aa",
       "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1538830022883
+      "lastmod": 1542784584625
     },
     {
       "name": "Wave_Going",
       "depth": 0,
-      "oncreate": "this.imgspd = 10 / ct.speed;\nthis.graph = 'Wave_Going';\nthis.dir = -90;\nthis.spd = 1;",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Going';\nthis.play();\nthis.direction = -90;\nthis.speed = 1;\n\nvar times = 0;\nthis.onLoop = () => {\n    times++;\n    if (times >= 3) {\n        this.kill = true;\n        ct.types.copy('Wave_Falling', this.x, this.y);\n    }\n};",
       "onstep": "this.move();\n\nif (ct.place.meet(this, this.x, this.y, 'PlayerShip')) {\n    ct.sound.spawn('Anchor');\n    ct.game.health -= 5;\n    this.kill = true;\n    ct.types.copy('Wave_Falling', this.x, this.y);\n    checkOverflows();\n    if (ct.game.health > 10 && ct.game.health < 50 && ct.game.sailors > 1) {\n        if (ct.random.chance(15)) {\n            ct.game.sailors --;\n            ct.game.sailorsTotal --;\n            ct.types.copy('FX_LostSailor', this.x, this.y);\n        }\n    }\n}",
-      "ondraw": "if (this.frame >= 5 * 3) {\n    this.frame = 0;\n    this.kill = true;\n    ct.types.copy('Wave_Falling', this.x, this.y);\n}\nthis.draw();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "6b676d35-ff6d-494b-8030-0543b6752bbf",
       "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1538927483943
+      "lastmod": 1542784590799
     },
     {
       "name": "Wave_Falling",
       "depth": 0,
-      "oncreate": "this.imgspd = 10 / ct.speed;\nthis.graph = 'Wave_Falling';\nthis.dir = -90;\nthis.spd = 1;",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Falling';\nthis.direction = -90;\nthis.speed = 1;\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;  \n};",
       "onstep": "this.move();",
-      "ondraw": "if (this.frame >= 5) {\n    this.kill = true;\n} else {\n    this.draw();\n}",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "abc207d1-c2a1-4c5c-bd02-e004dabb4a59",
       "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1538830011795
+      "lastmod": 1542784588216
     },
     {
       "name": "WaveSpawners",
       "depth": 0,
-      "oncreate": "this.waveSpawnTimer = ct.random(ct.speed * 8);",
-      "onstep": "this.waveSpawnTimer --;\nif (this.waveSpawnTimer <= 0) {\n    this.waveSpawnTimer = ct.speed * 8;\n    ct.types.copy('Wave_Rising', this.x, this.y);\n}",
+      "oncreate": "this.waveSpawnTimer = ct.random(60 * 8);\nthis.visible = false;",
+      "onstep": "this.waveSpawnTimer -= ct.delta;\nif (this.waveSpawnTimer <= 0) {\n    this.waveSpawnTimer = 60 * 8;\n    ct.types.copy('Wave_Rising', this.x, this.y);\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "9042a6c8-67c9-4525-bcf4-4ed0ec1c3692",
       "graph": "969fc84b-5b83-45aa-9d56-50e363f34ef8",
-      "lastmod": 1538823627180
+      "lastmod": 1543069166264
     },
     {
       "name": "PirateTrigger",
       "depth": 0,
-      "oncreate": "",
+      "oncreate": "this.visible = false;",
       "onstep": "if (ct.place.meet(this, this.x, this.y, 'PlayerShip')) {\n    for (const copy of ct.types.list.PirateTrigger) {\n        copy.kill = true;\n    }\n    for (const copy of ct.types.list.PirateShip) {\n        if (ct.u.pdc(this.x, this.y, copy.x, copy.y) <= 640) {\n            copy.aggroed = true;\n        }\n    }\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "47e39c0a-4e46-422d-b75d-c84c53455fdd",
       "graph": "dda72147-5dd5-418d-803d-6ad88cbb7993",
-      "lastmod": 1538895286751
+      "lastmod": 1543069174474
     },
     {
       "name": "WhirlTrigger",
@@ -1999,222 +2001,222 @@
     {
       "name": "ReturnSpot",
       "depth": 0,
-      "oncreate": "",
+      "oncreate": "this.visible = false;",
       "onstep": "",
       "ondraw": "",
       "ondestroy": "",
       "uid": "4ab103e1-b0ed-4757-b304-c896604882c6",
       "graph": "8eecab5f-5508-4944-909c-2dc73a8702bb",
-      "lastmod": 1539861780752
+      "lastmod": 1543069170617
     },
     {
       "name": "Whirl_Starting",
       "depth": -1,
-      "oncreate": "this.graph = 'Whirl_Starting';\nthis.imgspd = 10 / ct.speed;",
+      "oncreate": "this.graph = 'Whirl_Starting';\nthis.animationSpeed = 1 / 6;\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;\n    this.frame = 0;\n    ct.types.copy('Whirl_Whirling', this.x, this.y);\n}",
       "onstep": "ct.types.list.PlayerShip[0].dir += 4;",
-      "ondraw": "if (this.frame >= 4) {\n    this.kill = true;\n    this.frame = 0;\n    ct.types.copy('Whirl_Whirling', this.x, this.y);\n}\nthis.draw();\n",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "c2675f1e-a1da-47b4-94c4-067879986c64",
       "graph": "c4148163-23f2-4433-9224-5cc085dde7ea",
-      "lastmod": 1538830874737
+      "lastmod": 1542784534866
     },
     {
       "name": "Whirl_Whirling",
       "depth": -1,
-      "oncreate": "this.graph = 'Whirl_Whirling';\nthis.imgspd = 10 / ct.speed;",
+      "oncreate": "this.graph = 'Whirl_Whirling';\nthis.animationSpeed = 1 / 6;\n\nvar loop = 0;\n\nthis.onLoop = () => {\n    this.loop ++;\n    if (this.loop >= 2) {\n        this.kill = true;\n        ct.types.copy('Whirl_Ending', this.x, this.y);\n    }\n}\n",
       "onstep": "ct.types.list.PlayerShip[0].dir += 4;",
-      "ondraw": "if (this.frame >= 8 * 2) {\n    this.kill = true;\n    this.frame = 0;\n    ct.types.copy('Whirl_Ending', this.x, this.y);\n}\nthis.draw();\n",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "bc27529d-aacc-4e31-9b7c-cae527f121c3",
       "graph": "c4148163-23f2-4433-9224-5cc085dde7ea",
-      "lastmod": 1538830878001
+      "lastmod": 1542698556537
     },
     {
       "name": "Whirl_Ending",
       "depth": -1,
-      "oncreate": "this.imgspd = 10 / ct.speed;\nthis.graph = 'Whirl_Ending';",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Whirl_Ending';\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;\n}",
       "onstep": "this.move();",
-      "ondraw": "if (this.frame >= 4) {\n    this.kill = true;\n} else {\n    this.draw();\n}",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "21565f9e-b0e8-415a-a556-aa64283016cd",
-      "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1538830712087
+      "graph": "c4148163-23f2-4433-9224-5cc085dde7ea",
+      "lastmod": 1542784542960
     },
     {
       "name": "Parking_LevelEnd",
       "depth": -1,
       "oncreate": "",
       "onstep": "if (ct.keyboard.pressed.space) {\n    var player = ct.place.meet(this, this.x, this.y, 'PlayerShip');\n    if (player) {\n        ct.game.lastHealth = ct.game.health;\n        ct.game.lastFood = ct.game.food;\n        ct.game.lastSailors = ct.game.sailorsTotal;\n        ct.game.nextLevel = ct.room.nextLevel;\n        ct.rooms.switch('LevelTransition');\n    }\n}",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "ffe57351-bef5-43d8-ab6b-44aad31da3a3",
       "graph": "f57630bf-cacc-4305-a37b-6a65c8862e26",
-      "lastmod": 1538888506521
+      "lastmod": 1542696134948
     },
     {
       "name": "DrownScreen",
       "depth": 0,
-      "oncreate": "this.imgspd = 5 / ct.speed;\nct.u.wait(8/5*970)\n.then(() => {\n    this.imgspd = 0;\n    this.frame = 7;\n});",
+      "oncreate": "this.animationSpeed = 1 / 12;\nthis.onComplete = () => {\n    this.stop();\n};",
       "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "8407ae63-eb66-4e35-9a73-c728985f5c74",
       "graph": "fa8dfd76-02bb-4a67-94cd-8f88930d1d01",
-      "lastmod": 1538883702365
+      "lastmod": 1542695649884
     },
     {
       "name": "TryAgainButton",
       "depth": 0,
-      "oncreate": "",
+      "oncreate": "this.text = new PIXI.Text('Try Again!');\nthis.addChild(this.text);\nthis.text.y = -4;",
       "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    if (ct.game.lastHealth) {\n        ct.game.health = ct.game.lastHealth;\n        ct.game.food = ct.game.lastFood;\n        ct.game.sailorsTotal = ct.game.sailors = ct.game.lastSailors;\n    } else {\n        ct.game.food = 100;\n        ct.game.health = 100;\n        ct.game.sailors = ct.game.sailorsTotal = 10;\n    }\n    ct.mouse.clear();\n    ct.rooms.switch(ct.game.nextLevel || 'Level_01');\n}",
-      "ondraw": "ct.draw(this);\nct.styles.set('LabelBig');\nct.draw.text('Try Again', this.x, this.y - 4);\nct.styles.reset();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "612797b7-e9f4-4838-8703-37efe1bd2a71",
       "graph": "8a6e3cfe-2e23-4bf3-975e-f9551813cffa",
-      "lastmod": 1538891093512
+      "lastmod": 1542698323993
     },
     {
       "name": "HappyVillage",
       "depth": -1,
-      "oncreate": "this.imgspd = 10 / ct.speed;",
-      "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.play();",
+      "onstep": "",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "b6d5501c-3383-4d54-bc0c-5b0ad5e753cb",
       "graph": "13b91ad3-7654-450f-a805-920cea52f6a2",
-      "lastmod": 1538927542358
+      "lastmod": 1542695692682
     },
     {
       "name": "OnwardsButton",
       "depth": 0,
-      "oncreate": "",
+      "oncreate": "this.text = new PIXI.Text('Onwards!');\nthis.addChild(this.text);\nthis.text.y = -4;",
       "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    ct.mouse.clear();\n    ct.rooms.switch(ct.game.nextLevel);\n}",
-      "ondraw": "ct.draw(this);\nct.styles.set('LabelBig');\nct.draw.text('Onwards!', this.x, this.y - 4);\nct.styles.reset();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "0ce9e9c6-e639-432c-bf4c-58e9ee28d026",
       "graph": "8a6e3cfe-2e23-4bf3-975e-f9551813cffa",
-      "lastmod": 1538888817243
+      "lastmod": 1542696797808
     },
     {
       "name": "RedCross",
       "depth": 0,
-      "oncreate": "this.graph = 'RedCross';\nthis.imgspd = 10 / ct.speed;",
+      "oncreate": "this.graph = 'RedCross';\nthis.animationSpeed = 1/6;\nthis.play();",
       "onstep": "this.move();",
       "ondraw": "this.draw();",
       "ondestroy": "",
       "uid": "466b1f90-e712-4682-86e2-4ba2492eb564",
       "graph": "abad042e-dd43-4fc1-b97d-bbcbfabc88f6",
-      "lastmod": 1538886248444
+      "lastmod": 1542696408271
     },
     {
       "name": "House",
       "depth": 0,
-      "oncreate": "this.imgspd = 0;\nthis.frame = ct.random(3);",
+      "oncreate": "this.gotoAndStop(ct.random(3));",
       "onstep": "",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "352fd2a8-696d-41b6-a85a-2945bdbff191",
       "graph": "f403611e-da88-4d1b-b566-26726c809840",
-      "lastmod": 1538888467976
+      "lastmod": 1542695684813
     },
     {
       "name": "StormCloud",
       "depth": 12,
-      "oncreate": "this.phase = Math.random() * Math.PI * 2;\nthis.dist = ct.random.range(24, 32);\n\nthis.imgspd = 15 / ct.speed;",
+      "oncreate": "this.phase = Math.random() * Math.PI * 2;\nthis.dist = ct.random.range(24, 32);\n\nthis.animationSpeed = 1 / 4;",
       "onstep": "this.phase += 0.01;\nthis.x = this.xstart + Math.sin(this.phase) * this.dist;\nthis.y = this.ystart + Math.cos(this.phase) * this.dist;",
-      "ondraw": "if (this.frame >= 8*2) {\n    this.graph = 'Storm_Attack';\n    if (this.frame >= 8*3 - 0.25) {\n        this.frame = 0;\n        if (ct.place.meet(this, this.x, this.y, 'PlayerShip')) {\n            ct.sound.spawn('Zap');\n            ct.game.health -= 10;\n            checkOverflows();\n            if (ct.game.health > 10 && ct.game.health < 50 && ct.game.sailors > 1) {\n                if (ct.random.chance(15)) {\n                    ct.game.sailors --;\n                    ct.game.sailorsTotal --;\n                    ct.types.copy('FX_LostSailor', this.x, this.y);\n                }\n            }\n        }\n        ct.types.copy('Splash', this.x, this.y);\n        this.graph = 'Storm';\n    }\n} else {\n    this.graph = 'Storm';\n}\n\nthis.draw();",
+      "ondraw": "if (this.frame >= 8*2) {\n    this.graph = 'Storm_Attack';\n    if (this.frame >= 8*3 - 0.25) {\n        this.frame = 0;\n        if (ct.place.meet(this, this.x, this.y, 'PlayerShip')) {\n            ct.sound.spawn('Zap');\n            ct.game.health -= 10;\n            checkOverflows();\n            if (ct.game.health > 10 && ct.game.health < 50 && ct.game.sailors > 1) {\n                if (ct.random.chance(15)) {\n                    ct.game.sailors --;\n                    ct.game.sailorsTotal --;\n                    ct.types.copy('FX_LostSailor', this.x, this.y);\n                }\n            }\n        }\n        ct.types.copy('Splash', this.x, this.y);\n        this.graph = 'Storm';\n    }\n} else {\n    this.graph = 'Storm';\n}",
       "ondestroy": "",
       "uid": "972dfef7-06db-4e34-8eb6-608fb7de0642",
       "graph": "972811b1-5d5b-48ca-9be8-3d460b10eea1",
-      "lastmod": 1538926193950
+      "lastmod": 1542696768978
     },
     {
       "name": "Parking_GameEnd",
       "depth": -1,
       "oncreate": "",
       "onstep": "if (ct.keyboard.pressed.space) {\n    var player = ct.place.meet(this, this.x, this.y, 'PlayerShip');\n    if (player) {\n        ct.rooms.switch('TheEnd');\n    }\n}",
-      "ondraw": "ct.draw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "233e49d8-de83-424d-b374-631af97189ea",
       "graph": "f57630bf-cacc-4305-a37b-6a65c8862e26",
-      "lastmod": 1538910171233
+      "lastmod": 1542696128697
     },
     {
       "name": "Gates_Closed",
       "depth": 11,
-      "oncreate": "this.imgspd = 0;\nthis.ctype = 'Solid';",
+      "oncreate": "this.ctype = 'Solid';",
       "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "ondraw": "",
       "ondestroy": "ct.types.copy('Gates_Opening', this.x, this.y);",
       "uid": "9e7bf983-b0fa-4805-9a58-d839799613bb",
       "graph": "d15e249d-17cc-44e0-b421-64bbfac93e1d",
-      "lastmod": 1538914171214
+      "lastmod": 1542694292850
     },
     {
       "name": "Column_1",
       "depth": 3,
       "oncreate": "this.effect = ['Column_1'];\nthis.enabled = false;\nthis.ctype = 'Solid';",
       "onstep": "columnOnStep(this);",
-      "ondraw": "columnOnDraw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "f3224a3d-2954-481d-b6e2-6caa718609f2",
       "graph": "02645423-9d5b-4d34-ac0f-603f355ee0d1",
-      "lastmod": 1538912923047
+      "lastmod": 1542694212266
     },
     {
       "name": "Column_2",
       "depth": 3,
       "oncreate": "this.effect = ['Column_3', 'Column_4'];\nthis.enabled = false;\nthis.ctype = 'Solid';",
       "onstep": "columnOnStep(this);",
-      "ondraw": "columnOnDraw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "22b7f770-33de-4391-9256-2ce5893f86e2",
       "graph": "02645423-9d5b-4d34-ac0f-603f355ee0d1",
-      "lastmod": 1538912925995
+      "lastmod": 1542694216341
     },
     {
       "name": "Column_3",
       "depth": 3,
       "oncreate": "this.effect = ['Column_1', 'Column_3'];\nthis.enabled = false;\nthis.ctype = 'Solid';",
       "onstep": "columnOnStep(this);",
-      "ondraw": "columnOnDraw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "447aff0d-16f8-4123-b90d-ca31b8be816d",
       "graph": "02645423-9d5b-4d34-ac0f-603f355ee0d1",
-      "lastmod": 1538912928006
+      "lastmod": 1542694221051
     },
     {
       "name": "Column_4",
       "depth": 3,
       "oncreate": "this.effect = ['Column_2', 'Column_3'];\nthis.enabled = false;\nthis.ctype = 'Solid';",
       "onstep": "columnOnStep(this);",
-      "ondraw": "columnOnDraw(this);",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "e94fc2ea-42c9-4f79-9799-caca27c7d305",
       "graph": "02645423-9d5b-4d34-ac0f-603f355ee0d1",
-      "lastmod": 1538912930111
+      "lastmod": 1542694226060
     },
     {
       "name": "Gates_Opening",
       "depth": 11,
-      "oncreate": "this.imgspd = 10 / ct.speed;\nthis.ctype = 'Solid';",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.ctype = 'Solid';\nthis.play();\nthis.loop = false;\nthis.onComplete = () => {\n    this.kill = true;\n}",
       "onstep": "",
-      "ondraw": "if (this.frame >= 13) {\n    this.frame = 12;\n    this.imgspd = 0;\n    this.ctype = false;\n}\nthis.draw();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "6147fe63-1b55-4c2e-8b4b-9595ab0d8c81",
       "graph": "d15e249d-17cc-44e0-b421-64bbfac93e1d",
-      "lastmod": 1538914545295
+      "lastmod": 1542784599306
     },
     {
       "name": "EndingPeopleLayer",
       "depth": 1,
       "oncreate": "this.imgspd = 0;\nthis.frame = 10 - ct.game.sailorsTotal;",
       "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "ef57e5e7-a0d6-4ca8-9f24-8d7f99664029",
       "graph": "0f048c5e-1253-47a7-8843-eacb00f698a0",
-      "lastmod": 1538915160876
+      "lastmod": 1542694251799
     },
     {
       "name": "IslandEnding",
@@ -2232,44 +2234,77 @@
       "depth": 5,
       "oncreate": "this.kill = true;\nvar ship = ct.types.copy('PirateShip', this.x, this.y);\nship.graph = 'PirateShip_Big';\nship.hp = 10;",
       "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "d12251a8-4095-4f64-8240-6335c8da3913",
       "graph": "4713a1c7-d454-40df-a0c4-452707880a67",
-      "lastmod": 1538916677236
+      "lastmod": 1542694169169
     },
     {
       "name": "FX_LostSailor",
       "depth": 13,
       "oncreate": "this.imgspd = 0;\nthis.frame = ct.game.sailorsTotal;\nthis.phase = 0;\nthis.dir = ct.random.deg();\nthis.spd = 1;",
       "onstep": "this.move();\nthis.phase += 0.075;\nif (this.phase > Math.PI) {\n    this.kill = true;\n}",
-      "ondraw": "ct.draw(this, this.x, this.y - Math.sin(this.phase) * 48);",
+      "ondraw": "/*ct.draw(this, this.x, this.y - Math.sin(this.phase) * 48);*/",
       "ondestroy": "ct.types.copy('Splash', this.x, this.y);",
       "uid": "9a0cc8c1-4edf-42fc-a1ca-c1a0e0a49f89",
       "graph": "0f40718f-193f-47bd-a30b-7e86022520d9",
-      "lastmod": 1538918569461
+      "lastmod": 1542694283513
     },
     {
       "name": "Splash",
       "depth": 0,
-      "oncreate": "this.imgspd = 10 / ct.speed;",
-      "onstep": "if (this.frame >= 7) {\n    this.kill = true;\n}",
-      "ondraw": "this.draw();",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;\n};",
+      "onstep": "",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "e14d321b-cddb-4219-8cf9-16ad1760fa40",
       "graph": "2c92954d-3364-4882-b1ce-4a3c54ff560b",
-      "lastmod": 1538918530316
+      "lastmod": 1542698321865
     },
     {
       "name": "PeopleLayer",
       "depth": 1,
-      "oncreate": "this.imgspd = 0;\nthis.frame = 10 - ct.game.sailorsTotal;",
-      "onstep": "this.move();",
-      "ondraw": "this.draw();",
+      "oncreate": "this.gotoAndStop(10 - ct.game.sailorsTotal);",
+      "onstep": "",
+      "ondraw": "",
       "ondestroy": "",
       "uid": "8b241be4-a22c-415e-a800-52ad68e87095",
       "graph": "c8ad33c3-d2d9-49e2-be88-5b94f6c0c55f",
-      "lastmod": 1538927535605
+      "lastmod": 1542696169724
+    },
+    {
+      "name": "CursorSimple",
+      "depth": 0,
+      "oncreate": "",
+      "onstep": "this.move();",
+      "ondraw": "this.x = ct.mouse.x;\nthis.y = ct.mouse.y;",
+      "ondestroy": "",
+      "uid": "b0db4cf5-5d63-492f-994a-53aefa04a387",
+      "graph": "3aa99fe4-70a5-408e-aa46-0a9327d2e8f3",
+      "lastmod": 1542783265434
+    },
+    {
+      "name": "Cursor",
+      "depth": 0,
+      "oncreate": "",
+      "onstep": "",
+      "ondraw": "if (ct.types.list.PlayerShip.length) {\n    this.graph = 'CursorAttack';\n} else {\n    this.graph = 'CursorAnchor';\n}\n\nthis.x = ct.mouse.x;\nthis.y = ct.mouse.y;",
+      "ondestroy": "",
+      "uid": "40bbe6a2-0a22-42ee-82f2-4c34f362501c",
+      "graph": "5198c326-aad8-42f1-a275-22d7b9479387",
+      "lastmod": 1542783297984
+    },
+    {
+      "name": "InGameWidget",
+      "depth": 0,
+      "oncreate": "var overlay = new PIXI.Graphics();\noverlay.beginFill(0x5FCDE4);\noverlay.drawRect(0, 0, 59, 48);\noverlay.endFill();\noverlay.alpha = 0.35;\nthis.x = ct.room.x + 4;\nthis.y = ct.room.y + 4;\n\nthis.overlay = overlay;\nthis.addChild(overlay);",
+      "onstep": "",
+      "ondraw": "this.x = ct.room.x + 4;\nthis.y = ct.room.y + 4;\n",
+      "ondestroy": "",
+      "uid": "d9b87408-1009-4103-99f5-bba501c6af15",
+      "graph": -1,
+      "lastmod": 1543069860227
     }
   ],
   "sounds": [
@@ -2492,7 +2527,7 @@
         "type": "0",
         "color": "#FBF236"
       },
-      "lastmod": 1538928191946,
+      "lastmod": 1543069892509,
       "shadow": {
         "color": "#8F563B",
         "x": 0,
@@ -2506,9 +2541,9 @@
       "origname": "s6f19e5f78d35",
       "fill": {
         "type": "0",
-        "color": "rgba(95,205,228,0.5)"
+        "color": "100"
       },
-      "lastmod": 1538928291281
+      "lastmod": 1542782719534
     }
   ],
   "rooms": [
@@ -2516,7 +2551,7 @@
       "name": "Level_01",
       "oncreate": "inGameStart();\nthis.nextLevel = 'Level_02';\nct.sound.load('SideEffects');\nct.u.wait(1500)\n.then(() => {\n    ct.sound.spawn('Bittersweet');\n});",
       "onstep": "//ct.victoria.smoothFollow(0.1);\ninGameStep();",
-      "ondraw": "inGameDraw();",
+      "ondraw": "",
       "onleave": "",
       "width": 320,
       "height": 240,
@@ -13860,13 +13895,13 @@
       ],
       "gridX": 16,
       "gridY": 16,
-      "lastmod": 1538978373317
+      "lastmod": 1543069133786
     },
     {
       "name": "MainMenu",
-      "oncreate": "ct.room.waveTimer = ct.speed;\nct.sound.load('Bittersweet');",
+      "oncreate": "ct.room.waveTimer = ct.speed;\nct.sound.load('Bittersweet');\n\nthis.titleText = new PIXI.Text('StormCross');\nthis.titleText.x = this.width / 2;\nthis.titleText.y = 80;\nthis.titleText.anchor.x = this.titleText.anchor.y = 0.5;\n\nthis.subtitleText = new PIXI.Text('A game about saving a colony');\nthis.subtitleText.x = this.width / 2;\nthis.subtitleText.y = 104;\nthis.subtitleText.anchor.x = this.subtitleText.anchor.y = 0.5;\n\nthis.authorsText = new PIXI.Text('Created by CoMiGo and Kenny\\nMade with ct.js game maker - https://ctjs.rocks/\\nA mini Jam 12 Entry');\nthis.authorsText.x = this.width / 2;\nthis.authorsText.y = this.height - 20;\nthis.authorsText.anchor.x = this.authorsText.anchor.y = 0.5;\n\nthis.addChild(this.titleText);\nthis.addChild(this.subtitleText);\nthis.addChild(this.authorsText);",
       "onstep": "ct.room.waveTimer --;\nif (ct.room.waveTimer <= 0) {\n    ct.room.waveTimer = ct.speed * 6;\n    ct.sound.spawn(ct.random.dice('Wave_01', 'Wave_02', 'Wave_03'));\n}",
-      "ondraw": "ct.styles.set('Title');\nct.draw.text('StormCross', this.width / 2, 80);\n\nct.styles.set('LabelSmall');\nct.x.textAlign = 'center'; \nct.draw.text('A game about saving a colony', this.width / 2, 104);\n\nct.draw.text('Created by CoMiGo and Kenny', this.width / 2, this.height - 32);\nct.draw.text('Made with ct.js game maker - https://ctjs.rocks/', this.width / 2, this.height - 20);\nct.draw.text('A mini Jam 12 Entry', this.width / 2, this.height - 8);\nct.styles.reset();\n\nct.draw.image('CursorSimple', 0, ct.mouse.x, ct.mouse.y);",
+      "ondraw": "",
       "onleave": "",
       "width": 320,
       "height": 240,
@@ -13918,6 +13953,11 @@
               "x": 160,
               "y": 160,
               "uid": "d7ff01bf-a1f0-4ed4-8219-455431cd9ac6"
+            },
+            {
+              "x": 128,
+              "y": 96,
+              "uid": "b0db4cf5-5d63-492f-994a-53aefa04a387"
             }
           ]
         }
@@ -13932,7 +13972,7 @@
       ],
       "gridX": 32,
       "gridY": 32,
-      "lastmod": 1538910893466
+      "lastmod": 1542782530617
     },
     {
       "name": "Lose_Drown",
@@ -61185,10 +61225,6 @@
       "code": "ct.game = {\n    health: 100,\n    food: 100,\n    sailorsTotal: 10,\n    sailors: 10\n};"
     },
     {
-      "name": "inGameDraw",
-      "code": "var inGameDraw = function() {\n    var r = ct.room;\n    \n    ct.styles.set('Backdrop');\n    ct.draw.rectangle(r.x + 4, r.y + 4, 59, 48);\n    \n    ct.styles.set('HealthBar');\n    ct.draw.rectangle(r.x + 8, r.y + 8, Math.round(ct.game.health / 2), 7);\n    ct.styles.set('FoodBar');\n    ct.draw.rectangle(r.x + 8, r.y + 16, Math.round(ct.game.food / 2), 7);\n    ct.styles.reset();\n    \n    ct.styles.set('LabelSmall');\n    ct.draw.text(`Crew: ${ct.game.sailors}/${ct.game.sailorsTotal}`, r.x + 8, r.y + 30);\n    ct.draw.text(ct.types.list.PlayerShip_Gather.length? 'Anchored.' : 'Swimming.', r.x + 8, r.y + 42);\n    ct.styles.reset();\n    \n    if (ct.types.list.PlayerShip.length) {\n        ct.draw.image('CursorAttack', 0, ct.mouse.x, ct.mouse.y);\n    } else {\n        ct.draw.image('CursorAnchor', 0, ct.mouse.x, ct.mouse.y);\n    }\n};"
-    },
-    {
       "name": "pirateEQ",
       "code": "var pirateEQ = pirate => {\n    var player = ct.types.list.PlayerShip[0];\n    var spot = ct.place.nearest(pirate.x, pirate.y, 'PiratePatrolSpot') || {x: pirate.x, y: pirate.y};\n    return ct.eqs.query({\n        type: 'circle',\n        r: 120,\n        sizeX: 24,\n        sizeY: 24,\n        x: pirate.aggroed? player.x : spot.x,\n        y: pirate.aggroed? player.y : spot.y\n    })\n    .score(point => { /* ranking procedure */\n        let dist = ct.u.pdc(pirate.x, pirate.y, point.x, point.y);\n        point.score += 1 - ct.u.clamp(0, ct.u.unlerp(100, 300, dist), 1);\n        if (player) {\n            dist = ct.u.pdc(player.x, player.y, point.x, point.y);\n            if (dist > 50) {\n                point.score += ct.u.clamp(0, ct.u.unlerp(300, 50, dist), 1);\n            }\n        }\n    })\n    .score(ct.eqs.scoreOccupied('Solid'))\n    .score(ct.eqs.scoreTile(10))\n    .score(ct.eqs.scoreDirection(pirate.dir, pirate.x, pirate.y, 0.5))\n    .sort()\n    .portion(0.25)\n    .getBetterRandom();\n};\nvar pirateEQDebug = pirate => {\n    var player = ct.types.list.PlayerShip[0];\n    var spot = ct.place.nearest(pirate.x, pirate.y, 'PiratePatrolSpot') || {x: pirate.x, y: pirate.y};\n    return ct.eqs.query({\n        type: 'circle',\n        r: 120,\n        size: 24,\n        x: pirate.aggroed? player.x : spot.x,\n        y: pirate.aggroed? player.y : spot.y\n    })\n    .score(point => {\n        let dist = ct.u.pdc(pirate.x, pirate.y, point.x, point.y);\n        point.score += 1 - ct.u.clamp(0, ct.u.unlerp(100, 300, dist), 1);\n        if (player) {\n            dist = ct.u.pdc(player.x, player.y, point.x, point.y);\n            if (dist > 50) {\n                point.score += ct.u.clamp(0, ct.u.unlerp(300, 50, dist), 1);\n            }\n        }\n    })\n    .score(ct.eqs.scoreOccupied('Solid'))\n    .score(ct.eqs.scoreTile(10))\n    .score(ct.eqs.scoreDirection(pirate.dir, pirate.x, pirate.y, 0.5))\n    .sort()\n    //.portion(0.25)\n    .normalize()\n    .draw();\n};\n"
     },
@@ -61202,11 +61238,11 @@
     },
     {
       "name": "inGameStart",
-      "code": "var inGameStart = function () {\n    ct.room.borderx = ct.room.width / 2;\n    ct.room.bordery = ct.room.height / 2;\n    \n    ct.room.waveTimer = ct.speed;\n    ct.room.hungerTimer = ct.speed;\n};"
+      "code": "var inGameStart = function () {\n    var r = ct.room;\n    r.borderx = ct.room.width / 2;\n    r.bordery = ct.room.height / 2;\n    \n    r.waveTimer = 60;\n    r.hungerTimer = 60;\n\n    r.widget = ct.types.copy('InGameWidget');\n    \n    ct.types.copy('Cursor');\n    \n    /*\n    ct.styles.set('HealthBar');\n    ct.draw.rectangle(r.x + 8, r.y + 8, Math.round(ct.game.health / 2), 7);\n    ct.styles.set('FoodBar');\n    ct.draw.rectangle(r.x + 8, r.y + 16, Math.round(ct.game.food / 2), 7);\n    ct.styles.reset();\n    \n    ct.styles.set('LabelSmall');\n    ct.draw.text(`Crew: ${ct.game.sailors}/${ct.game.sailorsTotal}`, r.x + 8, r.y + 30);\n    ct.draw.text(ct.types.list.PlayerShip_Gather.length? 'Anchored.' : 'Swimming.', r.x + 8, r.y + 42);\n    ct.styles.reset();\n    */\n};"
     },
     {
       "name": "columnOnStep, columnOnDraw",
-      "code": "var checkColumns = function() {\n    if (ct.types.list.Column_1[0].enabled &&\n        ct.types.list.Column_2[0].enabled &&\n        ct.types.list.Column_3[0].enabled &&\n        ct.types.list.Column_4[0].enabled) {\n        ct.types.list.Gates_Closed[0].kill = true;\n    } \n};\n\nvar columnOnStep = function (col) {\n    if (ct.types.list.Gates_Closed.length) {\n        var bullet = ct.place.meet(col, col.x, col.y, 'Bullet');\n        if (bullet) {\n            bullet.kill = true;\n            ct.sound.spawn('Hit');\n            for (const type of col.effect) {\n                ct.types.list[type][0].enabled = !ct.types.list[type][0].enabled;\n            }\n            checkColumns();\n        }\n    }\n};\nvar columnOnDraw = function (col) {\n    col.draw();  \n    if (col.enabled) {\n        ct.draw.image('Fire', Math.floor(col.frame * 10 / ct.speed) % 6, col.x, col.y - 40);\n    }\n};"
+      "code": "var checkColumns = function() {\n    if (ct.types.list.Column_1[0].enabled &&\n        ct.types.list.Column_2[0].enabled &&\n        ct.types.list.Column_3[0].enabled &&\n        ct.types.list.Column_4[0].enabled) {\n        ct.types.list.Gates_Closed[0].kill = true;\n    } \n};\n\nvar columnOnStep = function (col) {\n    if (ct.types.list.Gates_Closed.length) {\n        var bullet = ct.place.meet(col, col.x, col.y, 'Bullet');\n        if (bullet) {\n            bullet.kill = true;\n            ct.sound.spawn('Hit');\n            for (const type of col.effect) {\n                ct.types.list[type][0].enabled = !ct.types.list[type][0].enabled;\n            }\n            checkColumns();\n        }\n    }\n};\nvar columnOnDraw = function (col) {\n    /*\n    col.draw();  \n    if (col.enabled) {\n        ct.draw.image('Fire', Math.floor(col.frame * 10 / ct.speed) % 6, col.x, col.y - 40);\n    }\n    */\n};"
     }
   ],
   "fonts": [
