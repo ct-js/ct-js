@@ -387,6 +387,11 @@ graphic-editor.panel.view
                     grprCanvas.x.arc(this.graphic.axis[0], this.graphic.axis[1], this.graphic.r, 0, 2 * Math.PI);
                     grprCanvas.x.fill();
                 }
+                grprCanvas.x.globalAlpha = 1;
+                grprCanvas.x.fillStyle = '#f33';
+                grprCanvas.x.beginPath();
+                grprCanvas.x.arc(this.graphic.axis[0], this.graphic.axis[1], 3, 0, 2 * Math.PI);
+                grprCanvas.x.fill();
             }
         };
         /**
@@ -477,6 +482,11 @@ graphic-editor.panel.view
                     graphCanvas.x.arc(this.graphic.axis[0], this.graphic.axis[1], this.graphic.r, 0, 2 * Math.PI);
                     graphCanvas.x.fill();
                 }
+                graphCanvas.x.globalAlpha = 1;
+                graphCanvas.x.fillStyle = '#f33';
+                graphCanvas.x.beginPath();
+                graphCanvas.x.arc(this.graphic.axis[0], this.graphic.axis[1], 3, 0, 2 * Math.PI);
+                graphCanvas.x.fill();
             }
         };
         
