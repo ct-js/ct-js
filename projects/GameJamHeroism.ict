@@ -1,6 +1,6 @@
 {
   "ctjsVersion": "0.5.2",
-  "notes": "/* empty */",
+  "notes": "/* empty */фвыфыв",
   "libs": {
     "keyboard": {},
     "place": {
@@ -1676,6 +1676,63 @@
       "bottom": 14,
       "uid": "c8ad33c3-d2d9-49e2-be88-5b94f6c0c55f",
       "lastmod": 1538927480919
+    },
+    {
+      "name": "Foodbar",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        0,
+        0
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 5,
+      "imgHeight": 5,
+      "width": 5,
+      "height": 5,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i7b9a7a93-bb48-4ceb-9451-451afa85a536",
+      "source": "/home/comigo/Рабочий стол/sprites/Foodbar.png",
+      "shape": "rect",
+      "left": 0,
+      "right": 5,
+      "top": 0,
+      "bottom": 5,
+      "uid": "7b9a7a93-bb48-4ceb-9451-451afa85a536",
+      "lastmod": 1543414285014
+    },
+    {
+      "name": "Healthbar",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        0,
+        0
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 5,
+      "imgHeight": 5,
+      "width": 5,
+      "height": 5,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i53b433a5-c0ff-45b7-9ea9-e5777397e94f.png",
+      "source": "/home/comigo/Рабочий стол/sprites/Healthbar.png",
+      "shape": "rect",
+      "left": 0,
+      "right": 5,
+      "top": 0,
+      "bottom": 5,
+      "uid": "53b433a5-c0ff-45b7-9ea9-e5777397e94f"
     }
   ],
   "types": [
@@ -1688,7 +1745,7 @@
       "ondestroy": "",
       "uid": "bb0e9732-833d-4f7c-8b65-c3336aff1de5",
       "graph": "7653be09-b494-4971-a631-f87d990beb60",
-      "lastmod": 1543062171662
+      "lastmod": 1543414114395
     },
     {
       "name": "DebrisSmall",
@@ -1715,13 +1772,13 @@
     {
       "name": "PlayButton",
       "depth": 0,
-      "oncreate": "this.text = new PIXI.Text('Play!');\nthis.text.anchor.x = 0.5;\nthis.text.anchor.y = 0.5;\nthis.addChild(this.text);\nthis.text.y = -4;",
+      "oncreate": "this.text = new PIXI.Text('Play!', ct.styles.get('LabelBig'));\nthis.text.anchor.x = 0.5;\nthis.text.anchor.y = 0.5;\nthis.addChild(this.text);",
       "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    ct.mouse.clear();\n    ct.rooms.switch('Level_01');\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "d7ff01bf-a1f0-4ed4-8219-455431cd9ac6",
       "graph": "8a6e3cfe-2e23-4bf3-975e-f9551813cffa",
-      "lastmod": 1542782112663
+      "lastmod": 1543410824256
     },
     {
       "name": "DebrisBig",
@@ -1798,7 +1855,7 @@
       "ondestroy": "",
       "uid": "47ce1b99-4e3f-4910-aad4-4144b596bc55",
       "graph": "7a31a847-6677-4cd1-b96a-2d004ab64e6f",
-      "lastmod": 1542695707546
+      "lastmod": 1543411800767
     },
     {
       "name": "IslandPart_Big",
@@ -1935,35 +1992,35 @@
     {
       "name": "Wave_Rising",
       "depth": 0,
-      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Rising';\nthis.direction = -90;\nthis.speed = 1;\nthis.loop = false;\nthis.onComplete = () => {\n    ct.types.copy('Wave_Going', this.x, this.y);\n    this.kill = true;  \n};",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Rising';\nthis.play();\nthis.speed = 1;\nthis.direction = -90;\nthis.loop = false;\nthis.onComplete = () => {\n    ct.types.copy('Wave_Going', this.x, this.y);\n    this.kill = true;  \n};",
       "onstep": "this.move();",
       "ondraw": "",
       "ondestroy": "",
       "uid": "569aa690-2b69-4b4f-bfb2-a32fa02721aa",
       "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1542784584625
+      "lastmod": 1543411006298
     },
     {
       "name": "Wave_Going",
       "depth": 0,
-      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Going';\nthis.play();\nthis.direction = -90;\nthis.speed = 1;\n\nvar times = 0;\nthis.onLoop = () => {\n    times++;\n    if (times >= 3) {\n        this.kill = true;\n        ct.types.copy('Wave_Falling', this.x, this.y);\n    }\n};",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Going';\nthis.speed = 1;\nthis.direction = -90;\nthis.play();\n\nvar times = 0;\nthis.onLoop = () => {\n    times++;\n    if (times >= 3) {\n        this.kill = true;\n        ct.types.copy('Wave_Falling', this.x, this.y);\n    }\n};",
       "onstep": "this.move();\n\nif (ct.place.meet(this, this.x, this.y, 'PlayerShip')) {\n    ct.sound.spawn('Anchor');\n    ct.game.health -= 5;\n    this.kill = true;\n    ct.types.copy('Wave_Falling', this.x, this.y);\n    checkOverflows();\n    if (ct.game.health > 10 && ct.game.health < 50 && ct.game.sailors > 1) {\n        if (ct.random.chance(15)) {\n            ct.game.sailors --;\n            ct.game.sailorsTotal --;\n            ct.types.copy('FX_LostSailor', this.x, this.y);\n        }\n    }\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "6b676d35-ff6d-494b-8030-0543b6752bbf",
       "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1542784590799
+      "lastmod": 1543411045266
     },
     {
       "name": "Wave_Falling",
       "depth": 0,
-      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Falling';\nthis.direction = -90;\nthis.speed = 1;\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;  \n};",
+      "oncreate": "this.animationSpeed = 1 / 6;\nthis.graph = 'Wave_Falling';\nthis.speed = 1;\nthis.direction = -90;\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;  \n};",
       "onstep": "this.move();",
       "ondraw": "",
       "ondestroy": "",
       "uid": "abc207d1-c2a1-4c5c-bd02-e004dabb4a59",
       "graph": "dfa1a581-d891-4dd2-a87a-04a87ab8ea4d",
-      "lastmod": 1542784588216
+      "lastmod": 1543411054099
     },
     {
       "name": "WaveSpawners",
@@ -1990,13 +2047,13 @@
     {
       "name": "WhirlTrigger",
       "depth": 0,
-      "oncreate": "",
+      "oncreate": "this.visible = false;",
       "onstep": "var player = ct.place.meet(this, this.x, this.y, 'PlayerShip');\nif (!ct.game.whirling && player) {\n    var spot = ct.place.nearest(player.x, player.y, 'ReturnSpot');\n    ct.types.copy('Whirl_Starting', player.x, player.y);\n    ct.types.copy('Whirl_Starting', spot.x, spot.y);\n    ct.game.whirling = true;\n    ct.sound.spawn('Vortex');\n    ct.u.wait(1000) \n    .then(() => {\n        ct.game.whirling = false;\n        player.x = spot.x;\n        player.y = spot.y;\n        ct.game.health -= 25;\n        checkOverflows();\n    });\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "6898bf3b-9ad6-456c-811e-c5463c75a59b",
       "graph": "b2878065-68ab-4f16-89dd-02c2f233592d",
-      "lastmod": 1538911595518
+      "lastmod": 1543411651742
     },
     {
       "name": "ReturnSpot",
@@ -2013,23 +2070,23 @@
       "name": "Whirl_Starting",
       "depth": -1,
       "oncreate": "this.graph = 'Whirl_Starting';\nthis.animationSpeed = 1 / 6;\nthis.loop = false;\nthis.play();\nthis.onComplete = () => {\n    this.kill = true;\n    this.frame = 0;\n    ct.types.copy('Whirl_Whirling', this.x, this.y);\n}",
-      "onstep": "ct.types.list.PlayerShip[0].dir += 4;",
+      "onstep": "ct.types.list.PlayerShip[0].orientation += 4 * ct.delta;",
       "ondraw": "",
       "ondestroy": "",
       "uid": "c2675f1e-a1da-47b4-94c4-067879986c64",
       "graph": "c4148163-23f2-4433-9224-5cc085dde7ea",
-      "lastmod": 1542784534866
+      "lastmod": 1543411605350
     },
     {
       "name": "Whirl_Whirling",
       "depth": -1,
-      "oncreate": "this.graph = 'Whirl_Whirling';\nthis.animationSpeed = 1 / 6;\n\nvar loop = 0;\n\nthis.onLoop = () => {\n    this.loop ++;\n    if (this.loop >= 2) {\n        this.kill = true;\n        ct.types.copy('Whirl_Ending', this.x, this.y);\n    }\n}\n",
-      "onstep": "ct.types.list.PlayerShip[0].dir += 4;",
+      "oncreate": "this.graph = 'Whirl_Whirling';\nthis.animationSpeed = 1 / 6;\n\nvar loop = 0;\n\nthis.onLoop = () => {\n    this.loop ++;\n    if (this.loop >= 2) {\n        this.kill = true;\n        ct.types.copy('Whirl_Ending', this.x, this.y);\n    }\n}\n\nthis.play();",
+      "onstep": "ct.types.list.PlayerShip[0].orientation += 4 * ct.delta",
       "ondraw": "",
       "ondestroy": "",
       "uid": "bc27529d-aacc-4e31-9b7c-cae527f121c3",
       "graph": "c4148163-23f2-4433-9224-5cc085dde7ea",
-      "lastmod": 1542698556537
+      "lastmod": 1543411632470
     },
     {
       "name": "Whirl_Ending",
@@ -2040,7 +2097,7 @@
       "ondestroy": "",
       "uid": "21565f9e-b0e8-415a-a556-aa64283016cd",
       "graph": "c4148163-23f2-4433-9224-5cc085dde7ea",
-      "lastmod": 1542784542960
+      "lastmod": 1543411586351
     },
     {
       "name": "Parking_LevelEnd",
@@ -2067,13 +2124,13 @@
     {
       "name": "TryAgainButton",
       "depth": 0,
-      "oncreate": "this.text = new PIXI.Text('Try Again!');\nthis.addChild(this.text);\nthis.text.y = -4;",
+      "oncreate": "this.text = new PIXI.Text('Try Again!', ct.styles.get('LabelBig'));\nthis.text.anchor.x = 0.5;\nthis.text.anchor.y = 0.5;\nthis.addChild(this.text);",
       "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    if (ct.game.lastHealth) {\n        ct.game.health = ct.game.lastHealth;\n        ct.game.food = ct.game.lastFood;\n        ct.game.sailorsTotal = ct.game.sailors = ct.game.lastSailors;\n    } else {\n        ct.game.food = 100;\n        ct.game.health = 100;\n        ct.game.sailors = ct.game.sailorsTotal = 10;\n    }\n    ct.mouse.clear();\n    ct.rooms.switch(ct.game.nextLevel || 'Level_01');\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "612797b7-e9f4-4838-8703-37efe1bd2a71",
       "graph": "8a6e3cfe-2e23-4bf3-975e-f9551813cffa",
-      "lastmod": 1542698323993
+      "lastmod": 1543073019327
     },
     {
       "name": "HappyVillage",
@@ -2089,13 +2146,13 @@
     {
       "name": "OnwardsButton",
       "depth": 0,
-      "oncreate": "this.text = new PIXI.Text('Onwards!');\nthis.addChild(this.text);\nthis.text.y = -4;",
+      "oncreate": "this.text = new PIXI.Text('Onwards!', ct.styles.get('LabelBig'));\nthis.text.anchor.x = 0.5;\nthis.text.anchor.y = 0.5;\nthis.addChild(this.text);",
       "onstep": "if (ct.mouse.pressed && ct.mouse.hovers(this)) {\n    ct.mouse.clear();\n    ct.rooms.switch(ct.game.nextLevel);\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "0ce9e9c6-e639-432c-bf4c-58e9ee28d026",
       "graph": "8a6e3cfe-2e23-4bf3-975e-f9551813cffa",
-      "lastmod": 1542696797808
+      "lastmod": 1543073011033
     },
     {
       "name": "RedCross",
@@ -2161,7 +2218,7 @@
       "ondestroy": "",
       "uid": "f3224a3d-2954-481d-b6e2-6caa718609f2",
       "graph": "02645423-9d5b-4d34-ac0f-603f355ee0d1",
-      "lastmod": 1542694212266
+      "lastmod": 1543559291423
     },
     {
       "name": "Column_2",
@@ -2275,36 +2332,36 @@
     },
     {
       "name": "CursorSimple",
-      "depth": 0,
+      "depth": 1000,
       "oncreate": "",
       "onstep": "this.move();",
       "ondraw": "this.x = ct.mouse.x;\nthis.y = ct.mouse.y;",
       "ondestroy": "",
       "uid": "b0db4cf5-5d63-492f-994a-53aefa04a387",
       "graph": "3aa99fe4-70a5-408e-aa46-0a9327d2e8f3",
-      "lastmod": 1542783265434
+      "lastmod": 1543070797403
     },
     {
       "name": "Cursor",
-      "depth": 0,
+      "depth": 1000,
       "oncreate": "",
       "onstep": "",
       "ondraw": "if (ct.types.list.PlayerShip.length) {\n    this.graph = 'CursorAttack';\n} else {\n    this.graph = 'CursorAnchor';\n}\n\nthis.x = ct.mouse.x;\nthis.y = ct.mouse.y;",
       "ondestroy": "",
       "uid": "40bbe6a2-0a22-42ee-82f2-4c34f362501c",
       "graph": "5198c326-aad8-42f1-a275-22d7b9479387",
-      "lastmod": 1542783297984
+      "lastmod": 1543070782387
     },
     {
       "name": "InGameWidget",
-      "depth": 0,
-      "oncreate": "var overlay = new PIXI.Graphics();\noverlay.beginFill(0x5FCDE4);\noverlay.drawRect(0, 0, 59, 48);\noverlay.endFill();\noverlay.alpha = 0.35;\nthis.x = ct.room.x + 4;\nthis.y = ct.room.y + 4;\n\nthis.overlay = overlay;\nthis.addChild(overlay);",
+      "depth": 999,
+      "oncreate": "var overlay = new PIXI.Graphics();\noverlay.beginFill(0x5FCDE4);\noverlay.drawRect(0, 0, 59, 48);\noverlay.endFill();\noverlay.alpha = 0.65;\nthis.x = ct.room.x + 4;\nthis.y = ct.room.y + 4;\n\nthis.overlay = overlay;\nthis.addChild(overlay);\n\nthis.crewLabel = new PIXI.Text(`Crew: ${ct.game.sailors}/${ct.game.sailorsTotal}`, ct.styles.get('LabelSmall'));\nthis.addChild(this.crewLabel);\nthis.crewLabel.x = 4;\nthis.crewLabel.y = 24;\n\nthis.anchoredLabel = new PIXI.Text(ct.types.list.PlayerShip_Gather.length? 'Anchored.' : 'Swimming.', ct.styles.get('LabelSmall'));\nthis.addChild(this.anchoredLabel);\nthis.anchoredLabel.x = 4;\nthis.anchoredLabel.y = 36;\n\nthis.healthBar = new PIXI.mesh.NineSlicePlane(ct.res.getTexture('Healthbar', 0), 2, 2, 2, 2);\nthis.addChild(this.healthBar);\nthis.healthBar.x = this.healthBar.y = 4;\nthis.healthBar.height = 8;\nthis.healthBar.width = 40;\n\nthis.foodBar = new PIXI.mesh.NineSlicePlane(ct.res.getTexture('Foodbar', 0), 2, 2, 2, 2);\nthis.addChild(this.foodBar);\nthis.foodBar.x = 4;\nthis.foodBar.y = 13;\nthis.foodBar.height = 8;\nthis.foodBar.width = 40;",
       "onstep": "",
-      "ondraw": "this.x = ct.room.x + 4;\nthis.y = ct.room.y + 4;\n",
+      "ondraw": "this.x = ct.room.x + 4;\nthis.y = ct.room.y + 4;\n\nvar crewText = `Crew: ${ct.game.sailors}/${ct.game.sailorsTotal}`,\n    anchoredText = ct.types.list.PlayerShip_Gather.length? 'Anchored.' : 'Swimming.';\nif (this.crewLabel.text !== crewText) {\n    this.crewLabel.text = crewText;\n}\nif (this.anchoredLabel.text !== anchoredText) {\n    this.anchoredLabel.text = anchoredText;\n}\n\n\nthis.healthBar.width = 0.5 * ct.game.health;\nthis.foodBar.width = 0.5 * ct.game.food;",
       "ondestroy": "",
       "uid": "d9b87408-1009-4103-99f5-bba501c6af15",
       "graph": -1,
-      "lastmod": 1543069860227
+      "lastmod": 1543638710167
     }
   ],
   "sounds": [
@@ -2441,13 +2498,14 @@
         "weight": 400,
         "italic": false,
         "valign": "middle",
-        "halign": "left"
+        "halign": "center",
+        "lineHeight": 13
       },
       "fill": {
         "type": "0",
         "color": "#FBF236"
       },
-      "lastmod": 1538834091954,
+      "lastmod": 1543410752250,
       "shadow": {
         "color": "rgba(0,0,0,0.34)",
         "x": 0,
@@ -2465,49 +2523,18 @@
         "weight": 400,
         "italic": false,
         "valign": "middle",
-        "halign": "center"
+        "halign": "center",
+        "lineHeight": 20
       },
       "fill": {
         "type": "0",
         "color": "#FBF236"
       },
-      "lastmod": 1538741706507,
+      "lastmod": 1543410735667,
       "shadow": {
         "color": "#8F563B",
         "x": 0,
         "y": 2,
-        "blur": 0
-      }
-    },
-    {
-      "name": "HealthBar",
-      "uid": "e435dda5-c50f-4dbc-b0c6-b8099f9fc986",
-      "origname": "sb8099f9fc986",
-      "fill": {
-        "type": "0",
-        "color": "#D95763"
-      },
-      "lastmod": 1538741751387,
-      "shadow": {
-        "color": "#AC3232",
-        "x": 0,
-        "y": 1,
-        "blur": 0
-      }
-    },
-    {
-      "name": "FoodBar",
-      "uid": "6f777e80-1d07-431e-b93b-8ee331d2a07d",
-      "origname": "s8ee331d2a07d",
-      "fill": {
-        "type": "0",
-        "color": "#FBF236"
-      },
-      "lastmod": 1538746144243,
-      "shadow": {
-        "color": "#DF7126",
-        "x": 0,
-        "y": 1,
         "blur": 0
       }
     },
@@ -2521,29 +2548,20 @@
         "weight": 400,
         "italic": false,
         "valign": "middle",
-        "halign": "center"
+        "halign": "center",
+        "lineHeight": 38
       },
       "fill": {
         "type": "0",
         "color": "#FBF236"
       },
-      "lastmod": 1543069892509,
+      "lastmod": 1543410822210,
       "shadow": {
         "color": "#8F563B",
         "x": 0,
         "y": 3,
         "blur": 0
       }
-    },
-    {
-      "name": "Backdrop",
-      "uid": "cb845b7d-5a24-43f7-aad3-6f19e5f78d35",
-      "origname": "s6f19e5f78d35",
-      "fill": {
-        "type": "0",
-        "color": "100"
-      },
-      "lastmod": 1542782719534
     }
   ],
   "rooms": [
@@ -13895,11 +13913,11 @@
       ],
       "gridX": 16,
       "gridY": 16,
-      "lastmod": 1543069133786
+      "lastmod": 1543411519574
     },
     {
       "name": "MainMenu",
-      "oncreate": "ct.room.waveTimer = ct.speed;\nct.sound.load('Bittersweet');\n\nthis.titleText = new PIXI.Text('StormCross');\nthis.titleText.x = this.width / 2;\nthis.titleText.y = 80;\nthis.titleText.anchor.x = this.titleText.anchor.y = 0.5;\n\nthis.subtitleText = new PIXI.Text('A game about saving a colony');\nthis.subtitleText.x = this.width / 2;\nthis.subtitleText.y = 104;\nthis.subtitleText.anchor.x = this.subtitleText.anchor.y = 0.5;\n\nthis.authorsText = new PIXI.Text('Created by CoMiGo and Kenny\\nMade with ct.js game maker - https://ctjs.rocks/\\nA mini Jam 12 Entry');\nthis.authorsText.x = this.width / 2;\nthis.authorsText.y = this.height - 20;\nthis.authorsText.anchor.x = this.authorsText.anchor.y = 0.5;\n\nthis.addChild(this.titleText);\nthis.addChild(this.subtitleText);\nthis.addChild(this.authorsText);",
+      "oncreate": "ct.room.waveTimer = ct.speed;\nct.sound.load('Bittersweet');\n\nthis.titleText = new PIXI.Text('StormCross', ct.styles.get('Title'));\nthis.titleText.x = this.width / 2;\nthis.titleText.y = 80;\nthis.titleText.anchor.x = this.titleText.anchor.y = 0.5;\nthis.titleText.depth = 40;\n\nthis.subtitleText = new PIXI.Text('A game about saving a colony', ct.styles.get('LabelSmall'));\nthis.subtitleText.x = this.width / 2;\nthis.subtitleText.y = 104;\nthis.subtitleText.anchor.x = this.subtitleText.anchor.y = 0.5;\n\nvar authorsText = 'Created by CoMiGo and Kenny\\nMade with ct.js game maker - https://ctjs.rocks/\\nA mini Jam 12 Entry';\nthis.authorsText = new PIXI.Text(authorsText, ct.styles.get('LabelSmall'));\nthis.authorsText.x = this.width / 2;\nthis.authorsText.y = this.height - 20;\nthis.authorsText.anchor.x = this.authorsText.anchor.y = 0.5;\n\nthis.addChild(this.titleText);\nthis.addChild(this.subtitleText);\nthis.addChild(this.authorsText);",
       "onstep": "ct.room.waveTimer --;\nif (ct.room.waveTimer <= 0) {\n    ct.room.waveTimer = ct.speed * 6;\n    ct.sound.spawn(ct.random.dice('Wave_01', 'Wave_02', 'Wave_03'));\n}",
       "ondraw": "",
       "onleave": "",
@@ -13972,7 +13990,7 @@
       ],
       "gridX": 32,
       "gridY": 32,
-      "lastmod": 1542782530617
+      "lastmod": 1543070769234
     },
     {
       "name": "Lose_Drown",
@@ -14021,7 +14039,7 @@
       "name": "Level_02",
       "oncreate": "inGameStart();\nthis.nextLevel = 'Level_03';\nct.u.wait(1500)\n.then(() => {\n    ct.sound.spawn('IntoTheDark');\n});\nct.sound.load('SideEffects');",
       "onstep": "inGameStep();",
-      "ondraw": "inGameDraw();",
+      "ondraw": "",
       "onleave": "",
       "width": 320,
       "height": 240,
@@ -39248,7 +39266,7 @@
       ],
       "gridX": 16,
       "gridY": 16,
-      "lastmod": 1540644063922
+      "lastmod": 1543411551565
     },
     {
       "name": "LevelTransition",
@@ -39386,7 +39404,7 @@
       "name": "Level_03",
       "oncreate": "inGameStart();\nthis.nextLevel = 'Outro';\nct.u.wait(1500)\n.then(() => {\n    ct.sound.spawn('SideEffects');\n});\nct.sound.load('Relax');",
       "onstep": "inGameStep();",
-      "ondraw": "inGameDraw();",
+      "ondraw": "",
       "onleave": "",
       "width": 320,
       "height": 240,
@@ -61234,11 +61252,11 @@
     },
     {
       "name": "inGameStep",
-      "code": "var inGameStep = function () {\n    ct.room.waveTimer --;\n    if (ct.room.waveTimer <= 0) {\n        ct.room.waveTimer = ct.speed * 6;\n        ct.sound.spawn(ct.random.dice('Wave_01', 'Wave_02', 'Wave_03'));\n    }\n    ct.room.hungerTimer --;\n    if (ct.room.hungerTimer <= 0) {\n        ct.room.hungerTimer = ct.speed * 3;\n        ct.game.food -= 1;\n        checkOverflows();\n    }\n};"
+      "code": "var inGameStep = function () {\n    ct.room.waveTimer -= ct.delta;\n    if (ct.room.waveTimer <= 0) {\n        ct.room.waveTimer = 60 * 6;\n        ct.sound.spawn(ct.random.dice('Wave_01', 'Wave_02', 'Wave_03'));\n    }\n    ct.room.hungerTimer -= ct.delta;\n    if (ct.room.hungerTimer <= 0) {\n        ct.room.hungerTimer = 60 * 3;\n        ct.game.food -= 1;\n        checkOverflows();\n    }\n};"
     },
     {
       "name": "inGameStart",
-      "code": "var inGameStart = function () {\n    var r = ct.room;\n    r.borderx = ct.room.width / 2;\n    r.bordery = ct.room.height / 2;\n    \n    r.waveTimer = 60;\n    r.hungerTimer = 60;\n\n    r.widget = ct.types.copy('InGameWidget');\n    \n    ct.types.copy('Cursor');\n    \n    /*\n    ct.styles.set('HealthBar');\n    ct.draw.rectangle(r.x + 8, r.y + 8, Math.round(ct.game.health / 2), 7);\n    ct.styles.set('FoodBar');\n    ct.draw.rectangle(r.x + 8, r.y + 16, Math.round(ct.game.food / 2), 7);\n    ct.styles.reset();\n    \n    ct.styles.set('LabelSmall');\n    ct.draw.text(`Crew: ${ct.game.sailors}/${ct.game.sailorsTotal}`, r.x + 8, r.y + 30);\n    ct.draw.text(ct.types.list.PlayerShip_Gather.length? 'Anchored.' : 'Swimming.', r.x + 8, r.y + 42);\n    ct.styles.reset();\n    */\n};"
+      "code": "var inGameStart = function () {\n    var r = ct.room;\n    r.borderx = ct.room.width / 2;\n    r.bordery = ct.room.height / 2;\n    \n    r.waveTimer = 60;\n    r.hungerTimer = 60;\n\n    r.widget = ct.types.copy('InGameWidget');\n    \n    ct.types.copy('Cursor');\n};"
     },
     {
       "name": "columnOnStep, columnOnDraw",
