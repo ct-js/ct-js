@@ -149,7 +149,7 @@ fonts-panel.flexfix.tall.fifty
                 style: obj.italic? 'italic' : 'normal'
             };
             console.log(obj.typefaceName);
-            var face = new FontFace(obj.typefaceName, `url(file://${source})`, template);
+            var face = new FontFace(obj.typefaceName, `url(file://${encodeURI(source)})`, template);
             var elt = document.createElement('span');
             elt.innerHTML = 'testString';
             elt.style.fontFamily = obj.typefaceName;
@@ -234,7 +234,7 @@ fonts-panel.flexfix.tall.fifty
                         style: font.italic? 'italic' : 'normal'
                     },
                     source = `${sessionStorage.projdir}/fonts/${font.origname}`;
-                var face = new FontFace(font.typefaceName, `url(file://${source})`, template);
+                var face = new FontFace(font.typefaceName, `url(file://${encodeURI(source)})`, template);
                 face.load()
                 .then(loaded => {
                     loaded.external = true;
