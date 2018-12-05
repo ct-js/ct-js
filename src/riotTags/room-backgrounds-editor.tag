@@ -1,7 +1,7 @@
 room-backgrounds-editor.room-editor-Backgrounds.tabbed.tall
     ul
         li.bg(each="{background, ind in opts.room.backgrounds}" oncontextmenu="{onContextMenu}")
-            img(src="{background.graph === -1? '/img/nograph.png' : (glob.graphmap[background.graph].src.split('?')[0] + '_prev.png?' + Math.random())}" onclick="{onChangeBgGraphic}")
+            img(src="{background.graph === -1? '/img/nograph.png' : (glob.graphmap[background.graph].src.split('?')[0] + '_prev.png?' + glob.graphmap[background.graph].g.lastmod)}" onclick="{onChangeBgGraphic}")
             span(onclick="{onChangeBgDepth}") {background.depth}
 
     button.inline.wide(onclick="{addBg}")
