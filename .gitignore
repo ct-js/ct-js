@@ -33,6 +33,7 @@ desktop\.ini
 *.png~
 
 # Generated files
+app/data
 app/bundle.js
 app/bundle.css
 app/index.html
