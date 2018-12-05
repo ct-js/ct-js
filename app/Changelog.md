@@ -1,4 +1,33 @@
-## v 0.5.1
+## v 0.5.3
+
+*6 December 2018*
+
+### ⚡ General Improvements
+
+* Ctrl+S and autosave/recovery feature
+
+### 🐛 Bug Fixes
+* Fix fonts with spaces in their path not working correctly inside the editor
+* Fix memory leak in room editor with opened background editor
+* Fix memory leak on room switch in ct.place
+* Fix color pickers not returing their intermediate values to editors
+
+### 💄 UI Improvements
+
+* ⚡ Make graphic selection in type and room editors for backgrounds cancellable
+* Show axis in graph editor
+
+### ✏ Misc
+
+✏ Fix minor issues in Russian localization file
+✏ Add 'A' to the font editor
+
+### License
+
+* Add nw-builder license notice (3rd-party)
+
+
+## v 0.5.2
 
 *7 November 2018*
 

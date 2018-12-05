@@ -19,7 +19,7 @@ const path = require('path'),
       NwBuilder = require('nw-builder');
 
 const nwVersion = '0.34.1',
-      nwFiles = ['./app/**', '!./app/export/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
+      nwFiles = ['./app/**', '!./app/export/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**', '!./app/data/**'];
 
 const closureCompiler = require('google-closure-compiler-js').gulp();
 
