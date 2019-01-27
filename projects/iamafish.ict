@@ -1,11 +1,7 @@
 {
-  "ctjsVersion": "1.0.0-next-1",
+  "ctjsVersion": "1.0.0-next-2",
   "notes": "/* empty */",
   "libs": {
-    "place": {
-      "gridX": 3000,
-      "gridY": 3000
-    },
     "random": {},
     "sound.howler": {},
     "fittoscreen": {
@@ -15,7 +11,11 @@
     "akatemplate": {
       "csscss": "body {\n    background: #000;\n}"
     },
-    "tween": {}
+    "tween": {},
+    "place": {
+      "gridX": 2048,
+      "gridY": 2048
+    }
   },
   "graphs": [
     {
@@ -392,7 +392,7 @@
       "top": 662,
       "bottom": 0,
       "uid": "be2ca4b5-a5e8-4795-88c0-fc8e63050148",
-      "lastmod": 1547389516006
+      "lastmod": 1547546642694
     },
     {
       "name": "Arc_Front",
@@ -624,7 +624,7 @@
       "offy": 0,
       "origname": "ib017fa77-8615-491d-8ab2-0ed7d9def1d0.png",
       "source": "C:\\Users\\Master\\Pictures\\Iamafish\\set2-assets\\Wisp.png",
-      "shape": "strip",
+      "shape": "circle",
       "left": 0,
       "right": 221,
       "top": 0,
@@ -768,14 +768,14 @@
       "offy": 0,
       "origname": "i5d8e00e1-d0ef-4120-89a0-7d2f6b3ce307.png",
       "source": "C:\\Users\\Master\\Pictures\\Iamafish\\set2-assets\\Orb.png",
-      "shape": "strip",
+      "shape": "circle",
       "left": 0,
       "right": 222,
       "top": 0,
       "bottom": 193,
       "uid": "5d8e00e1-d0ef-4120-89a0-7d2f6b3ce307",
       "r": 43,
-      "lastmod": 1547437531068,
+      "lastmod": 1547464403426,
       "stripPoints": [
         {
           "x": -2,
@@ -1025,7 +1025,7 @@
       "top": 943,
       "bottom": -11,
       "uid": "00d3363c-79d0-4f35-b41c-6d26753fd6f4",
-      "lastmod": 1547432065174,
+      "lastmod": 1547546647100,
       "stripPoints": [
         {
           "x": 128,
@@ -1104,14 +1104,14 @@
       "offy": 0,
       "origname": "id0accd81-7d6f-42d7-8a32-3d4b6cd6c2ac.png",
       "source": "C:\\Users\\Master\\Desktop\\Blue.png",
-      "shape": "strip",
+      "shape": "circle",
       "left": 106,
       "right": 116,
       "top": 94,
       "bottom": 99,
       "uid": "d0accd81-7d6f-42d7-8a32-3d4b6cd6c2ac",
       "r": 43,
-      "lastmod": 1547438063277,
+      "lastmod": 1547464407002,
       "stripPoints": [
         {
           "x": 5,
@@ -1191,7 +1191,8 @@
       "right": 1091,
       "top": 0,
       "bottom": 706,
-      "uid": "1da2ab47-b334-43b8-8e8d-75b5701aa8b0"
+      "uid": "1da2ab47-b334-43b8-8e8d-75b5701aa8b0",
+      "lastmod": 1547454369451
     },
     {
       "name": "Tense",
@@ -1355,7 +1356,7 @@
       "name": "Astronaut",
       "depth": 5,
       "oncreate": "this.skel = ct.res.makeSkeleton('Astronaut');\r\nthis.skel.animation.play('Stand');\r\nthis.addChild(this.skel);\r\n\r\nthis.skel.on(dragonBones.EventObject.FRAME_EVENT, event => {\r\n    if (event.name === 'Shoot') {\r\n        const bullet = ct.types.copy('BlueBall', this.x + this.scale.x * 460, this.y - 640);\r\n        bullet.direction = this.scale.x > 0?  0 : 180;\r\n    }\r\n});\r\n\r\nthis.gravity = 1;\r\n\r\nthis.graph = -1;\r\nthis.health = 3;\r\nthis.dmgDelay = 0;\r\n\r\nct.room.follow = this;\r\nct.room.borderX = 2000;\r\nct.room.borderY = 1000;\r\nct.room.followShiftY = -500;\r\n\r\nthis.lastX = this.xstart;\r\nthis.lastY = this.ystart;",
-      "onstep": "if (!this.dead) {\n    if ((ct.keyboard.down['space'] || ct.mouse.down) && this.onGround) {\n        this.shooting = true;\n        this.hspeed = 0;\n    } else {\n        this.shooting = false;\n        if (ct.keyboard.down['right'] || ct.keyboard.down['S']) {\n            this.scale.x = Math.abs(this.scale.x);\n            this.hspeed = 25;\n        } else if (ct.keyboard.down['left'] || ct.keyboard.down['A']) {\n            this.scale.x = -Math.abs(this.scale.x);   \n            this.hspeed = -25;\n        } else {\n            this.hspeed = 0;\n        }\n        if ((ct.keyboard.down['up'] || ct.keyboard.down['W']) && this.onGround) {\n            this.vspeed = -35;\n        }\n    }\n    this.dmgDelay -= ct.delta;\n    const danger = ct.place.occupied(this, 'Danger');\n    if (danger) {\n        if (danger.type === 'Fireball') {\n            danger.kill = true;\n        }\n        if (this.dmgDelay <= 0) {\n            this.health --;\n            if (this.health <= 0) {\n                this.dead = true;\n                ct.u.wait(2160)\n                .then(() => {\n                    this.x = this.lastX;\n                    this.y = this.lastY;\n                    this.health = 3;\n                    this.dead = false;\n                    this.vspeed = 0;\n                    this.skel.animation.play('Stand');\n                })\n            } else {\n            }\n            this.dmgDelay = 60 * 1.5;\n        }\n        if (!this.dead) {\n            this.vspeed = -30;\n        }\n    }\n    \n    \n    \n} else {\n    this.hspeed = 0;\n}\n\n\n// Move by horizontal axis, pixel by pixel\nfor (var i = 0; i < Math.abs(this.hspeed); i++) {\n    if (ct.place.free(this, this.x + Math.sign(this.hspeed), this.y, 'Solid')) {\n        this.x += Math.sign(this.hspeed);\n    } else {\n        break;\n    }\n}\n// Do the same for vertical speed\nfor (var i = 0; i < Math.abs(this.vspeed); i++) {\n    if (ct.place.free(this, this.x, this.y + Math.sign(this.vspeed), 'Solid')) {\n        this.y += Math.sign(this.vspeed);\n    } else {\n        this.vspeed = 0;\n        break;\n    }\n}\n\nthis.onGround = ct.place.occupied(this, this.x, this.y + 3, 'Solid');\nif (!this.onGround) {\n    this.vspeed += this.gravity;\n}",
+      "onstep": "if (!this.dead) {\n    if ((ct.keyboard.down['space'] || ct.mouse.down) && this.onGround) {\n        this.shooting = true;\n        this.hspeed = 0;\n    } else {\n        this.shooting = false;\n        if (ct.keyboard.down['right'] || ct.keyboard.down['D']) {\n            this.scale.x = Math.abs(this.scale.x);\n            this.hspeed = 25;\n        } else if (ct.keyboard.down['left'] || ct.keyboard.down['A']) {\n            this.scale.x = -Math.abs(this.scale.x);   \n            this.hspeed = -25;\n        } else {\n            this.hspeed = 0;\n        }\n        if ((ct.keyboard.down['up'] || ct.keyboard.down['W']) && this.onGround) {\n            this.vspeed = -35;\n        }\n    }\n    this.dmgDelay -= ct.delta;\n    const danger = ct.place.occupied(this, 'Danger');\n    if (danger) {\n        if (danger.type === 'Fireball') {\n            danger.kill = true;\n        }\n        if (this.dmgDelay <= 0) {\n            this.health --;\n            if (this.health <= 0) {\n                this.dead = true;\n                ct.u.wait(2160)\n                .then(() => {\n                    this.x = this.lastX;\n                    this.y = this.lastY - 20;\n                    this.health = 3;\n                    this.dead = false;\n                    this.vspeed = 0;\n                    this.skel.animation.play('Stand');\n                })\n            } else {\n            }\n            this.dmgDelay = 60 * 1.5;\n        }\n        if (!this.dead) {\n            this.vspeed = -30;\n        }\n    }\n    \n    \n    \n} else {\n    this.hspeed = 0;\n}\n\n\n// Move by horizontal axis, pixel by pixel\nfor (var i = 0; i < Math.abs(this.hspeed); i++) {\n    if (ct.place.free(this, this.x + Math.sign(this.hspeed), this.y, 'Solid')) {\n        this.x += Math.sign(this.hspeed);\n    } else {\n        break;\n    }\n}\n// Do the same for vertical speed\nfor (var i = 0; i < Math.abs(this.vspeed); i++) {\n    if (ct.place.free(this, this.x, this.y + Math.sign(this.vspeed), 'Solid')) {\n        this.y += Math.sign(this.vspeed);\n    } else {\n        this.vspeed = 0;\n        break;\n    }\n}\n\nthis.onGround = ct.place.occupied(this, this.x, this.y + 3, 'Solid');\nif (!this.onGround) {\n    this.vspeed += this.gravity;\n}",
       "ondraw": "var anim = this.skel.animation;\n\nif (!this.dead) {\n    if (this.onGround) {\n        if (this.hspeed === 0) {\n            if (this.shooting) {\n                if (anim.lastAnimationName !== 'Shoot') {\n                    anim.fadeIn('Shoot', 0.2);\n                }\n            } else {\n                if (anim.lastAnimationName !== 'Stand') {\n                    anim.fadeIn('Stand', 0.2);\n                }\n            }\n        } else {\n            if (anim.lastAnimationName !== 'Run') {\n                anim.fadeIn('Run', 0.3);\n            }\n        }\n    } else {\n        if (anim.lastAnimationName !== 'Jump') {\n            anim.fadeIn('Jump', 0.2);\n        }\n    }\n} else {\n    if (anim.lastAnimationName !== 'Die') {\n        anim.fadeIn('Die', 0.2);\n    }\n}",
       "ondestroy": "",
       "uid": "0bb0cdc1-f68f-4a45-9cac-a33d571d19be",
@@ -1363,7 +1364,7 @@
       "extends": {
         "ctype": "Player"
       },
-      "lastmod": 1547440809715
+      "lastmod": 1547454335756
     },
     {
       "name": "Fish_MoveUpperRight",
@@ -1403,7 +1404,7 @@
       "extends": {
         "ctype": "Solid"
       },
-      "lastmod": 1547371911889
+      "lastmod": 1547546703535
     },
     {
       "name": "Asteroid",
@@ -1586,7 +1587,7 @@
       "uid": "af3ee294-e901-45e2-b5c6-68218ef51af0",
       "graph": "1da2ab47-b334-43b8-8e8d-75b5701aa8b0",
       "extends": {},
-      "lastmod": 1547441177323
+      "lastmod": 1547454339883
     },
     {
       "name": "MysteryTrigger",
@@ -1804,86 +1805,62 @@
         {
           "x": 0,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 0,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 512,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 512,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 1024,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 1024,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 1536,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 1536,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 2048,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 2048,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 2560,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 2560,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 3072,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 3072,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 3584,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 3584,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": -512,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": -512,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": -1024,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": -1024,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": -1536,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": -1536,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": -2048,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": -2048,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": -2432,
@@ -1895,16 +1872,12 @@
         {
           "x": 4096,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 4096,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 4608,
           "y": 2560,
-          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd",
-          "lastX": 4608,
-          "lastY": 2432
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
         },
         {
           "x": 5120,
@@ -3069,6 +3042,16 @@
           "uid": "df2eccfa-f927-4022-ae03-edd830d91703"
         },
         {
+          "x": 24192,
+          "y": 2560,
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
+        },
+        {
+          "x": 23552,
+          "y": 2560,
+          "uid": "3cfd67b0-c89e-467d-ad82-4c89f4f037bd"
+        },
+        {
           "x": -1024,
           "y": 2432,
           "uid": "0bb0cdc1-f68f-4a45-9cac-a33d571d19be"
@@ -3084,7 +3067,7 @@
       "thumbnail": "8248ea45eea0",
       "gridX": 128,
       "gridY": 128,
-      "lastmod": 1547439657074
+      "lastmod": 1547454423414
     }
   ],
   "starting": 0,
@@ -3126,5 +3109,6 @@
       "uid": "3d0b98bf-9bc1-46a5-99bc-48128cd6604c"
     }
   ],
-  "palette": []
+  "palette": [],
+  "startroom": "baab12fd-594d-4afd-a9aa-a5b027b0c0ca"
 }
