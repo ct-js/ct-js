@@ -3117,5 +3117,49 @@
     }
   ],
   "palette": [],
-  "startroom": "baab12fd-594d-4afd-a9aa-a5b027b0c0ca"
+  "startroom": "baab12fd-594d-4afd-a9aa-a5b027b0c0ca",
+  "actions": [
+    {
+      "name": "Shoot",
+      "methods": [
+        {
+          "code": "mouse.Left",
+          "multiplier": 1
+        },
+        {
+          "code": "keyboard.Space"
+        }
+      ]
+    },
+    {
+      "name": "Move",
+      "methods": [
+        {
+          "code": "keyboard.KeyA",
+          "multiplier": -1
+        },
+        {
+          "code": "keyboard.KeyD"
+        },
+        {
+          "code": "keyboard.ArrowLeft",
+          "multiplier": -1
+        },
+        {
+          "code": "keyboard.ArrowRight"
+        }
+      ]
+    },
+    {
+      "name": "Jump",
+      "methods": [
+        {
+          "code": "keyboard.KeyW"
+        },
+        {
+          "code": "keyboard.ArrowUp"
+        }
+      ]
+    }
+  ]
 }
