@@ -3179,7 +3179,7 @@
     {
       "name": "Anabot",
       "depth": 0,
-      "oncreate": "var r = ct.room;\nr.follow = this;\nr.center = true;\n\nthis.moving = false;\nthis.health = this.healthMax = 100;\nthis.startingCrystals = ct.game.crystals;\n\nct.types.copy('UI_Bracket_Left');\nct.types.copy('UI_Bracket_Right');\nct.types.copy('UI_Healthbar');\nct.types.copy('UI_Crystals');\nct.types.copy('UI_Cursor');\nct.types.copy('MaskAnabot');\n\nvar keyLeft = ct.vkeys.button({\n    key: 'vkeys.Vk1',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\n\nvar keyRight = ct.vkeys.button({\n    key: 'vkeys.Vk2',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 280,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyRight.rotation = 180;\n\nvar keyUp = ct.vkeys.button({\n    key: 'vkeys.Vk4',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130 - 140,\n    depth: 14000\n});\nkeyUp.rotation = 90;\n\nvar keyDown = ct.vkeys.button({\n    key: 'vkeys.Vk3',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyDown.rotation = 270;",
+      "oncreate": "var r = ct.room;\nr.follow = this;\nr.center = true;\n\nthis.moving = false;\nthis.health = this.healthMax = 100;\nthis.startingCrystals = ct.game.crystals;\n\nct.types.copy('UI_Bracket_Left');\nct.types.copy('UI_Bracket_Right');\nct.types.copy('UI_Healthbar');\nct.types.copy('UI_Crystals');\nct.types.copy('UI_Cursor');\nct.types.copy('MaskAnabot');\n\nvar keyLeft = ct.vkeys.button({\n    key: 'Vk1',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\n\nvar keyRight = ct.vkeys.button({\n    key: 'Vk2',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 280,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyRight.rotation = 180;\n\nvar keyUp = ct.vkeys.button({\n    key: 'Vk4',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130 - 140,\n    depth: 14000\n});\nkeyUp.rotation = 90;\n\nvar keyDown = ct.vkeys.button({\n    key: 'Vk3',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyDown.rotation = 270;",
       "onstep": "\nif (ct.actions.AnabotX.down) {\n    if (!this.moving) {\n        var dx = 200*ct.actions.AnabotX.value;\n        if (ct.place.occupied(this, this.x + dx, this.y, 'Walkable') \n        &&  ct.place.free(this, this.x + dx, this.y, 'Solid')) {\n            this.moving = true;\n            ct.tween.add({\n                obj: this,\n                fields: {\n                    x: this.x + dx\n                },\n                duration: 350\n            })\n            .then(() => {\n                this.moving = false;\n            })\n        }\n        this.scale.x = ct.actions.AnabotX.value;\n    }\n}\nif (ct.actions.AnabotY.down) {\n    if (!this.moving) {\n        var dy = 100*ct.actions.AnabotY.value;\n        if (ct.place.occupied(this, this.x, this.y + dy, 'Walkable')\n        &&  ct.place.free(this, this.x, this.y + dy, 'Solid')) {\n            this.moving = true;\n            ct.tween.add({\n                obj: this,\n                fields: {\n                    y: this.y + dy\n                },\n                duration: 350\n            })\n            .then(() => {\n                this.moving = false;\n            })\n        }\n    }\n}\n\nthis.depth = this.y + 10;",
       "ondraw": "",
       "ondestroy": "ct.types.copy('Explosion', this.x, this.y - 100);\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        char: 'Anabot_Glitch',\n        string: 'Capita*** (transmisson ended)'\n    }]\n});\n\nct.u.wait(1000 * 3)\n.then(() => loadGame());",
@@ -3188,7 +3188,7 @@
       "extends": {
         "ctype": "Player"
       },
-      "lastmod": 1553425343754
+      "lastmod": 1554032160164
     },
     {
       "name": "Door",
@@ -3598,7 +3598,7 @@
       "uid": "0917170b-3d4a-4224-8a90-8562a07307b8",
       "texture": "ca09ff7c-470d-401c-9f11-4ffd4d06dcc6",
       "extends": {},
-      "lastmod": 1553416298766
+      "lastmod": 1554032035179
     },
     {
       "name": "LastTimer",
@@ -4080,7 +4080,7 @@
       "thumbnail": "a8930e5ccf71",
       "gridX": 256,
       "gridY": 256,
-      "lastmod": 1553423744810
+      "lastmod": 1554032186580
     },
     {
       "name": "Puzzle_Wires",
