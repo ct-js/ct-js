@@ -9,6 +9,9 @@
     "node": true,
     "jquery": true
   },
+  "parserOptions": {
+    "ecmaVersion": 8
+  },
   "extends": "eslint:recommended",
   "rules": {
     "accessor-pairs": "error",
