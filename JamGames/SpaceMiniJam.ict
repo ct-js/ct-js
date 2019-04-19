@@ -1,5 +1,5 @@
 {
-  "ctjsVersion": "1.0.0-next-2",
+  "ctjsVersion": "1.0.0-next-3",
   "notes": "/* empty */",
   "libs": {
     "place": {
@@ -14,7 +14,9 @@
     "random": {},
     "tween": {},
     "akatemplate": {},
-    "vkeys": {}
+    "vkeys": {},
+    "flow": {},
+    "keyboard": {}
   },
   "textures": [
     {
@@ -2789,6 +2791,34 @@
       "uid": "9f6ba255-bc95-418b-9d69-55213671b6f8",
       "lastmod": 1553426342035,
       "r": 58
+    },
+    {
+      "name": "HurtVignette",
+      "untill": 0,
+      "grid": [
+        1,
+        1
+      ],
+      "axis": [
+        0,
+        0
+      ],
+      "marginx": 0,
+      "marginy": 0,
+      "imgWidth": 512,
+      "imgHeight": 512,
+      "width": 512,
+      "height": 512,
+      "offx": 0,
+      "offy": 0,
+      "origname": "i4481cdc6-ad0a-4b0c-80f8-09e740462b24.png",
+      "source": "C:\\Users\\Master\\Desktop\\HurtVignette.png",
+      "shape": "rect",
+      "left": 0,
+      "right": 512,
+      "top": 0,
+      "bottom": 512,
+      "uid": "4481cdc6-ad0a-4b0c-80f8-09e740462b24"
     }
   ],
   "types": [
@@ -2796,7 +2826,7 @@
       "name": "Player",
       "depth": 1100,
       "oncreate": "var r = ct.room;\nr.follow = this;\nr.center = true;\n\nthis.health = ct.game.healthMax;\nthis.analysed = 0;\n\nct.u.wait(100)\n.then(() => {\n    this.planets = [...ct.types.list.Planet];\n});\n\nthis.maxspeed = 15;\nthis.drift = 0.15;\nthis.shootIntervalMain = 12;\nthis.shootIntervalAlt = 60;\nthis.switchMain = this.switchAlt = false;\n\nthis.scale.x = this.scale.y = 0.666;\n\nthis.msk = ct.types.copy('Mask');\nthis.msk.scale.x = this.msk.scale.y = 4.5;\n\nthis.shootTimerMain = 60;\nthis.shootTimerAlt = 60;\nthis.radarTimer = 60 * 10;\n\nct.types.copy('UI_Bracket_Left');\nct.types.copy('UI_Bracket_Right');\nct.types.copy('UI_Cursor');\nct.types.copy('UI_Healthbar');\nct.types.copy('UI_Analysis');\nct.types.copy('UI_Crystals');\n\nif (ct.room.name !== 'Space_01') {\n    ct.types.copy('Button_UpgradeHull');\n    ct.types.copy('Button_AddRockets');\n    ct.types.copy('Button_AddSpotlight');\n    ct.types.copy('Button_RepairHull');\n}",
-      "onstep": "var dx = ct.viewWidth / 2 - ct.mouse.rx;\nvar dy = ct.viewHeight / 2 - ct.mouse.ry;\n\nvar dist = ct.u.pdc(0, 0, dx, dy);\nvar dir = ct.u.pdn(dx, dy, 0, 0);\n\nthis.direction += ct.u.deltaDir(this.direction, dir) / 25;\nthis.rotation += ct.u.deltaDir(this.rotation, dir) / 10;\nif (dist > 200) {\n    var targetSpeed = Math.min(1, (dist - 200) / 400) * this.maxspeed;\n    this.speed = ct.u.lerp(this.speed, targetSpeed, this.drift*ct.delta);\n    this.gotoAndStop(0);\n    if (!this.lastMoved) {\n        this.direction = this.rotation;\n    }\n    this.lastMoved = true;\n    \n    if (Math.random() < 0.3) {\n        var spark = ct.types.copy(\n            'FX_Spark_Burst',\n            this.x + ct.u.ldx(80*this.scale.x, this.rotation + 180),\n            this.y + ct.u.ldy(80*this.scale.x, this.rotation + 180));\n        spark.tex = 'Spark_Flat';\n        spark.tint = 0x00d6c6;\n    }\n} else {\n    this.speed = ct.u.lerp(this.speed, 0, this.drift*ct.delta);\n    this.gotoAndStop(1);\n    this.lastMoved = false;\n}\n\nthis.move();\n\nif (this.x > 10000) {\n    this.x -= 20000;\n}\nif (this.x < -10000) {\n    this.x += 20000;\n}\nif (this.y > 10000) {\n    this.y -= 20000;\n}\nif (this.y < -10000) {\n    this.y += 20000;\n}\n\nvar obstacle = ct.place.occupied(this, 'Solid') || ct.place.occupied(this, 'Enemy');\nif (obstacle) {\n    this.direction = ct.u.pdn(obstacle.x, obstacle.y, this.x, this.y);\n    this.speed = 0;\n    // repel the ship\n    this.x = this.xprev + ct.u.ldx(5, this.direction);\n    this.y = this.yprev + ct.u.ldy(5, this.direction);\n}\n\n\nthis.shootTimerMain -= ct.delta;\nthis.shootTimerAlt -= ct.delta;\nif (ct.actions.ShootMain.down && this.shootTimerMain <= 0) {\n    this.shootTimerMain = this.shootIntervalMain;\n    var bdir = (this.switchMain? 90 : 270) + this.rotation;\n    var bullet = ct.types.copy(\n        'Laser_Blue',\n        this.x + ct.u.ldx(145 * this.scale.y, bdir),\n        this.y + ct.u.ldy(145 * this.scale.y, bdir)\n    );\n    bullet.direction = bullet.rotation = this.rotation + (this.switchMain? -5 : 5);\n    this.switchMain = !this.switchMain;\n}\nif (ct.game.rockets && ct.actions.ShootMain.down && this.shootTimerAlt <= 0) {\n    this.shootTimerAlt = this.shootIntervalAlt;\n    ct.sound.spawn('Shock_End');\n    \n    var bullet1 = ct.types.copy('Rocket_Player', this.x, this.y);\n    bullet1.direction = bullet1.rotation = this.rotation + 30;\n    \n    var bullet2 = ct.types.copy('Rocket_Player', this.x, this.y);\n    bullet2.direction = bullet2.rotation = this.rotation - 30;\n}\n\nthis.radarTimer -= ct.delta;\nif (this.radarTimer <= 0) {\n    this.radarTimer += 60 * 5;\n    if (this.planets.length) {\n        this.planets.sort((a, b) => {\n            return ct.u.pdc(this.x, this.y, a.x, a.y) - ct.u.pdc(this.x, this.y, b.x, b.y); \n        });\n        var wave = ct.types.copy('FX_Radar', this.x, this.y);\n        wave.tex = 'RadarWavePink';\n        wave.rotation = wave.direction = ct.u.pdn(this.x, this.y, this.planets[0].x, this.planets[0].y);\n    }\n    if (ct.types.list.SpaceStation.length) {\n        var wave = ct.types.copy('FX_Radar', this.x, this.y);\n        wave.rotation = wave.direction = ct.u.pdn(this.x, this.y, ct.types.list.SpaceStation[0].x, ct.types.list.SpaceStation[0].y);\n    }\n}\n",
+      "onstep": "var dx = ct.viewWidth / 2 - ct.mouse.rx;\nvar dy = ct.viewHeight / 2 - ct.mouse.ry;\n\nvar dist = ct.u.pdc(0, 0, dx, dy);\nvar dir = ct.u.pdn(dx, dy, 0, 0);\n\nthis.direction += ct.u.deltaDir(this.direction, dir) / 25;\nthis.rotation += ct.u.deltaDir(this.rotation, dir) / 10;\nif (dist > 200) {\n    var targetSpeed = Math.min(1, (dist - 200) / 400) * this.maxspeed;\n    this.speed = ct.u.lerp(this.speed, targetSpeed, this.drift*ct.delta);\n    this.gotoAndStop(0);\n    if (!this.lastMoved) {\n        this.direction = this.rotation;\n    }\n    this.lastMoved = true;\n    \n    if (Math.random() < 0.3) {\n        var spark = ct.types.copy(\n            'FX_Spark_Burst',\n            this.x + ct.u.ldx(80*this.scale.x, this.rotation + 180),\n            this.y + ct.u.ldy(80*this.scale.x, this.rotation + 180));\n        spark.tex = 'Spark_Flat';\n        spark.tint = 0x00d6c6;\n    }\n} else {\n    this.speed = ct.u.lerp(this.speed, 0, this.drift*ct.delta);\n    this.gotoAndStop(1);\n    this.lastMoved = false;\n}\n\nthis.move();\n\nif (this.x > 10000) {\n    this.x -= 20000;\n}\nif (this.x < -10000) {\n    this.x += 20000;\n}\nif (this.y > 10000) {\n    this.y -= 20000;\n}\nif (this.y < -10000) {\n    this.y += 20000;\n}\n\nvar obstacle = ct.place.occupied(this, 'Solid') || ct.place.occupied(this, 'Enemy');\nif (obstacle) {\n    this.direction = ct.u.pdn(obstacle.x, obstacle.y, this.x, this.y);\n    this.speed = 0;\n    // repel the ship\n    this.x = this.xprev + ct.u.ldx(5, this.direction);\n    this.y = this.yprev + ct.u.ldy(5, this.direction);\n}\n\n\nthis.shootTimerMain -= ct.delta;\nthis.shootTimerAlt -= ct.delta;\nif (ct.actions.ShootMain.down && this.shootTimerMain <= 0) {\n    this.shootTimerMain = this.shootIntervalMain;\n    var bdir = (this.switchMain? 90 : 270) + this.rotation;\n    var bullet = ct.types.copy(\n        'Laser_Blue',\n        this.x + ct.u.ldx(145 * this.scale.y, bdir),\n        this.y + ct.u.ldy(145 * this.scale.y, bdir)\n    );\n    bullet.direction = bullet.rotation = this.rotation + (this.switchMain? -5 : 5);\n    this.switchMain = !this.switchMain;\n}\nif (ct.game.rockets && ct.actions.ShootMain.down && this.shootTimerAlt <= 0) {\n    this.shootTimerAlt = this.shootIntervalAlt;\n    ct.sound.spawn('Shock_End');\n    \n    var bullet1 = ct.types.copy('Rocket_Player', this.x, this.y);\n    bullet1.direction = bullet1.rotation = this.rotation + 30;\n    \n    var bullet2 = ct.types.copy('Rocket_Player', this.x, this.y);\n    bullet2.direction = bullet2.rotation = this.rotation - 30;\n}\n\nthis.radarTimer -= ct.delta;\nif (this.radarTimer <= 0) {\n    this.radarTimer += 60 * 5;\n    if (this.planets.length) {\n        this.planets.sort((a, b) => {\n            return ct.u.pdc(this.x, this.y, a.x, a.y) - ct.u.pdc(this.x, this.y, b.x, b.y); \n        });\n        ct.sound.spawn('Sonar', {\n            volume: 0.4,\n            rate: ct.u.lerp(2, 0.7, Math.max(0, Math.min(1, (ct.u.pdc(this.x, this.y, this.planets[0].x, this.planets[0].y) / 5000))))\n        });\n        var wave = ct.types.copy('FX_Radar', this.x, this.y);\n        wave.tex = 'RadarWavePink';\n        wave.rotation = wave.direction = ct.u.pdn(this.x, this.y, this.planets[0].x, this.planets[0].y);\n    }\n    if (ct.types.list.SpaceStation.length) {\n        var wave = ct.types.copy('FX_Radar', this.x, this.y);\n        wave.rotation = wave.direction = ct.u.pdn(this.x, this.y, ct.types.list.SpaceStation[0].x, ct.types.list.SpaceStation[0].y);\n    }\n}\n",
       "ondraw": "this.msk.x = this.x;\nthis.msk.y = this.y;\nthis.msk.rotation = this.rotation;",
       "ondestroy": "ct.types.copy('Explosion', this.x, this.y);\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        char: 'Anabot_Glitch',\n        string: 'Capita*** (transmisson ended)'\n    }]\n});\n\nct.u.wait(1000 * 3)\n.then(() => loadGame());",
       "uid": "f6179c1d-2473-4c3a-bd87-b9645c1b31eb",
@@ -2804,7 +2834,7 @@
       "extends": {
         "ctype": "Player"
       },
-      "lastmod": 1553426198760
+      "lastmod": 1555680955975
     },
     {
       "name": "Button_Play",
@@ -2996,7 +3026,7 @@
       "name": "Laser_Magenta",
       "depth": 0,
       "oncreate": "this.speed = 35;\nct.u.wait(1000 * 5)\n.then(() => {\n    this.kill = true;\n});\nthis.scale.x = this.scale.y = 0.35;\n\nct.sound.spawn('Laser_Magenta');",
-      "onstep": "var player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 3;\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\n\nthis.move();\n",
+      "onstep": "var player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 3;\n    ct.types.copy('HurtVignette');\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\n\nthis.move();\n",
       "ondraw": "",
       "ondestroy": "",
       "uid": "7ec9ce7a-4cb8-4006-b6c4-9fe9a7112a9d",
@@ -3004,7 +3034,7 @@
       "extends": {
         "ctype": "EnemyProjectile"
       },
-      "lastmod": 1553405517446
+      "lastmod": 1555670380716
     },
     {
       "name": "UI_Healthbar",
@@ -3179,7 +3209,7 @@
     {
       "name": "Anabot",
       "depth": 0,
-      "oncreate": "var r = ct.room;\nr.follow = this;\nr.center = true;\n\nthis.moving = false;\nthis.health = this.healthMax = 100;\nthis.startingCrystals = ct.game.crystals;\n\nct.types.copy('UI_Bracket_Left');\nct.types.copy('UI_Bracket_Right');\nct.types.copy('UI_Healthbar');\nct.types.copy('UI_Crystals');\nct.types.copy('UI_Cursor');\nct.types.copy('MaskAnabot');\n\nvar keyLeft = ct.vkeys.button({\n    key: 'Vk1',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\n\nvar keyRight = ct.vkeys.button({\n    key: 'Vk2',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 280,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyRight.rotation = 180;\n\nvar keyUp = ct.vkeys.button({\n    key: 'Vk4',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130 - 140,\n    depth: 14000\n});\nkeyUp.rotation = 90;\n\nvar keyDown = ct.vkeys.button({\n    key: 'Vk3',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyDown.rotation = 270;",
+      "oncreate": "var r = ct.room;\nr.follow = this;\nr.followShiftY = -100;\nr.center = true;\n\nthis.moving = false;\nthis.health = this.healthMax = 100;\nthis.startingCrystals = ct.game.crystals;\n\nct.types.copy('UI_Bracket_Left');\nct.types.copy('UI_Bracket_Right');\nct.types.copy('UI_Healthbar');\nct.types.copy('UI_Crystals');\nct.types.copy('UI_Cursor');\nct.types.copy('MaskAnabot');\n\nvar keyLeft = ct.vkeys.button({\n    key: 'Vk1',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\n\nvar keyRight = ct.vkeys.button({\n    key: 'Vk2',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 280,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyRight.rotation = 180;\n\nvar keyUp = ct.vkeys.button({\n    key: 'Vk4',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130 - 140,\n    depth: 14000\n});\nkeyUp.rotation = 90;\n\nvar keyDown = ct.vkeys.button({\n    key: 'Vk3',\n    texNormal: 'Key_Normal',\n    texHover: 'Key_Active',\n    x: () => ct.room.x + ct.viewWidth - 130 - 140,\n    y: () => ct.room.y + ct.viewHeight - 130,\n    depth: 14000\n});\nkeyDown.rotation = 270;",
       "onstep": "\nif (ct.actions.AnabotX.down) {\n    if (!this.moving) {\n        var dx = 200*ct.actions.AnabotX.value;\n        if (ct.place.occupied(this, this.x + dx, this.y, 'Walkable') \n        &&  ct.place.free(this, this.x + dx, this.y, 'Solid')) {\n            this.moving = true;\n            ct.tween.add({\n                obj: this,\n                fields: {\n                    x: this.x + dx\n                },\n                duration: 350\n            })\n            .then(() => {\n                this.moving = false;\n            })\n        }\n        this.scale.x = ct.actions.AnabotX.value;\n    }\n}\nif (ct.actions.AnabotY.down) {\n    if (!this.moving) {\n        var dy = 100*ct.actions.AnabotY.value;\n        if (ct.place.occupied(this, this.x, this.y + dy, 'Walkable')\n        &&  ct.place.free(this, this.x, this.y + dy, 'Solid')) {\n            this.moving = true;\n            ct.tween.add({\n                obj: this,\n                fields: {\n                    y: this.y + dy\n                },\n                duration: 350\n            })\n            .then(() => {\n                this.moving = false;\n            })\n        }\n    }\n}\n\nthis.depth = this.y + 10;",
       "ondraw": "",
       "ondestroy": "ct.types.copy('Explosion', this.x, this.y - 100);\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        char: 'Anabot_Glitch',\n        string: 'Capita*** (transmisson ended)'\n    }]\n});\n\nct.u.wait(1000 * 3)\n.then(() => loadGame());",
@@ -3372,13 +3402,13 @@
       "uid": "e1f76b88-1f73-4c90-8498-eca985100447",
       "texture": "134384bd-f14c-4ff5-8b03-2219d1fcfb73",
       "extends": {},
-      "lastmod": 1553397362002
+      "lastmod": 1555675842882
     },
     {
       "name": "ShockProjectile",
       "depth": 0,
       "oncreate": "this.speed = 4;\nthis.scale.x = this.scale.y = 0.66;\nthis.depth = this.y + 50;\nct.u.wait(1000 * 10)\n.then(() => {\n    this.kill = true;\n});\n\nif (ct.u.prect(this.x, this.y, [\n    ct.room.x,\n    ct.room.y,\n    ct.room.x + ct.viewWidth,\n    ct.room.y + ct.viewHeight\n])) {\n    ct.sound.spawn('Laser_Heavy');\n}",
-      "onstep": "this.move();\nthis.rotation = ct.random.deg();\n\nvar player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 10;\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\nif (ct.place.occupied(this, 'Solid')) {\n    this.kill = true;\n}",
+      "onstep": "this.move();\nthis.rotation = ct.random.deg();\n\nvar player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 10;\n    ct.types.copy('HurtVignette');\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\nif (ct.place.occupied(this, 'Solid')) {\n    this.kill = true;\n}",
       "ondraw": "",
       "ondestroy": "for (var i = 0; i < 30; i++) {\n    var dir = ct.random.deg();\n    var spark = ct.types.copy(\n        'FX_Spark_Burst',\n        this.x + ct.u.ldx(this.scale.x * 60, dir),\n        this.y + ct.u.ldy(this.scale.x * 60, dir)\n    );\n    spark.tint = ct.random.dice(0xda99ed, 0x7682ec, 0xc95bba, 0xf9f6fa);\n    spark.depth = this.depth;\n    spark.direction = dir;\n}",
       "uid": "cf72ed22-2a64-4910-b264-a1bc6bfae1c6",
@@ -3386,7 +3416,7 @@
       "extends": {
         "ctype": "EnemyProjectile"
       },
-      "lastmod": 1553414289254
+      "lastmod": 1555670405293
     },
     {
       "name": "FX_Radar",
@@ -3398,7 +3428,7 @@
       "uid": "a3469514-b0a8-465a-9b6a-c3086a42c2bf",
       "texture": "fb8ab447-bbc8-4241-af59-a8bbb287381d",
       "extends": {},
-      "lastmod": 1553426129800
+      "lastmod": 1555680477205
     },
     {
       "name": "MissionComplete",
@@ -3456,7 +3486,7 @@
       "name": "Rocket_Enemy",
       "depth": 0,
       "oncreate": "this.speed = 20;\nct.tween.add({\n    obj: this,\n    fields: {\n        speed: 8\n    },\n    duration: 800\n})\n.catch(e => void 0);\nct.u.wait(1000 * 3)\n.then(() => {\n    this.kill = true;\n})\n.catch(e => void 0);",
-      "onstep": "var player = ct.types.list.Player[0];\nif (player) {\n    this.direction += ct.u.deltaDir(this.direction, ct.u.pdn(this.x, this.y, player.x, player.y)) * 0.08;\n}\nthis.rotation = this.direction;\n\nvar player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 5;\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\nvar bullet = ct.place.occupied(this, 'HeroProjectile');\nif (bullet) {\n    bullet.kill = true;\n    this.kill = true;\n}\n\nthis.move();",
+      "onstep": "var player = ct.types.list.Player[0];\nif (player) {\n    this.direction += ct.u.deltaDir(this.direction, ct.u.pdn(this.x, this.y, player.x, player.y)) * 0.08;\n}\nthis.rotation = this.direction;\n\nvar player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 5;\n    ct.types.copy('HurtVignette');\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\nvar bullet = ct.place.occupied(this, 'HeroProjectile');\nif (bullet) {\n    bullet.kill = true;\n    this.kill = true;\n}\n\nthis.move();",
       "ondraw": "",
       "ondestroy": "var explosion = ct.types.copy('Explosion_Small', this.x, this.y);",
       "uid": "6892ca4a-014d-401c-a0ab-88ab79e8edad",
@@ -3464,7 +3494,7 @@
       "extends": {
         "ctype": "EnemyProjectile"
       },
-      "lastmod": 1553424177514
+      "lastmod": 1555670390812
     },
     {
       "name": "Explosion_Small",
@@ -3490,7 +3520,7 @@
       "extends": {
         "ctype": "UI"
       },
-      "lastmod": 1553411099433
+      "lastmod": 1555669487147
     },
     {
       "name": "Rocket_Player",
@@ -3565,8 +3595,8 @@
     {
       "name": "Gates",
       "depth": 0,
-      "oncreate": "this.active = true;\nthis.gotoAndStop(0);\nthis.timer = ct.random.range(1, 60 * 3);\nthis.depth = this.y + 10;",
-      "onstep": "this.timer -= ct.delta;\nif (this.timer <= 0) {\n    if (this.active) {\n        this.timer += 60 * 3;\n        this.gotoAndStop(1);\n    } else {\n        this.timer += 60;\n        this.gotoAndStop(0);\n        if (ct.u.prect(this.x, this.y, [\n            ct.room.x,\n            ct.room.y,\n            ct.room.x + ct.viewWidth,\n            ct.room.y + ct.viewHeight\n        ])) {\n            ct.sound.spawn('LaserWall', {\n                volume: 0.35\n            });\n        }\n    }\n    this.active = !this.active;\n}\nif (this.active)  {\n    var player = ct.place.occupied(this, 'Player');\n    if (player) {\n        player.health -= ct.delta * 0.5;\n        if (player.health <= 0) {\n            player.kill = true;\n        }\n    }\n}",
+      "oncreate": "this.active = true;\nthis.gotoAndStop(0);\nthis.timer = ct.random.range(1, 60 * 3);\nthis.depth = this.y + 10;\n\nthis.damageTimer = ct.flow.timer(() => {\n    ct.types.copy('HurtVignette');\n}, 300);",
+      "onstep": "this.timer -= ct.delta;\nif (this.timer <= 0) {\n    if (this.active) {\n        this.timer += 60 * 3;\n        this.gotoAndStop(1);\n    } else {\n        this.timer += 60;\n        this.gotoAndStop(0);\n        if (ct.u.prect(this.x, this.y, [\n            ct.room.x,\n            ct.room.y,\n            ct.room.x + ct.viewWidth,\n            ct.room.y + ct.viewHeight\n        ])) {\n            ct.sound.spawn('LaserWall', {\n                volume: 0.35\n            });\n        }\n    }\n    this.active = !this.active;\n}\nif (this.active)  {\n    var player = ct.place.occupied(this, 'Player');\n    if (player) {\n        player.health -= ct.delta * 0.5;\n        this.damageTimer();\n        if (player.health <= 0) {\n            player.kill = true;\n        }\n    }\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "284d15e3-cfbf-43f1-ada4-1e890cca512b",
@@ -3574,7 +3604,7 @@
       "extends": {
         "ctype": ""
       },
-      "lastmod": 1553414941127
+      "lastmod": 1555679282714
     },
     {
       "name": "NexusCutscene",
@@ -3625,6 +3655,18 @@
         "ctype": "HeroProjectile"
       },
       "lastmod": 1553424180762
+    },
+    {
+      "name": "HurtVignette",
+      "depth": 14000,
+      "oncreate": "ct.tween.add({\n    obj: this,\n    duration: 1000,\n    fields: {\n        alpha: 0\n    },\n    curve: ct.tween.easeOutQuart\n}).then(() => this.kill = true);\n\nct.sound.spawn('Damage');",
+      "onstep": "this.move();",
+      "ondraw": "this.width = ct.viewWidth;\nthis.height = ct.viewHeight;\nthis.x = ct.room.x;\nthis.y = ct.room.y;",
+      "ondestroy": "",
+      "uid": "8b5a37ac-a6ff-417a-b52e-d6b5c66f3ea3",
+      "texture": "4481cdc6-ad0a-4b0c-80f8-09e740462b24",
+      "extends": {},
+      "lastmod": 1555679367722
     }
   ],
   "sounds": [
@@ -3757,6 +3799,18 @@
       "uid": "b5c815e0-fe67-4258-bcf9-cf2a06886071",
       "origname": "sb5c815e0-fe67-4258-bcf9-cf2a06886071.wav",
       "lastmod": 1553422768470
+    },
+    {
+      "name": "Damage",
+      "uid": "a03f4efd-eb51-4100-ab93-5ba2030cea6c",
+      "origname": "sa03f4efd-eb51-4100-ab93-5ba2030cea6c.wav",
+      "lastmod": 1555679276633
+    },
+    {
+      "name": "Sonar",
+      "uid": "960f2b58-3b4b-4134-8c22-dda13e30153a",
+      "origname": "s960f2b58-3b4b-4134-8c22-dda13e30153a.mp3",
+      "lastmod": 1555680448553
     }
   ],
   "styles": [
@@ -6031,11 +6085,6 @@
           "uid": "00154bd1-93a5-40f8-9183-ce9608be35d7"
         },
         {
-          "x": 5840,
-          "y": 724,
-          "uid": "00154bd1-93a5-40f8-9183-ce9608be35d7"
-        },
-        {
           "x": 1192,
           "y": -3492,
           "uid": "00154bd1-93a5-40f8-9183-ce9608be35d7"
@@ -6061,12 +6110,12 @@
       "thumbnail": "d8a2ba899573",
       "gridX": 256,
       "gridY": 256,
-      "lastmod": 1553426200761
+      "lastmod": 1555682156338
     },
     {
       "name": "Sands_02",
-      "oncreate": "if (!ct.sound.playing('Main')) {\n    this.music = ct.sound.spawn('Main', {\n        loop: true\n    });\n}\nif (!ct.sound.playing('Desert')) {\n    this.ambient = ct.sound.spawn('Desert', {\n        loop: true,\n        volume: 0.5\n    });\n}\nct.sound.load('Finale');\n\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        string: 'Anabot requests Captain.'\n    }, {\n        string: 'I can already see some living domes. The laboratory must be nearby.'\n    }, {\n        string: 'Let\\'s move. Anabot out.'\n    }]\n});\n\nct.game.lastLevel = this.name;  \nsaveGame();",
-      "onstep": "",
+      "oncreate": "if (!ct.sound.playing('Main')) {\n    this.music = ct.sound.spawn('Main', {\n        loop: true\n    });\n}\nif (!ct.sound.playing('Desert')) {\n    this.ambient = ct.sound.spawn('Desert', {\n        loop: true,\n        volume: 0.5\n    });\n}\nct.sound.load('Finale');\n\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        string: 'Anabot requests Captain.'\n    }, {\n        string: 'I can already see some living domes. The laboratory must be nearby.'\n    }, {\n        string: 'Let\\'s move. Anabot out.'\n    }]\n});\n\nct.game.lastLevel = this.name;  \nsaveGame();\n\nthis.shiftPhase = 0;",
+      "onstep": "this.shiftPhase += ct.delta * 0.1;\nvar t = this.shiftPhase;\n\nthis.followShiftX = Math.sin(t) * Math.cos(t * 2.31) * Math.cos(t* 1.465 + 0.9864) * Math.sin(t * 3.21324 + 0.123) * 3;",
       "ondraw": "",
       "onleave": "ct.sound.stop('Desert');",
       "width": 1920,
@@ -7539,11 +7588,11 @@
       "thumbnail": "55826a27e291",
       "gridX": 200,
       "gridY": 100,
-      "lastmod": 1553421196867
+      "lastmod": 1555681911018
     },
     {
       "name": "Interlude_02_03",
-      "oncreate": "ct.sound.stop('Main');\nct.sound.spawn('MMenu', {\n    loop: true\n});\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        string: 'We can\\'t let you destroy the universe!.'\n    }, {\n        string: 'You can.',\n        char: 'EnergySource'\n    }, {\n        string: 'This is madness, even for soulless automations.'\n    }, {\n        string: 'You do know that you are the only Anabot online. You do know that the universe you lived in is dead.',\n        char: 'EnergySource'\n    }, {\n        string: 'There are just you, your capitain, and a bunch of space stations filled with human corpses.',\n        char: 'EnergySource'\n    }, {\n        string: 'And, well, some mad robots from the old Cybran faction.',\n        char: 'EnergySource'\n    }, {\n        string: '…',\n    }, {\n        string: 'Anabot, your energy device has contacted us and and explained the situation.',\n        char: 'Operator'\n    }, {\n        string: 'I have a plan on how to speed the things up. I moved my station to sector 3582361:248412.',\n        char: 'Operator'\n    }, {\n        string: '…this sector does not exist.'\n    }, {\n        string: 'It does. I was wrong too.',\n        char: 'Operator'\n    }, {\n        string: 'See you soon. Operator out.',\n        char: 'Operator',\n        do: function () {\n            ct.types.copy('MissionComplete');\n        }\n    }]\n});",
+      "oncreate": "ct.sound.stop('Main');\nct.sound.spawn('MMenu', {\n    loop: true\n});\nct.types.copy('Dialogue', 0, 0, {\n    dialogue: [{\n        string: 'We can\\'t let you destroy the universe!.'\n    }, {\n        string: 'You can.',\n        char: 'EnergySource'\n    }, {\n        string: 'This is madness, even for soulless automations.'\n    }, {\n        string: 'You do know that you are the only Anabot online. You do know that the universe you lived in is dead.',\n        char: 'EnergySource'\n    }, {\n        string: 'There are just you, your capitain, and a bunch of space stations filled with human corpses.',\n        char: 'EnergySource'\n    }, {\n        string: 'And, well, some mad robots from the old Cybran faction.',\n        char: 'EnergySource'\n    }, {\n        string: '…',\n    }, {\n        string: 'Anabot, your energy device has contacted us and explained the situation.',\n        char: 'Operator'\n    }, {\n        string: 'I have a plan on how to speed the things up. I moved my station to sector 3582361:248412.',\n        char: 'Operator'\n    }, {\n        string: '…this sector does not exist.'\n    }, {\n        string: 'It does. I was wrong too.',\n        char: 'Operator'\n    }, {\n        string: 'See you soon. Operator out.',\n        char: 'Operator',\n        do: function () {\n            ct.types.copy('MissionComplete');\n        }\n    }]\n});",
       "onstep": "",
       "ondraw": "",
       "onleave": "ct.sound.stop('MMenu');",
@@ -7619,7 +7668,7 @@
       "thumbnail": "7192d0f0e362",
       "gridX": 64,
       "gridY": 64,
-      "lastmod": 1553421877690
+      "lastmod": 1555682246770
     },
     {
       "name": "Finale",
@@ -7680,7 +7729,7 @@
   "starting": 0,
   "settings": {
     "minifyhtmlcss": false,
-    "minifyjs": true,
+    "minifyjs": false,
     "fps": 30,
     "version": [
       0,
@@ -7723,6 +7772,9 @@
       "methods": [
         {
           "code": "mouse.Middle"
+        },
+        {
+          "code": "keyboard.Space"
         }
       ]
     },
@@ -7735,6 +7787,20 @@
         {
           "code": "vkeys.Vk2",
           "multiplier": -1
+        },
+        {
+          "code": "keyboard.ArrowLeft",
+          "multiplier": -1
+        },
+        {
+          "code": "keyboard.ArrowRight"
+        },
+        {
+          "code": "keyboard.KeyA",
+          "multiplier": -1
+        },
+        {
+          "code": "keyboard.KeyD"
         }
       ]
     },
@@ -7747,6 +7813,20 @@
         {
           "code": "vkeys.Vk4",
           "multiplier": -1
+        },
+        {
+          "code": "keyboard.KeyW",
+          "multiplier": -1
+        },
+        {
+          "code": "keyboard.KeyS"
+        },
+        {
+          "code": "keyboard.ArrowUp",
+          "multiplier": -1
+        },
+        {
+          "code": "keyboard.ArrowDown"
         }
       ]
     }
@@ -7788,5 +7868,5 @@
     "#B81ECC"
   ],
   "styletick": null,
-  "startroom": "5318859b-eb32-4da5-8810-a8930e5ccf71"
+  "startroom": "fc5db32e-648c-475c-aa76-55826a27e291"
 }
