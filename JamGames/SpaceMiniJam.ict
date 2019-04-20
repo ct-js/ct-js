@@ -9,7 +9,11 @@
     "fittoscreen": {
       "mode": "scaleFill"
     },
-    "sound.howler": {},
+    "sound.howler": {
+      "defaultMaxDistance": 2500,
+      "manageListenerPosition": true,
+      "useDepth": false
+    },
     "mouse": {},
     "random": {},
     "tween": {},
@@ -2906,7 +2910,7 @@
       "name": "SpaceStation",
       "depth": -50,
       "oncreate": "this.dr = ct.random.range(-0.1, 0.1);\nthis.rotation = ct.random.deg();\n\nthis.lights = ct.types.copy('SpaceStation_Lights', this.x, this.y);\nthis.scale.x = this.scale.y = this.lights.scale.x = this.lights.scale.y = 1.5;\n\nthis.rocketTimer = 0;",
-      "onstep": "this.rotation += this.dr * ct.delta;\nthis.lights.rotation = this.rotation;\n\nvar occupied = ct.place.occupied(this, 'Player');\nct.types.list.Button_UpgradeHull[0].visible = occupied;\nct.types.list.Button_AddRockets[0].visible = occupied;\nct.types.list.Button_AddSpotlight[0].visible = occupied;\nct.types.list.Button_RepairHull[0].visible = occupied;\n\nif (ct.room.name === 'Space_03') {\n    this.rocketTimer -= ct.delta;\n    if (this.rocketTimer <= 0) {\n        this.rocketTimer += 40;\n        var enemy;\n        var enemy1 = ct.place.nearest(this.x, this.y, 'Enemy_Drone'),\n            enemy2 = ct.place.nearest(this.x, this.y, 'Enemy_Rocketship');\n            \n        if (enemy1 && ct.u.pdc(enemy1.x, enemy1.y, this.x, this.y) < 2000) {\n            enemy = enemy1;\n        }\n        if (enemy2 && ct.u.pdc(enemy2.x, enemy2.y, this.x, this.y) < 2000) {\n            if (!enemy1 || ct.u.pdc(enemy1.x, enemy1.y, this.x, this.y) > ct.u.pdc(enemy2.x, enemy2.y, this.x, this.y)) {\n                enemy = enemy2;\n            }\n        }\n        if (enemy) {\n            var rocket = ct.types.copy('Rocket_Station', this.x, this.y, {\n                speed: 30\n            });\n            rocket.direction = rocket.rotation = ct.u.pdn(this.x, this.y, enemy.x, enemy.y);\n            ct.sound.spawn('Shock_End');\n        }\n    }\n}",
+      "onstep": "this.rotation += this.dr * ct.delta;\nthis.lights.rotation = this.rotation;\n\nvar occupied = ct.place.occupied(this, 'Player');\nct.types.list.Button_UpgradeHull[0].visible = occupied;\nct.types.list.Button_AddRockets[0].visible = occupied;\nct.types.list.Button_AddSpotlight[0].visible = occupied;\nct.types.list.Button_RepairHull[0].visible = occupied;\n\nif (ct.room.name === 'Space_03') {\n    this.rocketTimer -= ct.delta;\n    if (this.rocketTimer <= 0) {\n        this.rocketTimer += 40;\n        var enemy;\n        var enemy1 = ct.place.nearest(this.x, this.y, 'Enemy_Drone'),\n            enemy2 = ct.place.nearest(this.x, this.y, 'Enemy_Rocketship');\n            \n        if (enemy1 && ct.u.pdc(enemy1.x, enemy1.y, this.x, this.y) < 2000) {\n            enemy = enemy1;\n        }\n        if (enemy2 && ct.u.pdc(enemy2.x, enemy2.y, this.x, this.y) < 2000) {\n            if (!enemy1 || ct.u.pdc(enemy1.x, enemy1.y, this.x, this.y) > ct.u.pdc(enemy2.x, enemy2.y, this.x, this.y)) {\n                enemy = enemy2;\n            }\n        }\n        if (enemy) {\n            var rocket = ct.types.copy('Rocket_Station', this.x, this.y, {\n                speed: 30\n            });\n            rocket.direction = rocket.rotation = ct.u.pdn(this.x, this.y, enemy.x, enemy.y);\n            ct.sound.spawn('Shock_End', {\n                position: this\n            });\n        }\n    }\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "f55305ea-9f25-4b02-bd25-edca007335a6",
@@ -2914,7 +2918,7 @@
       "extends": {
         "ctype": "Station"
       },
-      "lastmod": 1553423692122
+      "lastmod": 1555735169556
     },
     {
       "name": "Mask",
@@ -3025,7 +3029,7 @@
     {
       "name": "Laser_Magenta",
       "depth": 0,
-      "oncreate": "this.speed = 35;\nct.u.wait(1000 * 5)\n.then(() => {\n    this.kill = true;\n});\nthis.scale.x = this.scale.y = 0.35;\n\nct.sound.spawn('Laser_Magenta');",
+      "oncreate": "this.speed = 35;\nct.u.wait(1000 * 5)\n.then(() => {\n    this.kill = true;\n});\nthis.scale.x = this.scale.y = 0.35;\n\nct.sound.spawn('Laser_Magenta', {\n    position: this\n});",
       "onstep": "var player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 3;\n    ct.types.copy('HurtVignette');\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\n\nthis.move();\n",
       "ondraw": "",
       "ondestroy": "",
@@ -3034,7 +3038,7 @@
       "extends": {
         "ctype": "EnemyProjectile"
       },
-      "lastmod": 1555670380716
+      "lastmod": 1555735145948
     },
     {
       "name": "UI_Healthbar",
@@ -3077,14 +3081,14 @@
     {
       "name": "Explosion",
       "depth": 1001,
-      "oncreate": "this.tex = 'Explosion_' + ct.random.dice('01', '02');\nthis.alpha = 0;\nthis.rotation = ct.random.deg();\nvar dr = ct.random.range(-10, 10);\nthis.scale.x = this.scale.y = 0.1;\n\nct.sound.spawn('ShipExplosion_' + ct.random.dice('01', '02'));\n\nct.tween.add({\n    obj: this,\n    duration: 100,\n    fields: {\n        alpha: 1\n    }\n})\n.catch(e => void 0);\nct.tween.add({\n    obj: this.scale,\n    duration: 200,\n    fields: {\n        x: 1,\n        y: 1\n    }\n}).then(() => ct.tween.add({\n    obj: this,\n    duration: 800,\n    fields: {\n        rotation: this.rotation + dr,\n        alpha: 0\n    }\n}))\n.then(() => this.kill = true)\n.catch(e => void 0);",
+      "oncreate": "this.tex = 'Explosion_' + ct.random.dice('01', '02');\nthis.alpha = 0;\nthis.rotation = ct.random.deg();\nvar dr = ct.random.range(-10, 10);\nthis.scale.x = this.scale.y = 0.1;\n\nct.sound.spawn('ShipExplosion_' + ct.random.dice('01', '02'), {\n    position: this\n});\n\nct.tween.add({\n    obj: this,\n    duration: 100,\n    fields: {\n        alpha: 1\n    }\n})\n.catch(e => void 0);\nct.tween.add({\n    obj: this.scale,\n    duration: 200,\n    fields: {\n        x: 1,\n        y: 1\n    }\n}).then(() => ct.tween.add({\n    obj: this,\n    duration: 800,\n    fields: {\n        rotation: this.rotation + dr,\n        alpha: 0\n    }\n}))\n.then(() => this.kill = true)\n.catch(e => void 0);",
       "onstep": "this.move();",
       "ondraw": "",
       "ondestroy": "",
       "uid": "e88fffad-4027-43bd-b0df-1ea52be5c3cd",
       "texture": "6328ece4-b0e1-4314-a115-b4043038da83",
       "extends": {},
-      "lastmod": 1553424200121
+      "lastmod": 1555735141332
     },
     {
       "name": "Puzzle_I",
@@ -3244,7 +3248,7 @@
       "uid": "9dc89d7f-bfd9-4d5e-aa31-b43e6ffac6b7",
       "texture": "66e05814-4873-4553-837d-f8cb60155164",
       "extends": {},
-      "lastmod": 1553393820302
+      "lastmod": 1555735220676
     },
     {
       "name": "Enemy_Platformer",
@@ -3256,7 +3260,7 @@
       "uid": "3c328d7d-58b4-48b9-a506-5ccd84e8653f",
       "texture": "ac5f254d-828a-463d-9e4a-69d3ade1d455",
       "extends": {},
-      "lastmod": 1553412205064
+      "lastmod": 1555735200355
     },
     {
       "name": "GatherableCrystals",
@@ -3407,7 +3411,7 @@
     {
       "name": "ShockProjectile",
       "depth": 0,
-      "oncreate": "this.speed = 4;\nthis.scale.x = this.scale.y = 0.66;\nthis.depth = this.y + 50;\nct.u.wait(1000 * 10)\n.then(() => {\n    this.kill = true;\n});\n\nif (ct.u.prect(this.x, this.y, [\n    ct.room.x,\n    ct.room.y,\n    ct.room.x + ct.viewWidth,\n    ct.room.y + ct.viewHeight\n])) {\n    ct.sound.spawn('Laser_Heavy');\n}",
+      "oncreate": "this.speed = 4;\nthis.scale.x = this.scale.y = 0.66;\nthis.depth = this.y + 50;\nct.u.wait(1000 * 10)\n.then(() => {\n    this.kill = true;\n});\n\nif (ct.u.prect(this.x, this.y, [\n    ct.room.x,\n    ct.room.y,\n    ct.room.x + ct.viewWidth,\n    ct.room.y + ct.viewHeight\n])) {\n    ct.sound.spawn('Laser_Heavy', {\n        position: this\n    });\n}",
       "onstep": "this.move();\nthis.rotation = ct.random.deg();\n\nvar player = ct.place.occupied(this, 'Player');\nif (player) {\n    this.kill = true;\n    player.health -= 10;\n    ct.types.copy('HurtVignette');\n    if (player.health <= 0) {\n        player.kill = true;\n    }\n}\n\nif (ct.place.occupied(this, 'Solid')) {\n    this.kill = true;\n}",
       "ondraw": "",
       "ondestroy": "for (var i = 0; i < 30; i++) {\n    var dir = ct.random.deg();\n    var spark = ct.types.copy(\n        'FX_Spark_Burst',\n        this.x + ct.u.ldx(this.scale.x * 60, dir),\n        this.y + ct.u.ldy(this.scale.x * 60, dir)\n    );\n    spark.tint = ct.random.dice(0xda99ed, 0x7682ec, 0xc95bba, 0xf9f6fa);\n    spark.depth = this.depth;\n    spark.direction = dir;\n}",
@@ -3416,7 +3420,7 @@
       "extends": {
         "ctype": "EnemyProjectile"
       },
-      "lastmod": 1555670405293
+      "lastmod": 1555735205164
     },
     {
       "name": "FX_Radar",
@@ -3472,7 +3476,7 @@
       "name": "Enemy_Rocketship",
       "depth": 50,
       "oncreate": "this.direction = this.rotation = ct.random.deg();\nthis.health = 15;\n\nthis.seeRadius = 650;\nthis.forgetRadius = 1500;\nthis.shootMaxRadius = 1200;\nthis.desiredDistance = 650;\nthis.distanceDelta = 200;\n\nthis.maxSpeed = 8;\n\nthis.shootType = 'Rocket_Enemy';\nthis.shootInterval = 60*3;\n\nthis.shootTimer = 0;\n\nthis.state = 'Resting';\nthis.gotoAndStop(1);\n\nthis.gotoX = this.x;\nthis.gotoY = this.y;",
-      "onstep": "var player = ct.types.list.Player[0];\n\nif (!player) {\n    return;\n}\n\nvar dist = ct.u.pdc(this.x, this.y, player.x, player.y),\n    dir = ct.u.pdn(this.x, this.y, player.x, player.y);\nif (this.state === 'Resting') {\n    if (dist <= this.seeRadius) {\n        this.state = 'Angry';\n    } else {\n        this.rotation = this.direction;\n    }\n} else if (this.state === 'Angry') {\n    this.rotation += ct.u.deltaDir(this.rotation, dir) / 10;\n    if (dist >= this.forgetRadius) {\n        this.state = 'Waiting';\n        ct.u.wait(1000)\n        .then(() => {\n            this.state = 'Resting';\n            this.gotoX = this.xstart;\n            this.gotoY = this.ystart;\n            this.shootTimer = 0;\n        });\n    } else {\n        if (dist > this.desiredDistance + this.distanceDelta\n        ||  dist < this.desiredDistance - this.distanceDelta) {\n            this.gotoX = player.x + ct.u.ldx(this.desiredDistance, dir + 180);\n            this.gotoY = player.y + ct.u.ldy(this.desiredDistance, dir + 180);\n        }\n        this.shootTimer -= ct.delta;\n        if (this.shootTimer <= 0 && dist < this.shootMaxRadius) {\n            var bullet = ct.types.copy(this.shootType, this.x, this.y);\n            bullet.direction = bullet.rotation = this.rotation + 90;\n            var bullet2 = ct.types.copy(this.shootType, this.x, this.y);\n            bullet2.direction = bullet.rotation = this.rotation - 90;\n            this.shootTimer = this.shootInterval;\n            ct.sound.spawn('Shock_End');\n        }\n    }\n}\n\nif (ct.u.pdc(this.gotoX, this.gotoY, this.x, this.y) > 50) {\n    this.direction += ct.u.deltaDir(this.direction, ct.u.pdn(this.x, this.y, this.gotoX, this.gotoY)) / 15;\n    this.speed = ct.u.lerp(this.speed, this.maxSpeed, 0.15*ct.delta);\n    this.gotoAndStop(0);\n} else {\n    this.speed = ct.u.lerp(this.speed, 0, 0.5*ct.delta);\n    this.gotoAndStop(1);\n}\n\nthis.move();",
+      "onstep": "var player = ct.types.list.Player[0];\n\nif (!player) {\n    return;\n}\n\nvar dist = ct.u.pdc(this.x, this.y, player.x, player.y),\n    dir = ct.u.pdn(this.x, this.y, player.x, player.y);\nif (this.state === 'Resting') {\n    if (dist <= this.seeRadius) {\n        this.state = 'Angry';\n    } else {\n        this.rotation = this.direction;\n    }\n} else if (this.state === 'Angry') {\n    this.rotation += ct.u.deltaDir(this.rotation, dir) / 10;\n    if (dist >= this.forgetRadius) {\n        this.state = 'Waiting';\n        ct.u.wait(1000)\n        .then(() => {\n            this.state = 'Resting';\n            this.gotoX = this.xstart;\n            this.gotoY = this.ystart;\n            this.shootTimer = 0;\n        });\n    } else {\n        if (dist > this.desiredDistance + this.distanceDelta\n        ||  dist < this.desiredDistance - this.distanceDelta) {\n            this.gotoX = player.x + ct.u.ldx(this.desiredDistance, dir + 180);\n            this.gotoY = player.y + ct.u.ldy(this.desiredDistance, dir + 180);\n        }\n        this.shootTimer -= ct.delta;\n        if (this.shootTimer <= 0 && dist < this.shootMaxRadius) {\n            var bullet = ct.types.copy(this.shootType, this.x, this.y);\n            bullet.direction = bullet.rotation = this.rotation + 90;\n            var bullet2 = ct.types.copy(this.shootType, this.x, this.y);\n            bullet2.direction = bullet.rotation = this.rotation - 90;\n            this.shootTimer = this.shootInterval;\n            ct.sound.spawn('Shock_End', {\n                position: this\n            });\n        }\n    }\n}\n\nif (ct.u.pdc(this.gotoX, this.gotoY, this.x, this.y) > 50) {\n    this.direction += ct.u.deltaDir(this.direction, ct.u.pdn(this.x, this.y, this.gotoX, this.gotoY)) / 15;\n    this.speed = ct.u.lerp(this.speed, this.maxSpeed, 0.15*ct.delta);\n    this.gotoAndStop(0);\n} else {\n    this.speed = ct.u.lerp(this.speed, 0, 0.5*ct.delta);\n    this.gotoAndStop(1);\n}\n\nthis.move();",
       "ondraw": "",
       "ondestroy": "ct.types.copy('Explosion', this.x, this.y);",
       "uid": "ba80b77e-c7f8-4b4f-b3fd-d731ec627a46",
@@ -3480,7 +3484,7 @@
       "extends": {
         "ctype": "Enemy"
       },
-      "lastmod": 1553423259281
+      "lastmod": 1555735180573
     },
     {
       "name": "Rocket_Enemy",
@@ -3494,19 +3498,19 @@
       "extends": {
         "ctype": "EnemyProjectile"
       },
-      "lastmod": 1555670390812
+      "lastmod": 1555735152444
     },
     {
       "name": "Explosion_Small",
       "depth": 1001,
-      "oncreate": "this.tex = 'Explosion_' + ct.random.dice('01', '02');\nthis.alpha = 0;\nthis.rotation = ct.random.deg();\nvar dr = ct.random.range(-10, 10);\nthis.scale.x = this.scale.y = 0.1;\n\nct.sound.spawn('RocketExplosion');\n\nct.tween.add({\n    obj: this,\n    duration: 100,\n    fields: {\n        alpha: 1\n    }\n})\n.catch(e => void 0);\nct.tween.add({\n    obj: this.scale,\n    duration: 200,\n    fields: {\n        x: 0.5,\n        y: 0.5\n    }\n}).then(() => ct.tween.add({\n    obj: this,\n    duration: 800,\n    fields: {\n        rotation: this.rotation + dr,\n        alpha: 0\n    }\n}))\n.then(() => this.kill = true)\n.catch(e => void 0);",
+      "oncreate": "this.tex = 'Explosion_' + ct.random.dice('01', '02');\nthis.alpha = 0;\nthis.rotation = ct.random.deg();\nvar dr = ct.random.range(-10, 10);\nthis.scale.x = this.scale.y = 0.1;\n\nct.sound.spawn('RocketExplosion', {\n    position: this\n});\n\nct.tween.add({\n    obj: this,\n    duration: 100,\n    fields: {\n        alpha: 1\n    }\n})\n.catch(e => void 0);\nct.tween.add({\n    obj: this.scale,\n    duration: 200,\n    fields: {\n        x: 0.5,\n        y: 0.5\n    }\n}).then(() => ct.tween.add({\n    obj: this,\n    duration: 800,\n    fields: {\n        rotation: this.rotation + dr,\n        alpha: 0\n    }\n}))\n.then(() => this.kill = true)\n.catch(e => void 0);",
       "onstep": "this.move();",
       "ondraw": "",
       "ondestroy": "",
       "uid": "9c0bd31f-f575-42ed-8cad-09f528c797d3",
       "texture": "6328ece4-b0e1-4314-a115-b4043038da83",
       "extends": {},
-      "lastmod": 1553424192386
+      "lastmod": 1555735131133
     },
     {
       "name": "Button_UpgradeHull",
@@ -3534,7 +3538,7 @@
       "extends": {
         "ctype": "HeroProjectile"
       },
-      "lastmod": 1553424174073
+      "lastmod": 1555735155980
     },
     {
       "name": "Button_AddSpotlight",
@@ -3596,7 +3600,7 @@
       "name": "Gates",
       "depth": 0,
       "oncreate": "this.active = true;\nthis.gotoAndStop(0);\nthis.timer = ct.random.range(1, 60 * 3);\nthis.depth = this.y + 10;\n\nthis.damageTimer = ct.flow.timer(() => {\n    ct.types.copy('HurtVignette');\n}, 300);",
-      "onstep": "this.timer -= ct.delta;\nif (this.timer <= 0) {\n    if (this.active) {\n        this.timer += 60 * 3;\n        this.gotoAndStop(1);\n    } else {\n        this.timer += 60;\n        this.gotoAndStop(0);\n        if (ct.u.prect(this.x, this.y, [\n            ct.room.x,\n            ct.room.y,\n            ct.room.x + ct.viewWidth,\n            ct.room.y + ct.viewHeight\n        ])) {\n            ct.sound.spawn('LaserWall', {\n                volume: 0.35\n            });\n        }\n    }\n    this.active = !this.active;\n}\nif (this.active)  {\n    var player = ct.place.occupied(this, 'Player');\n    if (player) {\n        player.health -= ct.delta * 0.5;\n        this.damageTimer();\n        if (player.health <= 0) {\n            player.kill = true;\n        }\n    }\n}",
+      "onstep": "this.timer -= ct.delta;\nif (this.timer <= 0) {\n    if (this.active) {\n        this.timer += 60 * 3;\n        this.gotoAndStop(1);\n    } else {\n        this.timer += 60;\n        this.gotoAndStop(0);\n        ct.sound.spawn('LaserWall', {\n            volume: 0.35,\n            position: this\n        });\n    }\n    this.active = !this.active;\n}\nif (this.active)  {\n    var player = ct.place.occupied(this, 'Player');\n    if (player) {\n        player.health -= ct.delta * 0.5;\n        this.damageTimer();\n        if (player.health <= 0) {\n            player.kill = true;\n        }\n    }\n}",
       "ondraw": "",
       "ondestroy": "",
       "uid": "284d15e3-cfbf-43f1-ada4-1e890cca512b",
@@ -3604,7 +3608,7 @@
       "extends": {
         "ctype": ""
       },
-      "lastmod": 1555679282714
+      "lastmod": 1555769523794
     },
     {
       "name": "NexusCutscene",
@@ -3654,7 +3658,7 @@
       "extends": {
         "ctype": "HeroProjectile"
       },
-      "lastmod": 1553424180762
+      "lastmod": 1555735158140
     },
     {
       "name": "HurtVignette",
@@ -7724,6 +7728,44 @@
       "gridX": 64,
       "gridY": 64,
       "lastmod": 1553423886250
+    },
+    {
+      "name": "Room_bf06756fa635",
+      "oncreate": "",
+      "onstep": "",
+      "ondraw": "",
+      "onleave": "",
+      "width": 1920,
+      "height": 1080,
+      "backgrounds": [],
+      "copies": [
+        {
+          "x": 768,
+          "y": 512,
+          "uid": "f6179c1d-2473-4c3a-bd87-b9645c1b31eb"
+        },
+        {
+          "x": -1088,
+          "y": 576,
+          "uid": "284d15e3-cfbf-43f1-ada4-1e890cca512b"
+        },
+        {
+          "x": 2688,
+          "y": 640,
+          "uid": "284d15e3-cfbf-43f1-ada4-1e890cca512b"
+        }
+      ],
+      "tiles": [
+        {
+          "depth": -10,
+          "tiles": []
+        }
+      ],
+      "uid": "cf36c037-619f-4d37-973a-bf06756fa635",
+      "thumbnail": "bf06756fa635",
+      "gridX": 64,
+      "gridY": 64,
+      "lastmod": 1555735300116
     }
   ],
   "starting": 0,
@@ -7868,5 +7910,5 @@
     "#B81ECC"
   ],
   "styletick": null,
-  "startroom": "fc5db32e-648c-475c-aa76-55826a27e291"
+  "startroom": "b7105de6-41b5-419d-8106-570f520dd04a"
 }
