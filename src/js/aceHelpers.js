@@ -141,36 +141,29 @@
 
     var highlightBracketsOverride = function(Range) {
         var {session} = this;
+        if (!session || !session.bgTokenizer) { return; }
         if (session.$bracketHighlight) { // Remove highlighting and set vars undefined
-            session.$bracketHighlight = session.removeMarker(this.session.$bracketHighlight);
-            session.$bracketHighlightMatch = session.removeMarker(this.session.$bracketHighlightMatch);
+            session.$bracketHighlight = session.removeMarker(session.$bracketHighlight);
+            session.$bracketHighlightMatch = session.removeMarker(session.$bracketHighlightMatch);
         }
-        if (this.$highlightPending) {
-            return;
-        }
-        this.$highlightPending = true;
-        setTimeout(() => {
-            this.$highlightPending = false;
-            if (!session || !session.bgTokenizer) { return; }
-            var cursorPos = this.getCursorPosition();
-            cursorPos.column += 1; // Look for right-side bracket first
-            var matchPos = session.findMatchingBracket(cursorPos);
-            var matchRange;
+        var cursorPos = this.getCursorPosition();
+        cursorPos.column += 1; // Look for right-side bracket first
+        var matchPos = session.findMatchingBracket(cursorPos);
+        var matchRange;
+        if (matchPos) {
+            matchRange = new Range(matchPos.row, matchPos.column, matchPos.row, matchPos.column + 1);
+        } else { // No right-side bracket, check left
+            cursorPos.column -= 1;
+            matchPos = session.findMatchingBracket(cursorPos);
             if (matchPos) {
                 matchRange = new Range(matchPos.row, matchPos.column, matchPos.row, matchPos.column + 1);
-            } else { // No right-side bracket, check left
-                cursorPos.column -= 1;
-                matchPos = session.findMatchingBracket(cursorPos);
-                if (matchPos) {
-                    matchRange = new Range(matchPos.row, matchPos.column, matchPos.row, matchPos.column + 1);
-                }
             }
-            if (matchRange) {
-                var cursorRange = new Range(cursorPos.row, cursorPos.column - 1, cursorPos.row, cursorPos.column);
-                session.$bracketHighlight = session.addMarker(cursorRange, 'ace_bracket', 'text');
-                session.$bracketHighlightMatch = session.addMarker(matchRange, 'ace_bracket', 'text');
-            }
-        }, 50);
+        }
+        if (matchRange) {
+            var cursorRange = new Range(cursorPos.row, cursorPos.column - 1, cursorPos.row, cursorPos.column);
+            session.$bracketHighlight = session.addMarker(cursorRange, 'ace_bracket', 'text');
+            session.$bracketHighlightMatch = session.addMarker(matchRange, 'ace_bracket', 'text');
+        }
     };
 
     /**
