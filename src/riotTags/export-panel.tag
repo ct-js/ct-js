@@ -28,9 +28,9 @@ export-panel
                 label
                     i.icon-apple
                     input(type="checkbox" checked="{currentProject.settings.export.mac64}" onchange="{wire('window.currentProject.settings.export.mac64')}")
-                    |   Mac x64
+                    |   MacOS x64
             .clear
-            p 
+            p
                 label
                     input(type="checkbox" checked="{currentProject.settings.export.debug}" onchange="{wire('window.currentProject.settings.export.debug')}")
                     |   {voc.debug}
