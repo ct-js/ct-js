@@ -186,7 +186,7 @@ const launchNw = () => {
 
 const docs = done => {
     fs.remove('./app/data/docs/')
-    .then(() => spawnise('npm', ['run', 'build'], {
+    .then(() => spawnise((/^win/).test(process.platform) ? 'npm.cmd' : 'npm', ['run', 'build'], {
         cwd: './docs'
     }))
     .then(() => fs.copy('./docs/docs/.vuepress/dist', './app/data/docs/'))
