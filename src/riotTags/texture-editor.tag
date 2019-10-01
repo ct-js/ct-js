@@ -756,9 +756,14 @@ texture-editor.panel.view
             }
         };
         this.getStripSegments = () => {
-            if(!this.texture) return;
-            const points = this.getMovableStripPoints();
+            if(!this.texture) {
+                return;
+            }
+            if (this.texture.shape !== 'strip') {
+                return;
+            }
 
+            const points = this.getMovableStripPoints();
             const segs = [];
 
             for(let i = 0; i < points.length; i++) {
