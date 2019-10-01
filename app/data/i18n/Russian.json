@@ -221,7 +221,7 @@
         "moveCenter": "Переместить ось вращения",
         "movePoint": "Переместить точку",
         "reimport": "Обновить",
-        "symmetryTool": "инструмент симметрии"
+        "symmetryTool": "Симметрия"
     },
     "sounds": {
         "create": "Создать"
