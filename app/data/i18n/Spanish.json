@@ -222,7 +222,7 @@
         "addPoint": "Agrega un punto",
         "moveCenter": "Mover eje",
         "movePoint": "Mueve este punto",
-        "symmetryTool": "herramienta de simetría"
+        "symmetryTool": "Herramienta de simetría"
     },
     "sounds": {
         "create": "Crear"
