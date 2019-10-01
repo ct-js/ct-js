@@ -203,18 +203,30 @@ ct.loop = function(delta) {
     ct.room.onStep.apply(ct.room);
     ct.rooms.afterStep.apply(ct.room);
     // copies
-    for (let i = 0, li = ct.stack.length; i < li;) {
-        if (ct.stack[i].kill) {
-            ct.types.onDestroy.apply(ct.stack[i]);
-            ct.stack[i].onDestroy.apply(ct.stack[i]);
-            ct.stack[i].destroy({
-                children: true
-            });
-            deadPool.push(ct.stack.splice(i, 1));
-            li--;
-        } else {
-            i++;
+    const killCopy = copy => {
+        for (const child of copy.children) {
+            if (child instanceof ct.types.Copy) {
+                child.kill = true;
+                killCopy(child);
+            }
         }
+
+        copy.onDestroy.apply(copy);
+        copy.destroy({children: true});
+        deadPool.push(copy);
+    };
+    for (let i = 0; i < ct.stack.length; i++) {
+        if (ct.stack[i].kill) {
+            // ct.types.onDestroy.apply(ct.stack[i]);
+            killCopy(ct.stack[i]);
+        }
+    }
+    // remove all copies from ct.stack
+    ct.stack = ct.stack.filter(copy => !copy.kill);
+
+    // ct.types.list[type: String]
+    for (const i in ct.types.list) {
+        ct.types.list[i] = ct.types.list[i].filter(type => !type.kill);
     }
 
     // ct.types.list[type: String]
