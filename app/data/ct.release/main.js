@@ -190,6 +190,31 @@ ct.u.ext(ct.u, { // make aliases
     pointCircle: ct.u.pcircle,
     extend: ct.u.ext
 });
+
+const killCopy = copy => {
+    for (const child of copy.children) {
+        if (child instanceof ct.types.Copy && !child.kill) {
+            child.kill = true;
+            killCopy(child);
+        }
+    }
+
+    ct.types.onDestroy.apply(copy);
+    copy.onDestroy.apply(copy);
+    copy.destroy({children: true});
+    deadPool.push(copy);
+};
+const filterInPlace = (array, condition) => {
+    let j = 0;
+    for(let i = 0, l = array.length; i < l; i++) {
+        if (condition(array[i], i, array)) {
+            array[j++] = array[i];
+        }
+    }
+  
+    array.length = j;
+    return array;
+};
 ct.loop = function(delta) {
     ct.delta = delta;
     ct.inputs.updateActions();
@@ -203,30 +228,16 @@ ct.loop = function(delta) {
     ct.room.onStep.apply(ct.room);
     ct.rooms.afterStep.apply(ct.room);
     // copies
-    const killCopy = copy => {
-        for (const child of copy.children) {
-            if (child instanceof ct.types.Copy && !child.kill) {
-                child.kill = true;
-                killCopy(child);
-            }
-        }
-
-        copy.onDestroy.apply(copy);
-        copy.destroy({children: true});
-        deadPool.push(copy);
-    };
     for (let i = 0; i < ct.stack.length; i++) {
         if (ct.stack[i].kill) {
-            // ct.types.onDestroy.apply(ct.stack[i]);
             killCopy(ct.stack[i]);
         }
     }
-    // remove all copies from ct.stack
-    ct.stack = ct.stack.filter(copy => !copy.kill);
+    filterInPlace(ct.stack, copy => !copy.kill);
 
     // ct.types.list[type: String]
     for (const i in ct.types.list) {
-        ct.types.list[i] = ct.types.list[i].filter(type => !type.kill);
+        filterInPlace(ct.types.list[i], type => !type.kill);
     }
 
     for (const cont of ct.stage.children) {
