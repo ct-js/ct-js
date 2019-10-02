@@ -229,16 +229,6 @@ ct.loop = function(delta) {
         ct.types.list[i] = ct.types.list[i].filter(type => !type.kill);
     }
 
-    // ct.types.list[type: String]
-    for (const i in ct.types.list) {
-        for (let k = 0, lk = ct.types.list[i].length; k < lk; k++) {
-            if (ct.types.list[i][k].kill) {
-                ct.types.list[i].splice(k, 1);
-                k--; lk--;
-            }
-        }
-    }
-
     for (const cont of ct.stage.children) {
         cont.children.sort((a, b) =>
             ((a.depth || 0) - (b.depth || 0)) || ((a.uid || 0) - (b.uid || 0)) || 0
