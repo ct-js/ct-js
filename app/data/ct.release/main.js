@@ -205,7 +205,7 @@ ct.loop = function(delta) {
     // copies
     const killCopy = copy => {
         for (const child of copy.children) {
-            if (child instanceof ct.types.Copy) {
+            if (child instanceof ct.types.Copy && !child.kill) {
                 child.kill = true;
                 killCopy(child);
             }
