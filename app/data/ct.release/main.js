@@ -1,7 +1,7 @@
 /* Made with ct.js http://ctjs.rocks/ */
-const deadPool = new Set(); // a pool of `kill`-ed copies for delaying frequent garbage collection
+const deadPool = []; // a pool of `kill`-ed copies for delaying frequent garbage collection
 setInterval(function () {
-    deadPool.clear();
+    deadPool.length = 0;
 }, 1000 * 60);
 
 const ct = {
@@ -225,7 +225,7 @@ ct.loop = function(delta) {
             copy.kill = true;
             ct.types.onDestroy.apply(copy);
             copy.onDestroy.apply(copy);
-            deadPool.add(copy);
+            deadPool.push(copy);
         }
     }
     removeKilledCopies(ct.stack);
