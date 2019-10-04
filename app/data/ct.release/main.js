@@ -1,7 +1,7 @@
 /* Made with ct.js http://ctjs.rocks/ */
-var deadPool = []; // a pool of `kill`-ed copies for delaying frequent garbage collection
+const deadPool = new Set(); // a pool of `kill`-ed copies for delaying frequent garbage collection
 setInterval(function () {
-    deadPool.length = 0;
+    deadPool.clear();
 }, 1000 * 60);
 
 const ct = {
@@ -191,23 +191,10 @@ ct.u.ext(ct.u, { // make aliases
     extend: ct.u.ext
 });
 
-const killCopy = copy => {
-    for (const child of copy.children) {
-        if (child instanceof ct.types.Copy && !child.kill) {
-            child.kill = true;
-            killCopy(child);
-        }
-    }
-
-    ct.types.onDestroy.apply(copy);
-    copy.onDestroy.apply(copy);
-    copy.destroy({children: true});
-    deadPool.push(copy);
-};
-const filterInPlace = (array, condition) => {
+const removeKilledCopies = (array) => {
     let j = 0;
-    for(let i = 0, l = array.length; i < l; i++) {
-        if (condition(array[i], i, array)) {
+    for(let i = 0; i < array.length; i++) {
+        if (!array[i].kill) {
             array[j++] = array[i];
         }
     }
@@ -230,14 +217,22 @@ ct.loop = function(delta) {
     // copies
     for (let i = 0; i < ct.stack.length; i++) {
         if (ct.stack[i].kill) {
-            killCopy(ct.stack[i]);
+            ct.stack[i].destroy({children: true});
         }
     }
-    filterInPlace(ct.stack, copy => !copy.kill);
+    for (const copy of ct.stack) {
+        if (!copy.parent) {
+            copy.kill = true;
+            ct.types.onDestroy.apply(copy);
+            copy.onDestroy.apply(copy);
+            deadPool.add(copy);
+        }
+    }
+    removeKilledCopies(ct.stack);
 
     // ct.types.list[type: String]
     for (const i in ct.types.list) {
-        filterInPlace(ct.types.list[i], type => !type.kill);
+        removeKilledCopies(ct.types.list[i]);
     }
 
     for (const cont of ct.stage.children) {
@@ -281,7 +276,9 @@ ct.loop = function(delta) {
     r.x = Math.round(r.x);
     r.y = Math.round(r.y);
 
+    // console.log("loop")
     for (let i = 0, li = ct.stack.length; i < li; i++) {
+        // console.log(ct.stack[i].type);
         ct.types.beforeDraw.apply(ct.stack[i]);
         ct.stack[i].onDraw.apply(ct.stack[i]);
         ct.types.afterDraw.apply(ct.stack[i]);
