@@ -216,12 +216,12 @@ ct.loop = function(delta) {
     ct.rooms.afterStep.apply(ct.room);
     // copies
     for (let i = 0; i < ct.stack.length; i++) {
-        if (ct.stack[i].kill) {
+        if (ct.stack[i].kill && !ct.stack[i]._destroyed) {
             ct.stack[i].destroy({children: true});
         }
     }
     for (const copy of ct.stack) {
-        if (!copy.parent) {
+        if (copy._destroyed) {
             copy.kill = true;
             ct.types.onDestroy.apply(copy);
             copy.onDestroy.apply(copy);
