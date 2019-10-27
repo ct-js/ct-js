@@ -40,6 +40,8 @@ project-selector
                         style="display:none",
                         onchange="{chooseProjectFolder}"
                         nwdirectory
+                        nwworkingdir="projects/ThisFolderWillHopefullyNeverExistButItWillGoInsideTheProjectsDir"
+                        nwdirectorydesc="{voc.newProject.selectProjectFolder}"
                     )
                     button.nm.wide.inline(onclick="{openProjectFolder}") {voc.newProject.button}
     .aVersionNumber
@@ -184,7 +186,7 @@ project-selector
         };
 
         this.openProjectFolder = e => {
-             const codename = this.refs.projectname.value;
+            const codename = this.refs.projectname.value;
             if (codename.length === 0) {
                 alertify.error(this.voc.newProject.nameerr);
                 return;
