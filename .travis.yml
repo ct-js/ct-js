@@ -13,6 +13,7 @@ install:
 stages:
   - lint
   - build
+  - deploy
 
 jobs:
   include:
@@ -20,5 +21,34 @@ jobs:
       script:
         - gulp lint
     - stage: build
+      name: Compile style and js assets
       script:
         - gulp build
+      skip_cleanup: true
+    - stage: build
+      on:
+        branch: master
+        tags: true
+      script:
+        - gulp -f devSetup.gulpfile.js
+        - gulp packages
+      skip_cleanup: true
+      deploy:
+        # Github Releases
+        - provider: releases
+          api_key: $GITHUB_OAUTH_TOKEN
+          file_glob: true
+          # see at gulpfile.js > zipPackages
+          file: ./build/ctjs - $TRAVIS_TAG/ct.js $TRAVIS_TAG for *.zip
+          skip_cleanup: true
+          draft: true
+          on:
+            tags: true
+            branch: master
+        # Push to comigo.itch.io/ct
+        - provider: script
+          script: gulp deployOnly
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master

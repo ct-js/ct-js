@@ -4,7 +4,6 @@
         "native": "English",
         "eng": "English"
     },
-
     "common": {
         "add": "Add",
         "addtonotes": "Add to notes",
@@ -25,11 +24,11 @@
         "exitconfirm": "Are you sure you want to exit?<br/>All the unsaved changes will be lost!",
         "fastimport": "Fast Import",
         "language": "Language",
+        "loading": "Loading…",
         "translateToYourLanguage": "Translate ct.js to your language!",
         "name": "Name:",
         "nametaken": "This name is already taken",
         "newname": "New name:",
-        "newversion": "# New version is avaliable\n",
         "no": "No",
         "none": "None",
         "norooms": "You need at least one room to compile your app.",
@@ -48,7 +47,6 @@
         "wrongFormat": "Wrong file format",
         "yes": "Yes"
     },
-
     "actionsEditor": {
         "actions": "Actions",
         "actionsEditor": "Actions editor",
@@ -89,7 +87,8 @@
             "button": "Create",
             "input": "Project's name (letters and digits)",
             "text": "Create new",
-            "nameerr": "Wrong project name."
+            "nameerr": "Wrong project name",
+            "selectProjectFolder": "Select a folder in which to store your project"
         },
         "recovery": {
             "message": "<h2 class=\"nmt\">Recovery</h2><p>ct.js has found a recovery file. Possibly, your project was not saved correctly or ct.js was shut down in case of some emergency. Here is when these files were lastly modified:</p><p>Your chosen file: {0} {1}<br/>Recovery file: {2} {3}</p><p>What file should ct.js open?</p>",
@@ -99,7 +98,7 @@
             "older": "(older)"
         },
         "loadingProject": "Loading the project…",
-        "loadingProjectError" : "Cannot open this project because of the following error: ",
+        "loadingProjectError": "Cannot open this project because of the following error: ",
         "homepage": "Homepage",
         "latestVersion": "Version $1 is available",
         "forgetProject": "Forget this project",
@@ -120,6 +119,7 @@
         "license": "License",
         "min": "Windowed",
         "modules": "Catmods",
+        "patrons": "Patrons",
         "recentProjects": "Recent projects",
         "rooms": "Rooms",
         "save": "Save project",
@@ -134,7 +134,16 @@
         "themeNight": "Dark",
         "types": "Types",
         "zipExport": "Export to .zip",
-        "zipProject": "Pack project to .zip"
+        "zipProject": "Pack project to .zip",
+        "codeFontDefault": "Default (Iosevka Light)",
+        "codeFontOldSchool": "Old school",
+        "codeFontSystem": "System",
+        "codeFontCustom": "Custom…",
+        "newFont": "New font:",
+        "codeFont": "Font for code",
+        "codeLigatures": "Ligatures",
+        "codeDense": "Dense layout",
+        "openIncludeFolder": "Open \"include\" folder"
     },
     "settings": {
         "actions": "Actions and input methods",
@@ -150,18 +159,12 @@
         "minifyhtmlcss": "Compress HTML and CSS",
         "minifyjs": "Compress JavaScript and convert it to ES5 (slow; use for releases)",
         "pixelatedrender": "Disable image smoothing here and in exported project (preserve crisp pixels)",
-        "preloader": "Preloader",
         "renderoptions": "Render Options",
         "settings": "Project settings",
         "site": "Homepage:",
         "title": "Name:",
         "version": "Version:",
         "versionpostfix": "Postfix:",
-        "preloaders": {
-            "circular": "Circular",
-            "bar": "Progress bar",
-            "no": "No preloader"
-        },
         "scripts": {
             "addNew": "Add a New Script",
             "deleteScript": "Delete the script",
@@ -180,8 +183,6 @@
         "logs": "Changelog",
         "methods": "Methods",
         "parameters": "Parameters",
-        "nomethods": "This module hasn't its own methods.",
-        "noparameters": "This module hasn't its own parameters.",
         "logs2": "Changelog",
         "settings": "Settings"
     },
@@ -207,7 +208,7 @@
         "rows": "Rows:",
         "setcenter": "Image's center",
         "speed": "Framerate:",
-        "tiled": "Is it tiled?",
+        "tiled": "Use as a background?",
         "replacetexture": "Replace…",
         "corrupted": "File is corrupted or missing! Closing now.",
         "showmask": "Show mask",
@@ -222,7 +223,8 @@
         "closeShape": "Close the shape",
         "addPoint": "Add a point",
         "moveCenter": "Move axis",
-        "movePoint": "Move this point"
+        "movePoint": "Move this point",
+        "symmetryTool": "Symmetry tool"
     },
     "sounds": {
         "create": "Create"
@@ -265,7 +267,7 @@
         "stroke": "Stroke",
         "strokecolor": "Stroke color:",
         "strokeweight": "Line weight:",
-        "testtext" : "Test text 0123 +",
+        "testtext": "Test text 0123 +",
         "textWrap": "Word wrap",
         "textWrapWidth": "Max width:"
     },
@@ -348,13 +350,50 @@
         "deletetile": "Delete a tile",
         "deletetiles": "Delete tiles",
         "movetilestolayer": "Move to layer",
-        "shifttiles": "Shift tiles"
+        "shifttiles": "Shift tiles",
+        "findTileset": "Find a tileset"
     },
     "notepad": {
         "local": "Project's notepad",
         "global": "Global notepad",
         "helppages": "Help",
         "backToHome": "Back to docs' homepage"
+    },
+    "patreon": {
+        "aboutPatrons": "Patrons are people who show their support to ComigoGames at Patreon, in form of recurring donations. Not everyone there comes from ct.js; some are using other apps from ComigoGames. Tip: if you are a creator and donate to ComigoGames via Patreon, you will get a link to your page here — that's my little help to your creations :)",
+        "patronsHeader": "Our patrons",
+        "businessShuttles": "Business shuttles",
+        "noShuttlesYet": "No business shuttles yet :c Your company may be the first one, though!",
+        "shuttlesDescription": "Business shuttles are considered as partners of ct.js. They are listed on ct.js' homepage and its store pages.",
+        "spacePirates": "Space Pirates",
+        "noPiratesYet": "There are no Space Pirates yet :c",
+        "piratesDescription": "Space Pirates get priority support on Discord server with a cool role, and get listed here.",
+        "spaceProgrammers": "Space Programmers",
+        "programmersDescription": "\"Space Programmer\" is a legacy tier that was available before ct.js went open-source and brought sources of jam games to patrons.",
+        "aspiringAstronauts": "Aspiring Astronauts",
+        "noAstronautsYet": "There are no Aspiring Astronauts yet :c",
+        "astronautsDescription": "Astronauts get a special role in Discord and get listed here!",
+        "thankAllPatrons": "Thanks to all ComigoGames patrons, current and former ones, as your support keeps Comigo moving forward and making even better apps! :)",
+        "becomeAPatron": "Become a patron",
+        "aboutFillers": [
+            "is cool all around 😎",
+            "is nice to chat with 🤗",
+            "has yet to become a star 💫",
+            "is just a prodigy ⭐️",
+            "is a good friend 🤝",
+            "is reliable 🙏",
+            "has a golden heart 🧡",
+            "is a magician 🔮",
+            "is here to help! 💪",
+            "is a superhero 🦸‍",
+            "has yet to show 🦹‍",
+            "is an unsolved mystery 🔍",
+            "is epic! ✨",
+            "is probably a robot 🤖",
+            "is like a blazing fire! 🔥",
+            "brings light and hope 🌞",
+            "is elegant and beautiful 🎩"
+        ]
     },
     "preview": {
         "reload": "Reload",

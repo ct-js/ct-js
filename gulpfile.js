@@ -13,6 +13,7 @@ const path = require('path'),
       stylint = require('gulp-stylint'),
       globby = require('globby'),
       filemode = require('filemode'),
+      zip = require('gulp-zip'),
 
       streamQueue = require('streamqueue'),
       notifier = require('node-notifier'),
@@ -77,7 +78,8 @@ const compileStylus = () =>
     gulp.src('./src/styl/theme*.styl')
     .pipe(sourcemaps.init())
     .pipe(stylus({
-        compress: true
+        compress: true,
+        'include css': true
     }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./app/data/'));
@@ -188,7 +190,7 @@ const lintStylus = () => gulp.src(['./src/styl/**/*.styl', '!./src/styl/3rdParty
         failOnWarning: true
     }));
 
-const lintJS = () => gulp.src(['./src/js/**/*.js', '!./src/js/3rdparty/**/*.js'])
+const lintJS = () => gulp.src(['./src/js/**/*.js', '!./src/js/3rdparty/**/*.js', './src/node_requires/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -264,7 +266,7 @@ fs.symlink = (target, destination) => {
 };
 
 const abortOnWindows = done => {
-    if ((/^win/).test(process.platform)) {
+    if ((/^win/).test(process.platform) && platforms.indexOf('osx64') !== -1) {
         throw new Error('Sorry, but building ct.js for mac is not possible on Windows due to Windows\' specifics. You can edit `platforms` at gulpfile.js if you don\'t need a package for mac.');
     }
     done();
@@ -280,12 +282,12 @@ const fixSymlinks = async () => {
     const glob = baseDir + '/Versions/*/nwjs Framework.framework/*';
     const execute = require('./node_requires/execute');
     const frameworkDir = path.dirname((await globby([glob]))[0]);
-    
+
     console.log('fixing symlinks at', frameworkDir);
-    
+
     execute(async ({exec}) => {
         await exec(`
-            cd "$(find "${frameworkDir}" -name "nwjs Framework.framework")"
+            cd "${frameworkDir}"
             rm "Versions/Current" && ln -s "./A" "./Versions/Current"
             rm "Helpers" && ln -s "./Versions/Current/Helpers"
             rm "Internet Plug-Ins" && ln -s "./Versions/Current/Internet Plug-Ins"
@@ -309,15 +311,60 @@ const examples = () => {
     return Promise.all(promises);
 };
 
+// eslint-disable-next-line valid-jsdoc
+/**
+ * @see https://stackoverflow.com/a/22907134
+ */
+const patronsCache = done => {
+    const http = require('https');
+
+    const dest = './app/data/patronsCache.csv',
+          src = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUMd6nvY0if8MuVDm5-zMfAxWCSWpUzOc81SehmBVZ6mytFkoB3y9i9WlUufhIMteMDc00O9EqifI3/pub?output=csv';
+    const file = fs.createWriteStream(dest);
+    http.get(src, function(response) {
+        response.pipe(file);
+        file.on('finish', function() {
+            file.close(() => done()); // close() is async, call cb after close completes.
+        });
+    })
+    .on('error', function(err) { // Handle errors
+        fs.unlink(dest); // Delete the file async. (But we don't check the result)
+        done(err);
+    });
+};
+
+let zipPackages;
+if ((/^win/).test(process.platform)) {
+    const zipsForAllPlatforms = platforms.map(platform => () =>
+        gulp.src(`./build/ctjs - v${pack.version}/${platform}/**`)
+        .pipe(zip(`ct.js v${pack.version} for ${platform}.zip`))
+        .pipe(gulp.dest(`./build/ctjs - v${pack.version}/`))
+    );
+    zipPackages = gulp.parallel(zipsForAllPlatforms);
+} else {
+    const execute = require('./node_requires/execute');
+    zipPackages = () => Promise.all(platforms.map(platform =>
+        // `r` for dirs,
+        // `q` for preventing spamming to stdout,
+        // and `y` for preserving symlinks
+        execute(({exec}) => exec(`
+            cd "./build/ctjs - v${pack.version}/"
+            zip -rqy "ct.js v${pack.version} for ${platform}.zip" "./${platform}"
+        `))
+    ));
+}
+
 const packages = gulp.series([
     lint,
     abortOnWindows,
     build,
     docs,
+    patronsCache,
     nwPackages,
     fixSymlinks,
     fixPermissions,
-    examples
+    examples,
+    zipPackages
 ]);
 
 const deployOnly = () => {
@@ -341,6 +388,7 @@ const defaultTask = gulp.series(build, launchDevMode);
 
 exports.lint = lint;
 exports.packages = packages;
+exports.patronsCache = patronsCache;
 exports.docs = docs;
 exports.build = build;
 exports.deploy = deploy;

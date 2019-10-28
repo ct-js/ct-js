@@ -27,6 +27,9 @@
             } else {
                 super([PIXI.Texture.EMPTY]);
             }
+            // it is defined in main.js
+            // eslint-disable-next-line no-undef
+            this[copyTypeSymbol] = true;
             if (exts) {
                 ct.u.ext(this, exts);
                 if (exts.tx) {
@@ -144,9 +147,6 @@
             this.hspeed += spd * Math.cos(dir*Math.PI/-180);
             this.vspeed += spd * Math.sin(dir*Math.PI/-180);
         }
-        static draw() {
-            console.warn('this.draw() call is not used in ct.js 1.0 and above, as all objects are now rendered by default. Please use this.visible to hide objects.');
-        }
     }
     class Background extends PIXI.TilingSprite {
         constructor(bgName, frame, depth, exts) {
@@ -161,6 +161,7 @@
             }
             super(ct.res.getTexture(bgName, frame || 0), width, height);
             ct.types.list.BACKGROUND.push(this);
+            this.anchor.x = this.anchor.y = 0;
             this.depth = depth;
             this.shiftX = this.shiftY = this.movementX = this.movementY = 0;
             this.parallaxX = this.parallaxY = 1;
@@ -189,7 +190,7 @@
                 this.x = ct.room.x;
                 this.tilePosition.x = -this.x*this.parallaxX + this.shiftX;
             } else {
-                this.y = this.shiftX + ct.room.x * (this.parallaxX - 1);
+                this.x = this.shiftX + ct.room.x * (this.parallaxX - 1);
             }
         }
         static onCreate() {
@@ -208,6 +209,7 @@
             for (let i = 0, l = data.tiles.length; i < l; i++) {
                 const textures = ct.res.getTexture(data.tiles[i].texture);
                 const sprite = new PIXI.Sprite(textures[data.tiles[i].frame]);
+                sprite.anchor.x = sprite.anchor.y = 0;
                 this.addChild(sprite);
                 sprite.x = data.tiles[i].x;
                 sprite.y = data.tiles[i].y;

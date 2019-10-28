@@ -1,15 +1,17 @@
 main-menu.flexcol
     nav.nogrow.flexrow(if="{window.currentProject}")
         ul#fullscreen.nav
-            li(onclick="{toggleFullscreen}" title="{voc.min}")
+            li.nbr(onclick="{toggleFullscreen}" title="{voc.min}")
                 i(class="icon-{fullscreen? 'minimize-2' : 'maximize-2'}")
 
         ul#app.nav.tabs
             li.it30#ctlogo(onclick="{ctClick}" title="{voc.ctIDE}")
                 i.icon-menu
+            li.it30(onclick="{changeTab('patrons')}" title="{voc.patrons}" class="{active: tab === 'patrons'}")
+                i.icon-heart
             li.it30(onclick="{saveProject}" title="{voc.save}")
                 i.icon-save
-            li.it30(onclick="{runProject}" title="{voc.launch}")
+            li.nbr.it30(onclick="{runProject}" title="{voc.launch}")
                 i.icon-play
 
         ul#mainnav.nav.tabs
@@ -43,6 +45,7 @@ main-menu.flexcol
         types-panel(show="{tab === 'types'}")
         rooms-panel(show="{tab === 'rooms'}")
         license-panel(if="{showLicense}")
+        patreon-screen(if="{tab === 'patrons'}")
         export-panel(show="{showExporter}")
     script.
         const fs = require('fs-extra'),
@@ -245,6 +248,12 @@ main-menu.flexcol
             click: this.saveProject
         }));
         catMenu.append(new gui.MenuItem({
+            label: this.voc.openIncludeFolder,
+            click: e => {
+                nw.Shell.openItem(path.join(sessionStorage.projdir, '/include'));
+            }
+        }))
+        catMenu.append(new gui.MenuItem({
             label: this.voc.zipProject,
             click: this.zipProject
         }));
@@ -258,6 +267,9 @@ main-menu.flexcol
                 this.showExporter = true;
                 this.update();
             }
+        }));
+        catMenu.append(new gui.MenuItem({
+            type: 'separator'
         }));
         catMenu.append(new gui.MenuItem({
             label: window.languageJSON.menu.startScreen,
@@ -315,6 +327,66 @@ main-menu.flexcol
         };
         localStorage.UItheme = localStorage.UItheme || 'Day';
 
+        var fontSubmenu = new nw.Menu();
+        fontSubmenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeFontDefault,
+            click: () => {
+                localStorage.fontFamily = '';
+                window.signals.trigger('codeFontUpdated');
+            }
+        }));
+        fontSubmenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeFontOldSchool,
+            click: () => {
+                localStorage.fontFamily = 'Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace';
+                window.signals.trigger('codeFontUpdated');
+            }
+        }));
+        fontSubmenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeFontSystem,
+            click: () => {
+                localStorage.fontFamily = 'monospace';
+                window.signals.trigger('codeFontUpdated');
+            }
+        }));
+        fontSubmenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeFontCustom,
+            click: () => {
+                alertify
+                .defaultValue(localStorage.fontFamily || '')
+                .prompt(window.languageJSON.menu.newFont)
+                .then(e => {
+                    if (e.inputValue && e.buttonClicked !== 'cancel') {
+                        localStorage.fontFamily = `"${e.inputValue}", monospace`;
+                    }
+                    window.signals.trigger('codeFontUpdated');
+                });
+            }
+        }));
+        fontSubmenu.append(new gui.MenuItem({type: 'separator'}));
+        fontSubmenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeLigatures,
+            type: 'checkbox',
+            checked: localStorage.codeLigatures !== 'off',
+            click: () => {
+                localStorage.codeLigatures = localStorage.codeLigatures === 'off'? 'on' : 'off';
+                window.signals.trigger('codeFontUpdated');
+            }
+        }));
+        fontSubmenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeDense,
+            type: 'checkbox',
+            checked: localStorage.codeDense === 'on',
+            click: () => {
+                localStorage.codeDense = localStorage.codeDense === 'off'? 'on' : 'off';
+                window.signals.trigger('codeFontUpdated');
+            }
+        }));
+
+        catMenu.append(new gui.MenuItem({
+            label: window.languageJSON.menu.codeFont,
+            submenu: fontSubmenu
+        }));
 
         catMenu.append(new gui.MenuItem({type: 'separator'}));
 
@@ -337,12 +409,14 @@ main-menu.flexcol
                 this.update();
             }
         }));
+
         catMenu.append(new gui.MenuItem({
             label: window.languageJSON.common.donate,
             click: function () {
                 gui.Shell.openExternal('https://www.patreon.com/comigo');
             }
         }));
+
         catMenu.append(new gui.MenuItem({type: 'separator'}));
         catMenu.append(new gui.MenuItem({
             label: window.languageJSON.common.exit,
@@ -358,12 +432,10 @@ main-menu.flexcol
         }));
 
         this.switchLanguage = filename => {
+            const i18n = require('./data/node_requires/i18n.js');
             const {extend} = require('./data/node_requires/objectUtils');
             try {
-                const vocDefault = fs.readJSONSync('./data/i18n/English.json');
-                const voc = fs.readJSONSync(`./data/i18n/${filename}.json`);
-                console.log(`Loaded a language file ${filename}.json`);
-                window.languageJSON = extend(vocDefault, voc);
+                window.languageJSON = i18n.loadLanguage(filename);
                 localStorage.appLanguage = filename;
                 window.signals.trigger('updateLocales');
                 window.riot.update();
@@ -377,7 +449,13 @@ main-menu.flexcol
         fs.readdir('./data/i18n/')
         .then(files => {
             files.forEach(filename => {
+                if (path.extname(filename) !== '.json') {
+                    return;
+                }
                 var file = filename.slice(0, -5);
+                if (file === 'Comments') {
+                    return;
+                }
                 languageSubmenu.append(new nw.MenuItem({
                     label: file,
                     click: function() {
@@ -391,7 +469,7 @@ main-menu.flexcol
             languageSubmenu.append(new nw.MenuItem({
                 label: window.languageJSON.common.translateToYourLanguage,
                 click: function() {
-                    gui.Shell.openExternal('https://translate.zanata.org/iteration/view/ct-js/v1/documents?docId=English.json&dswid=8629');
+                    gui.Shell.openExternal('https://github.com/ct-js/ct-js/tree/develop/app/data/i18n');
                 }
             }));
         })
