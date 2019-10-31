@@ -272,7 +272,6 @@ modules-panel.panel.view
             .pipe(unzipper.Parse())
             .on('entry', async (entry) => {
                 const fileName = entry.path.toLowerCase();
-                const type = entry.type; // 'Directory' or 'File'
                 if (fileName === "module.json" ||
                     fileName.endsWith("module.json")) {
                     // okay, we consumes the entry by buffering the contents into memory.
@@ -304,12 +303,13 @@ modules-panel.panel.view
                             entry.path = `${moduleName}/${filePath}`;
                         }
                         entry.path =  path.join(libsDir, entry.path);
+                         // 'Directory' or 'File'
                         if (entry.type === 'Directory') {
                             await fs.ensureDir(entry.path);
                         } else {
                             const fileName = entry.path.toLowerCase();
                             if (fileName.endsWith("module.json")) {
-                                const content = entry.tmpContent;//await entry.buffer();
+                                const content = entry.tmpContent;
                                 await fs.writeFile(entry.path, content);
                             } else {
                                 entry.pipe(fs.createWriteStream(entry.path))
