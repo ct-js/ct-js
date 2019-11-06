@@ -264,7 +264,7 @@ modules-panel.panel.view
             if (value.length === 0) {
                 return;
             }
-            e.target.value = "";
+            e.target.value = '';
             let parentName = null;
             let moduleName = null;
             const entries = [];
@@ -272,12 +272,11 @@ modules-panel.panel.view
             .pipe(unzipper.Parse())
             .on('entry', async (entry) => {
                 const fileName = entry.path.toLowerCase();
-                if (fileName === "module.json" ||
-                    fileName.endsWith("module.json")) {
+                if (path.basename(fileName) === 'module.json') {
                     // okay, we consumes the entry by buffering the contents into memory.
                     const content = entry.tmpContent = await entry.buffer();
                     const json = JSON.parse(content.toString());
-                    moduleName = json.main.name;
+                    moduleName = json.main.packageName || path.basename(value, '.zip');
                     const indexOf = fileName.indexOf('/');
                     if (indexOf !== -1) {
                         parentName = fileName.substring(0, indexOf);
