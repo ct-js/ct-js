@@ -397,6 +397,7 @@ const killRecursive = copy => {
         }
     }
 };
+ /*eslint complexity: ["error", 21]*/
 ct.loop = function(delta) {
     ct.delta = delta;
     ct.inputs.updateActions();
@@ -409,6 +410,13 @@ ct.loop = function(delta) {
     ct.rooms.beforeStep.apply(ct.room);
     ct.room.onStep.apply(ct.room);
     ct.rooms.afterStep.apply(ct.room);
+    // rooms
+    const roomsTemp = ct.room.rooms;
+    for (const room of roomsTemp) {
+        ct.rooms.beforeStep.apply(room);
+        room.onStep.apply(room);
+        ct.rooms.afterStep.apply(room);
+    }
     // copies
     for (let i = 0; i < ct.stack.length; i++) {
         // eslint-disable-next-line no-underscore-dangle

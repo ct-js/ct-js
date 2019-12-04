@@ -8,6 +8,8 @@
             this.follow = this.borderX = this.borderY = this.followShiftX = this.followShiftY = this.followDrift = 0;
             this.tileLayers = [];
             this.backgrounds = [];
+            this.copies = [];
+            this.rooms = [];
             if (!ct.room) {
                 ct.room = ct.rooms.current = this;
             }
@@ -30,10 +32,11 @@
                     this.addChild(tl);
                 }
                 for (let i = 0, li = template.objects.length; i < li; i++) {
-                    ct.types.make(template.objects[i].type, template.objects[i].x, template.objects[i].y, {
+                    const copy = ct.types.make(template.objects[i].type, template.objects[i].x, template.objects[i].y, {
                         tx: template.objects[i].tx,
                         ty: template.objects[i].ty
                     }, this);
+                    this.copies.push(copy);
                 }
             }
             return this;
@@ -85,6 +88,10 @@
         clear() {
             ct.stage.children = [];
             ct.stack = [];
+            // eslint-disable-next-line no-underscore-dangle
+            ct.rooms._prepend = [];
+            // eslint-disable-next-line no-underscore-dangle
+            ct.rooms._append = [];
             for (var i in ct.types.list) {
                 ct.types.list[i] = [];
             }
@@ -102,6 +109,9 @@
             }            
         },
         switching: false,
+        /* eslint-disable */
+        _append: [],
+        _prepend: [],
         /**
          * Loads a given room and adds it to the stage. Useful for embedding prefabs and UI screens.
          * @param  {string} roomName The name of a room to add to the stage
@@ -109,9 +119,50 @@
          */
         load(roomName) {
             const room = new Room(ct.rooms.templates[roomName]);
-            ct.stage.addChild(ct.room);
+            ct.stage.addChild(room);
+            ct.room.rooms.push(room);
             return room;
         },
+        append(roomName) {
+            // that returns a newly created room. This room is added to ct.stage after all the other rooms
+            const room = new Room(ct.rooms.templates[roomName]);
+            ct.rooms._append.push(room);
+            return room;
+        },
+        prepend(roomName) {
+            // that returns a newly created room. This room is added to ct.stage before all the other rooms
+            const room = new Room(ct.rooms.templates[roomName]);
+            ct.rooms._prepend.push(room);
+            return room;
+        },
+        /**
+         * Attachs rooms from prepend and append methods, respectively.
+         */
+        done() {
+            const prepend = ct.rooms._prepend;
+            const append = ct.rooms._append;
+            // added to ct.stage before all the other rooms
+            for(let room of prepend) {
+                ct.stage.addChild(room);
+                ct.room.rooms.push(room);
+            }
+            // added to ct.stage after all the other rooms
+            for(let room of append) {
+                ct.stage.addChild(room);
+                ct.room.rooms.push(room);
+            }
+        },
+        merge(roomName) {
+            // that returns an array of created copies, backgrounds, tile layers, 
+            // and these all are added to the current room, ct.room
+            /**
+             * @type {Room}
+             */
+            const room = ct.rooms.load(roomName);
+            ct.room.rooms.push(room);
+            return room.backgrounds.concat(room.tileLayers, room.copies);
+        },
+        /* eslint-enable */
         forceSwitch(roomName) {
             if (nextRoom) {
                 roomName = nextRoom;
