@@ -397,7 +397,6 @@ const killRecursive = copy => {
         }
     }
 };
- /*eslint complexity: ["error", 21]*/
 ct.loop = function(delta) {
     ct.delta = delta;
     ct.inputs.updateActions();
@@ -406,16 +405,15 @@ ct.loop = function(delta) {
         ct.stack[i].onStep.apply(ct.stack[i]);
         ct.types.afterStep.apply(ct.stack[i]);
     }
-
-    ct.rooms.beforeStep.apply(ct.room);
-    ct.room.onStep.apply(ct.room);
-    ct.rooms.afterStep.apply(ct.room);
-    // rooms
-    const roomsTemp = ct.room.rooms;
-    for (const room of roomsTemp) {
-        ct.rooms.beforeStep.apply(room);
-        room.onStep.apply(room);
-        ct.rooms.afterStep.apply(room);
+    // There may be a number of rooms stacked on top of each other.
+    // Loop through them and filter out everything that is not a room.
+    for (const item of ct.stage) {
+        if (!(item instanceof Room)) {
+            continue;
+        }
+        ct.rooms.beforeStep.apply(item);
+        item.onStep.apply(item);
+        ct.rooms.afterStep.apply(item);
     }
     // copies
     for (let i = 0; i < ct.stack.length; i++) {
@@ -479,9 +477,7 @@ ct.loop = function(delta) {
     r.x = Math.round(r.x);
     r.y = Math.round(r.y);
 
-    // console.log("loop")
     for (let i = 0, li = ct.stack.length; i < li; i++) {
-        // console.log(ct.stack[i].type);
         ct.types.beforeDraw.apply(ct.stack[i]);
         ct.stack[i].onDraw.apply(ct.stack[i]);
         ct.types.afterDraw.apply(ct.stack[i]);
