@@ -184,7 +184,6 @@
             }
             return generateRoomChildren(ct.rooms.templates[roomName], ct.room);
         },
-        /* eslint-enable */
         forceSwitch(roomName) {
             if (nextRoom) {
                 roomName = nextRoom;
