@@ -1,5 +1,43 @@
 (function () {
-    /* global deadPool */
+    /**
+     * We can generate copies, tiles and backgrounds inside another room in form of "merging".
+     * Let's move this logic out to a separate method.
+     *
+     * @param {object} template The template of a room as it was exported from ct.IDE
+     * @param {PIXI.DisplayObject} target The container that should contain the created items
+     * @returns {Array<Copy|Background|Tileset>} An array of created copies, backgrounds, tile layers,
+     * added to the current room (`ct.room`). Note: it does not get updated, so beware of memory leaks
+     * if you keep a reference to this array for a long time!
+     */
+    const generateRoomChildren = (template, target) => {
+        const generated = {
+            copies: [],
+            tileLayers: [],
+            backgrounds: []
+        };
+        for (const t of template.bgs) {
+            const bg = new ct.types.Background(t.texture, null, t.depth, t.extends);
+            target.backgrounds.push(bg);
+            ct.stack.push(bg);
+            target.addChild(bg);
+            generated.backgrounds.push(bg);
+        }
+        for (const t of template.tiles) {
+            const tl = ct.rooms.addTileLayer(t);
+            target.tileLayers.push(tl);
+            target.addChild(tl);
+            generated.tileLayers.push(tl);
+        }
+        for (const t of template.objects) {
+            const c = ct.types.make(t.type, t.x, t.y, {
+                tx: t.tx || 1,
+                ty: t.ty || 1
+            }, target);
+            generated.copies.push(c);
+        }
+        return generated;
+    };
+     /* global deadPool */
     class Room extends PIXI.Container {
         constructor(template) {
             super();
@@ -8,8 +46,6 @@
             this.follow = this.borderX = this.borderY = this.followShiftX = this.followShiftY = this.followDrift = 0;
             this.tileLayers = [];
             this.backgrounds = [];
-            this.copies = [];
-            this.rooms = [];
             if (!ct.room) {
                 ct.room = ct.rooms.current = this;
             }
@@ -20,24 +56,7 @@
                 this.onLeave = template.onLeave;
                 this.template = template;
                 this.name = template.name;
-                for (let i = 0, li = template.bgs.length; i < li; i++) {
-                    const bg = new ct.types.Background(template.bgs[i].texture, null, template.bgs[i].depth, template.bgs[i].extends);
-                    this.backgrounds.push(bg);
-                    ct.stack.push(bg);
-                    this.addChild(bg);
-                }
-                for (let i = 0, li = template.tiles.length; i < li; i++) {
-                    const tl = ct.rooms.addTileLayer(template.tiles[i]);
-                    this.tileLayers.push(tl);
-                    this.addChild(tl);
-                }
-                for (let i = 0, li = template.objects.length; i < li; i++) {
-                    const copy = ct.types.make(template.objects[i].type, template.objects[i].x, template.objects[i].y, {
-                        tx: template.objects[i].tx,
-                        ty: template.objects[i].ty
-                    }, this);
-                    this.copies.push(copy);
-                }
+                generateRoomChildren(this, this);
             }
             return this;
         }
@@ -82,16 +101,13 @@
             return new ct.types.Tileset(layer);
         },
         /**
-         * Clears the current room
-         * @return {void}
+         * Clears the current stage, removing all rooms with copies, tile layers, backgrounds,
+         * and other potential entities.
+         * @returns {void}
          */
         clear() {
             ct.stage.children = [];
             ct.stack = [];
-            // eslint-disable-next-line no-underscore-dangle
-            ct.rooms._prepend = [];
-            // eslint-disable-next-line no-underscore-dangle
-            ct.rooms._append = [];
             for (var i in ct.types.list) {
                 ct.types.list[i] = [];
             }
@@ -100,18 +116,15 @@
          * Switches to the given room. Note that this transition happens at the end
          * of the frame, so the name of a new room may be overridden.
          */
-        'switch'(room) {
-            if (ct.rooms.templates[room]){
-                nextRoom = room;
+        'switch'(roomName) {
+            if (ct.rooms.templates[roomName]) {
+                nextRoom = roomName;
                 ct.rooms.switching = true;
             } else {
-                console.error('[ct.rooms] The room "' + room + '" does not exist!');
-            }            
+                console.error(`[ct.rooms] switch failed: The room ${roomName} does not exist!`);
+            }
         },
         switching: false,
-        /* eslint-disable */
-        _append: [],
-        _prepend: [],
         /**
          * Loads a given room and adds it to the stage. Useful for embedding prefabs and UI screens.
          * @param  {string} roomName The name of a room to add to the stage
@@ -123,44 +136,46 @@
             ct.room.rooms.push(room);
             return room;
         },
+        /**
+         * Creates a new room and adds it to the stage, separating its draw stack from existing ones.
+         * This room is added to `ct.stage` after all the other rooms.
+         * @param {string} roomName The name of the room to be appended
+         * @returns {Room} A newly created room
+         */
         append(roomName) {
-            // that returns a newly created room. This room is added to ct.stage after all the other rooms
+            if (!(roomName in ct.rooms.templates)) {
+                console.error(`[ct.rooms] append failed: the room ${roomName} does not exist!`);
+                return false;
+            }
             const room = new Room(ct.rooms.templates[roomName]);
-            ct.rooms._append.push(room);
-            return room;
-        },
-        prepend(roomName) {
-            // that returns a newly created room. This room is added to ct.stage before all the other rooms
-            const room = new Room(ct.rooms.templates[roomName]);
-            ct.rooms._prepend.push(room);
+            ct.stage.addChild(room);
             return room;
         },
         /**
-         * Attachs rooms from prepend and append methods, respectively.
+         * Creates a new room and adds it to the stage, separating its draw stack from existing ones.
+         * This room is added to `ct.stage` before all the other rooms.
+         * @param {string} roomName The name of the room to be prepended
+         * @returns {Room} A newly created room
          */
-        done() {
-            const prepend = ct.rooms._prepend;
-            const append = ct.rooms._append;
-            // added to ct.stage before all the other rooms
-            for(let room of prepend) {
-                ct.stage.addChild(room);
-                ct.room.rooms.push(room);
+        prepend(roomName) {
+            if (!(roomName in ct.rooms.templates)) {
+                console.error(`[ct.rooms] prepend failed: the room ${roomName} does not exist!`);
+                return false;
             }
-            // added to ct.stage after all the other rooms
-            for(let room of append) {
-                ct.stage.addChild(room);
-                ct.room.rooms.push(room);
-            }
+            const room = new Room(ct.rooms.templates[roomName]);
+            ct.stage.addChildAt(room, 0);
+            return room;
         },
+        /**
+         * Merges a given room into the current one.
+         *
+         * @param {string} roomName The name of the room that needs to be merged
+         * @returns {Array<Copy|Background|Tileset>} An array of created copies, backgrounds, tile layers,
+         * added to the current room (`ct.room`). Note: it does not get updated, so beware of memory leaks
+         * if you keep a reference to this array for a long time!
+         */
         merge(roomName) {
-            // that returns an array of created copies, backgrounds, tile layers, 
-            // and these all are added to the current room, ct.room
-            /**
-             * @type {Room}
-             */
-            const room = ct.rooms.load(roomName);
-            ct.room.rooms.push(room);
-            return room.backgrounds.concat(room.tileLayers, room.copies);
+            return generateRoomChildren(ct.rooms.templates[roomName], ct.room);
         },
         /* eslint-enable */
         forceSwitch(roomName) {
