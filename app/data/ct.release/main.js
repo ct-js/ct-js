@@ -407,13 +407,15 @@ ct.loop = function(delta) {
     }
     // There may be a number of rooms stacked on top of each other.
     // Loop through them and filter out everything that is not a room.
-    for (const item of ct.stage) {
-        if (!(item instanceof Room)) {
+    for (const item of ct.stage.children) {
+        // the Room class is not visible, so we have to access it in another way.
+        if (!(item.constructor.name === 'Room')) {
             continue;
         }
         ct.rooms.beforeStep.apply(item);
         item.onStep.apply(item);
         ct.rooms.afterStep.apply(item);
+        //*/
     }
     // copies
     for (let i = 0; i < ct.stack.length; i++) {

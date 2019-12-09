@@ -56,7 +56,7 @@
                 this.onLeave = template.onLeave;
                 this.template = template;
                 this.name = template.name;
-                generateRoomChildren(this, this);
+                generateRoomChildren(this.template, this);
             }
             return this;
         }
@@ -131,9 +131,12 @@
          * @returns {Room} The newly created room
          */
         load(roomName) {
+            if (!(roomName in ct.rooms.templates)) {
+                console.error(`[ct.rooms] load failed: the room ${roomName} does not exist!`);
+                return false;
+            }
             const room = new Room(ct.rooms.templates[roomName]);
             ct.stage.addChild(room);
-            ct.room.rooms.push(room);
             return room;
         },
         /**
@@ -175,6 +178,10 @@
          * if you keep a reference to this array for a long time!
          */
         merge(roomName) {
+            if (!(roomName in ct.rooms.templates)) {
+                console.error(`[ct.rooms] merge failed: the room ${roomName} does not exist!`);
+                return false;
+            }
             return generateRoomChildren(ct.rooms.templates[roomName], ct.room);
         },
         /* eslint-enable */
