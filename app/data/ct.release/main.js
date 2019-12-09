@@ -415,7 +415,6 @@ ct.loop = function(delta) {
         ct.rooms.beforeStep.apply(item);
         item.onStep.apply(item);
         ct.rooms.afterStep.apply(item);
-        //*/
     }
     // copies
     for (let i = 0; i < ct.stack.length; i++) {
