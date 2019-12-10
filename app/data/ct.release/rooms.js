@@ -1,64 +1,3 @@
-<<<<<<< HEAD
-(function () {
-    /**
-     * We can generate copies, tiles and backgrounds inside another room in form of "merging".
-     * Let's move this logic out to a separate method.
-     *
-     * @param {object} template The template of a room as it was exported from ct.IDE
-     * @param {PIXI.DisplayObject} target The container that should contain the created items
-     * @returns {Array<Copy|Background|Tileset>} An array of created copies, backgrounds, tile layers,
-     * added to the current room (`ct.room`). Note: it does not get updated, so beware of memory leaks
-     * if you keep a reference to this array for a long time!
-     */
-    const generateRoomChildren = (template, target) => {
-        const generated = {
-            copies: [],
-            tileLayers: [],
-            backgrounds: []
-        };
-        for (const t of template.bgs) {
-            const bg = new ct.types.Background(t.texture, null, t.depth, t.extends);
-            target.backgrounds.push(bg);
-            ct.stack.push(bg);
-            target.addChild(bg);
-            generated.backgrounds.push(bg);
-        }
-        for (const t of template.tiles) {
-            const tl = ct.rooms.addTileLayer(t);
-            target.tileLayers.push(tl);
-            target.addChild(tl);
-            generated.tileLayers.push(tl);
-        }
-        for (const t of template.objects) {
-            const c = ct.types.make(t.type, t.x, t.y, {
-                tx: t.tx || 1,
-                ty: t.ty || 1
-            }, target);
-            generated.copies.push(c);
-        }
-        return generated;
-    };
-     /* global deadPool */
-    class Room extends PIXI.Container {
-        constructor(template) {
-            super();
-            this.x = this.y = 0;
-            this.uid = 0;
-            this.follow = this.borderX = this.borderY = this.followShiftX = this.followShiftY = this.followDrift = 0;
-            this.tileLayers = [];
-            this.backgrounds = [];
-            if (!ct.room) {
-                ct.room = ct.rooms.current = this;
-            }
-            if (template) {
-                this.onCreate = template.onCreate;
-                this.onStep = template.onStep;
-                this.onDraw = template.onDraw;
-                this.onLeave = template.onLeave;
-                this.template = template;
-                this.name = template.name;
-                generateRoomChildren(this.template, this);
-=======
 class Room extends PIXI.Container {
     constructor(template) {
         super();
@@ -93,7 +32,6 @@ class Room extends PIXI.Container {
                     tx: template.objects[i].tx,
                     ty: template.objects[i].ty
                 }, this);
->>>>>>> upstream/develop
             }
         }
         return this;
@@ -161,11 +99,7 @@ class Room extends PIXI.Container {
                 nextRoom = roomName;
                 ct.rooms.switching = true;
             } else {
-<<<<<<< HEAD
-                console.error(`[ct.rooms] switch failed: The room ${roomName} does not exist!`);
-=======
-                console.error('[ct.rooms] The room "' + room + '" does not exist!');
->>>>>>> upstream/develop
+                console.error('[ct.rooms] The room "' + roomName + '" does not exist!');
             }
         },
         switching: false,
@@ -226,7 +160,35 @@ class Room extends PIXI.Container {
                 console.error(`[ct.rooms] merge failed: the room ${roomName} does not exist!`);
                 return false;
             }
-            return generateRoomChildren(ct.rooms.templates[roomName], ct.room);
+
+            const generated = {
+                copies: [],
+                tileLayers: [],
+                backgrounds: []
+            };
+            const template = ct.rooms.templates[roomName], 
+            target = ct.room;
+            for (const t of template.bgs) {
+                const bg = new ct.types.Background(t.texture, null, t.depth, t.extends);
+                target.backgrounds.push(bg);
+                ct.stack.push(bg);
+                target.addChild(bg);
+                generated.backgrounds.push(bg);
+            }
+            for (const t of template.tiles) {
+                const tl = ct.rooms.addTileLayer(t);
+                target.tileLayers.push(tl);
+                target.addChild(tl);
+                generated.tileLayers.push(tl);
+            }
+            for (const t of template.objects) {
+                const c = ct.types.make(t.type, t.x, t.y, {
+                    tx: t.tx || 1,
+                    ty: t.ty || 1
+                }, target);
+                generated.copies.push(c);
+            }
+            return generated;
         },
         forceSwitch(roomName) {
             if (nextRoom) {
