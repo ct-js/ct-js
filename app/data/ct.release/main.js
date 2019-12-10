@@ -446,7 +446,6 @@ ct.u.ext(ct.u, {// make aliases
         // There may be a number of rooms stacked on top of each other.
         // Loop through them and filter out everything that is not a room.
         for (const item of ct.stage.children) {
-            // the Room class is not visible, so we have to access it in another way.
             if (!(item instanceof Room)) {
                 continue;
             }
@@ -491,9 +490,14 @@ ct.u.ext(ct.u, {// make aliases
             ct.stack[i].yprev = ct.stack[i].y;
         }
 
-        ct.rooms.beforeDraw.apply(ct.room);
-        ct.room.onDraw.apply(ct.room);
-        ct.rooms.afterDraw.apply(ct.room);
+        for (const item of ct.stage.children) {
+            if (!(item instanceof Room)) {
+                continue;
+            }
+            ct.rooms.beforeDraw.apply(item);
+            item.onDraw.apply(item);
+            ct.rooms.afterDraw.apply(item);
+        }
 
         ct.main.fpstick++;
         if (ct.rooms.switching) {
