@@ -1,7 +1,11 @@
 {
     "globals": {
         "ct": false,
-        "PIXI": false
+        "PIXI": false,
+        "Room": false,
+        "Background": false,
+        "Tileset": false,
+        "Copy": false
     },
     "rules": {
         "prefer-destructuring": "off"
