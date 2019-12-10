@@ -409,7 +409,7 @@ ct.loop = function(delta) {
     // Loop through them and filter out everything that is not a room.
     for (const item of ct.stage.children) {
         // the Room class is not visible, so we have to access it in another way.
-        if (!(item.constructor.name === 'Room')) {
+        if (!(item instanceof Room)) {
             continue;
         }
         ct.rooms.beforeStep.apply(item);
