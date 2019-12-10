@@ -116,6 +116,8 @@ class Room extends PIXI.Container {
             }
             const room = new Room(ct.rooms.templates[roomName]);
             ct.stage.addChild(room);
+            room.onCreate();
+            ct.rooms.onCreate.apply(room);
             return room;
         },
         /**
@@ -131,10 +133,12 @@ class Room extends PIXI.Container {
             }
             const room = new Room(ct.rooms.templates[roomName]);
             ct.stage.addChildAt(room, 0);
+            room.onCreate();
+            ct.rooms.onCreate.apply(room);
             return room;
         },
         /**
-         * Merges a given room into the current one.
+         * Merges a given room into the current one. Skips room's OnCreate event.
          *
          * @param {string} roomName The name of the room that needs to be merged
          * @returns {Array<Copy|Background|Tileset>} An array of created copies, backgrounds, tile layers,
