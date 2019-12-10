@@ -160,14 +160,13 @@ class Room extends PIXI.Container {
                 console.error(`[ct.rooms] merge failed: the room ${roomName} does not exist!`);
                 return false;
             }
-
             const generated = {
                 copies: [],
                 tileLayers: [],
                 backgrounds: []
             };
-            const template = ct.rooms.templates[roomName], 
-            target = ct.room;
+            const template = ct.rooms.templates[roomName];
+            const target = ct.room;
             for (const t of template.bgs) {
                 const bg = new ct.types.Background(t.texture, null, t.depth, t.extends);
                 target.backgrounds.push(bg);
