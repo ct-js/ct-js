@@ -195,11 +195,11 @@ class Room extends PIXI.Container {
             ct.viewHeight = ct.roomHeight = template.height;
             ct.pixiApp.renderer.resize(template.width, template.height);
             ct.rooms.current = ct.room = new Room(template);
+            ct.stage.addChild(ct.room);
             ct.room.onCreate();
             ct.rooms.onCreate.apply(ct.room);
             /*%switch%*/
             ct.rooms.switching = false;
-            ct.stage.addChild(ct.room);
             nextRoom = void 0;
         },
         onCreate() {
