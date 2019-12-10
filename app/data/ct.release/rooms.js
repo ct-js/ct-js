@@ -104,20 +104,6 @@ class Room extends PIXI.Container {
         },
         switching: false,
         /**
-         * Loads a given room and adds it to the stage. Useful for embedding prefabs and UI screens.
-         * @param  {string} roomName The name of a room to add to the stage
-         * @returns {Room} The newly created room
-         */
-        load(roomName) {
-            if (!(roomName in ct.rooms.templates)) {
-                console.error(`[ct.rooms] load failed: the room ${roomName} does not exist!`);
-                return false;
-            }
-            const room = new Room(ct.rooms.templates[roomName]);
-            ct.stage.addChild(room);
-            return room;
-        },
-        /**
          * Creates a new room and adds it to the stage, separating its draw stack from existing ones.
          * This room is added to `ct.stage` after all the other rooms.
          * @param {string} roomName The name of the room to be appended
