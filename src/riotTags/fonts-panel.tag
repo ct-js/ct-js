@@ -1,29 +1,34 @@
 fonts-panel.flexfix.tall.fifty
-    div.flexfix-header
+    asset-viewer(
+        collection="{currentProject.fonts}"
+        contextmenu="{onFontContextMenu}"
+        vocspace="fonts"
+        namespace="fonts"
+        click="{openFont}"
+        thumbnails="{thumbnails}"
+        names="{names}"
+        ref="fonts"
+        class="tall"
+    )
         h1 {voc.fonts}
-    .toleft
-        label.file.flexfix-header
-            input(type="file" multiple
-                accept=".ttf"
-                onchange="{fontImport}")
-            .button
-                i.icon.icon-import
-                span {voc.import}
-    .clear
-    ul.cards.flexfix-body
-        li(each="{font in (searchResults? searchResults : fonts)}"
-        onclick="{openFont(font)}"
-        oncontextmenu="{onFontContextMenu(font)}"
-        onlong-press="{onFontContextMenu(font)}")
-            span {font.typefaceName} {font.weight} {font.italic? voc.italic : ''}
-            img(src="file://{window.sessionStorage.projdir + '/fonts/' + font.origname}_prev.png?{font.lastmod}")
+        .toleft
+            label.file.flexfix-header
+                input(type="file" multiple
+                    accept=".ttf"
+                    onchange="{parent.fontImport}")
+                .button
+                    svg.feather
+                        use(xlink:href="data/icons.svg#download")
+                    span {voc.import}
     .aDropzone(if="{dropping}")
         .middleinner
-            i.icon-import
+            svg.feather
+                use(xlink:href="data/icons.svg#download")
             h2 {languageJSON.common.fastimport}
             input(type="file" multiple
                 accept=".ttf"
                 onchange="{fontImport}")
+    context-menu(menu="{fontMenu}" ref="fontMenu")
     font-editor(if="{editingFont}" fontobj="{editedFont}")
     script.
         this.editingFont = false;
@@ -32,17 +37,21 @@ fonts-panel.flexfix.tall.fifty
         this.namespace = 'fonts';
         this.mixin(window.riotVoc);
         const fs = require('fs-extra'),
-              path = require('path'),
-              gui = require('nw.gui');
+              path = require('path');
+
+        this.thumbnails = font => `file://${window.sessionStorage.projdir}/fonts/${font.origname}_prev.png?cache=${font.lastmod}`;
+        this.names = font => `${font.typefaceName} ${font.weight} ${font.italic? this.voc.italic : ''}`;
 
         this.setUpPanel = e => {
             window.currentProject.fonts = window.currentProject.fonts || [];
             this.fonts = window.currentProject.fonts;
             this.editingFont = false;
             this.editedFont = null;
+            this.refs.fonts.updateList();
             this.update();
         };
         window.signals.on('projectLoaded', this.setUpPanel);
+        this.on('mount', this.setUpPanel);
         this.on('unmount', () => {
             window.signals.off('projectLoaded', this.setUpPanel);
         });
@@ -53,72 +62,70 @@ fonts-panel.flexfix.tall.fifty
         };
 
         // Context menu for manipulating fonts with RMB
-        var fontMenu = new gui.Menu();
+        this.fontMenu = {
+            items: [{
+                label: window.languageJSON.common.open,
+                click: e => {
+                    this.editingFont = true;
+                    this.update();
+                }
+            }, {
+                label: languageJSON.common.copyName,
+                click: e => {
+                    const {clipboard} = require('electron');
+                    clipboard.writeText(this.editedFont.name);
+                }
+            }, {
+                label: window.languageJSON.common.rename,
+                click: () => {
+                    alertify
+                    .defaultValue(this.editedFont.typefaceName)
+                    .prompt(window.languageJSON.common.newname)
+                    .then(e => {
+                        if (e.inputValue !== '' && e.buttonClicked !== 'cancel') {
+                            this.editedFont.typefaceName = e.inputValue;
+                            this.refs.fonts.updateList();
+                            this.update();
+                        }
+                    });
+                }
+            }, {
+                type: 'separator'
+            }, {
+                label: window.languageJSON.common.delete,
+                click: () => {
+                    alertify
+                    .okBtn(window.languageJSON.common.delete)
+                    .cancelBtn(window.languageJSON.common.cancel)
+                    .confirm(window.languageJSON.common.confirmDelete.replace('{0}', `${this.editedFont.typefaceName} ${this.editedFont.weight} ${this.editedFont.italic? voc.italic : ''}`))
+                    .then(e => {
+                        if (e.buttonClicked === 'ok') {
+                            const ind = window.currentProject.fonts.indexOf(this.editedFont);
+                            window.currentProject.fonts.splice(ind, 1);
+                            this.refs.fonts.updateList();
+                            this.update();
+                            alertify
+                            .okBtn(window.languageJSON.common.ok)
+                            .cancelBtn(window.languageJSON.common.cancel);
+                        }
+                    });
+                }
+            }]
+        };
         this.onFontContextMenu = font => e => {
-            this.editedFont = e.item.font;
-            fontMenu.popup(e.clientX, e.clientY);
+            this.editedFont = font;
+            this.refs.fontMenu.popup(e.clientX, e.clientY);
             e.preventDefault();
         };
-        fontMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.open,
-            click: e => {
-                this.editingFont = true;
-                this.update();
-            }
-        }));
-        fontMenu.append(new gui.MenuItem({
-            label: languageJSON.common.copyName,
-            click: e => {
-                var clipboard = nw.Clipboard.get();
-                clipboard.set(this.editedFont.name, 'text');
-            }
-        }));
-        fontMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.rename,
-            click: () => {
-                alertify
-                .defaultValue(this.editedFont.name)
-                .prompt(window.languageJSON.common.newname)
-                .then(e => {
-                    if (e.inputValue !== '' && e.buttonClicked !== 'cancel') {
-                        this.editedFont.name = e.inputValue;
-                        this.update();
-                    }
-                });
-            }
-        }));
-        fontMenu.append(new gui.MenuItem({
-            type: 'separator'
-        }));
-        fontMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.delete,
-            click: () => {
-                alertify
-                .okBtn(window.languageJSON.common.delete)
-                .cancelBtn(window.languageJSON.common.cancel)
-                .confirm(window.languageJSON.common.confirmDelete.replace('{0}', `${this.editedFont.typefaceName} ${this.editedFont.weight} ${this.editedFont.italic? voc.italic : ''}`))
-                .then(e => {
-                    if (e.buttonClicked === 'ok') {
-                        const ind = window.currentProject.fonts.indexOf(this.editedFont);
-                        window.currentProject.fonts.splice(ind, 1);
-                        this.update();
-                        alertify
-                        .okBtn(window.languageJSON.common.ok)
-                        .cancelBtn(window.languageJSON.common.cancel);
-                    }
-                });
-            }
-        }));
 
         /**
          * The event of importing a font through a file manager
          */
         this.fontImport = e => { // e.target:input[type="file"]
             const generateGUID = require('./data/node_requires/generateGUID');
-            var i;
-            files = e.target.value.split(';');
+            const files = [...e.target.files].map(file => file.path);
             e.target.value = '';
-            for (i = 0; i < files.length; i++) {
+            for (let i = 0; i < files.length; i++) {
                 if (/\.ttf/gi.test(files[i])) {
                     let id = generateGUID();
                     this.loadFont(

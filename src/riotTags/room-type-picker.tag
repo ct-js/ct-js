@@ -7,7 +7,8 @@ room-type-picker.room-editor-TypeSwatches.tabbed.tall
         class="{active: opts.current === -1}"
     )
         span {voc.selectAndMove}
-        i.icon-move
+        svg.feather
+            use(xlink:href="data/icons.svg#move")
     .room-editor-aTypeSwatch(
         each="{type in (searchResults? searchResults : types)}"
         title="{type.name}"
@@ -15,7 +16,10 @@ room-type-picker.room-editor-TypeSwatches.tabbed.tall
         class="{active: parent.opts.current === type}"
     )
         span {type.name}
-        img(src="{type.texture === -1? '/data/img/notexture.png' : (glob.texturemap[type.texture].src.split('?')[0] + '_prev.png?' + getTypeTextureRevision(type))}")
+        img(
+            src="{type.texture === -1? 'data/img/notexture.png' : (glob.texturemap[type.texture].src.split('?')[0] + '_prev.png?' + getTypeTextureRevision(type))}"
+            draggable="false"
+        )
     .room-editor-aTypeSwatch.filler
     .room-editor-aTypeSwatch.filler
     .room-editor-aTypeSwatch.filler

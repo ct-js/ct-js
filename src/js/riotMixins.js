@@ -37,7 +37,17 @@
 
     var voc = tag => {
         const updateLocales = () => {
-            tag.voc = window.languageJSON[tag.namespace];
+            if (tag.namespace) {
+                const way = tag.namespace.split(/(?<!\\)\./gi);
+                for (let i = 0, l = way.length; i < l; i++) {
+                    way[i] = way[i].replace(/\\./g, '.');
+                }
+                let space = window.languageJSON;
+                for (const partial of way) {
+                    space = space[partial];
+                }
+                tag.voc = space;
+            }
             tag.vocGlob = window.languageJSON.common;
         };
         updateLocales();
@@ -49,6 +59,25 @@
     window.riotVoc = {
         init() {
             voc(this);
+        }
+    };
+
+    var niceTime = function(date) {
+        if (!(date instanceof Date)) {
+            date = new Date(date);
+        }
+        const today = new Date();
+        if (date.getDate() !== today.getDate() ||
+            date.getFullYear() !== today.getFullYear() ||
+            date.getMonth() !== today.getMonth()
+        ) {
+            return date.toLocaleDateString();
+        }
+        return date.toLocaleTimeString();
+    };
+    window.riotNiceTime = {
+        init() {
+            this.niceTime = niceTime;
         }
     };
 })();

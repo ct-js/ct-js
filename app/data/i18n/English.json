@@ -11,13 +11,13 @@
         "cancel": "Cancel",
         "cannotBeEmpty": "This cannot be empty",
         "confirmDelete": "Are you sure you want to delete {0}? It cannot be undone.",
-        "contribute": "Contribute 💻",
+        "contribute": "Contribute",
         "copy": "Copy",
         "copyName": "Copy the name",
         "ctsite": "ct.js homepage",
         "cut": "Cut",
         "delete": "Delete",
-        "donate": "Donate ❤️",
+        "donate": "Donate",
         "done": "Done!",
         "duplicate": "Duplicate",
         "exit": "Exit",
@@ -88,6 +88,7 @@
             "input": "Project's name (letters and digits)",
             "text": "Create new",
             "nameerr": "Wrong project name",
+            "saveProjectHere": "Save the project here",
             "selectProjectFolder": "Select a folder in which to store your project"
         },
         "recovery": {
@@ -134,7 +135,7 @@
         "themeDay": "Light",
         "themeNight": "Dark",
         "types": "Types",
-        "zipExport": "Export to .zip",
+        "zipExport": "Export for web",
         "zipProject": "Pack project to .zip",
         "codeFontDefault": "Default (Iosevka Light)",
         "codeFontOldSchool": "Old school",
@@ -145,6 +146,14 @@
         "codeLigatures": "Ligatures",
         "codeDense": "Dense layout",
         "openIncludeFolder": "Open \"include\" folder"
+    },
+    "onboarding": {
+        "hoorayHeader": "Wow! You've just created a project!",
+        "nowWhatParagraph": "Now, what should we do?",
+        "openSpaceShooterTutorial": "Learn how to make a space shooter",
+        "openPlatformerTutorial": "Learn how to make a platformer",
+        "doNothing": "Skip this screen",
+        "showOnboardingCheckbox": "Show this screen when creating a new project"
     },
     "settings": {
         "actions": "Actions and input methods",
@@ -402,6 +411,7 @@
         "reload": "Reload",
         "roomRestart": "Restart the room",
         "openExternal": "Open in browser",
-        "getQR": "QR codes and local server URL"
+        "getQR": "QR codes and local server URL",
+        "flipLayout": "Change debugger's layout"
     }
 }

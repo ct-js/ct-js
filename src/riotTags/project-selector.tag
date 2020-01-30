@@ -15,13 +15,14 @@ project-selector
                             onclick="{updatePreview(project)}"
                             ondblclick="{loadRecentProject}"
                         )
-                            .toright
-                                i.icon-x(onclick="{forgetProject}" title="{voc.forgetProject}")
+                            .toright(onclick="{forgetProject}" title="{voc.forgetProject}")
+                                svg.feather
+                                    use(xlink:href="data/icons.svg#x")
                             span {project}
                     label.file.flexfix-footer.nmb
-                        input(type="file" ref="fileexternal" accept=".ict" onchange="{openProjectFind}")
-                        .button.wide.inline.nml.nmr
-                            i.icon.icon-folder
+                        button.wide.inline.nml.nmr(onclick="{openProjectFind}")
+                            svg.feather
+                                use(xlink:href="data/icons.svg#folder")
                             span {voc.browse}
             #newProject.inset.flexrow.flexmiddle
                 .c4.npl.npt.npb
@@ -34,22 +35,15 @@ project-selector
                         ref="projectname"
                     ).wide
                 .c3.npr.npt.npb
-                    input(
-                        type="file",
-                        ref="choosefolder",
-                        style="display:none",
-                        onchange="{chooseProjectFolder}"
-                        nwdirectory
-                        nwworkingdir="projects/ThisFolderWillHopefullyNeverExistButItWillGoInsideTheProjectsDir"
-                        nwdirectorydesc="{voc.newProject.selectProjectFolder}"
-                    )
                     button.nm.wide.inline(onclick="{openProjectFolder}") {voc.newProject.button}
     .aVersionNumber
         a(href="https://discord.gg/CggbPkb" title="{voc.discord}" onclick="{openExternal('https://discord.gg/CggbPkb')}")
-            i.icon-discord
+            svg.icon
+                use(xlink:href="data/icons.svg#discord")
         a(href="https://twitter.com/ctjsrocks" title="{voc.twitter}" onclick="{openExternal('https://twitter.com/ctjsrocks')}")
-            i.icon-twitter
-        .inlineblock v{nw.App.manifest.version}.
+            svg.icon
+                use(xlink:href="data/icons.svg#twitter")
+        .inlineblock v{ctjsVersion}.
         |
         |
         // as itch releases are always in sync with the fetched version number, let's route users to itch.io page
@@ -59,6 +53,7 @@ project-selector
     script.
         const fs = require('fs-extra'),
               path = require('path');
+        this.ctjsVersion = require('electron').remote.app.getVersion();
         this.requirePath = path;
         this.namespace = 'intro';
         this.mixin(window.riotVoc);
@@ -72,7 +67,7 @@ project-selector
         this.on('unmount', () => {
             window.signals.off('hideProjectSelector', hideProjectSelector);
         });
-        this.projectSplash = '/data/img/notexture.png';
+        this.projectSplash = 'data/img/notexture.png';
         this.newVersion = false;
 
         // Loads recently opened projects
@@ -89,15 +84,15 @@ project-selector
         this.updatePreview = projectPath => e => {
             this.projectSplash = 'file://' + path.dirname(projectPath) + '/' + path.basename(projectPath, '.ict') + '/img/splash.png';
         };
-
         /**
          * Creates a mew project.
          * Technically it creates an empty project in-memory, then saves it to a directory.
          * Creates basic directories for sounds and textures.
          */
         this.newProject = async (way, codename) => {
+            sessionStorage.showOnboarding = true;
             var projectData = {
-                ctjsVersion: nw.App.manifest.version,
+                ctjsVersion: this.ctjsVersion,
                 notes: '/* empty */',
                 libs: {
                     place: {
@@ -182,7 +177,16 @@ project-selector
          * Handler for a manual search for a project folder, triggered by an input[type="file"]
          */
         this.chooseProjectFolder = e => {
-            this.newProject(e.target.value, this.refs.projectname.value);
+            const {dialog, BrowserWindow} = require('electron').remote;
+            const [path] = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
+                title: this.voc.newProject.selectProjectFolder,
+                defaultPath: 'projects/',
+                buttonLabel: this.voc.newProject.saveProjectHere,
+                properties: ['openDirectory']
+            }) || [];
+            if (path) {
+                this.newProject(path, this.refs.projectname.value);
+            }
         };
 
         this.openProjectFolder = e => {
@@ -191,15 +195,25 @@ project-selector
                 alertify.error(this.voc.newProject.nameerr);
                 return;
             }
-            this.refs.choosefolder.click();
+            this.chooseProjectFolder();
         };
 
         /**
          * Handler for a manual search for a project, triggered by an input[type="file"]
          */
         this.openProjectFind = e => {
-            var fe = this.refs.fileexternal,
-                proj = fe.value;
+            const {dialog, BrowserWindow} = require('electron').remote;
+            const [proj] = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
+                filters: [{
+                    name: 'Ct.js project',
+                    extensions: ['ict']
+                }],
+                defaultPath: 'projects/',
+                properties: ['openFile']
+            }) || [];
+            if (!proj) {
+                return;
+            }
             if (path.extname(proj).toLowerCase() === '.ict') {
                 window.loadProject(proj);
                 sessionStorage.projname = path.basename(proj);
@@ -207,7 +221,6 @@ project-selector
             } else {
                 alertify.error(languageJSON.common.wrongFormat);
             }
-            fe.value = '';
         };
 
         // Checking for updates
@@ -218,7 +231,7 @@ project-selector
             .then(data => data.json())
             .then(json => {
                 if (!json.errors) {
-                    if (nw.App.manifest.version != json.latest) {
+                    if (this.ctjsVersion != json.latest) {
                         this.newVersion = this.voc.latestVersion.replace('$1', json.latest);
                         this.update();
                     }
@@ -230,7 +243,8 @@ project-selector
         }, 0);
 
         this.openExternal = link => e => {
-            nw.Shell.openExternal(link);
+            const {shell} = require('electron');
+            shell.openExternal(link);
             e.stopPropagation();
             e.preventDefault();
         };

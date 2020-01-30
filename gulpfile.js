@@ -10,18 +10,13 @@ const path = require('path'),
       stylus = require('gulp-stylus'),
       riot = require('gulp-riot'),
       pug = require('gulp-pug'),
-      eslint = require('gulp-eslint'),
-      stylint = require('gulp-stylint'),
-      globby = require('globby'),
-      filemode = require('filemode'),
-      zip = require('gulp-zip'),
+      sprite = require('gulp-svgstore'),
 
       jsdocx = require('jsdoc-x'),
 
       streamQueue = require('streamqueue'),
       notifier = require('node-notifier'),
       fs = require('fs-extra'),
-      NwBuilder = require('nw-builder'),
 
       spawnise = require('./node_requires/spawnise');
 
@@ -29,10 +24,6 @@ const argv = minimist(process.argv.slice(2));
 const npm = (/^win/).test(process.platform) ? 'npm.cmd' : 'npm';
 
 const pack = require('./app/package.json');
-
-const nwVersion = '0.34.1',
-      platforms = ['osx64', 'win32', 'win64', 'linux32', 'linux64'],
-      nwFiles = ['./app/**', '!./app/export/**', '!./app/projects/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
 
 var channelPostfix = argv.channel || false;
 
@@ -137,6 +128,11 @@ const copyRequires = () =>
 
 const compileScripts = gulp.series(compileRiot, concatScripts);
 
+const icons = () =>
+    gulp.src('./src/icons/**/*.svg')
+    .pipe(sprite())
+    .pipe(gulp.dest('./app/data'));
+
 const watchScripts = () => {
     gulp.watch('./src/js/**/*', gulp.series(compileScripts))
     .on('error', err => {
@@ -177,6 +173,9 @@ const watchRequires = () => {
         console.error('[node_requires error]', err);
     });
 };
+const watchIcons = () => {
+    gulp.watch('./src/icons/**/*.svg', icons);
+};
 
 const watch = () => {
     watchScripts();
@@ -184,35 +183,33 @@ const watch = () => {
     watchPug();
     watchRiot();
     watchRequires();
+    watchIcons();
 };
 
-const lintStylus = () => gulp.src(['./src/styl/**/*.styl', '!./src/styl/3rdParty/**/*.styl'])
+const lintStylus = () => {
+    const stylint = require('gulp-stylint');
+    return gulp.src(['./src/styl/**/*.styl', '!./src/styl/3rdParty/**/*.styl'])
     .pipe(stylint())
     .pipe(stylint.reporter())
     .pipe(stylint.reporter('fail', {
         failOnWarning: true
     }));
+};
 
-const lintJS = () => gulp.src(['./src/js/**/*.js', '!./src/js/3rdparty/**/*.js', './src/node_requires/**/*.js'])
+const lintJS = () => {
+    const eslint = require('gulp-eslint');
+    return gulp.src(['./src/js/**/*.js', '!./src/js/3rdparty/**/*.js', './src/node_requires/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
+};
 
 const lint = gulp.series(lintJS, lintStylus);
 
-const launchNw = () => { // makes a loop that keeps ct.js open if it was closed, either by a user or by assets' changes
-    var nw = new NwBuilder({
-        files: nwFiles,
-        version: nwVersion,
-        platforms,
-        flavor: 'sdk'
-    });
-    return nw.run()
-    .catch(function (error) {
-        showErrorBox();
-        console.error(error);
-    })
-    .then(launchNw);
+const launchApp = () => {
+    spawnise.spawn(npm, ['run', 'start'], {
+        cwd: './app'
+    }).then(launchApp);
 };
 
 const docs = async () => {
@@ -322,97 +319,37 @@ declare namespace`))
      */
     namespace`))
     .pipe(gulp.dest('./app/data/typedefs/'));
-const bakeTypedefs = gulp.series([bakeCtTypedefs, concatTypedefs]);
+
+// electron-builder ignores .d.ts files no matter how you describe your app's contents.
+const copyPixiTypedefs = () => gulp.src('./app/node_modules/pixi.js/pixi.js.d.ts')
+    .pipe(gulp.dest('./app/data/typedefs'));
+
+const bakeTypedefs = gulp.series([bakeCtTypedefs, concatTypedefs, copyPixiTypedefs]);
 
 
-const build = gulp.parallel([compilePug, compileStylus, compileScripts, copyRequires, bakeTypedefs]);
+const build = gulp.parallel([
+    compilePug,
+    compileStylus,
+    compileScripts,
+    copyRequires,
+    icons,
+    bakeTypedefs
+]);
 
-
-const nwPackages = async () => {
+const bakePackages = async () => {
+    const builder = require('electron-builder');
     await fs.remove(path.join('./build', `ctjs - v${pack.version}`));
-    var nw = new NwBuilder({
-        files: nwFiles,
-        platforms,
-        version: nwVersion,
-        flavor: 'sdk',
-        buildType: 'versioned',
-        // forceDownload: true,
-        zip: false,
-        macIcns: './app/ct.ide.icns'
-    });
-    await nw.build();
-};
-
-// a workaround for https://github.com/nwjs-community/nw-builder/issues/289
-const fixPermissions = () => {
-    if (platforms.indexOf('osx64') === -1) {
-        return Promise.resolve(); // skip the fix if not building for macos
-    }
-    const baseDir = path.posix.join('./build', `ctjs - v${pack.version}`, 'osx64', 'ctjs.app/Contents');
-
-    const globs = [
-        baseDir + '/MacOS/nwjs',
-        baseDir + '/Versions/*/nwjs Framework.framework/Versions/A/nwjs Framework',
-        baseDir + '/Versions/*/nwjs Helper.app/Contents/MacOS/nwjs Helper'
-    ];
-    return globby(globs)
-    .then(files => {
-        console.log('overriding permissions for', files);
-        return Promise.all(files.map(file => filemode(file, '777')));
+    await builder.build({// @see https://github.com/electron-userland/electron-builder/blob/master/packages/app-builder-lib/src/packagerApi.ts
+        projectDir: './app',
+        //mac: pack.build.mac.target || ['default'],
+        //win: pack.build.win.target,
+        //linux: pack.build.linux.target
     });
 };
 
-const oldSymlink = fs.symlink;
-fs.symlink = (target, destination) => {
-    console.log('link', target, '<==', destination);
-    return oldSymlink(target, destination);
-};
 
-const abortOnWindows = done => {
-    if ((/^win/).test(process.platform) && platforms.indexOf('osx64') !== -1) {
-        throw new Error('Sorry, but building ct.js for mac is not possible on Windows due to Windows\' specifics. You can edit `platforms` at gulpfile.js if you don\'t need a package for mac.');
-    }
-    done();
-};
-// Based on solution at https://github.com/strawbees/desktop-packager/blob/master/commands/darwin/bundle.js
-const fixSymlinks = async () => {
-    if (platforms.indexOf('osx64') === -1) {
-        return; // skip the fix if not building for macos
-    }
-    const baseDir = path.posix.join('./build', `ctjs - v${pack.version}`, 'osx64', 'ctjs.app/Contents');
-
-    // the actual directory depends on nw version, so let's find the needed dir with a glob
-    const glob = baseDir + '/Versions/*/nwjs Framework.framework/*';
-    const execute = require('./node_requires/execute');
-    const frameworkDir = path.dirname((await globby([glob]))[0]);
-
-    console.log('fixing symlinks at', frameworkDir);
-
-    execute(async ({exec}) => {
-        await exec(`
-            cd "${frameworkDir}"
-            rm "Versions/Current" && ln -s "./A" "./Versions/Current"
-            rm "Helpers" && ln -s "./Versions/Current/Helpers"
-            rm "Internet Plug-Ins" && ln -s "./Versions/Current/Internet Plug-Ins"
-            rm "Libraries" && ln -s "./Versions/Current/Libraries"
-            rm "nwjs Framework" && ln -s "./Versions/Current/nwjs Framework"
-            rm "Resources" && ln -s "./Versions/Current/Resources"
-            rm "XPCServices" && ln -s "./Versions/Current/XPCServices"
-        `);
-    });
-};
-exports.fixPermissions = fixPermissions;
-exports.fixSymlinks = fixSymlinks;
-
-const examples = () => {
-    const promises = platforms.map(platform =>
-        fs.copy(
-            './src/examples',
-            path.join('./build', `ctjs - v${pack.version}`, platform, 'examples')
-        )
-    );
-    return Promise.all(promises);
-};
+const examples = () => gulp.src('./src/examples/**/*')
+    .pipe(gulp.dest('./app/examples'));
 
 // eslint-disable-next-line valid-jsdoc
 /**
@@ -436,38 +373,13 @@ const patronsCache = done => {
     });
 };
 
-let zipPackages;
-if ((/^win/).test(process.platform)) {
-    const zipsForAllPlatforms = platforms.map(platform => () =>
-        gulp.src(`./build/ctjs - v${pack.version}/${platform}/**`)
-        .pipe(zip(`ct.js v${pack.version} for ${platform}.zip`))
-        .pipe(gulp.dest(`./build/ctjs - v${pack.version}/`))
-    );
-    zipPackages = gulp.parallel(zipsForAllPlatforms);
-} else {
-    const execute = require('./node_requires/execute');
-    zipPackages = () => Promise.all(platforms.map(platform =>
-        // `r` for dirs,
-        // `q` for preventing spamming to stdout,
-        // and `y` for preserving symlinks
-        execute(({exec}) => exec(`
-            cd "./build/ctjs - v${pack.version}/"
-            zip -rqy "ct.js v${pack.version} for ${platform}.zip" "./${platform}"
-        `))
-    ));
-}
-
 const packages = gulp.series([
     lint,
-    abortOnWindows,
     build,
     docs,
     patronsCache,
-    nwPackages,
-    fixSymlinks,
-    fixPermissions,
     examples,
-    zipPackages
+    bakePackages
 ]);
 
 const deployOnly = () => {
@@ -483,7 +395,7 @@ const deploy = gulp.series([packages, deployOnly]);
 
 const launchDevMode = done => {
     watch();
-    launchNw();
+    launchApp();
     done();
 };
 const defaultTask = gulp.series(build, launchDevMode);

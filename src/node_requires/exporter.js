@@ -3,7 +3,7 @@ const fs = require('fs-extra'),
 const glob = require('./glob');
 const basePath = './data/';
 
-let ctlibs, currentProject, writeDir;
+let currentProject, writeDir;
 
 const parseKeys = function(data, str, lib) {
     var str2 = str;
@@ -41,7 +41,6 @@ const injectModules = injects => // async
         const libData = await fs.readJSON(path.join(basePath + 'ct.libs/', lib, 'module.json'), {
             'encoding': 'utf8'
         });
-        ctlibs[lib] = libData.main;
         if (await fs.pathExists(path.join(basePath + 'ct.libs/', lib, 'injects'))) {
             const injectFiles = await fs.readdir(path.join(basePath + 'ct.libs/', lib, 'injects')),
                   injectKeys = injectFiles.map(fname => path.basename(fname, path.extname(fname)));
@@ -151,7 +150,7 @@ const packImages = async () => {
         const atlasJSON = {
             meta: {
                 app: 'https://ctjs.rocks/',
-                version: nw.App.manifest.version,
+                version: require('electron').remote.app.getVersion(),
                 image: `a${binInd}.png`,
                 format: 'RGBA8888',
                 size: {
@@ -478,16 +477,6 @@ const runCtProject = async (project, projdir) => {
         throw new Error(languageJSON.common.norooms);
     }
 
-    ctlibs = {
-        CORE: {
-            name: 'ct.js Game Framework',
-            info: 'A game made with ct.js game framework and ct.IDE. Create your 2D games for free!',
-            authors: [{
-                name: 'Cosmo Myzrail Gorynych',
-                site: 'https://ctjs.rocks/'
-            }]
-        }
-    };
     await fs.remove(writeDir);
     await Promise.all([
         fs.ensureDir(path.join(writeDir, '/img/')),
@@ -534,8 +523,6 @@ const runCtProject = async (project, projdir) => {
 
     const startroom = getStartingRoom();
 
-    /* global nw */
-
     /* Load source files in parallel */
     const sources = {};
     const sourcesList = [
@@ -560,8 +547,7 @@ const runCtProject = async (project, projdir) => {
         .replace(/\/\*@startheight@\*\//g, startroom.height)
         .replace(/\/\*@pixelatedrender@\*\//g, Boolean(currentProject.settings.pixelatedrender))
         .replace(/\/\*@maxfps@\*\//g, Number(currentProject.settings.maxFPS))
-        .replace(/\/\*@libs@\*\//g, `JSON.parse('${JSON.stringify(ctlibs)}')`)
-        .replace(/\/\*@ctversion@\*\//g, nw.App.manifest.version)
+        .replace(/\/\*@ctversion@\*\//g, require('electron').remote.app.getVersion())
         .replace(/\/\*@projectmeta@\*\//g, JSON.stringify({
             name: currentProject.settings.title,
             author: currentProject.settings.author,

@@ -21,12 +21,14 @@ sound-editor.panel.view
                 span   {voc.isMusicFile}
         label.file
             .button.wide.nml
-                i.icon.icon-plus
+                svg.feather
+                    use(xlink:href="data/icons.svg#plus")
                 span {voc.import}
             input(type="file" ref="inputsound" accept=".mp3,.ogg,.wav" onchange="{changeSoundFile}")
         p.nmb
             button.wide(onclick="{soundSave}" title="Shift+Control+S" data-hotkey="Control+S")
-                i.icon.icon-confirm
+                svg.feather
+                    use(xlink:href="data/icons.svg#check")
                 span {voc.save}
     script.
         const path = require('path');
@@ -65,7 +67,7 @@ sound-editor.panel.view
             }
         };
         this.changeSoundFile = () => {
-            var val = this.refs.inputsound.value;
+            const val = this.refs.inputsound.files[0].path;
             fs.copy(val, sessionStorage.projdir + '/snd/s' + this.sound.uid + path.extname(val), e => {
                 if (e) {
                     console.error(e);

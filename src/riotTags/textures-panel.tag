@@ -1,133 +1,65 @@
 textures-panel.panel.view
     .flexfix.tall
         div
-            .toright
-                b {vocGlob.sort}
-                button.inline.square(onclick="{switchSort('date')}" class="{selected: sort === 'date' && !searchResults}")
-                    i.icon-clock
-                button.inline.square(onclick="{switchSort('name')}" class="{selected: sort === 'name' && !searchResults}")
-                    i.icon-sort-alphabetically
-                .aSearchWrap
-                    input.inline(type="text" onkeyup="{fuseSearch}")
-            .toleft
+            asset-viewer(
+                collection="{currentProject.textures}"
+                contextmenu="{showTexturePopup}"
+                vocspace="texture"
+                namespace="textures"
+                click="{openTexture}"
+                thumbnails="{thumbnails}"
+                ref="textures"
+            )
                 label.file.flexfix-header
                     input(type="file" multiple
                         accept=".png,.jpg,.jpeg,.bmp,.gif,.json"
-                        onchange="{textureImport}")
+                        onchange="{parent.textureImport}")
                     .button
-                        i.icon.icon-import
+                        svg.feather
+                            use(xlink:href="data/icons.svg#download")
                         span {voc.import}
-        //-    button#texturecreate(data-event="textureCreate")
-        //-        i.icon.icon-lamp
-        //-        span {voc.create}
-        .flexfix-body
-            ul.cards
-                li(
-                    each="{texture in (searchResults? searchResults : textures)}"
-                    oncontextmenu="{showTexturePopup(texture)}"
-                    onlong-press="{showTexturePopup(texture)}"
-                    onclick="{openTexture(texture, false)}"
-                    no-reorder
-                )
-                    span {texture.name}
-                    img(src="file://{sessionStorage.projdir + '/img/' + texture.origname + '_prev.png?' + texture.lastmod}")
-            h2
-                span {voc.skeletons}
-                docs-shortcut(path="/skeletal-animation.html")
-            ul.cards
-                li(
-                    each="{skeleton in (searchResultsSkel? searchResultsSkel : skeletons)}"
-                    oncontextmenu="{showTexturePopup(skeleton, true)}"
-                    onlong-press="{showTexturePopup(skeleton, true)}"
-                    onclick="{openSkeleton(texture)}"
-                    no-reorder
-                )
-                    span {skeleton.name}
-                    img(src="file://{sessionStorage.projdir + '/img/' + skeleton.origname + '_prev.png?' + skeleton.lastmod}")
-
+            asset-viewer(
+                collection="{currentProject.skeletons}"
+                contextmenu="{showSkeletonPopup}"
+                vocspace="texture"
+                namespace="skeletons"
+                thumbnails="{thumbnails}"
+                ref="skeletons"
+            )
+                h2
+                    span {voc.skeletons}
+                    docs-shortcut(path="/skeletal-animation.html")
                 label.file.flexfix-header
                     input(type="file" multiple
                         accept=".json"
-                        onchange="{textureImport}")
+                        onchange="{parent.textureImport}")
                     .button
-                        i.icon.icon-import
+                        svg.feather
+                            use(xlink:href="data/icons.svg#download")
                         span {voc.import}
 
     .aDropzone(if="{dropping}")
         .middleinner
-            i.icon-import
+            svg.feather
+                use(xlink:href="data/icons.svg#download")
             h2 {languageJSON.common.fastimport}
             input(type="file" multiple
                 accept=".png,.jpg,.jpeg,.bmp,.gif,.json"
                 onchange="{textureImport}")
 
     texture-editor(if="{editing}" texture="{currentTexture}")
+    context-menu(menu="{textureMenu}" ref="textureMenu")
     script.
         const fs = require('fs-extra'),
-              path = require('path'),
-              gui = require('nw.gui');
+              path = require('path');
         const glob = require('./data/node_requires/glob');
         const generateGUID = require('./data/node_requires/generateGUID');
         this.namespace = 'texture';
         this.mixin(window.riotVoc);
         this.editing = false;
         this.dropping = false;
-        this.sort = 'name';
-        this.sortReverse = false;
 
-        this.updateList = () => {
-            this.textures = [...window.currentProject.textures];
-            this.skeletons = [...window.currentProject.skeletons];
-            if (this.sort === 'name') {
-                this.textures.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                });
-                this.skeletons.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                });
-            } else {
-                this.textures.sort((a, b) => {
-                    return b.lastmod - a.lastmod;
-                });
-                this.skeletons.sort((a, b) => {
-                    return b.lastmod - a.lastmod;
-                });
-            }
-            if (this.sortReverse) {
-                this.textures.reverse();
-                this.skeletons.reverse();
-            }
-        };
-        this.switchSort = sort => e => {
-            if (this.sort === sort) {
-                this.sortReverse = !this.sortReverse;
-            } else {
-                this.sort = sort;
-                this.sortReverse = false;
-            }
-            this.updateList();
-        };
-        const fuseOptions = {
-            shouldSort: true,
-            tokenize: true,
-            threshold: 0.5,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: ['name']
-        };
-        const Fuse = require('fuse.js');
-        this.fuseSearch = e => {
-            if (e.target.value.trim()) {
-                var fuse = new Fuse(this.textures, fuseOptions);
-                var fuseSkel = new Fuse(this.skeletons, fuseOptions);
-                this.searchResults = fuse.search(e.target.value.trim());
-                this.searchResultsSkel = fuse.search(e.target.value.trim());
-            } else {
-                this.searchResults = null;
-            }
-        };
+        this.thumbnails = texture => `file://${sessionStorage.projdir}/img/${texture.origname}_prev.png?cache=${texture.lastmod}`;
 
         this.fillTextureMap = () => {
             glob.texturemap = {};
@@ -152,18 +84,20 @@ textures-panel.panel.view
                 imgHeight: 32,
                 closedStrip: true
             }
-            img.src = '/data/img/unknown.png';
+            img.src = 'data/img/unknown.png';
         };
 
         this.setUpPanel = e => {
-            this.updateList();
             this.fillTextureMap();
+            this.refs.textures.updateList();
+            this.refs.skeletons.updateList();
             this.searchResults = null;
             this.editing = false;
             this.dropping = false;
             this.currentTexture = null;
             this.update();
         };
+
         window.signals.on('projectLoaded', this.setUpPanel);
         this.on('mount', this.setUpPanel);
         this.on('unmount', () => {
@@ -174,9 +108,8 @@ textures-panel.panel.view
          * An event fired when user attempts to add files from a file manager (by clicking an "Import" button)
          */
         this.textureImport = e => { // input[type="file"]
-            var i;
-            files = e.target.value.split(';');
-            for (i = 0; i < files.length; i++) {
+            const files = [...e.target.files].map(file => file.path);
+            for (let i = 0; i < files.length; i++) {
                 if (/\.(jpg|gif|png|jpeg)/gi.test(files[i])) {
                     let id = generateGUID();
                     this.loadImg(
@@ -194,7 +127,7 @@ textures-panel.panel.view
                     )
                 }
             }
-            e.srcElement.value = "";
+            e.srcElement.value = '';
             this.dropping = false;
             e.preventDefault();
         };
@@ -236,7 +169,8 @@ textures-panel.panel.view
                         window.currentProject.textures.push(obj);
                         this.imgGenPreview(dest, dest + '_prev.png', 64)
                         .then(dataUrl => {
-                            this.updateList();
+                            this.refs.textures.updateList();
+                            this.refs.skeletons.updateList();
                             this.update();
                         });
                         this.imgGenPreview(dest, dest + '_prev@2.png', 128);
@@ -262,7 +196,8 @@ textures-panel.panel.view
                 })
                 this.skelGenPreview(dest, dest + '_prev.png', [64, 128])
                 .then(dataUrl => {
-                    this.updateList();
+                    this.refs.textures.updateList();
+                    this.refs.skeletons.updateList();
                     this.update();
                 });
             });
@@ -363,94 +298,93 @@ textures-panel.panel.view
         };
 
         // Creates a context menu that will appear on RMB click on texture cards
-        var textureMenu = new gui.Menu();
-        textureMenu.append(new gui.MenuItem({
-            label: languageJSON.common.open,
-            click: e => {
-                if (this.currentTextureType === 'skeleton') {
-                    this.openSkeleton(this.currentTexture)();
-                } else {
-                    this.openTexture(this.currentTexture)();
-                }
-                this.update();
-            }
-        }));
-        textureMenu.append(new gui.MenuItem({
-            label: languageJSON.common.copyName,
-            click: e => {
-                var clipboard = nw.Clipboard.get();
-                clipboard.set(this.currentTexture.name, 'text');
-            }
-        }));
-        textureMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.rename,
-            click: e => {
-                alertify
-                .defaultValue(this.currentTexture.name)
-                .prompt(window.languageJSON.common.newname)
-                .then(e => {
-                    if (e.inputValue && e.inputValue != '' && e.buttonClicked !== 'cancel') {
-                        this.currentTexture.name = e.inputValue;
-                        this.update();
+        this.textureMenu = {
+            opened: false,
+            items: [{
+                label: languageJSON.common.open,
+                click: e => {
+                    if (this.currentTextureType === 'skeleton') {
+                        this.openSkeleton(this.currentTexture)();
+                    } else {
+                        this.openTexture(this.currentTexture)();
                     }
-                });
-            }
-        }));
-        textureMenu.append(new gui.MenuItem({
-            type: 'separator'
-        }));
-        textureMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.delete,
-            click: e => {
-                alertify
-                .okBtn(window.languageJSON.common.delete)
-                .cancelBtn(window.languageJSON.common.cancel)
-                .confirm(window.languageJSON.common.confirmDelete.replace('{0}', this.currentTexture.name))
-                .then(e => {
-                    if (e.buttonClicked === 'ok') {
-                        if (this.currentTextureType === 'skeleton') {
-                            window.currentProject.skeletons.splice(this.currentTextureId, 1);
-                        } else {
-                            for (const type of window.currentProject.types) {
-                                if (type.texture === this.currentTexture.uid) {
-                                    type.texture = -1;
+                    this.update();
+                }
+            }, {
+                label: languageJSON.common.copyName,
+                click: e => {
+                    const {clipboard} = require('electron');
+                    clipboard.writeText(this.currentTexture.name);
+                }
+            }, {
+                label: window.languageJSON.common.rename,
+                click: e => {
+                    alertify
+                    .defaultValue(this.currentTexture.name)
+                    .prompt(window.languageJSON.common.newname)
+                    .then(e => {
+                        if (e.inputValue && e.inputValue != '' && e.buttonClicked !== 'cancel') {
+                            this.currentTexture.name = e.inputValue;
+                            this.update();
+                        }
+                    });
+                }
+            }, {
+                type: 'separator'
+            }, {
+                label: window.languageJSON.common.delete,
+                click: e => {
+                    alertify
+                    .okBtn(window.languageJSON.common.delete)
+                    .cancelBtn(window.languageJSON.common.cancel)
+                    .confirm(window.languageJSON.common.confirmDelete.replace('{0}', this.currentTexture.name))
+                    .then(e => {
+                        if (e.buttonClicked === 'ok') {
+                            if (this.currentTextureType === 'skeleton') {
+                                window.currentProject.skeletons.splice(this.currentTextureId, 1);
+                            } else {
+                                for (const type of window.currentProject.types) {
+                                    if (type.texture === this.currentTexture.uid) {
+                                        type.texture = -1;
+                                    }
                                 }
-                            }
-                            for (const room of window.currentProject.rooms) {
-                                if ('tiles' in room) {
-                                    for (const layer of room.tiles) {
+                                for (const room of window.currentProject.rooms) {
+                                    if ('tiles' in room) {
+                                        for (const layer of room.tiles) {
+                                            let i = 0;
+                                            while (i < layer.tiles.length) {
+                                                if (layer.tiles[i].texture === this.currentTexture.uid) {
+                                                    layer.tiles.splice(i, 1);
+                                                } else {
+                                                    i++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if ('backgrounds' in room) {
                                         let i = 0;
-                                        while (i < layer.tiles.length) {
-                                            if (layer.tiles[i].texture === this.currentTexture.uid) {
-                                                layer.tiles.splice(i, 1);
+                                        while (i < room.backgrounds.length) {
+                                            if (room.backgrounds[i].texture === this.currentTexture.uid) {
+                                                room.backgrounds.splice(i, 1);
                                             } else {
                                                 i++;
                                             }
                                         }
                                     }
                                 }
-                                if ('backgrounds' in room) {
-                                    let i = 0;
-                                    while (i < room.backgrounds.length) {
-                                        if (room.backgrounds[i].texture === this.currentTexture.uid) {
-                                            room.backgrounds.splice(i, 1);
-                                        } else {
-                                            i++;
-                                        }
-                                    }
-                                }
+                                window.currentProject.textures.splice(this.currentTextureId, 1);
                             }
-                            window.currentProject.textures.splice(this.currentTextureId, 1);
+                            this.refs.textures.updateList();
+                            this.refs.skeletons.updateList();
+                            this.update();
+                            alertify
+                                .okBtn(window.languageJSON.common.ok)
+                                .cancelBtn(window.languageJSON.common.cancel);
                         }
-                        this.updateList();
-                        this.update();
-                        alertify
-                            .okBtn(window.languageJSON.common.ok)
-                            .cancelBtn(window.languageJSON.common.cancel);
-                    }
-                });
-            }
-        }));
+                    });
+                }
+            }]
+        };
         /**
          * Shows the context menu created above
          */
@@ -462,8 +396,11 @@ textures-panel.panel.view
                 this.currentTextureId = currentProject.textures.indexOf(texture);
             }
             this.currentTexture = texture;
-            textureMenu.popup(e.clientX, e.clientY);
+            this.refs.textureMenu.popup(e.clientX, e.clientY);
             e.preventDefault();
+        };
+        this.showSkeletonPopup = skel => e => {
+            this.showTexturePopup(skel, true)(e);
         };
 
         /**
