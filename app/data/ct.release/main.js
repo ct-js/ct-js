@@ -409,41 +409,14 @@ ct.u.ext(ct.u, {// make aliases
         }
     };
     const manageCamera = () => {
-        const r = ct.room;
-        if (r.follow) {
-            const speed = Math.min(1, (1-r.followDrift)*ct.delta);
-            if (r.follow.kill) {
-                delete r.follow;
-            } else if (r.center) {
-                r.x += speed * (r.follow.x + r.followShiftX - r.x - ct.viewWidth / 2);
-                r.y += speed * (r.follow.y + r.followShiftY - r.y - ct.viewHeight / 2);
-            } else {
-                let cx = 0,
-                    cy = 0,
-                    w = 0,
-                    h = 0;
-                w = Math.min(r.borderX, ct.viewWidth / 2);
-                h = Math.min(r.borderY, ct.viewHeight / 2);
-                if (r.follow.x + r.followShiftX - r.x < w) {
-                    cx = r.follow.x + r.followShiftX - r.x - w;
-                }
-                if (r.follow.y + r.followShiftY - r.y < h) {
-                    cy = r.follow.y + r.followShiftY - r.y - h;
-                }
-                if (r.follow.x + r.followShiftX - r.x > ct.viewWidth - w) {
-                    cx = r.follow.x + r.followShiftX - r.x - ct.viewWidth + w;
-                }
-                if (r.follow.y + r.followShiftY - r.y > ct.viewHeight - h) {
-                    cy = r.follow.y + r.followShiftY - r.y - ct.viewHeight + h;
-                }
-                r.x = Math.floor(r.x + speed * cx);
-                r.y = Math.floor(r.y + speed * cy);
+        const x = ct.camera.computedX,
+              y = ct.camera.computedY;
+        for (const item of ct.stage.children) {
+            if (!item.isUI) {
+                item.x = x - ct.viewWidth / 2;
+                item.y = y - ct.viewHeight / 2;
             }
         }
-        r.x = r.x || 0;
-        r.y = r.y || 0;
-        r.x = Math.round(r.x);
-        r.y = Math.round(r.y);
     };
 
     ct.loop = function(delta) {

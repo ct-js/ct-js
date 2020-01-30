@@ -201,6 +201,9 @@ class Room extends PIXI.Container {
             var template = ct.rooms.templates[roomName];
             ct.viewWidth = ct.roomWidth = template.width;
             ct.viewHeight = ct.roomHeight = template.height;
+            ct.camera = new Camera();
+            ct.camera.x = ct.roomWidth / 2;
+            ct.camera.y = ct.roomHeight / 2;
             ct.pixiApp.renderer.resize(template.width, template.height);
             ct.rooms.current = ct.room = new Room(template);
             ct.stage.addChild(ct.room);

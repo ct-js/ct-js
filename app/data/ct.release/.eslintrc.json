@@ -5,7 +5,8 @@
         "Room": false,
         "Background": false,
         "Tileset": false,
-        "Copy": false
+        "Copy": false,
+        "Camera": false
     },
     "rules": {
         "prefer-destructuring": "off"
