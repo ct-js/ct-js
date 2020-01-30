@@ -1,3 +1,11 @@
+/**
+ * @typedef IRoomMergeResult
+ *
+ * @property {Array<Copy>} copies
+ * @property {Array<Tileset>} tileLayers
+ * @property {Array<Background>} backgrounds
+ */
+
 class Room extends PIXI.Container {
     constructor(template) {
         super();
@@ -141,7 +149,7 @@ class Room extends PIXI.Container {
          * Merges a given room into the current one. Skips room's OnCreate event.
          *
          * @param {string} roomName The name of the room that needs to be merged
-         * @returns {Array<Copy|Background|Tileset>} An array of created copies, backgrounds, tile layers,
+         * @returns {IRoomMergeResult} Arrays of created copies, backgrounds, tile layers,
          * added to the current room (`ct.room`). Note: it does not get updated, so beware of memory leaks
          * if you keep a reference to this array for a long time!
          */
