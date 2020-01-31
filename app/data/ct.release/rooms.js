@@ -11,7 +11,6 @@ class Room extends PIXI.Container {
         super();
         this.x = this.y = 0;
         this.uid = 0;
-        this.follow = this.borderX = this.borderY = this.followShiftX = this.followShiftY = this.followDrift = 0;
         this.tileLayers = [];
         this.backgrounds = [];
         if (!ct.room) {
@@ -199,9 +198,9 @@ class Room extends PIXI.Container {
             ct.rooms.clear();
             deadPool.length = 0;
             var template = ct.rooms.templates[roomName];
-            ct.viewWidth = ct.roomWidth = template.width;
-            ct.viewHeight = ct.roomHeight = template.height;
-            ct.camera = new Camera();
+            ct.roomWidth = template.width;
+            ct.roomHeight = template.height;
+            ct.camera = new Camera(0, 0, ct.roomWidth, ct.roomHeight);
             ct.camera.x = ct.roomWidth / 2;
             ct.camera.y = ct.roomHeight / 2;
             ct.pixiApp.renderer.resize(template.width, template.height);

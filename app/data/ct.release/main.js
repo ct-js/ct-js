@@ -19,10 +19,6 @@ setInterval(function () {
  * @namespace
  */
 const ct = {
-    /**
-     * An array with metadata of all the modules used in a ct.js game
-     * @type {Object.<string,ILibMeta>}
-     */
     speed: [/*@maxfps@*/][0] || 60,
     types: {},
     snd: {},
@@ -47,6 +43,11 @@ const ct = {
      */
     delta: 1,
     /**
+     * The camera that outputs its view to the renderer.
+     * @type {Copy}
+     */
+    camera: null,
+    /**
      * ct.js version in form of a string `X.X.X`.
      * @type {string}
      */
@@ -66,7 +67,7 @@ const ct = {
      * @type {number}
      */
     set width(value) {
-        ct.viewWidth = ct.roomWidth = value;
+        ct.camera.width = ct.roomWidth = value;
         if (!ct.fittoscreen || ct.fittoscreen.mode === 'fastScale') {
             ct.pixiApp.renderer.resize(value, ct.height);
         }
@@ -85,7 +86,7 @@ const ct = {
      * @type {number}
      */
     set height(value) {
-        ct.viewHeight = ct.roomHeight = value;
+        ct.camera.height = ct.roomHeight = value;
         if (!ct.fittoscreen || ct.fittoscreen.mode === 'fastScale') {
             ct.pixiApp.renderer.resize(ct.width, value);
         }
@@ -95,15 +96,21 @@ const ct = {
         return value;
     },
     /**
-     * The width of the current view, in game units
+     * The width of the current view, in UI units
      * @type {number}
+     * @deprecated Since v1.3.0. See `ct.camera.width`.
      */
-    viewWidth: null,
+    get viewWidth() {
+        return ct.camera.width;
+    },
     /**
-     * The height of the current view, in game units
+     * The height of the current view, in UI units
      * @type {number}
+     * @deprecated Since v1.3.0. See `ct.camera.height`.
      */
-    viewHeight: null
+    get viewHeight() {
+        return ct.camera.height;
+    }
 };
 
 // eslint-disable-next-line no-console
@@ -289,6 +296,18 @@ ct.u = {
         return (val - a) / (b - a);
     },
     /**
+     * Translates a point from UI space to game space.
+     * @param {number} x The x coordinate in UI space.
+     * @param {number} y The y coordinate in UI space.
+     * @returns {Array<number>} A pair of new `x` and `y` coordinates.
+     */
+    uiToGameCoord(x, y) {
+        const modx = (x - ct.camera.width / 2) * ct.camera.scale.x + ct.camera.computedX,
+              mody = (y + ct.camera.height / 2) * ct.camera.scale.y + ct.camera.computedY;
+        const rotated = ct.u.rotate(modx, mody);
+        return [rotated.x, rotated.y];
+    },
+    /**
      * Tests whether a given point is inside the given rectangle (it can be either a copy or an array)
      * @param {number} x The x coordinate of the point
      * @param {number} y The y coordinate of the point
@@ -409,12 +428,19 @@ ct.u.ext(ct.u, {// make aliases
         }
     };
     const manageCamera = () => {
-        const x = ct.camera.computedX,
-              y = ct.camera.computedY;
+        const px = ct.camera.computedX,
+              py = ct.camera.computedY,
+              sx = 1 / (isNaN(ct.camera.scale.x)? 1 : ct.camera.scale.x),
+              sy = 1 / (isNaN(ct.camera.scale.y)? 1 : ct.camera.scale.y);
         for (const item of ct.stage.children) {
-            if (!item.isUI) {
-                item.x = x - ct.viewWidth / 2;
-                item.y = y - ct.viewHeight / 2;
+            if (!item.isUI && item.localTransform) {
+                item.x = -ct.camera.width / 2;
+                item.y = -ct.camera.height / 2;
+                item.pivot.x = px;
+                item.pivot.y = py;
+                item.scale.x = sx;
+                item.scale.y = sy;
+                item.rotation = -ct.camera.rotation;
             }
         }
     };

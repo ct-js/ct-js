@@ -33,24 +33,24 @@
                     bg.width = width;
                     bg.height = height;
                 }
-                ct.viewWidth = width;
-                ct.viewHeight = height;
+                ct.camera.width = width;
+                ct.camera.height = height;
             }
             if (mode !== 'scaleFit') {
                 ct.pixiApp.renderer.resize(width, height);
                 if (mode === 'scaleFill') {
                     if (minorWidth) {
-                        ct.viewWidth = Math.ceil(width / k);
+                        ct.camera.width = Math.ceil(width / k);
                     } else {
-                        ct.viewHeight = Math.ceil(height / k);
+                        ct.camera.height = Math.ceil(height / k);
                     }
                     for (const bg of ct.types.list.BACKGROUND) {
-                        bg.width = ct.viewWidth;
-                        bg.height = ct.viewHeight;
+                        bg.width = ct.camera.width;
+                        bg.height = ct.camera.height;
                     }
                 }
             } else {
-                ct.pixiApp.renderer.resize(Math.floor(ct.viewWidth * k), Math.floor(ct.viewHeight * k));
+                ct.pixiApp.renderer.resize(Math.floor(ct.camera.width * k), Math.floor(ct.camera.height * k));
                 canv.style.position = 'absolute';
                 canv.style.left = (width - ct.width) / 2 + 'px';
                 canv.style.top = (height - ct.height) / 2 + 'px';

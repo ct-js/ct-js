@@ -57,11 +57,11 @@
 
     ct.mouse.listenerMove = function(e) {
         var rect = ct.pixiApp.view.getBoundingClientRect();
-        ct.mouse.rx = (e.clientX - rect.left) * ct.viewWidth / rect.width;
-        ct.mouse.ry = (e.clientY - rect.top) * ct.viewHeight / rect.height;
-        ct.mouse.x = ct.mouse.rx + ct.rooms.current.x;
-        ct.mouse.y = ct.mouse.ry + ct.rooms.current.y;
-        if (ct.mouse.rx > 0 && ct.mouse.ry > 0 && ct.mouse.ry < ct.viewHeight && ct.mouse.rx < ct.viewWidth) {
+        ct.mouse.xui = (e.clientX - rect.left) * ct.camera.width / rect.width;
+        ct.mouse.yui = (e.clientY - rect.top) * ct.camera.height / rect.height;
+        const rotated = ct.u.uiToGameCoord(ct.mouse.xui, ct.mouse.yui);
+        [ct.mouse.x, ct.mouse.y] = rotated;
+        if (ct.mouse.xui > 0 && ct.mouse.yui > 0 && ct.mouse.yui < ct.camera.height && ct.mouse.xui < ct.camera.width) {
             ct.mouse.inside = true;
         } else {
             ct.mouse.inside = false;
@@ -89,8 +89,8 @@
     };
     ct.mouse.listenerWheel = function (e) {
         ct.mouse.wheel = e.wheelDelta || -e.detail < 0? -1 : 1;
-        setKey('wheel', ct.mouse.wheel);
-        e.preventDefault();
+        setKey('Wheel', ct.mouse.wheel);
+        //e.preventDefault();
     };
 
     ct.mouse.setupListeners = function () {
@@ -98,15 +98,19 @@
             document.addEventListener('mousemove', ct.mouse.listenerMove, false);
             document.addEventListener('mouseup', ct.mouse.listenerUp, false);
             document.addEventListener('mousedown', ct.mouse.listenerDown, false);
-            document.addEventListener('wheel', ct.mouse.listenerWheel, false);
+            document.addEventListener('wheel', ct.mouse.listenerWheel, false, {
+                passive: false
+            });
             document.addEventListener('contextmenu', ct.mouse.listenerContextMenu, false);
-            document.addEventListener('DOMMouseScroll', ct.mouse.listenerWheel, false);
+            document.addEventListener('DOMMouseScroll', ct.mouse.listenerWheel, {
+                passive: false
+            });
         } else { // IE?
             document.attachEvent('onmousemove', ct.mouse.listenerMove);
             document.attachEvent('onmouseup', ct.mouse.listenerUp);
             document.attachEvent('onmousedown', ct.mouse.listenerDown);
-            document.attachEvent('oncontextmenu', ct.mouse.listenerWheel);
-            document.attachEvent('onmousewheel', ct.mouse.listenerContextMenu);
+            document.attachEvent('onmousewheel', ct.mouse.listenerWheel);
+            document.attachEvent('oncontextmenu', ct.mouse.listenerContextMenu);
         }
     };
 })();
