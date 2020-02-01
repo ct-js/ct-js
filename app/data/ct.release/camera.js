@@ -23,8 +23,8 @@
  *
  * @property {number} shake The current power of a screen shake effect, relative to the screen's max side (100 is 100% of screen shake). If set to 0 or less, it, disables the effect.
  * @property {number} shakePhase The current phase of screen shake oscillation.
- * @property {number} shakeDecay The amount of `shake` units substracted in a second.
- * @property {number} shakeFrequency The base frequency of the screen shake effect.
+ * @property {number} shakeDecay The amount of `shake` units substracted in a second. Default is 5.
+ * @property {number} shakeFrequency The base frequency of the screen shake effect. Default is 50.
  * @property {number} shakeX A multiplier applied to the horizontal screen shake effect. Default is 1.
  * @property {number} shakeY A multiplier applied to the vertical screen shake effect. Default is 1.
  * @property {number} shakeMax The maximum possible value for the `shake` property to protect players from losing their monitor, in `shake` units. Default is 10.
@@ -42,9 +42,10 @@ class Camera extends PIXI.DisplayObject {
         this.shiftX = this.shiftY = 0;
         this.borderX = this.borderY = null;
         this.drift = 0;
-        this.shake = this.shakeDecay = 0;
+        this.shake = 0;
+        this.shakeDecay = 5;
         this.shakeX = this.shakeY = 1;
-        this.shakeFrequency = 10;
+        this.shakeFrequency = 50;
 
         this.shakePhase = this.shakePhaseX = this.shakePhaseY = 0;
     }
@@ -84,9 +85,11 @@ class Camera extends PIXI.DisplayObject {
         }
 
         const sec = delta / PIXI.Ticker.shared.maxFPS;
+        this.shake -= sec * this.shakeDecay;
+        this.shake = Math.max(0, this.shake);
         this.shakePhase += sec * this.shakeFrequency;
-        this.shakePhaseX += sec * this.shakeFrequency + Math.sin(this.shakeFrequency * 1.489); // no logic in these constants
-        this.shakePhaseY += sec * this.shakeFrequency + Math.cos(this.shakeFrequency * 1.734); // They are used to desync fluctuations and remove repetitive circular movements
+        this.shakePhaseX += sec * this.shakeFrequency * (1 + Math.sin(this.shakePhase * 0.1489) * 0.25); // no logic in these constants
+        this.shakePhaseY += sec * this.shakeFrequency * (1 + Math.sin(this.shakePhase * 0.1734) * 0.25); // They are used to desync fluctuations and remove repetitive circular movements
 
         // The speed of drift movement
         const speed = this.drift? Math.min(1, (1-this.drift)*delta) : 1;
@@ -122,14 +125,14 @@ class Camera extends PIXI.DisplayObject {
 
     /** Returns the current camera position plus the screen shake effect. */
     get computedX() {
-        const dx = (Math.sin(this.shakePhaseX) + Math.sin(this.shakePhaseX * 2.1846)) / 1.5;
-        const x = this.x + dx * this.shake * Math.max(ct.viewWidth, this.height) / 100 * this.shakeX;
+        const dx = (Math.sin(this.shakePhaseX) + Math.sin(this.shakePhaseX * 3.1846)*0.25) / 1.25;
+        const x = this.x + dx * this.shake * Math.max(this.width, this.height) / 100 * this.shakeX;
         return this.roundValues? Math.round(x) : x;
     }
     /** Returns the current camera position plus the screen shake effect. */
     get computedY() {
-        const dy = (Math.sin(this.shakePhaseX) + Math.sin(this.shakePhaseX * 1.8948)) / 1.5;
-        const y = this.y + dy * this.shake * Math.max(ct.viewWidth, this.height) / 100 * this.shakeY;
+        const dy = (Math.sin(this.shakePhaseY) + Math.sin(this.shakePhaseY * 2.8948)*0.25) / 1.25;
+        const y = this.y + dy * this.shake * Math.max(this.width, this.height) / 100 * this.shakeY;
         return this.roundValues? Math.round(y) : y;
     }
 
