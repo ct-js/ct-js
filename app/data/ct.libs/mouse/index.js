@@ -17,10 +17,10 @@
     };
 
     ct.mouse = {
-        rx: 0,
-        ry: 0,
         xprev: 0,
         yprev: 0,
+        xuiprev: 0,
+        yuiprev: 0,
         inside: false,
         pressed: false,
         down: false,
@@ -41,12 +41,6 @@
             }
             return false;
         },
-        get x() {
-            return ct.mouse.rx + ct.rooms.current.x;
-        },
-        get y() {
-            return ct.mouse.ry + ct.rooms.current.y;
-        },
         hide() {
             ct.pixiApp.renderer.view.style.cursor = 'none';
         },
@@ -59,8 +53,7 @@
         var rect = ct.pixiApp.view.getBoundingClientRect();
         ct.mouse.xui = (e.clientX - rect.left) * ct.camera.width / rect.width;
         ct.mouse.yui = (e.clientY - rect.top) * ct.camera.height / rect.height;
-        const rotated = ct.u.uiToGameCoord(ct.mouse.xui, ct.mouse.yui);
-        [ct.mouse.x, ct.mouse.y] = rotated;
+        [ct.mouse.x, ct.mouse.y] = ct.u.uiToGameCoord(ct.mouse.xui, ct.mouse.yui);
         if (ct.mouse.xui > 0 && ct.mouse.yui > 0 && ct.mouse.yui < ct.camera.height && ct.mouse.xui < ct.camera.width) {
             ct.mouse.inside = true;
         } else {
@@ -88,8 +81,7 @@
         e.preventDefault();
     };
     ct.mouse.listenerWheel = function (e) {
-        ct.mouse.wheel = e.wheelDelta || -e.detail < 0? -1 : 1;
-        setKey('Wheel', ct.mouse.wheel);
+        setKey('Wheel', e.wheelDelta || -e.detail < 0? -1 : 1);
         //e.preventDefault();
     };
 

@@ -1,6 +1,6 @@
 ## `ct.mouse.x`, `ct.mouse.y`
 
-Current cursor position at horisontal and vertical axes, in world coordinates.
+Current cursor position at horisontal and vertical axes, in game coordinates.
 
 **Example: make a copy follow the cursor**
 
@@ -9,11 +9,9 @@ this.x = ct.mouse.x;
 this.y = ct.mouse.y;
 ```
 
-# `ct.mouse.rx`, `ct.mouse.ry`
+# `ct.mouse.xui`, `ct.mouse.yui`
 
-A cursor position relative to the current view (or camera), but not relative to the room.
-
-`ct.mouse.rx` is the same as `ct.mouse.x - ct.room.x`.
+A cursor position relative to the current view (UI coordinates), but not relative to the room.
 
 ## `ct.mouse.pressed`
 

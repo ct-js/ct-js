@@ -16,11 +16,16 @@
     };
     // returns a new object with the necessary information about a touch event
     var copyTouch = e => {
-        var rect = ct.pixiApp.view.getBoundingClientRect();
-        var touch = {
+        const rect = ct.pixiApp.view.getBoundingClientRect();
+        ct.touch.xui = (e.clientX - rect.left) * ct.camera.width;
+        ct.touch.yui = (e.clientY - rect.top) * ct.camera.height;
+        ct.touch.xuiprev = ct.touch.xui;
+        ct.touch.yuiprev = ct.touch.yui;
+        const positionUi = ct.u.uiToGameCoord(ct.touch.xui, ct.touch.yui);
+        const touch = {
             id: e.identifier,
-            x: (e.clientX - rect.left) * ct.viewWidth / rect.width + ct.rooms.current.x,
-            y: (e.clientY - rect.top) * ct.viewHeight / rect.height + ct.rooms.current.y,
+            x: positionUi[0],
+            y: positionUi[1],
             clientX: e.clientX,
             clientY: e.clientY,
             r: e.radiusX? Math.max(e.radiusX, e.radiusY) : 0
