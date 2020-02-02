@@ -4,8 +4,8 @@
 class Background extends PIXI.TilingSprite {
     constructor(bgName, frame, depth, exts) {
         exts = exts || {};
-        var width = ct.viewWidth,
-            height = ct.viewHeight;
+        var width = ct.camera.width,
+            height = ct.camera.height;
         if (exts.repeat === 'no-repeat' || exts.repeat === 'repeat-x') {
             height = ct.res.getTexture(bgName, frame || 0).orig.height * (exts.scaleY || 1);
         }
@@ -27,12 +27,13 @@ class Background extends PIXI.TilingSprite {
         if (this.scaleY) {
             this.tileScale.y = Number(this.scaleY);
         }
+        this.reposition();
     }
     onStep() {
         this.shiftX += ct.delta * this.movementX;
         this.shiftY += ct.delta * this.movementY;
     }
-    onDraw() {
+    reposition() {
         const cameraBounds = ct.camera.getBoundingBox();
         this.width = cameraBounds.width;
         this.height = cameraBounds.height;
@@ -48,6 +49,9 @@ class Background extends PIXI.TilingSprite {
         } else {
             this.x = this.shiftX + cameraBounds.x * (this.parallaxX - 1);
         }
+    }
+    onDraw() {
+        this.reposition();
     }
     static onCreate() {
         void 0;

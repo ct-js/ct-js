@@ -496,6 +496,7 @@ const runCtProject = async (project, projdir) => {
         afterdraw: '',
         afterstep: '',
 
+        beforeroomoncreate: '',
         roomoncreate: '',
         roomonleave: '',
         afterroomdraw: '',
@@ -580,6 +581,7 @@ const runCtProject = async (project, projdir) => {
         .replace('@startroom@', startroom.name)
         .replace('/*@rooms@*/', roomsCode)
         .replace('/*%switch%*/', injects.switch)
+        .replace('/*%beforeroomoncreate%*/', injects.beforeroomoncreate)
         .replace('/*%roomoncreate%*/', injects.roomoncreate)
         .replace('/*%roomonleave%*/', injects.roomonleave);
     buffer += '\n';

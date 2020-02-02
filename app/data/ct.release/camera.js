@@ -4,7 +4,7 @@
  * Usually you won't create new instances of it, but if you need, you can substitute
  * ct.camera with a new one.
  *
- * @extends {PIXI.AnimatedSprite}
+ * @extends {PIXI.DisplayObject}
  * @class
  *
  * @property {number} x The real x-coordinate of the camera. It does not have a screen shake effect applied, as well as may differ from `targetX` if the camera is in transition.
@@ -39,13 +39,14 @@ class Camera extends PIXI.DisplayObject {
         this.targetY = this.y = y;
         this.width = w || 1920;
         this.height = h || 1080;
-        this.shiftX = this.shiftY = 0;
+        this.shiftX = this.shiftY = this.interpolatedShiftX = this.interpolatedShiftY = 0;
         this.borderX = this.borderY = null;
         this.drift = 0;
         this.shake = 0;
         this.shakeDecay = 5;
         this.shakeX = this.shakeY = 1;
         this.shakeFrequency = 50;
+        this.getBounds = this.getBoundingBox;
 
         this.shakePhase = this.shakePhaseX = this.shakePhaseY = 0;
     }
@@ -72,6 +73,8 @@ class Camera extends PIXI.DisplayObject {
         this.targetX = this.x = x;
         this.targetY = this.y = y;
         this.shakePhase = this.shakePhaseX = this.shakePhaseY = 0;
+        this.interpolatedShiftX = this.shiftX;
+        this.interpolatedShiftY = this.shiftY;
     }
 
     /**
@@ -80,7 +83,7 @@ class Camera extends PIXI.DisplayObject {
      * @returns {void}
      */
     update(delta) {
-        if (this.follow.kill) {
+        if (this.follow && this.follow.kill) {
             this.follow = false;
         }
 
@@ -95,29 +98,32 @@ class Camera extends PIXI.DisplayObject {
         const speed = this.drift? Math.min(1, (1-this.drift)*delta) : 1;
 
         if (this.follow && ('x' in this.follow) && ('y' in this.follow)) {
-            let cx = 0,
-                cy = 0;
-            const w = this.borderX === null? this.width / 2 : Math.min(this.borderX, this.width / 2);
-            const h = this.borderY === null? this.height / 2 : Math.min(this.borderY, this.height / 2);
-
-            if (this.follow.x + this.shiftX - this.x < w) {
-                cx = this.follow.x + this.shiftX - this.x - w;
+            const bx = this.borderX === null? this.width / 2 : Math.min(this.borderX, this.width / 2),
+                  by = this.borderY === null? this.height / 2 : Math.min(this.borderY, this.height / 2);
+            const tl = this.uiToGameCoord(bx, by),
+                  br = this.uiToGameCoord(this.width - bx, this.height - by);
+            if (this.follow.x < tl[0]) {
+                this.targetX = this.follow.x - bx + this.width / 2;
+            } else if (this.follow.x > br[0]) {
+                this.targetX = this.follow.x + bx - this.width / 2;
             }
-            if (this.follow.x + this.shiftX - this.x > this.width - w) {
-                cx = this.follow.x + this.shiftX - this.x - this.width + w;
+            if (this.follow.y < tl[1]) {
+                this.targetY = this.follow.y - by + this.height / 2;
+            } else if (this.follow.y > br[1]) {
+                this.targetY = this.follow.y + by - this.height / 2;
             }
-            if (this.follow.y + this.shiftY - this.y < h) {
-                cy = this.follow.y + this.shiftY - this.y - h;
-            }
-            if (this.follow.y + this.shiftY - this.y > this.width - h) {
-                cy = this.follow.y + this.shiftY - this.y - this.width + h;
-            }
-            this.targetX += cx;
-            this.targetY += cy;
+            //if (this.follow.x > br[0]) {
+            //    this.targetX = this.follow.x - br[0];
+            //}
+            //if (this.follow.y > br[1]) {
+            //    this.targetY = this.follow.y - br[1];
+            //}
         }
 
-        this.x = this.targetX * (1-speed) + this.x * speed;
-        this.y = this.targetY * (1-speed) + this.y * speed;
+        this.x = this.targetX * speed + this.x * (1-speed);
+        this.y = this.targetY * speed + this.y * (1-speed);
+        this.interpolatedShiftX = this.shiftX * speed + this.interpolatedShiftX * (1-speed);
+        this.interpolatedShiftY = this.shiftY * speed + this.interpolatedShiftY * (1-speed);
 
         this.x = this.x || 0;
         this.y = this.y || 0;
@@ -127,19 +133,20 @@ class Camera extends PIXI.DisplayObject {
     get computedX() {
         const dx = (Math.sin(this.shakePhaseX) + Math.sin(this.shakePhaseX * 3.1846)*0.25) / 1.25;
         const x = this.x + dx * this.shake * Math.max(this.width, this.height) / 100 * this.shakeX;
-        return this.roundValues? Math.round(x) : x;
+        return x + this.interpolatedShiftX;
     }
     /** Returns the current camera position plus the screen shake effect. */
     get computedY() {
         const dy = (Math.sin(this.shakePhaseY) + Math.sin(this.shakePhaseY * 2.8948)*0.25) / 1.25;
         const y = this.y + dy * this.shake * Math.max(this.width, this.height) / 100 * this.shakeY;
-        return this.roundValues? Math.round(y) : y;
+        return y + this.interpolatedShiftY;
     }
 
     /**
      * Returns the position of the left edge where the visible rectangle ends, in game coordinates.
      * This can be used for UI positioning in game coordinates. This does not count for rotations, though.
      * For rotated and/or scaled viewports, see `getTopLeftCorner` and `getBottomLeftCorner` methods.
+     * @returns {number} The location of the left edge.
      */
     get left() {
         return this.computedX + (this.width / 2) * this.scale.x;
@@ -148,6 +155,7 @@ class Camera extends PIXI.DisplayObject {
      * Returns the position of the top edge where the visible rectangle ends, in game coordinates.
      * This can be used for UI positioning in game coordinates. This does not count for rotations, though.
      * For rotated and/or scaled viewports, see `getTopLeftCorner` and `getTopRightCorner` methods.
+     * @returns {number} The location of the top edge.
      */
     get top() {
         return this.computedY - (this.height / 2) * this.scale.y;
@@ -156,6 +164,7 @@ class Camera extends PIXI.DisplayObject {
      * Returns the position of the right edge where the visible rectangle ends, in game coordinates.
      * This can be used for UI positioning in game coordinates. This does not count for rotations, though.
      * For rotated and/or scaled viewports, see `getTopRightCorner` and `getBottomRightCorner` methods.
+     * @returns {number} The location of the right edge.
      */
     get right() {
         return this.computedX + (this.width / 2) * this.scale.x;
@@ -164,20 +173,31 @@ class Camera extends PIXI.DisplayObject {
      * Returns the position of the bottom edge where the visible rectangle ends, in game coordinates.
      * This can be used for UI positioning in game coordinates. This does not count for rotations, though.
      * For rotated and/or scaled viewports, see `getBottomLeftCorner` and `getBottomRightCorner` methods.
+     * @returns {number} The location of the bottom edge.
      */
     get bottom() {
         return this.computedY + (this.height / 2) * this.scale.y;
     }
 
     /**
+     * Translates a point from UI space to game space.
+     * @param {number} x The x coordinate in UI space.
+     * @param {number} y The y coordinate in UI space.
+     * @returns {Array<number>} A pair of new `x` and `y` coordinates.
+     */
+    uiToGameCoord(x, y) {
+        const modx = (x - this.width / 2) * this.scale.x,
+              mody = (y - this.height / 2) * this.scale.y;
+        const result = ct.u.rotateRad(modx, mody, this.rotation);
+        return [result[0] + this.computedX, result[1] + this.computedY];
+    }
+    /**
      * Gets the position of the top-left corner of the viewport in game coordinates.
      * This is useful for positioning UI elements in game coordinates, especially with rotated viewports.
      * @returns {Array<number>} A pair of `x` and `y` coordinates.
      */
     getTopLeftCorner() {
-        const hw = this.width / 2 * this.scale.x;
-        const hh = this.height / 2 * this.scale.y;
-        return ct.u.rotate(this.x - hw, this.y - hh, this.angle);
+        return this.uiToGameCoord(0, 0);
     }
 
     /**
@@ -186,9 +206,7 @@ class Camera extends PIXI.DisplayObject {
      * @returns {Array<number>} A pair of `x` and `y` coordinates.
      */
     getTopRightCorner() {
-        const hw = this.width / 2 * this.scale.x;
-        const hh = this.height / 2 * this.scale.y;
-        return ct.u.rotate(this.x + hw, this.y - hh, this.angle);
+        return this.uiToGameCoord(this.width, 0);
     }
 
     /**
@@ -197,9 +215,7 @@ class Camera extends PIXI.DisplayObject {
      * @returns {Array<number>} A pair of `x` and `y` coordinates.
      */
     getBottomLeftCorner() {
-        const hw = this.width / 2 * this.scale.x;
-        const hh = this.height / 2 * this.scale.y;
-        return ct.u.rotate(this.x - hw, this.y + hh, this.angle);
+        return this.uiToGameCoord(0, this.height);
     }
 
     /**
@@ -208,9 +224,7 @@ class Camera extends PIXI.DisplayObject {
      * @returns {Array<number>} A pair of `x` and `y` coordinates.
      */
     getBottomRightCorner() {
-        const hw = this.width / 2 * this.scale.x;
-        const hh = this.height / 2 * this.scale.y;
-        return ct.u.rotate(this.x + hw, this.y + hh, this.angle);
+        return this.uiToGameCoord(this.width, this.height);
     }
 
     /**
@@ -220,16 +234,59 @@ class Camera extends PIXI.DisplayObject {
      */
     getBoundingBox() {
         const bb = new PIXI.Bounds();
-        const hw = this.width / 2 * this.scale.x;
-        const hh = this.height / 2 * this.scale.y;
-        const tl = ct.u.rotate(this.x - hw, this.y - hh, this.angle),
-              tr = ct.u.rotate(this.x + hw, this.y - hh, this.angle),
-              bl = ct.u.rotate(this.x - hw, this.y + hh, this.angle),
-              br = ct.u.rotate(this.x + hw, this.y + hh, this.angle);
+        const tl = this.getTopLeftCorner(),
+              tr = this.getTopRightCorner(),
+              bl = this.getBottomLeftCorner(),
+              br = this.getBottomRightCorner();
         bb.addPoint(new PIXI.Point(tl[0], tl[1]));
         bb.addPoint(new PIXI.Point(tr[0], tr[1]));
         bb.addPoint(new PIXI.Point(bl[0], bl[1]));
         bb.addPoint(new PIXI.Point(br[0], br[1]));
         return bb.getRectangle();
+    }
+
+    /**
+     * Realigns all the copies in a room so that they distribute proportionally
+     * to a new camera size based on their `xstart` and `ystart` coordinates.
+     * Will throw an error if the given room is not in UI space (if `room.isUi` is not `true`).
+     * @param {Room} room The room which copies will be realigned.
+     * @returns {void}
+     */
+    realign(room) {
+        if (!room.isUi) {
+            throw new Error('[ct.camera] An attempt to realing a room that is not in UI space. The room in question is', room);
+        }
+        const w = (ct.rooms.templates[room.name].width || 1),
+              h = (ct.rooms.templates[room.name].height || 1);
+        for (const copy of room.children) {
+            if (!('xstart' in copy)) {
+                // this doesn't look like a copy, skip it
+                continue;
+            }
+            copy.x = copy.xstart / w * this.width;
+            copy.y = copy.ystart / h * this.height;
+        }
+    }
+    /**
+     * This will align all non-UI layers in the game according to the camera's transforms.
+     * This is automatically called internally, and you will hardly ever use it.
+     * @returns {void}
+     */
+    manageStage() {
+        const px = this.computedX,
+              py = this.computedY,
+              sx = 1 / (isNaN(this.scale.x)? 1 : this.scale.x),
+              sy = 1 / (isNaN(this.scale.y)? 1 : this.scale.y);
+        for (const item of ct.stage.children) {
+            if (!item.isUi && item.pivot) {
+                item.x = -this.width / 2;
+                item.y = -this.height / 2;
+                item.pivot.x = px;
+                item.pivot.y = py;
+                item.scale.x = sx;
+                item.scale.y = sy;
+                item.rotation = -this.rotation;
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ const ct = {
     delta: 1,
     /**
      * The camera that outputs its view to the renderer.
-     * @type {Copy}
+     * @type {Camera}
      */
     camera: null,
     /**
@@ -302,10 +302,7 @@ ct.u = {
      * @returns {Array<number>} A pair of new `x` and `y` coordinates.
      */
     uiToGameCoord(x, y) {
-        const modx = (x - ct.camera.width / 2) * ct.camera.scale.x + ct.camera.computedX,
-              mody = (y + ct.camera.height / 2) * ct.camera.scale.y + ct.camera.computedY;
-        const rotated = ct.u.rotate(modx, mody);
-        return [rotated.x, rotated.y];
+        return ct.camera.uiToGameCoord(x, y);
     },
     /**
      * Tests whether a given point is inside the given rectangle (it can be either a copy or an array)
@@ -428,20 +425,9 @@ ct.u.ext(ct.u, {// make aliases
         }
     };
     const manageCamera = () => {
-        const px = ct.camera.computedX,
-              py = ct.camera.computedY,
-              sx = 1 / (isNaN(ct.camera.scale.x)? 1 : ct.camera.scale.x),
-              sy = 1 / (isNaN(ct.camera.scale.y)? 1 : ct.camera.scale.y);
-        for (const item of ct.stage.children) {
-            if (!item.isUI && item.localTransform) {
-                item.x = -ct.camera.width / 2;
-                item.y = -ct.camera.height / 2;
-                item.pivot.x = px;
-                item.pivot.y = py;
-                item.scale.x = sx;
-                item.scale.y = sy;
-                item.rotation = -ct.camera.rotation;
-            }
+        if (ct.camera) {
+            ct.camera.update(ct.delta);
+            ct.camera.manageStage();
         }
     };
 

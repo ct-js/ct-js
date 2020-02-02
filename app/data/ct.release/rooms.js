@@ -114,14 +114,18 @@ class Room extends PIXI.Container {
          * Creates a new room and adds it to the stage, separating its draw stack from existing ones.
          * This room is added to `ct.stage` after all the other rooms.
          * @param {string} roomName The name of the room to be appended
+         * @param {object} [exts] Any additional parameters applied to the new room. Useful for passing settings and data to new widgets and prefabs.
          * @returns {Room} A newly created room
          */
-        append(roomName) {
+        append(roomName, exts) {
             if (!(roomName in ct.rooms.templates)) {
                 console.error(`[ct.rooms] append failed: the room ${roomName} does not exist!`);
                 return false;
             }
             const room = new Room(ct.rooms.templates[roomName]);
+            if (exts) {
+                ct.u.ext(room, exts);
+            }
             ct.stage.addChild(room);
             room.onCreate();
             ct.rooms.onCreate.apply(room);
@@ -131,14 +135,16 @@ class Room extends PIXI.Container {
          * Creates a new room and adds it to the stage, separating its draw stack from existing ones.
          * This room is added to `ct.stage` before all the other rooms.
          * @param {string} roomName The name of the room to be prepended
+         * @param {boolean} [isUi] Whether the added room should be treated as a UI layer. Defaults to false.
          * @returns {Room} A newly created room
          */
-        prepend(roomName) {
+        prepend(roomName, isUi) {
             if (!(roomName in ct.rooms.templates)) {
                 console.error(`[ct.rooms] prepend failed: the room ${roomName} does not exist!`);
                 return false;
             }
             const room = new Room(ct.rooms.templates[roomName]);
+            room.isUi = isUi;
             ct.stage.addChildAt(room, 0);
             room.onCreate();
             ct.rooms.onCreate.apply(room);
@@ -200,15 +206,15 @@ class Room extends PIXI.Container {
             var template = ct.rooms.templates[roomName];
             ct.roomWidth = template.width;
             ct.roomHeight = template.height;
-            ct.camera = new Camera(0, 0, ct.roomWidth, ct.roomHeight);
-            ct.camera.x = ct.roomWidth / 2;
-            ct.camera.y = ct.roomHeight / 2;
+            ct.camera = new Camera(ct.roomWidth / 2, ct.roomHeight / 2, ct.roomWidth, ct.roomHeight);
             ct.pixiApp.renderer.resize(template.width, template.height);
+            /*%beforeroomoncreate%*/
             ct.rooms.current = ct.room = new Room(template);
             ct.stage.addChild(ct.room);
             ct.room.onCreate();
             ct.rooms.onCreate.apply(ct.room);
             /*%switch%*/
+            ct.camera.manageStage();
             ct.rooms.switching = false;
             nextRoom = void 0;
         },
