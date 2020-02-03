@@ -66,6 +66,7 @@ class Room extends PIXI.Container {
      */
     ct.rooms = {
         templates: {},
+        list: {},
         /**
          * Creates and adds a background to the current room, at the given depth.
          * @param {string} texture The name of the texture to use
@@ -96,6 +97,40 @@ class Room extends PIXI.Container {
             for (var i in ct.types.list) {
                 ct.types.list[i] = [];
             }
+            ct.rooms.list = {};
+            for (const name in ct.rooms.templates) {
+                ct.rooms.list[name] = [];
+            }
+        },
+        /**
+         * This method safely removes a previously appended/prepended room from the stage.
+         * It will trigger "On Leave" for a room and "On Destroy" event for all the copies of the removed room.
+         * The room will also have `this.kill` set to `true` in its event, if it comes in handy.
+         * This method cannot remove `ct.room`, the main room.
+         * @param {Room} room The `room` argument must be a reference to the previously created room.
+         * @returns {void}
+         */
+        remove(room) {
+            if (!(room instanceof Room)) {
+                if (typeof room === 'string') {
+                    throw new Error('[ct.rooms] To remove a room, you should provide a reference to it (to an object), not its name. Provided value:', room);
+                }
+                throw new Error('[ct.rooms] An attempt to remove a room that is not actually a room! Provided value:', room);
+            }
+            const ind = ct.rooms.list[room.name];
+            if (ind !== -1) {
+                ct.rooms.list[room.name].splice(ind, 1);
+            } else {
+                // eslint-disable-next-line no-console
+                console.warn('[ct.rooms] Removing a room that was not found in ct.rooms.list. This is strange…');
+            }
+            room.kill = true;
+            ct.stage.removeChild(room);
+            for (const copy of room.children) {
+                copy.kill = true;
+            }
+            room.onLeave();
+            ct.rooms.onLeave.apply(room);
         },
         /*
          * Switches to the given room. Note that this transition happens at the end
@@ -129,25 +164,29 @@ class Room extends PIXI.Container {
             ct.stage.addChild(room);
             room.onCreate();
             ct.rooms.onCreate.apply(room);
+            ct.rooms.list[roomName].push(room);
             return room;
         },
         /**
          * Creates a new room and adds it to the stage, separating its draw stack from existing ones.
          * This room is added to `ct.stage` before all the other rooms.
          * @param {string} roomName The name of the room to be prepended
-         * @param {boolean} [isUi] Whether the added room should be treated as a UI layer. Defaults to false.
+         * @param {object} [exts] Any additional parameters applied to the new room. Useful for passing settings and data to new widgets and prefabs.
          * @returns {Room} A newly created room
          */
-        prepend(roomName, isUi) {
+        prepend(roomName, exts) {
             if (!(roomName in ct.rooms.templates)) {
                 console.error(`[ct.rooms] prepend failed: the room ${roomName} does not exist!`);
                 return false;
             }
             const room = new Room(ct.rooms.templates[roomName]);
-            room.isUi = isUi;
+            if (exts) {
+                ct.u.ext(room, exts);
+            }
             ct.stage.addChildAt(room, 0);
             room.onCreate();
             ct.rooms.onCreate.apply(room);
+            ct.rooms.list[roomName].push(room);
             return room;
         },
         /**
@@ -213,6 +252,7 @@ class Room extends PIXI.Container {
             ct.stage.addChild(ct.room);
             ct.room.onCreate();
             ct.rooms.onCreate.apply(ct.room);
+            ct.rooms.list[roomName].push(ct.room);
             /*%switch%*/
             ct.camera.manageStage();
             ct.rooms.switching = false;
