@@ -305,6 +305,15 @@ ct.u = {
         return ct.camera.uiToGameCoord(x, y);
     },
     /**
+     * Translates a point from fame space to UI space.
+     * @param {number} x The x coordinate in game space.
+     * @param {number} y The y coordinate in game space.
+     * @returns {Array<number>} A pair of new `x` and `y` coordinates.
+     */
+    gameToUiCoord(x, y) {
+        return ct.camera.gameToUiCoord(x, y);
+    },
+    /**
      * Tests whether a given point is inside the given rectangle (it can be either a copy or an array)
      * @param {number} x The x coordinate of the point
      * @param {number} y The y coordinate of the point
