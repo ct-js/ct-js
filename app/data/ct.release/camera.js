@@ -87,7 +87,7 @@ class Camera extends PIXI.DisplayObject {
             this.follow = false;
         }
 
-        const sec = delta / PIXI.Ticker.shared.maxFPS;
+        const sec = delta / (PIXI.Ticker.shared.maxFPS || 60);
         this.shake -= sec * this.shakeDecay;
         this.shake = Math.max(0, this.shake);
         if (this.shakeMax) {
@@ -272,6 +272,7 @@ class Camera extends PIXI.DisplayObject {
      * Realigns all the copies in a room so that they distribute proportionally
      * to a new camera size based on their `xstart` and `ystart` coordinates.
      * Will throw an error if the given room is not in UI space (if `room.isUi` is not `true`).
+     * You can skip the realignment for some copies if you set their `skipRealign` parameter to `true`.
      * @param {Room} room The room which copies will be realigned.
      * @returns {void}
      */
@@ -282,8 +283,7 @@ class Camera extends PIXI.DisplayObject {
         const w = (ct.rooms.templates[room.name].width || 1),
               h = (ct.rooms.templates[room.name].height || 1);
         for (const copy of room.children) {
-            if (!('xstart' in copy)) {
-                // this doesn't look like a copy, skip it
+            if (!('xstart' in copy) || copy.skipRealign) {
                 continue;
             }
             copy.x = copy.xstart / w * this.width;
