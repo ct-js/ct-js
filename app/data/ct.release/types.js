@@ -300,6 +300,18 @@ const Copy = (function () {
             this.hspeed += spd * Math.cos(dir*Math.PI/-180);
             this.vspeed += spd * Math.sin(dir*Math.PI/-180);
         }
+
+        /**
+         * Returns the room that owns the current copy
+         * @returns {Room} The room that owns the current copy
+         */
+        getRoom() {
+            let parent = this.parent;
+            while (!(parent instanceof Room)) {
+                parent = parent.parent;
+            }
+            return parent;
+        }
     }
     return Copy;
 })();
