@@ -105,22 +105,16 @@ class Camera extends PIXI.DisplayObject {
                   by = this.borderY === null? this.height / 2 : Math.min(this.borderY, this.height / 2);
             const tl = this.uiToGameCoord(bx, by),
                   br = this.uiToGameCoord(this.width - bx, this.height - by);
-            if (this.follow.x < tl[0]) {
+            if (this.follow.x < tl[0] - this.interpolatedShiftX) {
                 this.targetX = this.follow.x - bx + this.width / 2;
-            } else if (this.follow.x > br[0]) {
+            } else if (this.follow.x > br[0] - this.interpolatedShiftX) {
                 this.targetX = this.follow.x + bx - this.width / 2;
             }
-            if (this.follow.y < tl[1]) {
+            if (this.follow.y < tl[1] - this.interpolatedShiftY) {
                 this.targetY = this.follow.y - by + this.height / 2;
-            } else if (this.follow.y > br[1]) {
+            } else if (this.follow.y > br[1] - this.interpolatedShiftY) {
                 this.targetY = this.follow.y + by - this.height / 2;
             }
-            //if (this.follow.x > br[0]) {
-            //    this.targetX = this.follow.x - br[0];
-            //}
-            //if (this.follow.y > br[1]) {
-            //    this.targetY = this.follow.y - br[1];
-            //}
         }
 
         this.x = this.targetX * speed + this.x * (1-speed);
