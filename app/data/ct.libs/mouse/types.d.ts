@@ -19,5 +19,7 @@ declare namespace ct {
         var inside: boolean;
         /** Returns `true` if the mouse hovers over a given `copy`. This does **not** take scaling and rotation into account, as well as polygonal shapes (as they are hollow). */
         function hovers(copy: Copy): boolean;
+        /** Returns `true` if the mouse hovers over a given `copy`. This does **not** take scaling and rotation into account, as well as polygonal shapes (as they are hollow). */
+        function hoversUi(copy: Copy): boolean;
     }
 }

@@ -41,6 +41,21 @@
             }
             return false;
         },
+        hoversUi(copy) {
+            if (!copy.shape) {
+                return false;
+            }
+            if (copy.shape.type === 'rect') {
+                return ct.u.prect(ct.mouse.xui, ct.mouse.yui, copy);
+            }
+            if (copy.shape.type === 'circle') {
+                return ct.u.pcircle(ct.mouse.xui, ct.mouse.yui, copy);
+            }
+            if (copy.shape.type === 'point') {
+                return ct.mouse.xui === copy.x && ct.mouse.yui === copy.y;
+            }
+            return false;
+        },
         hide() {
             ct.pixiApp.renderer.view.style.cursor = 'none';
         },
