@@ -189,7 +189,7 @@ class Camera extends PIXI.DisplayObject {
     uiToGameCoord(x, y) {
         const modx = (x - this.width / 2) * this.scale.x,
               mody = (y - this.height / 2) * this.scale.y;
-        const result = ct.u.rotateRad(modx, mody, this.rotation);
+        const result = ct.u.rotate(modx, mody, this.rotation);
         return [result[0] + this.computedX, result[1] + this.computedY];
     }
 
@@ -202,7 +202,7 @@ class Camera extends PIXI.DisplayObject {
     gameToUiCoord(x, y) {
         const relx = x - this.computedX,
               rely = y - this.computedY;
-        const unrotated = ct.u.rotateRad(relx, rely, -this.rotation);
+        const unrotated = ct.u.rotate(relx, rely, -this.rotation);
         return [
             unrotated[0] / this.scale.x + this.width / 2,
             unrotated[1] / this.scale.y + this.height / 2
@@ -262,6 +262,19 @@ class Camera extends PIXI.DisplayObject {
         return bb.getRectangle();
     }
 
+    get rotation() {
+        return this.transform.rotation / Math.PI * -180;
+    }
+    /**
+     * The rotation angle of a camera.
+     * @param {number} value New rotation value
+     * @type {number}
+     */
+    set rotation(value) {
+        this.transform.rotation = value * Math.PI / -180;
+        return value;
+    }
+
     /**
      * Realigns all the copies in a room so that they distribute proportionally
      * to a new camera size based on their `xstart` and `ystart` coordinates.
@@ -302,7 +315,7 @@ class Camera extends PIXI.DisplayObject {
                 item.pivot.y = py;
                 item.scale.x = sx;
                 item.scale.y = sy;
-                item.rotation = -this.rotation;
+                item.angle = -this.angle;
             }
         }
     }
