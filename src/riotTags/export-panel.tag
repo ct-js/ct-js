@@ -7,26 +7,31 @@ export-panel
             p {voc.firstrunnotice}
             .fifty.npl
                 label
-                    i.icon-windows
+                    svg.icon
+                        use(xlink:href="data/icons.svg#windows")
                     input(type="checkbox" checked="{currentProject.settings.export.windows64}" onchange="{wire('window.currentProject.settings.export.windows64')}")
                     |   Windows x64
                 label
-                    i.icon-windows
+                    svg.icon
+                        use(xlink:href="data/icons.svg#windows")
                     input(type="checkbox" checked="{currentProject.settings.export.windows32}" onchange="{wire('window.currentProject.settings.export.windows32')}")
                     |   Windows x32
             .fifty.npr
                 label
-                    i.icon-linux
+                    svg.icon
+                        use(xlink:href="data/icons.svg#linux")
                     input(type="checkbox" checked="{currentProject.settings.export.linux64}" onchange="{wire('window.currentProject.settings.export.linux64')}")
                     |   Linux x64
                 label
-                    i.icon-linux
+                    svg.icon
+                        use(xlink:href="data/icons.svg#linux")
                     input(type="checkbox" checked="{currentProject.settings.export.linux32}" onchange="{wire('window.currentProject.settings.export.linux32')}")
                     |   Linux x32
             .clear
             .fifty.npl.npt
                 label
-                    i.icon-apple
+                    svg.icon
+                        use(xlink:href="data/icons.svg#apple")
                     input(type="checkbox" checked="{currentProject.settings.export.mac64}" onchange="{wire('window.currentProject.settings.export.mac64')}")
                     |   MacOS x64
             .clear
@@ -44,8 +49,10 @@ export-panel
                 button(onclick="{close}") {voc.hide}
                 button(onclick="{export}")
                     span.inlineblock.rotateccw(if="{working}")
-                        i.icon-refresh-ccw
-                    i.icon-upload(if="{!working}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#refresh-ccw")
+                    svg.feather(if="{!working}")
+                        use(xlink:href="data/icons.svg#upload")
                     span(if="{working}")   {voc.working}
                     span(if="{!working}")   {voc.export}
     script.
@@ -78,9 +85,9 @@ export-panel
                 runCtExport(currentProject, sessionStorage.projdir)
                 .then(getWritableDir)
                 .then(dir => writable = dir)
-                .then(() => fs.copy('./data/ct.release/nwPack/', `${writable}/export/`))
+                .then(() => fs.copy('./data/ct.release/desktopPack/', `${writable}/export/`))
                 .then(() => {
-                    const json = fs.readJSONSync('./data/ct.release/nwPack/package.json');
+                    const json = fs.readJSONSync('./data/ct.release/desktopPack/package.json');
                     json.version = version;
                     if (currentProject.settings.title) {
                         json.name = currentProject.settings.title;
@@ -111,7 +118,7 @@ export-panel
                     }
                     const options = {
                         files: `${writable}/export/**/**`, // use the glob format
-                        version: process.versions.nw,
+                        version: '0.34.1',
                         platforms,
                         flavor: (currentProject.settings.export.debug? 'sdk' : 'normal'),
                         appName: currentProject.settings.title || 'ct.js Game',
@@ -147,7 +154,8 @@ export-panel
                     alertify.success(`Success! Exported to: ${writable}/exportDesktop/`);
                     this.log.push(path.resolve(`${writable}/exportDesktop/`));
                     this.working = false;
-                    nw.Shell.showItemInFolder(path.resolve(`./exportDesktop/${currentProject.settings.title || 'ctjs-game'} - v${version}`));
+                    const {shell} = require('electron');
+                    shell.showItemInFolder(path.resolve(`./exportDesktop/${currentProject.settings.title || 'ctjs-game'} - v${version}`));
                     this.update();
                 })
                 .catch(error => {
@@ -166,5 +174,6 @@ export-panel
         };
 
         this.copyLog = e => {
-            nw.Clipboard.get().set(this.log.join('\n'));
+            const {clipboard} = require('electron');
+            clipboard.writeText(this.log.join('\n'));
         };

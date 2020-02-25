@@ -1,9 +1,13 @@
 (function (ct) {
     const loader = new PIXI.Loader();
-    const loadingLabel = ct.pixiApp.view.previousSibling,
-          loadingBar = loadingLabel.querySelector('.ct-aLoadingBar');
+    const loadingScreen = document.querySelector('.ct-aLoadingScreen'),
+          loadingBar = loadingScreen.querySelector('.ct-aLoadingBar');
     /* global dragonBones */
     const dbFactory = window.dragonBones? dragonBones.PixiFactory.factory : null;
+    /**
+     * An utility object that managess and stores textures and other entities
+     * @namespace
+     */
     ct.res = {
         soundsLoaded: 0,
         soundsTotal: [/*@sndtotal@*/][0],
@@ -29,6 +33,14 @@
             /*%res%*/
             PIXI.Loader.shared.load();
         },
+        /*
+         * Gets a pixi.js texture from a ct.js' texture name, so that it can be used in pixi.js objects.
+         * @param {string} name The name of the ct.js texture
+         * @param {number} [frame] The frame to extract
+         * @returns {PIXI.Texture|Array<PIXI.Texture>} If `frame` was specified, returns a single PIXI.Texture. Otherwise, returns an array with all the frames of this ct.js' texture.
+         *
+         * @note Formatted as a non-jsdoc comment as it requires a better ts declaration than the auto-generated one
+         */
         getTexture(name, frame) {
             if (name === -1) {
                 if (frame !== void 0) {
@@ -42,9 +54,15 @@
             }
             return reg.textures;
         },
-        makeSkeleton(name) {
+        /**
+         * Creates a DragonBones skeleton, ready to be added to your copies.
+         * @param {string} name The name of the skeleton asset
+         * @param {string} [skin] Optional; allows you to specify the used skin
+         * @returns {object} The created skeleton
+         */
+        makeSkeleton(name, skin) {
             const r = ct.res.skelRegistry[name],
-                  skel = dbFactory.buildArmatureDisplay('Armature', r.data.name);
+                  skel = dbFactory.buildArmatureDisplay('Armature', r.data.name, skin);
             skel.ctName = name;
             skel.on(dragonBones.EventObject.SOUND_EVENT, function (event) {
                 if (ct.sound.exists(event.name)) {
@@ -58,7 +76,7 @@
     };
 
     PIXI.Loader.shared.onLoad.add(e => {
-        loadingLabel.setAttribute('data-progress', e.progress);
+        loadingScreen.setAttribute('data-progress', e.progress);
         loadingBar.style.width = e.progress + '%';
     });
     PIXI.Loader.shared.onComplete.add(() => {
@@ -85,10 +103,10 @@
             ct.res.skelRegistry[skel].data = PIXI.Loader.shared.resources[ct.res.skelRegistry[skel].origname + '_ske.json'].data;
         }
         /*%resload%*/
-        loadingLabel.classList.add('hidden');
+        loadingScreen.classList.add('hidden');
         setTimeout(() => {
             /*%start%*/
-            ct.pixiApp.ticker.add(ct.loop);
+            PIXI.Ticker.shared.add(ct.loop);
             ct.rooms.forceSwitch(ct.rooms.starting);
         }, 0);
     });

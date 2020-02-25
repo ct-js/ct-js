@@ -3,40 +3,65 @@ modules-panel.panel.view
         .c3.borderright.tall
             ul#moduleincluded
                 li(each="{module in enabledModules}" onclick="{renderModule(module)}")
-                    i.icon-confirm
+                    svg.feather.success
+                        use(xlink:href="data/icons.svg#check")
                     span {module}
             ul#modulelist
                 li(each="{module in allModules}" onclick="{renderModule(module)}")
-                    i.icon(class="icon-{(module in window.currentProject.libs)? 'confirm on' : 'mod off'}")
+                    svg.feather(class="{(module in window.currentProject.libs)? 'success on' : 'off'}")
+                        use(xlink:href="data/icons.svg#{(module in window.currentProject.libs)? 'check' : 'ctmod'}")
                     span {module}
+            label.file.flexfix-footer.nmb
+                input(
+                    type="file"
+                    ref="importmodules"
+                    accept=".zip"
+                    onchange="{importModules}")
+                .button.wide.inline.nml.nmr
+                    svg.feather
+                        use(xlink:href="data/icons.svg#folder")
+                    span {voc.importModules}
         .c9.tall.flexfix(if="{currentModule}")
             ul.nav.tabs.flexfix-header.noshrink
                 li#modinfo(onclick="{changeTab('moduleinfo')}" class="{active: tab === 'moduleinfo'}")
-                    i.icon-info
+                    svg.feather
+                        use(xlink:href="data/icons.svg#info")
                     span {voc.info}
                 li#modsettings(if="{currentModule.fields && currentModuleName in currentProject.libs}" onclick="{changeTab('modulesettings')}" class="{active: tab === 'modulesettings'}")
-                    i.icon-settings
+                    svg.feather
+                        use(xlink:href="data/icons.svg#settings")
                     span {voc.settings}
                 li#modhelp( if="{currentModuleDocs}" onclick="{changeTab('modulehelp')}" class="{active: tab === 'modulehelp'}")
-                    i.icon-document
+                    svg.feather
+                        use(xlink:href="data/icons.svg#file-text")
                     span {voc.help}
                 li#modlogs(if="{currentModuleLogs}" onclick="{changeTab('modulelogs')}" class="{active: tab === 'modulelogs'}")
-                    i.icon-list
+                    svg.feather
+                        use(xlink:href="data/icons.svg#list")
                     span {voc.logs}
             div.flexfix-body
                 #moduleinfo.tabbed.nbt(show="{tab === 'moduleinfo'}")
                     label.bigpower(onclick="{toggleModule(currentModuleName)}" class="{off: !(currentModuleName in currentProject.libs)}")
-                        i(class="icon-{currentModuleName in currentProject.libs? 'confirm' : 'delete'}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#{currentModuleName in currentProject.libs? 'check' : 'x'}")
                         span
                     h1#modname
                         span {currentModule.main.name}
                         span.version {currentModule.main.version}
                     a.external(each="{author in currentModule.main.authors}" title="{voc.author}" href="{author.site || 'mailto:'+author.mail}")
-                        i.icon-user
+                        svg.feather
+                            use(xlink:href="data/icons.svg#user")
                         span#modauthor {author.name}
-                    i#modinjects.icon-zap.warning(title="{voc.hasinjects}" show="{currentModule.injects}")
-                    i#modconfigurable.icon-settings.success(title="{voc.hasfields}" show="{currentModule.fields}")
-                    i#modinputmethods.icon-airplay.success(title="{voc.hasinputmethods}" show="{currentModule.inputMethods}")
+
+                    span(title="{voc.hasinjects}")
+                        svg.feather.warning#modinjects(show="{currentModule.injects}")
+                            use(xlink:href="data/icons.svg#zap")
+                    span(title="{voc.hasfields}")
+                        svg.feather(show="{currentModule.fields}").success
+                            use(xlink:href="data/icons.svg#settings")
+                    span(title="{voc.hasinputmethods}")
+                        svg.feather(show="{currentModule.inputMethods}").success
+                            use(xlink:href="data/icons.svg#airplay")
 
                     #modinfohtml(if="{currentModuleHelp}")
                         raw(ref="raw" content="{currentModuleHelp}")
@@ -92,14 +117,16 @@ modules-panel.panel.view
                 #modulelogs.tabbed.nbt(show="{tab === 'modulelogs'}" if="{currentModuleLogs}")
                     h1 {voc.logs2}
                     raw(ref="raw" content="{currentModuleLogs}")
+
     script.
         const path = require('path'),
               fs = require('fs-extra'),
-              gui = require('nw.gui');
+              unzipper = require('unzipper');
         const md = require('markdown-it')({
             html: false,
             linkify: true,
             highlight: function (str, lang) {
+                const hljs = require('highlight.js');
                 if (lang && hljs.getLanguage(lang)) {
                     try {
                         return hljs.highlight(lang, str).value;
@@ -108,7 +135,6 @@ modules-panel.panel.view
                 return ''; // use external default escaping
             }
         });
-        const hljs = require('highlight.js');
         const glob = require('./data/node_requires/glob');
         const libsDir = './data/ct.libs';
         this.md = md;
@@ -137,13 +163,47 @@ modules-panel.panel.view
 
         this.escapeDots = str => str.replace(/\./g, '\\.');
 
+        const tryLoadTypedefs = moduleName => {
+            if (!(moduleName in currentProject.libs)) {
+                return;
+            }
+            const typedefPath = path.join(libsDir, moduleName, 'types.d.ts');
+            fs.pathExists(typedefPath)
+            .then(exists => {
+                if (!exists) {
+                    // generate dummy typedefs if none were provided by the module
+                    const data = `declare namespace ct {\n/** Sorry, no in-code docs for this module :c */\n var ${moduleName}: any; }`;
+                    glob.moduleTypings[moduleName] = [
+                        monaco.languages.typescript.javascriptDefaults.addExtraLib(data),
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib(data)
+                    ];
+                    return;
+                }
+                fs.readFile(typedefPath, 'utf8')
+                .then(data => {
+                    glob.moduleTypings[moduleName] = [
+                        monaco.languages.typescript.javascriptDefaults.addExtraLib(data),
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib(data)
+                    ];
+                });
+            });
+        };
+        const removeTypedefs = moduleName => {
+            if (glob.moduleTypings[moduleName]) {
+                for (const lib of glob.moduleTypings[moduleName]) {
+                    lib.dispose();
+                }
+            }
+        };
         fs.readdir(libsDir, (err, files) => {
             if (err) {
                 throw err;
             }
             for (var i = 0; i < files.length; i++) {
                 if (fs.pathExistsSync(path.join(libsDir, files[i], 'module.json'))) {
-                    this.allModules.push(files[i]);
+                    const moduleName = files[i];
+                    this.allModules.push(moduleName);
+                    tryLoadTypedefs(moduleName);
                 }
             }
             this.currentModuleHelp = '';
@@ -155,21 +215,23 @@ modules-panel.panel.view
         this.toggleModule = moduleName => e => {
             if (window.currentProject.libs[moduleName]) {
                 delete window.currentProject.libs[moduleName];
+                removeTypedefs(moduleName);
             } else {
                 window.currentProject.libs[moduleName] = {};
+                tryLoadTypedefs(moduleName);
                 // 'Settings' page
                 if (this.currentModule.fields && currentProject.libs[name]) {
-                    for (var k in this.currentModule.fields) {
-                        if (!currentProject.libs[name][this.currentModule.fields[k].key]) {
-                            if (this.currentModule.fields[k].default) {
-                                currentProject.libs[name][this.currentModule.fields[k].key] = this.currentModule.fields[k].default;
+                    for (const field of this.currentModule.fields) {
+                        if (!currentProject.libs[name][field.key]) {
+                            if (field.default) {
+                                currentProject.libs[name][field.key] = field.default;
                             } else {
-                                if (this.currentModule.fields[k].type == 'number') {
-                                    currentProject.libs[name][this.currentModule.fields[k].key] = 0;
-                                } else if (this.currentModule.fields[k].type == 'checkbox') {
-                                    currentProject.libs[name][this.currentModule.fields[k].key] = false;
+                                if (field.type == 'number') {
+                                    currentProject.libs[name][field.key] = 0;
+                                } else if (field.type == 'checkbox') {
+                                    currentProject.libs[name][field.key] = false;
                                 } else {
-                                    currentProject.libs[name][this.currentModule.fields[k].key] = '';
+                                    currentProject.libs[name][field.key] = '';
                                 }
                             }
                         }
@@ -228,22 +290,72 @@ modules-panel.panel.view
             this.tab = 'moduleinfo';
         };
 
-        var clipboard = nw.Clipboard.get();
-        var copymeMenu = new gui.Menu();
-        copymeMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.copy,
-            click: e => {
-                clipboard.set(this.currentFragment, 'text');
+        this.importModules = async (e) => {
+            const files = e.target.files;
+            if (files.length === 0) {
+                return;
             }
-        }));
-        copymeMenu.append(new gui.MenuItem({
-            label: window.languageJSON.common.addtonotes,
-            click: e => {
-                currentProject.notes += '\n' + this.currentFragment;
-            }
-        }));
-        this.showCopyMenu = e => {
-            this.currentFragment = `ct.${this.currentModuleName}.${e.item.name || e.item.parameter || e.item.method}`;
-            copymeMenu.popup(e.pageX, e.pageY);
-            e.preventDefault();
-        };
+            const value = files[0].path;
+            e.target.value = '';
+            let parentName = null;
+            let moduleName = null;
+            const entries = [];
+            fs.createReadStream(value)
+            .pipe(unzipper.Parse())
+            .on('entry', async (entry) => {
+                const fileName = entry.path.toLowerCase();
+                if (path.basename(fileName) === 'module.json') {
+                    // okay, we consumes the entry by buffering the contents into memory.
+                    const content = entry.tmpContent = await entry.buffer();
+                    const json = JSON.parse(content.toString());
+                    moduleName = json.main.packageName || path.basename(value, '.zip');
+                    const indexOf = fileName.indexOf('/');
+                    if (indexOf !== -1) {
+                        parentName = fileName.substring(0, indexOf);
+                    }
+                }
+                entries.push(entry);
+            })
+            .on('finish', async () => {
+                if (moduleName !== null) {
+                    // okay, let's create parent directory
+                    await fs.ensureDir(path.join(libsDir, moduleName));
+                    for (let entry of entries) {
+                        const filePath = entry.path;
+                        const indexOf = filePath.indexOf('/')
+                        if (filePath === parentName) {
+                            continue;
+                        }
+                        if (indexOf !== -1) {
+                            if (parentName !== null) {
+                                entry.path = `${moduleName}${filePath.substring(indexOf)}`;
+                            } else {
+                                entry.path = `${moduleName}/${filePath}`;
+                            }
+                        } else {
+                            entry.path = `${moduleName}/${filePath}`;
+                        }
+                        entry.path =  path.join(libsDir, entry.path);
+                         // 'Directory' or 'File'
+                        if (entry.type === 'Directory') {
+                            await fs.ensureDir(entry.path);
+                        } else {
+                            const fileName = entry.path.toLowerCase();
+                            if (fileName.endsWith("module.json")) {
+                                const content = entry.tmpContent;
+                                await fs.writeFile(entry.path, content);
+                            } else {
+                                entry.pipe(fs.createWriteStream(entry.path))
+                                .on('error', (e) => {
+                                    alertify.error(e);
+                                    console.log(e);
+                                    return;
+                                });
+                            }
+                        }
+                    }
+                    this.allModules.push(moduleName);
+                    this.update();
+                }
+            });
+        }

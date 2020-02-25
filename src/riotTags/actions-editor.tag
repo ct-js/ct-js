@@ -1,13 +1,14 @@
 actions-editor.panel.view.pad
     .panel.pad.flexfix.tall
         .flexfix-header
-            h1 
+            h1
                 | {voc.actionsEditor}
-                docs-shortcut(path="/actions.href")
+                docs-shortcut(path="/actions.html")
             p(if="{!currentProject.actions || !currentProject.actions.length}") {voc.noActionsYet}
         .flexfix-body(if="{!currentProject.actions || !currentProject.actions.length}")
             button.nml(onclick="{addNewAction}")
-                i.icon-plus
+                svg.feather
+                    use(xlink:href="data/icons.svg#plus")
                 span   {vocGlob.add}
         .flexfix-body.aStrippedList.nmt(if="{currentProject.actions && currentProject.actions.length}")
             li.hide800.npl.npr
@@ -21,16 +22,18 @@ actions-editor.panel.view.pad
                     .flexrow.middle
                         div.relative.wide
                             input.wide(type="text" placeholder="{voc.inputActionNamePlaceholder}" value="{action.name}" onchange="{checkActionNameAndSave}")
-                            .anErrorNotice(if="{nameTaken === action.name}") {vocGlob.nametaken} 
-                            .anErrorNotice(if="{action.name.trim() === ''}") {vocGlob.cannotBeEmpty} 
+                            .anErrorNotice(if="{nameTaken === action.name}" ref="errors") {vocGlob.nametaken}
+                            .anErrorNotice(if="{action.name.trim() === ''}" ref="errors") {vocGlob.cannotBeEmpty}
                         .spacer
-                        i.a.icon-x(title="{voc.deleteAction}" onclick="{deleteAction}")
+                        svg.feather.a(title="{voc.deleteAction}" onclick="{deleteAction}")
+                            use(xlink:href="data/icons.svg#x")
                 .c8.npr.breakon800
                     ul.aStrippedList.nmt
                         li.flexrow.middle.npl(each="{method, mInd in action.methods}")
                             .fifty.npt.npl.npb
                                 code.inline {method.code}
-                                i.icon-alert-circle.orange(if="{!(method.code.split('.')[0] in currentProject.libs)}" title="{voc.methodModuleMissing}")
+                                svg.feather.orange(if="{!(method.code.split('.')[0] in currentProject.libs)}" title="{voc.methodModuleMissing}")
+                                    use(xlink:href="data/icons.svg#alert-circle")
                             .fifty.npt.npr.npb
                                 b {voc.multiplier}:
                                 input.short(
@@ -38,18 +41,22 @@ actions-editor.panel.view.pad
                                     value="{method.multiplier === void 0? 1 : method.multiplier}"
                                     onchange="{wire('window.currentProject.actions.'+ ind +'.methods.'+ mInd +'.multiplier')}"
                                 )
-                            i.icon-x.a(title="{voc.deleteMethod}" onclick="{deleteMethod(action)}")
+                            svg.feather.a(title="{voc.deleteMethod}" onclick="{deleteMethod(action)}")
+                                use(xlink:href="data/icons.svg#x")
                     button.nml(onclick="{addMethod}")
-                        i.icon-plus
+                        svg.feather
+                            use(xlink:href="data/icons.svg#plus")
                         span   {voc.addMethod}
                 .clear
             p
                 button.nml(onclick="{addNewAction}")
-                    i.icon-plus
+                    svg.feather
+                        use(xlink:href="data/icons.svg#plus")
                     span   {voc.addAction}
         .flexfix-footer
             button.wide(onclick="{saveActions}")
-                i.icon-save
+                svg.feather
+                    use(xlink:href="data/icons.svg#save")
                 span   {vocGlob.save}
     .dimmer(show="{addingMethod}")
         method-selector(action="{editedAction}" ref="methodSelector")
@@ -89,6 +96,19 @@ actions-editor.panel.view.pad
         };
 
         this.saveActions = e => {
+            if ((Array.isArray(this.refs.errors) && this.refs.errors.length) || this.refs.errors) {
+                let errors = this.refs.errors;
+                if (!Array.isArray(errors)) {
+                    errors = [errors];
+                }
+                // animate the error notice
+                const jellify = require('./data/node_requires/jellify');
+                for (const errorTag of errors) {
+                    jellify(errorTag);
+                }
+                soundbox.play('Failure');
+                return false;
+            }
             this.parent.editingActions = false;
             this.parent.update();
         };

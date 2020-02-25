@@ -16,7 +16,7 @@
         "ctsite": "Página de Inicio de ct.js",
         "cut": "Cortar",
         "delete": "Borrar",
-        "donate": "Donar ❤️",
+        "donate": "Donar",
         "done": "¡Hecho!",
         "duplicate": "Duplicar",
         "exit": "Salir",
@@ -44,7 +44,8 @@
         "tilelayer": "capa de baldosas",
         "wrongFormat": "Formato de archivo incorrecto",
         "yes": "Si",
-        "contribute": ""
+        "contribute": "",
+        "zoom": "Zoom:"
     },
     "actionsEditor": {
         "actions": "Acciones",
@@ -322,7 +323,6 @@
         "add": "Añadir",
         "none": "Nada",
         "done": "Hecho",
-        "zoom": "Zoom:",
         "grid": "Establecer cuadrícula",
         "gridoff": "Deshabilitar cuadrícula",
         "gridsize": "Tamaño de la cuadrícula:",

@@ -6,7 +6,7 @@ texture-editor.panel.view
                     b {voc.name}
                     br
                     input.wide(type="text" value="{opts.texture.name}" onchange="{wire('this.texture.name')}")
-                    .anErrorNotice(if="{nameTaken}") {vocGlob.nametaken}
+                    .anErrorNotice(if="{nameTaken}" ref="errorNotice") {vocGlob.nametaken}
                     label.checkbox
                         input#texturetiled(type="checkbox" checked="{opts.texture.tiled}" onchange="{wire('this.texture.tiled')}")
                         span   {voc.tiled}
@@ -20,7 +20,8 @@ texture-editor.panel.view
                         button.wide.nml(onclick="{textureCenter}")
                             span   {voc.setcenter}
                         button.square.nmr(onclick="{textureIsometrify}" title="{voc.isometrify}")
-                            i.icon-map-pin
+                            svg.feather
+                                use(xlink:href="data/icons.svg#map-pin")
                 fieldset
                     b {voc.form}
                     label.checkbox
@@ -46,7 +47,8 @@ texture-editor.panel.view
                         br
                         input.short(type="number" value="{opts.texture.bottom}" onchange="{wire('this.texture.bottom')}" oninput="{wire('this.texture.bottom')}")
                     button.wide(onclick="{textureFillRect}")
-                        i.icon-maximize
+                        svg.feather
+                            use(xlink:href="data/icons.svg#maximize")
                         span {voc.fill}
                 fieldset(if="{opts.texture.shape === 'strip'}")
                     .flexrow.aStripPointRow(each="{point, ind in getMovableStripPoints()}")
@@ -54,7 +56,8 @@ texture-editor.panel.view
                         span   ×
                         input.short(type="number" value="{point.y}" oninput="{wire('this.texture.stripPoints.'+ ind + '.y')}")
                         button.square.inline(title="{voc.removePoint}" onclick="{removeStripPoint}")
-                            i.icon-minus
+                            svg.feather
+                                use(xlink:href="data/icons.svg#minus")
                     label.checkbox
                         input(type="checkbox" checked="{opts.texture.closedStrip}" onchange="{onClosedStripChange}" )
                         span   {voc.closeShape}
@@ -62,15 +65,17 @@ texture-editor.panel.view
                         input(type="checkbox" checked="{opts.texture.symmetryStrip}" onchange="{onSymmetryChange}")
                         span   {voc.symmetryTool}
                     button.wide(onclick="{addStripPoint}")
-                        i.icon-plus
+                        svg.feather
+                            use(xlink:href="data/icons.svg#plus")
                         span   {voc.addPoint}
                 fieldset
                     label.checkbox
                         input(checked="{prevShowMask}" onchange="{wire('this.prevShowMask')}" type="checkbox")
                         span   {voc.showmask}
             .flexfix-footer
-                button.wide(onclick="{textureSave}")
-                    i.icon-save
+                button.wide(onclick="{textureSave}" title="Shift+Control+S" data-hotkey="Control+S")
+                    svg.feather
+                        use(xlink:href="data/icons.svg#save")
                     span {window.languageJSON.common.save}
         .texture-editor-anAtlas.tall(
             if="{opts.texture}"
@@ -106,10 +111,12 @@ texture-editor.panel.view
                     label.file(title="{voc.replacetexture}")
                         input(type="file" ref="textureReplacer" accept=".png,.jpg,.jpeg,.bmp,.gif" onchange="{textureReplace}")
                         .button.inline
-                            i.icon-folder
+                            svg.feather
+                                use(xlink:href="data/icons.svg#folder")
                             span {voc.replacetexture}
                     .button.inline(title="{voc.reimport}" if="{opts.texture.source}" onclick="{reimport}")
-                        i.icon-refresh-ccw
+                        svg.feather
+                            use(xlink:href="data/icons.svg#refresh-ccw")
             .textureview-zoom
                 div.button-stack.inlineblock
                     button#texturezoom25.inline(onclick="{textureToggleZoom(0.25)}" class="{active: zoomFactor === 0.25}") 25%
@@ -167,25 +174,30 @@ texture-editor.panel.view
                     canvas(ref="grprCanvas")
                 .flexrow
                     button#textureplay.square.inline(onclick="{currentTexturePreviewPlay}")
-                        i(class="icon-{this.prevPlaying? 'pause' : 'play'}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#{prevPlaying? 'pause' : 'play'}")
                     span(ref="textureviewframe") 0 / 1
                     .filler
                     button#textureviewback.square.inline(onclick="{currentTexturePreviewBack}")
-                        i.icon-back
+                        svg.feather
+                            use(xlink:href="data/icons.svg#skip-back")
                     button#textureviewnext.square.inline.nmr(onclick="{currentTexturePreviewNext}")
-                        i.icon-next
+                        svg.feather
+                            use(xlink:href="data/icons.svg#skip-forward")
                 .flexrow
                     b {voc.speed}
                     .filler
                     input#grahpspeed.short(type="number" min="1" value="{prevSpeed}" onchange="{wire('this.prevSpeed')}" oninput="{wire('this.prevSpeed')}")
                 .relative
                     button#texturecolor.inline.wide(onclick="{changeTexturePreviewColor}")
-                        i.icon-drop
+                        svg.feather
+                            use(xlink:href="data/icons.svg#droplet")
                         span {voc.bgcolor}
                 input.color.rgb#previewbgcolor
 
     color-picker(
         ref="previewBackgroundColor" if="{changingTexturePreviewColor}"
+        hidealpha="true"
         color="{previewColor}" onapply="{updatePreviewColor}" onchanged="{updatePreviewColor}" oncancel="{cancelPreviewColor}"
     )
     script.
@@ -247,16 +259,17 @@ texture-editor.panel.view
         });
 
         this.textureReplace = e => {
-            if (/\.(jpg|gif|png|jpeg)/gi.test(this.refs.textureReplacer.value)) {
+            const val = this.refs.textureReplacer.files[0].path;
+            if (/\.(jpg|gif|png|jpeg)/gi.test(val)) {
                 this.loadImg(
                     this.texture.uid,
-                    this.refs.textureReplacer.value,
-                    sessionStorage.projdir + '/img/i' + this.texture.uid + path.extname(this.refs.textureReplacer.value)
+                    val,
+                    sessionStorage.projdir + '/img/i' + this.texture.uid + path.extname(val)
                 );
-                this.texture.source = this.refs.textureReplacer.value;
+                this.texture.source = val;
             } else {
                 alertify.error(window.languageJSON.common.wrongFormat);
-                console.log(this.refs.textureReplacer.value, 'NOT passed');
+                console.log(val, 'NOT passed');
             }
             this.refs.textureReplacer.value = '';
         };
@@ -264,7 +277,7 @@ texture-editor.panel.view
             this.loadImg(
                 this.texture.uid,
                 this.texture.source,
-                sessionStorage.projdir + '/img/i' + this.texture.uid + path.extname(this.refs.textureReplacer.value)
+                sessionStorage.projdir + '/img/i' + this.texture.uid + path.extname(this.texture.source)
             );
         }
 
@@ -689,6 +702,12 @@ texture-editor.panel.view
          * Событие сохранения графики
          */
         this.textureSave = () => {
+            if (this.nameTaken) {
+                // animate the error notice
+                require('./data/node_requires/jellify')(this.refs.errorNotice);
+                soundbox.play('Failure');
+                return false;
+            }
             this.parent.fillTextureMap();
             glob.modified = true;
             this.texture.lastmod = +(new Date());
@@ -726,7 +745,7 @@ texture-editor.panel.view
                     w*k, h*k
                 );
                 var data = c.toDataURL().replace(/^data:image\/\w+;base64,/, '');
-                var buf = new Buffer(data, 'base64');
+                var buf = Buffer.from(data, 'base64');
                 fs.writeFile(destination, buf, function(err) {
                     if (err) {
                         console.log(err);

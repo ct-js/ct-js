@@ -5,7 +5,7 @@ style-editor.panel.view
                 b {vocGlob.name}
                 br
                 input.wide(type="text" value="{styleobj.name}" onchange="{wire('this.styleobj.name')}")
-                .anErrorNotice(if="{nameTaken}") {vocGlob.nametaken}
+                .anErrorNotice(if="{nameTaken}" ref="errorNotice") {vocGlob.nametaken}
         .tabwrap.flexfix-body
             ul.nav.tabs.nogrow.noshrink
                 li(onclick="{changeTab('stylefont')}" class="{active: tab === 'stylefont'}") {voc.font}
@@ -35,11 +35,14 @@ style-editor.panel.view
                         b {voc.alignment}
                         .align.buttonselect
                             button#middleleft.inline.nml(onclick="{styleSetAlign('left')}" class="{active: this.styleobj.font.halign === 'left'}")
-                                i.icon.icon-align-left
+                                svg.feather
+                                    use(xlink:href="data/icons.svg#align-left")
                             button#middlecenter.inline(onclick="{styleSetAlign('center')}" class="{active: this.styleobj.font.halign === 'center'}")
-                                i.icon.icon-align-center
+                                svg.feather
+                                    use(xlink:href="data/icons.svg#align-center")
                             button#middleright.inline(onclick="{styleSetAlign('right')}" class="{active: this.styleobj.font.halign === 'right'}")
-                                i.icon.icon-align-right
+                                svg.feather
+                                    use(xlink:href="data/icons.svg#align-right")
                         label
                             b {voc.lineHeight}
                             br
@@ -117,8 +120,9 @@ style-editor.panel.view
                         br
                         input#shadowblur(type="number" value="{styleobj.shadow.blur}" min="0" onchange="{wire('this.styleobj.shadow.blur')}" oninput="{wire('this.styleobj.shadow.blur')}")
         .flexfix-footer
-            button.wide.nogrow.noshrink(onclick="{styleSave}")
-                i.icon.icon-confirm
+            button.wide.nogrow.noshrink(onclick="{styleSave}" title="Shift+Control+S" data-hotkey="Control+S")
+                svg.feather
+                    use(xlink:href="data/icons.svg#check")
                 span {voc.apply}
     #stylepreview.tall(ref="canvasSlot")
     texture-selector(if="{selectingTexture}" onselected="{applyTexture}" ref="textureselector")
@@ -142,6 +146,7 @@ style-editor.panel.view
             this.tab = tab;
         };
         this.on('mount', e => {
+            const PIXI = require('pixi.js-legacy');
             const width = 800;
             const height = 500;
             this.pixiApp = new PIXI.Application({
@@ -151,7 +156,6 @@ style-editor.panel.view
             });
             this.refs.canvasSlot.appendChild(this.pixiApp.view);
 
-            console.log(this.pixiApp);
             var labelShort = languageJSON.styleview.testtext,
                 labelMultiline = languageJSON.styleview.testtext.repeat(2) + '\n' + languageJSON.styleview.testtext.repeat(3) + '\n' + languageJSON.styleview.testtext,
                 labelLong = 'A quick blue cat jumps over the lazy frog. 0123456789 '.repeat(3),
@@ -234,6 +238,12 @@ style-editor.panel.view
             this.pixiApp.render();
         };
         this.styleSave = function() {
+            if (this.nameTaken) {
+                // animate the error notice
+                require('./data/node_requires/jellify')(this.refs.errorNotice);
+                soundbox.play('Failure');
+                return false;
+            }
             this.styleobj.lastmod = +(new Date());
             this.styleGenPreview(sessionStorage.projdir + '/img/' + this.styleobj.origname + '_prev@2.png', 128);
             this.styleGenPreview(sessionStorage.projdir + '/img/' + this.styleobj.origname + '_prev.png', 64).then(() => {
@@ -249,12 +259,12 @@ style-editor.panel.view
         this.styleGenPreview = function(destination, size) {
             return new Promise((accept, decline) => {
                 var img = this.pixiApp.renderer.plugins.extract.base64(this.labelThumbnail);
-                console.log(img);
+
                 var data = img.replace(/^data:image\/\w+;base64,/, '');
                 var buf = new Buffer(data, 'base64'); // TODO: replace as plain Buffer constructor is deprecated
                 fs.writeFile(destination, buf, function(err) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                         decline(err);
                     } else {
                         accept(destination);

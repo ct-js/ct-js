@@ -25,9 +25,28 @@ settings-panel.panel.view
             |   {voc.versionpostfix}
             input(type="text" style="width: 3rem;" value="{currentProject.settings.versionPostfix}" length="5" onchange="{wire('this.currentProject.settings.versionPostfix')}")
         fieldset
+            h2 {voc.branding.heading}
+            .block
+                b
+                    span {voc.branding.icon}
+                    hover-hint(text="{voc.branding.iconNotice}")
+                br
+                texture-input(val="{currentProject.settings.branding.icon || -1}" showempty="yep" onselected="{updateGameIcon}")
+            .spacer
+            .block
+                b
+                    span {voc.branding.accent}
+                    hover-hint(text="{voc.branding.accentNotice}")
+                color-input(onchange="{wire('window.currentProject.settings.branding.accent', true)}" color="{currentProject.settings.branding.accent}")
+            .spacer
+            .block.checkbox
+                input(type="checkbox" value="{currentProject.settings.branding.invertPreloaderScheme}" checked="{currentProject.settings.branding.invertPreloaderScheme}" onchange="{wire('this.currentProject.settings.branding.invertPreloaderScheme')}")
+                span {voc.branding.invertPreloaderScheme}
+        fieldset
             h2 {voc.actions}
             button.nml(onclick="{openActionsEditor}")
-                i.icon-airplay
+                svg.feather
+                    use(xlink:href="data/icons.svg#airplay")
                 span   {voc.editActions}
         fieldset
             h2 {voc.renderoptions}
@@ -37,6 +56,9 @@ settings-panel.panel.view
             label.block.checkbox
                 input(type="checkbox" value="{currentProject.settings.highDensity}" checked="{currentProject.settings.highDensity}" onchange="{wire('this.currentProject.settings.highDensity')}")
                 span {voc.highDensity}
+            label.block.checkbox
+                input(type="checkbox" value="{currentProject.settings.usePixiLegacy}" checked="{currentProject.settings.usePixiLegacy}" onchange="{wire('this.currentProject.settings.usePixiLegacy')}")
+                span {voc.usePixiLegacy}
             label.block
                 span {voc.maxFPS}
                 |
@@ -50,48 +72,23 @@ settings-panel.panel.view
                 input(type="checkbox" value="{currentProject.settings.minifyjs}" checked="{currentProject.settings.minifyjs}" onchange="{wire('this.currentProject.settings.minifyjs')}")
                 span {voc.minifyjs}
 
-    .tall.fifty.flexfix.npr.npt.npb
-        h1.flexfix-header {voc.scripts.header}
-        ul.menu.flexfix-body
-            li(each="{script in currentProject.scripts}" onclick="{selectScript}")
-                code {script.name}
-                div.toright(onclick="{deleteScript}" title="{voc.scripts.deleteScript}")
-                    i.icon-delete
-        button.flexfix-footer(onclick="{addNewScript}")
-            i.icon-add
-            span {voc.scripts.addNew}
+    scripts-panel.tall.fifty.flexfix.npr.npt.npb
     actions-editor(if="{editingActions}")
-    script-editor(if="{currentScript}" script="{currentScript}")
     script.
         this.namespace = 'settings';
         this.mixin(window.riotVoc);
         this.mixin(window.riotWired);
         this.currentProject = window.currentProject;
-        this.currentProject.scripts = this.currentProject.scripts || [];
         this.currentProject.settings.fps = this.currentProject.settings.fps || 30;
 
-        this.addNewScript = e => {
-            var script = {
-                name: 'New Script',
-                code: `/* ${this.voc.scripts.newScriptComment} */`
-            };
-            this.currentProject.scripts.push(script);
-            this.currentScript = script;
-        };
-        this.selectScript = e => {
-            this.currentScript = e.item.script;
-        };
-        this.deleteScript = e => {
-            var script = e.item.script,
-                ind = this.currentProject.scripts.indexOf(script);
-            this.currentProject.scripts.splice(ind, 1);
-            e.stopPropagation();
-        };
         this.changeTitle = e => {
             currentProject.settings.title = e.target.value.trim();
             if (currentProject.settings.title) {
                 document.title = currentProject.settings.title + ' — ct.js';
             }
+        };
+        this.updateGameIcon = tex => {
+            currentProject.settings.branding.icon = tex.uid;
         };
         this.openActionsEditor = e => {
             this.editingActions = true;
