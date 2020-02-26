@@ -371,7 +371,7 @@
         "spawningHeading": "Erzeugung",
         "timeBetweenBursts": "Zeit zwischen Erzeugungen:",
         "spawnAtOnce": "Gleichzeitig erzeugen:",
-        "chanceToSpawn": "Wahrscheinlichkeit einen Partikel zu erzeugen:",
+        "chanceToSpawn": "Erzeugungswahrscheinlichkeit:",
         "maxParticles": "Maximale Partikel:",
         "lifetime": "Partikel Lebenszeit (sek)",
         "emitterLifetime": "Emitter Lebenszeit (sek):",
@@ -392,7 +392,7 @@
         "radius": "Radius:",
         "starPoints": "Punkte:",
         "startAngle": "Rotation, (Grad).:",
-        "relativeEmitterPosition": "Position relativ zu anderen Emittern",
+        "relativeEmitterPosition": "Rel. Position zu anderen Emittern",
 
         "addEmitter": "Weiteren Emitter hinzufügen",
         "reset": "Vorschau zurücksetzen",
