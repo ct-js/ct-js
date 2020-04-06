@@ -392,11 +392,26 @@ ct.u = {
     /**
      * Returns a Promise that resolves after the given time
      * @param {number} time Time to wait, in milliseconds
+     * @param {object} [options={}] An object with options
+     * @param {boolean} [options.useUiDelta=false] If true, use ct.deltaUi instead of ct.delta 
+     * @param {boolean} [options.useTimeout=false] If true, use setTimeout() instead of ct.delta
      * @returns {Promise<void>} The promise with no data
      */
-    wait(time) {
+    wait(time, options = {}) {
         var room = ct.room.name;
-        return new Promise((resolve, reject) => setTimeout(() => {
+        var options = {
+            useUiDelta: options.useUiDelta || false,
+            useTimeout: options.useTimeout || false
+        };
+        if ((options.useUiDelta && options.useTimeout) == true) {
+            return new Promise((resolve, reject) => {
+                reject({
+                    info: 'Both options are true',
+                    from: 'ct.u.wait'
+                });
+            });
+        }
+        if (options.useTimeout) return new Promise((resolve, reject) => setTimeout(() => {
             if (ct.room.name === room) {
                 resolve();
             } else {
@@ -406,7 +421,37 @@ ct.u = {
                 });
             }
         }, time));
-    }
+        return new Promise(function (resolve, reject) {
+            let time_a = 0; // Timer time
+            let timer; // Timer
+            const intervalClear = function () {
+                clearInterval(timer);
+            }; // Function to clear the setInterval, not sure if needed
+            timer = setInterval(function () {
+                if (ct.room.name === room) {
+                    time_a += options.useUiDelta ? ct.deltaUi : ct.delta; // Add time
+                    if (time_a * 1000 >= time) {
+                        resolve() && intervalClear(); // If the timer is done, resolve and clear the interval
+                    }
+                } else {
+                    reject({
+                        info: 'Room switch',
+                        from: 'ct.u.wait'
+                    }); // Reject if the room was switched
+                }
+            }, 1);
+        });
+        /*return new Promise((resolve, reject) => setTimeout(() => {
+            if (ct.room.name === room) {
+                resolve();
+            } else {
+                reject({
+                    info: 'Room switch',
+                    from: 'ct.u.wait'
+                });
+            }
+        }, time));*/
+    },
 };
 ct.u.ext(ct.u, {// make aliases
     lengthDirX: ct.u.ldx,
