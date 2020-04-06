@@ -1,4 +1,11 @@
 /* eslint-disable no-underscore-dangle */
+
+// eslint-disable-next-line no-warning-comments
+/* Todo:
+ * - Fix timer.js not being added to the export
+ * - Add support for ending timers after a certain amount of time
+ */
+
 (function () {
     /**
      * Timer utilities
@@ -21,7 +28,12 @@
          */
         _timersUi: {},
         /**
-         * Adds the timer with the given name
+         * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
+         * @private
+         */
+        _timersInterval: {},
+        /**
+         * Adds a new timer with the given name
          *
          * @param {string} name The name of the timer, which you use to access it from `ct.timer.timers`.
          * @param {boolean} [uiDelta=false] If the timer should be counted using `ct.deltaUi`
@@ -71,6 +83,12 @@
 
             for (let timer of this._timersUi) {
                 if (!(timer instanceof Number)) console.warn(`[ct.timer] ${timer} is not a number!`);
+                timer += ct.deltaUi;
+            }
+
+            for (let timer of this._timersInterval) {
+                // Dont warn the user about internal timers
+                //if (!(timer instanceof Number)) console.warn(`[ct.timer] ${timer} is not a number!`);
                 timer += ct.deltaUi;
             }
 

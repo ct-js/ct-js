@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* Made with ct.js http://ctjs.rocks/ */
 const deadPool = []; // a pool of `kill`-ed copies for delaying frequent garbage collection
 const copyTypeSymbol = Symbol('I am a ct.js copy');
@@ -289,7 +290,7 @@ ct.u = {
      * @returns {number} The result of the interpolation
      */
     lerp(a, b, alpha) {
-        return a + (b-a)*alpha;
+        return a + (b - a) * alpha;
     },
     /**
      * Returns the position of a given value in a given range. Opposite to linear interpolation.
@@ -361,7 +362,7 @@ ct.u = {
      * @param {any} [arr] An optional array of properties to copy. If not specified, all the properties will be copied.
      * @returns {object} The modified destination object
      */
-    ext (o1, o2, arr) {
+    ext(o1, o2, arr) {
         if (arr) {
             for (const i in arr) {
                 if (o2[arr[i]]) {
@@ -399,11 +400,11 @@ ct.u = {
      */
     wait(time, options = {}) {
         var room = ct.room.name;
-        var options_a = {
+        var optionsA = {
             useUiDelta: options.useUiDelta || false,
             useTimeout: options.useTimeout || false
         };
-        if ((options_a.useUiDelta && options_a.useTimeout) == true) {
+        if ((optionsA.useUiDelta && optionsA.useTimeout) === true) {
             return new Promise((resolve, reject) => {
                 reject({
                     info: 'Both options are true',
@@ -411,7 +412,7 @@ ct.u = {
                 });
             });
         }
-        if (options_a.useTimeout) return new Promise((resolve, reject) => setTimeout(() => {
+        if (optionsA.useTimeout) return new Promise((resolve, reject) => setTimeout(() => {
             if (ct.room.name === room) {
                 resolve();
             } else {
@@ -422,16 +423,16 @@ ct.u = {
             }
         }, time));
         return new Promise(function (resolve, reject) {
-            let time_a = 0; // Timer time
-            let timer; // Timer
-            const intervalClear = function () {
-                clearInterval(timer);
-            }; // Function to clear the setInterval, not sure if needed
-            timer = setInterval(function () {
+            //let timeA = 0; // Timer time
+            const randomNum = Number(Math.random() * 10);
+            ct.timer._timersInterval["ct.u.wait" + randomNum] = 0;
+            const timer = setInterval(function () {
                 if (ct.room.name === room) {
-                    time_a += options_a.useUiDelta ? ct.deltaUi : ct.delta; // Add time
-                    if (time_a * 1000 >= time) {
-                        resolve() && intervalClear(); // If the timer is done, resolve and clear the interval
+                    //timeA += optionsA.useUiDelta ? ct.deltaUi : ct.delta; // Add time
+                    if (ct.timer._timersInterval["ct.u.wait" + randomNum] / 60 >= time) {
+                        // If the timer is done, resolve and clear the interval
+                        resolve();
+                        clearInterval(timer); // Might not run?
                     }
                 } else {
                     reject({
@@ -439,7 +440,7 @@ ct.u = {
                         from: 'ct.u.wait'
                     }); // Reject if the room was switched
                 }
-            }, 1);
+            }, 1 / 60);
         });
         /*return new Promise((resolve, reject) => setTimeout(() => {
             if (ct.room.name === room) {
@@ -494,7 +495,7 @@ ct.u.ext(ct.u, {// make aliases
         }
     };
 
-    ct.loop = function(delta) {
+    ct.loop = function (delta) {
         ct.delta = delta;
         ct.deltaUi = PIXI.Ticker.shared.elapsedMS / (1000 / (PIXI.Ticker.shared.maxFPS || 60));
         ct.inputs.updateActions();
@@ -519,7 +520,7 @@ ct.u.ext(ct.u, {// make aliases
             // eslint-disable-next-line no-underscore-dangle
             if (copy.kill && !copy._destroyed) {
                 killRecursive(copy); // This will also allow a parent to eject children to a new container before they are destroyed as well
-                copy.destroy({children: true});
+                copy.destroy({ children: true });
             }
         }
 
