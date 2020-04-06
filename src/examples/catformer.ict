@@ -311,18 +311,18 @@ types:
     lastmod: 1585943971312
   - name: ButtonLeft
     depth: 0
-    oncreate: |2-
-              this.button = ct.vkeys.button({
-                      key: "Vk2",
-                      texNormal: "buttonLeft",
-                      texActive: "buttonLeft",
-                      texHover: "buttonLeft",
-                      x: () => this.x,
-                      y: () => this.y,
-                      depth: 1000
-              });
-
-              this.button.visible = false;
+    oncreate: |-
+      this.button = ct.vkeys.button({
+          key: "Vk2",
+          texNormal: "buttonLeft",
+          texActive: "buttonLeft",
+          texHover: "buttonLeft",
+          x: () => this.x,
+          y: () => this.y,
+          depth: 1000
+      });
+      this.alpha = 0.5;
+      this.button.visible = false;
     onstep: this.move();
     ondraw: |-
       this.button.x = this.x;
@@ -331,20 +331,21 @@ types:
     uid: 45a6ee81-34af-494e-914e-51ec9d414314
     texture: e706498a-bfef-4366-9481-687b01ff7bf1
     extends: {}
-    lastmod: 1586011757840
+    lastmod: 1586161306439
   - name: ButtonRight
     depth: 0
-    oncreate: |2-
-          this.button = ct.vkeys.button({
-              key: "Vk1",
-              texNormal: "buttonRight",
-              texActive: "buttonRight",
-              texHover: "buttonRight",
-              x: () => this.x,
-              y: () => this.y,
-              depth: 1000
-          });
-          this.button.visible = false;
+    oncreate: |-
+      this.button = ct.vkeys.button({
+          key: "Vk1",
+          texNormal: "buttonRight",
+          texActive: "buttonRight",
+          texHover: "buttonRight",
+          x: () => this.x,
+          y: () => this.y,
+          depth: 1000
+      });
+      this.alpha = 0.5;
+      this.button.visible = false;
     onstep: this.move();
     ondraw: |-
       this.button.x = this.x;
@@ -353,20 +354,21 @@ types:
     uid: 03773b4b-e444-4a2d-9891-3ddf9575cc87
     texture: 8f3b23d8-3aed-429a-a66e-9572cad7919a
     extends: {}
-    lastmod: 1586011805726
+    lastmod: 1586161193203
   - name: ButtonJump
     depth: 0
-    oncreate: |2-
-              this.button = ct.vkeys.button({
-                      key: "Vk3",
-                      texNormal: "buttonJump",
-                      texActive: "buttonJump",
-                      texHover: "buttonJump",
-                      x: () => this.x,
-                      y: () => this.y,
-                      depth: 1000
-              });
-              this.button.visible = false;
+    oncreate: |-
+      this.button = ct.vkeys.button({
+          key: "Vk3",
+          texNormal: "buttonJump",
+          texActive: "buttonJump",
+          texHover: "buttonJump",
+          x: () => this.x,
+          y: () => this.y,
+          depth: 1000
+      });
+      this.alpha = 0.5;
+      this.button.visible = false;
     onstep: ''
     ondraw: |-
       this.button.x = this.x;
@@ -375,7 +377,7 @@ types:
     uid: 86f037f0-9a1c-4306-9d67-00be01bbd793
     texture: b5121b5f-8109-45c0-9fa4-44f9f10ce88c
     extends: {}
-    lastmod: 1586012160940
+    lastmod: 1586161303216
 sounds:
   - name: BodyFall
     uid: 64f57367-eae3-40e1-8769-e11bd3c90f62
@@ -469,7 +471,7 @@ rooms:
         texture: fd9d7012-6826-4368-8fe5-0385b72bc902
     uid: b0f0ff4d-a155-4d68-a86e-5bb7ed8973ab
     grid: 35
-    lastmod: 1585943857187
+    lastmod: 1586161145705
     thumbnail: 1
     tiles:
       - depth: -10
@@ -1716,7 +1718,7 @@ rooms:
         texture: fd9d7012-6826-4368-8fe5-0385b72bc902
     uid: 1a5a64c6-5a4b-4f57-aa99-371ae3c158a3
     grid: 64
-    lastmod: 1585943115806
+    lastmod: 1586161338199
     thumbnail: 2
     gridX: 64
     gridY: 64
@@ -1775,13 +1777,13 @@ rooms:
       - x: 44
         'y': 46
         uid: 1f73eb4f-8795-4234-af61-2c44c3fba073
-      - x: 128
+      - x: 96
         'y': 640
         uid: 45a6ee81-34af-494e-914e-51ec9d414314
-      - x: 256
+      - x: 224
         'y': 640
         uid: 03773b4b-e444-4a2d-9891-3ddf9575cc87
-      - x: 896
+      - x: 832
         'y': 640
         uid: 86f037f0-9a1c-4306-9d67-00be01bbd793
     tiles:
@@ -1789,9 +1791,9 @@ rooms:
         tiles: []
     uid: cc861d50-35d6-4687-b789-5768eedfd438
     thumbnail: 5768eedfd438
-    gridX: 64
+    gridX: 32
     gridY: 64
-    lastmod: 1585943120733
+    lastmod: 1586161332969
 soundtick: 6
 roomtick: 3
 typetick: 12
@@ -1879,6 +1881,9 @@ actions:
       - code: vkeys.Vk2
         multiplier: -1
       - code: vkeys.Vk1
+  - name: Touch
+    methods:
+      - code: mouse.Left
 textures:
   - name: boxAlt
     untill: 0
@@ -2197,7 +2202,7 @@ textures:
       - 1
     axis:
       - 40
-      - 80
+      - 40
     marginx: 0
     marginy: 0
     imgWidth: 80
@@ -2208,22 +2213,23 @@ textures:
     offy: 0
     origname: ib5121b5f-8109-45c0-9fa4-44f9f10ce88c.png
     source: 'D:\Downloads\onscreencontrols\Sprites\flatDark\flatDark44.png'
-    shape: rect
+    shape: circle
     left: 40
     right: 40
     top: 80
     bottom: 0
     uid: b5121b5f-8109-45c0-9fa4-44f9f10ce88c
     padding: 1
-    lastmod: 1586012098137
+    lastmod: 1586161221876
+    r: 40
   - name: buttonRight
     untill: 0
     grid:
       - 1
       - 1
     axis:
-      - 60
-      - 80
+      - 40
+      - 40
     marginx: 0
     marginy: 0
     imgWidth: 80
@@ -2234,14 +2240,15 @@ textures:
     offy: 0
     origname: i8f3b23d8-3aed-429a-a66e-9572cad7919a.png
     source: 'D:\Downloads\onscreencontrols\Sprites\flatDark\flatDark24.png'
-    shape: rect
+    shape: circle
     left: 60
     right: 20
     top: 80
     bottom: 0
     uid: 8f3b23d8-3aed-429a-a66e-9572cad7919a
     padding: 1
-    lastmod: 1586011966357
+    lastmod: 1586161215286
+    r: 40
   - name: buttonLeft
     untill: 0
     grid:
@@ -2249,7 +2256,7 @@ textures:
       - 1
     axis:
       - 40
-      - 80
+      - 40
     marginx: 0
     marginy: 0
     imgWidth: 80
@@ -2260,13 +2267,14 @@ textures:
     offy: 0
     origname: ie706498a-bfef-4366-9481-687b01ff7bf1.png
     source: 'D:\Downloads\onscreencontrols\Sprites\flatDark\flatDark23.png'
-    shape: rect
+    shape: circle
     left: 40
     right: 40
     top: 80
     bottom: 0
     uid: e706498a-bfef-4366-9481-687b01ff7bf1
     padding: 1
-    lastmod: 1585944092175
+    lastmod: 1586161218807
+    r: 40
 texturetick: 15
 emitterTandems: []

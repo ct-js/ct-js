@@ -23,6 +23,7 @@ libs:
   tween: {}
   transition: {}
   vkeys: {}
+  touch: {}
 types:
   - name: Player_Blue
     depth: 5
@@ -352,15 +353,15 @@ types:
       this.y = this.ystart + Math.sin(this.phase) * 8;
     ondestroy: ''
     uid: 319c6995-59f3-4267-a1de-cf58f77614d3
-    lastmod: 1583893459673
+    lastmod: 1586163349237
     extends: {}
     texture: 968baf79-5ff3-443b-8834-fa3b55638500
   - name: StartButton
     depth: 0
     oncreate: ''
     onstep: |-
-      if (ct.mouse.pressed) {
-          if (ct.mouse.hovers(this)) {
+      if (ct.actions.Touch.pressed) {
+          if (ct.mouse.hovers(this) || ct.touch.collide(this)) {
               ct.transition.fadeOut()
               .then(() => {
                   ct.rooms.switch('InGame');
@@ -370,7 +371,7 @@ types:
     ondraw: ''
     ondestroy: ''
     uid: 972bb4d9-7cfc-4dbe-bc30-883562271057
-    lastmod: 1551427672784
+    lastmod: 1586163402289
     extends: {}
     texture: 2a454e11-3441-4f57-bfb6-ce837acd7881
   - name: AbstractBonus
@@ -688,29 +689,29 @@ types:
     depth: 0
     oncreate: ''
     onstep: |-
-      if (ct.mouse.pressed) {
-          if (ct.mouse.hovers(this)) {
+      if (ct.actions.Touch.pressed) {
+          if (ct.mouse.hovers(this) || ct.touch.collide(this)) {
               ct.rooms.switch('InGame');
           }
       }
     ondraw: ''
     ondestroy: ''
     uid: 73759c16-fba4-4134-b048-e53aa4d2f34b
-    lastmod: 1551427659008
+    lastmod: 1586163409409
     extends: {}
     texture: 071162b9-d836-4145-9515-586ce289ef14
   - name: Joystick
     depth: 0
-    oncreate: |2-
-              this.button = ct.vkeys.joystick({
-                      key: "Vjoy1",
-                      tex: "Joystick_Center",
-                      trackballTex: "Joystick_Move",
-                      x: () => this.x,
-                      y: () => this.y,
-                      depth: 1000,
-              });
-              this.button.visible = false;
+    oncreate: |-
+      this.button = ct.vkeys.joystick({
+          key: "Vjoy1",
+          tex: "Joystick_Center",
+          trackballTex: "Joystick_Move",
+          x: () => this.x,
+          y: () => this.y,
+          depth: 1000,
+      });
+      this.visible = false;
     onstep: this.move();
     ondraw: |-
       this.button.x = this.x;
@@ -719,20 +720,20 @@ types:
     uid: c78818a4-c20e-46b9-8a39-9fbb5a83eabe
     texture: 847c402c-dbd5-4971-ba6d-f2fca6d156bd
     extends: {}
-    lastmod: 1586012996675
+    lastmod: 1586163798708
   - name: Button_Shoot
     depth: 0
-    oncreate: |2-
-              this.button = ct.vkeys.button({
-                      key: "Vk1",
-                      texNormal: "Button_Shoot",
-                      texActive: "Button_Shoot",
-                      texHover: "Button_Shoot",
-                      x: () => this.x,
-                      y: () => this.y,
-                      depth: 1000
-              });
-              this.button.visible = false;
+    oncreate: |-
+      this.button = ct.vkeys.button({
+          key: "Vk1",
+          texNormal: "Button_Shoot",
+          texActive: "Button_Shoot",
+          texHover: "Button_Shoot",
+          x: () => this.x,
+          y: () => this.y,
+          depth: 1000
+      });
+      this.button.visible = false;
     onstep: this.move();
     ondraw: |-
       this.button.x = this.x;
@@ -741,7 +742,7 @@ types:
     uid: b334b5ec-69b4-4c0d-bd50-709cf9bfa60d
     texture: 13433dd6-9fec-4244-8188-d6ec14a51974
     extends: {}
-    lastmod: 1586013005087
+    lastmod: 1586163311182
 sounds:
   - name: Laser_Small
     uid: 684d983f-9827-4ac8-9915-bd498154c5f4
@@ -821,7 +822,9 @@ styles:
 rooms:
   - name: InGame
     oncreate: >-
-      ct.rooms.append("Controls_Layer", {isUi: true});
+      if (ct.touch.enabled) {
+          ct.rooms.append("Controls_Layer", {isUi: true});
+      }
 
 
       this.score = 0;
@@ -945,7 +948,7 @@ rooms:
         extends:
           movementY: 2
     uid: 2e5bf702-9eac-4fef-8282-07d2dd0a9bac
-    lastmod: 1586013116253
+    lastmod: 1586162618949
     grid: 50
     thumbnail: 1
     gridX: 50
@@ -954,18 +957,9 @@ rooms:
       - depth: -10
         tiles: []
     copies:
-      - x: 600
-        'y': 650
+      - x: 950
+        'y': 850
         uid: 1fab434d-0976-4b65-8390-d013695aba8c
-      - x: 500
-        'y': 300
-        uid: bc01cee1-1b8b-4418-aeb9-a7c5eac2cd51
-      - x: 750
-        'y': 300
-        uid: bc01cee1-1b8b-4418-aeb9-a7c5eac2cd51
-      - x: 1150
-        'y': 300
-        uid: bc01cee1-1b8b-4418-aeb9-a7c5eac2cd51
   - name: MainMenu
     oncreate: >-
       //ct.sound.spawn('Music', {
@@ -1012,7 +1006,7 @@ rooms:
           movementX: -0.5
     uid: 6c75cdb8-cfb4-4dcc-887a-f76ae98b5499
     grid: 64
-    lastmod: 1583892982658
+    lastmod: 1586162699710
     thumbnail: 2
     gridX: 64
     gridY: 64
@@ -1097,11 +1091,11 @@ rooms:
     height: 1080
     backgrounds: []
     copies:
-      - x: 1728
-        'y': 896
+      - x: 1722
+        'y': 898
         uid: b334b5ec-69b4-4c0d-bd50-709cf9bfa60d
-      - x: 256
-        'y': 896
+      - x: 210
+        'y': 872
         uid: c78818a4-c20e-46b9-8a39-9fbb5a83eabe
     tiles:
       - depth: -10
@@ -1110,7 +1104,7 @@ rooms:
     thumbnail: 23d3934bc7d0
     gridX: 64
     gridY: 64
-    lastmod: 1586013067214
+    lastmod: 1586162687698
 soundtick: 9
 roomtick: 3
 typetick: 19
@@ -1179,7 +1173,7 @@ actions:
         multiplier: -1
       - code: keyboard.ArrowRight
       - code: vkeys.Vjoy1X
-        multiplier: 0
+        multiplier: 1
   - name: MoveY
     methods:
       - code: keyboard.KeyW
@@ -1189,7 +1183,11 @@ actions:
       - code: keyboard.ArrowUp
         multiplier: -1
       - code: vkeys.Vjoy1Y
-        multiplier: 0
+        multiplier: 1
+  - name: Touch
+    methods:
+      - code: touch.Any
+      - code: mouse.Left
 textures:
   - name: PlayerShip_Blue
     untill: 0
@@ -2437,44 +2435,45 @@ textures:
       - 1
       - 1
     axis:
-      - 0
-      - 0
+      - 167
+      - 104
     marginx: 0
     marginy: 0
-    imgWidth: 80
-    imgHeight: 80
-    width: 80
-    height: 80
+    imgWidth: 277
+    imgHeight: 245
+    width: 277
+    height: 245
     offx: 0
     offy: 0
     origname: i13433dd6-9fec-4244-8188-d6ec14a51974.png
-    source: 'D:\Downloads\onscreencontrols\Sprites\flatDark\flatDark48.png'
-    shape: rect
+    source: 'C:\Users\Master\Desktop\AttackButton.png'
+    shape: circle
     left: 0
     right: 80
     top: 0
     bottom: 80
     uid: 13433dd6-9fec-4244-8188-d6ec14a51974
     padding: 1
-    lastmod: 1586012732748
+    lastmod: 1586162378942
+    r: 94
   - name: Joystick_Center
     untill: 0
     grid:
       - 1
       - 1
     axis:
-      - 80
-      - 80
+      - 165
+      - 159
     marginx: 0
     marginy: 0
-    imgWidth: 160
-    imgHeight: 160
-    width: 160
-    height: 160
+    imgWidth: 330
+    imgHeight: 330
+    width: 330
+    height: 330
     offx: 0
     offy: 0
     origname: i847c402c-dbd5-4971-ba6d-f2fca6d156bd.png
-    source: 'D:\Downloads\onscreencontrols\Sprites\flatDark\flatDark06.png'
+    source: 'C:\Users\Master\Desktop\Joystick_Pad.png'
     shape: circle
     left: 0
     right: 160
@@ -2482,26 +2481,26 @@ textures:
     bottom: 160
     uid: 847c402c-dbd5-4971-ba6d-f2fca6d156bd
     padding: 1
-    lastmod: 1586014363372
-    r: 80
+    lastmod: 1586163660812
+    r: 150
   - name: Joystick_Move
     untill: 0
     grid:
       - 1
       - 1
     axis:
-      - 48
-      - 48
+      - 67
+      - 64
     marginx: 0
     marginy: 0
-    imgWidth: 96
-    imgHeight: 97
-    width: 96
-    height: 97
+    imgWidth: 134
+    imgHeight: 134
+    width: 134
+    height: 134
     offx: 0
     offy: 0
     origname: i6272c8f2-f8ff-4802-85ae-06daa7013296.png
-    source: 'D:\Downloads\onscreencontrols\Sprites\flatDark\flatDark00.png'
+    source: 'C:\Users\Master\Desktop\Joystick_Thumb.png'
     shape: circle
     left: 0
     right: 96
@@ -2509,8 +2508,8 @@ textures:
     bottom: 97
     uid: 6272c8f2-f8ff-4802-85ae-06daa7013296
     padding: 1
-    lastmod: 1586012762140
-    r: 48
+    lastmod: 1586163544302
+    r: 57
 texturetick: 32
 emitterTandems:
   - name: Explosion
