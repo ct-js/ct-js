@@ -9,6 +9,7 @@ libs:
   keyboard.polyfill: {}
   keyboard: {}
   vkeys: {}
+  touch: {}
 types:
   - name: Box
     depth: 0
@@ -43,7 +44,7 @@ types:
     ondraw: ''
     ondestroy: ''
     uid: 1026c1c8-90e4-4b93-bb6a-568f53918097
-    lastmod: 1547476749007
+    lastmod: 1586186509272
     extends:
       ctype: Solid
     texture: f3de5077-0e66-43de-93f2-d3a75184aa2e
@@ -119,6 +120,9 @@ types:
           if (onGround) {
               this.speed = Math.max(0, this.speed - this.maxspeed);
               this.gotoAndStop(9);
+          } else if (!ct.actions.Move.pressed) {
+              // Don't move if we are not pressing the move button
+              this.hspeed = 0;
           }
       }
 
@@ -138,6 +142,9 @@ types:
           if (onGround) {
               this.vspeed = -this.jumpPower;
               this.gotoAndStop(12);
+          } else if (!ct.actions.Move.pressed) {
+              // Don't move if we are not pressing the move button
+              this.hspeed = 0;
           }
       }
 
@@ -202,7 +209,7 @@ types:
       ct.camera.shiftX = this.scale.x * 150;
     ondestroy: ''
     uid: 00664f77-21c6-4b06-b310-88640b1beaf9
-    lastmod: 1586011926856
+    lastmod: 1586187116327
     extends:
       ctype: Player
     texture: ad390b6e-4c2c-412f-8143-1c70b9c16fc0
@@ -286,10 +293,16 @@ types:
               ct.fittoscreen.toggleFullscreen();
           }
       }
+
+      if (ct.touch.enabled) {
+          if (ct.u.prect(ct.touch.x, ct.touch.y, this)) {
+              ct.fittoscreen.toggleFullscreen();
+          }
+      }
     ondraw: 'this.gotoAndStop(ct.fittoscreen.getIsFullscreen()? 1 : 0);'
     ondestroy: ''
     uid: 8a4b8de4-7729-4936-bc7b-bc277a512975
-    lastmod: 1586011198344
+    lastmod: 1586186372422
     extends: {}
     texture: d161a39a-203e-4099-99e2-41385d94f975
   - name: CoinWidget
@@ -1647,9 +1660,11 @@ rooms:
       this.subLabel.anchor.x = this.subLabel.anchor.y = 0.5;
 
       this.addChild(this.subLabel);
-    onstep: |-
+    onstep: >-
       this.wait -= ct.delta;
-      if (ct.keyboard.lastKey && this.wait < 0) {
+
+      if ((ct.keyboard.lastKey || ct.touch.hovers(ct.types.list["Greed"][0])) &&
+      this.wait < 0) {
           ct.rooms.switch('InGame');
       }
     ondraw: ''
@@ -1662,7 +1677,7 @@ rooms:
         texture: fd9d7012-6826-4368-8fe5-0385b72bc902
     uid: 1ee751d0-24cc-43af-b91d-1a91a9aa48f5
     grid: 64
-    lastmod: 1585942982154
+    lastmod: 1586187265246
     thumbnail: 2
     gridX: 64
     gridY: 64

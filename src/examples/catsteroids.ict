@@ -368,10 +368,19 @@ types:
               });
           }
       }
+
+      if (ct.touch.enabled) {
+          if (ct.touch.hovers(this)) {
+              ct.transition.fadeOut()
+              .then(() => {
+                  ct.rooms.switch('InGame');
+              });
+          }
+      }
     ondraw: ''
     ondestroy: ''
     uid: 972bb4d9-7cfc-4dbe-bc30-883562271057
-    lastmod: 1586163402289
+    lastmod: 1586185849459
     extends: {}
     texture: 2a454e11-3441-4f57-bfb6-ce837acd7881
   - name: AbstractBonus
