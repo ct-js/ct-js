@@ -10,10 +10,18 @@
          * @type Object<Number>
          */
         timers: {},
+        /**
+         * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
+         * @private
+         */
         _timers: {},
+        /**
+         * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
+         * @private
+         */
         _timersUi: {},
         /**
-         * The function to add a timer
+         * Adds the timer with the given name
          *
          * @param {string} name The name of the timer, which you use to access it from `ct.timer.timers`.
          * @param {boolean} [uiDelta=false] If the timer should be counted using `ct.deltaUi`
@@ -31,9 +39,29 @@
             }
         },
         /**
+         * Removes the timer with the given name
+         * 
+         * @param {string} name The name of the timer, which you used to access the timer from `ct.timer.timers`.
+         * @returns {void}
+         */
+        removeTimer(name) {
+            try {
+                delete this._timers[name.toString()];
+                delete this.timers[name.toString()];
+            } catch (e) {
+                try {
+                    delete this._timersUi[name.toString()];
+                    delete this.timers[name.toString()];
+                } catch (e2) {
+                    console.warn(`[ct.timer] Timer '${name.toString()}' does not exist!`);
+                }
+            }
+        },
+        /**
          * Updates the timers. **DONT CALL THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
          * 
          * @returns {void}
+         * @private
          */
         updateTimers() {
             for (let timer of this._timers) {
@@ -51,7 +79,7 @@
             this.timers = temp2;
 
             for (let timer of this.timers) {
-                timer /= 60;
+                timer /= 60; // Change the time to seconds
             }
         }
     };
