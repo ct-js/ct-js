@@ -142,7 +142,8 @@ const exportCtProject = async (project, projdir) => {
         'rooms.js',
         'sound.js',
         'styles.js',
-        'types.js'
+        'types.js',
+        'timer.js'
     ];
     for (const file of sourcesList) {
         sources[file] = fs.readFile(path.join(basePath, 'ct.release', file), {

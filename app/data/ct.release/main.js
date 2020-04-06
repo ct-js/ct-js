@@ -45,9 +45,9 @@ const ct = {
      * This is a version for UI elements, as it is not affected by time scaling, and thus works well
      * both with slow-mo effects and game pause.
      *
-    * @type {number}
-    */
-   deltaUi: 1,
+     * @type {number}
+     */
+    deltaUi: 1,
     /**
      * The camera that outputs its view to the renderer.
      * @type {Camera}
@@ -147,7 +147,7 @@ try {
     console.error(e);
     // eslint-disable-next-line no-console
     console.warn('[ct.js] Something bad has just happened. This is usually due to hardware problems. I\'ll try to fix them now, but if the game still doesn\'t run, try including a legacy renderer in the project\'s settings.');
-    PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES , 16);
+    PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
     ct.pixiApp = new PIXI.Application(pixiAppSettings);
 }
 
@@ -399,11 +399,11 @@ ct.u = {
      */
     wait(time, options = {}) {
         var room = ct.room.name;
-        var options = {
+        var options_a = {
             useUiDelta: options.useUiDelta || false,
             useTimeout: options.useTimeout || false
         };
-        if ((options.useUiDelta && options.useTimeout) == true) {
+        if ((options_a.useUiDelta && options_a.useTimeout) == true) {
             return new Promise((resolve, reject) => {
                 reject({
                     info: 'Both options are true',
@@ -411,7 +411,7 @@ ct.u = {
                 });
             });
         }
-        if (options.useTimeout) return new Promise((resolve, reject) => setTimeout(() => {
+        if (options_a.useTimeout) return new Promise((resolve, reject) => setTimeout(() => {
             if (ct.room.name === room) {
                 resolve();
             } else {
@@ -429,7 +429,7 @@ ct.u = {
             }; // Function to clear the setInterval, not sure if needed
             timer = setInterval(function () {
                 if (ct.room.name === room) {
-                    time_a += options.useUiDelta ? ct.deltaUi : ct.delta; // Add time
+                    time_a += options_a.useUiDelta ? ct.deltaUi : ct.delta; // Add time
                     if (time_a * 1000 >= time) {
                         resolve() && intervalClear(); // If the timer is done, resolve and clear the interval
                     }
@@ -498,6 +498,7 @@ ct.u.ext(ct.u, {// make aliases
         ct.delta = delta;
         ct.deltaUi = PIXI.Ticker.shared.elapsedMS / (1000 / (PIXI.Ticker.shared.maxFPS || 60));
         ct.inputs.updateActions();
+        ct.timer.updateTimers();
         for (let i = 0, li = ct.stack.length; i < li; i++) {
             ct.types.beforeStep.apply(ct.stack[i]);
             ct.stack[i].onStep.apply(ct.stack[i]);

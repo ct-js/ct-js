@@ -28,19 +28,15 @@ styles:
       type: '0'
 rooms:
   - name: test
-    oncreate: >-
-      this.text = new PIXI.Text('delta: ' + ct.delta + "\ndeltaUi: " +
-      ct.deltaUi + "\ntimerOn: " + this.timerOn, ct.styles.get('default'));
+    oncreate: |2-
+          this.text = new PIXI.Text('delta: ' + ct.delta + "\ndeltaUi: " + ct.deltaUi + "\ntimerOn: " + this.timerOn, ct.styles.get('default'));
+          this.text.x = 32;
+          this.text.y = 32;
 
-      this.text.x = 32;
+          this.addChild(this.text);
 
-      this.text.y = 32;
-
-
-      this.addChild(this.text);
-
-
-      this.timerOn = false;
+          this.timerOn = false;
+          this.timerAdded = false;
     onstep: ''
     ondraw: |2-
           if (ct.actions.Test.down) {
@@ -51,6 +47,12 @@ rooms:
                   ct.u.wait(1000).then(() => {
                       this.timerOn = false;
                   });
+              }
+              if (!this.timerAdded) {
+                  ct.timer.addTimer("a");
+                  this.timerAdded = true;
+              } else {
+                  console.log(ct.timer.timers["a"]);
               }
           }
 
@@ -69,6 +71,7 @@ rooms:
     thumbnail: 0079a0731f6f
     gridX: 64
     gridY: 64
+    lastmod: 1586194958412
 actions:
   - name: Test
     methods:
