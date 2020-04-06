@@ -6,7 +6,7 @@
      */
     ct.timer = {
         /**
-         * An object with timers
+         * An object with timers. Counted in seconds.
          * @type Object<Number>
          */
         timers: {},
@@ -17,15 +17,16 @@
          *
          * @param {string} name The name of the timer, which you use to access it from `ct.timer.timers`.
          * @param {boolean} [uiDelta=false] If the timer should be counted using `ct.deltaUi`
-         * @param {number} [startTime=0] The amount of time to start at. **60 units = 1 second**
+         * @param {number} [startTime=0] The amount of time to start at. Counted in seconds.
          * @returns {void}
          */
         addTimer(name, uiDelta = false, startTime = 0) {
+            const _startTime = startTime * 60; // Convert to ct.delta time
             if (uiDelta) {
-                this._timersUi[name.toString()] = startTime;
+                this._timersUi[name.toString()] = _startTime;
                 this.timers[name.toString()] = startTime;
             } else {
-                this._timers[name.toString()] = startTime;
+                this._timers[name.toString()] = _startTime;
                 this.timers[name.toString()] = startTime;
             }
         },
@@ -48,6 +49,10 @@
             var temp1 = this._timers;
             var temp2 = ct.u.ext(temp1, this._timersUi);
             this.timers = temp2;
+
+            for (let timer of this.timers) {
+                timer /= 60;
+            }
         }
     };
 })();
