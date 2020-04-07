@@ -31,7 +31,7 @@
          * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
          * @private
          */
-        _timersInterval: {},
+        _timersInternal: {},
         /**
          * Adds a new timer with the given name
          *
@@ -86,7 +86,7 @@
                 timer += ct.deltaUi;
             }
 
-            for (let timer of this._timersInterval) {
+            for (let timer of this._timersInternal) {
                 // Dont warn the user about internal timers
                 //if (!(timer instanceof Number)) console.warn(`[ct.timer] ${timer} is not a number!`);
                 timer += ct.deltaUi;

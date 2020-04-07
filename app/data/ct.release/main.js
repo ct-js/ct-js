@@ -425,11 +425,11 @@ ct.u = {
         return new Promise(function (resolve, reject) {
             //let timeA = 0; // Timer time
             const randomNum = Number(Math.random() * 10);
-            ct.timer._timersInterval["ct.u.wait" + randomNum] = 0;
+            ct.timer._timersInternal["ct.u.wait" + randomNum] = 0;
             const timer = setInterval(function () {
                 if (ct.room.name === room) {
                     //timeA += optionsA.useUiDelta ? ct.deltaUi : ct.delta; // Add time
-                    if (ct.timer._timersInterval["ct.u.wait" + randomNum] / 60 >= time) {
+                    if (ct.timer._timersInternal["ct.u.wait" + randomNum] / 60 >= time) {
                         // If the timer is done, resolve and clear the interval
                         resolve();
                         clearInterval(timer); // Might not run?
