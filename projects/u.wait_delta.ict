@@ -48,13 +48,16 @@ rooms:
                       this.timerOn = false;
                   });
               }
-              if (!this.timerAdded) {
-                  ct.timer.addTimer("a");
-                  this.timerAdded = true;
-              } else {
-                  console.log(ct.timer.timers["a"]);
-              }
           }
+          if (!this.timerAdded) {
+              ct.timer.addTimer("a");
+              this.timerAdded = true;
+          }
+          console.log(this.timerOn);
+          console.log(ct.timer.timers["a"]);
+          console.log(ct.timer._timers["a"]);
+          console.log(ct.timer._timersUi["a"]);
+          console.log(ct.timer._timersInternal["ct.u.wait"]);
 
           this.text.x = 32;
           this.text.y = 32;

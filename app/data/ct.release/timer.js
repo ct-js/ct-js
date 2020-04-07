@@ -1,8 +1,8 @@
+/* eslint-disable no-empty */
 /* eslint-disable no-underscore-dangle */
 
 // eslint-disable-next-line no-warning-comments
 /* Todo:
- * - Fix timer.js not being added to the export
  * - Add support for ending timers after a certain amount of time
  */
 
@@ -76,19 +76,18 @@
          * @private
          */
         updateTimers() {
-            for (let timer of this._timers) {
-                if (!(timer instanceof Number)) console.warn(`[ct.timer] ${timer} is not a number!`);
+            if (Object.keys(this._timers).length > 0) for (const timerName in this._timers) {
+                let timer = this._timers[timerName];
                 timer += ct.delta;
             }
 
-            for (let timer of this._timersUi) {
-                if (!(timer instanceof Number)) console.warn(`[ct.timer] ${timer} is not a number!`);
+            if (Object.keys(this._timersUi).length > 0) for (const timerName in this._timersUi) {
+                let timer = this._timersUi[timerName];
                 timer += ct.deltaUi;
             }
 
-            for (let timer of this._timersInternal) {
-                // Dont warn the user about internal timers
-                //if (!(timer instanceof Number)) console.warn(`[ct.timer] ${timer} is not a number!`);
+            if (Object.keys(this._timersInternal).length > 0) for (const timerName in this._timersInternal) {
+                let timer = this._timersInternal[timerName];
                 timer += ct.deltaUi;
             }
 
@@ -96,7 +95,8 @@
             var temp2 = ct.u.ext(temp1, this._timersUi);
             this.timers = temp2;
 
-            for (let timer of this.timers) {
+            if (Object.keys(this.timers).length > 0) for (const timerName in this.timers) {
+                let timer = this.timers[timerName];
                 timer /= 60; // Change the time to seconds
             }
         }

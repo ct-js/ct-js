@@ -238,6 +238,9 @@ const exportCtProject = async (project, projdir) => {
     buffer += (await sources['sound.js'])
         .replace('/*@sound@*/', sounds);
 
+    buffer += (await sources['timer.js']);
+    buffer += '\n';
+
     const fonts = await bundleFonts(currentProject, projdir, writeDir);
     buffer += fonts.js;
     /* eslint-enable require-atomic-updates */
