@@ -37,6 +37,8 @@ rooms:
 
           this.timerOn = false;
           this.timerAdded = false;
+
+          ct.timer.addTimer("a", true);
     onstep: ''
     ondraw: |2-
           if (ct.actions.Test.down) {
@@ -48,16 +50,16 @@ rooms:
                       this.timerOn = false;
                   });
               }
-          }
-          if (!this.timerAdded) {
-              ct.timer.addTimer("a");
-              this.timerAdded = true;
+              if (this.timerAdded == false) {
+                  //ct.timer.addTimer("a");
+                  this.timerAdded = true;
+              }
           }
           console.log(this.timerOn);
           console.log(ct.timer.timers["a"]);
           console.log(ct.timer._timers["a"]);
           console.log(ct.timer._timersUi["a"]);
-          console.log(ct.timer._timersInternal["ct.u.wait"]);
+          //console.log(ct.timer._timersInternal["ct.u.wait"] / 60);
 
           this.text.x = 32;
           this.text.y = 32;

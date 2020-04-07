@@ -43,11 +43,11 @@
         addTimer(name, uiDelta = false, startTime = 0) {
             const _startTime = startTime * 60; // Convert to ct.delta time
             if (uiDelta) {
-                this._timersUi[name.toString()] = _startTime;
-                this.timers[name.toString()] = startTime;
+                this._timersUi[name.toString()] = Number(_startTime);
+                this.timers[name.toString()] = Number(startTime);
             } else {
-                this._timers[name.toString()] = _startTime;
-                this.timers[name.toString()] = startTime;
+                this._timers[name.toString()] = Number(_startTime);
+                this.timers[name.toString()] = Number(startTime);
             }
         },
         /**
@@ -76,28 +76,28 @@
          * @private
          */
         updateTimers() {
+            this.timers = {};
+
             if (Object.keys(this._timers).length > 0) for (const timerName in this._timers) {
-                let timer = this._timers[timerName];
-                timer += ct.delta;
+                this._timers[timerName] += ct.delta;
+                this.timers[timerName] = this._timers[timerName];
             }
 
             if (Object.keys(this._timersUi).length > 0) for (const timerName in this._timersUi) {
-                let timer = this._timersUi[timerName];
-                timer += ct.deltaUi;
+                this._timersUi[timerName] += ct.deltaUi;
+                this.timers[timerName] = this._timersUi[timerName];
             }
 
             if (Object.keys(this._timersInternal).length > 0) for (const timerName in this._timersInternal) {
-                let timer = this._timersInternal[timerName];
-                timer += ct.deltaUi;
+                this._timersInternal[timerName] += ct.deltaUi;
+                this.timers[timerName] = this._timersInternal[timerName];
             }
 
-            var temp1 = this._timers;
-            var temp2 = ct.u.ext(temp1, this._timersUi);
-            this.timers = temp2;
+            //var temp1 = this._timers;
+            //this.timers = ct.u.ext(temp1, this._timersUi);
 
             if (Object.keys(this.timers).length > 0) for (const timerName in this.timers) {
-                let timer = this.timers[timerName];
-                timer /= 60; // Change the time to seconds
+                this.timers[timerName] /= 60; // Change the time to seconds
             }
         }
     };

@@ -6,6 +6,9 @@ setInterval(function () {
     deadPool.length = 0;
 }, 1000 * 60);
 
+// eslint-disable-next-line prefer-const
+let ctUWaitCounter = 0;
+
 /**
  * The ct.js library
  * @namespace
@@ -423,14 +426,15 @@ ct.u = {
             }
         }, time));
         return new Promise(function (resolve, reject) {
-            //let timeA = 0; // Timer time
-            const randomNum = Number(Math.random() * 10);
-            ct.timer._timersInternal["ct.u.wait"] = 0;
+            const currentCounter = ctUWaitCounter;
+            ct.timer._timersInternal["ct.u.wait" + currentCounter] = 0;
+            ctUWaitCounter++;
             const timer = setInterval(function () {
                 if (ct.room.name === room) {
                     //timeA += optionsA.useUiDelta ? ct.deltaUi : ct.delta; // Add time
-                    if (ct.timer._timersInternal["ct.u.wait"] / 60 >= time) {
+                    if (ct.timer._timersInternal["ct.u.wait"] / 60 * 1000 >= time) {
                         // If the timer is done, resolve and clear the interval
+                        delete ct.timer._timersInternal["ct.u.wait" + currentCounter];
                         resolve();
                         clearInterval(timer); // Might not run?
                     }
