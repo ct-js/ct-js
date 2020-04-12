@@ -261,7 +261,6 @@ types:
       this.vspeed = -10;
       this.ctype = 'BulletsHeroes';
       this.phase = 0;
-      this.rotation = ct.random.deg();
       ct.emitters.follow(this, 'Electricity');
 
       this.damage = 7.5;
@@ -273,8 +272,6 @@ types:
       this.phase += ct.delta * 0.1;
       this.x = this.xstart + Math.sin(this.phase) * 75 * this.scale.x;
       ct.types.move(this);
-
-      this.direction = ct.u.pdn(this.xprev, this.yprev, this.x, this.y);
     ondraw: ''
     ondestroy: ''
     uid: 140f8bde-bd06-4b2d-a5f2-87427848252e
