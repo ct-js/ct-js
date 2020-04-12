@@ -7,7 +7,7 @@ main-menu.flexcol
 
         ul#app.nav.tabs
             li.it30#ctlogo(onclick="{ctClick}" title="{voc.ctIDE}")
-                svg.feather
+                svg.feather.nmr
                     use(xlink:href="data/icons.svg#menu")
                 context-menu#theCatMenu(menu="{catMenu}" ref="catMenu")
             li.it30(onclick="{changeTab('patrons')}" title="{voc.patrons}" class="{active: tab === 'patrons'}")
@@ -183,7 +183,12 @@ main-menu.flexcol
             const runCtExport = require('./data/node_requires/exporter');
             runCtExport(currentProject, sessionStorage.projdir)
             .then(path => {
-                window.openDebugger(`http://localhost:${server.address().port}`);
+                if (localStorage.disableBuiltInDebugger === 'yes') {
+                    const shell = require('electron').shell;
+                    shell.openExternal(`http://localhost:${server.address().port}/`);
+                } else {
+                    window.openDebugger(`http://localhost:${server.address().port}`);
+                }
             })
             .catch(e => {
                 window.alertify.error(e);
@@ -266,6 +271,80 @@ main-menu.flexcol
             window.signals.trigger('UIThemeChanged', theme);
         };
 
+        const troubleshootingSubmenu = {
+            items: [{
+                label: window.languageJSON.menu.toggleDevTools,
+                icon: 'terminal',
+                hotkeyLabel: 'Ctrl+Shift+C',
+                click: () => {
+                    const {remote} = require('electron');
+                    remote.getCurrentWindow().webContents.toggleDevTools();
+                }
+            }, {
+                label: window.languageJSON.menu.copySystemInfo,
+                icon: 'file-text',
+                click: async () => {
+                    alertify.log(window.languageJSON.menu.systemInfoWait);
+                    const os = require('os');
+                    const {remote, clipboard} = require('electron');
+                    const YAML = require('js-yaml');
+                    const PIXI = require('pixi.js');
+                    const gpuData = await remote.app.getGPUInfo('complete');
+                    const gpuDump = YAML.safeDump(gpuData);
+                    const report = `Ct.js v${remote.app.getVersion()} 😽 ${remote.app.isPackaged? '(packaged)' : '(runs from sources)'}\n\n` +
+                          `Electron v${process.versions.electron}\n` +
+                          `Chrome v${process.versions.chrome}\n` +
+                          `Node.js v${process.versions.node}\n` +
+                          `Pixi.js v${PIXI.VERSION}\n\n` +
+                          `OS ${process.platform} ${process.arch} // ${os.type()} ${os.release()}\n\n` +
+                          `GPU data:\n${gpuDump}`;
+                    clipboard.writeText(report);
+                    alertify.success(window.languageJSON.menu.systemInfoDone);
+                }
+            }, {
+                label: window.languageJSON.menu.disableAcceleration,
+                type: 'checkbox',
+                checked: () => fs.existsSync('./pleaseCtJSLoadWithoutGPUAccelerationMmkay'),
+                click: async () => {
+                    if (await fs.exists('./pleaseCtJSLoadWithoutGPUAccelerationMmkay')) {
+                        await fs.remove('./pleaseCtJSLoadWithoutGPUAccelerationMmkay');
+                    } else {
+                        await fs.outputFile('./pleaseCtJSLoadWithoutGPUAccelerationMmkay', 'Do it.');
+                    }
+                    this.update();
+                }
+            }, {
+                label: window.languageJSON.menu.disableBuiltInDebugger,
+                type: 'checkbox',
+                checked: () => localStorage.disableBuiltInDebugger === 'yes',
+                click: () => {
+                    if (localStorage.disableBuiltInDebugger === 'yes') {
+                        localStorage.disableBuiltInDebugger = 'no';
+                    } else {
+                        localStorage.disableBuiltInDebugger = 'yes';
+                    }
+                }
+            }, {
+                type: 'separator'
+            }, {
+                icon: 'discord',
+                iconClass: 'icon',
+                label: window.languageJSON.menu.visitDiscordForGamedevSupport,
+                click: () => {
+                    const {shell} = require('electron');
+                    shell.openExternal('https://discord.gg/3f7TsRC');
+                }
+            }, {
+                icon: 'github',
+                iconClass: 'icon',
+                label: window.languageJSON.menu.postAnIssue,
+                click: () => {
+                    const {shell} = require('electron');
+                    shell.openExternal('https://github.com/ct-js/ct-js/issues/new/choose');
+                }
+            }]
+        };
+
         this.catMenu = {
             items: [{
                 label: window.languageJSON.common.save,
@@ -315,7 +394,6 @@ main-menu.flexcol
                 label: window.languageJSON.common.language,
                 submenu: languageSubmenu
             }, {
-
                 label: window.languageJSON.menu.theme,
                 submenu: {
                     items: [{
@@ -380,7 +458,7 @@ main-menu.flexcol
                     }, {
                         label: window.languageJSON.menu.codeLigatures,
                         type: 'checkbox',
-                        checked: localStorage.codeLigatures !== 'off',
+                        checked: () => localStorage.codeLigatures !== 'off',
                         click: () => {
                             localStorage.codeLigatures = localStorage.codeLigatures === 'off'? 'on' : 'off';
                             window.signals.trigger('codeFontUpdated');
@@ -388,7 +466,7 @@ main-menu.flexcol
                     }, {
                         label: window.languageJSON.menu.codeDense,
                         type: 'checkbox',
-                        checked: localStorage.codeDense === 'on',
+                        checked: () => localStorage.codeDense === 'on',
                         click: () => {
                             localStorage.codeDense = localStorage.codeDense === 'off'? 'on' : 'off';
                             window.signals.trigger('codeFontUpdated');
@@ -411,6 +489,10 @@ main-menu.flexcol
                     const {shell} = require('electron');
                     shell.openExternal('https://www.patreon.com/comigo');
                 }
+            }, {
+                label: window.languageJSON.menu.troubleshooting,
+                icon: 'alert-circle',
+                submenu: troubleshootingSubmenu
             }, {
                 label: window.languageJSON.common.ctsite,
                 click: function () {
