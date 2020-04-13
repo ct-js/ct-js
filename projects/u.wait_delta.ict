@@ -59,6 +59,13 @@ rooms:
           console.log(this.timerOn);
           console.log(ct.timer.timers["a"]);
           console.log(ct.timer.timedTimers["b"]);
+          if (this.timerOn == false) {
+              this.timerOn = true;
+              ct.u.wait(1000).then(() => {
+                  console.warn("done yay");
+                  this.timerOn = false;
+              });
+          }
           //console.log(ct.timer._timersInternal["ct.u.wait"] / 60);
 
           this.text.x = 32;
