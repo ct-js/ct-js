@@ -378,6 +378,38 @@ main-menu.flexcol
             }, {
                 type: 'separator'
             }, {
+                label: window.languageJSON.common.zoom_in,
+                icon: 'zoom-in',
+                click: e => {
+                    const { webFrame } = require('electron');
+                    webFrame.setZoomFactor(webFrame.getZoomFactor() + 0.25);
+                    try {
+                        require('gulp');
+                        console.log('Zoom in to ', webFrame.getZoomFactor());
+                    } catch (e) {
+                        void e;
+                    }
+                },
+                hotkey: 'Control+=',
+                hotkeyLabel: 'Ctrl+='
+            }, {
+                label: window.languageJSON.common.zoom_out,
+                icon: 'zoom-out',
+                click: e => {
+                    const { webFrame } = require('electron');
+                    webFrame.setZoomFactor(webFrame.getZoomFactor() - 0.25);
+                    try {
+                        require('gulp');
+                        console.log('Zoom out to ', webFrame.getZoomFactor());
+                    } catch (e) {
+                        void e;
+                    }
+                },
+                hotkey: 'Control+-',
+                hotkeyLabel: 'Ctrl+-'
+            }, {
+                type: 'separator'
+            }, {
                 label: window.languageJSON.menu.startScreen,
                 click: (e) => {
                     if (!confirm(window.languageJSON.common.reallyexit)) {
