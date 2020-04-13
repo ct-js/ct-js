@@ -378,7 +378,7 @@ main-menu.flexcol
             }, {
                 type: 'separator'
             }, {
-                label: window.languageJSON.common.zoom_in,
+                label: window.languageJSON.common.zoomIn,
                 icon: 'zoom-in',
                 click: e => {
                     const { webFrame } = require('electron');
@@ -393,7 +393,7 @@ main-menu.flexcol
                 hotkey: 'Control+=',
                 hotkeyLabel: 'Ctrl+='
             }, {
-                label: window.languageJSON.common.zoom_out,
+                label: window.languageJSON.common.zoomOut,
                 icon: 'zoom-out',
                 click: e => {
                     const { webFrame } = require('electron');
