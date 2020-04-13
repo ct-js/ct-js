@@ -382,13 +382,26 @@ main-menu.flexcol
                 icon: 'zoom-in',
                 click: e => {
                     const { webFrame } = require('electron');
-                    webFrame.setZoomFactor(webFrame.getZoomFactor() + 0.25);
+                    const updateZoom = () => {
+                        return Number(webFrame.getZoomFactor());
+                    };
+                    let zoom = updateZoom();
+                    if (zoom === (NaN || 0 || 5) || zoom < 0.1 || zoom >= 5) {
+                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
+                        zoom = updateZoom();
+                    } else {
+                        webFrame.setZoomFactor(zoom + 0.1);
+                        zoom = updateZoom();
+                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
+                    }
+
                     try {
                         require('gulp');
-                        console.log('Zoom in to ', webFrame.getZoomFactor());
+                        console.log('Zoom in to ', zoom);
                     } catch (e) {
                         void e;
                     }
+                    localStorage.editorZooming = zoom;
                 },
                 hotkey: 'Control+=',
                 hotkeyLabel: 'Ctrl+='
@@ -397,13 +410,26 @@ main-menu.flexcol
                 icon: 'zoom-out',
                 click: e => {
                     const { webFrame } = require('electron');
-                    webFrame.setZoomFactor(webFrame.getZoomFactor() - 0.25);
+                    const updateZoom = () => {
+                        return Number(webFrame.getZoomFactor());
+                    };
+                    let zoom = updateZoom();
+                    if (zoom === (NaN || 0 || 5) || zoom < 0.1 || zoom >= 5) {
+                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
+                        zoom = updateZoom();
+                    } else {
+                        webFrame.setZoomFactor(zoom - 0.1);
+                        zoom = updateZoom();
+                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
+                    }
+
                     try {
                         require('gulp');
-                        console.log('Zoom out to ', webFrame.getZoomFactor());
+                        console.log('Zoom out to ', zoom);
                     } catch (e) {
                         void e;
                     }
+                    localStorage.editorZooming = zoom;
                 },
                 hotkey: 'Control+-',
                 hotkeyLabel: 'Ctrl+-'

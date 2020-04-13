@@ -4,5 +4,6 @@
         localStorage.lastProjects = '';
         localStorage.notes = '';
         localStorage.appLanguage = 'English';
+        localStorage.editorZooming = require('electron').webFrame.getZoomFactor() || 1;
     }
 })();
