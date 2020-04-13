@@ -1,17 +1,12 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-underscore-dangle */
 
-// eslint-disable-next-line no-warning-comments
-/* Todo:
- * - Add support for ending timers after a certain amount of time
- */
-
 class CtTimer {
     /**
      * An object for holding a timer
      * 
      * @param {string} name The name of the timer
-     * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.a
+     * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
      * @param {number} [startTime=0] The amout of time to start at, **in milliseconds**
      */
     constructor(name, uiDelta = false, startTime = 0) {
@@ -40,7 +35,7 @@ class CtTimedTimer extends CtTimer {
      * @param {string} name The name of the timer
      * @param {number} length The length for the timed timer, **in milliseconds**
      * @param {function} callback The function to call when the timer ends.
-     * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.a
+     * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
      * @param {number} [startTime=0] The amout of time to start at, **in milliseconds**
      */
     constructor(name, length, callback, uiDelta = false, startTime = 0) {
@@ -90,8 +85,8 @@ class CtTimedTimer extends CtTimer {
          * Adds a new timer with the given name
          *
          * @param {string} name The name of the timer, which you use to access it from `ct.timer.timers`.
-         * @param {boolean} [uiDelta=false] If the timer should be counted using `ct.deltaUi`
-         * @param {number} [startTime=0] The amount of time to start at. Counted in seconds.
+         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
+         * @param {number} [startTime=0] The amount of time to start at, **in milliseconds**
          * @returns {void}
          */
         addTimer(name, uiDelta = false, startTime = 0) {
@@ -103,7 +98,7 @@ class CtTimedTimer extends CtTimer {
          * @param {string} name The name of the timer
          * @param {number} length The length for the timed timer, **in milliseconds**
          * @param {function} callback The function to call when the timer ends.
-         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.a
+         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
         * @param {number} [startTime=0] The amout of time to start at, **in milliseconds**
          * @returns {void}
          */
