@@ -395,12 +395,7 @@ main-menu.flexcol
                         if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
                     }
 
-                    try {
-                        require('gulp');
-                        console.log('Zoom in to ', zoom);
-                    } catch (e) {
-                        void e;
-                    }
+                    console.debug('Zoom in to ', zoom);
                     localStorage.editorZooming = zoom;
                 },
                 hotkey: 'Control+=',
@@ -423,12 +418,7 @@ main-menu.flexcol
                         if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
                     }
 
-                    try {
-                        require('gulp');
-                        console.log('Zoom out to ', zoom);
-                    } catch (e) {
-                        void e;
-                    }
+                    console.debug('Zoom out to ', zoom);
                     localStorage.editorZooming = zoom;
                 },
                 hotkey: 'Control+-',
