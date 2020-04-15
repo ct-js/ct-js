@@ -1,7 +1,4 @@
 (function (window) {
-    // Set the correct zoom
-    if (Number(require('electron').webFrame.getZoomFactor()) !== Number(localStorage.editorZooming)) { require('electron').webFrame.setZoomFactor(Number(localStorage.editorZooming)); }
-
     window.migrationProcess = window.migrationProcess || [];
     window.applyMigrationCode = function (version) {
         const process = window.migrationProcess.find(process => process.version === version);
