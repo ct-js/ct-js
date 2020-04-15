@@ -381,19 +381,14 @@ main-menu.flexcol
                 label: window.languageJSON.common.zoomIn,
                 icon: 'zoom-in',
                 click: e => {
-                    const { webFrame } = require('electron');
-                    const updateZoom = () => {
-                        return Number(webFrame.getZoomFactor());
-                    };
-                    let zoom = updateZoom();
-                    if (zoom === (NaN || 0 || 5) || zoom < 0.1 || zoom >= 5) {
-                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
-                        zoom = updateZoom();
-                    } else {
-                        webFrame.setZoomFactor(zoom + 0.1);
-                        zoom = updateZoom();
-                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
+                    const {webFrame} = require('electron');
+                    let zoom = webFrame.getZoomFactor() + 0.1;
+                    if (Number.isNaN(zoom) || !zoom || !Number.isFinite(zoom)) {
+                        zoom = 1;
+                    } else if (zoom > 5) {
+                        zoom = 5;
                     }
+                    webFrame.setZoomFactor(zoom);
 
                     console.debug('Zoom in to ', zoom);
                     localStorage.editorZooming = zoom;
@@ -404,19 +399,14 @@ main-menu.flexcol
                 label: window.languageJSON.common.zoomOut,
                 icon: 'zoom-out',
                 click: e => {
-                    const { webFrame } = require('electron');
-                    const updateZoom = () => {
-                        return Number(webFrame.getZoomFactor());
-                    };
-                    let zoom = updateZoom();
-                    if (zoom === (NaN || 0 || 5) || zoom < 0.1 || zoom >= 5) {
-                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
-                        zoom = updateZoom();
-                    } else {
-                        webFrame.setZoomFactor(zoom - 0.1);
-                        zoom = updateZoom();
-                        if (zoom === NaN) { webFrame.setZoomFactor(0.1); } else if (zoom >= 5) { webFrame.setZoomFactor(4.9); } else if (zoom < 0.11) { webFrame.setZoomFactor(0.1); }
+                    const {webFrame} = require('electron');
+                    let zoom = webFrame.getZoomFactor() - 0.1;
+                    if (Number.isNaN(zoom) || !zoom || !Number.isFinite(zoom)) {
+                        zoom = 1;
+                    } else if (zoom < 0.25) {
+                        zoom = 0.25;
                     }
+                    webFrame.setZoomFactor(zoom);
 
                     console.debug('Zoom out to ', zoom);
                     localStorage.editorZooming = zoom;
