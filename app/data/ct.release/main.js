@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* Made with ct.js http://ctjs.rocks/ */
 const deadPool = []; // a pool of `kill`-ed copies for delaying frequent garbage collection
 const copyTypeSymbol = Symbol('I am a ct.js copy');
@@ -427,14 +426,14 @@ ct.u = {
         }, time));
         return new Promise(function (resolve, reject) {
             const currentCounter = ctUWaitCounter;
-            ct.timer._timersInternal["ct.u.wait" + currentCounter] = 0;
+            ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = 0;
             ctUWaitCounter++;
             const timer = setInterval(function () {
                 if (ct.room.name === room) {
                     //timeA += optionsA.useUiDelta ? ct.deltaUi : ct.delta; // Add time
-                    if (ct.timer._timersInternal["ct.u.wait"] / 60 * 1000 >= time) {
+                    if (ct.timer[internalTimerSymbol]["ct.u.wait"] / ct.speed * 1000 >= time) {
                         // If the timer is done, resolve and clear the interval
-                        delete ct.timer._timersInternal["ct.u.wait" + currentCounter];
+                        delete ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
                         resolve();
                         clearInterval(timer); // Might not run?
                     }
@@ -524,7 +523,7 @@ ct.u.ext(ct.u, {// make aliases
             // eslint-disable-next-line no-underscore-dangle
             if (copy.kill && !copy._destroyed) {
                 killRecursive(copy); // This will also allow a parent to eject children to a new container before they are destroyed as well
-                copy.destroy({ children: true });
+                copy.destroy({children: true});
             }
         }
 

@@ -1,66 +1,62 @@
-/* eslint-disable no-empty */
-/* eslint-disable no-underscore-dangle */
-
-class CtTimer {
-    /**
-     * An object for holding a timer
-     * 
-     * @param {string} name The name of the timer
-     * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
-     * @param {number} [startTime=0] The amout of time to start at, **in milliseconds**
-     */
-    constructor(name, uiDelta = false, startTime = 0) {
-        this._name = name;
-        this.uiDelta = uiDelta;
-        this._time = startTime / 1000 * 60;
-        this.time = this._time * 1000 / 60;
-    }
-
-    /**
-     * Updates the timer. **DONT CALL THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
-     *
-     * @returns {void}
-     * @private
-     */
-    update() {
-        this._time += this.uiDelta ? ct.deltaUi : ct.delta;
-        this.time = this._time * 1000 / 60;
-    }
-}
-
-class CtTimedTimer extends CtTimer {
-    /**
-     * An object for holding a timed timer
-     *
-     * @param {string} name The name of the timer
-     * @param {number} length The length for the timed timer, **in milliseconds**
-     * @param {function} callback The function to call when the timer ends.
-     * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
-     * @param {number} [startTime=0] The amout of time to start at, **in milliseconds**
-     */
-    constructor(name, length, callback, uiDelta = false, startTime = 0) {
-        super(name, uiDelta, startTime);
-        this.length = length; // / 1000;
-        this.callback = callback;
-        this.done = false;
-    }
-
-    /**
-     * Updates the timer. **DONT CALL THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
-     *
-     * @returns {void}
-     * @private
-     */
-    update() {
-        super.update();
-        if (this.time >= this.length && this.done !== true) {
-            this.done = true;
-            this.callback();
-        }
-    }
-}
+const internalTimerSymbol = Symbol('_timersInternal');
+let currentRoomName = ct.room.name;
 
 (function () {
+    // Keep these in the function scope because there's no need anywhere else
+    const ctTimerName = Symbol('_name');
+    const ctTimerTime = Symbol('_time');
+
+    window.CtTimer = class {
+        /**
+         * An object for holding a timer
+         * 
+         * @param {string} name The name of the timer
+         * @param {number} [timeMs=0] The length of the timer, **in milliseconds**
+         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
+         * @param {boolean} [addTimer=false] **For internal methods only**
+         */
+        constructor(name, timeMs = 0, uiDelta = false, addTimer = false) {
+            this[ctTimerName] = name.toString();
+            this.uiDelta = uiDelta;
+            this[ctTimerTime] = 0; //startTime / 1000 * ct.speed;
+            this.time = this[ctTimerTime] * 1000 / ct.speed;
+            this.timeLeft = timeMs / 1000 * ct.speed;
+            this.promise = new Promise((resolve, reject) => {
+                this.resolve = resolve;
+                this.reject = reject;
+            });
+            this.rejected = false;
+            if (!addTimer) ct.timer.timers[name.toString()] = this;
+        }
+
+        /**
+         * Updates the timer. **DONT CALL THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
+         *
+         * @returns {void}
+         * @private
+         */
+        update() {
+            if (this.rejected === true) return;
+            this[ctTimerTime] += this.uiDelta ? ct.deltaUi : ct.delta;
+            this.time = this[ctTimerTime] * 1000 / ct.speed;
+            if (ct.room.name !== currentRoomName) {
+                currentRoomName = ct.room.name;
+                this.reject({
+                    info: 'Room switch',
+                    from: 'ct.timer'
+                }); // Reject if the room was switched
+                this.rejected = true;
+            }
+            // If the timer is supposed to end
+            if (this.timeLeft !== 0) {
+                this.timeLeft -= this[ctTimerTime] * 1000 / ct.speed;
+                if (this.timeLeft <= 0) {
+                    this.resolve();
+                }
+            }
+        }
+    };
+
     /**
      * Timer utilities
      * @namespace
@@ -72,16 +68,6 @@ class CtTimedTimer extends CtTimer {
          */
         timers: {},
         /**
-         * An object with timed timers.
-         * @type Object<CtTimedTimer>
-         */
-        timedTimers: {},
-        /**
-         * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
-         * @private
-         */
-        _timersInternal: {},
-        /**
          * Adds a new timer with the given name
          *
          * @param {string} name The name of the timer, which you use to access it from `ct.timer.timers`.
@@ -90,20 +76,7 @@ class CtTimedTimer extends CtTimer {
          * @returns {void}
          */
         addTimer(name, uiDelta = false, startTime = 0) {
-            this.timers[name.toString()] = new CtTimer(name, uiDelta, startTime);
-        },
-        /**
-         * Adds a new timed timer with the given name
-         *
-         * @param {string} name The name of the timer
-         * @param {number} length The length for the timed timer, **in milliseconds**
-         * @param {function} callback The function to call when the timer ends.
-         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
-        * @param {number} [startTime=0] The amout of time to start at, **in milliseconds**
-         * @returns {void}
-         */
-        addTimedTimer(name, length, callback, uiDelta = false, startTime = 0) {
-            this.timedTimers[name.toString()] = new CtTimedTimer(name, length, callback, uiDelta, startTime);
+            this.timers[name.toString()] = new CtTimer(name, uiDelta, startTime, true);
         },
         /**
          * Removes the timer with the given name
@@ -115,11 +88,7 @@ class CtTimedTimer extends CtTimer {
             try {
                 delete this.timers[name.toString()];
             } catch (e) {
-                try {
-                    delete this.timedTimers[name.toString()];
-                } catch (e2) {
-                    console.warn(`[ct.timer] Timer '${name.toString()}' does not exist!`);
-                }
+                console.warn(`[ct.timer] Timer '${name.toString()}' does not exist!`);
             }
         },
         /**
@@ -142,26 +111,25 @@ class CtTimedTimer extends CtTimer {
                 this.timers[timerName] = this._timersUi[timerName];
             }*/
 
-            if (Object.keys(this._timersInternal).length > 0) for (const timerName in this._timersInternal) {
-                this._timersInternal[timerName] += ct.deltaUi;
+            if (Object.keys(this[internalTimerSymbol]).length > 0) for (const timerName in this[internalTimerSymbol]) {
+                this[internalTimerSymbol][timerName] += ct.deltaUi;
             }
 
             if (Object.keys(this.timers).length > 0) for (const timerName in this.timers) {
                 this.timers[timerName].update();
             }
 
-            // Timed timers
-
-            if (Object.keys(this.timedTimers).length > 0) for (const timerName in this.timedTimers) {
-                this.timedTimers[timerName].update();
-            }
-
             //var temp1 = this._timers;
             //this.timers = ct.u.ext(temp1, this._timersUi);
 
             //if (Object.keys(this.timers).length > 0) for (const timerName in this.timers) {
-            //this.timers[timerName] /= 60; // Change the time to seconds
+            //this.timers[timerName] /= ct.speed; // Change the time to seconds
             //}
         }
     };
+    /**
+     * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
+     * @private
+     */
+    ct.timer[internalTimerSymbol] = {};
 })();
