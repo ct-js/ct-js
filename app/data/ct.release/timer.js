@@ -1,10 +1,10 @@
 const internalTimerSymbol = Symbol('_timersInternal');
-let currentRoomName = ct.room.name;
 
 (function () {
     // Keep these in the function scope because there's no need anywhere else
     const ctTimerName = Symbol('_name');
     const ctTimerTime = Symbol('_time');
+    const ctTimerRoomName = Symbol('_roomName');
 
     window.CtTimer = class {
         /**
@@ -16,6 +16,7 @@ let currentRoomName = ct.room.name;
          * @param {boolean} [addTimer=false] **For internal methods only**
          */
         constructor(name, timeMs = 0, uiDelta = false, addTimer = false) {
+            this[ctTimerRoomName] = ct.room.name || '';
             this[ctTimerName] = name.toString();
             this.uiDelta = uiDelta;
             this[ctTimerTime] = 0; //startTime / 1000 * ct.speed;
@@ -30,6 +31,17 @@ let currentRoomName = ct.room.name;
         }
 
         /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         *
+         * @param {any} onfulfilled The callback to execute when the Promise is resolved.
+         * @param {any} onrejected The callback to execute when the Promise is rejected.
+         * @returns {Promise} A Promise for the completion of which ever callback is executed.
+         */
+        then(...args) {
+            return this.promise.then(...args);
+        }
+
+        /**
          * Updates the timer. **DONT CALL THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
          *
          * @returns {void}
@@ -39,8 +51,8 @@ let currentRoomName = ct.room.name;
             if (this.rejected === true) return;
             this[ctTimerTime] += this.uiDelta ? ct.deltaUi : ct.delta;
             this.time = this[ctTimerTime] * 1000 / ct.speed;
-            if (ct.room.name !== currentRoomName) {
-                currentRoomName = ct.room.name;
+            if (ct.room.name !== this[ctTimerRoomName] && this[ctTimerRoomName] !== '') {
+                //this[ctTimerRoomName] = ct.room.name;
                 this.reject({
                     info: 'Room switch',
                     from: 'ct.timer'
@@ -73,10 +85,11 @@ let currentRoomName = ct.room.name;
          * @param {string} name The name of the timer, which you use to access it from `ct.timer.timers`.
          * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
          * @param {number} [startTime=0] The amount of time to start at, **in milliseconds**
-         * @returns {void}
+         * @returns {CtTimer} The timer
          */
         addTimer(name, uiDelta = false, startTime = 0) {
             this.timers[name.toString()] = new CtTimer(name, uiDelta, startTime, true);
+            return this.timers[name.toString()];
         },
         /**
          * Removes the timer with the given name

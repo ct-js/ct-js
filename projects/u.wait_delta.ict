@@ -38,8 +38,9 @@ rooms:
           this.timerOn = false;
           this.timerAdded = false;
 
-          ct.timer.addTimer("a", true);
-          ct.timer.addTimedTimer("b", 1000, function () { console.warn("done"); }, true);
+          this.timer = new CtTimer("a", 5000, true).then(() => {
+              console.warn("ajshdjakshdjahskjdhjkh +++++++++++++++++++");
+          });
     onstep: ''
     ondraw: |2-
           if (ct.actions.Test.down) {
@@ -58,7 +59,6 @@ rooms:
           }
           console.log(this.timerOn);
           console.log(ct.timer.timers["a"]);
-          console.log(ct.timer.timedTimers["b"]);
           if (this.timerOn == false) {
               this.timerOn = true;
               ct.u.wait(1000).then(() => {
