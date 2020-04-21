@@ -1,5 +1,5 @@
 main-menu.flexcol
-    nav.nogrow.flexrow(if="{global.currentProject}")
+    nav.nogrow.flexrow(if="{window.currentProject}")
         ul#fullscreen.nav
             li.nbr(onclick="{toggleFullscreen}" title="{voc.min} (F11)")
                 svg.feather
@@ -53,7 +53,7 @@ main-menu.flexcol
                 svg.feather
                     use(xlink:href="data/icons.svg#room")
                 span {voc.rooms}
-    div.flexitem.relative(if="{global.currentProject}")
+    div.flexitem.relative(if="{window.currentProject}")
         settings-panel(show="{tab === 'settings'}" data-hotkey-scope="settings")
         modules-panel(show="{tab === 'modules'}" data-hotkey-scope="modules")
         textures-panel(show="{tab === 'texture'}" data-hotkey-scope="texture")
@@ -93,11 +93,8 @@ main-menu.flexcol
         this.fullscreen = false;
         this.toggleFullscreen = function() {
             this.fullscreen = !this.fullscreen;
-            if (this.fullscreen) {
-                nw.Window.get().enterFullscreen();
-            } else {
-                nw.Window.get().leaveFullscreen();
-            }
+            const {remote} = require('electron');
+            remote.getCurrentWindow().setFullScreen(this.fullscreen);
         };
 
         const languageSubmenu = {
@@ -136,12 +133,12 @@ main-menu.flexcol
         };
         this.saveProject = () => {
             const YAML = require('js-yaml');
-            const data = YAML.safeDump(global.currentProject);
-            return fs.outputFile(global.projdir + '.ict', data)
+            const data = YAML.safeDump(currentProject);
+            return fs.outputFile(sessionStorage.projdir + '.ict', data)
             .then(() => {
                 alertify.success(languageJSON.common.savedcomm, "success", 3000);
                 this.saveRecoveryDebounce();
-                fs.remove(global.projdir + '.ict.recovery')
+                fs.remove(sessionStorage.projdir + '.ict.recovery')
                 .then(() => console.log())
                 .catch(console.error);
                 glob.modified = false;
@@ -149,10 +146,10 @@ main-menu.flexcol
             .catch(alertify.error);
         };
         this.saveRecovery = () => {
-            if (global.currentProject) {
+            if (currentProject) {
                 const YAML = require('js-yaml');
-                const data = YAML.safeDump(global.currentProject);
-                fs.outputFile(global.projdir + '.ict.recovery', data);
+                const data = YAML.safeDump(currentProject);
+                fs.outputFile(sessionStorage.projdir + '.ict.recovery', data);
             }
             this.saveRecoveryDebounce();
         };
@@ -184,10 +181,11 @@ main-menu.flexcol
         this.runProject = e => {
             document.body.style.cursor = 'progress';
             const runCtExport = require('./data/node_requires/exporter');
-            runCtExport(global.currentProject, global.projdir)
+            runCtExport(currentProject, sessionStorage.projdir)
             .then(path => {
                 if (localStorage.disableBuiltInDebugger === 'yes') {
-                    nw.Shell.openExternal(`http://localhost:${server.address().port}/`);
+                    const shell = require('electron').shell;
+                    shell.openExternal(`http://localhost:${server.address().port}/`);
                 } else {
                     window.openDebugger(`http://localhost:${server.address().port}`);
                 }
@@ -202,10 +200,11 @@ main-menu.flexcol
         };
         this.runProjectAlt = e => {
             const runCtExport = require('./data/node_requires/exporter');
-            runCtExport(global.currentProject, global.projdir)
+            runCtExport(currentProject, sessionStorage.projdir)
             .then(path => {
                 console.log(path);
-                nw.Shell.openExternal(`http://localhost:${server.address().port}/`);
+                const shell = require('electron').shell;
+                shell.openExternal(`http://localhost:${server.address().port}/`);
             });
         };
         hotkey.on('Alt+F5', this.runProjectAlt);
@@ -222,14 +221,15 @@ main-menu.flexcol
                 await this.saveProject();
                 await fs.remove(outName);
                 await fs.remove(inDir);
-                await fs.copy(global.projdir + '.ict', path.join(inDir, sessionStorage.projname));
-                await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
+                await fs.copy(sessionStorage.projdir + '.ict', path.join(inDir, sessionStorage.projname));
+                await fs.copy(sessionStorage.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
 
                 const archive = archiver('zip'),
                     output = fs.createWriteStream(outName);
 
                 output.on('close', () => {
-                    nw.Shell.showItemInFolder(outName);
+                    const shell = require('electron').shell;
+                    shell.showItemInFolder(outName);
                     alertify.success(this.voc.successZipProject.replace('{0}', outName));
                     fs.remove(inDir);
                 });
@@ -247,13 +247,14 @@ main-menu.flexcol
             let exportFile = path.join(writable, '/export.zip'),
                 inDir = path.join(writable, '/export/');
             await fs.remove(exportFile);
-            runCtExport(global.currentProject, global.projdir)
+            runCtExport(currentProject, sessionStorage.projdir)
             .then(() => {
                 let archive = archiver('zip'),
                     output = fs.createWriteStream(exportFile);
 
                 output.on('close', () => {
-                    nw.Shell.showItemInFolder(exportFile);
+                    const shell = require('electron').shell;
+                    shell.showItemInFolder(exportFile);
                     alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
                 });
 
@@ -276,26 +277,29 @@ main-menu.flexcol
                 icon: 'terminal',
                 hotkeyLabel: 'Ctrl+Shift+C',
                 click: () => {
-                    const win = nw.Window.get();
-                    if (win.isDevToolsOpen()) {
-                        win.closeDevTools();
-                    } else {
-                        win.showDevTools();
-                    }
+                    const {remote} = require('electron');
+                    remote.getCurrentWindow().webContents.toggleDevTools();
                 }
             }, {
                 label: window.languageJSON.menu.copySystemInfo,
                 icon: 'file-text',
                 click: async () => {
+                    alertify.log(window.languageJSON.menu.systemInfoWait);
                     const os = require('os');
+                    const {remote, clipboard} = require('electron');
                     const YAML = require('js-yaml');
+                    const PIXI = require('pixi.js');
+                    const gpuData = await remote.app.getGPUInfo('complete');
+                    const gpuDump = YAML.safeDump(gpuData);
                     const report = `Ct.js v${remote.app.getVersion()} 😽 ${remote.app.isPackaged? '(packaged)' : '(runs from sources)'}\n\n` +
-                          `NW.JS v${process.versions.nw}\n` +
-                          `Chromium v${process.versions.chromium}\n` +
+                          `Electron v${process.versions.electron}\n` +
+                          `Chrome v${process.versions.chrome}\n` +
                           `Node.js v${process.versions.node}\n` +
                           `Pixi.js v${PIXI.VERSION}\n\n` +
-                          `OS ${process.platform} ${process.arch} // ${os.type()} ${os.release()}`;
-                    nw.Clipboard.get().set(report, 'text');
+                          `OS ${process.platform} ${process.arch} // ${os.type()} ${os.release()}\n\n` +
+                          `GPU data:\n${gpuDump}`;
+                    clipboard.writeText(report);
+                    alertify.success(window.languageJSON.menu.systemInfoDone);
                 }
             }, {
                 label: window.languageJSON.menu.disableAcceleration,
@@ -327,14 +331,16 @@ main-menu.flexcol
                 iconClass: 'icon',
                 label: window.languageJSON.menu.visitDiscordForGamedevSupport,
                 click: () => {
-                    nw.Shell.openExternal('https://discord.gg/3f7TsRC');
+                    const {shell} = require('electron');
+                    shell.openExternal('https://discord.gg/3f7TsRC');
                 }
             }, {
                 icon: 'github',
                 iconClass: 'icon',
                 label: window.languageJSON.menu.postAnIssue,
                 click: () => {
-                    nw.Shell.openExternal('https://github.com/ct-js/ct-js/issues/new/choose');
+                    const {shell} = require('electron');
+                    shell.openExternal('https://github.com/ct-js/ct-js/issues/new/choose');
                 }
             }]
         };
@@ -349,9 +355,10 @@ main-menu.flexcol
             }, {
                 label: this.voc.openIncludeFolder,
                 click: e => {
-                    fs.ensureDir(path.join(global.projdir, '/include'))
+                    fs.ensureDir(path.join(sessionStorage.projdir, '/include'))
                     .then(() => {
-                        nw.Shell.openItem(path.join(global.projdir, '/include'));
+                        const shell = require('electron').shell;
+                        shell.openItem(path.join(sessionStorage.projdir, '/include'));
                     });
                 }
             }, {
@@ -368,44 +375,6 @@ main-menu.flexcol
                     this.update();
                 },
                 icon: 'package'
-            }, {
-                type: 'separator'
-            }, {
-                label: window.languageJSON.common.zoomIn,
-                icon: 'zoom-in',
-                click: e => {
-                    const win = nw.Window.get();
-                    let zoom = win.zoomLevel + 0.5;
-                    if (Number.isNaN(zoom) || !zoom || !Number.isFinite(zoom)) {
-                        zoom = 0;
-                    } else if (zoom > 5) {
-                        zoom = 5;
-                    }
-                    win.zoomLevel = zoom;
-
-                    console.debug('Zoom in to ', zoom);
-                    localStorage.editorZooming = zoom;
-                },
-                hotkey: 'Control+=',
-                hotkeyLabel: 'Ctrl+='
-            }, {
-                label: window.languageJSON.common.zoomOut,
-                icon: 'zoom-out',
-                click: e => {
-                    const win = nw.Window.get();
-                    let zoom = win.zoomLevel - 0.5;
-                    if (Number.isNaN(zoom) || !zoom || !Number.isFinite(zoom)) {
-                        zoom = 0;
-                    } else if (zoom < -3) {
-                        zoom = -3;
-                    }
-                    win.zoomLevel = zoom;
-
-                    console.debug('Zoom out to ', zoom);
-                    localStorage.editorZooming = zoom;
-                },
-                hotkey: 'Control+-',
-                hotkeyLabel: 'Ctrl+-'
             }, {
                 type: 'separator'
             }, {
@@ -509,14 +478,16 @@ main-menu.flexcol
             }, {
                 label: window.languageJSON.common.contribute,
                 click: function () {
-                    nw.Shell.openExternal('https://github.com/ct-js/ct-js');
+                    const {shell} = require('electron');
+                    shell.openExternal('https://github.com/ct-js/ct-js');
                 },
                 icon: 'code'
             }, {
                 label: window.languageJSON.common.donate,
                 icon: 'heart',
                 click: function () {
-                    nw.Shell.openExternal('https://www.patreon.com/comigo');
+                    const {shell} = require('electron');
+                    shell.openExternal('https://www.patreon.com/comigo');
                 }
             }, {
                 label: window.languageJSON.menu.troubleshooting,
@@ -525,7 +496,8 @@ main-menu.flexcol
             }, {
                 label: window.languageJSON.common.ctsite,
                 click: function () {
-                    nw.Shell.openExternal('https://ctjs.rocks/');
+                    const {shell} = require('electron');
+                    shell.openExternal('https://ctjs.rocks/');
                 }
             }, {
                 label: window.languageJSON.menu.license,
@@ -574,7 +546,8 @@ main-menu.flexcol
             languageSubmenu.items.push({
                 label: window.languageJSON.common.translateToYourLanguage,
                 click: function() {
-                    nw.Shell.openExternal('https://github.com/ct-js/ct-js/tree/develop/app/data/i18n');
+                    const {shell} = require('electron');
+                    shell.openExternal('https://github.com/ct-js/ct-js/tree/develop/app/data/i18n');
                 }
             });
         })

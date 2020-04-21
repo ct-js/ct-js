@@ -45,9 +45,7 @@
         "wrongFormat": "Formato de archivo incorrecto",
         "yes": "Si",
         "contribute": "",
-        "zoom": "Zoom:",
-        "zoomIn": "Acercar",
-        "zoomOut": "Alejar"
+        "zoom": "Zoom:"
     },
     "actionsEditor": {
         "actions": "Acciones",

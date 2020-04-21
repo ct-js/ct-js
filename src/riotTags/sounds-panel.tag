@@ -1,6 +1,6 @@
 sounds-panel.panel.view
     asset-viewer(
-        collection="{global.currentProject.sounds}"
+        collection="{currentProject.sounds}"
         contextmenu="{popupMenu}"
         namespace="sounds"
         click="{openSound}"
@@ -47,7 +47,7 @@ sounds-panel.panel.view
                 name: 'Sound_' + slice,
                 uid: id
             };
-            global.currentProject.sounds.push(newSound);
+            window.currentProject.sounds.push(newSound);
             this.refs.sounds.updateList();
             this.openSound(newSound)();
         };
@@ -67,7 +67,8 @@ sounds-panel.panel.view
             }, {
                 label: languageJSON.common.copyName,
                 click: e => {
-                    nw.Clipboard.get().set(this.editedSound.name, 'text');
+                    const {clipboard} = require('electron');
+                    clipboard.writeText(this.editedSound.name);
                 }
             }, {
                 label: window.languageJSON.common.rename,
@@ -93,8 +94,8 @@ sounds-panel.panel.view
                     .confirm(window.languageJSON.common.confirmDelete.replace('{0}', this.editedSound.name))
                     .then(e => {
                         if (e.buttonClicked === 'ok') {
-                            var ind = global.currentProject.sounds.indexOf(this.editedSound);
-                            global.currentProject.sounds.splice(ind, 1);
+                            var ind = window.currentProject.sounds.indexOf(this.editedSound);
+                            window.currentProject.sounds.splice(ind, 1);
                             this.refs.sounds.updateList();
                             this.update();
                             alertify

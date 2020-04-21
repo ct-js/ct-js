@@ -25,6 +25,7 @@ const generateCanvasGrid = function(size, color) {
 };
 
 const generatePixiTextureGrid = function(size, color) {
+    const PIXI = require('pixi.js');
     const canvas = generateCanvasGrid(size, color);
     return PIXI.Texture.from(canvas);
 };

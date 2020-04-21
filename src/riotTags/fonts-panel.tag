@@ -1,6 +1,6 @@
 fonts-panel.flexfix.tall.fifty
     asset-viewer(
-        collection="{global.currentProject.fonts}"
+        collection="{currentProject.fonts}"
         contextmenu="{onFontContextMenu}"
         vocspace="fonts"
         namespace="fonts"
@@ -32,19 +32,19 @@ fonts-panel.flexfix.tall.fifty
     font-editor(if="{editingFont}" fontobj="{editedFont}")
     script.
         this.editingFont = false;
-        global.currentProject.fonts = global.currentProject.fonts || [];
-        this.fonts = global.currentProject.fonts;
+        window.currentProject.fonts = window.currentProject.fonts || [];
+        this.fonts = window.currentProject.fonts;
         this.namespace = 'fonts';
         this.mixin(window.riotVoc);
         const fs = require('fs-extra'),
               path = require('path');
 
-        this.thumbnails = font => `file://${window.global.projdir}/fonts/${font.origname}_prev.png?cache=${font.lastmod}`;
+        this.thumbnails = font => `file://${window.sessionStorage.projdir}/fonts/${font.origname}_prev.png?cache=${font.lastmod}`;
         this.names = font => `${font.typefaceName} ${font.weight} ${font.italic? this.voc.italic : ''}`;
 
         this.setUpPanel = e => {
-            global.currentProject.fonts = global.currentProject.fonts || [];
-            this.fonts = global.currentProject.fonts;
+            window.currentProject.fonts = window.currentProject.fonts || [];
+            this.fonts = window.currentProject.fonts;
             this.editingFont = false;
             this.editedFont = null;
             this.refs.fonts.updateList();
@@ -72,7 +72,8 @@ fonts-panel.flexfix.tall.fifty
             }, {
                 label: languageJSON.common.copyName,
                 click: e => {
-                    nw.Clipboard.get().set(this.editedFont.name, 'text');
+                    const {clipboard} = require('electron');
+                    clipboard.writeText(this.editedFont.name);
                 }
             }, {
                 label: window.languageJSON.common.rename,
@@ -99,8 +100,8 @@ fonts-panel.flexfix.tall.fifty
                     .confirm(window.languageJSON.common.confirmDelete.replace('{0}', `${this.editedFont.typefaceName} ${this.editedFont.weight} ${this.editedFont.italic? voc.italic : ''}`))
                     .then(e => {
                         if (e.buttonClicked === 'ok') {
-                            const ind = global.currentProject.fonts.indexOf(this.editedFont);
-                            global.currentProject.fonts.splice(ind, 1);
+                            const ind = window.currentProject.fonts.indexOf(this.editedFont);
+                            window.currentProject.fonts.splice(ind, 1);
                             this.refs.fonts.updateList();
                             this.update();
                             alertify
@@ -130,7 +131,7 @@ fonts-panel.flexfix.tall.fifty
                     this.loadFont(
                         id,
                         files[i],
-                        path.join(global.projdir, '/fonts/f' + id + '.ttf'),
+                        path.join(sessionStorage.projdir, '/fonts/f' + id + '.ttf'),
                         true
                     );
                 } else {
@@ -152,11 +153,10 @@ fonts-panel.flexfix.tall.fifty
                     origname: path.basename(dest),
                     lastmod: +(new Date())
                 };
-                global.currentProject.fonts.push(obj);
+                window.currentProject.fonts.push(obj);
                 setTimeout(() => {
                     this.fontGenPreview(dest, dest + '_prev.png', 64, obj)
                     .then(dataUrl => {
-                        this.refs.fonts.updateList();
                         this.update();
                     });
                 }, 250)
@@ -241,7 +241,7 @@ fonts-panel.flexfix.tall.fifty
         });
 
         this.loadFonts = () => {
-            var fonts = global.currentProject.fonts;
+            var fonts = window.currentProject.fonts;
             for (const font of document.fonts) {
                 if (font.external) {
                     document.fonts.delete(font);
@@ -252,7 +252,7 @@ fonts-panel.flexfix.tall.fifty
                         weight: font.weight,
                         style: font.italic? 'italic' : 'normal'
                     },
-                    source = `${global.projdir}/fonts/${font.origname}`;
+                    source = `${sessionStorage.projdir}/fonts/${font.origname}`;
                     var cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
                 var face = new FontFace('CTPROJFONT' + font.typefaceName, `url(file://${cleanedSource})`, template);
                 face.load()

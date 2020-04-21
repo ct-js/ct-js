@@ -1,5 +1,6 @@
 const substituteCssVars = (str, project, injects) => {
-    const Color = global.brehautColor;
+    /* global net */
+    const {Color} = net.brehaut;
     let color1 = project.settings.branding.accent,
         // eslint-disable-next-line new-cap
         color2 = (Color(project.settings.branding.accent).getLuminance() < 0.5)? '#ffffff' : '#000000';
