@@ -129,13 +129,13 @@ ct.timer = {
             this.timers[timerName] = this._timersUi[timerName];
         }*/
 
-        if (Object.keys(this[internalTimerSymbol]).length > 0) for (const timerName in this[internalTimerSymbol]) {
+        /*if (Object.keys(this[internalTimerSymbol]).length > 0) for (const timerName in this[internalTimerSymbol]) {
             //this[internalTimerSymbol][timerName] += ct.deltaUi;
             if (typeof this[internalTimerSymbol][timerName] === CtTimer) {
                 if (this[internalTimerSymbol][timerName].done) delete this[internalTimerSymbol][timerName];
                 this[internalTimerSymbol][timerName].update();
             } else this[internalTimerSymbol][timerName] += ct.deltaUi;
-        }
+        }*/
 
         if (Object.keys(this.timers).length > 0) for (const timerName in this.timers) {
             this.timers[timerName].update();
@@ -153,6 +153,6 @@ ct.timer = {
  * **DONT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING**
  * @private
  */
-ct.timer[internalTimerSymbol] = {};
+//ct.timer[internalTimerSymbol] = {};
 
 //(function () {})();
