@@ -140,9 +140,10 @@
          *
          * @param {Function} func The function to limit
          * @param {Number} ms The period to wait, in milliseconds
+         * @param {boolean} [useUiDelta=false] If true, use ct.deltaUi instead of ct.delta
          * @returns {Function} a new triggerable function
          */
-        timer(func, ms) {
+        timer(func, ms, useUiDelta = false) {
             // The same may be done with ct.flow.gate + ct.flow.
             var timer;
             var delay = function () {
@@ -151,6 +152,7 @@
                         timer = false;
                     }, ms);
                     func();
+                    //timer = ct.u.wait(ms, useUiDelta).then(func);
                 }
             };
             return delay;

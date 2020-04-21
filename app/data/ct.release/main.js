@@ -6,8 +6,7 @@ setInterval(function () {
 }, 1000 * 60);
 
 
-let ctUWaitCounter = 0;
-const ctUWait = Symbol('ct.u.wait'); // Doesn't really do anything except come out as "Symbol(ct.u.wait)" when we use .toString()
+let internalTimerCounter = 0;
 
 
 /**
@@ -402,11 +401,11 @@ ct.u = {
      */
     wait(time, useUiDelta = false) {
         var room = ct.room.name;
-        const currentCounter = ctUWaitCounter;
-        ctUWaitCounter++;
+        const currentCounter = internalTimerCounter;
+        internalTimerCounter++;
         //ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
         //return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].promise;
-        return new CtTimer(ctUWait.toString() + currentCounter, time, useUiDelta);
+        return new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta);
         /*ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
         setInterval(() => {
             if (ct.room.name === room) {
@@ -497,7 +496,7 @@ ct.u.ext(ct.u, {// make aliases
             // eslint-disable-next-line no-underscore-dangle
             if (copy.kill && !copy._destroyed) {
                 killRecursive(copy); // This will also allow a parent to eject children to a new container before they are destroyed as well
-                copy.destroy({ children: true });
+                copy.destroy({children: true});
             }
         }
 
