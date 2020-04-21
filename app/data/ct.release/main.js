@@ -5,8 +5,10 @@ setInterval(function () {
     deadPool.length = 0;
 }, 1000 * 60);
 
-// eslint-disable-next-line prefer-const
+
 let ctUWaitCounter = 0;
+const ctUWait = Symbol('ct.u.wait'); // Doesn't really do anything except come out as "Symbol(ct.u.wait)" when we use .toString()
+
 
 /**
  * The ct.js library
@@ -396,17 +398,16 @@ ct.u = {
      * Returns a Promise that resolves after the given time
      * @param {number} time Time to wait, in milliseconds
      * @param {boolean} [useUiDelta=false] If true, use ct.deltaUi instead of ct.delta 
-     * @returns {CtTimer} The timer, with you can call `.then()` to
+     * @returns {CtTimer} The timer, which you can call `.then()` to
      */
     wait(time, useUiDelta = false) {
         var room = ct.room.name;
         const currentCounter = ctUWaitCounter;
         ctUWaitCounter++;
-        ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true, (arg) => {
-            console.warn("a");
-            if (arg.done) delete ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
-        });
-        return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
+        //ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
+        //return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].promise;
+        const timer = new CtTimer(ctUWait.toString() + currentCounter, time, useUiDelta);
+        return timer;
         /*ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
         setInterval(() => {
             if (ct.room.name === room) {

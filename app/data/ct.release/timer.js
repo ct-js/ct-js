@@ -13,9 +13,8 @@ class CtTimer {
      * @param {number} [timeMs=0] The length of the timer, **in milliseconds**
      * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
      * @param {boolean} [addTimer=false] **For internal methods only**
-     * @param {function} [updateInject=(arg) => void 0] **For internal methods only**
      */
-    constructor(name, timeMs = 0, uiDelta = false, addTimer = false, updateInject = (arg) => void 0) {
+    constructor(name, timeMs = 0, uiDelta = false, addTimer = false) {
         this[ctTimerRoomName] = ct.room.name || '';
         this[ctTimerName] = name.toString();
         this.uiDelta = uiDelta;
@@ -29,8 +28,6 @@ class CtTimer {
         });
         this.rejected = false;
         this.done = false;
-        if (updateInject instanceof Function) this.updateInject = updateInject;
-        else this.updateInject = (arg) => void 0;
         if (!addTimer) ct.timer.timers[name.toString()] = this;
     }
 
@@ -77,18 +74,6 @@ class CtTimer {
     }
 }
 
-const ctTimerUpdateInjectHandler = (timer) => {
-    try {
-        timer.updateInject(timer);
-    } catch (e) {
-        try {
-            timer.updateInject();
-        } catch (e2) {
-            console.warn("[ct.timer] Errors occurred when running the CtTimer update() injection function: " + e + e2s);
-        }
-    }
-};
-
 /**
  * Timer utilities
  * @namespace
@@ -108,7 +93,7 @@ ct.timer = {
      * @returns {CtTimer} The timer
      */
     addTimer(name, timeMs = 0, uiDelta = false) {
-        this.timers[name.toString()] = new CtTimer(name, timeMs, uiDelta, true, (arg) => console.debug("reeeeeee"));
+        this.timers[name.toString()] = new CtTimer(name, timeMs, uiDelta, true);
         return this.timers[name.toString()];
     },
     /**
@@ -147,14 +132,13 @@ ct.timer = {
         if (Object.keys(this[internalTimerSymbol]).length > 0) for (const timerName in this[internalTimerSymbol]) {
             //this[internalTimerSymbol][timerName] += ct.deltaUi;
             if (typeof this[internalTimerSymbol][timerName] === CtTimer) {
+                if (this[internalTimerSymbol][timerName].done) delete this[internalTimerSymbol][timerName];
                 this[internalTimerSymbol][timerName].update();
-                ctTimerUpdateInjectHandler(this[internalTimerSymbol][timerName]);
             } else this[internalTimerSymbol][timerName] += ct.deltaUi;
         }
 
         if (Object.keys(this.timers).length > 0) for (const timerName in this.timers) {
             this.timers[timerName].update();
-            ctTimerUpdateInjectHandler(this.timers[timerName]);
         }
 
         //var temp1 = this._timers;
