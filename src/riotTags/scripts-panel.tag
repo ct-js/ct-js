@@ -1,7 +1,7 @@
 scripts-panel
     h1.flexfix-header {voc.header}
     ul.menu.flexfix-body
-        li(each="{script in currentProject.scripts}" name="{script.name}" id="{script.name}" onclick="{selectScript}")
+        li(each="{script in global.currentProject.scripts}" name="{script.name}" id="{script.name}" onclick="{selectScript}")
             code {script.name}
             div.toright(onclick="{deleteScript}" title="{voc.deleteScript}" style="padding-right: 5px;")
                 svg.feather.dim
@@ -20,7 +20,7 @@ scripts-panel
     script.
         this.namespace = 'settings.scripts';
         this.mixin(window.riotVoc);
-        this.currentProject = window.currentProject;
+        this.currentProject = global.currentProject;
         this.currentProject.scripts = this.currentProject.scripts || [];
 
         this.addNewScript = e => {
@@ -89,7 +89,7 @@ scripts-panel
 
         const glob = require('./data/node_requires/glob');
         glob.scriptTypings = glob.scriptTypings || {};
-        for (const script of currentProject.scripts) {
+        for (const script of global.currentProject.scripts) {
             glob.scriptTypings[script.name] = [
                 monaco.languages.typescript.javascriptDefaults.addExtraLib(script.code),
                 monaco.languages.typescript.typescriptDefaults.addExtraLib(script.code)
