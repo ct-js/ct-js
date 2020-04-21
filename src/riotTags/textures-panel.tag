@@ -2,7 +2,7 @@ textures-panel.panel.view
     .flexfix.tall
         div
             asset-viewer(
-                collection="{global.currentProject.textures}"
+                collection="{currentProject.textures}"
                 contextmenu="{showTexturePopup}"
                 vocspace="texture"
                 namespace="textures"
@@ -19,7 +19,7 @@ textures-panel.panel.view
                             use(xlink:href="data/icons.svg#download")
                         span {voc.import}
             asset-viewer(
-                collection="{global.currentProject.skeletons}"
+                collection="{currentProject.skeletons}"
                 contextmenu="{showSkeletonPopup}"
                 vocspace="texture"
                 namespace="skeletons"
@@ -60,16 +60,16 @@ textures-panel.panel.view
         this.dropping = false;
 
         const {getTexturePreview} = require('./data/node_requires/resources/textures');
-        // this.thumbnails = texture => `file://${global.projdir}/img/${texture.origname}_prev.png?cache=${texture.lastmod}`;
+        // this.thumbnails = texture => `file://${sessionStorage.projdir}/img/${texture.origname}_prev.png?cache=${texture.lastmod}`;
         this.thumbnails = getTexturePreview;
 
         this.fillTextureMap = () => {
             glob.texturemap = {};
-            global.currentProject.textures.forEach(texture => {
+            window.currentProject.textures.forEach(texture => {
                 var img = document.createElement('img');
                 glob.texturemap[texture.uid] = img;
                 img.g = texture;
-                img.src = 'file://' + global.projdir + '/img/' + texture.origname + '?' + texture.lastmod;
+                img.src = 'file://' + sessionStorage.projdir + '/img/' + texture.origname + '?' + texture.lastmod;
             });
             var img = document.createElement('img');
             glob.texturemap[-1] = img;
@@ -129,8 +129,8 @@ textures-panel.panel.view
                     this.loadSkeleton(
                         id,
                         files[i],
-                        global.projdir + '/img/skdb' + id + '_ske.json'
-                    );
+                        sessionStorage.projdir + '/img/skdb' + id + '_ske.json'
+                    )
                 }
             }
             e.srcElement.value = '';
@@ -143,7 +143,7 @@ textures-panel.panel.view
             .then(() => fs.copy(filename.replace('_ske.json', '_tex.json'), dest.replace('_ske.json', '_tex.json')))
             .then(() => fs.copy(filename.replace('_ske.json', '_tex.png'), dest.replace('_ske.json', '_tex.png')))
             .then(() => {
-                global.currentProject.skeletons.push({
+                currentProject.skeletons.push({
                     name: path.basename(filename).replace('_ske.json', ''),
                     origname: path.basename(dest),
                     from: 'dragonbones',
@@ -151,6 +151,7 @@ textures-panel.panel.view
                 })
                 this.skelGenPreview(dest, dest + '_prev.png', [64, 128])
                 .then(dataUrl => {
+                    this.refs.textures.updateList();
                     this.refs.skeletons.updateList();
                     this.update();
                 });
@@ -179,7 +180,7 @@ textures-panel.panel.view
                     const promises = sizes.map(size => new Promise((resolve, reject) => {
                         const app = new PIXI.Application();
                         const base64 = app.renderer.plugins.extract.base64(skel)
-                        const data = base64.replace(/^data:image\/\w+;base64,/, '');
+                        const data = base64.replace(/^data:image\/\w+;base64,/, '');;
                         const buf = new Buffer(data, 'base64');
                         const stream = fs.createWriteStream(destFile);
                         stream.on('finish', () => {
@@ -219,7 +220,8 @@ textures-panel.panel.view
             }, {
                 label: languageJSON.common.copyName,
                 click: e => {
-                    nw.Clipboard.get().set(this.currentTexture.name, 'text');
+                    const {clipboard} = require('electron');
+                    clipboard.writeText(this.currentTexture.name);
                 }
             }, {
                 label: window.languageJSON.common.rename,
@@ -246,14 +248,14 @@ textures-panel.panel.view
                     .then(e => {
                         if (e.buttonClicked === 'ok') {
                             if (this.currentTextureType === 'skeleton') {
-                                global.currentProject.skeletons.splice(this.currentTextureId, 1);
+                                window.currentProject.skeletons.splice(this.currentTextureId, 1);
                             } else {
-                                for (const type of global.currentProject.types) {
+                                for (const type of window.currentProject.types) {
                                     if (type.texture === this.currentTexture.uid) {
                                         type.texture = -1;
                                     }
                                 }
-                                for (const room of global.currentProject.rooms) {
+                                for (const room of window.currentProject.rooms) {
                                     if ('tiles' in room) {
                                         for (const layer of room.tiles) {
                                             let i = 0;
@@ -277,17 +279,17 @@ textures-panel.panel.view
                                         }
                                     }
                                 }
-                                for (const tandem of global.currentProject.emitterTandems) {
+                                for (const tandem of window.currentProject.emitterTandems) {
                                     for (const emitter of tandem.emitters) {
                                         if (emitter.texture === this.currentTexture.uid) {
                                             emitter.texture = -1;
                                         }
                                     }
                                 }
-                                if (global.currentProject.settings.icon === this.currentTexture.uid) {
-                                    delete global.currentProject.settings.icon;
+                                if (window.currentProject.settings.icon === this.currentTexture.uid) {
+                                    delete window.currentProject.settings.icon;
                                 }
-                                global.currentProject.textures.splice(this.currentTextureId, 1);
+                                window.currentProject.textures.splice(this.currentTextureId, 1);
                             }
                             this.refs.textures.updateList();
                             this.refs.skeletons.updateList();
@@ -306,9 +308,9 @@ textures-panel.panel.view
         this.showTexturePopup = (texture, isSkeleton) => e => {
             this.currentTextureType = isSkeleton? 'skeleton' : 'texture';
             if (isSkeleton) {
-                this.currentTextureId = global.currentProject.skeletons.indexOf(texture);
+                this.currentTextureId = currentProject.skeletons.indexOf(texture);
             } else {
-                this.currentTextureId = global.currentProject.textures.indexOf(texture);
+                this.currentTextureId = currentProject.textures.indexOf(texture);
             }
             this.currentTexture = texture;
             this.refs.textureMenu.popup(e.clientX, e.clientY);
@@ -323,7 +325,7 @@ textures-panel.panel.view
          */
         this.openTexture = texture => e => {
             this.currentTexture = texture;
-            this.currentTextureId = global.currentProject.textures.indexOf(texture);
+            this.currentTextureId = window.currentProject.textures.indexOf(texture);
             this.editing = true;
         };
         this.openSkeleton = skel => e => {

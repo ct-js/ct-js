@@ -46,9 +46,7 @@
         "tilelayer": "warstwa kafelków",
         "wrongFormat": "Zły format pliku",
         "yes": "Tak",
-        "zoom": "Powiększenie",
-        "zoomIn": "Powiększanie",
-        "zoomOut": "Pomniejszanie"
+        "zoom": "Powiększenie"
     },
     "actionsEditor": {
         "actions": "Akcje",

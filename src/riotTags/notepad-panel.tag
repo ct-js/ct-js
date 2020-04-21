@@ -18,7 +18,7 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
         div(show="{tab === 'notepadglobal'}")
             .aCodeEditor(ref="notepadglobal")
         div(show="{tab === 'helppages'}")
-            iframe(src="http://localhost:{server.address().port}/{getIfDarkTheme()? '?darkTheme=yep' : ''}" ref="helpIframe" nwdisable nwfaketop)
+            iframe(src="http://localhost:{server.address().port}/{getIfDarkTheme()? '?darkTheme=yep' : ''}" ref="helpIframe")
             button.aHomeButton(title="{voc.backToHome}" onclick="{backToHome}")
                 svg.feather
                     use(xlink:href="data/icons.svg#home")
@@ -73,7 +73,7 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
         };
 
         this.on('update', () => {
-            this.notepadlocal.setValue(global.currentProject.notes || '');
+            this.notepadlocal.setValue(window.currentProject.notes || '');
         });
 
         this.on('mount', () => {
@@ -86,7 +86,7 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
                 });
 
                 this.notepadlocal.onDidChangeModelContent((e) => {
-                    global.currentProject.notes = this.notepadlocal.getValue();
+                    window.currentProject.notes = this.notepadlocal.getValue();
                     glob.modified = true;
                 });
                 this.notepadglobal.onDidChangeModelContent((e) => {

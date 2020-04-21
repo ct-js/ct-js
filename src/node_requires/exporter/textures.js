@@ -98,7 +98,7 @@ const packImages = async (proj, writeDir) => {
         const atlasJSON = {
             meta: {
                 app: 'https://ctjs.rocks/',
-                version: require('package.json').version,
+                version: require('electron').remote.app.getVersion(),
                 image: `a${binInd}.png`,
                 format: 'RGBA8888',
                 size: {

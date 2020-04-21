@@ -8,8 +8,6 @@
         }
         if (way[0] === 'this') {
             root = that;
-        } else if (way[0] === 'global') {
-            root = global;
         } else {
             root = window;
         }

@@ -47,9 +47,7 @@
         "tilelayer": "Tile Ebene",
         "wrongFormat": "Falsches Dateiformat",
         "yes": "Ja",
-        "zoom": "Zoom",
-        "zoomIn": "Zoomen in",
-        "zoomOut": "Verkleinern"
+        "zoom": "Zoom"
     },
     "actionsEditor": {
         "actions": "Actions",

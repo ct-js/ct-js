@@ -6,7 +6,8 @@ debugger-modal.view
             br
             code {address}
     script.
-        const port = window.gamePort;
+        const params = new URLSearchParams(window.location.search),
+              port = Number(params.get('port'));
         this.interfaces = [];
         var os = require('os');
         var interfaces = os.networkInterfaces();

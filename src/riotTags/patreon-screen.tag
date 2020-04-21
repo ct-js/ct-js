@@ -146,5 +146,6 @@ patreon-screen.view(style="z-index: 100;")
         this.loadPatrons();
 
         this.openPatreon = e => {
-            nw.Shell.openExternal('https://www.patreon.com/comigo');
+            const {shell} = require('electron');
+            shell.openExternal('https://www.patreon.com/comigo');
         }
