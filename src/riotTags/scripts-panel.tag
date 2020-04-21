@@ -1,7 +1,7 @@
 scripts-panel
     h1.flexfix-header {voc.header}
     ul.menu.flexfix-body
-        li(each="{script in global.currentProject.scripts}" name="{script.name}" id="{script.name}" onclick="{selectScript}")
+        li(each="{script in global.currentProject.scripts}" onclick="{selectScript}")
             code {script.name}
             div.toright(onclick="{deleteScript}" title="{voc.deleteScript}" style="padding-right: 5px;")
                 svg.feather.dim
