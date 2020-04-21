@@ -89,6 +89,10 @@ rooms:
           this.timer = new CtTimer("a", 5000, true).then(() => {
               console.warn("ajshdjakshdjahskjdhjkh +++++++++++++++++++");
           });
+
+          this.flowTimer = ct.flow.timer(() => {
+              console.warn("a");
+          }, 5000);
     onstep: ''
     ondraw: |2-
           if (ct.actions.Test.down) {
@@ -114,6 +118,7 @@ rooms:
                   //this.timerOn = false;
               });
           }
+          this.flowTimer();
           //console.log(ct.timer._timersInternal["ct.u.wait"] / 60);
 
           this.text.x = 32;

@@ -148,11 +148,14 @@
             var timer;
             var delay = function () {
                 if (!timer) {
-                    timer = setTimeout(() => {
+                    timer = true;
+                    ct.u.wait(ms, useUiDelta).then(() => {
                         timer = false;
-                    }, ms);
+                    });
+                    /*timer = setTimeout(() => {
+                        timer = false;
+                    }, ms);*/
                     func();
-                    //timer = ct.u.wait(ms, useUiDelta).then(func);
                 }
             };
             return delay;
