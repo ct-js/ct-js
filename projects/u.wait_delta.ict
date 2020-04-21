@@ -61,9 +61,9 @@ rooms:
           console.log(ct.timer.timers["a"]);
           if (this.timerOn == false) {
               this.timerOn = true;
-              ct.u.wait(1000).then(() => {
+              ct.u.wait(5000).then(() => {
                   console.warn("done yay");
-                  this.timerOn = false;
+                  //this.timerOn = false;
               });
           }
           //console.log(ct.timer._timersInternal["ct.u.wait"] / 60);
@@ -83,7 +83,24 @@ rooms:
     thumbnail: 0079a0731f6f
     gridX: 64
     gridY: 64
-    lastmod: 1586194958412
+    lastmod: 1587428032702
+  - name: test2
+    oncreate: ''
+    onstep: ''
+    ondraw: ''
+    onleave: ''
+    width: 800
+    height: 600
+    backgrounds: []
+    copies: []
+    tiles:
+      - depth: -10
+        tiles: []
+    uid: cfcbbd02-8895-4083-885d-318bf434ecf1
+    thumbnail: 318bf434ecf1
+    gridX: 64
+    gridY: 64
+    lastmod: 1587428043720
 actions:
   - name: Test
     methods:
@@ -117,3 +134,4 @@ scripts: []
 fonts: []
 styletick: .nan
 palette: []
+startroom: ef9f0643-be19-44d7-8ff1-0079a0731f6f

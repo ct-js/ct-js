@@ -395,56 +395,30 @@ ct.u = {
     /**
      * Returns a Promise that resolves after the given time
      * @param {number} time Time to wait, in milliseconds
-     * @param {object} [options={}] An object with options
-     * @param {boolean} [options.useUiDelta=false] If true, use ct.deltaUi instead of ct.delta 
-     * @param {boolean} [options.useTimeout=false] If true, use setTimeout() instead of ct.delta
-     * @returns {Promise<void>} The promise with no data
+     * @param {boolean} [useUiDelta=false] If true, use ct.deltaUi instead of ct.delta 
+     * @returns {CtTimer} The timer, with you can call `.then()` to
      */
-    wait(time, options = {}) {
+    wait(time, useUiDelta = false) {
         var room = ct.room.name;
-        var optionsA = {
-            useUiDelta: options.useUiDelta || false,
-            useTimeout: options.useTimeout || false
-        };
-        if ((optionsA.useUiDelta && optionsA.useTimeout) === true) {
-            return new Promise((resolve, reject) => {
-                reject({
-                    info: 'Both options are true',
-                    from: 'ct.u.wait'
-                });
-            });
-        }
-        if (optionsA.useTimeout) return new Promise((resolve, reject) => setTimeout(() => {
+        const currentCounter = ctUWaitCounter;
+        ctUWaitCounter++;
+        ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true, (arg) => {
+            console.warn("a");
+            if (arg.done) delete ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
+        });
+        return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
+        /*ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
+        setInterval(() => {
             if (ct.room.name === room) {
-                resolve();
+                if (ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].done) delete ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
             } else {
-                reject({
+                ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].reject({
                     info: 'Room switch',
                     from: 'ct.u.wait'
-                });
+                }); // Reject if the room was switched
             }
-        }, time));
-        return new Promise(function (resolve, reject) {
-            const currentCounter = ctUWaitCounter;
-            ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = 0;
-            ctUWaitCounter++;
-            const timer = setInterval(function () {
-                if (ct.room.name === room) {
-                    //timeA += optionsA.useUiDelta ? ct.deltaUi : ct.delta; // Add time
-                    if (ct.timer[internalTimerSymbol]["ct.u.wait"] / ct.speed * 1000 >= time) {
-                        // If the timer is done, resolve and clear the interval
-                        delete ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
-                        resolve();
-                        clearInterval(timer); // Might not run?
-                    }
-                } else {
-                    reject({
-                        info: 'Room switch',
-                        from: 'ct.u.wait'
-                    }); // Reject if the room was switched
-                }
-            }, 1 / 60);
-        });
+        }, 1 / ct.speed);
+        return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].promise;*/
         /*return new Promise((resolve, reject) => setTimeout(() => {
             if (ct.room.name === room) {
                 resolve();
@@ -523,7 +497,7 @@ ct.u.ext(ct.u, {// make aliases
             // eslint-disable-next-line no-underscore-dangle
             if (copy.kill && !copy._destroyed) {
                 killRecursive(copy); // This will also allow a parent to eject children to a new container before they are destroyed as well
-                copy.destroy({children: true});
+                copy.destroy({ children: true });
             }
         }
 
