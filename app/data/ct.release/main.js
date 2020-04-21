@@ -406,8 +406,7 @@ ct.u = {
         ctUWaitCounter++;
         //ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
         //return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].promise;
-        const timer = new CtTimer(ctUWait.toString() + currentCounter, time, useUiDelta);
-        return timer;
+        return new CtTimer(ctUWait.toString() + currentCounter, time, useUiDelta);
         /*ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
         setInterval(() => {
             if (ct.room.name === room) {
