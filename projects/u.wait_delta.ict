@@ -10,9 +10,57 @@ libs:
   keyboard: {}
   keyboard.polyfill: {}
   sound.howler: {}
-textures: []
+  flow: {}
+  tween: {}
+textures:
+  - name: Robot_Idle
+    untill: 0
+    grid:
+      - 1
+      - 1
+    axis:
+      - 0
+      - 0
+    marginx: 0
+    marginy: 0
+    imgWidth: 96
+    imgHeight: 96
+    width: 96
+    height: 96
+    offx: 0
+    offy: 0
+    origname: i17142445-0a78-4191-a02d-528bcd40e136.png
+    source: >-
+      /Users/aidandj/Library/Mobile
+      Documents/com~apple~CloudDocs/Code/ct-js/src/examples/Platformer_assets/Robot_Idle.png
+    shape: rect
+    left: 0
+    right: 96
+    top: 0
+    bottom: 96
+    uid: 17142445-0a78-4191-a02d-528bcd40e136
+    padding: 1
 skeletons: []
-types: []
+types:
+  - name: test
+    depth: 0
+    oncreate: |-
+      ct.tween.add({
+          obj: this,
+          fields: {
+              x: this.x + 100,
+              y: this.y + 150
+          },
+          duration: 1000,
+          curve: ct.tween.easeInOutCirc
+      });
+    onstep: this.move();
+    ondraw: ''
+    ondestroy: ''
+    uid: 52954eac-7257-4f70-a490-0e46be2914e7
+    texture: 17142445-0a78-4191-a02d-528bcd40e136
+    extends: {}
+    lastmod: 1587492564967
 sounds: []
 styles:
   - name: default
@@ -75,7 +123,10 @@ rooms:
     width: 800
     height: 600
     backgrounds: []
-    copies: []
+    copies:
+      - x: 128
+        'y': 64
+        uid: 52954eac-7257-4f70-a490-0e46be2914e7
     tiles:
       - depth: -10
         tiles: []
@@ -130,6 +181,7 @@ settings:
   title: u.wait_delta
   author: naturecodevoid
   site: 'https://ctjs.rocks'
+  maxFPS: 60
 scripts: []
 fonts: []
 styletick: .nan
