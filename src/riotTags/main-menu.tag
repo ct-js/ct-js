@@ -136,17 +136,44 @@ main-menu.flexcol
         };
         this.saveProject = () => {
             const YAML = require('js-yaml');
-            const data = YAML.safeDump(global.currentProject);
-            return fs.outputFile(global.projdir + '.ict', data)
-            .then(() => {
+            const data = {};
+            return new Promise(function(resolve, reject) {
+                /*try { fs.mkdirSync(global.projdir + '/rooms').catch(); } catch (e) { void 0; }
+                for (const room of global.currentProject.rooms) {
+                    fs.outputFile(global.projdir + '/rooms/' + room.name + '.yaml', YAML.safeDump(room));
+                }
+
+                try { fs.mkdirSync(global.projdir + '/textures').catch(); } catch (e) { void 0; }
+                for (const texture of global.currentProject.textures) {
+                    fs.outputFile(global.projdir + '/textures/' + room.name + '.yaml', YAML.safeDump(texture));
+                }*/
+
+                for (const key of Object.keys(global.currentProject)) {
+                    const property = global.currentProject[key];
+                    if (Array.isArray(property)) {
+                        try { fs.mkdirSync(global.projdir + '/' + key); } catch (e) { void 0; }
+                        if (fs.readdirSync(global.projdir + '/' + key).length > 0) for (const file of fs.readdirSync(global.projdir + '/' + key)) {
+                            const filePath = global.projdir + '/' + key + '/' + file;
+                            const tmp = fs.statSync(filePath).isFile() ? fs.unlinkSync(filePath) : '';
+                        }
+                        for (const value of property) {
+                            fs.outputFile(global.projdir + '/' + key + '/' + value.name + '.yaml', YAML.safeDump(value));
+                        }
+                    } else {
+                        data[key] = property;
+                    }
+                }
+
+                fs.outputFile(global.projdir + '.ict', YAML.safeDump(data));
+            }).then(() => {
                 alertify.success(languageJSON.common.savedcomm, "success", 3000);
                 this.saveRecoveryDebounce();
                 fs.remove(global.projdir + '.ict.recovery')
-                .then(() => console.log())
-                .catch(console.error);
+                    .then(() => console.log())
+                    .catch(console.error);
                 glob.modified = false;
             })
-            .catch(alertify.error);
+                .catch(alertify.error);
         };
         this.saveRecovery = () => {
             if (global.currentProject) {

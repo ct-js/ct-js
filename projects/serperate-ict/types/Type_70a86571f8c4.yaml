@@ -1,0 +1,10 @@
+name: Type_70a86571f8c4
+depth: 0
+oncreate: ''
+onstep: this.move();
+ondraw: ''
+ondestroy: ''
+uid: 21c46bd5-fbda-4e11-b0f2-70a86571f8c4
+texture: -1
+extends: {}
+lastmod: 1587602063074

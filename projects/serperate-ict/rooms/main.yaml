@@ -1,0 +1,17 @@
+name: main
+oncreate: ''
+onstep: ''
+ondraw: ''
+onleave: ''
+width: 800
+height: 600
+backgrounds: []
+copies: []
+tiles:
+  - depth: -10
+    tiles: []
+uid: b23a61a0-9752-4824-9c3b-ade3396b720e
+thumbnail: ade3396b720e
+gridX: 64
+gridY: 64
+lastmod: 1587591021782

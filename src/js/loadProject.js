@@ -151,6 +151,21 @@
                 try {
                     const YAML = require('js-yaml');
                     projectData = YAML.safeLoad(data);
+                    if (!projectData.textures) {
+                        // Load other files
+                        // eslint-disable-next-line max-depth
+                        for (const key of ["actions", "emitterTandems", "rooms", "scripts", "skeletons", "sounds", "styles", "textures", "types"]) {
+                            projectData[key] = [];
+                            // eslint-disable-next-line max-depth
+                            if (fs.readdirSync(global.projdir + '/' + key).length > 0) for (const file of fs.readdirSync(global.projdir + '/' + key)) {
+                                const filePath = global.projdir + '/' + key + '/' + file;
+                                const fileData = YAML.safeLoad(fs.readFileSync(filePath));
+                                projectData[key].push(fileData);
+                            } else {
+                                projectData[key] = [];
+                            }
+                        }
+                    }
                 } catch (e) {
                     // whoopsie, wrong window
                     // eslint-disable-next-line no-console
