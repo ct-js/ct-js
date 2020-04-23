@@ -153,6 +153,8 @@
                     projectData = YAML.safeLoad(data);
                     if (!projectData.textures) {
                         // Load other files
+                        let scriptOrder = [];
+                        const scripts = {};
                         // eslint-disable-next-line max-depth
                         for (const key of ["actions", "emitterTandems", "rooms", "scripts", "skeletons", "sounds", "styles", "textures", "types"]) {
                             projectData[key] = [];
@@ -160,10 +162,20 @@
                             if (fs.readdirSync(global.projdir + '/' + key).length > 0) for (const file of fs.readdirSync(global.projdir + '/' + key)) {
                                 const filePath = global.projdir + '/' + key + '/' + file;
                                 const fileData = YAML.safeLoad(fs.readFileSync(filePath));
-                                projectData[key].push(fileData);
+                                // eslint-disable-next-line max-depth
+                                if (file === "_scriptOrder.yaml") {
+                                    scriptOrder = fileData;
+                                } else {
+                                    scripts[fileData.name] = fileData;
+                                }
                             } else {
                                 projectData[key] = [];
                             }
+                        }
+                        projectData.scripts = [];
+                        // eslint-disable-next-line max-depth
+                        for (const scriptName of scriptOrder) {
+                            projectData.scripts.push(scripts[scriptName]);
                         }
                     }
                 } catch (e) {

@@ -163,6 +163,11 @@ main-menu.flexcol
                         data[key] = property;
                     }
                 }
+                const scripts = [];
+                for (const script of global.currentProject.scripts) {
+                    scripts.push(script.name);
+                }
+                fs.outputFile(global.projdir + '/scripts/_scriptOrder.yaml', YAML.safeDump(scripts));
 
                 fs.outputFile(global.projdir + '.ict', YAML.safeDump(data));
             }).then(() => {
