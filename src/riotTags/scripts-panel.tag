@@ -60,7 +60,7 @@ scripts-panel
                     bottom.push(element);
                 }
             }
-            top.splice(top.length - 2, 0, script);
+            top.splice(top.length - 1, 0, script);
             const out = [...top, ...bottom];
             console.debug(out);
             this.currentProject.scripts = out;
