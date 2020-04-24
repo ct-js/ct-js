@@ -207,7 +207,7 @@ main-menu.flexcol
                                 tmp.height = room.height;
                                 tmp.uid = room.uid;
                                 tmp.thumbnail = room.thumbnail;
-                                tmp.lastmod = room.lastmod || 0;
+                                tmp.lastmod = room.lastmod;
                                 tmp.gridX = room.gridX;
                                 tmp.gridY = room.gridY;
                                 fs.outputFileSync(
