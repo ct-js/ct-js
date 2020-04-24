@@ -434,7 +434,7 @@ main-menu.flexcol
                     .catch(console.error);
                 glob.modified = false;
             })
-                .catch(alertify.error);
+                .catch((e) => {alertify.error(e);console.error(e)});
         };
         this.saveRecovery = () => {
             if (global.currentProject) {
