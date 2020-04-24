@@ -157,11 +157,9 @@ main-menu.flexcol
                             const dirPath = path.join(global.projdir);
                             const ext = '.yaml';
                             const fileName = 'Actions';
-                            const actions = {};
+                            const actions = [];
                             for (const action of global.currentProject.actions) {
-                                const tmp = Object.assign({}, action);
-                                //delete tmp.name;
-                                actions[action.name] = tmp;
+                                actions.push(action);
                             }
                             fs.outputFileSync(
                                 path.join(dirPath, fileName + ext),
@@ -393,7 +391,7 @@ main-menu.flexcol
                                 try {
                                     fs.mkdirSync(path.join(dirPath, type.name + ext + '.data'));
                                 } catch (e) {
-                                    void 0;
+                                    void 0; 
                                 }
                                 fs.outputFileSync(
                                     path.join(
@@ -435,7 +433,7 @@ main-menu.flexcol
                     .catch(console.error);
                 glob.modified = false;
             })
-                .catch((e) => {alertify.error(e);console.error(e)});
+                .catch(alertify.error);
         };
         this.saveRecovery = () => {
             if (global.currentProject) {

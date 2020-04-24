@@ -157,9 +157,10 @@
                     const dirPath = path.join(global.projdir);
                     const ext = '.yaml';
                     const fileName = 'Actions';
-                    projectData[key] = fs.readFileSync(
-                        path.join(dirPath, fileName + ext)
-                    );
+                    projectData[key] = YAML.safeLoad(fs.readFileSync(
+                        path.join(dirPath, fileName + ext),
+                        'utf8'
+                    ));
                     break;
                 }
 
@@ -233,7 +234,7 @@
                             if (file === 'scriptOrder.yaml') {
                                 scriptOrder = YAML.safeLoad(fileData);
                             } else {
-                                scripts[file.replace('.js', '')] = fileData;
+                                scripts[file.replace(".js", "")] = fs.readFileSync(filePath, 'utf8');
                             }
                         }
                     break;
@@ -349,7 +350,8 @@
         }
         projectData.scripts = [];
         for (const scriptName of scriptOrder) {
-            projectData.scripts.push(scripts[scriptName]);
+            projectData.scripts.push({name: scriptName,
+                                        code: scripts[scriptName]});
         }
     };
 
