@@ -207,7 +207,13 @@
                                 fileData = YAML.safeLoad(
                                     fs.readFileSync(filePath)
                                 );
-                                tmp2 = Object.assign({}, fileData);
+                                tmp2 = Object.assign(
+                                    {},
+                                    Object.assign(
+                                        YAML.safeLoad(fs.readFileSync(path.join(filePath + ".data", "contents.yaml"))),
+                                        fileData,
+                                    ),
+                                );
                                 tmp2.oncreate = fs.readFileSync(path.join(filePath + '.data', 'oncreate.js'), 'utf8');
                                 tmp2.onstep = fs.readFileSync(path.join(filePath + '.data', 'onstep.js'), 'utf8');
                                 tmp2.ondraw = fs.readFileSync(path.join(filePath + '.data', 'ondraw.js'), 'utf8');
