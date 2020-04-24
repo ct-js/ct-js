@@ -426,6 +426,7 @@ main-menu.flexcol
                 }
 
                 fs.outputFileSync(global.projdir + '.ict', YAML.safeDump(data));
+                resolve();
             }).then(() => {
                 alertify.success(languageJSON.common.savedcomm, "success", 3000);
                 this.saveRecoveryDebounce();
