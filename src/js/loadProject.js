@@ -207,26 +207,10 @@
                                     fs.readFileSync(filePath)
                                 );
                                 tmp2 = Object.assign({}, fileData);
-                                // eslint-disable-next-line max-depth
-                                if (
-                                    fs.readdirSync(filePath + '.data').length >
-                                    0
-                                )
-                                    // eslint-disable-next-line max-depth
-                                    for (const file2 of fs.readdirSync(
-                                        filePath + '.data'
-                                    )) {
-                                        const filePath2 = path.join(
-                                            filePath + '.data',
-                                            file2
-                                        );
-                                        const fileData2 = fs.readFileSync(
-                                            filePath2,
-                                            "utf8"
-                                        );
-                                        console.log(fileData2);
-                                        tmp2[file2.replace(".js", '')] = fileData2.toString();
-                                    }
+                                tmp2.oncreate = fs.readFileSync(path.join(filePath + '.data', 'oncreate.js'), 'utf8');
+                                tmp2.onstep = fs.readFileSync(path.join(filePath + '.data', 'onstep.js'), 'utf8');
+                                tmp2.ondraw = fs.readFileSync(path.join(filePath + '.data', 'ondraw.js'), 'utf8');
+                                tmp2.onleave = fs.readFileSync(path.join(filePath + '.data', 'onleave.js'), 'utf8');
                                 const tmp3 = file.includes(ext)
                                     ? tmp.push(tmp2)
                                     : null;
@@ -342,26 +326,10 @@
                                     fs.readFileSync(filePath)
                                 );
                                 tmp2 = Object.assign({}, fileData);
-                                // eslint-disable-next-line max-depth
-                                if (
-                                    fs.readdirSync(filePath + '.data').length >
-                                    0
-                                )
-                                    // eslint-disable-next-line max-depth
-                                    for (const file2 of fs.readdirSync(
-                                        filePath + '.data'
-                                    )) {
-                                        const filePath2 = path.join(
-                                            filePath + '.data',
-                                            file2
-                                        );
-                                        const fileData2 = fs.readFileSync(
-                                            filePath2,
-                                            "utf8"
-                                        );
-                                        console.log(fileData2);
-                                        tmp2[file2.replace(".js", '')] = fileData2.toString();
-                                    }
+                                tmp2.oncreate = fs.readFileSync(path.join(filePath + '.data', 'oncreate.js'), 'utf8');
+                                tmp2.onstep = fs.readFileSync(path.join(filePath + '.data', 'onstep.js'), 'utf8');
+                                tmp2.ondraw = fs.readFileSync(path.join(filePath + '.data', 'ondraw.js'), 'utf8');
+                                tmp2.ondestroy = fs.readFileSync(path.join(filePath + '.data', 'ondestroy.js'), 'utf8');
                                 const tmp3 = file.includes(ext)
                                     ? tmp.push(tmp2)
                                     : null;

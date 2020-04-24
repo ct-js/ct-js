@@ -412,8 +412,8 @@ main-menu.flexcol
                                     type.ondraw
                                 );
                                 fs.outputFileSync(
-                                    path.join(dirPath, type.name + ext + '.data', 'onleave.js'),
-                                    type.onleave
+                                    path.join(dirPath, type.name + ext + '.data', 'ondestroy.js'),
+                                    type.ondestroy
                                 );
                             }
                             break;
