@@ -134,6 +134,257 @@
         }
     };
 
+    // eslint-disable-next-line complexity
+    var loadProjectFiles = function (projectData) {
+        const YAML = require('js-yaml');
+        // Load other files
+        let scriptOrder = [];
+        const scripts = {};
+        for (const key of [
+            'actions',
+            'emitterTandems',
+            //'fonts',
+            'rooms',
+            'scripts',
+            'skeletons',
+            'sounds',
+            'styles',
+            'textures',
+            'types',
+        ]) {
+            switch (key) {
+                case 'actions': {
+                    const dirPath = path.join(global.projdir);
+                    const ext = '.yaml';
+                    const fileName = 'Actions';
+                    projectData[key] = fs.readFileSync(
+                        path.join(dirPath, fileName + ext)
+                    );
+                    break;
+                }
+
+                case 'emitterTandems': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.cttandem';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            const fileData = YAML.safeLoad(
+                                fs.readFileSync(filePath)
+                            );
+                            const tmp2 = file.includes(ext) ? tmp.push(fileData) : null;
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                /*case 'fonts': {
+                    const dirPath = path.join(global.projdir, key);
+                    fs.emptyDirSync(dirPath);
+                    const ext = '.ctfont';
+                    for (const font of global.currentProject.fonts) {
+                        fs.outputFileSync(
+                            path.join(dirPath, font.typefaceName + ext),
+                            YAML.safeDump(font)
+                        );
+                    }
+                    break;
+                }*/
+
+                case 'rooms': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.ctroom';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            let fileData = null;
+                            let tmp2 = null;
+                            // eslint-disable-next-line max-depth
+                            try {
+                                fileData = YAML.safeLoad(
+                                    fs.readFileSync(filePath)
+                                );
+                                tmp2 = Object.assign({}, fileData);
+                                // eslint-disable-next-line max-depth
+                                if (
+                                    fs.readdirSync(filePath + '.data').length >
+                                    0
+                                )
+                                    // eslint-disable-next-line max-depth
+                                    for (const file2 of fs.readdirSync(
+                                        filePath + '.data'
+                                    )) {
+                                        const filePath2 = path.join(
+                                            filePath + '.data',
+                                            file2
+                                        );
+                                        const fileData2 = fs.readFileSync(
+                                            filePath2,
+                                            "utf8"
+                                        );
+                                        console.log(fileData2);
+                                        tmp2[file2.replace(".js", '')] = fileData2.toString();
+                                    }
+                                const tmp3 = file.includes(ext)
+                                    ? tmp.push(tmp2)
+                                    : null;
+                            } catch (e) {
+                                void 0;
+                            }
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                case 'scripts': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.js';
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            const fileData = fs.readFileSync(filePath);
+                            // eslint-disable-next-line max-depth
+                            if (file === 'scriptOrder.yaml') {
+                                scriptOrder = YAML.safeLoad(fileData);
+                            } else {
+                                scripts[file.replace('.js', '')] = fileData;
+                            }
+                        }
+                    break;
+                }
+
+                case 'skeletons': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.yaml';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            const fileData = YAML.safeLoad(
+                                fs.readFileSync(filePath)
+                            );
+                            const tmp2 = file.includes(ext)
+                                ? tmp.push(fileData)
+                                : null;
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                case 'sounds': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.ctsound';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            const fileData = YAML.safeLoad(
+                                fs.readFileSync(filePath)
+                            );
+                            const tmp2 = file.includes(ext)
+                                ? tmp.push(fileData)
+                                : null;
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                case 'styles': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.ctfont';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            const fileData = YAML.safeLoad(
+                                fs.readFileSync(filePath)
+                            );
+                            const tmp2 = file.includes(ext)
+                                ? tmp.push(fileData)
+                                : null;
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                case 'textures': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.cttexture';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            const fileData = YAML.safeLoad(
+                                fs.readFileSync(filePath)
+                            );
+                            const tmp2 = file.includes(ext)
+                                ? tmp.push(fileData)
+                                : null;
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                case 'types': {
+                    const dirPath = path.join(global.projdir, key);
+                    const ext = '.cttype';
+                    const tmp = [];
+                    if (fs.readdirSync(dirPath).length > 0)
+                        for (const file of fs.readdirSync(dirPath)) {
+                            const filePath = path.join(dirPath, file);
+                            let fileData = null;
+                            let tmp2 = null;
+                            // eslint-disable-next-line max-depth
+                            try {
+                                fileData = YAML.safeLoad(
+                                    fs.readFileSync(filePath)
+                                );
+                                tmp2 = Object.assign({}, fileData);
+                                // eslint-disable-next-line max-depth
+                                if (
+                                    fs.readdirSync(filePath + '.data').length >
+                                    0
+                                )
+                                    // eslint-disable-next-line max-depth
+                                    for (const file2 of fs.readdirSync(
+                                        filePath + '.data'
+                                    )) {
+                                        const filePath2 = path.join(
+                                            filePath + '.data',
+                                            file2
+                                        );
+                                        const fileData2 = fs.readFileSync(
+                                            filePath2,
+                                            "utf8"
+                                        );
+                                        console.log(fileData2);
+                                        tmp2[file2.replace(".js", '')] = fileData2.toString();
+                                    }
+                                const tmp3 = file.includes(ext)
+                                    ? tmp.push(tmp2)
+                                    : null;
+                            } catch (e) {
+                                void 0;
+                            }
+                        }
+                    projectData[key] = tmp;
+                    break;
+                }
+
+                default: {
+                    console.error(key + ' was not loaded! Maybe a new feature?');
+                    break;
+                }
+            }
+        }
+        projectData.scripts = [];
+        for (const scriptName of scriptOrder) {
+            projectData.scripts.push(scripts[scriptName]);
+        }
+    };
+
     /**
      * Checks file format and loads it
      *
@@ -152,31 +403,7 @@
                     const YAML = require('js-yaml');
                     projectData = YAML.safeLoad(data);
                     if (!projectData.textures) {
-                        // Load other files
-                        let scriptOrder = [];
-                        const scripts = {};
-                        // eslint-disable-next-line max-depth
-                        for (const key of ["actions", "emitterTandems", "rooms", "scripts", "skeletons", "sounds", "styles", "textures", "types"]) {
-                            projectData[key] = [];
-                            // eslint-disable-next-line max-depth
-                            if (fs.readdirSync(global.projdir + '/' + key).length > 0) for (const file of fs.readdirSync(global.projdir + '/' + key)) {
-                                const filePath = global.projdir + '/' + key + '/' + file;
-                                const fileData = YAML.safeLoad(fs.readFileSync(filePath));
-                                // eslint-disable-next-line max-depth
-                                if (file === "_scriptOrder.yaml") {
-                                    scriptOrder = fileData;
-                                } else {
-                                    scripts[fileData.name] = fileData;
-                                }
-                            } else {
-                                projectData[key] = [];
-                            }
-                        }
-                        projectData.scripts = [];
-                        // eslint-disable-next-line max-depth
-                        for (const scriptName of scriptOrder) {
-                            projectData.scripts.push(scripts[scriptName]);
-                        }
+                        loadProjectFiles(projectData);
                     }
                 } catch (e) {
                     // whoopsie, wrong window
