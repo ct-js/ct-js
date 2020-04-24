@@ -237,19 +237,19 @@ main-menu.flexcol
                                         room.name + ext + '.data',
                                         'oncreate.js'
                                     ),
-                                    YAML.safeDump(room.oncreate)
+                                    room.oncreate
                                 );
                                 fs.outputFileSync(
                                     path.join(dirPath, room.name + ext + '.data', 'onstep.js'),
-                                    YAML.safeDump(room.onstep)
+                                    room.onstep
                                 );
                                 fs.outputFileSync(
                                     path.join(dirPath, room.name + ext + '.data', 'ondraw.js'),
-                                    YAML.safeDump(room.ondraw)
+                                    room.ondraw
                                 );
                                 fs.outputFileSync(
                                     path.join(dirPath, room.name + ext + '.data', 'onleave.js'),
-                                    YAML.safeDump(room.onleave)
+                                    room.onleave
                                 );
                             }
                             break;
