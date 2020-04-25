@@ -152,9 +152,9 @@
             'textures',
             'types',
         ]) {
+            const dirPath = path.join(global.projdir, key);
             switch (key) {
                 case 'actions': {
-                    const dirPath = path.join(global.projdir);
                     const ext = '.yaml';
                     const fileName = 'Actions';
                     projectData[key] = YAML.safeLoad(fs.readFileSync(
@@ -165,7 +165,6 @@
                 }
 
                 case 'emitterTandems': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.cttandem';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
@@ -181,7 +180,6 @@
                 }
 
                 /*case 'fonts': {
-                    const dirPath = path.join(global.projdir, key);
                     fs.emptyDirSync(dirPath);
                     const ext = '.ctfont';
                     for (const font of global.currentProject.fonts) {
@@ -194,7 +192,6 @@
                 }*/
 
                 case 'rooms': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.ctroom';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
@@ -230,7 +227,6 @@
                 }
 
                 case 'scripts': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.js';
                     if (fs.readdirSync(dirPath).length > 0)
                         for (const file of fs.readdirSync(dirPath)) {
@@ -247,7 +243,6 @@
                 }
 
                 case 'skeletons': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.yaml';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
@@ -265,7 +260,6 @@
                 }
 
                 case 'sounds': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.ctsound';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
@@ -283,7 +277,6 @@
                 }
 
                 case 'styles': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.ctfont';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
@@ -301,7 +294,6 @@
                 }
 
                 case 'textures': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.cttexture';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
@@ -319,7 +311,6 @@
                 }
 
                 case 'types': {
-                    const dirPath = path.join(global.projdir, key);
                     const ext = '.cttype';
                     const tmp = [];
                     if (fs.readdirSync(dirPath).length > 0)
