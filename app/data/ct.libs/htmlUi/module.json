@@ -1,0 +1,14 @@
+{
+    "main": {
+        "name": "htmlUi",
+        "version": "1.0.0",
+        "authors": [
+            {
+                "name": "QueenOfMischief"
+            },
+            {
+                "name": "naturecodevoid (for porting to catmod)"
+            }
+        ]
+    }
+}
