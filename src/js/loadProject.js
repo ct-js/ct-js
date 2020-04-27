@@ -152,11 +152,15 @@
             'textures',
             'types',
         ]) {
-            const dirPath = path.join(global.projdir, key);
+            let dirPath = path.join(global.projdir, key);
+            if (key !== "actions") {
+                fs.ensureDirSync(dirPath);
+            }
             switch (key) {
                 case 'actions': {
                     const ext = '.yaml';
                     const fileName = 'Actions';
+                    dirPath = path.join(global.projdir);
                     projectData[key] = YAML.safeLoad(fs.readFileSync(
                         path.join(dirPath, fileName + ext),
                         'utf8'

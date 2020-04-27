@@ -152,12 +152,17 @@ main-menu.flexcol
                     'types',
                 ]) {
                     delete data[key];
-                    const dirPath = path.join(global.projdir, key);
+                    let dirPath = path.join(global.projdir, key);
+                    if (key !== 'actions') {
+                        fs.emptyDirSync(dirPath);
+                        fs.ensureDirSync(dirPath);
+                    }
                     switch (key) {
                         case 'actions': {
                             const ext = '.yaml';
                             const fileName = 'Actions';
                             const actions = [];
+                            dirPath = path.join(global.projdir);
                             for (const action of global.currentProject.actions) {
                                 actions.push(action);
                             }
@@ -170,7 +175,6 @@ main-menu.flexcol
 
                         case 'emitterTandems': {
                             const ext = '.cttandem';
-                            fs.emptyDirSync(dirPath);
                             for (const emitter of global.currentProject.emitterTandems) {
                                 const tmp = Object.assign({}, emitter);
                                 //delete tmp.name;
@@ -196,7 +200,6 @@ main-menu.flexcol
 
                         case 'rooms': {
                             const ext = '.ctroom';
-                            fs.emptyDirSync(dirPath);
                             for (const room of global.currentProject.rooms) {
                                 const tmp = {};
                                 tmp.name = room.name;
@@ -255,7 +258,6 @@ main-menu.flexcol
                         case 'scripts': {
                             const ext = '.js';
                             const scripts = [];
-                            fs.emptyDirSync(dirPath);
                             for (const script of global.currentProject.scripts) {
                                 scripts.push(script.name);
                                 fs.outputFileSync(
@@ -272,7 +274,6 @@ main-menu.flexcol
 
                         case 'skeletons': {
                             const ext = '.yaml';
-                            fs.emptyDirSync(dirPath);
                             for (const skeleton of global.currentProject.skeletons) {
                                 fs.outputFileSync(
                                     path.join(dirPath, skeleton.name + ext),
@@ -284,7 +285,6 @@ main-menu.flexcol
 
                         case 'sounds': {
                             const ext = '.ctsound';
-                            fs.emptyDirSync(dirPath);
                             for (const sound of global.currentProject.sounds) {
                                 fs.outputFileSync(
                                     path.join(dirPath, sound.name + ext),
@@ -296,7 +296,6 @@ main-menu.flexcol
 
                         case 'styles': {
                             const ext = '.ctfont';
-                            fs.emptyDirSync(dirPath);
                             for (const style of global.currentProject.styles) {
                                 fs.outputFileSync(
                                     path.join(dirPath, style.name + ext),
@@ -308,7 +307,6 @@ main-menu.flexcol
 
                         case 'textures': {
                             const ext = '.cttexture';
-                            fs.emptyDirSync(dirPath);
                             for (const texture of global.currentProject.textures) {
                                 /*const tmp = {};
                                 tmp.name = texture.name;
@@ -366,7 +364,6 @@ main-menu.flexcol
 
                         case 'types': {
                             const ext = '.cttype';
-                            fs.emptyDirSync(dirPath);
                             for (const type of global.currentProject.types) {
                                 const tmp = {};
                                 tmp.name = type.name;
