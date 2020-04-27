@@ -344,6 +344,7 @@
                     break;
                 }
             }
+            console.debug(key + " loading successful.");
         }
         projectData.scripts = [];
         for (const scriptName of scriptOrder) {
