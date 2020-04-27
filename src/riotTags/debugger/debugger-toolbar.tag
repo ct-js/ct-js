@@ -193,5 +193,3 @@ debugger-toolbar
             this.previewWindow.close(true);
             nw.Window.get().close();
         };
-
-        nw.Window.get().on('close', this.closeItself);
