@@ -153,6 +153,9 @@
             'types',
         ]) {
             let dirPath = path.join(global.projdir, "contents", key);
+            if (key === "scripts") {
+                dirPath = path.join(global.projdir, key);
+            }
             if (key !== "actions") {
                 fs.ensureDirSync(dirPath);
             }

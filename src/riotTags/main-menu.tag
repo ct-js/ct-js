@@ -153,6 +153,9 @@ main-menu.flexcol
                 ]) {
                     delete data[key];
                     let dirPath = path.join(global.projdir, "contents", key);
+                    if (key === "scripts") {
+                        dirPath = path.join(global.projdir, key);
+                    }
                     if (key !== 'actions') {
                         fs.emptyDirSync(dirPath);
                         try {
