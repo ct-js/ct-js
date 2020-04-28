@@ -106,7 +106,7 @@ project-selector
                 alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
                 throw e;
             });
-            global.projdir = path.join(way);
+            global.projdir = way;
             sessionStorage.projname = codename + '.ict';
             await fs.ensureDir(path.join(global.projdir, '/img'));
             fs.ensureDir(path.join(global.projdir, '/snd'));
