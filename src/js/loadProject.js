@@ -355,14 +355,18 @@
         }
         projectData.scripts = [];
         for (const scriptName of scriptOrder) {
-            projectData.scripts.push({name: scriptName,
-                                        code: scripts[scriptName]});
+            projectData.scripts.push({
+                name: scriptName,
+                code: scripts[scriptName]
+            });
             delete scripts[scriptName];
         }
         // Leftover scripts
         for (const scriptName in scripts) {
-            projectData.scripts.push({name: scriptName,
-                                        code: scripts[scriptName]});
+            projectData.scripts.push({
+                name: scriptName,
+                code: scripts[scriptName]
+            });
         }
     };
 

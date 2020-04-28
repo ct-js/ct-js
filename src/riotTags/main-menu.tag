@@ -136,7 +136,7 @@ main-menu.flexcol
         };
         this.saveProject = () => {
             const YAML = require('js-yaml');
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 const data = Object.assign({}, global.currentProject);
 
                 for (const key of [
@@ -160,7 +160,7 @@ main-menu.flexcol
                         fs.emptyDirSync(dirPath);
                         try {
                             fs.emptyDirSync(path.join(dirPath, '..', '..', key)); // Try to clean the directory outside the 'contents' folder
-                        } catch(e) {
+                        } catch (e) {
                             void 0;
                         }
                         fs.ensureDirSync(dirPath);
@@ -176,7 +176,7 @@ main-menu.flexcol
                             }
                             try {
                                 fs.unlinkSync(path.join(dirPath, '..', fileName + ext));
-                            } catch(e) {
+                            } catch (e) {
                                 void 0;
                             }
                             fs.outputFileSync(
@@ -392,7 +392,7 @@ main-menu.flexcol
                                 try {
                                     fs.mkdirSync(path.join(dirPath, type.name + ext + '.data'));
                                 } catch (e) {
-                                    void 0; 
+                                    void 0;
                                 }
                                 fs.outputFileSync(
                                     path.join(
@@ -436,7 +436,7 @@ main-menu.flexcol
                     .catch(console.error);
                 glob.modified = false;
             })
-                .catch((e) => {alertify.error(e);console.error(e)});
+                .catch((e) => { alertify.error(e); console.error(e) });
         };
         this.saveRecovery = () => {
             if (global.currentProject) {
