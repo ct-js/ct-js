@@ -92,9 +92,15 @@ project-selector
         this.newProject = async (way, codename) => {
             sessionStorage.showOnboarding = true;
             const projectData = require('./data/node_requires/resources/projects/defaultProject').get();
+            const gitignoreData = require('./data/node_requires/resources/projects/gitignore').get();
             const YAML = require('js-yaml');
             const data = YAML.safeDump(projectData);
             fs.outputFile(path.join(way, codename + '.ict'), data)
+            .catch(e => {
+                alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
+                throw e;
+            });
+            fs.outputFile(path.join(way, '.gitignore'), gitignoreData)
             .catch(e => {
                 alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
                 throw e;

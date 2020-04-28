@@ -1,4 +1,5 @@
 const defaultProject = require('./defaultProject');
+const gitignore = require('./gitignore');
 
 const getDefaultProjectDir = function () {
     const path = require('path');
@@ -7,5 +8,6 @@ const getDefaultProjectDir = function () {
 
 module.exports = {
     defaultProject,
+    gitignore,
     getDefaultProjectDir
 };
