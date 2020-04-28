@@ -420,7 +420,7 @@ main-menu.flexcol
                             break;
                         }
                     }
-                    console.debug(key + " saving successful.");
+                    console.debug(key + " saved successfully.");
                 }
 
                 fs.outputFileSync(path.join(global.projdir, path.basename(global.projdir + '.ict')), YAML.safeDump(data));
