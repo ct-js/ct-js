@@ -403,7 +403,7 @@
 
     window.loadProject = proj => {
         sessionStorage.projname = path.basename(proj);
-        global.projdir = path.join(path.dirname(proj)/*, path.basename(proj, '.ict')*/);
+        global.projdir = path.dirname(proj);
 
         fs.stat(proj + '.recovery', (err, stat) => {
             if (!err && stat.isFile()) {
