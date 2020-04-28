@@ -152,9 +152,14 @@ main-menu.flexcol
                     'types',
                 ]) {
                     delete data[key];
-                    let dirPath = path.join(global.projdir, key);
+                    let dirPath = path.join(global.projdir, "contents", key);
                     if (key !== 'actions') {
                         fs.emptyDirSync(dirPath);
+                        try {
+                            fs.emptyDirSync(path.join(dirPath, '..', '..', key)); // Try to clean the directory outside the 'contents' folder
+                        } catch(e) {
+                            void 0;
+                        }
                         fs.ensureDirSync(dirPath);
                     }
                     switch (key) {
@@ -162,9 +167,14 @@ main-menu.flexcol
                             const ext = '.yaml';
                             const fileName = 'Actions';
                             const actions = [];
-                            dirPath = path.join(global.projdir);
+                            dirPath = path.join(global.projdir, "contents");
                             for (const action of global.currentProject.actions) {
                                 actions.push(action);
+                            }
+                            try {
+                                fs.unlinkSync(path.join(dirPath, '..', fileName + ext));
+                            } catch(e) {
+                                void 0;
                             }
                             fs.outputFileSync(
                                 path.join(dirPath, fileName + ext),
@@ -413,7 +423,7 @@ main-menu.flexcol
                     console.debug(key + " saving successful.");
                 }
 
-                fs.outputFileSync(global.projdir + '.ict', YAML.safeDump(data));
+                fs.outputFileSync(path.join(global.projdir, path.basename(global.projdir + '.ict')), YAML.safeDump(data));
                 resolve();
             }).then(() => {
                 alertify.success(languageJSON.common.savedcomm, "success", 3000);
@@ -429,7 +439,7 @@ main-menu.flexcol
             if (global.currentProject) {
                 const YAML = require('js-yaml');
                 const data = YAML.safeDump(global.currentProject);
-                fs.outputFile(global.projdir + '.ict.recovery', data);
+                fs.outputFile(path.join(global.projdir, path.basename(global.projdir + '.ict.recovery')), data);
             }
             this.saveRecoveryDebounce();
         };

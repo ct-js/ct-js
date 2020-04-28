@@ -152,7 +152,7 @@
             'textures',
             'types',
         ]) {
-            let dirPath = path.join(global.projdir, key);
+            let dirPath = path.join(global.projdir, "contents", key);
             if (key !== "actions") {
                 fs.ensureDirSync(dirPath);
             }
@@ -160,7 +160,7 @@
                 case 'actions': {
                     const ext = '.yaml';
                     const fileName = 'Actions';
-                    dirPath = path.join(global.projdir);
+                    dirPath = path.join(global.projdir, "contents");
                     projectData[key] = YAML.safeLoad(fs.readFileSync(
                         path.join(dirPath, fileName + ext),
                         'utf8'
@@ -403,7 +403,7 @@
 
     window.loadProject = proj => {
         sessionStorage.projname = path.basename(proj);
-        global.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
+        global.projdir = path.join(path.dirname(proj)/*, path.basename(proj, '.ict')*/);
 
         fs.stat(proj + '.recovery', (err, stat) => {
             if (!err && stat.isFile()) {
