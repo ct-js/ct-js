@@ -135,7 +135,8 @@
     };
 
     // eslint-disable-next-line complexity
-    var loadProjectFiles = function (projectData) {
+    var loadProjectFiles = function (projectData, proj) {
+        global.projdir = path.dirname(proj);
         const YAML = require('js-yaml');
         // Load other files
         let scriptOrder = [];
@@ -377,6 +378,7 @@
      * @returns {void}
      */
     var loadProjectFile = async proj => {
+        global.projdir = path.dirname(proj);
         const data = await fs.readFile(proj, 'utf8');
         let projectData;
         // Before v1.3, projects were stored in JSON format
@@ -388,7 +390,7 @@
                     const YAML = require('js-yaml');
                     projectData = YAML.safeLoad(data);
                     if (!projectData.textures) {
-                        loadProjectFiles(projectData);
+                        loadProjectFiles(projectData, proj);
                     }
                 } catch (e) {
                     // whoopsie, wrong window
