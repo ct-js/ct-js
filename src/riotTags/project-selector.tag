@@ -90,8 +90,10 @@ project-selector
          * Creates basic directories for sounds and textures.
          */
         this.newProject = async (way, codename) => {
+            way = path.join(way, codename);
             sessionStorage.showOnboarding = true;
             const projectData = require('./data/node_requires/resources/projects/defaultProject').get();
+            const gitignoreData = require('./data/node_requires/resources/projects/gitignore').get();
             const YAML = require('js-yaml');
             const data = YAML.safeDump(projectData);
             fs.outputFile(path.join(way, codename + '.ict'), data)
@@ -99,7 +101,12 @@ project-selector
                 alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
                 throw e;
             });
-            global.projdir = path.join(way, codename);
+            fs.outputFile(path.join(way, '.gitignore'), gitignoreData)
+            .catch(e => {
+                alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
+                throw e;
+            });
+            global.projdir = way;
             sessionStorage.projname = codename + '.ict';
             await fs.ensureDir(path.join(global.projdir, '/img'));
             fs.ensureDir(path.join(global.projdir, '/snd'));

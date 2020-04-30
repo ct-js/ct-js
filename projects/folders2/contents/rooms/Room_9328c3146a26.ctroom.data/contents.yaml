@@ -1,0 +1,16 @@
+backgrounds: []
+copies:
+  - x: 256
+    'y': 128
+    uid: 1bf77614-e33c-456f-bc4e-449de280c090
+tiles:
+  - depth: -10
+    tiles:
+      - x: 256
+        'y': 192
+        texture: 0f5520d2-83b4-4af3-a4c7-1ba728dec7da
+        grid:
+          - 0
+          - 0
+          - 1
+          - 1

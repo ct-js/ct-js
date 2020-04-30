@@ -136,23 +136,313 @@ main-menu.flexcol
         };
         this.saveProject = () => {
             const YAML = require('js-yaml');
-            const data = YAML.safeDump(global.currentProject);
-            return fs.outputFile(global.projdir + '.ict', data)
-            .then(() => {
+            return new Promise(function (resolve, reject) {
+                const data = Object.assign({}, global.currentProject);
+
+                for (const key of [
+                    'actions',
+                    'emitterTandems',
+                    //'fonts',
+                    'rooms',
+                    'scripts',
+                    'skeletons',
+                    'sounds',
+                    'styles',
+                    'textures',
+                    'types',
+                ]) {
+                    delete data[key];
+                    let dirPath = path.join(global.projdir, "contents", key);
+                    if (key === "scripts") {
+                        dirPath = path.join(global.projdir, key);
+                    }
+                    if (key !== 'actions') {
+                        fs.emptyDirSync(dirPath);
+                        try {
+                            fs.emptyDirSync(path.join(dirPath, '..', '..', key)); // Try to clean the directory outside the 'contents' folder
+                        } catch (e) {
+                            void 0;
+                        }
+                        fs.ensureDirSync(dirPath);
+                    }
+                    switch (key) {
+                        case 'actions': {
+                            const ext = '.yaml';
+                            const fileName = 'Actions';
+                            const actions = [];
+                            dirPath = path.join(global.projdir, "contents");
+                            for (const action of global.currentProject.actions) {
+                                actions.push(action);
+                            }
+                            try {
+                                fs.unlinkSync(path.join(dirPath, '..', fileName + ext));
+                            } catch (e) {
+                                void 0;
+                            }
+                            fs.outputFileSync(
+                                path.join(dirPath, fileName + ext),
+                                YAML.safeDump(actions)
+                            );
+                            break;
+                        }
+
+                        case 'emitterTandems': {
+                            const ext = '.cttandem';
+                            for (const emitter of global.currentProject.emitterTandems) {
+                                const tmp = Object.assign({}, emitter);
+                                //delete tmp.name;
+                                fs.outputFileSync(
+                                    path.join(dirPath, emitter.name + ext),
+                                    YAML.safeDump(tmp)
+                                );
+                            }
+                            break;
+                        }
+
+                        /*case 'fonts': {
+                            const ext = '.ctfont';
+                            fs.emptyDirSync(dirPath);
+                            for (const font of global.currentProject.fonts) {
+                                fs.outputFileSync(
+                                    path.join(dirPath, font.typefaceName + ext),
+                                    YAML.safeDump(font)
+                                );
+                            }
+                            break;
+                        }*/
+
+                        case 'rooms': {
+                            const ext = '.ctroom';
+                            for (const room of global.currentProject.rooms) {
+                                const tmp = {};
+                                tmp.name = room.name;
+                                tmp.width = room.width;
+                                tmp.height = room.height;
+                                tmp.uid = room.uid;
+                                tmp.thumbnail = room.thumbnail;
+                                tmp.lastmod = room.lastmod;
+                                tmp.gridX = room.gridX;
+                                tmp.gridY = room.gridY;
+                                fs.outputFileSync(
+                                    path.join(dirPath, room.name + ext),
+                                    YAML.safeDump(tmp)
+                                );
+                                try {
+                                    fs.mkdirSync(path.join(dirPath, room.name + ext + '.data'));
+                                } catch (e) {
+                                    void 0;
+                                }
+                                const tmp2 = {};
+                                tmp2.backgrounds = room.backgrounds;
+                                tmp2.copies = room.copies;
+                                tmp2.tiles = room.tiles;
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        room.name + ext + '.data',
+                                        'contents.yaml'
+                                    ),
+                                    YAML.safeDump(tmp2)
+                                );
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        room.name + ext + '.data',
+                                        'oncreate.js'
+                                    ),
+                                    room.oncreate
+                                );
+                                fs.outputFileSync(
+                                    path.join(dirPath, room.name + ext + '.data', 'onstep.js'),
+                                    room.onstep
+                                );
+                                fs.outputFileSync(
+                                    path.join(dirPath, room.name + ext + '.data', 'ondraw.js'),
+                                    room.ondraw
+                                );
+                                fs.outputFileSync(
+                                    path.join(dirPath, room.name + ext + '.data', 'onleave.js'),
+                                    room.onleave
+                                );
+                            }
+                            break;
+                        }
+
+                        case 'scripts': {
+                            const ext = '.js';
+                            const scripts = [];
+                            for (const script of global.currentProject.scripts) {
+                                scripts.push(script.name);
+                                fs.outputFileSync(
+                                    path.join(dirPath, script.name + ext),
+                                    script.code
+                                );
+                            }
+                            fs.outputFileSync(
+                                path.join(dirPath, 'scriptOrder.yaml'),
+                                YAML.safeDump(scripts)
+                            );
+                            break;
+                        }
+
+                        case 'skeletons': {
+                            const ext = '.yaml';
+                            for (const skeleton of global.currentProject.skeletons) {
+                                fs.outputFileSync(
+                                    path.join(dirPath, skeleton.name + ext),
+                                    YAML.safeDump(skeleton)
+                                );
+                            }
+                            break;
+                        }
+
+                        case 'sounds': {
+                            const ext = '.ctsound';
+                            for (const sound of global.currentProject.sounds) {
+                                fs.outputFileSync(
+                                    path.join(dirPath, sound.name + ext),
+                                    YAML.safeDump(sound)
+                                );
+                            }
+                            break;
+                        }
+
+                        case 'styles': {
+                            const ext = '.ctfont';
+                            for (const style of global.currentProject.styles) {
+                                fs.outputFileSync(
+                                    path.join(dirPath, style.name + ext),
+                                    YAML.safeDump(style)
+                                );
+                            }
+                            break;
+                        }
+
+                        case 'textures': {
+                            const ext = '.cttexture';
+                            for (const texture of global.currentProject.textures) {
+                                /*const tmp = {};
+                                tmp.name = texture.name;
+                                tmp.depth = texture.depth;
+                                tmp.texture = texture.texture;
+                                tmp.uid = texture.uid;
+                                tmp.extends = texture.extends;
+                                tmp.lastmod = texture.lastmod;*/
+                                fs.outputFileSync(
+                                    path.join(dirPath, texture.name + ext),
+                                    YAML.safeDump(texture)
+                                );
+                                /*try {
+                                    fs.mkdirSync(
+                                        path.join(dirPath, texture.name + ext + '.data')
+                                    );
+                                } catch (e) {
+                                    void 0;
+                                }
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        texture.name + ext + '.data',
+                                        'oncreate.js'
+                                    ),
+                                    texture.oncreate
+                                );
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        texture.name + ext + '.data',
+                                        'onstep.js'
+                                    ),
+                                    texture.onstep
+                                );
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        texture.name + ext + '.data',
+                                        'ondraw.js'
+                                    ),
+                                    texture.ondraw
+                                );
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        texture.name + ext + '.data',
+                                        'onleave.js'
+                                    ),
+                                    texture.onleave
+                                );*/
+                            }
+                            break;
+                        }
+
+                        case 'types': {
+                            const ext = '.cttype';
+                            for (const type of global.currentProject.types) {
+                                const tmp = {};
+                                tmp.name = type.name;
+                                tmp.depth = type.depth;
+                                tmp.texture = type.texture;
+                                tmp.uid = type.uid;
+                                tmp.extends = type.extends;
+                                tmp.lastmod = type.lastmod;
+                                fs.outputFileSync(
+                                    path.join(dirPath, type.name + ext),
+                                    YAML.safeDump(tmp)
+                                );
+                                try {
+                                    fs.mkdirSync(path.join(dirPath, type.name + ext + '.data'));
+                                } catch (e) {
+                                    void 0;
+                                }
+                                fs.outputFileSync(
+                                    path.join(
+                                        dirPath,
+                                        type.name + ext + '.data',
+                                        'oncreate.js'
+                                    ),
+                                    type.oncreate
+                                );
+                                fs.outputFileSync(
+                                    path.join(dirPath, type.name + ext + '.data', 'onstep.js'),
+                                    type.onstep
+                                );
+                                fs.outputFileSync(
+                                    path.join(dirPath, type.name + ext + '.data', 'ondraw.js'),
+                                    type.ondraw
+                                );
+                                fs.outputFileSync(
+                                    path.join(dirPath, type.name + ext + '.data', 'ondestroy.js'),
+                                    type.ondestroy
+                                );
+                            }
+                            break;
+                        }
+
+                        default: {
+                            console.error(key + ' was not saved! Maybe a new feature?');
+                            break;
+                        }
+                    }
+                    console.debug(key + " saved successfully.");
+                }
+
+                fs.outputFileSync(path.join(global.projdir, path.basename(global.projdir + '.ict')), YAML.safeDump(data));
+                resolve();
+            }).then(() => {
                 alertify.success(languageJSON.common.savedcomm, "success", 3000);
                 this.saveRecoveryDebounce();
                 fs.remove(global.projdir + '.ict.recovery')
-                .then(() => console.log())
-                .catch(console.error);
+                    .then(() => console.log())
+                    .catch(console.error);
                 glob.modified = false;
             })
-            .catch(alertify.error);
+                .catch((e) => { alertify.error(e); console.error(e) });
         };
         this.saveRecovery = () => {
             if (global.currentProject) {
                 const YAML = require('js-yaml');
                 const data = YAML.safeDump(global.currentProject);
-                fs.outputFile(global.projdir + '.ict.recovery', data);
+                fs.outputFile(path.join(global.projdir, path.basename(global.projdir + '.ict.recovery')), data);
             }
             this.saveRecoveryDebounce();
         };

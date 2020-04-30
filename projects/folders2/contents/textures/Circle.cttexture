@@ -1,0 +1,25 @@
+name: Circle
+untill: 0
+grid:
+  - 1
+  - 1
+axis:
+  - 0
+  - 0
+marginx: 0
+marginy: 0
+imgWidth: 440
+imgHeight: 434
+width: 440
+height: 434
+offx: 0
+offy: 0
+origname: i0f5520d2-83b4-4af3-a4c7-1ba728dec7da.png
+source: /Users/aidandj/Desktop/Circle.png
+shape: rect
+left: 0
+right: 440
+top: 0
+bottom: 434
+uid: 0f5520d2-83b4-4af3-a4c7-1ba728dec7da
+padding: 1
