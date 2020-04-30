@@ -1,13 +1,12 @@
 /* Made with ct.js http://ctjs.rocks/ */
+
+/* global CtTimer */
+
 const deadPool = []; // a pool of `kill`-ed copies for delaying frequent garbage collection
 const copyTypeSymbol = Symbol('I am a ct.js copy');
 setInterval(function () {
     deadPool.length = 0;
 }, 1000 * 60);
-
-
-let internalTimerCounter = 0;
-
 
 /**
  * The ct.js library
@@ -394,41 +393,27 @@ ct.u = {
         document.getElementsByTagName('head')[0].appendChild(script);
     },
     /**
-     * Returns a Promise that resolves after the given time
+     * Returns a Promise that resolves after the given time.
+     * This timer is run in gameplay time scale, meaning that it is affected by time stretching.
      * @param {number} time Time to wait, in milliseconds
-     * @param {boolean} [useUiDelta=false] If true, use ct.deltaUi instead of ct.delta 
      * @returns {CtTimer} The timer, which you can call `.then()` to
      */
-    wait(time, useUiDelta = false) {
-        var room = ct.room.name;
-        const currentCounter = internalTimerCounter;
-        internalTimerCounter++;
-        //ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
-        //return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].promise;
-        return new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta);
-        /*ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter] = new CtTimer("ct.u.wait" + currentCounter, time, useUiDelta, true);
-        setInterval(() => {
-            if (ct.room.name === room) {
-                if (ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].done) delete ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter];
-            } else {
-                ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].reject({
-                    info: 'Room switch',
-                    from: 'ct.u.wait'
-                }); // Reject if the room was switched
-            }
-        }, 1 / ct.speed);
-        return ct.timer[internalTimerSymbol]["ct.u.wait" + currentCounter].promise;*/
-        /*return new Promise((resolve, reject) => setTimeout(() => {
-            if (ct.room.name === room) {
-                resolve();
-            } else {
-                reject({
-                    info: 'Room switch',
-                    from: 'ct.u.wait'
-                });
-            }
-        }, time));*/
+    wait(time) {
+        const id = ct.timer.counter;
+        ct.timer.counter++;
+        return new CtTimer('ct.u.wait' + id, time);
     },
+    /**
+     * Returns a Promise that resolves after the given time.
+     * This timer runs in UI time scale and is not sensitive to time stretching.
+     * @param {number} time Time to wait, in milliseconds
+     * @returns {CtTimer} The timer, which you can call `.then()` to
+     */
+    waitUi(time) {
+        const id = ct.timer.counter;
+        ct.timer.counter++;
+        return new CtTimer('ct.u.wait' + id, time, true);
+    }
 };
 ct.u.ext(ct.u, {// make aliases
     lengthDirX: ct.u.ldx,
