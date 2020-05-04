@@ -1,5 +1,3 @@
-/* global ct */
-
 var i = 0;
 while (i < ct.tween.tweens.length) {
     var tween = ct.tween.tweens[i];

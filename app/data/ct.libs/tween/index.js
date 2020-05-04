@@ -1,18 +1,18 @@
-/* global ct */
+/* global CtTimer */
 
 ct.tween = {
     /**
      * Creates a new tween effect and adds it to the game loop
-     * 
+     *
      * @param {Object} options An object with options:
      * @param {Object|Copy} options.obj An object to animate. All objects are supported.
      * @param {Object} options.fields A map with pairs `fieldName: newValue`. Values must be of numerical type.
-     * @param {Function} options.curve An interpolating function. You can write your own, 
-     * or use default ones written below. The default one is `ct.tween.ease`.
+     * @param {Function} options.curve An interpolating function. You can write your own,
+     * or use default ones (see methods in `ct.tween`). The default one is `ct.tween.ease`.
      * @param {Number} options.duration The duration of easing, in milliseconds.
      * @param {Number} options.useUiDelta If true, use ct.deltaUi instead of ct.delta. The default is `false`.
-     * 
-     * @returns {Promise} A promise which is resolved if the effect was fully played, 
+     *
+     * @returns {Promise} A promise which is resolved if the effect was fully played,
      * or rejected if it was interrupted manually by code, room switching or instance kill.
      * You can call a `stop()` method on this promise to interrupt it manually.
      */
@@ -23,9 +23,8 @@ ct.tween = {
             curve: options.curve || ct.tween.ease,
             duration: options.duration || 1000,
             useUiDelta: options.useUiDelta || false,
-            timer: new CtTimer("ct.tween.add" + internalTimerCounter, this.duration, this.useUiDelta)
+            timer: new CtTimer('ct.tween', this.duration, this.useUiDelta)
         };
-        internalTimerCounter++;
         var promise = new Promise((resolve, reject) => {
             tween.resolve = resolve;
             tween.reject = reject;
@@ -47,8 +46,8 @@ ct.tween = {
     /**
      * Linear interpolation.
      * Here and below, these parameters are used:
-     * 
-     * @param {Number} s Starting value 
+     *
+     * @param {Number} s Starting value
      * @param {Number} d The change of value to transition to, the Delta
      * @param {Number} a The current timing state, 0-1
      * @returns {Number} Interpolated value
