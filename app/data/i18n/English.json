@@ -169,6 +169,7 @@
         "themeNight": "Dark",
         "types": "Types",
         "zipExport": "Export for web",
+        "cordovaExport": "Export to cordova",
         "zipProject": "Pack project to .zip",
         "codeFontDefault": "Default (Iosevka Light)",
         "codeFontOldSchool": "Old school",
