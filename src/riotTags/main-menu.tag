@@ -242,27 +242,31 @@ main-menu.flexcol
                 alertify.error(e);
             }
         };
+
+        const cordova = require('./data/node_requires/cordova/cordova');
         this.zipExport = async e => {
-            const writable = await getWritableDir();
-            const runCtExport = require('./data/node_requires/exporter');
-            let exportFile = path.join(writable, '/export.zip'),
-                inDir = path.join(writable, '/export/');
-            await fs.remove(exportFile);
-            runCtExport(global.currentProject, global.projdir)
-            .then(() => {
-                let archive = archiver('zip'),
-                    output = fs.createWriteStream(exportFile);
-
-                output.on('close', () => {
-                    nw.Shell.showItemInFolder(exportFile);
-                    alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
-                });
-
-                archive.pipe(output);
-                archive.directory(inDir, false);
-                archive.finalize();
-            })
-            .catch(alertify.error);
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const exportPath = await window.showOpenDialog({
+                defaultPath: defaultProjectDir,
+                openDirectory: true
+            });
+            const settings = global.currentProject.settings;
+            if (exportPath) {
+                try {
+                    const title = settings.title.replace(/\s/ig,"_");
+                    const writable = await getWritableDir();
+                    const exportFolder = path.join(exportPath, `/export/${settings.title.replace(/\s/ig,"_")}`);
+                    const inDir = path.join(writable, '/export/');
+                    await fs.remove(exportFolder);
+                    await fs.mkdir(exportFolder, {recursive:true});
+                    await cordova.create(exportFolder, "rocks.ctjs", title)
+                    await fs.remove(path.join(exportFolder, 'www'));
+                    await fs.copy(inDir, path.join(exportFolder, 'www'));
+                    alertify.success(this.voc.successZipExport.replace('{0}', exportFolder));
+                } catch(e) {
+                 alertify.error(e);
+                }
+            }
         };
         localStorage.UItheme = localStorage.UItheme || 'Day';
         this.switchTheme = theme => {
