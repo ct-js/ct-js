@@ -210,57 +210,70 @@ main-menu.flexcol
         hotkey.on('Alt+F5', this.runProjectAlt);
 
         this.zipProject = async () => {
-            try {
-                const os = require('os');
-                const path = require('path');
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const exportPath = await window.showOpenDialog({
+                defaultPath: defaultProjectDir,
+                openDirectory: true
+            });
+            if (exportPath) {
+                try {
+                    const os = require('os');
+                    const path = require('path');
 
-                const writable = await getWritableDir();
-                const inDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ctZipProject-')),
-                      outName = path.join(writable, `/${sessionStorage.projname}.zip`);
+                    const inDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ctZipProject-')),
+                        outName = path.join(exportPath, `/${sessionStorage.projname}.zip`);
 
-                await this.saveProject();
-                await fs.remove(outName);
-                await fs.remove(inDir);
-                await fs.copy(global.projdir + '.ict', path.join(inDir, sessionStorage.projname));
-                await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
+                    await this.saveProject();
+                    await fs.remove(outName);
+                    await fs.remove(inDir);
+                    await fs.copy(global.projdir + '.ict', path.join(inDir, sessionStorage.projname));
+                    await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
 
-                const archive = archiver('zip'),
-                      output = fs.createWriteStream(outName);
+                    const archive = archiver('zip'),
+                        output = fs.createWriteStream(outName);
 
-                output.on('close', () => {
-                    nw.Shell.showItemInFolder(outName);
-                    alertify.success(this.voc.successZipProject.replace('{0}', outName));
-                    fs.remove(inDir);
-                });
+                    output.on('close', () => {
+                        nw.Shell.showItemInFolder(outName);
+                        alertify.success(this.voc.successZipProject.replace('{0}', outName));
+                        fs.remove(inDir);
+                    });
 
-                archive.pipe(output);
-                archive.directory(inDir, false);
-                archive.finalize();
-            } catch (e) {
-                alertify.error(e);
+                    archive.pipe(output);
+                    archive.directory(inDir, false);
+                    archive.finalize();
+                } catch (e) {
+                    alertify.error(e);
+                }
             }
         };
         this.zipExport = async () => {
-            const writable = await getWritableDir();
-            const runCtExport = require('./data/node_requires/exporter');
-            const exportFile = path.join(writable, '/export.zip'),
-                  inDir = path.join(writable, '/export/');
-            await fs.remove(exportFile);
-            runCtExport(global.currentProject, global.projdir)
-            .then(() => {
-                const archive = archiver('zip'),
-                      output = fs.createWriteStream(exportFile);
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const exportPath = await window.showOpenDialog({
+                defaultPath: defaultProjectDir,
+                openDirectory: true
+            });
+            if (exportPath) {
+                const writable = await getWritableDir();
+                const runCtExport = require('./data/node_requires/exporter');
+                const exportFile = path.join(exportPath, '/export.zip'),
+                    inDir = path.join(writable, '/export/');
+                await fs.remove(exportFile);
+                runCtExport(global.currentProject, global.projdir)
+                .then(() => {
+                    const archive = archiver('zip'),
+                        output = fs.createWriteStream(exportFile);
 
-                output.on('close', () => {
-                    nw.Shell.showItemInFolder(exportFile);
-                    alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
-                });
+                    output.on('close', () => {
+                        nw.Shell.showItemInFolder(exportFile);
+                        alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
+                    });
 
-                archive.pipe(output);
-                archive.directory(inDir, false);
-                archive.finalize();
-            })
-            .catch(alertify.error);
+                    archive.pipe(output);
+                    archive.directory(inDir, false);
+                    archive.finalize();
+                })
+                .catch(alertify.error);
+            }
         };
         this.cordovaExport = async () => {
             const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
