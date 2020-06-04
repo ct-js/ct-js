@@ -11,6 +11,9 @@ const path = require('path'),
       riot = require('gulp-riot'),
       pug = require('gulp-pug'),
       sprite = require('gulp-svgstore'),
+      globby = require('globby'),
+      filemode = require('filemode'),
+      zip = require('gulp-zip'),
 
       jsdocx = require('jsdoc-x'),
 
@@ -20,12 +23,17 @@ const path = require('path'),
 
       spawnise = require('./node_requires/spawnise');
 
+const nwVersion = '0.34.5',
+      platforms = ['osx64', 'win32', 'win64', 'linux32', 'linux64'],
+      nwFiles = ['./app/**', '!./app/export/**', '!./app/projects/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
+
 const argv = minimist(process.argv.slice(2));
 const npm = (/^win/).test(process.platform) ? 'npm.cmd' : 'npm';
 
 const pack = require('./app/package.json');
 
-var channelPostfix = argv.channel || false;
+var channelPostfix = argv.channel || false,
+    fixEnabled = argv.fix || false;
 
 let errorBoxShown = false;
 const showErrorBox = function () {
@@ -102,7 +110,10 @@ const compileRiot = () =>
     .pipe(gulp.dest('./temp/'));
 
 const concatScripts = () =>
-    streamQueue({objectMode: true},
+    streamQueue(
+        {
+            objectMode: true
+        },
         gulp.src('./src/js/3rdparty/riot.min.js'),
         gulp.src(['./src/js/**', '!./src/js/3rdparty/riot.min.js']),
         gulp.src('./temp/riot.js')
@@ -198,18 +209,46 @@ const lintStylus = () => {
 
 const lintJS = () => {
     const eslint = require('gulp-eslint');
-    return gulp.src(['./src/js/**/*.js', '!./src/js/3rdparty/**/*.js', './src/node_requires/**/*.js'])
-    .pipe(eslint())
+    return gulp.src([
+        './src/js/**/*.js',
+        '!./src/js/3rdparty/**/*.js',
+        './src/node_requires/**/*.js',
+        './src/pug/**/*.pug'
+    ])
+    .pipe(eslint({
+        fix: fixEnabled
+    }))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+};
+const lintTags = () => {
+    const eslint = require('gulp-eslint'),
+          replaceExt = require('gulp-ext-replace');
+    return gulp.src(['./src/riotTags/**/*.tag'])
+    .pipe(replaceExt('.pug')) // rename so that it becomes edible for eslint-plugin-pug
+    .pipe(eslint()) // ESLint-pug cannot automatically fix issues
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
 };
 
-const lint = gulp.series(lintJS, lintStylus);
+const lintI18n = () => require('./node_requires/i18n')().then(console.log);
+
+const lint = gulp.series(lintJS, lintTags, lintStylus, lintI18n);
 
 const launchApp = () => {
-    spawnise.spawn(npm, ['run', 'start'], {
-        cwd: './app'
-    }).then(launchApp);
+    const NwBuilder = require('nw-builder');
+    const nw = new NwBuilder({
+        files: nwFiles,
+        version: nwVersion,
+        platforms,
+        flavor: 'sdk'
+    });
+    return nw.run()
+    .catch(error => {
+        showErrorBox();
+        console.error(error);
+    })
+    .then(launchApp);
 };
 
 const docs = async () => {
@@ -249,7 +288,7 @@ const getDocumentation = doc => {
     if (doc.kind === 'function') {
         return {
             value: `${doc.description}
-${(doc.params || []).map(param => `* \`${param.name}\` (${param.type.names.join('|')}) ${param.description} ${param.optional? '(optional)' : ''}`).join('\n')}
+${(doc.params || []).map(param => `* \`${param.name}\` (${param.type.names.join('|')}) ${param.description} ${param.optional ? '(optional)' : ''}`).join('\n')}
 
 Returns ${doc.returns[0].type.names.join('|')}, ${doc.returns[0].description}`
         };
@@ -295,13 +334,11 @@ const concatTypedefs = () =>
     gulp.src(['./src/typedefs/ct.js/types.d.ts', './src/typedefs/ct.js/**/*.ts', './src/typedefs/default/**/*.ts'])
     .pipe(concat('global.d.ts'))
     // patch the generated output so ct classes allow custom properties
-    .pipe(replace(
-        'declare class Copy extends PIXI.AnimatedSprite {', `
+    .pipe(replace('declare class Copy extends PIXI.AnimatedSprite {', `
         declare class Copy extends PIXI.AnimatedSprite {
             [key: string]: any
         `))
-    .pipe(replace(
-        'declare class Room extends PIXI.Container {', `
+    .pipe(replace('declare class Room extends PIXI.Container {', `
         declare class Room extends PIXI.Container {
             [key: string]: any
         `))
@@ -337,15 +374,102 @@ const build = gulp.parallel([
 ]);
 
 const bakePackages = async () => {
-    const builder = require('electron-builder');
+    const NwBuilder = require('nw-builder');
     await fs.remove(path.join('./build', `ctjs - v${pack.version}`));
-    await builder.build({// @see https://github.com/electron-userland/electron-builder/blob/master/packages/app-builder-lib/src/packagerApi.ts
-        projectDir: './app',
-        //mac: pack.build.mac.target || ['default'],
-        //win: pack.build.win.target,
-        //linux: pack.build.linux.target
+    var nw = new NwBuilder({
+        files: nwFiles,
+        platforms,
+        version: nwVersion,
+        flavor: 'sdk',
+        buildType: 'versioned',
+        // forceDownload: true,
+        zip: false,
+        macIcns: './buildAssets/icon.icns'
+    });
+    await nw.build();
+    console.log('Built to this location:', path.join('./build', `ctjs - v${pack.version}`));
+};
+
+// a workaround for https://github.com/nwjs-community/nw-builder/issues/289
+const fixPermissions = () => {
+    if (platforms.indexOf('osx64') === -1) {
+        return Promise.resolve(); // skip the fix if not building for macos
+    }
+    const baseDir = path.posix.join('./build', `ctjs - v${pack.version}`, 'osx64', 'ctjs.app/Contents');
+
+    const globs = [
+        baseDir + '/MacOS/nwjs',
+        baseDir + '/Versions/*/nwjs Framework.framework/Versions/A/nwjs Framework',
+        baseDir + '/Versions/*/nwjs Helper.app/Contents/MacOS/nwjs Helper'
+    ];
+    return globby(globs)
+    .then(files => {
+        console.log('overriding permissions for', files);
+        return Promise.all(files.map(file => filemode(file, '777')));
     });
 };
+
+const oldSymlink = fs.symlink;
+fs.symlink = (target, destination) => {
+    console.log('link', target, '<==', destination);
+    return oldSymlink(target, destination);
+};
+
+const abortOnWindows = done => {
+    if ((/^win/).test(process.platform) && platforms.indexOf('osx64') !== -1) {
+        throw new Error('Sorry, but building ct.js for mac is not possible on Windows due to Windows\' specifics. You can edit `platforms` at gulpfile.js if you don\'t need a package for mac.');
+    }
+    done();
+};
+// Based on solution at https://github.com/strawbees/desktop-packager/blob/master/commands/darwin/bundle.js
+const fixSymlinks = async () => {
+    if (platforms.indexOf('osx64') === -1) {
+        return; // skip the fix if not building for macos
+    }
+    const baseDir = path.posix.join('./build', `ctjs - v${pack.version}`, 'osx64', 'ctjs.app/Contents');
+
+    // the actual directory depends on nw version, so let's find the needed dir with a glob
+    const glob = baseDir + '/Versions/*/nwjs Framework.framework/*';
+    const execute = require('./node_requires/execute');
+    const frameworkDir = path.dirname((await globby([glob]))[0]);
+
+    console.log('fixing symlinks at', frameworkDir);
+
+    execute(async ({exec}) => {
+        await exec(`
+            cd "${frameworkDir}"
+            rm "Versions/Current" && ln -s "./A" "./Versions/Current"
+            rm "Helpers" && ln -s "./Versions/Current/Helpers"
+            rm "Internet Plug-Ins" && ln -s "./Versions/Current/Internet Plug-Ins"
+            rm "Libraries" && ln -s "./Versions/Current/Libraries"
+            rm "nwjs Framework" && ln -s "./Versions/Current/nwjs Framework"
+            rm "Resources" && ln -s "./Versions/Current/Resources"
+            rm "XPCServices" && ln -s "./Versions/Current/XPCServices"
+        `);
+    });
+};
+exports.fixPermissions = fixPermissions;
+exports.fixSymlinks = fixSymlinks;
+
+
+let zipPackages;
+if ((/^win/).test(process.platform)) {
+    const zipsForAllPlatforms = platforms.map(platform => () =>
+        gulp.src(`./build/ctjs - v${pack.version}/${platform}/**`)
+        .pipe(zip(`ct.js v${pack.version} for ${platform}.zip`))
+        .pipe(gulp.dest(`./build/ctjs - v${pack.version}/`)));
+    zipPackages = gulp.parallel(zipsForAllPlatforms);
+} else {
+    const execute = require('./node_requires/execute');
+    zipPackages = () => Promise.all(platforms.map(platform =>
+        // `r` for dirs,
+        // `q` for preventing spamming to stdout,
+        // and `y` for preserving symlinks
+        execute(({exec}) => exec(`
+            cd "./build/ctjs - v${pack.version}/"
+            zip -rqy "ct.js v${pack.version} for ${platform}.zip" "./${platform}"
+        `))));
+}
 
 
 const examples = () => gulp.src('./src/examples/**/*')
@@ -361,13 +485,13 @@ const patronsCache = done => {
     const dest = './app/data/patronsCache.csv',
           src = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUMd6nvY0if8MuVDm5-zMfAxWCSWpUzOc81SehmBVZ6mytFkoB3y9i9WlUufhIMteMDc00O9EqifI3/pub?output=csv';
     const file = fs.createWriteStream(dest);
-    http.get(src, function(response) {
+    http.get(src, response => {
         response.pipe(file);
-        file.on('finish', function() {
+        file.on('finish', () => {
             file.close(() => done()); // close() is async, call cb after close completes.
         });
     })
-    .on('error', function(err) { // Handle errors
+    .on('error', err => { // Handle errors
         fs.unlink(dest); // Delete the file async. (But we don't check the result)
         done(err);
     });
@@ -375,20 +499,24 @@ const patronsCache = done => {
 
 const packages = gulp.series([
     lint,
+    abortOnWindows,
     build,
     docs,
     patronsCache,
     examples,
-    bakePackages
+    bakePackages,
+    fixSymlinks,
+    fixPermissions,
+    zipPackages
 ]);
 
 const deployOnly = () => {
     console.log(`For channel ${channelPostfix}`);
-    return spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux32`, `comigo/ct:linux32${channelPostfix? '-' + channelPostfix: ''}`, '--userversion', pack.version])
-    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux64`, `comigo/ct:linux64${channelPostfix? '-' + channelPostfix: ''}`, '--userversion', pack.version]))
-    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/osx64`, `comigo/ct:osx64${channelPostfix? '-' + channelPostfix: ''}`, '--userversion', pack.version]))
-    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win32`, `comigo/ct:win32${channelPostfix? '-' + channelPostfix: ''}`, '--userversion', pack.version]))
-    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win64`, `comigo/ct:win64${channelPostfix? '-' + channelPostfix: ''}`, '--userversion', pack.version]));
+    return spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux32`, `comigo/ct:linux32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version])
+    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux64`, `comigo/ct:linux64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]))
+    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/osx64`, `comigo/ct:osx64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]))
+    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win32`, `comigo/ct:win32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]))
+    .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win64`, `comigo/ct:win64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]));
 };
 
 const deploy = gulp.series([packages, deployOnly]);

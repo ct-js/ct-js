@@ -1,37 +1,17 @@
 sounds-panel.panel.view
-    .flexfix.tall
-        .flexfix-header
-            div
-                .toright
-                    b {vocGlob.sort}
-                    button.inline.square(onclick="{switchSort('date')}" class="{selected: sort === 'date' && !searchResults}")
-                        svg.feather
-                            use(xlink:href="data/icons.svg#clock")
-                    button.inline.square(onclick="{switchSort('name')}" class="{selected: sort === 'name' && !searchResults}")
-                        svg.feather
-                            use(xlink:href="data/icons.svg#sort-alphabetically")
-                    .aSearchWrap
-                        input.inline(type="text" onkeyup="{fuseSearch}")
-                        svg.feather
-                            use(xlink:href="data/icons.svg#search")
-                    button.inline.square(onclick="{switchLayout}")
-                        svg.feather
-                            use(xlink:href="data/icons.svg#{localStorage.soundsLayout === 'list'? 'grid' : 'list'}")
-                .toleft
-                    button#soundcreate(onclick="{soundNew}" title="Control+N" data-hotkey="Control+n")
-                        svg.feather
-                            use(xlink:href="data/icons.svg#plus")
-                        span {voc.create}
-        ul.cards.flexfix-body(class="{list: localStorage.soundsLayout === 'list'}")
-            li(
-                each="{sound in (searchResults? searchResults : sounds)}"
-                onclick="{openSound(sound)}"
-                oncontextmenu="{popupMenu(sound)}"
-                onlong-press="{popupMenu(sound)}"
-            )
-                span {sound.name}
-                span.date(if="{sound.lastmod}") {niceTime(sound.lastmod)}
-                img(src="data/img/{sound.isMusic? 'music' : 'wave'}.png")
+    asset-viewer(
+        collection="{global.currentProject.sounds}"
+        contextmenu="{popupMenu}"
+        namespace="sounds"
+        click="{openSound}"
+        thumbnails="{thumbnails}"
+        ref="sounds"
+        class="tall"
+    )
+        button#soundcreate(onclick="{parent.soundNew}" title="Control+N" data-hotkey="Control+n")
+            svg.feather
+                use(xlink:href="data/icons.svg#plus")
+            span {voc.create}
     sound-editor(if="{editing}" sound="{editedSound}")
     context-menu(menu="{soundMenu}" ref="soundMenu")
     script.
@@ -41,57 +21,13 @@ sounds-panel.panel.view
         this.sort = 'name';
         this.sortReverse = false;
 
-        this.updateList = () => {
-            this.sounds = [...window.currentProject.sounds];
-            if (this.sort === 'name') {
-                this.sounds.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                });
-            } else {
-                this.sounds.sort((a, b) => {
-                    return b.lastmod - a.lastmod;
-                });
-            }
-            if (this.sortReverse) {
-                this.sounds.reverse();
-            }
-        };
-        this.switchSort = sort => e => {
-            if (this.sort === sort) {
-                this.sortReverse = !this.sortReverse;
-            } else {
-                this.sort = sort;
-                this.sortReverse = false;
-            }
-            this.updateList();
-        };
-        this.switchLayout = e => {
-            localStorage.soundsLayout = localStorage.soundsLayout === 'list'? 'grid' : 'list';
-        };
-        const fuseOptions = {
-            shouldSort: true,
-            tokenize: true,
-            threshold: 0.5,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: ['name']
-        };
-        const Fuse = require('fuse.js');
-        this.fuseSearch = e => {
-            if (e.target.value.trim()) {
-                var fuse = new Fuse(this.sounds, fuseOptions);
-                this.searchResults = fuse.search(e.target.value.trim());
-            } else {
-                this.searchResults = null;
-            }
-        };
-        this.setUpPanel = e => {
-            this.updateList();
+        this.thumbnails = sound => `data/img/${sound.isMusic ? 'music' : 'wave'}.png`;
+
+        this.setUpPanel = () => {
             this.searchResults = null;
             this.editing = false;
             this.editedSound = null;
+            this.refs.sounds.updateList();
             this.update();
         };
         window.signals.on('projectLoaded', this.setUpPanel);
@@ -100,7 +36,7 @@ sounds-panel.panel.view
             window.signals.off('projectLoaded', this.setUpPanel);
         });
 
-        this.soundNew = e => {
+        this.soundNew = () => {
             if (this.editing) {
                 return false;
             }
@@ -111,11 +47,12 @@ sounds-panel.panel.view
                 name: 'Sound_' + slice,
                 uid: id
             };
-            window.currentProject.sounds.push(newSound);
-            this.updateList();
+            global.currentProject.sounds.push(newSound);
+            this.refs.sounds.updateList();
             this.openSound(newSound)();
+            return true;
         };
-        this.openSound = sound => e => {
+        this.openSound = sound => () => {
             this.editedSound = sound;
             this.editing = true;
             this.update();
@@ -129,10 +66,9 @@ sounds-panel.panel.view
                     this.openSound(this.editedSound)();
                 }
             }, {
-                label: languageJSON.common.copyName,
-                click: e => {
-                    const {clipboard} = require('electron');
-                    clipboard.writeText(this.editedSound.name);
+                label: window.languageJSON.common.copyName,
+                click: () => {
+                    nw.Clipboard.get().set(this.editedSound.name, 'text');
                 }
             }, {
                 label: window.languageJSON.common.rename,
@@ -158,9 +94,9 @@ sounds-panel.panel.view
                     .confirm(window.languageJSON.common.confirmDelete.replace('{0}', this.editedSound.name))
                     .then(e => {
                         if (e.buttonClicked === 'ok') {
-                            var ind = window.currentProject.sounds.indexOf(this.editedSound);
-                            window.currentProject.sounds.splice(ind, 1);
-                            this.updateList();
+                            var ind = global.currentProject.sounds.indexOf(this.editedSound);
+                            global.currentProject.sounds.splice(ind, 1);
+                            this.refs.sounds.updateList();
                             this.update();
                             alertify
                             .okBtn(window.languageJSON.common.ok)

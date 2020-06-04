@@ -1,11 +1,11 @@
-(function (window) {
+(function addLoadProjectMethod(window) {
     window.migrationProcess = window.migrationProcess || [];
-    window.applyMigrationCode = function (version) {
+    window.applyMigrationCode = function applyMigrationCode(version) {
         const process = window.migrationProcess.find(process => process.version === version);
         if (!process) {
             throw new Error(`Cannot find migration code for version ${version}`);
         }
-        process.process(window.currentProject)
+        process.process(global.currentProject)
         .then(() => window.alertify.success(`Applied migration code for version ${version}`, 'success', 3000));
     };
 
@@ -21,7 +21,7 @@
             raw[3],
             // -next- versions and other postfixes will count as a fourth component.
             // They all will apply before regular versions
-            raw[4]? raw[5] || 1 : null
+            raw[4] ? raw[5] || 1 : null
         ];
     };
 
@@ -89,7 +89,7 @@
         // @see https://github.com/eslint/eslint/issues/11900
         // @see https://github.com/eslint/eslint/issues/11899
         // eslint-disable-next-line require-atomic-updates
-        project.ctjsVersion = require('electron').remote.app.getVersion();
+        project.ctjsVersion = process.versions.ctjs;
     };
 
     /**
@@ -100,21 +100,21 @@
      */
     var loadProject = async projectData => {
         const glob = require('./data/node_requires/glob');
-        window.currentProject = projectData;
+        global.currentProject = projectData;
         window.alertify.log(window.languageJSON.intro.loadingProject);
         glob.modified = false;
 
         try {
             await adapter(projectData);
-            fs.ensureDir(sessionStorage.projdir);
-            fs.ensureDir(sessionStorage.projdir + '/img');
-            fs.ensureDir(sessionStorage.projdir + '/snd');
+            fs.ensureDir(global.projdir);
+            fs.ensureDir(global.projdir + '/img');
+            fs.ensureDir(global.projdir + '/snd');
 
-            const lastProjects = localStorage.lastProjects? localStorage.lastProjects.split(';') : [];
-            if (lastProjects.indexOf(path.normalize(sessionStorage.projdir + '.ict')) !== -1) {
-                lastProjects.splice(lastProjects.indexOf(path.normalize(sessionStorage.projdir + '.ict')), 1);
+            const lastProjects = localStorage.lastProjects ? localStorage.lastProjects.split(';') : [];
+            if (lastProjects.indexOf(path.normalize(global.projdir + '.ict')) !== -1) {
+                lastProjects.splice(lastProjects.indexOf(path.normalize(global.projdir + '.ict')), 1);
             }
-            lastProjects.unshift(path.normalize(sessionStorage.projdir + '.ict'));
+            lastProjects.unshift(path.normalize(global.projdir + '.ict'));
             if (lastProjects.length > 15) {
                 lastProjects.pop();
             }
@@ -122,8 +122,8 @@
             window.signals.trigger('hideProjectSelector');
             window.signals.trigger('projectLoaded');
 
-            if (window.currentProject.settings.title) {
-                document.title = window.currentProject.settings.title + ' — ct.js';
+            if (global.currentProject.settings.title) {
+                document.title = global.currentProject.settings.title + ' — ct.js';
             }
 
             setTimeout(() => {
@@ -140,28 +140,44 @@
      * @param {String} proj The path to the file.
      * @returns {void}
      */
-    var loadProjectFile = proj => {
-        fs.readJSON(proj, (err, projectData) => {
-            if (err) {
-                window.alertify.error(err);
-                return;
+    var loadProjectFile = async proj => {
+        const textProjData = await fs.readFile(proj, 'utf8');
+        let projectData;
+        // Before v1.3, projects were stored in JSON format
+        try {
+            if (textProjData.indexOf('{') === 0) { // First, make a silly check for JSON files
+                projectData = JSON.parse(textProjData);
+            } else {
+                try {
+                    const YAML = require('js-yaml');
+                    projectData = YAML.safeLoad(textProjData);
+                } catch (e) {
+                    // whoopsie, wrong window
+                    // eslint-disable-next-line no-console
+                    console.warn(`Tried to load a file ${proj} as a YAML, but got an error (see below). Falling back to JSON.`);
+                    console.error(e);
+                    projectData = JSON.parse(textProjData);
+                }
             }
-            if (!projectData) {
-                window.alertify.error(window.languageJSON.common.wrongFormat);
-                return;
-            }
-            try {
-                loadProject(projectData);
-            } catch (e) {
-                window.alertify.error(e);
-                throw e;
-            }
-        });
+        } catch (e) {
+            window.alertify.error(e);
+            throw e;
+        }
+        if (!projectData) {
+            window.alertify.error(window.languageJSON.common.wrongFormat);
+            return;
+        }
+        try {
+            loadProject(projectData);
+        } catch (e) {
+            window.alertify.error(e);
+            throw e;
+        }
     };
 
     window.loadProject = proj => {
         sessionStorage.projname = path.basename(proj);
-        sessionStorage.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
+        global.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
 
         fs.stat(proj + '.recovery', (err, stat) => {
             if (!err && stat.isFile()) {
@@ -177,10 +193,9 @@
                 */
                 .confirm(voc.message
                     .replace('{0}', targetStat.mtime.toLocaleString())
-                    .replace('{1}', targetStat.mtime < stat.mtime? voc.older : voc.newer)
+                    .replace('{1}', targetStat.mtime < stat.mtime ? voc.older : voc.newer)
                     .replace('{2}', stat.mtime.toLocaleString())
-                    .replace('{3}', stat.mtime < targetStat.mtime? voc.older : voc.newer)
-                )
+                    .replace('{3}', stat.mtime < targetStat.mtime ? voc.older : voc.newer))
                 .then(e => {
                     if (e.buttonClicked === 'ok') {
                         loadProjectFile(proj + '.recovery');

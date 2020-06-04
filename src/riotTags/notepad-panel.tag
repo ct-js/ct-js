@@ -1,5 +1,5 @@
 notepad-panel#notepad.panel.dockright(class="{opened: opened}")
-    ul.nav.tabs.nogrow
+    ul.nav.tabs.nogrow.nb
         li(onclick="{changeTab('notepadlocal')}" class="{active: tab === 'notepadlocal'}")
             svg.feather
                 use(xlink:href="data/icons.svg#edit")
@@ -18,7 +18,7 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
         div(show="{tab === 'notepadglobal'}")
             .aCodeEditor(ref="notepadglobal")
         div(show="{tab === 'helppages'}")
-            iframe(src="http://localhost:{server.address().port}/" ref="helpIframe")
+            iframe(src="http://localhost:{server.address().port}/{getIfDarkTheme()? '?darkTheme=yep' : ''}" ref="helpIframe" nwdisable nwfaketop)
             button.aHomeButton(title="{voc.backToHome}" onclick="{backToHome}")
                 svg.feather
                     use(xlink:href="data/icons.svg#home")
@@ -32,7 +32,7 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
         this.opened = false;
         this.namespace = 'notepad';
         this.mixin(window.riotVoc);
-        this.notepadToggle = function() {
+        this.notepadToggle = function notepadToggle() {
             this.opened = !this.opened;
         };
 
@@ -43,7 +43,7 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
         });
 
         this.tab = 'notepadlocal';
-        this.changeTab = tab => e => {
+        this.changeTab = tab => () => {
             this.tab = tab;
         };
         this.on('update', () => {
@@ -64,12 +64,15 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             window.removeEventListener('resize', updateEditorSize);
         });
 
-        this.backToHome = e => {
+        this.getIfDarkTheme = () =>
+            localStorage.UItheme === 'Night' || localStorage.UItheme === 'Horizon';
+
+        this.backToHome = () => {
             this.refs.helpIframe.contentWindow.location = `http://localhost:${this.server.address().port}/`;
         };
 
         this.on('update', () => {
-            this.notepadlocal.setValue(window.currentProject.notes || '');
+            this.notepadlocal.setValue(global.currentProject.notes || '');
         });
 
         this.on('mount', () => {
@@ -81,11 +84,11 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
                     language: 'typescript'
                 });
 
-                this.notepadlocal.onDidChangeModelContent((e) => {
-                    window.currentProject.notes = this.notepadlocal.getValue();
+                this.notepadlocal.onDidChangeModelContent(() => {
+                    global.currentProject.notes = this.notepadlocal.getValue();
                     glob.modified = true;
                 });
-                this.notepadglobal.onDidChangeModelContent((e) => {
+                this.notepadglobal.onDidChangeModelContent(() => {
                     localStorage.notes = this.notepadglobal.getValue();
                 });
                 this.notepadglobal.setValue(localStorage.notes);
@@ -103,8 +106,8 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             serverInfo: 'ctjsgameeditor'
         });
 
-        this.server = require('http').createServer(function (request, response) {
-            request.addListener('end', function () {
+        this.server = require('http').createServer(function staticServerHandler(request, response) {
+            request.addListener('end', function serveFile() {
                 fileServer.serve(request, response);
             }).resume();
         });

@@ -1,45 +1,50 @@
-(function () {
-    const {remote} = require('electron');
-    const win = remote.getCurrentWindow();
+(function windowWatcher() {
+    if (!document.body.hasAttribute('data-manage-window')) {
+        return;
+    }
+    var maximized = false;
+    const win = nw.Window.get();
 
     const saveState = function () {
         let lastState = 'center';
-        if (win.isFullScreen()) {
+        if (win.isFullscreen) {
             lastState = 'fullscreen';
-        } else if (win.isMaximized()) {
+        } else if (maximized) {
             lastState = 'maximized';
         }
         localStorage.windowSettings = JSON.stringify({
-            mode: win.isFullScreen()? 'fullscreen' : lastState
+            mode: win.isFullscreen ? 'fullscreen' : lastState
         });
     };
     win.on('restore', () => {
+        maximized = false;
         saveState();
     });
     win.on('maximize', () => {
+        maximized = true;
+    });
+    win.on('move', function windowMoveListener() {
+        maximized = false;
         saveState();
     });
-    win.on('unmaximize', function () {
+    window.addEventListener('resize', function windowResizeListener() {
+        maximized = false;
         saveState();
     });
-    win.on('move', function () {
-        saveState();
-    });
-    window.addEventListener('resize', function () {
-        saveState();
-    });
-    win.on('close', function () {
+    win.on('closed', function windowCloseListener() {
         saveState();
     });
 
-    const settings = localStorage.windowSettings? JSON.parse(localStorage.windowSettings) : {
-        mode: 'center'
-    };
+    const settings = localStorage.windowSettings ?
+        JSON.parse(localStorage.windowSettings) :
+        {
+            mode: 'center'
+        };
     if (settings.mode === 'fullscreen') {
-        win.enterFullScreen();
+        win.enterFullscreen();
     } else if (settings.mode === 'maximized') {
         win.maximize();
     } else {
-        win.center();
+        win.setPosition('center');
     }
 })();

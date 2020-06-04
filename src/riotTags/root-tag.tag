@@ -5,7 +5,7 @@ root-tag
     script.
         this.selectorVisible = true;
         window.signals.on('resetAll', () => {
-            window.currentProject = false;
+            global.currentProject = false;
             this.selectorVisible = true;
             riot.update();
         });
@@ -16,10 +16,10 @@ root-tag
             stylesheet.innerHTML = `
                 code, pre {
                     font-family: ${localStorage.fontFamily || 'Iosevka, monospace'};
-                    font-variant-ligatures: ${localStorage.codeLigatures === 'off'? 'none' : 'normal'};
+                    font-variant-ligatures: ${localStorage.codeLigatures === 'off' ? 'none' : 'normal'};
                 }
                 .monaco-editor .view-lines.view-lines {
-                    line-height: ${localStorage.codeDense === 'on'? 1.5 : 1.75};
+                    line-height: ${localStorage.codeDense === 'on' ? 1.5 : 1.75};
                 }
             `;
         };

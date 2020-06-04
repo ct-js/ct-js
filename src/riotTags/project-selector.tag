@@ -53,7 +53,7 @@ project-selector
     script.
         const fs = require('fs-extra'),
               path = require('path');
-        this.ctjsVersion = require('electron').remote.app.getVersion();
+        this.ctjsVersion = process.versions.ctjs;
         this.requirePath = path;
         this.namespace = 'intro';
         this.mixin(window.riotVoc);
@@ -81,71 +81,31 @@ project-selector
         /**
          * Update a splash image of a selected project
          */
-        this.updatePreview = projectPath => e => {
+        this.updatePreview = projectPath => () => {
             this.projectSplash = 'file://' + path.dirname(projectPath) + '/' + path.basename(projectPath, '.ict') + '/img/splash.png';
         };
         /**
-         * Creates a mew project.
+         * Creates a new project.
          * Technically it creates an empty project in-memory, then saves it to a directory.
          * Creates basic directories for sounds and textures.
          */
         this.newProject = async (way, codename) => {
-            var projectData = {
-                ctjsVersion: this.ctjsVersion,
-                notes: '/* empty */',
-                libs: {
-                    place: {
-                        gridX: 512,
-                        gridY: 512
-                    },
-                    fittoscreen: {
-                        mode: "scaleFit"
-                    },
-                    mouse: {},
-                    keyboard: {},
-                    'keyboard.polyfill': {},
-                    'sound.howler': {},
-                    akatemplate: {
-                        csscss: "body {\n    background: #000;\n}"
-                    }
-                },
-                textures: [],
-                skeletons: [],
-                types: [],
-                sounds: [],
-                styles: [],
-                rooms: [],
-                actions: [],
-                starting: 0,
-                settings: {
-                    minifyhtmlcss: false,
-                    minifyjs: false,
-                    fps: 30,
-                    version: [0, 0, 0],
-                    versionPostfix: '',
-                    export: {
-                        windows64: true,
-                        windows32: true,
-                        linux64: true,
-                        linux32: true,
-                        mac64: true,
-                        debug: false
-                    }
-                }
-            };
-            fs.writeJSON(path.join(way, codename + '.ict'), projectData, function(e) {
-                if (e) {
-                    alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
-                    throw e;
-                }
+            sessionStorage.showOnboarding = true;
+            const defaultProject = require('./data/node_requires/resources/projects/defaultProject').get();
+            const YAML = require('js-yaml');
+            const projectYAML = YAML.safeDump(defaultProject);
+            fs.outputFile(path.join(way, codename + '.ict'), projectYAML)
+            .catch(e => {
+                alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
+                throw e;
             });
-            sessionStorage.projdir = path.join(way, codename);
+            global.projdir = path.join(way, codename);
             sessionStorage.projname = codename + '.ict';
-            await fs.ensureDir(sessionStorage.projdir + '/img');
-            fs.ensureDir(sessionStorage.projdir + '/snd');
-            fs.ensureDir(sessionStorage.projdir + '/include');
+            await fs.ensureDir(path.join(global.projdir, '/img'));
+            fs.ensureDir(path.join(global.projdir, '/snd'));
+            fs.ensureDir(path.join(global.projdir, '/include'));
             setTimeout(() => { // for some reason, it must be done through setTimeout; otherwise it fails
-                fs.copy('./data/img/notexture.png', path.join(sessionStorage.projdir + '/img/splash.png'), e => {
+                fs.copy('./data/img/notexture.png', path.join(global.projdir + '/img/splash.png'), e => {
                     if (e) {
                         alertify.error(e);
                         console.error(e);
@@ -159,36 +119,36 @@ project-selector
          * Opens a recent project when an item in the Recent Project list is double-clicked
          */
         this.loadRecentProject = e => {
-            var projectPath = e.item.project;
+            const projectPath = e.item.project;
             window.loadProject(projectPath);
         };
         /**
          * Removes a project from the recents list
          */
         this.forgetProject = e => {
-            var project = e.item.project;
+            const {project} = e.item;
             this.lastProjects.splice(this.lastProjects.indexOf(project), 1);
             localStorage.lastProjects = this.lastProjects.join(';');
             e.stopPropagation();
-        }
+        };
 
         /**
          * Handler for a manual search for a project folder, triggered by an input[type="file"]
          */
-        this.chooseProjectFolder = e => {
-            const {dialog, BrowserWindow} = require('electron').remote;
-            const [path] = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
+        this.chooseProjectFolder = async () => {
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const projPath = await window.showOpenDialog({
                 title: this.voc.newProject.selectProjectFolder,
-                defaultPath: 'projects/',
+                defaultPath: defaultProjectDir,
                 buttonLabel: this.voc.newProject.saveProjectHere,
-                properties: ['openDirectory']
-            }) || [];
-            if (path) {
-                this.newProject(path, this.refs.projectname.value);
+                openDirectory: true
+            });
+            if (projPath) {
+                this.newProject(projPath, this.refs.projectname.value);
             }
         };
 
-        this.openProjectFolder = e => {
+        this.openProjectFolder = () => {
             const codename = this.refs.projectname.value;
             if (codename.length === 0) {
                 alertify.error(this.voc.newProject.nameerr);
@@ -200,50 +160,50 @@ project-selector
         /**
          * Handler for a manual search for a project, triggered by an input[type="file"]
          */
-        this.openProjectFind = e => {
-            const {dialog, BrowserWindow} = require('electron').remote;
-            const [proj] = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
-                filters: [{
-                    name: 'Ct.js project',
-                    extensions: ['ict']
-                }],
-                defaultPath: 'projects/',
-                properties: ['openFile']
-            }) || [];
+        this.openProjectFind = async () => {
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const proj = await window.showOpenDialog({
+                filter: '.ict',
+                defaultPath: defaultProjectDir
+            });
             if (!proj) {
                 return;
             }
             if (path.extname(proj).toLowerCase() === '.ict') {
                 window.loadProject(proj);
                 sessionStorage.projname = path.basename(proj);
-                sessionStorage.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
+                global.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
             } else {
-                alertify.error(languageJSON.common.wrongFormat);
+                alertify.error(window.languageJSON.common.wrongFormat);
             }
         };
 
         // Checking for updates
         setTimeout(() => {
             const {isWin, isLinux} = require('./data/node_requires/platformUtils.js');
-            const channel = isWin? 'win64' : (isLinux? 'linux64': 'osx64');
+            let channel = 'osx64';
+            if (isWin) {
+                channel = 'win64';
+            } else if (isLinux) {
+                channel = 'linux64';
+            }
             fetch(`https://itch.io/api/1/x/wharf/latest?target=comigo/ct&channel_name=${channel}`)
-            .then(data => data.json())
+            .then(response => response.json())
             .then(json => {
                 if (!json.errors) {
-                    if (this.ctjsVersion != json.latest) {
+                    if (this.ctjsVersion !== json.latest) {
                         this.newVersion = this.voc.latestVersion.replace('$1', json.latest);
                         this.update();
                     }
                 } else {
                     console.error('Update check failed:');
-                    console.log(json.errors);
+                    console.error(json.errors);
                 }
             });
         }, 0);
 
         this.openExternal = link => e => {
-            const {shell} = require('electron');
-            shell.openExternal(link);
+            nw.Shell.openExternal(link);
             e.stopPropagation();
             e.preventDefault();
         };

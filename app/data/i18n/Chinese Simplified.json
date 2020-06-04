@@ -45,7 +45,10 @@
         "tilelayer": "平铺层",
         "wrongFormat": "错误的文件格式",
         "yes": "是",
-        "loading": "加载中..."
+        "loading": "加载中...",
+        "zoom": "缩放:",
+        "zoomIn": "放大缩小字体功能 放大缩小字体功能",
+        "zoomOut": "放大缩小字体功能 放大缩小字体功能"
     },
     "actionsEditor": {
         "actions": "动作",
@@ -171,7 +174,9 @@
             "addNew": "添加新脚本",
             "deleteScript": "删除脚本",
             "header": "脚本",
-            "newScriptComment": "使用脚本定义常用函数并导入小型库"
+            "newScriptComment": "使用脚本定义常用函数并导入小型库",
+            "moveUp": "向上移动",
+            "moveDown": "向下移动"
         },
         "usePixiLegacy": "添加基于画布的旧版渲染器以支持较旧的浏览器和图形卡 (在您的游戏中最多增加20kb)"
     },
@@ -330,7 +335,6 @@
         "add": "添加",
         "none": "无",
         "done": "完成",
-        "zoom": "缩放:",
         "grid": "设置网格",
         "gridoff": "禁用网格",
         "gridsize": "网格大小:",
@@ -362,13 +366,6 @@
         "global": "全局记事本",
         "helppages": "帮助",
         "backToHome": "回到文档主页"
-    },
-    "preview": {
-        "reload": "重载",
-        "roomRestart": "重启房间",
-        "openExternal": "在浏览器中打开",
-        "getQR": "二维码和本地服务器网址",
-        "flipLayout": "更改调试器的布局"
     },
     "patreon": {
         "aboutPatrons": "赞助人是以经常性捐赠的形式表示对Patreon的ComigoGames的支持. 并不是每个人都来自ct.js. 有些是正在使用ComigoGames的其他应用程序. 提示: 如果您是创作者, 并通过Patreon捐赠给ComigoGames, 您将在此处找到指向您页面的链接 — 这就是我对您的创作的小小帮助 :)",
