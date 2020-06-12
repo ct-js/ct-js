@@ -10,8 +10,8 @@ debugger-modal.view
         const passedParams = new URLSearchParams(window.location.search);
         if (passedParams.has('link')) {
             const link = passedParams.get('link');
-            const url = new URL(link)
-            port = url.port;
+            const url = new URL(link);
+            ({port} = url);
         }
         this.interfaces = [];
         var os = require('os');
