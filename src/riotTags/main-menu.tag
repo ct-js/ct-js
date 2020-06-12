@@ -82,7 +82,7 @@ main-menu.flexcol
         this.mixin(window.riotVoc);
 
         this.tab = 'settings';
-        this.changeTab = tab => () => {
+        this.changeTab = tab => e => {
             this.tab = tab;
             hotkey.cleanScope();
             hotkey.push(tab);
@@ -91,7 +91,7 @@ main-menu.flexcol
         };
 
         this.fullscreen = false;
-        this.toggleFullscreen = function toggleFullscreen() {
+        this.toggleFullscreen = function() {
             this.fullscreen = !this.fullscreen;
             if (this.fullscreen) {
                 nw.Window.get().enterFullscreen();
@@ -107,7 +107,7 @@ main-menu.flexcol
         const recentProjectsSubmenu = {
             items: []
         };
-        this.refreshLatestProject = function refreshLatestProject() {
+        this.refreshLatestProject = function() {
             recentProjectsSubmenu.items.length = 0;
             var lastProjects;
             if (('lastProjects' in localStorage) &&
@@ -119,13 +119,12 @@ main-menu.flexcol
             for (const project of lastProjects) {
                 recentProjectsSubmenu.items.push({
                     label: project,
-                    click() {
-                        alertify.confirm(window.languageJSON.common.reallyexit, e => {
-                            if (e) {
-                                window.signals.trigger('resetAll');
-                                window.loadProject(project);
-                            }
-                        });
+                    click: function () {
+                        if (!confirm(window.languageJSON.common.reallyexit)) {
+                            return false;
+                        }
+                        window.signals.trigger('resetAll');
+                        window.loadProject(project);
                     }
                 });
             }
@@ -138,12 +137,13 @@ main-menu.flexcol
         };
         this.saveProject = () => {
             const YAML = require('js-yaml');
-            const projectYAML = YAML.safeDump(global.currentProject);
-            return fs.outputFile(global.projdir + '.ict', projectYAML)
+            const data = YAML.safeDump(global.currentProject);
+            return fs.outputFile(global.projdir + '.ict', data)
             .then(() => {
-                alertify.success(window.languageJSON.common.savedcomm, 'success', 3000);
+                alertify.success(languageJSON.common.savedcomm, "success", 3000);
                 this.saveRecoveryDebounce();
                 fs.remove(global.projdir + '.ict.recovery')
+                .then(() => console.log())
                 .catch(console.error);
                 glob.modified = false;
             })
@@ -152,12 +152,12 @@ main-menu.flexcol
         this.saveRecovery = () => {
             if (global.currentProject) {
                 const YAML = require('js-yaml');
-                const recoveryYAML = YAML.safeDump(global.currentProject);
-                fs.outputFile(global.projdir + '.ict.recovery', recoveryYAML);
+                const data = YAML.safeDump(global.currentProject);
+                fs.outputFile(global.projdir + '.ict.recovery', data);
             }
             this.saveRecoveryDebounce();
         };
-        this.saveRecoveryDebounce = window.debounce(this.saveRecovery, 1000 * 60 * 5);
+        this.saveRecoveryDebounce = debounce(this.saveRecovery, 1000 * 60 * 5);
         window.signals.on('saveProject', this.saveProject);
         this.on('unmount', () => {
             window.signals.off('saveProject', this.saveProject);
@@ -173,19 +173,20 @@ main-menu.flexcol
                 cache: false,
                 serverInfo: 'ctjsgameeditor'
             });
+            console.log('[serverPath]', path.join(dir, '/export/'));
         });
-        const server = require('http').createServer((request, response) => {
-            request.addListener('end', () => {
+        const server = require('http').createServer(function (request, response) {
+            request.addListener('end', function () {
                 fileServer.serve(request, response);
             }).resume();
         });
         server.listen(0);
 
-        this.runProject = () => {
+        this.runProject = e => {
             document.body.style.cursor = 'progress';
             const runCtExport = require('./data/node_requires/exporter');
             runCtExport(global.currentProject, global.projdir)
-            .then(() => {
+            .then(path => {
                 if (localStorage.disableBuiltInDebugger === 'yes') {
                     nw.Shell.openExternal(`http://localhost:${server.address().port}/`);
                 } else {
@@ -200,16 +201,17 @@ main-menu.flexcol
                 document.body.style.cursor = '';
             });
         };
-        this.runProjectAlt = () => {
+        this.runProjectAlt = e => {
             const runCtExport = require('./data/node_requires/exporter');
             runCtExport(global.currentProject, global.projdir)
-            .then(() => {
+            .then(path => {
+                console.log(path);
                 nw.Shell.openExternal(`http://localhost:${server.address().port}/`);
             });
         };
         hotkey.on('Alt+F5', this.runProjectAlt);
 
-        this.zipProject = async () => {
+        this.zipProject = async e => {
             try {
                 const os = require('os');
                 const path = require('path');
@@ -225,7 +227,7 @@ main-menu.flexcol
                 await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
 
                 const archive = archiver('zip'),
-                      output = fs.createWriteStream(outName);
+                    output = fs.createWriteStream(outName);
 
                 output.on('close', () => {
                     nw.Shell.showItemInFolder(outName);
@@ -240,31 +242,10 @@ main-menu.flexcol
                 alertify.error(e);
             }
         };
-        this.zipExport = async () => {
-            const writable = await getWritableDir();
-            const runCtExport = require('./data/node_requires/exporter');
-            const exportFile = path.join(writable, '/export.zip'),
-                  inDir = path.join(writable, '/export/');
-            await fs.remove(exportFile);
-            runCtExport(global.currentProject, global.projdir)
-            .then(() => {
-                const archive = archiver('zip'),
-                      output = fs.createWriteStream(exportFile);
 
-                output.on('close', () => {
-                    nw.Shell.showItemInFolder(exportFile);
-                    alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
-                });
-
-                archive.pipe(output);
-                archive.directory(inDir, false);
-                archive.finalize();
-            })
-            .catch(alertify.error);
-        };
-        this.cordovaExport = async () => {
+        const cordova = require('./data/node_requires/cordova/cordova');
+        this.zipExport = async e => {
             const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
-            const cordova = require('cordova');
             const exportPath = await window.showOpenDialog({
                 defaultPath: defaultProjectDir,
                 openDirectory: true
@@ -306,11 +287,12 @@ main-menu.flexcol
             }, {
                 label: window.languageJSON.menu.copySystemInfo,
                 icon: 'file-text',
-                click: () => {
+                click: async () => {
                     const os = require('os'),
                           path = require('path');
+                    const YAML = require('js-yaml');
                     const packaged = path.basename(process.execPath, path.extname(process.execPath)) !== 'nw';
-                    const report = `Ct.js v${process.versions.ctjs} 😽 ${packaged ? '(packaged)' : '(runs from sources)'}\n\n` +
+                    const report = `Ct.js v${process.versions.ctjs} 😽 ${packaged? '(packaged)' : '(runs from sources)'}\n\n` +
                           `NW.JS v${process.versions.nw}\n` +
                           `Chromium v${process.versions.chromium}\n` +
                           `Node.js v${process.versions.node}\n` +
@@ -318,7 +300,19 @@ main-menu.flexcol
                           `OS ${process.platform} ${process.arch} // ${os.type()} ${os.release()}`;
                     nw.Clipboard.get().set(report, 'text');
                 }
-            }, {
+            }, /*{
+                label: window.languageJSON.menu.disableAcceleration,
+                type: 'checkbox',
+                checked: () => fs.existsSync('./pleaseCtJSLoadWithoutGPUAccelerationMmkay'),
+                click: async () => {
+                    if (await fs.exists('./pleaseCtJSLoadWithoutGPUAccelerationMmkay')) {
+                        await fs.remove('./pleaseCtJSLoadWithoutGPUAccelerationMmkay');
+                    } else {
+                        await fs.outputFile('./pleaseCtJSLoadWithoutGPUAccelerationMmkay', 'Do it.');
+                    }
+                    this.update();
+                }
+            },*/ {
                 label: window.languageJSON.menu.disableBuiltInDebugger,
                 type: 'checkbox',
                 checked: () => localStorage.disableBuiltInDebugger === 'yes',
@@ -419,7 +413,7 @@ main-menu.flexcol
                         type: 'checkbox',
                         checked: () => localStorage.codeLigatures !== 'off',
                         click: () => {
-                            localStorage.codeLigatures = localStorage.codeLigatures === 'off' ? 'on' : 'off';
+                            localStorage.codeLigatures = localStorage.codeLigatures === 'off'? 'on' : 'off';
                             window.signals.trigger('codeFontUpdated');
                         }
                     }, {
@@ -427,7 +421,7 @@ main-menu.flexcol
                         type: 'checkbox',
                         checked: () => localStorage.codeDense === 'on',
                         click: () => {
-                            localStorage.codeDense = localStorage.codeDense === 'off' ? 'on' : 'off';
+                            localStorage.codeDense = localStorage.codeDense === 'off'? 'on' : 'off';
                             window.signals.trigger('codeFontUpdated');
                         }
                     }]
@@ -437,7 +431,7 @@ main-menu.flexcol
             }, {
                 label: window.languageJSON.common.zoomIn,
                 icon: 'zoom-in',
-                click: () => {
+                click: e => {
                     const win = nw.Window.get();
                     let zoom = win.zoomLevel + 0.5;
                     if (Number.isNaN(zoom) || !zoom || !Number.isFinite(zoom)) {
@@ -447,6 +441,7 @@ main-menu.flexcol
                     }
                     win.zoomLevel = zoom;
 
+                    console.debug('Zoom in to ', zoom);
                     localStorage.editorZooming = zoom;
                 },
                 hotkey: 'Control+=',
@@ -454,7 +449,7 @@ main-menu.flexcol
             }, {
                 label: window.languageJSON.common.zoomOut,
                 icon: 'zoom-out',
-                click: () => {
+                click: e => {
                     const win = nw.Window.get();
                     let zoom = win.zoomLevel - 0.5;
                     if (Number.isNaN(zoom) || !zoom || !Number.isFinite(zoom)) {
@@ -464,6 +459,7 @@ main-menu.flexcol
                     }
                     win.zoomLevel = zoom;
 
+                    console.debug('Zoom out to ', zoom);
                     localStorage.editorZooming = zoom;
                 },
                 hotkey: 'Control+-',
@@ -480,7 +476,7 @@ main-menu.flexcol
                 hotkeyLabel: 'Ctrl+S'
             }, {
                 label: this.voc.exportDesktop,
-                click: () => {
+                click: e => {
                     this.showExporter = true;
                     this.update();
                 },
@@ -490,14 +486,11 @@ main-menu.flexcol
                 click: this.zipExport,
                 icon: 'upload-cloud'
             }, {
-                label: this.voc.cordovaExport,
-                click: this.cordovaExport
-            }, {
                 label: this.voc.zipProject,
                 click: this.zipProject
             }, {
                 label: this.voc.openIncludeFolder,
-                click: () => {
+                click: e => {
                     fs.ensureDir(path.join(global.projdir, '/include'))
                     .then(() => {
                         nw.Shell.openItem(path.join(global.projdir, '/include'));
@@ -507,12 +500,11 @@ main-menu.flexcol
                 type: 'separator'
             }, {
                 label: window.languageJSON.menu.startScreen,
-                click: () => {
-                    alertify.confirm(window.languageJSON.common.reallyexit, e => {
-                        if (e) {
-                            window.signals.trigger('resetAll');
-                        }
-                    });
+                click: (e) => {
+                    if (!confirm(window.languageJSON.common.reallyexit)) {
+                        return false;
+                    }
+                    window.signals.trigger('resetAll');
                 }
             }, {
                 label: window.languageJSON.intro.latest,
@@ -525,14 +517,14 @@ main-menu.flexcol
                 icon: 'settings'
             }, {
                 label: window.languageJSON.common.contribute,
-                click: () => {
+                click: function () {
                     nw.Shell.openExternal('https://github.com/ct-js/ct-js');
                 },
                 icon: 'code'
             }, {
                 label: window.languageJSON.common.donate,
                 icon: 'heart',
-                click: () => {
+                click: function () {
                     nw.Shell.openExternal('https://www.patreon.com/comigo');
                 }
             }, {
@@ -541,7 +533,7 @@ main-menu.flexcol
                 submenu: troubleshootingSubmenu
             }, {
                 label: window.languageJSON.common.ctsite,
-                click: () => {
+                click: function () {
                     nw.Shell.openExternal('https://ctjs.rocks/');
                 }
             }, {
@@ -554,16 +546,18 @@ main-menu.flexcol
         };
         this.switchLanguage = filename => {
             const i18n = require('./data/node_requires/i18n.js');
+            const {extend} = require('./data/node_requires/objectUtils');
             try {
                 window.languageJSON = i18n.loadLanguage(filename);
                 localStorage.appLanguage = filename;
                 window.signals.trigger('updateLocales');
                 window.riot.update();
-            } catch (e) {
-                alertify.alert('Could not open a language file: ' + e);
+                console.log('Applied a new language file.');
+            } catch(e) {
+                alert('Could not open a language file: ' + e);
             }
         };
-        var {switchLanguage} = this;
+        var switchLanguage = this.switchLanguage;
 
         fs.readdir('./data/i18n/')
         .then(files => {
@@ -578,7 +572,7 @@ main-menu.flexcol
                 languageSubmenu.items.push({
                     label: file,
                     icon: () => localStorage.appLanguage === file && 'check',
-                    click: () => {
+                    click: function() {
                         switchLanguage(file);
                     }
                 });
@@ -588,11 +582,11 @@ main-menu.flexcol
             });
             languageSubmenu.items.push({
                 label: window.languageJSON.common.translateToYourLanguage,
-                click: () => {
+                click: function() {
                     nw.Shell.openExternal('https://github.com/ct-js/ct-js/tree/develop/app/data/i18n');
                 }
             });
         })
         .catch(e => {
-            alertify.alert('Could not get i18n files: ' + e);
+            alert('Could not get i18n files: ' + e);
         });
