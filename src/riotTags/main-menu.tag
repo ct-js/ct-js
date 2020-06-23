@@ -1,10 +1,5 @@
 main-menu.flexcol
     nav.nogrow.flexrow(if="{global.currentProject}")
-        ul#fullscreen.nav
-            li.nbr(onclick="{toggleFullscreen}" title="{voc.min} (F11)")
-                svg.feather
-                    use(xlink:href="data/icons.svg#{fullscreen? 'minimize-2' : 'maximize-2'}" data-hotkey="F11")
-
         ul#app.nav.tabs
             li.it30#ctlogo(onclick="{ctClick}" title="{voc.ctIDE}")
                 svg.feather.nmr
@@ -21,10 +16,10 @@ main-menu.flexcol
                     use(xlink:href="data/icons.svg#play")
 
         ul#mainnav.nav.tabs
-            li(onclick="{changeTab('settings')}" class="{active: tab === 'settings'}" data-hotkey="Control+1" title="Control+1")
+            li(onclick="{changeTab('project')}" class="{active: tab === 'project'}" data-hotkey="Control+1" title="Control+1")
                 svg.feather
-                    use(xlink:href="data/icons.svg#settings")
-                span {voc.settings}
+                    use(xlink:href="data/icons.svg#sliders")
+                span {voc.project}
             li(onclick="{changeTab('modules')}" class="{active: tab === 'modules'}" data-hotkey="Control+2" title="Control+2")
                 svg.feather
                     use(xlink:href="data/icons.svg#ctmod")
@@ -54,7 +49,7 @@ main-menu.flexcol
                     use(xlink:href="data/icons.svg#room")
                 span {voc.rooms}
     div.flexitem.relative(if="{global.currentProject}")
-        settings-panel(show="{tab === 'settings'}" data-hotkey-scope="settings")
+        project-settings(show="{tab === 'project'}" data-hotkey-scope="project")
         modules-panel(show="{tab === 'modules'}" data-hotkey-scope="modules")
         textures-panel(show="{tab === 'texture'}" data-hotkey-scope="texture")
         ui-panel(show="{tab === 'ui'}" data-hotkey-scope="ui")
@@ -81,23 +76,13 @@ main-menu.flexcol
         this.namespace = 'menu';
         this.mixin(window.riotVoc);
 
-        this.tab = 'settings';
+        this.tab = 'project';
         this.changeTab = tab => () => {
             this.tab = tab;
             hotkey.cleanScope();
             hotkey.push(tab);
             window.signals.trigger('globalTabChanged');
             window.signals.trigger(`${tab}Focus`);
-        };
-
-        this.fullscreen = false;
-        this.toggleFullscreen = function toggleFullscreen() {
-            this.fullscreen = !this.fullscreen;
-            if (this.fullscreen) {
-                nw.Window.get().enterFullscreen();
-            } else {
-                nw.Window.get().leaveFullscreen();
-            }
         };
 
         const languageSubmenu = {
@@ -215,35 +200,36 @@ main-menu.flexcol
                 defaultPath: defaultProjectDir,
                 openDirectory: true
             });
-            if (exportPath) {
-                try {
-                    const os = require('os');
-                    const path = require('path');
+            if (!exportPath) {
+                return;
+            }
+            try {
+                const os = require('os');
+                const path = require('path');
 
-                    const inDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ctZipProject-')),
-                        outName = path.join(exportPath, `/${sessionStorage.projname}.zip`);
+                const inDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ctZipProject-')),
+                      outName = path.join(exportPath, `/${sessionStorage.projname}.zip`);
 
-                    await this.saveProject();
-                    await fs.remove(outName);
-                    await fs.remove(inDir);
-                    await fs.copy(global.projdir + '.ict', path.join(inDir, sessionStorage.projname));
-                    await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
+                await this.saveProject();
+                await fs.remove(outName);
+                await fs.remove(inDir);
+                await fs.copy(global.projdir + '.ict', path.join(inDir, sessionStorage.projname));
+                await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
 
-                    const archive = archiver('zip'),
-                        output = fs.createWriteStream(outName);
+                const archive = archiver('zip'),
+                      output = fs.createWriteStream(outName);
 
-                    output.on('close', () => {
-                        nw.Shell.showItemInFolder(outName);
-                        alertify.success(this.voc.successZipProject.replace('{0}', outName));
-                        fs.remove(inDir);
-                    });
+                output.on('close', () => {
+                    nw.Shell.showItemInFolder(outName);
+                    alertify.success(this.voc.successZipProject.replace('{0}', outName));
+                    fs.remove(inDir);
+                });
 
-                    archive.pipe(output);
-                    archive.directory(inDir, false);
-                    archive.finalize();
-                } catch (e) {
-                    alertify.error(e);
-                }
+                archive.pipe(output);
+                archive.directory(inDir, false);
+                archive.finalize();
+            } catch (e) {
+                alertify.error(e);
             }
         };
         this.zipExport = async () => {
@@ -252,51 +238,74 @@ main-menu.flexcol
                 defaultPath: defaultProjectDir,
                 openDirectory: true
             });
-            if (exportPath) {
-                const writable = await getWritableDir();
-                const runCtExport = require('./data/node_requires/exporter');
-                const exportFile = path.join(exportPath, '/export.zip'),
-                    inDir = path.join(writable, '/export/');
-                await fs.remove(exportFile);
-                runCtExport(global.currentProject, global.projdir)
-                .then(() => {
-                    const archive = archiver('zip'),
-                        output = fs.createWriteStream(exportFile);
 
-                    output.on('close', () => {
-                        nw.Shell.showItemInFolder(exportFile);
-                        alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
-                    });
-
-                    archive.pipe(output);
-                    archive.directory(inDir, false);
-                    archive.finalize();
-                })
-                .catch(alertify.error);
+            if (!exportPath) {
+                return;
             }
+            const writable = await getWritableDir();
+            const runCtExport = require('./data/node_requires/exporter');
+            const exportFile = path.join(exportPath, '/export.zip'),
+                  inDir = path.join(exportPath, '/export/');
+            await fs.remove(exportFile);
+            runCtExport(global.currentProject, global.projdir)
+            .then(() => {
+                const archive = archiver('zip'),
+                      output = fs.createWriteStream(exportFile);
+
+                output.on('close', () => {
+                    nw.Shell.showItemInFolder(exportFile);
+                    alertify.success(this.voc.successZipExport.replace('{0}', exportFile));
+                });
+
+                archive.pipe(output);
+                archive.directory(inDir, false);
+                archive.finalize();
+            })
+            .catch(alertify.error);
         };
-        this.cordovaExport = async () => {
+        this.mobileExport = async () => {
             const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
-            const cordova = require('cordova');
             const exportPath = await window.showOpenDialog({
                 defaultPath: defaultProjectDir,
                 openDirectory: true
             });
-            const settings = global.currentProject.settings;
+            alertify.log('Working…');
             if (exportPath) {
                 try {
-                    const title = settings.title.replace(/\s/ig,"_");
+                    const settings = global.currentProject.settings;
+                    const path = require('path');
+                    const {promisify} = require('util');
+                    const exec = promisify(require('child_process').exec);
+                    const cordovaPath = path.join(path.dirname(require.resolve('cordova')), 'bin', 'cordova');
+                    const runCtExport = require('./data/node_requires/exporter');
+
+                    await runCtExport(global.currentProject, global.projdir);
+                    const title = settings.authoring.title.replace(/\s/ig,'_');
+                    const appName = settings.authoring.appId || 'rocks.ctjs.unidentified';
+
                     const writable = await getWritableDir();
-                    const exportFolder = path.join(exportPath, `/export/${settings.title.replace(/\s/ig,"_")}`);
+                    const exportFolder = path.join(exportPath, title);
                     const inDir = path.join(writable, '/export/');
                     await fs.remove(exportFolder);
-                    await fs.mkdir(exportFolder, {recursive:true});
-                    await cordova.create(exportFolder, "rocks.ctjs", title)
+                    await fs.mkdir(exportFolder, {
+                        recursive: true
+                    });
+                    await exec(`${cordovaPath} create ${exportFolder} ${appName} ${title}`, {
+                        cwd: exportFolder
+                    });
                     await fs.remove(path.join(exportFolder, 'www'));
                     await fs.copy(inDir, path.join(exportFolder, 'www'));
+
+                    await exec(`${cordovaPath} platform add android`, {
+                        cwd: exportFolder
+                    });
+                    await exec(`${cordovaPath} build`, {
+                        cwd: exportFolder
+                    });
+
                     alertify.success(this.voc.successZipExport.replace('{0}', exportFolder));
                 } catch(e) {
-                 alertify.error(e);
+                    alertify.error(e);
                 }
             }
         };
@@ -375,7 +384,13 @@ main-menu.flexcol
                             this.switchTheme('Day');
                         }
                     }, {
-                        label: window.languageJSON.menu.themeNight,
+                        label: window.languageJSON.menu.themeSpringStream || 'Spring Stream',
+                        icon: () => localStorage.UItheme === 'SpringStream' && 'check',
+                        click: () => {
+                            this.switchTheme('SpringStream');
+                        }
+                    }, {
+                        label: window.languageJSON.menu.themeNight || 'Night',
                         icon: () => localStorage.UItheme === 'Night' && 'check',
                         click: () => {
                             this.switchTheme('Night');
@@ -503,8 +518,9 @@ main-menu.flexcol
                 click: this.zipExport,
                 icon: 'upload-cloud'
             }, {
-                label: this.voc.cordovaExport,
-                click: this.cordovaExport
+                label: `${this.voc.mobileExport} ${this.vocGlob.experimental}`,
+                click: this.mobileExport,
+                icon: 'smartphone'
             }, {
                 label: this.voc.zipProject,
                 click: this.zipProject
