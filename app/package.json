@@ -54,6 +54,7 @@
   "chromium-args": "--mixed-context --enable-features=nw2 --load-extensions --force-color-profile=srgb --disable-features=ColorCorrectRendering",
   "dependencies": {
     "archiver": "^3.1.1",
+    "cordova": "^9.0.0",
     "csswring": "7.0.0",
     "electron-packager": "^14.2.1",
     "fs-extra": "^9.0.0",

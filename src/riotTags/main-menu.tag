@@ -195,13 +195,20 @@ main-menu.flexcol
         hotkey.on('Alt+F5', this.runProjectAlt);
 
         this.zipProject = async () => {
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const exportPath = await window.showOpenDialog({
+                defaultPath: defaultProjectDir,
+                openDirectory: true
+            });
+            if (!exportPath) {
+                return;
+            }
             try {
                 const os = require('os');
                 const path = require('path');
 
-                const writable = await getWritableDir();
                 const inDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ctZipProject-')),
-                      outName = path.join(writable, `/${sessionStorage.projname}.zip`);
+                      outName = path.join(exportPath, `/${sessionStorage.projname}.zip`);
 
                 await this.saveProject();
                 await fs.remove(outName);
@@ -226,10 +233,19 @@ main-menu.flexcol
             }
         };
         this.zipExport = async () => {
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const exportPath = await window.showOpenDialog({
+                defaultPath: defaultProjectDir,
+                openDirectory: true
+            });
+
+            if (!exportPath) {
+                return;
+            }
             const writable = await getWritableDir();
             const runCtExport = require('./data/node_requires/exporter');
-            const exportFile = path.join(writable, '/export.zip'),
-                  inDir = path.join(writable, '/export/');
+            const exportFile = path.join(exportPath, '/export.zip'),
+                  inDir = path.join(exportPath, '/export/');
             await fs.remove(exportFile);
             runCtExport(global.currentProject, global.projdir)
             .then(() => {
@@ -246,6 +262,52 @@ main-menu.flexcol
                 archive.finalize();
             })
             .catch(alertify.error);
+        };
+        this.mobileExport = async () => {
+            const defaultProjectDir = require('./data/node_requires/resources/projects').getDefaultProjectDir();
+            const exportPath = await window.showOpenDialog({
+                defaultPath: defaultProjectDir,
+                openDirectory: true
+            });
+            alertify.log('Working…');
+            if (exportPath) {
+                try {
+                    const settings = global.currentProject.settings;
+                    const path = require('path');
+                    const {promisify} = require('util');
+                    const exec = promisify(require('child_process').exec);
+                    const cordovaPath = path.join(path.dirname(require.resolve('cordova')), 'bin', 'cordova');
+                    const runCtExport = require('./data/node_requires/exporter');
+
+                    await runCtExport(global.currentProject, global.projdir);
+                    const title = settings.authoring.title.replace(/\s/ig,'_');
+                    const appName = settings.authoring.appId || 'rocks.ctjs.unidentified';
+
+                    const writable = await getWritableDir();
+                    const exportFolder = path.join(exportPath, title);
+                    const inDir = path.join(writable, '/export/');
+                    await fs.remove(exportFolder);
+                    await fs.mkdir(exportFolder, {
+                        recursive: true
+                    });
+                    await exec(`${cordovaPath} create ${exportFolder} ${appName} ${title}`, {
+                        cwd: exportFolder
+                    });
+                    await fs.remove(path.join(exportFolder, 'www'));
+                    await fs.copy(inDir, path.join(exportFolder, 'www'));
+
+                    await exec(`${cordovaPath} platform add android`, {
+                        cwd: exportFolder
+                    });
+                    await exec(`${cordovaPath} build`, {
+                        cwd: exportFolder
+                    });
+
+                    alertify.success(this.voc.successZipExport.replace('{0}', exportFolder));
+                } catch(e) {
+                    alertify.error(e);
+                }
+            }
         };
         localStorage.UItheme = localStorage.UItheme || 'Day';
         this.switchTheme = theme => {
@@ -455,6 +517,10 @@ main-menu.flexcol
                 label: this.voc.zipExport,
                 click: this.zipExport,
                 icon: 'upload-cloud'
+            }, {
+                label: `${this.voc.mobileExport} ${this.vocGlob.experimental}`,
+                click: this.mobileExport,
+                icon: 'smartphone'
             }, {
                 label: this.voc.zipProject,
                 click: this.zipProject
