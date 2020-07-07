@@ -13,12 +13,19 @@ from PyQt5 import QtGui
 
 from platform import platform
 import sys
+import os
 
 is64bits = sys.maxsize > 2 ** 32
 
 null = None
 true = True
 false = False
+
+if "win" in platform().lower() and not "darwin" in platform().lower():
+    installDirectoryParent = os.environ["LOCALAPPDATA"]
+else:
+    # TODO: add Library/Application Support to installDirectoryParent if the os is mac
+    installDirectoryParent = os.environ["HOME"]
 
 
 class Contants:
@@ -29,11 +36,14 @@ class Contants:
     linuxUntested = "**If your OS is related to/based on Linux, ct.js should run.**\n\nct.js is not tested on this operating system. It may not run correctly. Use at your own risk."
 
     ########### Path
-    # TODO: Include things like the location to save the installation location and platform specific installation location defaults
+    defaultInstallDir = os.path.join(installDirectoryParent, "ct.js")
 
     ########### Other
     githubUrl = "https://api.github.com/repos/ct-js/ct-js/releases/latest"
     testedLinuxDistros = ["linux"]
+
+
+print("Default installation directory location: " + Contants.defaultInstallDir)
 
 
 def platformIsTestedDistroLinux():
@@ -84,7 +94,7 @@ class Installer(QDialog):
 
         self.locationBox = QLineEdit(self)
         self.locationBox.resize(280, 40)
-        self.locationBox.setText("asjkdajdhkl")
+        self.locationBox.setText(Contants.defaultInstallDir)
 
         self.locationLabel = QLabel(Contants.location, parent=self)
         self.locationLabel.setFont(self.getFont(16))
@@ -120,6 +130,7 @@ if __name__ == "__main__":
     app = QApplication([])
     app.setStyle("Fusion")
 
+    """
     if not platformIsTestedDistroLinux() and "linux" in platformStuff.channel:
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
@@ -127,6 +138,7 @@ if __name__ == "__main__":
         msg.setInformativeText(Contants.linuxUntested)
         msg.setWindowTitle("Warning")
         msg.show()
+    """
 
     installer = Installer()
     installer.show()
