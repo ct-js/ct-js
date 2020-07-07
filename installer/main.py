@@ -16,23 +16,36 @@ import sys
 
 is64bits = sys.maxsize > 2 ** 32
 
+null = None
+true = True
+false = False
+
 
 class Contants:
     ########### Text
     instructions = "Hello! This installer will install ct.js at the desired location. You can also use it to update ct.js."
     location = "Enter the installation location here (leave this unchanged it you're not an advanced user):"
     install = "Install ct.js"
+    linuxUntested = "**If your OS is related to/based on Linux, ct.js should run.**\n\nct.js is not tested on this operating system. It may not run correctly. Use at your own risk."
 
     ########### Path
     # TODO: Include things like the location to save the installation location and platform specific installation location defaults
 
     ########### Other
     githubUrl = "https://api.github.com/repos/ct-js/ct-js/releases/latest"
+    testedLinuxDistros = ["linux"]
+
+
+def platformIsTestedDistroLinux():
+    for i in Contants.testedLinuxDistros:
+        if i in platform().lower():
+            return true
+    return false
 
 
 class PlatformStuff:
     def __init__(self):
-        print(platform())
+        print("Platform: " + platform())
         if "darwin" in platform().lower():
             # Mac
             self.channel = "osx64"
@@ -52,10 +65,6 @@ class PlatformStuff:
 
 
 platformStuff = PlatformStuff()
-
-null = None
-true = True
-false = False
 
 
 class Installer(QDialog):
@@ -109,7 +118,15 @@ if __name__ == "__main__":
     print("Opening application...")
 
     app = QApplication([])
-    app.setStyle("Windows")
+    app.setStyle("Fusion")
+
+    if not platformIsTestedDistroLinux() and not "linux" in platformStuff.channel:
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText("Warning")
+        msg.setInformativeText(Contants.linuxUntested)
+        msg.setWindowTitle("Warning")
+        msg.show()
 
     installer = Installer()
     installer.show()
