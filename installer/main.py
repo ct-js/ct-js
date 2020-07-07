@@ -14,6 +14,9 @@ from PyQt5 import QtGui
 from platform import platform
 import sys
 import os
+import requests
+import tempfile
+import zipfile
 
 is64bits = sys.maxsize > 2 ** 32
 
@@ -24,8 +27,11 @@ false = False
 if "win" in platform().lower() and not "darwin" in platform().lower():
     installDirectoryParent = os.environ["LOCALAPPDATA"]
 else:
-    # TODO: add Library/Application Support to installDirectoryParent if the os is mac
     installDirectoryParent = os.environ["HOME"]
+    if "darwin" in platform().lower():
+        installDirectoryParent = os.path.join(
+            installDirectoryParent, "Library", "Application Support"
+        )
 
 
 class Contants:
@@ -37,6 +43,10 @@ class Contants:
 
     ########### Path
     defaultInstallDir = os.path.join(installDirectoryParent, "ct.js")
+    downloadedFileName = "ctjs-installer-download.zip"
+    downloadedFilePath = os.path.join(
+        tempfile.gettempdir(), "ct.js", downloadedFileName
+    )
 
     ########### Other
     githubUrl = "https://api.github.com/repos/ct-js/ct-js/releases/latest"
@@ -44,6 +54,10 @@ class Contants:
 
 
 print("Default installation directory location: " + Contants.defaultInstallDir)
+print(
+    "Default installation directory location exists: "
+    + os.path.exists(Contants.defaultInstallDir).__str__()
+)
 
 
 def platformIsTestedDistroLinux():
@@ -51,6 +65,30 @@ def platformIsTestedDistroLinux():
         if i in platform().lower():
             return true
     return false
+
+
+githubData = requests.get(Contants.githubUrl).json()
+
+
+# https://stackoverflow.com/questions/9419162/download-returned-zip-file-from-url#14260592
+def download_url(url, save_path=Contants.downloadedFilePath, chunk_size=128):
+    r = requests.get(url, stream=True)
+    print("Downloading " + url + " to " + save_path)
+    try:
+        os.mkdir(os.path.dirname(save_path))
+    except:
+        pass
+    with open(save_path, "wb") as fd:
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            fd.write(chunk)
+    print("Finished downloading " + url + " to " + save_path)
+
+
+def getRelease(channel):
+    # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
+    release = [x for x in githubData["assets"] if channel in x["name"]][0]
+    url = release["browser_download_url"]
+    download_url(url)
 
 
 class PlatformStuff:
@@ -79,6 +117,8 @@ platformStuff = PlatformStuff()
 
 class Installer(QDialog):
     def __init__(self, parent=null):
+        # TODO: redo gui, move them without using the GridLayout
+
         super(Installer, self).__init__(parent)
 
         self.setWindowTitle("ct.js Installer")
