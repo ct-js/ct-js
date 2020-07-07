@@ -1,0 +1,1 @@
+# TODO: list requirements like pyqt5 and pyinstaller
