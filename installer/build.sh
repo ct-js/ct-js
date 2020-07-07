@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-# TODO: run pyinstaller here
+python3 -m PyInstaller main.py
