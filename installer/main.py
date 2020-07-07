@@ -29,6 +29,7 @@ if "win" in platform().lower() and not "darwin" in platform().lower():
 else:
     installDirectoryParent = os.environ["HOME"]
     if "darwin" in platform().lower():
+        # TODO: use Applications folder instead
         installDirectoryParent = os.path.join(
             installDirectoryParent, "Library", "Application Support"
         )
@@ -162,6 +163,10 @@ class Installer(QDialog):
     @pyqtSlot()
     def on_click(self):
         location = self.locationBox.text()
+        getRelease(platformStuff.channel)
+        with zipfile.ZipFile(Contants.downloadedFilePath, 'r') as zip_ref:
+            zip_ref.extractall(location)
+        # TODO: tell the user its done installing and exit
 
 
 if __name__ == "__main__":
