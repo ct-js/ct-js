@@ -120,7 +120,7 @@ if __name__ == "__main__":
     app = QApplication([])
     app.setStyle("Fusion")
 
-    if not platformIsTestedDistroLinux() and not "linux" in platformStuff.channel:
+    if not platformIsTestedDistroLinux() and "linux" in platformStuff.channel:
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
         msg.setText("Warning")
