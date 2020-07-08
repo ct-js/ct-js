@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QMessageBox,
 )
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, QThread
+from PyQt5.QtGui import QMovie, QPainter, QPixmap
 from PyQt5 import QtGui
 
 from platform import platform
@@ -17,6 +18,7 @@ import os
 import requests
 import tempfile
 import zipfile
+import time
 
 is64bits = sys.maxsize > 2 ** 32
 
@@ -30,9 +32,7 @@ else:
     installDirectoryParent = os.environ["HOME"]
     if "darwin" in platform().lower():
         # TODO: use Applications folder instead
-        installDirectoryParent = os.path.join(
-            installDirectoryParent, "Library", "Application Support"
-        )
+        installDirectoryParent = os.path.join(installDirectoryParent, "Applications")
 
 
 class Contants:
@@ -41,6 +41,7 @@ class Contants:
     location = "Enter the installation location here (leave this unchanged it you're not an advanced user):"
     install = "Install ct.js"
     linuxUntested = "**If your OS is related to/based on Linux, ct.js should run.**\n\nct.js is not tested on this operating system. It may not run correctly. Use at your own risk."
+    installing = "Installing..."
 
     ########### Path
     defaultInstallDir = os.path.join(installDirectoryParent, "ct.js")
@@ -116,12 +117,42 @@ class PlatformStuff:
 platformStuff = PlatformStuff()
 
 
+class InstallThread(QThread):
+    def __init__(self, location, parent):
+        QThread.__init__(self)
+
+        self.location = location
+        self.app: Installer = parent
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        getRelease(platformStuff.channel)
+        with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
+            zip_ref.extractall(self.location)
+        self.app.installingLabel.setText("Done installing!")
+        self.app.setWindowTitle("Done installing ct.js!")
+
+
 class Installer(QDialog):
     def __init__(self, parent=null):
         # TODO: redo gui, move them without using the GridLayout
-
         super(Installer, self).__init__(parent)
 
+        try:
+            self.setWindowIcon(
+                QtGui.QIcon(
+                    os.path.join(
+                        os.path.dirname(os.path.realpath(__file__)),
+                        "assets",
+                        "icon.ico",
+                    )
+                )
+            )
+        except:
+            pass
+        self.setWindowIconText("ct.js Installer")
         self.setWindowTitle("ct.js Installer")
         self.left = 30
         self.top = 30
@@ -160,13 +191,44 @@ class Installer(QDialog):
     def getFont(self, size: int):
         return QtGui.QFont("GothamBold", size, QtGui.QFont.Bold)
 
-    @pyqtSlot()
+    # @pyqtSlot()
     def on_click(self):
-        location = self.locationBox.text()
-        getRelease(platformStuff.channel)
-        with zipfile.ZipFile(Contants.downloadedFilePath, 'r') as zip_ref:
-            zip_ref.extractall(location)
-        # TODO: tell the user its done installing and exit
+        self.setWindowTitle("Installing ct.js...")
+
+        self.instructionsLabel.hide()
+        self.locationBox.hide()
+        self.locationLabel.hide()
+        self.installButton.hide()
+
+        self.installingLabel = QLabel(Contants.installing, parent=self)
+        self.installingLabel.setFont(self.getFont(18))
+        self.installingLabel.setWordWrap(true)
+
+        self.gif = QMovie(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "assets",
+                "partycarrot.gif",
+            )
+        )
+        self.gif.frameChanged.connect(self.repaint)
+        self.gif.start()
+
+        self.layout.addWidget(self.installingLabel, 1, 1, Qt.AlignTop | Qt.AlignCenter)
+
+        self.installThread = InstallThread(self.locationBox.text(), self)
+        self.installThread.start()
+
+    def paintEvent(self, event):
+        try:
+            currentFrame = self.gif.currentPixmap()
+            frameRect = currentFrame.rect()
+            frameRect.moveCenter(self.rect().center())
+            if frameRect.intersects(event.rect()):
+                painter = QPainter(self)
+                painter.drawPixmap(frameRect.left(), frameRect.top(), currentFrame)
+        except:
+            pass
 
 
 if __name__ == "__main__":
