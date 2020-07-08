@@ -180,6 +180,7 @@ class Installer(QDialog):
         self.locationLabel.setFont(self.getFont(16))
         self.locationLabel.setWordWrap(true)
         self.locationLabel.move(0, 20)
+        self.setStyleName("locationLabel")
 
         self.installButton = QPushButton(Contants.install, self)
         self.installButton.setFont(self.getFont(16))
@@ -232,12 +233,17 @@ class Installer(QDialog):
         except:
             pass
 
+    def setStyleName(self, name: str):
+        return self.__dict__[name].setObjectName(name)
+
 
 if __name__ == "__main__":
     print("Opening application...")
 
     app = QApplication([])
     app.setStyle("Fusion")
+    with open(getAsset("style.qtstyle"), "r") as f:
+        app.setStyleSheet(f.read())
 
     """
     if not platformIsTestedDistroLinux() and "linux" in platformStuff.channel:

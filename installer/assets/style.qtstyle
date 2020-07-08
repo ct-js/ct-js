@@ -1,0 +1,138 @@
+/* Welcome page */
+
+QLabel#welcomeLabel {
+    /* Welcome to Ct.js! */
+
+    position: absolute;
+    width: 248px;
+    height: 44px;
+    left: 20px;
+    top: 46px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 44px;
+
+    /* identical to box height */
+
+    color: #5144db;
+}
+
+QLabel#instructionsLabel {
+    /* You're almost there! Press this big button to open a door to a wonderful world of game development: */
+
+    position: absolute;
+    width: 245px;
+    height: 57px;
+    left: 23px;
+    top: 101px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: #666666;
+}
+
+QLabel#installButton {
+    /* Install ct.js */
+
+    position: absolute;
+    width: 185px;
+    height: 60px;
+    left: 23px;
+    top: 180px;
+}
+
+/* Installation page */
+
+QLabel#installInfoLabel {
+    /* Get release info Download the app Unpack and install ct.js Create shortcuts and file rules */
+
+    position: absolute;
+    width: 245px;
+    height: 112px;
+    left: 46px;
+    top: 97px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 28px;
+
+    /* or 200% */
+
+    color: #666666;
+}
+
+/* Shared */
+
+QLabel#bottomRowTextLabel {
+    /* Installing at C:\Users\user\AppData\Local\ct.js */
+    /* Pro tip: use the same installer to update ct.js! */
+
+    position: absolute;
+    width: 300px;
+    height: 19px;
+    left: 21px;
+    top: calc(50% - 19px / 2 - 0.5px);
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+
+    /* identical to box height */
+
+    color: #666666;
+}
+
+QLabel#changeAbortLabel {
+    /* Change... */
+    /* Abort */
+
+    position: absolute;
+    width: 61px;
+    height: 19px;
+    left: calc(50% - 61px / 2);
+    top: calc(50% - 19px / 2 - 0.5px);
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+
+    /* identical to box height */
+
+    color: #5144db;
+}
+
+QLabel#changeAbortBox {
+    /* Change... */
+    /* Abort */
+
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+
+    border: 1px solid #446adb;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+QLabel#bottomRowTextBox {
+    position: absolute;
+    height: 54px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
