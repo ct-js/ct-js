@@ -19,6 +19,7 @@ import requests
 import tempfile
 import zipfile
 import time
+import shutil
 
 is64bits = sys.maxsize > 2 ** 32
 
@@ -43,7 +44,7 @@ class Contants:
     installing = "Installing..."
 
     ########### Path
-    defaultInstallDir = os.path.join(installDirectoryParent, "ct.js")
+    defaultInstallDir = os.path.join(installDirectoryParent)
     downloadedFileName = "ctjs-installer-download.zip"
     downloadedFilePath = os.path.join(
         tempfile.gettempdir(), "ct.js", downloadedFileName
@@ -91,6 +92,10 @@ def getRelease(channel):
     download_url(url)
 
 
+def getAsset(name):
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", name,)
+
+
 class PlatformStuff:
     def __init__(self):
         print("Platform: " + platform())
@@ -127,8 +132,21 @@ class InstallThread(QThread):
 
     def run(self):
         getRelease(platformStuff.channel)
+        zipFolderName = platformStuff.channel
+
         with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
+            try:
+                zipFolderName = os.path.dirname(zip_ref.namelist()[0])
+            except:
+                pass
             zip_ref.extractall(self.location)
+
+        time.sleep(0.5)
+        os.rename(
+            os.path.join(self.location, zipFolderName),
+            os.path.join(self.location, "ct.js"),
+        )
+
         self.app.installingLabel.setText("Done installing!")
         self.app.setWindowTitle("Done installing ct.js!")
 
@@ -138,15 +156,7 @@ class Installer(QDialog):
         super(Installer, self).__init__(parent)
 
         try:
-            self.setWindowIcon(
-                QtGui.QIcon(
-                    os.path.join(
-                        os.path.dirname(os.path.realpath(__file__)),
-                        "assets",
-                        "icon.ico",
-                    )
-                )
-            )
+            self.setWindowIcon(QtGui.QIcon(getAsset("icon.ico")))
         except:
             pass
         self.setWindowIconText("ct.js Installer")
@@ -202,13 +212,7 @@ class Installer(QDialog):
         self.installingLabel.setFont(self.getFont(18))
         self.installingLabel.setWordWrap(true)
 
-        self.gif = QMovie(
-            os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
-                "assets",
-                "partycarrot.gif",
-            )
-        )
+        self.gif = QMovie(getAsset("partycarrot.gif"))
         self.gif.frameChanged.connect(self.repaint)
         self.gif.start()
 
