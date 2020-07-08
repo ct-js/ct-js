@@ -70,7 +70,6 @@ def platformIsTestedDistroLinux():
 
 githubData = requests.get(Contants.githubUrl).json()
 
-
 # https://stackoverflow.com/questions/9419162/download-returned-zip-file-from-url#14260592
 def download_url(url, save_path=Contants.downloadedFilePath, chunk_size=128):
     r = requests.get(url, stream=True)
@@ -158,6 +157,7 @@ class Installer(QDialog):
         self.width = 600
         self.height = 325
         self.setGeometry(self.left, self.top, self.width, self.height)
+        self.setFixedSize(self.width, self.height)
 
         self.instructionsLabel = QLabel(Contants.instructions, parent=self)
         self.instructionsLabel.setFont(self.getFont(18))
