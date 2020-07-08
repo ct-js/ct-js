@@ -37,10 +37,21 @@ else:
 
 class Contants:
     ########### Text
-    instructions = "Hello! This installer will install ct.js at the desired location. You can also use it to update ct.js."
-    location = "Enter the installation location here (leave this unchanged it you're not an advanced user):"
-    install = "Install ct.js"
-    installing = "Installing..."
+    welcomeLabel = "Welcome to Ct.js!"
+    instructionsLabel = "You're almost there! Press this big button to open a door to a wonderful world of game development: "
+    installButtonLabel = "Install ct.js"
+
+    installInfoLabel_1 = "Get release info"
+    installInfoLabel_2 = "Download the app"
+    installInfoLabel_3 = "Unpack and install ct.js"
+    installInfoLabel_4 = "Create shortcuts and file rules"
+    etaLabel_1 = "This will take about "
+    etaLabel_2 = " seconds."
+
+    bottomRowTextLabel_1 = "Installing at "
+    bottomRowTextLabel_2 = "Pro tip: use the same installer to update ct.js!"
+    changeAbortLabel_1 = "Change..."
+    changeAbortLabel_2 = "Abort"
 
     ########### Path
     defaultInstallDir = os.path.join(installDirectoryParent)
@@ -103,9 +114,6 @@ class PlatformStuff:
             self.channel = "linux32"
             if is64bits:
                 self.channel = "linux64"
-
-    def __get_url(self):
-        pass
 
 
 platformStuff = PlatformStuff()

@@ -75,8 +75,68 @@ QLabel#installButtonBox {
 
 /* Installation page */
 
-QLabel#installInfoLabel {
-    /* Get release info Download the app Unpack and install ct.js Create shortcuts and file rules */
+QLabel#installInfoLabel_1 {
+    /* Get release info */
+
+    position: absolute;
+    width: 245px;
+    height: 112px;
+    left: 46px;
+    top: 97px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 28px;
+
+    /* or 200% */
+
+    color: #666666;
+}
+
+QLabel#installInfoLabel_2 {
+    /* Download the app */
+
+    position: absolute;
+    width: 245px;
+    height: 112px;
+    left: 46px;
+    top: 97px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 28px;
+
+    /* or 200% */
+
+    color: #666666;
+}
+
+QLabel#installInfoLabel_3 {
+    /* Unpack and install ct.js */
+
+    position: absolute;
+    width: 245px;
+    height: 112px;
+    left: 46px;
+    top: 97px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 28px;
+
+    /* or 200% */
+
+    color: #666666;
+}
+
+QLabel#installInfoLabel_4 {
+    /* Create shortcuts and file rules */
 
     position: absolute;
     width: 245px;
