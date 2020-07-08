@@ -40,7 +40,6 @@ class Contants:
     instructions = "Hello! This installer will install ct.js at the desired location. You can also use it to update ct.js."
     location = "Enter the installation location here (leave this unchanged it you're not an advanced user):"
     install = "Install ct.js"
-    linuxUntested = "**If your OS is related to/based on Linux, ct.js should run.**\n\nct.js is not tested on this operating system. It may not run correctly. Use at your own risk."
     installing = "Installing..."
 
     ########### Path
@@ -52,7 +51,6 @@ class Contants:
 
     ########### Other
     githubUrl = "https://api.github.com/repos/ct-js/ct-js/releases/latest"
-    testedLinuxDistros = ["linux"]
 
 
 print("Default installation directory location: " + Contants.defaultInstallDir)
@@ -60,13 +58,6 @@ print(
     "Default installation directory location exists: "
     + os.path.exists(Contants.defaultInstallDir).__str__()
 )
-
-
-def platformIsTestedDistroLinux():
-    for i in Contants.testedLinuxDistros:
-        if i in platform().lower():
-            return true
-    return false
 
 
 githubData = requests.get(Contants.githubUrl).json()
@@ -244,16 +235,6 @@ if __name__ == "__main__":
     app.setStyle("Fusion")
     with open(getAsset("stylesheet.qtstyle"), "r") as f:
         app.setStyleSheet(f.read())
-
-    """
-    if not platformIsTestedDistroLinux() and "linux" in platformStuff.channel:
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Warning)
-        msg.setText("Warning")
-        msg.setInformativeText(Contants.linuxUntested)
-        msg.setWindowTitle("Warning")
-        msg.show()
-    """
 
     installer = Installer()
     installer.show()

@@ -181,3 +181,15 @@ QLabel#bottomRowTextBox {
     right: 0px;
     bottom: 0px;
 }
+
+QLabel#windowBorderBox {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 32px;
+    bottom: 0px;
+
+    background: #ffffff;
+    border: 1px solid #c8cdd1;
+    box-sizing: border-box;
+}
