@@ -135,7 +135,6 @@ class InstallThread(QThread):
 
 class Installer(QDialog):
     def __init__(self, parent=null):
-        # TODO: redo gui, move them without using the GridLayout
         super(Installer, self).__init__(parent)
 
         try:
