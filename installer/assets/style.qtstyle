@@ -38,14 +38,39 @@ QLabel#instructionsLabel {
     color: #666666;
 }
 
-QLabel#installButton {
+QLabel#installButtonLabel {
     /* Install ct.js */
 
     position: absolute;
-    width: 185px;
-    height: 60px;
-    left: 23px;
-    top: 180px;
+    width: 112px;
+    height: 33px;
+    left: calc(50% - 112px / 2 - 0.5px);
+    top: calc(50% - 33px / 2 - 0.5px);
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 33px;
+
+    /* identical to box height */
+
+    color: #ffffff;
+}
+
+QLabel#installButtonBox {
+    /* Install ct.js */
+
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+
+    background: #446adb;
+    border: 1px solid #5144db;
+    box-sizing: border-box;
+    border-radius: 3px;
 }
 
 /* Installation page */
@@ -66,6 +91,26 @@ QLabel#installInfoLabel {
     line-height: 28px;
 
     /* or 200% */
+
+    color: #666666;
+}
+
+QLabel#etaLabel {
+    /* This will take about 50 seconds. */
+
+    position: absolute;
+    width: 177px;
+    height: 24px;
+    left: 20px;
+    top: 261px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 24px;
+
+    /* identical to box height, or 200% */
 
     color: #666666;
 }
