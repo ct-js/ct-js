@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt, pyqtSlot, QThread
 from PyQt5.QtGui import QMovie, QPainter, QPixmap
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 from platform import platform
 import sys
@@ -40,6 +40,8 @@ class Contants:
     welcomeLabel = "Welcome to Ct.js!"
     instructionsLabel = "You're almost there! Press this big button to open a door to a wonderful world of game development: "
     installButtonLabel = "Install ct.js"
+    bottomRowTextLabel_1 = "Installing at "
+    changeAbortLabel_1 = "Change..."
 
     installInfoLabel_1 = "Get release info"
     installInfoLabel_2 = "Download the app"
@@ -47,10 +49,7 @@ class Contants:
     installInfoLabel_4 = "Create shortcuts and file rules"
     etaLabel_1 = "This will take about "
     etaLabel_2 = " seconds."
-
-    bottomRowTextLabel_1 = "Installing at "
     bottomRowTextLabel_2 = "Pro tip: use the same installer to update ct.js!"
-    changeAbortLabel_1 = "Change..."
     changeAbortLabel_2 = "Abort"
 
     ########### Path
@@ -167,43 +166,59 @@ class Installer(QDialog):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setFixedSize(self.width, self.height)
 
-        self.instructionsLabel = QLabel(Contants.instructions, parent=self)
-        self.instructionsLabel.setFont(self.getFont(18))
+        self.installing = false
+
+        # Border and bottom row
+
+        # First page
+
+        self.welcomeLabel = QLabel(Contants.welcomeLabel, parent=self)
+        self.welcomeLabel.move(20, 14)
+        self.welcomeLabel.setFont(QtGui.QFont("Open Sans", 32, QtGui.QFont.Light))
+        self.setStyleName("welcomeLabel")
+
+        self.instructionsLabel = QLabel(Contants.instructionsLabel, parent=self)
+        self.instructionsLabel.move(23, 69)
+        self.instructionsLabel.resize(245, 57)
         self.instructionsLabel.setWordWrap(true)
+        self.setStyleName("instructionsLabel")
 
-        self.locationBox = QLineEdit(self)
-        self.locationBox.resize(280, 40)
-        self.locationBox.setText(Contants.defaultInstallDir)
+        self.installButtonLabel = QPushButton(Contants.installButtonLabel, self)
+        self.installButtonLabel.move(23, 148)
+        self.installButtonLabel.resize(185, 60)
+        self.installButtonLabel.clicked.connect(self.install)
+        self.setStyleName("installButtonLabel")
 
-        self.locationLabel = QLabel(Contants.location, parent=self)
-        self.locationLabel.setFont(self.getFont(16))
-        self.locationLabel.setWordWrap(true)
-        self.locationLabel.move(0, 20)
-        self.setStyleName("locationLabel")
-
-        self.installButton = QPushButton(Contants.install, self)
-        self.installButton.setFont(self.getFont(16))
-        self.installButton.move(0, 20)
-        self.installButton.clicked.connect(self.on_click)
-
-        self.layout = QGridLayout()
-        self.layout.addWidget(
-            self.instructionsLabel, 1, 1, Qt.AlignTop | Qt.AlignCenter
+        self.bottomRowTextLabel = QLabel(
+            Contants.bottomRowTextLabel_1 + Contants.defaultInstallDir, parent=self
         )
-        self.layout.addWidget(self.locationBox, 2, 1, Qt.AlignTop | Qt.AlignCenter)
-        self.layout.addWidget(self.locationLabel, 1, 1, Qt.AlignCenter)
-        self.layout.addWidget(self.installButton, 2, 1, Qt.AlignCenter)
+        self.bottomRowTextLabel.move(21, 281)
+        self.bottomRowTextLabel.resize(300, 19)
+        self.bottomRowTextLabel.setWordWrap(true)
+        self.setStyleName("bottomRowTextLabel")
 
-        self.setLayout(self.layout)
+        self.changeAbortLabel = QPushButton(Contants.changeAbortLabel_1, self)
+        self.changeAbortLabel.move(369, 275)
+        self.changeAbortLabel.resize(113, 32)
+        self.changeAbortLabel.clicked.connect(self.change_location)
+        self.setStyleName("changeAbortLabel")
+
+        self.hammerCatImage = QLabel(parent=self)
+        image = QPixmap(getAsset("HammerCat.svg"))
+        self.hammerCatImage.setPixmap(image)
+        self.hammerCatImage.resize(image.width(), image.height())
+        self.hammerCatImage.move(481 - image.width(), 34)
 
     def getFont(self, size: int):
         return QtGui.QFont("GothamBold", size, QtGui.QFont.Bold)
 
     # @pyqtSlot()
-    def on_click(self):
+    def install(self):
+        self.installing = true
+
         self.setWindowTitle("Installing ct.js...")
 
-        self.instructionsLabel.hide()
+        self.welcomeLabel.hide()
         self.locationBox.hide()
         self.locationLabel.hide()
         self.installButton.hide()
@@ -218,10 +233,32 @@ class Installer(QDialog):
 
         self.layout.addWidget(self.installingLabel, 1, 1, Qt.AlignTop | Qt.AlignCenter)
 
-        self.installThread = InstallThread(self.locationBox.text(), self)
-        self.installThread.start()
+        # self.installThread = InstallThread(self.locationBox.text(), self)
+        # self.installThread.start()
+
+    def change_location(self):
+        pass
 
     def paintEvent(self, event):
+        # Border
+        qp = QtGui.QPainter(self)
+        br = QtGui.QBrush(QtGui.QColor(255, 255, 255, 100))
+        pen = QtGui.QPen()
+        pen.setColor(QtGui.QColor(200, 205, 209, 200))
+        pen.setWidth(1.5)
+        qp.setPen(pen)
+        qp.setBrush(br)
+        qp.drawRect(QtCore.QRect(0, 0, self.width, self.height))
+
+        # Bottom row
+        br2 = QtGui.QBrush(QtGui.QColor(255, 255, 255, 100))
+        pen2 = QtGui.QPen()
+        pen2.setColor(QtGui.QColor(200, 205, 209, 200))
+        pen2.setWidth(1.5)
+        qp.setPen(pen2)
+        qp.setBrush(br2)
+        qp.drawRect(QtCore.QRect(0, 264, self.width, self.height))
+
         try:
             currentFrame = self.gif.currentPixmap()
             frameRect = currentFrame.rect()

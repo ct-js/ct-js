@@ -1,6 +1,6 @@
 /* Welcome page */
 
-QLabel#welcomeLabel {
+#welcomeLabel {
     /* Welcome to Ct.js! */
 
     position: absolute;
@@ -9,9 +9,9 @@ QLabel#welcomeLabel {
     left: 20px;
     top: 46px;
 
-    font-family: Open Sans;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto Thin', Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 100;
     font-size: 32px;
     line-height: 44px;
 
@@ -20,7 +20,7 @@ QLabel#welcomeLabel {
     color: #5144db;
 }
 
-QLabel#instructionsLabel {
+#instructionsLabel {
     /* You're almost there! Press this big button to open a door to a wonderful world of game development: */
 
     position: absolute;
@@ -38,7 +38,7 @@ QLabel#instructionsLabel {
     color: #666666;
 }
 
-QLabel#installButtonLabel {
+#installButtonLabel {
     /* Install ct.js */
 
     position: absolute;
@@ -56,26 +56,23 @@ QLabel#installButtonLabel {
     /* identical to box height */
 
     color: #ffffff;
+
+    background-color: #446adb;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #5144db;
+    border-radius: 3px;
 }
 
-QLabel#installButtonBox {
-    /* Install ct.js */
-
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-
-    background: #446adb;
-    border: 1px solid #5144db;
-    box-sizing: border-box;
-    border-radius: 3px;
+#installButtonLabel:hover {
+    color: #446adb;
+    background-color: #ffffff;
+    border-color: #999999;
 }
 
 /* Installation page */
 
-QLabel#installInfoLabel_1 {
+#installInfoLabel_1 {
     /* Get release info */
 
     position: absolute;
@@ -95,7 +92,7 @@ QLabel#installInfoLabel_1 {
     color: #666666;
 }
 
-QLabel#installInfoLabel_2 {
+#installInfoLabel_2 {
     /* Download the app */
 
     position: absolute;
@@ -115,7 +112,7 @@ QLabel#installInfoLabel_2 {
     color: #666666;
 }
 
-QLabel#installInfoLabel_3 {
+#installInfoLabel_3 {
     /* Unpack and install ct.js */
 
     position: absolute;
@@ -135,7 +132,7 @@ QLabel#installInfoLabel_3 {
     color: #666666;
 }
 
-QLabel#installInfoLabel_4 {
+#installInfoLabel_4 {
     /* Create shortcuts and file rules */
 
     position: absolute;
@@ -155,7 +152,7 @@ QLabel#installInfoLabel_4 {
     color: #666666;
 }
 
-QLabel#etaLabel {
+#etaLabel {
     /* This will take about 50 seconds. */
 
     position: absolute;
@@ -177,7 +174,7 @@ QLabel#etaLabel {
 
 /* Shared */
 
-QLabel#bottomRowTextLabel {
+#bottomRowTextLabel {
     /* Installing at C:\Users\user\AppData\Local\ct.js */
     /* Pro tip: use the same installer to update ct.js! */
 
@@ -198,7 +195,7 @@ QLabel#bottomRowTextLabel {
     color: #666666;
 }
 
-QLabel#changeAbortLabel {
+#changeAbortLabel {
     /* Change... */
     /* Abort */
 
@@ -217,24 +214,22 @@ QLabel#changeAbortLabel {
     /* identical to box height */
 
     color: #5144db;
-}
 
-QLabel#changeAbortBox {
-    /* Change... */
-    /* Abort */
-
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-
-    border: 1px solid #446adb;
-    box-sizing: border-box;
+    background-color: #FAFAFA;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #446adb;
     border-radius: 3px;
 }
 
-QLabel#bottomRowTextBox {
+#changeAbortLabel:hover {
+    color: #FAFAFA;
+    background-color: #5144db;
+    border-color: #446adb;
+}
+
+/*
+#bottomRowTextBox {
     position: absolute;
     height: 54px;
     left: 0px;
@@ -242,7 +237,7 @@ QLabel#bottomRowTextBox {
     bottom: 0px;
 }
 
-QLabel#windowBorderBox {
+#windowBorderBox {
     position: absolute;
     left: 0px;
     right: 0px;
@@ -253,3 +248,4 @@ QLabel#windowBorderBox {
     border: 1px solid #c8cdd1;
     box-sizing: border-box;
 }
+*/
