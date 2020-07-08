@@ -163,8 +163,8 @@ class Installer(QDialog):
         self.setWindowTitle("ct.js Installer")
         self.left = 30
         self.top = 30
-        self.width = 600
-        self.height = 325
+        self.width = 506
+        self.height = 318
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setFixedSize(self.width, self.height)
 
@@ -213,9 +213,9 @@ class Installer(QDialog):
         self.installingLabel.setFont(self.getFont(18))
         self.installingLabel.setWordWrap(true)
 
-        self.gif = QMovie(getAsset("partycarrot.gif"))
-        self.gif.frameChanged.connect(self.repaint)
-        self.gif.start()
+        # self.gif = QMovie(getAsset("partycarrot.gif"))
+        # self.gif.frameChanged.connect(self.repaint)
+        # self.gif.start()
 
         self.layout.addWidget(self.installingLabel, 1, 1, Qt.AlignTop | Qt.AlignCenter)
 
@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
     app = QApplication([])
     app.setStyle("Fusion")
-    with open(getAsset("style.qtstyle"), "r") as f:
+    with open(getAsset("stylesheet.qtstyle"), "r") as f:
         app.setStyleSheet(f.read())
 
     """
