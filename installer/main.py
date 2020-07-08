@@ -31,7 +31,6 @@ if "win" in platform().lower() and not "darwin" in platform().lower():
 else:
     installDirectoryParent = os.environ["HOME"]
     if "darwin" in platform().lower():
-        # TODO: use Applications folder instead
         installDirectoryParent = os.path.join(installDirectoryParent, "Applications")
 
 
