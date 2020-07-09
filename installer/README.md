@@ -22,10 +22,12 @@ Run `./build.sh` to build the installer.
     -   [ ] first page
         -   [x] gui
         -   [ ] change button
-        -   [ ] install button
+        -   [x] install button
     -   [ ] second page
-        -   [ ] gui
-        -   [ ] installation status
-        -   [ ] abort button
+        -   [x] gui
+        -   [x] installation status
+        -   [x] abort button
+        -   [ ] rotating icon
+        -   [ ] run bat/sh files that create shortcuts/file rules
         -   [ ] eta
 -   [ ] figure out pyinstaller

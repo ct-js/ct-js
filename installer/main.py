@@ -37,12 +37,13 @@ else:
 
 class Contants:
     ########### Text
-    welcomeLabel = "Welcome to Ct.js!"
+    welcomeLabel_1 = "Welcome to Ct.js!"
     instructionsLabel = "You're almost there! Press this big button to open a door to a wonderful world of game development: "
     installButtonLabel = "Install ct.js"
     bottomRowTextLabel_1 = "Installing at "
     changeAbortLabel_1 = "Change..."
 
+    welcomeLabel_2 = "Working..."
     installInfoLabel_1 = "Get release info"
     installInfoLabel_2 = "Download the app"
     installInfoLabel_3 = "Unpack and install ct.js"
@@ -51,6 +52,8 @@ class Contants:
     etaLabel_2 = " seconds."
     bottomRowTextLabel_2 = "Pro tip: use the same installer to update ct.js!"
     changeAbortLabel_2 = "Abort"
+    welcomeLabel_3 = "Done!"
+    changeAbortLabel_3 = "Close installer and open ct.js"
 
     ########### Path
     defaultInstallDir = os.path.join(installDirectoryParent)
@@ -70,12 +73,7 @@ print(
 )
 
 
-githubData = null
-
-
-def getGitHubData():
-    githubData = requests.get(Contants.githubUrl).json()
-    return githubData
+githubData = {}
 
 
 # https://stackoverflow.com/questions/9419162/download-returned-zip-file-from-url#14260592
@@ -90,14 +88,6 @@ def downloadUrl(url, save_path=Contants.downloadedFilePath, chunk_size=128):
         for chunk in r.iter_content(chunk_size=chunk_size):
             fd.write(chunk)
     print("Finished downloading " + url + " to " + save_path)
-
-
-def getRelease(channel):
-    getGitHubData()
-    # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
-    release = [x for x in githubData["assets"] if channel in x["name"]][0]
-    url = release["browser_download_url"]
-    downloadUrl(url)
 
 
 def getAsset(name):
@@ -135,8 +125,26 @@ class InstallThread(QThread):
     def __del__(self):
         self.wait()
 
+    def getGitHubData(self):
+        githubData = requests.get(Contants.githubUrl).json()
+        self.changeStep("installInfoImage_2")
+        return githubData
+
+    def getRelease(self, channel):
+        # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
+        release = [x for x in self.getGitHubData()["assets"] if channel in x["name"]][0]
+        url = release["browser_download_url"]
+        downloadUrl(url)
+        self.changeStep("installInfoImage_3")
+
+    def changeStep(self, name):
+        self.app.currentStep.setPixmap(QPixmap(getAsset("check-circle.svg")))
+        self.app.currentStep = self.app.__dict__[name]
+        self.app.currentStep.setPixmap(QPixmap(getAsset("rotate-cw.svg")))
+        self.app.rotateThread.getStartPos()
+
     def run(self):
-        getRelease(platformStuff.channel)
+        self.getRelease(platformStuff.channel)
         zipFolderName = platformStuff.channel
 
         with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
@@ -147,13 +155,57 @@ class InstallThread(QThread):
             zip_ref.extractall(self.location)
 
         time.sleep(0.5)
+        try:
+            shutil.rmtree(os.path.join(self.location, "ct.js"))
+        except:
+            pass
+
         os.rename(
             os.path.join(self.location, zipFolderName),
             os.path.join(self.location, "ct.js"),
         )
 
-        self.app.installingLabel.setText("Done installing!")
+        self.changeStep("installInfoImage_4")
+        # TODO: run bat/sh files that create shortcuts here
+
+        self.app.welcomeLabel.setText(Contants.welcomeLabel_3)
+        self.app.changeAbortLabel.setText(Contants.changeAbortLabel_3)
+        self.app.currentStep.setPixmap(QPixmap(getAsset("check-circle.svg")))
+        self.app.currentStep = null
         self.app.setWindowTitle("Done installing ct.js!")
+
+
+class RotateThread(QThread):
+    def __init__(self, parent):
+        QThread.__init__(self)
+
+        self.app: Installer = parent
+        self._animation = QtCore.QVariantAnimation(
+            self,
+            startValue=0.0,
+            endValue=360.0,
+            duration=10 * 1000,
+            valueChanged=self.on_valueChanged,
+        )
+        self.getStartPos()
+        self._animation.start()
+
+    def __del__(self):
+        self.wait()
+
+    def getStartPos(self):
+        self.startX = self.app.currentStep.x()
+        self.startY = self.app.currentStep.y()
+        self._pixmap = self.app.currentStep.pixmap()
+
+    def on_valueChanged(self, value):
+        try:
+            t = QtGui.QTransform()
+            t.rotate(value)
+            self.app.currentStep.setPixmap(self._pixmap.transformed(t))
+            self.app.currentStep.move(self.startX, self.startY)
+        except:
+            pass
 
 
 class Installer(QDialog):
@@ -175,11 +227,13 @@ class Installer(QDialog):
 
         self.location = Contants.defaultInstallDir
 
+        self.installing = false
+
         # Border and bottom row
 
         # First page
 
-        self.welcomeLabel = QLabel(Contants.welcomeLabel, parent=self)
+        self.welcomeLabel = QLabel(Contants.welcomeLabel_1, parent=self)
         self.welcomeLabel.move(20, 14)
         self.welcomeLabel.setFont(QtGui.QFont("Open Sans", 32, QtGui.QFont.Light))
         self.setStyleName("welcomeLabel")
@@ -217,17 +271,82 @@ class Installer(QDialog):
         self.hammerCatImage.move(481 - image.width(), 34)
 
     def install(self):
+        self.installing = true
         self.setWindowTitle("Installing ct.js...")
+
+        self.welcomeLabel.setText(Contants.welcomeLabel_2)
+        self.changeAbortLabel.setText(Contants.changeAbortLabel_2)
+        self.bottomRowTextLabel.setText(Contants.bottomRowTextLabel_2)
+        self.instructionsLabel.hide()
+        self.installButtonLabel.hide()
+
+        self.installInfoLabel_1 = QLabel(Contants.installInfoLabel_1, parent=self)
+        self.installInfoLabel_1.move(46, 71)
+        self.setStyleName("installInfoLabel_1")
+        self.installInfoLabel_1.show()
+
+        self.installInfoLabel_2 = QLabel(Contants.installInfoLabel_2, parent=self)
+        self.installInfoLabel_2.move(46, 99)
+        self.setStyleName("installInfoLabel_2")
+        self.installInfoLabel_2.show()
+
+        self.installInfoLabel_3 = QLabel(Contants.installInfoLabel_3, parent=self)
+        self.installInfoLabel_3.move(46, 127)
+        self.setStyleName("installInfoLabel_3")
+        self.installInfoLabel_3.show()
+
+        self.installInfoLabel_4 = QLabel(Contants.installInfoLabel_4, parent=self)
+        self.installInfoLabel_4.move(46, 155)
+        self.setStyleName("installInfoLabel_4")
+        self.installInfoLabel_4.show()
+
+        self.installInfoImage_1 = QLabel(parent=self)
+        image_1 = QPixmap(getAsset("rotate-cw.svg"))
+        self.installInfoImage_1.setPixmap(image_1)
+        self.installInfoImage_1.resize(image_1.width(), image_1.height())
+        self.installInfoImage_1.move(20, 72)
+        self.installInfoImage_1.show()
+
+        self.installInfoImage_2 = QLabel(parent=self)
+        image_2 = QPixmap(getAsset("circle.svg"))
+        self.installInfoImage_2.setPixmap(image_2)
+        self.installInfoImage_2.resize(image_2.width(), image_2.height())
+        self.installInfoImage_2.move(20, 100)
+        self.installInfoImage_2.show()
+
+        self.installInfoImage_3 = QLabel(parent=self)
+        image_3 = QPixmap(getAsset("circle.svg"))
+        self.installInfoImage_3.setPixmap(image_3)
+        self.installInfoImage_3.resize(image_3.width(), image_3.height())
+        self.installInfoImage_3.move(20, 128)
+        self.installInfoImage_3.show()
+
+        self.installInfoImage_4 = QLabel(parent=self)
+        image_4 = QPixmap(getAsset("circle.svg"))
+        self.installInfoImage_4.setPixmap(image_4)
+        self.installInfoImage_4.resize(image_4.width(), image_4.height())
+        self.installInfoImage_4.move(20, 155)
+        self.installInfoImage_4.show()
+
+        self.currentStep = self.installInfoImage_1
 
         # self.gif = QMovie(getAsset("partycarrot.gif"))
         # self.gif.frameChanged.connect(self.repaint)
         # self.gif.start()
 
-        # self.installThread = InstallThread(self.location, self)
-        # self.installThread.start()
+        self.rotateThread = RotateThread(self)
+        self.rotateThread.start()
+
+        self.installThread = InstallThread(self.location, self)
+        self.installThread.start()
 
     def changeLocation(self):
-        pass
+        if self.installing:
+            # Abort button
+            sys.exit()
+            return
+        # Change button
+        return
 
     def paintEvent(self, event):
         # Border
@@ -279,3 +398,4 @@ if __name__ == "__main__":
     app.exec_()
 
     print("Application closed")
+    sys.exit()
