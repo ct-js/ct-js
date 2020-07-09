@@ -28,6 +28,7 @@ Run `./build.sh` to build the installer.
         -   [x] installation status
         -   [x] abort button
         -   [ ] rotating icon
+        -   [ ] open ct.js button
         -   [ ] run bat/sh files that create shortcuts/file rules
         -   [ ] eta
 -   [ ] figure out pyinstaller

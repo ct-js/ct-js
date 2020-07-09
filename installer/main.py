@@ -7,9 +7,10 @@ from PyQt5.QtWidgets import (
     QLineEdit,
     QPushButton,
     QMessageBox,
+    QFileDialog,
 )
-from PyQt5.QtCore import Qt, pyqtSlot, QThread
-from PyQt5.QtGui import QMovie, QPainter, QPixmap
+from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtGui import QMovie, QPainter, QPixmap, QImage
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 from platform import platform
@@ -53,7 +54,7 @@ class Contants:
     bottomRowTextLabel_2 = "Pro tip: use the same installer to update ct.js!"
     changeAbortLabel_2 = "Abort"
     welcomeLabel_3 = "Done!"
-    changeAbortLabel_3 = "Close installer and open ct.js"
+    changeAbortLabel_3 = "Open ct.js"
 
     ########### Path
     defaultInstallDir = os.path.join(installDirectoryParent)
@@ -141,7 +142,6 @@ class InstallThread(QThread):
         self.app.currentStep.setPixmap(QPixmap(getAsset("check-circle.svg")))
         self.app.currentStep = self.app.__dict__[name]
         self.app.currentStep.setPixmap(QPixmap(getAsset("rotate-cw.svg")))
-        self.app.rotateThread.getStartPos()
 
     def run(self):
         self.getRelease(platformStuff.channel)
@@ -172,40 +172,8 @@ class InstallThread(QThread):
         self.app.changeAbortLabel.setText(Contants.changeAbortLabel_3)
         self.app.currentStep.setPixmap(QPixmap(getAsset("check-circle.svg")))
         self.app.currentStep = null
+        self.app.doneInstalling = true
         self.app.setWindowTitle("Done installing ct.js!")
-
-
-class RotateThread(QThread):
-    def __init__(self, parent):
-        QThread.__init__(self)
-
-        self.app: Installer = parent
-        self._animation = QtCore.QVariantAnimation(
-            self,
-            startValue=0.0,
-            endValue=360.0,
-            duration=10 * 1000,
-            valueChanged=self.on_valueChanged,
-        )
-        self.getStartPos()
-        self._animation.start()
-
-    def __del__(self):
-        self.wait()
-
-    def getStartPos(self):
-        self.startX = self.app.currentStep.x()
-        self.startY = self.app.currentStep.y()
-        self._pixmap = self.app.currentStep.pixmap()
-
-    def on_valueChanged(self, value):
-        try:
-            t = QtGui.QTransform()
-            t.rotate(value)
-            self.app.currentStep.setPixmap(self._pixmap.transformed(t))
-            self.app.currentStep.move(self.startX, self.startY)
-        except:
-            pass
 
 
 class Installer(QDialog):
@@ -228,6 +196,7 @@ class Installer(QDialog):
         self.location = Contants.defaultInstallDir
 
         self.installing = false
+        self.doneInstalling = false
 
         # Border and bottom row
 
@@ -270,6 +239,9 @@ class Installer(QDialog):
         self.hammerCatImage.resize(image.width(), image.height())
         self.hammerCatImage.move(481 - image.width(), 34)
 
+    def updateLocation(self):
+        self.bottomRowTextLabel.setText(Contants.bottomRowTextLabel_1 + self.location)
+
     def install(self):
         self.installing = true
         self.setWindowTitle("Installing ct.js...")
@@ -299,6 +271,8 @@ class Installer(QDialog):
         self.installInfoLabel_4.move(46, 155)
         self.setStyleName("installInfoLabel_4")
         self.installInfoLabel_4.show()
+
+        # Images
 
         self.installInfoImage_1 = QLabel(parent=self)
         image_1 = QPixmap(getAsset("rotate-cw.svg"))
@@ -334,18 +308,38 @@ class Installer(QDialog):
         # self.gif.frameChanged.connect(self.repaint)
         # self.gif.start()
 
-        self.rotateThread = RotateThread(self)
-        self.rotateThread.start()
-
         self.installThread = InstallThread(self.location, self)
         self.installThread.start()
 
     def changeLocation(self):
+        if self.doneInstalling:
+            # Open ct.js
+            if "osx" in platformStuff.channel:
+                # Mac
+                # os.execvp(
+                #    "open", tuple(["-n", "-a", f'"{self.location}/ct.js/ctjs.app"'])
+                # )
+                pass
+            elif "win" in platformStuff.channel:
+                # Windows
+                # os.execvp(f'"{self.location}\\ct.js\\ctjs.exe"', tuple())
+                pass
+            else:
+                # Linux hopefully
+                # os.execvp(f'"{self.location}/ct.js/ctjs"', tuple())
+                pass
+            sys.exit()
+            return
         if self.installing:
             # Abort button
             sys.exit()
             return
         # Change button
+        dialog = QFileDialog(self)
+        dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
+        dialog.exec_()
+        self.location = dialog.selectedFiles()[0]
+        self.updateLocation()
         return
 
     def paintEvent(self, event):
