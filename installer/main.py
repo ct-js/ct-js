@@ -70,10 +70,16 @@ print(
 )
 
 
-githubData = requests.get(Contants.githubUrl).json()
+githubData = null
+
+
+def getGitHubData():
+    githubData = requests.get(Contants.githubUrl).json()
+    return githubData
+
 
 # https://stackoverflow.com/questions/9419162/download-returned-zip-file-from-url#14260592
-def download_url(url, save_path=Contants.downloadedFilePath, chunk_size=128):
+def downloadUrl(url, save_path=Contants.downloadedFilePath, chunk_size=128):
     r = requests.get(url, stream=True)
     print("Downloading " + url + " to " + save_path)
     try:
@@ -87,10 +93,11 @@ def download_url(url, save_path=Contants.downloadedFilePath, chunk_size=128):
 
 
 def getRelease(channel):
+    getGitHubData()
     # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
     release = [x for x in githubData["assets"] if channel in x["name"]][0]
     url = release["browser_download_url"]
-    download_url(url)
+    downloadUrl(url)
 
 
 def getAsset(name):
@@ -166,7 +173,7 @@ class Installer(QDialog):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setFixedSize(self.width, self.height)
 
-        self.installing = false
+        self.location = Contants.defaultInstallDir
 
         # Border and bottom row
 
@@ -190,7 +197,7 @@ class Installer(QDialog):
         self.setStyleName("installButtonLabel")
 
         self.bottomRowTextLabel = QLabel(
-            Contants.bottomRowTextLabel_1 + Contants.defaultInstallDir, parent=self
+            Contants.bottomRowTextLabel_1 + self.location, parent=self
         )
         self.bottomRowTextLabel.move(21, 281)
         self.bottomRowTextLabel.resize(300, 19)
@@ -200,7 +207,7 @@ class Installer(QDialog):
         self.changeAbortLabel = QPushButton(Contants.changeAbortLabel_1, self)
         self.changeAbortLabel.move(369, 275)
         self.changeAbortLabel.resize(113, 32)
-        self.changeAbortLabel.clicked.connect(self.change_location)
+        self.changeAbortLabel.clicked.connect(self.changeLocation)
         self.setStyleName("changeAbortLabel")
 
         self.hammerCatImage = QLabel(parent=self)
@@ -209,34 +216,17 @@ class Installer(QDialog):
         self.hammerCatImage.resize(image.width(), image.height())
         self.hammerCatImage.move(481 - image.width(), 34)
 
-    def getFont(self, size: int):
-        return QtGui.QFont("GothamBold", size, QtGui.QFont.Bold)
-
-    # @pyqtSlot()
     def install(self):
-        self.installing = true
-
         self.setWindowTitle("Installing ct.js...")
-
-        self.welcomeLabel.hide()
-        self.locationBox.hide()
-        self.locationLabel.hide()
-        self.installButton.hide()
-
-        self.installingLabel = QLabel(Contants.installing, parent=self)
-        self.installingLabel.setFont(self.getFont(18))
-        self.installingLabel.setWordWrap(true)
 
         # self.gif = QMovie(getAsset("partycarrot.gif"))
         # self.gif.frameChanged.connect(self.repaint)
         # self.gif.start()
 
-        self.layout.addWidget(self.installingLabel, 1, 1, Qt.AlignTop | Qt.AlignCenter)
-
         # self.installThread = InstallThread(self.locationBox.text(), self)
         # self.installThread.start()
 
-    def change_location(self):
+    def changeLocation(self):
         pass
 
     def paintEvent(self, event):
@@ -278,7 +268,7 @@ if __name__ == "__main__":
 
     app = QApplication([])
     app.setStyle("Fusion")
-    with open(getAsset("stylesheet.qtstyle"), "r") as f:
+    with open(getAsset("stylesheet.css"), "r") as f:
         app.setStyleSheet(f.read())
 
     installer = Installer()

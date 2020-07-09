@@ -16,8 +16,16 @@ Run `./build.sh` to build the installer.
 
 ## Todo
 
--   [x] when unzipping, extract to the parent of the installation directory and rename extraction (before: LocalAppData
-        -> ct.js -> osx64; after: LocalAppData -> ct.js)
--   [ ] redo first page gui, move them without using the GridLayout
--   [ ] use CoMiGo's new design, make a style for it (?)
+-   [ ] new gui
+    -   [x] style
+        -   button hover style may need to be changed
+    -   [ ] first page
+        -   [x] gui
+        -   [ ] change button
+        -   [ ] install button
+    -   [ ] second page
+        -   [ ] gui
+        -   [ ] installation status
+        -   [ ] abort button
+        -   [ ] eta
 -   [ ] figure out pyinstaller
