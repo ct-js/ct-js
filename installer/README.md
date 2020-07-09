@@ -21,7 +21,7 @@ Run `./build.sh` to build the installer.
         -   button hover style may need to be changed
     -   [ ] first page
         -   [x] gui
-        -   [ ] change button
+        -   [x] change button
         -   [x] install button
     -   [ ] second page
         -   [x] gui
