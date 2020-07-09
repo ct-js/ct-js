@@ -223,7 +223,7 @@ class Installer(QDialog):
         # self.gif.frameChanged.connect(self.repaint)
         # self.gif.start()
 
-        # self.installThread = InstallThread(self.locationBox.text(), self)
+        # self.installThread = InstallThread(self.location, self)
         # self.installThread.start()
 
     def changeLocation(self):
