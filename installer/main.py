@@ -21,6 +21,7 @@ import tempfile
 import zipfile
 import time
 import shutil
+import subprocess
 
 is64bits = sys.maxsize > 2 ** 32
 
@@ -314,20 +315,22 @@ class Installer(QDialog):
     def changeLocation(self):
         if self.doneInstalling:
             # Open ct.js
+            program = []
+
             if "osx" in platformStuff.channel:
                 # Mac
-                # os.execvp(
-                #    "open", tuple(["-n", "-a", f'"{self.location}/ct.js/ctjs.app"'])
-                # )
-                pass
+                program = ["open", "-n", "-a", f'"{self.location}/ct.js/ctjs.app"']
+
             elif "win" in platformStuff.channel:
                 # Windows
-                # os.execvp(f'"{self.location}\\ct.js\\ctjs.exe"', tuple())
-                pass
+                program = ["start", "/B", f'"{self.location}\\ct.js\\ctjs.exe"']
+
             else:
                 # Linux hopefully
-                # os.execvp(f'"{self.location}/ct.js/ctjs"', tuple())
-                pass
+                program = ["&", f'"{self.location}/ct.js/ctjs"']
+
+            print(f"ct.js run command: {program}")
+            subprocess.Popen(program, shell=True)
             sys.exit()
             return
         if self.installing:

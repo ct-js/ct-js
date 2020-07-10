@@ -19,7 +19,7 @@ Run `./build.sh` to build the installer.
 -   [ ] new gui
     -   [x] style
         -   button hover style may need to be changed
-    -   [ ] first page
+    -   [x] first page
         -   [x] gui
         -   [x] change button
         -   [x] install button
@@ -27,8 +27,9 @@ Run `./build.sh` to build the installer.
         -   [x] gui
         -   [x] installation status
         -   [x] abort button
-        -   [ ] rotating icon
+        -   [ ] rotating in-progress icon
         -   [ ] open ct.js button
+            -   hopefully works
         -   [ ] run bat/sh files that create shortcuts/file rules
         -   [ ] eta
 -   [ ] figure out pyinstaller
