@@ -383,6 +383,12 @@ if __name__ == "__main__":
     print("Opening application...")
 
     app = QApplication([])
+
+    # https://stackoverflow.com/a/51914685
+    # Tries to solve weird scaling that could occur
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    app.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+
     app.setStyle("Fusion")
     with open(getAsset("stylesheet.css"), "r") as f:
         app.setStyleSheet(f.read())
