@@ -157,13 +157,13 @@ main-menu.flexcol
                         dirPath = path.join(global.projdir, key);
                     }
                     if (key !== 'actions') {
+                        fs.ensureDirSync(dirPath);
                         fs.emptyDirSync(dirPath);
                         try {
-                            fs.emptyDirSync(path.join(dirPath, '..', '..', key)); // Try to clean the directory outside the 'contents' folder
+                            fs.removeSync(path.join(dirPath, '..', '..', key)); // Try to clean the directory outside the 'contents' folder
                         } catch (e) {
                             void 0;
                         }
-                        fs.ensureDirSync(dirPath);
                     }
                     switch (key) {
                         case 'actions': {
