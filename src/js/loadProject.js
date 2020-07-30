@@ -111,10 +111,10 @@
             fs.ensureDir(global.projdir + '/snd');
 
             const lastProjects = localStorage.lastProjects? localStorage.lastProjects.split(';') : [];
-            if (lastProjects.indexOf(path.normalize(global.projdir + '.ict')) !== -1) {
-                lastProjects.splice(lastProjects.indexOf(path.normalize(global.projdir + '.ict')), 1);
+            if (lastProjects.indexOf(path.normalize(global.projdir + path.sep + sessionStorage.projname)) !== -1) {
+                lastProjects.splice(lastProjects.indexOf(path.normalize(global.projdir + path.sep + sessionStorage.projname)), 1);
             }
-            lastProjects.unshift(path.normalize(global.projdir + '.ict'));
+            lastProjects.unshift(path.normalize(global.projdir + path.sep + sessionStorage.projname));
             if (lastProjects.length > 15) {
                 lastProjects.pop();
             }
