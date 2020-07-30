@@ -286,7 +286,7 @@ main-menu.flexcol
                         }
 
                         case 'skeletons': {
-                            const ext = '.yaml';
+                            const ext = '.ctskeleton';
                             for (const skeleton of global.currentProject.skeletons) {
                                 fs.outputFileSync(
                                     path.join(dirPath, skeleton.name + ext),
