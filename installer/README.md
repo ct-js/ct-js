@@ -28,6 +28,7 @@ Run `./build.sh` to build the installer.
         -   [x] installation status
         -   [x] abort button
         -   [ ] rotating in-progress icon
+            -   mac sucks so idk if it works
         -   [ ] open ct.js button
             -   hopefully works
         -   [ ] run bat/sh files that create shortcuts/file rules

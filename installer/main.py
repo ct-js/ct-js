@@ -116,6 +116,30 @@ class PlatformStuff:
 
 platformStuff = PlatformStuff()
 
+class RotateThread(QThread):
+    def __init__(self, location, parent):
+        QThread.__init__(self)
+
+        self.location = location
+        self.app: Installer = parent
+        self.startPixmap = self.app.currentStep.pixmap()
+        self.animation = QtCore.QVariantAnimation(
+            self,
+            startValue=0.0,
+            endValue=360.0,
+            duration=1000,
+            valueChanged=self.on_valueChanged
+        )
+        self.animation.start()
+
+    def __del__(self):
+        self.wait()
+
+    def on_valueChanged(self):
+        t = QtGui.QTransform()
+        t.rotate(self.animation.currentValue())
+        self.app.currentStep.setPixmap(self.startPixmap.transformed(t))
+
 
 class InstallThread(QThread):
     def __init__(self, location, parent):
@@ -311,6 +335,9 @@ class Installer(QDialog):
 
         self.installThread = InstallThread(self.location, self)
         self.installThread.start()
+
+        #self.rotateThread = RotateThread(self.location, self)
+        #self.rotateThread.start()
 
     def changeLocation(self):
         if self.doneInstalling:
