@@ -34,4 +34,4 @@ Run `./build.sh` to build the installer.
             -   windows is freezing, linux isnt tested, otherwise should work
         -   [ ] eta
 -   [ ] figure out pyinstaller/py2app/py2exe
--   [ ] interagate everything into travis
+-   [ ] integrate everything into travis
