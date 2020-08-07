@@ -449,7 +449,7 @@ class Installer(QDialog):
 
             elif "win" in platformStuff.channel:
                 # Windows
-                program = "start /B '" + self.location + "\\ct.js\\ctjs.exe'"
+                program = "start 'ct.js' '" + self.location + "\\ct.js\\ctjs.exe'"
 
             else:
                 # Linux hopefully

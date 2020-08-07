@@ -1,2 +1,2 @@
 :: Runs ct.js
-start "{installDir}\ct.js\ctjs.exe"
+start "ct.js" "{installDir}\ct.js\ctjs.exe"
