@@ -133,37 +133,19 @@ class PlatformStuff:
         print(f"Channel: {self.channel}")
 
     def windowsShortcuts(self, app: "Installer"):
-        try:
-            """
-            from win32com.client import Dispatch
-            import winshell
+        #try:
+        os.symlink(
+            path.join(app.location, "ct.js", "ctjs.exe"),
+            path.join(pyshortcuts.get_desktop(), "ctjs"),
+        )
+        from pyshortcuts.windows import get_startmenu
 
-            def create_shortcuts(tool_name, exe_path, icon_path):
-                shell = Dispatch("WScript.Shell")
-                shortcut_file = os.path.join(winshell.desktop(), tool_name + ".lnk")
-                shortcut = shell.CreateShortCut(shortcut_file)
-                shortcut.TargetPath = exe_path
-                shortcut.IconLocation = icon_path
-                shortcut.save()
-
-            create_shortcuts(
-                tool_name="ct.js",
-                exe_path=path.join(app.location, "ct.js", "ctjs.exe",),
-                icon_path=path.join(app.location, "ct.js", "ct_ide.png",),
-            )
-            """
-            os.symlink(
-                path.join(app.location, "ct.js", "ctjs.exe"),
-                path.join(pyshortcuts.get_desktop(), "ctjs"),
-            )
-            from pyshortcuts.windows import get_startmenu
-
-            os.symlink(
-                path.join(app.location, "ct.js", "ctjs.exe"),
-                path.join(get_startmenu(), "ctjs"),
-            )
-        except:
-            showShortcutsWarning()
+        os.symlink(
+            path.join(app.location, "ct.js", "ctjs.exe"),
+            path.join(get_startmenu(), "ctjs"),
+        )
+        #except:
+        #    showShortcutsWarning()
 
     def macShortcuts(self, app: "Installer"):
         program = (
@@ -359,7 +341,7 @@ class Installer(QDialog):
             Contants.bottomRowTextLabel_1 + self.location, parent=self
         )
         self.bottomRowTextLabel.move(21, 281)
-        self.bottomRowTextLabel.resize(300, 19)
+        self.bottomRowTextLabel.resize(340, 19)
         self.bottomRowTextLabel.setWordWrap(false)
         self.setStyleName("bottomRowTextLabel")
 
