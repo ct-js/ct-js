@@ -257,7 +257,7 @@ class InstallThread(QThread):
         # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
         release = [x for x in self.getGitHubData()["assets"] if channel in x["name"]][0]
         url = release["browser_download_url"]
-        downloadUrl(url)
+        #downloadUrl(url)
         self.changeStep("installInfoImage_3")
 
     def changeStep(self, name):
@@ -269,7 +269,7 @@ class InstallThread(QThread):
         self.getRelease(platformStuff.channel)
         zipFolderName = platformStuff.channel
 
-        with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
+        """with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
             try:
                 zipFolderName = os.path.dirname(zip_ref.namelist()[0])
             except:
@@ -285,7 +285,7 @@ class InstallThread(QThread):
         os.rename(
             os.path.join(self.location, zipFolderName),
             os.path.join(self.location, "ct.js"),
-        )
+        )"""
 
         self.changeStep("installInfoImage_4")
         platformStuff.shortcuts(self.app)
