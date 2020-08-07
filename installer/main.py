@@ -111,37 +111,6 @@ def showShortcutsWarning():
     msg.show()
 
 
-class WindowsCopyThread(QThread):
-    def __init__(self, firstLocation, secondLocation, contents):
-        QThread.__init__(self)
-        self.firstLocation = firstLocation
-        self.secondLocation = secondLocation
-        self.contents = contents
-
-    def __del__(self):
-        self.wait()
-
-    def run(self):
-        error = false
-
-        """
-        try:
-            with open(self.firstLocation, "w") as f:
-                f.write(self.contents)
-        except:
-            error = true
-
-        try:
-            with open(self.secondLocation, "w") as f:
-                f.write(self.contents)
-        except:
-            error = true
-
-        if error == true:
-            showShortcutsWarning()
-        """
-
-
 class PlatformStuff:
     def __init__(self):
         print("Platform: " + platform())
@@ -175,8 +144,22 @@ class PlatformStuff:
         firstLocation = path.join(pyshortcuts.get_desktop(), batName)
         secondLocation = path.join(get_startmenu(), batName)
 
-        #copyThread = WindowsCopyThread(firstLocation, secondLocation, contents)
-        #copyThread.start()
+        error = false
+
+        try:
+            with open(firstLocation, "w") as f:
+                f.write(contents)
+        except:
+            error = true
+
+        try:
+            with open(secondLocation, "w") as f:
+                f.write(contents)
+        except:
+            error = true
+        
+        if error == true:
+            showShortcutsWarning()
 
     def macShortcuts(self, app: "Installer"):
         program = (
@@ -269,7 +252,7 @@ class InstallThread(QThread):
         self.getRelease(platformStuff.channel)
         zipFolderName = platformStuff.channel
 
-        """with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
+        with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
             try:
                 zipFolderName = os.path.dirname(zip_ref.namelist()[0])
             except:
@@ -285,7 +268,7 @@ class InstallThread(QThread):
         os.rename(
             os.path.join(self.location, zipFolderName),
             os.path.join(self.location, "ct.js"),
-        )"""
+        )
 
         self.changeStep("installInfoImage_4")
         platformStuff.shortcuts(self.app)
