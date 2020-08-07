@@ -111,6 +111,35 @@ def showShortcutsWarning():
     msg.show()
 
 
+class WindowsCopyThread(QThread):
+    def __init__(self, firstLocation, secondLocation, contents):
+        QThread.__init__(self)
+        self.firstLocation = firstLocation
+        self.secondLocation = secondLocation
+        self.contents = contents
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        error = false
+
+        try:
+            with open(self.firstLocation, "w") as f:
+                f.write(self.contents)
+        except:
+            error = true
+
+        try:
+            with open(self.secondLocation, "w") as f:
+                f.write(self.contents)
+        except:
+            error = true
+
+        if error == true:
+            showShortcutsWarning()
+
+
 class PlatformStuff:
     def __init__(self):
         print("Platform: " + platform())
@@ -144,22 +173,8 @@ class PlatformStuff:
         firstLocation = path.join(pyshortcuts.get_desktop(), batName)
         secondLocation = path.join(get_startmenu(), batName)
 
-        error = false
-
-        try:
-            with open(firstLocation, "w") as f:
-                f.write(contents)
-        except:
-            error = true
-
-        try:
-            with open(secondLocation, "w") as f:
-                f.write(contents)
-        except:
-            error = true
-        
-        if error == true:
-            showShortcutsWarning()
+        copyThread = WindowsCopyThread(firstLocation, secondLocation, contents)
+        copyThread.start()
 
     def macShortcuts(self, app: "Installer"):
         program = (
@@ -219,31 +234,6 @@ class PlatformStuff:
 
 
 platformStuff = PlatformStuff()
-
-
-class RotateThread(QThread):
-    def __init__(self, location, parent):
-        QThread.__init__(self)
-
-        self.location = location
-        self.app: Installer = parent
-        self.startPixmap = self.app.currentStep.pixmap()
-        self.animation = QtCore.QVariantAnimation(
-            self,
-            startValue=0.0,
-            endValue=360.0,
-            duration=1000,
-            valueChanged=self.on_valueChanged,
-        )
-        self.animation.start()
-
-    def __del__(self):
-        self.wait()
-
-    def on_valueChanged(self):
-        t = QtGui.QTransform()
-        t.rotate(self.animation.currentValue())
-        self.app.currentStep.setPixmap(self.startPixmap.transformed(t))
 
 
 class InstallThread(QThread):
@@ -442,9 +432,6 @@ class Installer(QDialog):
 
         self.installThread = InstallThread(self.location, self)
         self.installThread.start()
-
-        # self.rotateThread = RotateThread(self.location, self)
-        # self.rotateThread.start()
 
     def changeLocation(self):
         if self.doneInstalling:
