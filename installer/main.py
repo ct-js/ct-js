@@ -133,19 +133,27 @@ class PlatformStuff:
         print(f"Channel: {self.channel}")
 
     def windowsShortcuts(self, app: "Installer"):
-        #try:
-        os.symlink(
-            path.join(app.location, "ct.js", "ctjs.exe"),
-            path.join(pyshortcuts.get_desktop(), "ctjs"),
-        )
-        from pyshortcuts.windows import get_startmenu
+        try:
+            # On windows, you can't create a symlink without administrator.
+            # An alternative is to dump a .bat file in the same places that runs ct.js
+            from pyshortcuts.windows import get_startmenu
 
-        os.symlink(
-            path.join(app.location, "ct.js", "ctjs.exe"),
-            path.join(get_startmenu(), "ctjs"),
-        )
-        #except:
-        #    showShortcutsWarning()
+            batName = "ctjs.bat"
+            with open(getAsset(batName), "r") as f:
+                contents = f.read().replace("{installDir}", app.location)
+
+            print(contents)
+
+            firstLocation = path.join(pyshortcuts.get_desktop(), batName)
+            secondLocation = path.join(get_startmenu(), batName)
+
+            with open(firstLocation, "w") as f:
+                f.write(contents)
+
+            with open(secondLocation, "w") as f:
+                f.write(contents)
+        except:
+            showShortcutsWarning()
 
     def macShortcuts(self, app: "Installer"):
         program = (
