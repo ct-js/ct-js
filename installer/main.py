@@ -144,6 +144,8 @@ class PlatformStuff:
         firstLocation = path.join(pyshortcuts.get_desktop(), batName)
         secondLocation = path.join(get_startmenu(), batName)
 
+        error = false
+
         try:
             with open(firstLocation, "w") as f:
                 f.write(contents)
