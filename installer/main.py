@@ -103,6 +103,14 @@ def runCommand(command: str):
     subprocess.Popen(command, shell=True)
 
 
+def showShortcutsWarning():
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Warning)
+    msg.setText("Creating shortcuts have failed. You may want to re-run the installer.")
+    msg.setWindowTitle("Warning")
+    msg.show()
+
+
 class PlatformStuff:
     def __init__(self):
         print("Platform: " + platform())
@@ -124,7 +132,25 @@ class PlatformStuff:
                 self.channel = "linux64"
 
     def windowsShortcuts(self, app: "Installer"):
-        pass
+        try:
+            from win32com.client import Dispatch
+            import winshell
+
+            def create_shortcuts(tool_name, exe_path, icon_path):
+                shell = Dispatch("WScript.Shell")
+                shortcut_file = os.path.join(winshell.desktop(), tool_name + ".lnk")
+                shortcut = shell.CreateShortCut(shortcut_file)
+                shortcut.TargetPath = exe_path
+                shortcut.IconLocation = icon_path
+                shortcut.save()
+
+            create_shortcuts(
+                tool_name="ct.js",
+                exe_path=path.join(app.location, "ct.js", "ctjs.exe",),
+                icon_path=path.join(app.location, "ct.js", "ct_ide.png",),
+            )
+        except:
+            showShortcutsWarning()
 
     def macShortcuts(self, app: "Installer"):
         program = (
@@ -136,45 +162,49 @@ class PlatformStuff:
             )
             + "'"
         )
-
         runCommand(program)
 
-        """
-        pyshortcuts.make_shortcut(
-            script=" ",
-            name="ct.js",
-            icon=path.join(
-                app.location, "ct.js", "ctjs.app", "Contents", "Resources", "app.icns",
-            ),
-            executable="open -n -a "
-            + "'"
-            + path.join(
-                app.location, "ct.js", "ctjs.app"  # , "Contents", "MacOS", "nwjs"
-            )
-            + "'",
-        )
-        """
+        try:
+            # TODO: fix mac desktop shortcuts
+            pass
+        except:
+            showShortcutsWarning()
 
     def linuxShortcuts(self, app: "Installer"):
-        desktopFileName = "ct.js.desktop"
-        with open(getAsset(desktopFileName), "r") as f:
-            contents = f.read().replace("{installDir}", app.location)
+        exeFiles = ["chromedriver", "ctjs", "nwjc"]
+        for i in exeFiles:
+            try:
+                program = (
+                    "chmod +x '"
+                    + path.abspath(path.join(app.location, "ct.js", i))
+                    + "'"
+                )
+                runCommand(program)
+            except:
+                pass
 
-        from pyshortcuts.linux import get_homedir
+        try:
+            desktopFileName = "ct.js.desktop"
+            with open(getAsset(desktopFileName), "r") as f:
+                contents = f.read().replace("{installDir}", app.location)
 
-        home = get_homedir()
-        firstLocation = path.join(
-            home, ".local", "share", "applications", desktopFileName
-        )
-        secondLocation = path.join(home, "Desktop", desktopFileName)
+            from pyshortcuts.linux import get_homedir
 
-        with open(firstLocation, "w") as f:
-            f.write(contents)
-        program = "chmod +x '" + firstLocation + "'"
-        runCommand(program)
+            home = get_homedir()
+            firstLocation = path.join(
+                home, ".local", "share", "applications", desktopFileName
+            )
+            secondLocation = path.join(home, "Desktop", desktopFileName)
 
-        with open(secondLocation, "w") as f:
-            f.write(contents)
+            with open(firstLocation, "w") as f:
+                f.write(contents)
+            program = "chmod +x '" + firstLocation + "'"
+            runCommand(program)
+
+            with open(secondLocation, "w") as f:
+                f.write(contents)
+        except:
+            showShortcutsWarning()
 
 
 platformStuff = PlatformStuff()

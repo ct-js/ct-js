@@ -1,4 +1,6 @@
 PyQt5
 pyshortcuts
+winshell
+win32com
 PyInstaller
 black
