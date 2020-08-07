@@ -130,9 +130,11 @@ class PlatformStuff:
             self.channel = "linux32"
             if is64bits:
                 self.channel = "linux64"
+        print(f"Channel: {self.channel}")
 
     def windowsShortcuts(self, app: "Installer"):
         try:
+            """
             from win32com.client import Dispatch
             import winshell
 
@@ -148,6 +150,17 @@ class PlatformStuff:
                 tool_name="ct.js",
                 exe_path=path.join(app.location, "ct.js", "ctjs.exe",),
                 icon_path=path.join(app.location, "ct.js", "ct_ide.png",),
+            )
+            """
+            os.symlink(
+                path.join(app.location, "ct.js", "ctjs.exe"),
+                path.join(pyshortcuts.get_desktop(), "ctjs"),
+            )
+            from pyshortcuts.windows import get_startmenu
+
+            os.symlink(
+                path.join(app.location, "ct.js", "ctjs.exe"),
+                path.join(get_startmenu(), "ctjs"),
             )
         except:
             showShortcutsWarning()
@@ -165,8 +178,10 @@ class PlatformStuff:
         runCommand(program)
 
         try:
-            # TODO: fix mac desktop shortcuts
-            pass
+            os.symlink(
+                path.join(app.location, "ct.js", "ctjs.app"),
+                path.join(pyshortcuts.get_desktop(), "ctjs.app"),
+            )
         except:
             showShortcutsWarning()
 
@@ -266,6 +281,7 @@ class InstallThread(QThread):
         self.getRelease(platformStuff.channel)
         zipFolderName = platformStuff.channel
 
+        """
         with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
             try:
                 zipFolderName = os.path.dirname(zip_ref.namelist()[0])
@@ -283,6 +299,7 @@ class InstallThread(QThread):
             os.path.join(self.location, zipFolderName),
             os.path.join(self.location, "ct.js"),
         )
+        """
 
         self.changeStep("installInfoImage_4")
         platformStuff.shortcuts(self.app)
@@ -343,7 +360,7 @@ class Installer(QDialog):
         )
         self.bottomRowTextLabel.move(21, 281)
         self.bottomRowTextLabel.resize(300, 19)
-        self.bottomRowTextLabel.setWordWrap(true)
+        self.bottomRowTextLabel.setWordWrap(false)
         self.setStyleName("bottomRowTextLabel")
 
         self.changeAbortLabel = QPushButton(Contants.changeAbortLabel_1, self)
