@@ -28,9 +28,9 @@ Run `./build.sh` to build the installer.
         -   [x] installation status
         -   [x] abort button
         -   [ ] rotating in-progress icon
-            -   mac sucks so idk if it works
-        -   [ ] open ct.js button
+        -   [x] open ct.js button
             -   hopefully works
-        -   [ ] run bat/sh files that create shortcuts/file rules
+        -   [x] run bat/sh files that create shortcuts/file rules
+            -   windows is freezing, linux isnt tested, otherwise should work
         -   [ ] eta
 -   [ ] figure out pyinstaller/py2app/py2exe
