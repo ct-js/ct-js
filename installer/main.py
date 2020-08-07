@@ -124,6 +124,7 @@ class WindowsCopyThread(QThread):
     def run(self):
         error = false
 
+        """
         try:
             with open(self.firstLocation, "w") as f:
                 f.write(self.contents)
@@ -138,6 +139,7 @@ class WindowsCopyThread(QThread):
 
         if error == true:
             showShortcutsWarning()
+        """
 
 
 class PlatformStuff:
@@ -267,7 +269,6 @@ class InstallThread(QThread):
         self.getRelease(platformStuff.channel)
         zipFolderName = platformStuff.channel
 
-        """
         with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
             try:
                 zipFolderName = os.path.dirname(zip_ref.namelist()[0])
@@ -285,7 +286,6 @@ class InstallThread(QThread):
             os.path.join(self.location, zipFolderName),
             os.path.join(self.location, "ct.js"),
         )
-        """
 
         self.changeStep("installInfoImage_4")
         platformStuff.shortcuts(self.app)
