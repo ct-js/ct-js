@@ -16,12 +16,14 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from platform import platform
 import sys
 import os
+from os import path
 import requests
 import tempfile
 import zipfile
 import time
 import shutil
 import subprocess
+import pyshortcuts
 
 is64bits = sys.maxsize > 2 ** 32
 
@@ -96,25 +98,87 @@ def getAsset(name):
     return os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", name,)
 
 
+def runCommand(command: str):
+    print(f"running command: {command}")
+    subprocess.Popen(command, shell=True)
+
+
 class PlatformStuff:
     def __init__(self):
         print("Platform: " + platform())
         if "darwin" in platform().lower():
             # Mac
+            self.shortcuts = self.macShortcuts
             self.channel = "osx64"
         elif "win" in platform().lower():
             # Windows
+            self.shortcuts = self.windowsShortcuts
             self.channel = "win32"
             if is64bits:
                 self.channel = "win64"
         else:
             # Assume linux
+            self.shortcuts = self.linuxShortcuts
             self.channel = "linux32"
             if is64bits:
                 self.channel = "linux64"
 
+    def windowsShortcuts(self, app: "Installer"):
+        pass
+
+    def macShortcuts(self, app: "Installer"):
+        program = (
+            "chmod +x '"
+            + path.abspath(
+                path.join(
+                    app.location, "ct.js", "ctjs.app", "Contents", "MacOS", "nwjs"
+                )
+            )
+            + "'"
+        )
+
+        runCommand(program)
+
+        """
+        pyshortcuts.make_shortcut(
+            script=" ",
+            name="ct.js",
+            icon=path.join(
+                app.location, "ct.js", "ctjs.app", "Contents", "Resources", "app.icns",
+            ),
+            executable="open -n -a "
+            + "'"
+            + path.join(
+                app.location, "ct.js", "ctjs.app"  # , "Contents", "MacOS", "nwjs"
+            )
+            + "'",
+        )
+        """
+
+    def linuxShortcuts(self, app: "Installer"):
+        desktopFileName = "ct.js.desktop"
+        with open(getAsset(desktopFileName), "r") as f:
+            contents = f.read().replace("{installDir}", app.location)
+
+        from pyshortcuts.linux import get_homedir
+
+        home = get_homedir()
+        firstLocation = path.join(
+            home, ".local", "share", "applications", desktopFileName
+        )
+        secondLocation = path.join(home, "Desktop", desktopFileName)
+
+        with open(firstLocation, "w") as f:
+            f.write(contents)
+        program = "chmod +x '" + firstLocation + "'"
+        runCommand(program)
+
+        with open(secondLocation, "w") as f:
+            f.write(contents)
+
 
 platformStuff = PlatformStuff()
+
 
 class RotateThread(QThread):
     def __init__(self, location, parent):
@@ -128,7 +192,7 @@ class RotateThread(QThread):
             startValue=0.0,
             endValue=360.0,
             duration=1000,
-            valueChanged=self.on_valueChanged
+            valueChanged=self.on_valueChanged,
         )
         self.animation.start()
 
@@ -191,7 +255,7 @@ class InstallThread(QThread):
         )
 
         self.changeStep("installInfoImage_4")
-        # TODO: run bat/sh files that create shortcuts here
+        platformStuff.shortcuts(self.app)
 
         self.app.welcomeLabel.setText(Contants.welcomeLabel_3)
         self.app.changeAbortLabel.setText(Contants.changeAbortLabel_3)
@@ -336,8 +400,8 @@ class Installer(QDialog):
         self.installThread = InstallThread(self.location, self)
         self.installThread.start()
 
-        #self.rotateThread = RotateThread(self.location, self)
-        #self.rotateThread.start()
+        # self.rotateThread = RotateThread(self.location, self)
+        # self.rotateThread.start()
 
     def changeLocation(self):
         if self.doneInstalling:
@@ -346,18 +410,17 @@ class Installer(QDialog):
 
             if "osx" in platformStuff.channel:
                 # Mac
-                program = ["open", "-n", "-a", f'"{self.location}/ct.js/ctjs.app"']
+                program = "open -n -a '" + self.location + "/ct.js/ctjs.app'"
 
             elif "win" in platformStuff.channel:
                 # Windows
-                program = ["start", "/B", f'"{self.location}\\ct.js\\ctjs.exe"']
+                program = "start /B '" + self.location + "\\ct.js\\ctjs.exe'"
 
             else:
                 # Linux hopefully
-                program = ["&", f'"{self.location}/ct.js/ctjs"']
+                program = "& '" + self.location + "/ct.js/ctjs'"
 
-            print(f"ct.js run command: {program}")
-            subprocess.Popen(program, shell=True)
+            runCommand(program)
             sys.exit()
             return
         if self.installing:

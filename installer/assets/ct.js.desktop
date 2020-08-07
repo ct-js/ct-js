@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name[en_US]=ct.js
+GenericName[en_US]=ct.js
+Comment[en_US]=ct.js is a game development application.
+Exec={installDir}/ct.js/ctjs
+Path={installDir}/ct.js/
+Icon={installDir}/ct.js/ct_ide.png
+Terminal=false
+Type=Application
+Categories=Development
