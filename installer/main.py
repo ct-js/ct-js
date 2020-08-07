@@ -175,8 +175,8 @@ class PlatformStuff:
         firstLocation = path.join(pyshortcuts.get_desktop(), batName)
         secondLocation = path.join(get_startmenu(), batName)
 
-        copyThread = WindowsCopyThread(firstLocation, secondLocation, contents)
-        copyThread.start()
+        #copyThread = WindowsCopyThread(firstLocation, secondLocation, contents)
+        #copyThread.start()
 
     def macShortcuts(self, app: "Installer"):
         program = (
