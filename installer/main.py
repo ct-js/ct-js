@@ -94,8 +94,19 @@ def downloadUrl(url, save_path=Contants.downloadedFilePath, chunk_size=128):
     print("Finished downloading " + url + " to " + save_path)
 
 
+def base_path():
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except:
+        base_path = os.path.abspath(".")
+
+    return base_path
+
+
 def getAsset(name):
-    return os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", name)
+    return os.path.join(base_path(), "assets", name)
 
 
 def runCommand(command: str):
@@ -135,6 +146,7 @@ class PlatformStuff:
     def windowsShortcuts(self, app: "Installer"):
         print(" ")
         try:
+
             def create_shortcuts(tool_name, exe_path, icon_path):
                 with open(getAsset("create_shortcuts.bat"), "r") as f:
                     contents = f.read().replace("{installDir}", app.location)
@@ -233,7 +245,7 @@ class InstallThread(QThread):
         print(" ")
         url = release["browser_download_url"]
         print(" ")
-        # downloadUrl(url)
+        downloadUrl(url)
         self.changeStep("installInfoImage_3")
         print(" ")
 
@@ -248,7 +260,6 @@ class InstallThread(QThread):
         zipFolderName = platformStuff.channel
         print(" ")
 
-        """
         with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
             try:
                 zipFolderName = os.path.dirname(zip_ref.namelist()[0])
@@ -266,7 +277,6 @@ class InstallThread(QThread):
             os.path.join(self.location, zipFolderName),
             os.path.join(self.location, "ct.js"),
         )
-        """
         print(" ")
 
         from shutil import copyfile
@@ -437,7 +447,9 @@ class Installer(QDialog):
 
             elif "win" in platformStuff.channel:
                 # Windows
-                program = "start 'ct.js' '" + self.location + "\\ct.js\\ctjs.exe'"
+                program = (
+                    'cmd /C start "ct.js" "' + self.location + '\\ct.js\\ctjs.exe"'
+                )
 
             else:
                 # Linux hopefully
