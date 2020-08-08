@@ -278,6 +278,12 @@ class InstallThread(QThread):
         """
         print(" ")
 
+        from shutil import copyfile
+
+        copyfile(
+            getAsset("icon.ico"), path.join(self.app.location, "ct.js", "ctjs.ico")
+        )
+
         self.changeStep("installInfoImage_4")
         print(" ")
         platformStuff.shortcuts(self.app)

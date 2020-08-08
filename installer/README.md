@@ -31,7 +31,6 @@ Run `./build.sh` to build the installer.
         -   [x] open ct.js button
             -   hopefully works
         -   [x] run bat/sh files that create shortcuts/file rules
-            -   windows is freezing, linux isnt tested, otherwise should work
         -   [ ] eta
 -   [ ] figure out pyinstaller/py2app/py2exe
 -   [ ] integrate everything into travis
