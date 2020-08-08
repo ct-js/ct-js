@@ -126,6 +126,10 @@
                 document.title = global.currentProject.settings.title + ' — ct.js';
             }
 
+            const {loadAllTypedefs, resetTypedefs} = require('./data/node_requires/resources/modules/typedefs');
+            resetTypedefs();
+            loadAllTypedefs();
+
             setTimeout(() => {
                 window.riot.update();
             }, 0);
@@ -176,6 +180,12 @@
     };
 
     window.loadProject = proj => {
+        if (!proj) {
+            const baseMessage = 'An attempt to open a project with an empty path.';
+            alertify.error(baseMessage + ' See the console for the call stack.');
+            const err = new Error(baseMessage);
+            throw err;
+        }
         sessionStorage.projname = path.basename(proj);
         global.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
 

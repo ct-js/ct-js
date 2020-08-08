@@ -10,6 +10,7 @@
         "apply": "Apply",
         "cancel": "Cancel",
         "cannotBeEmpty": "This cannot be empty",
+        "clear": "Clear",
         "confirmDelete": "Are you sure you want to delete {0}? It cannot be undone.",
         "contribute": "Contribute",
         "copy": "Copy",
@@ -23,6 +24,7 @@
         "exit": "Exit",
         "exitconfirm": "Are you sure you want to exit?<br/>All the unsaved changes will be lost!",
         "fastimport": "Fast Import",
+        "filter": "Filter:",
         "language": "Language",
         "loading": "Loading…",
         "translateToYourLanguage": "Translate ct.js!",
@@ -44,6 +46,7 @@
         "saveproject": "Save project",
         "selectDialogue": "Select…",
         "select": "Select",
+        "search": "Search:",
         "sort": "Sort:",
         "tilelayer": "tile layer",
         "wrongFormat": "Wrong file format",
@@ -80,6 +83,10 @@
     },
     "docsShortcut": {
         "openDocs": "Open the documentation"
+    },
+    "docsPanel": {
+        "documentation": "Documentation",
+        "reference": "Reference"
     },
     "exportPanel": {
         "hide": "Hide",
@@ -125,15 +132,15 @@
     },
     "menu": {
         "ctIDE": "ct.IDE",
-        "exportDesktop": "Export for desktop",
+        "exportDesktop": "Export for desktop…",
         "texture": "Textures",
-        "launch": "Compile and run",
+        "launch": "Launch",
         "launchHotkeys": "(F5; Alt+F5 to run in your default browser)",
         "license": "License",
         "min": "Windowed",
-        "modules": "Catmods",
         "patrons": "Patrons",
         "recentProjects": "Recent projects",
+        "restart": "Restart",
         "rooms": "Rooms",
         "save": "Save project",
         "startScreen": "Return to the starting screen",
@@ -169,7 +176,9 @@
         "disableAcceleration": "Disable graphics acceleration (needs restart)",
         "disableBuiltInDebugger": "Disable built-in debugger",
         "visitDiscordForGamedevSupport": "Join Discord server for gamedev support",
-        "postAnIssue": "Post an issue on Github"
+        "postAnIssue": "Post an issue on Github…",
+        "openProject": "Open a project…",
+        "openExample": "Open an example project…"
     },
     "onboarding": {
         "hoorayHeader": "Wow! You've just created a project!",
@@ -177,7 +186,7 @@
         "openSpaceShooterTutorial": "Learn how to make a space shooter",
         "openPlatformerTutorial": "Learn how to make a platformer",
         "openJettyCatTutorial": "Learn how to make a Jetty Cat",
-        "doNothing": "Skip this screen",
+        "doNothing": "Skip this screen and make a great game!",
         "showOnboardingCheckbox": "Show this screen when creating a new project"
     },
     "settings": {
@@ -210,6 +219,9 @@
             "iconNotice": "It should be a square, one-frame texture that is at least 256x256px large.",
             "invertPreloaderScheme": "Invert preloader's color scheme"
         },
+        "modules": {
+            "heading": "Catmods"
+        },
         "rendering": {
             "heading": "Render Options",
             "framerate": "Framerate:",
@@ -232,14 +244,12 @@
             "moveDown": "Move down",
             "moveUp": "Move up",
             "newScriptComment": "Use scripts to define frequent functions and import small libraries"
-        }
+        },
+        "catmodsSettings": "Catmods' settings"
     },
     "modules": {
         "author": "Author of this catmod",
         "dependencies": "Dependencies:",
-        "hasfields": "Configurable",
-        "hasinjects": "Has injections",
-        "hasinputmethods": "Provides additional input methods",
         "help": "Reference",
         "info": "Info",
         "license": "License",
@@ -249,12 +259,30 @@
         "parameters": "Parameters",
         "logs2": "Changelog",
         "settings": "Settings",
-        "importModules": "Import Modules"
+        "importModules": "Import Modules",
+        "enabledModules": "Enabled modules",
+        "availableModules": "Available modules",
+        "filter": "Filter",
+        "categories": {
+            "customization": "Customization",
+            "utilities": "Utilities",
+            "media": "Multimedia",
+            "misc": "Other",
+            "desktop": "Desktop builds",
+            "motionPlanning": "Motion planning",
+            "inputs": "Input methods",
+            "fx": "FX",
+            "mobile": "Mobile devices",
+            "integrations": "Integrations",
+            "tweaks": "Tweaks",
+            "networking": "Networking"
+        }
     },
     "texture": {
         "create": "Create",
         "import": "Import",
-        "skeletons": "Skeletal Animation"
+        "skeletons": "Skeletal Animation",
+        "createType": "Create a type from it"
     },
     "textureview": {
         "bgcolor": "Change bg color",
@@ -336,7 +364,8 @@
         "strokeweight": "Line weight:",
         "testtext": "Test text 0123 +",
         "textWrap": "Word wrap",
-        "textWrapWidth": "Max width:"
+        "textWrapWidth": "Max width:",
+        "useCustomFont": "Use custom font…"
     },
     "fonts": {
         "fonts": "Fonts",
@@ -347,7 +376,23 @@
         "typefacename": "Typeface name:",
         "fontweight": "Font weight:",
         "italic": "Is italic?",
-        "reimport": "Reimport"
+        "reimport": "Reimport",
+        "generateBitmapFont": "Also generate a bitmap font",
+        "bitmapFont": "Bitmap font",
+        "bitmapFontSize": "Font size:",
+        "bitmapFontLineHeight": "Line height:",
+        "resultingBitmapFontName": "Resource name",
+        "charset": "Charset:",
+        "charsets": {
+            "punctuation": "Digits and punctuation (you usually do need this)",
+            "basicLatin": "Basic Latin",
+            "latinExtended": "Latin extended",
+            "cyrillic": "Cyrillic",
+            "greekCoptic": "Greek and Coptic",
+            "custom": "Custom",
+            "allInFont": "Draw everything the font supports"
+        },
+        "customCharsetHint": "Type all the letters you want to include, both in upper and lower case."
     },
     "particleEmitters": {
         "emittersHeading": "Particle emitters",
@@ -502,8 +547,9 @@
     "notepad": {
         "local": "Project's notepad",
         "global": "Global notepad",
-        "helppages": "Help",
-        "backToHome": "Back to docs' homepage"
+        "helppages": "Learn",
+        "backToHome": "Back to docs' homepage",
+        "modulespages": "Modules' docs"
     },
     "patreon": {
         "aboutPatrons": "Patrons are people who show their support to ComigoGames at Patreon, in form of recurring donations. Not everyone there comes from ct.js; some are using other apps from ComigoGames. Tip: if you are a creator and donate to ComigoGames via Patreon, you will get a link to your page here — that's my little help to your creations :)",
