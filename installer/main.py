@@ -133,32 +133,36 @@ class PlatformStuff:
         print(f"Channel: {self.channel}")
 
     def windowsShortcuts(self, app: "Installer"):
-        # On windows, you can't create a symlink without administrator.
-        # An alternative is to dump a .bat file in the same places that runs ct.js
-        from pyshortcuts.windows import get_startmenu
-
-        batName = "ctjs.bat"
-        with open(getAsset(batName), "r") as f:
-            contents = f.read().replace("{installDir}", app.location)
-
-        firstLocation = path.join(pyshortcuts.get_desktop(), batName)
-        secondLocation = path.join(get_startmenu(), batName)
-
-        error = false
-
         try:
-            with open(firstLocation, "w") as f:
-                f.write(contents)
-        except:
-            error = true
+            from win32com.client import Dispatch
+            from pyshortcuts.windows import get_startmenu
 
-        try:
-            with open(secondLocation, "w") as f:
-                f.write(contents)
+            def create_shortcuts(tool_name, exe_path, icon_path):
+
+                shell = Dispatch("WScript.Shell")
+                shortcut_file = os.path.join(
+                    pyshortcuts.get_desktop(), tool_name + ".lnk"
+                )
+                shortcut = shell.CreateShortCut(shortcut_file)
+                shortcut.TargetPath = exe_path
+                # shortcut.WorkingDirectory = startin
+                shortcut.IconLocation = icon_path
+                shortcut.save()
+
+                shortcut_file2 = os.path.join(
+                    get_startmenu(), tool_name + ".lnk"
+                )
+                shortcut2 = shell.CreateShortCut(shortcut_file)
+                shortcut2.TargetPath = exe_path
+                # shortcut.WorkingDirectory = startin
+                shortcut2.IconLocation = icon_path
+                shortcut2.save()
+
+            create_shortcuts("ct.js", path.join(app.location, "ct.js", "ctjs.exe"), path.join(app.location, "ct.js", "ct_ide.png"))
+
+        except ImportError:
+            print("Error importing win32com. Maybe not on windows?")
         except:
-            error = true
-        
-        if error == true:
             showShortcutsWarning()
 
     def macShortcuts(self, app: "Installer"):
@@ -240,7 +244,7 @@ class InstallThread(QThread):
         # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
         release = [x for x in self.getGitHubData()["assets"] if channel in x["name"]][0]
         url = release["browser_download_url"]
-        #downloadUrl(url)
+        # downloadUrl(url)
         self.changeStep("installInfoImage_3")
 
     def changeStep(self, name):
