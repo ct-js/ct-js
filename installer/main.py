@@ -135,14 +135,7 @@ class PlatformStuff:
     def windowsShortcuts(self, app: "Installer"):
         print(" ")
         try:
-            from pyshortcuts.windows import get_startmenu
-
             def create_shortcuts(tool_name, exe_path, icon_path):
-                shortcut_file = os.path.join(
-                    pyshortcuts.get_desktop(), tool_name + ".lnk"
-                )
-                shortcut_file2 = os.path.join(get_startmenu(), tool_name + ".lnk")
-
                 with open(getAsset("create_shortcuts.bat"), "r") as f:
                     contents = f.read().replace("{installDir}", app.location)
 
@@ -155,8 +148,6 @@ class PlatformStuff:
                 path.join(app.location, "ct.js", "ct_ide.png"),
             )
 
-        except ImportError:
-            print("Error importing win32com. Maybe not on windows?")
         except:
             showShortcutsWarning()
 
