@@ -94,19 +94,19 @@ def downloadUrl(url, save_path=Contants.downloadedFilePath, chunk_size=128):
     print("Finished downloading " + url + " to " + save_path)
 
 
-def base_path():
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+# https://stackoverflow.com/a/13790741
+def basePath():
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
+        basePath = sys._MEIPASS
     except:
-        base_path = os.path.abspath(".")
+        basePath = os.path.abspath(".")
 
-    return base_path
+    return basePath
 
 
 def getAsset(name):
-    return os.path.join(base_path(), "assets", name)
+    return os.path.join(basePath(), "assets", name)
 
 
 def runCommand(command: str):
