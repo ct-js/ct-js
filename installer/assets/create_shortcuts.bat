@@ -1,0 +1,1 @@
+powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Start Menu\Programs\Startup\ct.js.lnk');$s.TargetPath="{installDir}\ct.js\ctjs.exe";IconLocation="{installDir}\ct.js\ct_ide.png";$s.Save()"
