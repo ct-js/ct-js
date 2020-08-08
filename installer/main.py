@@ -95,7 +95,7 @@ def downloadUrl(url, save_path=Contants.downloadedFilePath, chunk_size=128):
 
 
 def getAsset(name):
-    return os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", name,)
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", name)
 
 
 def runCommand(command: str):
@@ -133,32 +133,21 @@ class PlatformStuff:
         print(f"Channel: {self.channel}")
 
     def windowsShortcuts(self, app: "Installer"):
+        print(" ")
         try:
-            from win32com.client import Dispatch
             from pyshortcuts.windows import get_startmenu
 
             def create_shortcuts(tool_name, exe_path, icon_path):
-
-                shell = Dispatch("WScript.Shell")
                 shortcut_file = os.path.join(
                     pyshortcuts.get_desktop(), tool_name + ".lnk"
                 )
-                shortcut = shell.CreateShortCut(shortcut_file)
-                shortcut.TargetPath = exe_path
-                # shortcut.WorkingDirectory = startin
-                shortcut.IconLocation = icon_path
-                shortcut.save()
+                shortcut_file2 = os.path.join(get_startmenu(), tool_name + ".lnk")
 
-                shortcut_file2 = os.path.join(
-                    get_startmenu(), tool_name + ".lnk"
-                )
-                shortcut2 = shell.CreateShortCut(shortcut_file)
-                shortcut2.TargetPath = exe_path
-                # shortcut.WorkingDirectory = startin
-                shortcut2.IconLocation = icon_path
-                shortcut2.save()
-
-            create_shortcuts("ct.js", path.join(app.location, "ct.js", "ctjs.exe"), path.join(app.location, "ct.js", "ct_ide.png"))
+            create_shortcuts(
+                "ct.js",
+                path.join(app.location, "ct.js", "ctjs.exe"),
+                path.join(app.location, "ct.js", "ct_ide.png"),
+            )
 
         except ImportError:
             print("Error importing win32com. Maybe not on windows?")
@@ -238,14 +227,18 @@ class InstallThread(QThread):
     def getGitHubData(self):
         githubData = requests.get(Contants.githubUrl).json()
         self.changeStep("installInfoImage_2")
+        print(" ")
         return githubData
 
     def getRelease(self, channel):
         # https://stackoverflow.com/questions/9542738/python-find-in-list#9542768
         release = [x for x in self.getGitHubData()["assets"] if channel in x["name"]][0]
+        print(" ")
         url = release["browser_download_url"]
+        print(" ")
         # downloadUrl(url)
         self.changeStep("installInfoImage_3")
+        print(" ")
 
     def changeStep(self, name):
         self.app.currentStep.setPixmap(QPixmap(getAsset("check-circle.svg")))
@@ -254,7 +247,9 @@ class InstallThread(QThread):
 
     def run(self):
         self.getRelease(platformStuff.channel)
+        print(" ")
         zipFolderName = platformStuff.channel
+        print(" ")
 
         """
         with zipfile.ZipFile(Contants.downloadedFilePath, "r") as zip_ref:
@@ -275,13 +270,19 @@ class InstallThread(QThread):
             os.path.join(self.location, "ct.js"),
         )
         """
+        print(" ")
 
         self.changeStep("installInfoImage_4")
+        print(" ")
         platformStuff.shortcuts(self.app)
+        print(" ")
 
         self.app.welcomeLabel.setText(Contants.welcomeLabel_3)
+        print(" ")
         self.app.changeAbortLabel.setText(Contants.changeAbortLabel_3)
+        print(" ")
         self.app.currentStep.setPixmap(QPixmap(getAsset("check-circle.svg")))
+        print(" ")
         self.app.currentStep = null
         self.app.doneInstalling = true
         self.app.setWindowTitle("Done installing ct.js!")
