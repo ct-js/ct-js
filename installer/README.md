@@ -33,4 +33,7 @@ Run `./build.sh` to build the installer.
         -   [x] run bat/sh files that create shortcuts/file rules
         -   [ ] eta
 -   [ ] figure out pyinstaller/py2app/py2exe
+    -   [x] windows
+    -   [ ] mac
+    -   [ ] linux
 -   [ ] integrate everything into travis
