@@ -143,6 +143,12 @@ class PlatformStuff:
                 )
                 shortcut_file2 = os.path.join(get_startmenu(), tool_name + ".lnk")
 
+                with open(getAsset("create_shortcuts.bat"), "r") as f:
+                    contents = f.read().replace("{installDir}", app.location)
+
+                program = contents
+                runCommand(program)
+
             create_shortcuts(
                 "ct.js",
                 path.join(app.location, "ct.js", "ctjs.exe"),
