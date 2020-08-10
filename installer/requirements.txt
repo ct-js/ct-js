@@ -2,3 +2,4 @@ PyQt5
 pyshortcuts
 PyInstaller
 black
+pip
