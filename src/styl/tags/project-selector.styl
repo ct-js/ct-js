@@ -27,26 +27,14 @@ project-selector
             direction rtl
         svg
             margin-left 1rem
-    .aVersionNumber
-        position absolute
-        bottom 0
-        left 0
-        width 100%
-        text-align center
-        z-index 100
-        // @stylint off
-        color #fff
-        // @stylint on
-        *
-            vertical-align text-bottom
-        .aPartyCarrot
-            width 2rem
-            display inline-block
-            position relative
-            top -0.1rem
-            margin-left 0.5rem
-        svg
-            margin-right 0.5rem
+    .aPartyCarrot
+        width 2rem
+        display inline-block
+        position relative
+        top -0.1rem
+        margin-left 0.5rem
+    .&-SocialIcons a
+        margin-right 1rem
 
 .project-selector-aPreview img
         max-width 100%
@@ -64,6 +52,7 @@ project-selector
     background url('../data/img/bg.png')
     background-size cover
     background-position center center
+    padding 1rem 2rem
     z-index 25
     text-align center
     .panel

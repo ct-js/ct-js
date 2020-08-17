@@ -1,6 +1,7 @@
 project-selector
-    #bg.stretch.middle
-        #intro.panel.middleinner
+    #bg.stretch.flexcol
+        .filler
+        #intro.panel.nogrow
             div.flexrow
                 .c4.np
                 .c8.npt.npb
@@ -36,24 +37,32 @@ project-selector
                     ).wide
                 .c3.npr.npt.npb
                     button.nm.wide.inline(onclick="{openProjectFolder}") {voc.newProject.button}
-    .aVersionNumber
-        a(href="https://discord.gg/CggbPkb" title="{voc.discord}" onclick="{openExternal('https://discord.gg/CggbPkb')}")
-            svg.icon
-                use(xlink:href="data/icons.svg#discord")
-        a(href="https://twitter.com/ctjsrocks" title="{voc.twitter}" onclick="{openExternal('https://twitter.com/ctjsrocks')}")
-            svg.icon
-                use(xlink:href="data/icons.svg#twitter")
-        .inlineblock v{ctjsVersion}.
-        |
-        |
-        // as itch releases are always in sync with the fetched version number, let's route users to itch.io page
-        a.inlineblock(if="{newVersion}" href="https://comigo.itch.io/ct#download" onclick="{openExternal}")
-            | {newVersion}
-            img(src="data/img/partycarrot.gif" if="{newVersion}").aPartyCarrot
+        .filler
+        .flexrow.nogrow.project-selector-SocialIcons
+            span.nogrow
+                a(href="https://discord.gg/CggbPkb" title="{voc.discord}" onclick="{openExternal('https://discord.gg/CggbPkb')}")
+                    svg.icon
+                        use(xlink:href="data/icons.svg#discord")
+                a(href="https://t.me/ct_js" title="{voc.telegram}" onclick="{openExternal('https://t.me/ct_js')}")
+                    svg.icon
+                        use(xlink:href="data/icons.svg#telegram")
+                a(href="https://twitter.com/ctjsrocks" title="{voc.twitter}" onclick="{openExternal('https://twitter.com/ctjsrocks')}")
+                    svg.icon
+                        use(xlink:href="data/icons.svg#twitter")
+                a(href="https://github.com/ct-js/ct-js/" title="{voc.github}" onclick="{openExternal('https://github.com/ct-js/ct-js/')}")
+                    svg.icon
+                        use(xlink:href="data/icons.svg#github")
+                a(href="https://comigo.itch.io/ct" title="{voc.itch}" onclick="{openExternal('https://comigo.itch.io/ct')}")
+                    svg.icon
+                        use(xlink:href="data/icons.svg#itch-dot-io")
+                a(href="https://www.patreon.com/comigo" title="{voc.patreon}" onclick="{openExternal('https://www.patreon.com/comigo')}")
+                    svg.icon
+                        use(xlink:href="data/icons.svg#patreon")
+            .filler
+            update-bar.nogrow
     script.
         const fs = require('fs-extra'),
               path = require('path');
-        this.ctjsVersion = process.versions.ctjs;
         this.requirePath = path;
         this.namespace = 'intro';
         this.mixin(window.riotVoc);
@@ -178,29 +187,6 @@ project-selector
             }
         };
 
-        // Checking for updates
-        setTimeout(() => {
-            const {isWin, isLinux} = require('./data/node_requires/platformUtils.js');
-            let channel = 'osx64';
-            if (isWin) {
-                channel = 'win64';
-            } else if (isLinux) {
-                channel = 'linux64';
-            }
-            fetch(`https://itch.io/api/1/x/wharf/latest?target=comigo/ct&channel_name=${channel}`)
-            .then(response => response.json())
-            .then(json => {
-                if (!json.errors) {
-                    if (this.ctjsVersion !== json.latest) {
-                        this.newVersion = this.voc.latestVersion.replace('$1', json.latest);
-                        this.update();
-                    }
-                } else {
-                    console.error('Update check failed:');
-                    console.error(json.errors);
-                }
-            });
-        }, 0);
 
         this.openExternal = link => e => {
             nw.Shell.openExternal(link);

@@ -119,13 +119,16 @@
         "loadingProject": "Loading the project…",
         "loadingProjectError": "Cannot open this project because of the following error: ",
         "homepage": "Homepage",
-        "latestVersion": "Version $1 is available",
         "forgetProject": "Forget this project",
         "browse": "Browse",
         "latest": "Latest projects",
         "unableToWriteToFolders": "Ct.js could not find an appropriate place for projects! Make sure you store ct.js app inside a folder you have access to write to.",
         "twitter": "Twitter channel",
-        "discord": "Discord community"
+        "discord": "Discord community",
+        "telegram": "Telegram channel",
+        "github": "Github repository",
+        "itch": "Store page at itc.io",
+        "patreon": "Support project at Patreon!"
     },
     "licensepanel": {
         "ctjslicense": "Ct.js License (MIT)"
@@ -592,5 +595,16 @@
             "brings light and hope 🌞",
             "is elegant and beautiful 🎩"
         ]
+    },
+    "updates": {
+        "withItch": "Close ct.js and update it with itch.io app.",
+        "manuallyReadonly": "The ct.js directory is read-only, so you will need to manually update ct.js with your package manager.",
+        "withInstaller": "Update",
+        "downloadingInstaller": "Downloading the installer. We will notify you when it is ready.",
+        "updateLater": "Update later",
+        "saveAndUpdate": "Save and update",
+        "versionAvailable": "Version $1 is available!",
+        "fetchingUpdateInfo": "Checking for updates…",
+        "youHaveLatestVersion": "You have the latest version! 🎉"
     }
 }
