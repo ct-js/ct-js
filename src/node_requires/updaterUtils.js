@@ -1,7 +1,7 @@
 const {exec, isWin, isMac} = require('./platformUtils');
 const path = require('path');
 const winInstaller = path.join(exec, 'ctjs-installer.exe');
-const macInstaller = path.join(exec, 'ctjs-installer.app');
+const macInstaller = path.join(exec, 'ctjs-installer.app/Contents/MacOS/ctjs-installer');
 const linuxInstaller = path.join(exec, 'ctjs-installer');
 /**
  * Checks whether an updater/installer exists inside the ct.js' directory.
