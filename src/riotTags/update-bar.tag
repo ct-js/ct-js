@@ -15,7 +15,7 @@ update-bar
         this.namespace = 'updates';
         this.mixin(window.riotVoc);
         this.fetchingInfo = true;
-        this.ctjsVersion = "1.4.0";
+        this.ctjsVersion = process.versions.ctjs;
         this.updaterResolution = {decision: false};
         // Checking for updates
         setTimeout(() => {
