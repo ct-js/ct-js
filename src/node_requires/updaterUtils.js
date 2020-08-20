@@ -30,7 +30,7 @@ const runUpdater = async function () {
         detached: true,
         cwd: exec
     };
-    const args = [`'${exec}'`];
+    const args = [`${exec}`];
 
     if (isWin) {
         spawn(winInstaller, args, opts);
