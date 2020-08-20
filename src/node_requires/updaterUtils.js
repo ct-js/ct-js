@@ -1,8 +1,9 @@
 const {exec, isWin, isMac} = require('./platformUtils');
 const path = require('path');
 const winInstaller = path.join(exec, 'ctjs-installer.exe');
-const macInstaller = path.join(exec, 'ctjs-installer.app/Contents/MacOS/ctjs-installer');
+const macInstaller = path.join(exec, 'ctjs-installer.app', 'Contents', 'MacOS', 'ctjs-installer');
 const linuxInstaller = path.join(exec, 'ctjs-installer');
+
 /**
  * Checks whether an updater/installer exists inside the ct.js' directory.
  * @returns {Promise<boolean>} `true` if an installer exists.
@@ -23,13 +24,13 @@ const runUpdater = async function () {
     if (!(await updaterExists())) {
         throw new Error('The updater was requested, but it did not exist.');
     }
-    const spawn = require('child_process');
+    const {spawn} = require('child_process');
 
     const opts = {
         detached: true,
         cwd: exec
     };
-    const args = ['--update'];
+    const args = [`'${exec}'`];
 
     if (isWin) {
         spawn(winInstaller, args, opts);

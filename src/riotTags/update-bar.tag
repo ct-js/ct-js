@@ -1,12 +1,12 @@
 update-bar
-    span v{ctjsVersion}.
+    span v{ctjsVersion} |
     |
     |
     span(if="{fetchingInfo}") {voc.fetchingUpdateInfo}
     span(if="{newVersion}" href="https://comigo.itch.io/ct#download" onclick="{openExternal}")
-        | {newVersion}
+        |  {newVersion}
         img(src="data/img/partycarrot.gif" if="{newVersion}").aPartyCarrot
-        button(onclick="{runUpdater}" if="{updaterResolution.decision}")
+        button(onclick="({runUpdater})()" if="{updaterResolution.decision}")
             span {voc.withInstaller}
         span(if="{!updaterResolution.decision && reason === 'itch'}") {voc.withItch}
         span(if="{!updaterResolution.decision && reason === 'readonly'}") {voc.manuallyReadonly}
@@ -15,7 +15,8 @@ update-bar
         this.namespace = 'updates';
         this.mixin(window.riotVoc);
         this.fetchingInfo = true;
-        this.ctjsVersion = process.versions.ctjs;
+        this.ctjsVersion = "1.4.0";
+        this.updaterResolution = {decision: false};
         // Checking for updates
         setTimeout(() => {
             const {isWin, isLinux} = require('./data/node_requires/platformUtils.js');
@@ -30,9 +31,9 @@ update-bar
             .then(json => {
                 if (!json.errors) {
                     if (this.ctjsVersion !== json.latest) {
-                        this.newVersion = this.voc.latestVersion.replace('$1', json.latest);
-                        const {updaterNeeded} = require('./data/node_requires/updaterServices');
-                        updaterNeeded.then(resolution => {
+                        this.newVersion = this.voc.versionAvailable.replace('$1', json.latest);
+                        const {updaterNeeded} = require('./data/node_requires/updaterUtils');
+                        updaterNeeded().then(resolution => {
                             this.updaterResolution = resolution;
                             this.update();
                         });
@@ -52,5 +53,7 @@ update-bar
             if (await updaterExists()) {
                 await runUpdater();
                 nw.App.quit();
+            } else {
+                alertify.error("You do not have the installer downloaded! Click here to go to the download page", () => nw.Shell.openExternal("https://ctjs.rocks/download/"));
             }
         };
