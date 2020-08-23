@@ -4,7 +4,7 @@ It allows you to easily save and load JSON objects, as well as plain text data.
 
 JSON objects are regular JavaScript objects, but without functions, Date objects, RegExps, circular references, and some other advanced stuff. If your variable consists of other objects, arrays, strings, numbers and boolean, it can be safely stored, and loaded later in the same form. Thus, they are great for saving your game state.
 
-By default, all the file operations will be performed relative to a special directory created for your game, which is templated as a `${User's home directory}/${Author name from the settings tab}/${Project's name from the same tab}`, e.g. `/home/comigo/Cosmo Myzrail Gorynych/Platformer complete tutorial` on a Linux machine. You can inspect this behavior by calling `ct.fs.getPath(...)`, or simply by reading ct.fs.gameFolder parameter.
+By default, all the file operations will be performed relative to a special directory created for your game, which is templated as a `${User Application Data}/${Author name from the settings tab}/${Project's name from the same tab}`, e.g. `/home/comigo/.local/share/Cosmo Myzrail Gorynych/Platformer complete tutorial` on a Linux machine. You can inspect this behavior by calling `ct.fs.getPath(...)`, or simply by reading ct.fs.gameFolder parameter.
 
 This behavior can be changed by setting `ct.fs.gameFolder`, but it's not recommended unless you changed your meta fields and need to preserved user's data.
 
