@@ -19,6 +19,9 @@ try {
     // The `HOME` variable is not always available in ct.js on Windows
     const home = process.env.HOME || ((process.env.HOMEDRIVE || '') + process.env.HOMEPATH);
 
+    // Borrowed from keyboard.polyfill
+    function contains(s, ss) { return String(s).indexOf(ss) !== -1; }
+
     const operatingSystem = (function() {
         if (contains(navigator.platform, 'Win')) { return operatingSystems.Windows; }
         if (contains(navigator.platform, 'Mac')) { return operatingSystems.macOS; }
@@ -137,9 +140,6 @@ try {
 
     ct.fs.rename = ct.fs.move;
     ct.fs.exists = ct.fs.stat;
-
-    // Util
-    function contains(s, ss) { return String(s).indexOf(ss) !== -1; }
 } catch (e) {
     console.warn('[ct.fs] File system is not available! Make sure you have fallbacks for localStorage to save your game state.');
     console.warn(e);
