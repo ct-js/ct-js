@@ -14,43 +14,55 @@ try {
         Linux: 'linux',
         iOS: 'ios',
         Android: 'android'
-    }
+    };
 
     // The `HOME` variable is not always available in ct.js on Windows
     const home = process.env.HOME || ((process.env.HOMEDRIVE || '') + process.env.HOMEPATH);
 
     // Borrowed from keyboard.polyfill
-    function contains(s, ss) { return String(s).indexOf(ss) !== -1; }
+    const contains = function contains(s, ss) {
+        return String(s).indexOf(ss) !== -1;
+    };
 
-    const operatingSystem = (function() {
-        if (contains(navigator.platform, 'Win')) { return operatingSystems.Windows; }
-        if (contains(navigator.platform, 'Mac')) { return operatingSystems.macOS; }
-        if (contains(navigator.platform, 'CrOS')) { return operatingSystems.ChromeOS; }
-        if (contains(navigator.platform, 'Linux')) { return operatingSystems.Linux; }
-        if (contains(navigator.userAgent, 'iPad') || contains(navigator.platform, 'iPod') || contains(navigator.platform, 'iPhone')) { return operatingSystems.iOS; }
+    const operatingSystem = (function getOperatingSystem() {
+        if (contains(navigator.platform, 'Win')) {
+            return operatingSystems.Windows;
+        }
+        if (contains(navigator.platform, 'Mac')) {
+            return operatingSystems.macOS;
+        }
+        if (contains(navigator.platform, 'CrOS')) {
+            return operatingSystems.ChromeOS;
+        }
+        if (contains(navigator.platform, 'Linux')) {
+            return operatingSystems.Linux;
+        }
+        if (contains(navigator.userAgent, 'iPad') || contains(navigator.platform, 'iPod') || contains(navigator.platform, 'iPhone')) {
+            return operatingSystems.iOS;
+        }
         return '';
-    } ());
+    }());
 
-    
+
     const getAppData = (home, operatingSystem) => {
-        switch(operatingSystem) {
-            case operatingSystems.Windows:
-                return process.env.AppData;
-            case operatingSystems.macOS:
-                return `${home}/Library/Application Support`;
-            case operatingSystems.Linux:
-                return process.env.XDG_DATA_HOME || `${home}/.local/share`;
+        switch (operatingSystem) {
+        case operatingSystems.Windows:
+            return process.env.AppData;
+        case operatingSystems.macOS:
+            return `${home}/Library/Application Support`;
+        case operatingSystems.Linux:
+            return process.env.XDG_DATA_HOME || `${home}/.local/share`;
             // Don't know what to do for ChromeOS or iOS, do they use AppData or
             // Should those default to LocalStorage?
-            default:
-                return home;
+        default:
+            return home;
         }
-    }
+    };
 
     const appData = getAppData(home, operatingSystem);
-    
+
     const getPath = dest => {
-        const absoluteDest = path.isAbsolute(dest)? dest : path.join(ct.fs.gameFolder, dest);
+        const absoluteDest = path.isAbsolute(dest) ? dest : path.join(ct.fs.gameFolder, dest);
         if (ct.fs.forceLocal) {
             if (absoluteDest.indexOf(ct.fs.gameFolder) !== 0) {
                 throw new Error('[ct.fs] Operations outside the save directory are not permitted by default due to safety concerns. If you do need to work outside the save directory, change `ct.fs.forceLocal` to `false`. ' +
@@ -66,22 +78,20 @@ try {
         });
     };
 
-    
-
 
     ct.fs = {
         isAvailable: true,
         gameFolder: path.join(appData, ct.meta.author || '', ct.meta.name || 'Ct.js game'),
         forceLocal: true,
 
-        async save(filename, data) {
+        async save(filename, jsonData) {
             await ensureParents(filename);
-            await fs.writeFile(getPath(filename), JSON.stringify(data), 'utf8');
+            await fs.writeFile(getPath(filename), JSON.stringify(jsonData), 'utf8');
             return void 0;
         },
         async load(filename) {
-            const data = await fs.readFile(getPath(filename), 'utf8');
-            return JSON.parse(data);
+            const textData = await fs.readFile(getPath(filename), 'utf8');
+            return JSON.parse(textData);
         },
         async saveText(filename, text) {
             if (!text && text !== '') {
