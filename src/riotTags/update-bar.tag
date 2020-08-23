@@ -4,9 +4,10 @@ update-bar
     |
     span(if="{fetchingInfo}") {voc.fetchingUpdateInfo}
     span(if="{newVersion}" href="https://comigo.itch.io/ct#download" onclick="{openExternal}")
-        |  {newVersion}
+        |
+        | { newVersion }
         img(src="data/img/partycarrot.gif" if="{newVersion}").aPartyCarrot
-        button(onclick="({runUpdater})()" if="{updaterResolution.decision}")
+        button(onclick="{runUpdater}" if="{updaterResolution.decision}")
             span {voc.withInstaller}
         span(if="{!updaterResolution.decision && reason === 'itch'}") {voc.withItch}
         span(if="{!updaterResolution.decision && reason === 'readonly'}") {voc.manuallyReadonly}
@@ -16,7 +17,9 @@ update-bar
         this.mixin(window.riotVoc);
         this.fetchingInfo = true;
         this.ctjsVersion = process.versions.ctjs;
-        this.updaterResolution = {decision: false};
+        this.updaterResolution = {
+            decision: false
+        };
         // Checking for updates
         setTimeout(() => {
             const {isWin, isLinux} = require('./data/node_requires/platformUtils.js');
@@ -54,6 +57,6 @@ update-bar
                 await runUpdater();
                 nw.App.quit();
             } else {
-                alertify.error("You do not have the installer downloaded! Click here to go to the download page", () => nw.Shell.openExternal("https://ctjs.rocks/download/"));
+                alertify.error('You do not have the installer downloaded! Click here to go to the download page', () => nw.Shell.openExternal('https://ctjs.rocks/download/'));
             }
         };
