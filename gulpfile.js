@@ -3,6 +3,7 @@
 /* eslint no-console: 0 */
 const path = require('path'),
       gulp = require('gulp'),
+      changed = require('gulp-changed'),
       concat = require('gulp-concat'),
       replace = require('gulp-replace'),
       sourcemaps = require('gulp-sourcemaps'),
@@ -106,14 +107,22 @@ const compilePug = () =>
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./app/'));
 
+const riotSettings = {
+    compact: false,
+    template: 'pug'
+};
 const compileRiot = () =>
     gulp.src('./src/riotTags/**')
-    .pipe(riot({
-        compact: false,
-        template: 'pug'
-    }))
+    .pipe(riot(riotSettings))
     .pipe(concat('riot.js'))
     .pipe(gulp.dest('./temp/'));
+
+const compileRiotPartial = path => {
+    console.log(`Updating tag at ${path}…`);
+    return gulp.src(path)
+    .pipe(riot(riotSettings))
+    .pipe(gulp.dest('./app/data/hotLoadTags/'));
+};
 
 const concatScripts = () =>
     streamQueue(
@@ -155,12 +164,19 @@ const copyInEditorDocs = () =>
 
 const compileScripts = gulp.series(compileRiot, concatScripts);
 
-const icons = () =>
+const makeIconAtlas = () =>
     gulp.src('./src/icons/**/*.svg', {
         base: './src/icons'
     })
     .pipe(sprite())
     .pipe(gulp.dest('./app/data'));
+
+const writeIconList = () => fs.readdir('./src/icons')
+    .then(files => files.filter(file => path.extname(file) === '.svg'))
+    .then(files => files.map(file => path.basename(file, '.svg')))
+    .then(files => fs.outputJSON('./app/data/icons.json', files));
+
+const icons = gulp.series(makeIconAtlas, writeIconList);
 
 const watchScripts = () => {
     gulp.watch('./src/js/**/*', gulp.series(compileScripts))
@@ -171,12 +187,12 @@ const watchScripts = () => {
     .on('change', fileChangeNotifier);
 };
 const watchRiot = () => {
-    gulp.watch('./src/riotTags/**/*', gulp.series(compileScripts))
-    .on('error', err => {
+    const watcher = gulp.watch('./src/riotTags/**/*');
+    watcher.on('error', err => {
         notifier.notify(makeErrorObj('Riot failure', err));
         console.error('[pug error]', err);
-    })
-    .on('change', fileChangeNotifier);
+    });
+    watcher.on('change', compileRiotPartial);
 };
 const watchStylus = () => {
     gulp.watch('./src/styl/**/*', compileStylus)
@@ -414,6 +430,26 @@ const bakePackages = async () => {
         macIcns: nightly ? './buildAssets/nightly.icns' : './buildAssets/icon.icns'
     });
     await nw.build();
+
+    // Copy .itch.toml files for each target platform
+    await Promise.all(platforms.map(platform => {
+        if (platform.indexOf('win') === 0) {
+            return fs.copy(
+                './buildAssets/windows.itch.toml',
+                path.join(`./build/ctjs - v${pack.version}`, platform, '.itch.toml')
+            );
+        }
+        if (platform === 'osx64') {
+            return fs.copy(
+                './buildAssets/mac.itch.toml',
+                path.join(`./build/ctjs - v${pack.version}`, platform, '.itch.toml')
+            );
+        }
+        return fs.copy(
+            './buildAssets/linux.itch.toml',
+            path.join(`./build/ctjs - v${pack.version}`, platform, '.itch.toml')
+        );
+    }));
     console.log('Built to this location:', path.join('./build', `ctjs - v${pack.version}`));
 };
 

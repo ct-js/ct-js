@@ -187,7 +187,7 @@ const Copy = (function Copy() {
                     this.scale.y = exts.ty;
                 }
                 if (exts.tr) {
-                    this.rotation = exts.tr;
+                    this.angle = exts.tr;
                 }
             }
             this.position.set(x || 0, y || 0);
@@ -205,7 +205,7 @@ const Copy = (function Copy() {
                     onDraw: t.onDraw,
                     onCreate: t.onCreate,
                     onDestroy: t.onDestroy,
-                    shape: t.texture ? ct.res.registry[t.texture].shape : {}
+                    shape: ct.res.getTextureShape(t.texture || -1)
                 });
                 if (exts && exts.depth !== void 0) {
                     this.depth = exts.depth;
@@ -229,7 +229,7 @@ const Copy = (function Copy() {
         set tex(value) {
             this.textures = ct.res.getTexture(value);
             this[textureAccessor] = value;
-            this.shape = value !== -1 ? ct.res.registry[value].shape : {};
+            this.shape = ct.res.getTextureShape(value);
             this.anchor.x = this.textures[0].defaultAnchor.x;
             this.anchor.y = this.textures[0].defaultAnchor.y;
             return value;
@@ -256,7 +256,7 @@ const Copy = (function Copy() {
             this.vspeed *= multiplier;
         }
         get direction() {
-            return (Math.atan2(this.vspeed, this.hspeed) * -180 / Math.PI + 360) % 360;
+            return (Math.atan2(this.vspeed, this.hspeed) * 180 / Math.PI + 360) % 360;
         }
         /**
          * The moving direction of the copy, in degrees, starting with 0 at the right side
@@ -267,20 +267,8 @@ const Copy = (function Copy() {
          */
         set direction(value) {
             var speed = this.speed;
-            this.hspeed = speed * Math.cos(value * Math.PI / -180);
-            this.vspeed = speed * Math.sin(value * Math.PI / -180);
-            return value;
-        }
-        get rotation() {
-            return this.transform.rotation / Math.PI * -180;
-        }
-        /**
-         * The direction of a copy's texture.
-         * @param {number} value New rotation value
-         * @type {number}
-         */
-        set rotation(value) {
-            this.transform.rotation = value * Math.PI / -180;
+            this.hspeed = speed * Math.cos(value * Math.PI / 180);
+            this.vspeed = speed * Math.sin(value * Math.PI / 180);
             return value;
         }
 
@@ -290,8 +278,8 @@ const Copy = (function Copy() {
          */
         move() {
             if (this.gravity) {
-                this.hspeed += this.gravity * ct.delta * Math.cos(this.gravityDir * Math.PI / -180);
-                this.vspeed += this.gravity * ct.delta * Math.sin(this.gravityDir * Math.PI / -180);
+                this.hspeed += this.gravity * ct.delta * Math.cos(this.gravityDir * Math.PI / 180);
+                this.vspeed += this.gravity * ct.delta * Math.sin(this.gravityDir * Math.PI / 180);
             }
             this.x += this.hspeed * ct.delta;
             this.y += this.vspeed * ct.delta;
@@ -304,8 +292,8 @@ const Copy = (function Copy() {
          * @returns {void}
          */
         addSpeed(spd, dir) {
-            this.hspeed += spd * Math.cos(dir * Math.PI / -180);
-            this.vspeed += spd * Math.sin(dir * Math.PI / -180);
+            this.hspeed += spd * Math.cos(dir * Math.PI / 180);
+            this.vspeed += spd * Math.sin(dir * Math.PI / 180);
         }
 
         /**
@@ -385,27 +373,6 @@ const Copy = (function Copy() {
             return obj;
         },
         /**
-         * Calls `move` on a given copy, recalculating its position based on its speed.
-         * @param {Copy} o The copy to move
-         * @returns {void}
-         * @deprecated
-         */
-        move(o) {
-            o.move();
-        },
-        /**
-         * Applies an acceleration to the copy, with a given additive speed and direction.
-         * Technically, calls copy's `addSpeed(spd, dir)` method.
-         * @param {any} o The copy to accelerate
-         * @param {any} spd The speed to add
-         * @param {any} dir The direction in which to push the copy
-         * @returns {void}
-         * @deprecated
-         */
-        addSpeed(o, spd, dir) {
-            o.addSpeed(spd, dir);
-        },
-        /**
          * Applies a function to each copy in the current room
          * @param {Function} func The function to apply
          * @returns {void}
@@ -422,12 +389,25 @@ const Copy = (function Copy() {
             func.apply(obj, this);
         },
         /**
+         * Checks whether there are any copies of this type's name.
+         * Will throw an error if you pass an invalid type name.
+         * @param {string} type The name of a type to check.
+         * @returns {boolean} Returns `true` if at least one copy exists in a room;
+         * `false` otherwise.
+         */
+        exists(type) {
+            if (!(type in ct.types.templates)) {
+                throw new Error(`[ct.types] ct.types.exists: There is no such type ${type}.`);
+            }
+            return ct.types.list[type].length > 0;
+        },
+        /**
          * Checks whether a given object exists in game's world.
          * Intended to be applied to copies, but may be used with other PIXI entities.
          * @param {Copy|Pixi.DisplayObject|any} obj The copy which existence needs to be checked.
          * @returns {boolean} Returns `true` if a copy exists; `false` otherwise.
          */
-        exists(obj) {
+        valid(obj) {
             if (obj instanceof Copy) {
                 return !obj.kill;
             }

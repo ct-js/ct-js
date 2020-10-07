@@ -34,7 +34,6 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             use(xlink:href="data/icons.svg#{opened? 'chevron-right' : 'chevron-left'}")
     script.
         const glob = require('./data/node_requires/glob');
-        const hotkey = require('./data/node_requires/hotkeys')(document);
         this.opened = false;
         this.namespace = 'notepad';
         this.mixin(window.riotVoc);
@@ -42,10 +41,14 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             this.opened = !this.opened;
         };
 
-        hotkey.on('F1', () => {
+        const openHelp = () => {
             this.opened = true;
             this.tab = 'helppages';
             this.update();
+        };
+        window.hotkeys.on('F1', openHelp);
+        this.on('unmount', () => {
+            window.hotkeys.off('F1', openHelp);
         });
 
         this.tab = 'notepadlocal';
@@ -107,13 +110,16 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             cleanUrls: true
         };
         const handler = require('serve-handler');
-        const fileServer = require('http').createServer((request, response) =>
-            handler(request, response, fileServerSettings));
-        fileServer.listen(0, () => {
-            // eslint-disable-next-line no-console
-            console.info(`[ct.docs] Running docs server at http://localhost:${fileServer.address().port}`);
-        });
-        this.server = fileServer;
+        if (!this.docServerStarted) {
+            const fileServer = require('http').createServer((request, response) =>
+                handler(request, response, fileServerSettings));
+            fileServer.listen(0, () => {
+                // eslint-disable-next-line no-console
+                console.info(`[ct.docs] Running docs server at http://localhost:${fileServer.address().port}`);
+            });
+            this.server = fileServer;
+            this.docServerStarted = true;
+        }
 
         var openDocs = e => {
             this.changeTab('helppages')();
