@@ -285,6 +285,23 @@ const exportCtProject = async (project, projdir) => {
 
     css += fonts.css;
 
+    // Wrap in function
+    buffer = `(function() {\n${buffer}\n})();`;
+
+    // JS minify
+    buffer = await (await require('terser').minify(buffer, {
+        mangle: {
+            reserved: ['ct']
+        },
+        format: {
+            comments: '/^! Made with ct.js /'
+        }
+    })).code;
+
+    // JS obfuscator
+    buffer = require('javascript-obfuscator').obfuscate(buffer)
+.getObfuscatedCode();
+
     // Output minified HTML & CSS
     const csswring = require('csswring');
     const htmlMinify = require('html-minifier').minify;
