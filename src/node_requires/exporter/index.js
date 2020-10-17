@@ -285,22 +285,28 @@ const exportCtProject = async (project, projdir) => {
 
     css += fonts.css;
 
-    // Wrap in function
-    buffer = `(function() {\n${buffer}\n})();`;
-
     // JS minify
-    buffer = await (await require('terser').minify(buffer, {
-        mangle: {
-            reserved: ['ct']
-        },
-        format: {
-            comments: '/^! Made with ct.js /'
-        }
-    })).code;
+    if (currentProject.settings.export.codeModifier === 'minify') {
+        buffer = await (await require('terser').minify(buffer, {
+            mangle: {
+                reserved: ['ct']
+            },
+            format: {
+                comments: '/^! Made with ct.js /'
+            }
+        })).code;
+    }
 
     // JS obfuscator
-    buffer = require('javascript-obfuscator').obfuscate(buffer)
+    if (currentProject.settings.export.codeModifier === 'obfuscate') {
+        buffer = require('javascript-obfuscator').obfuscate(buffer)
 .getObfuscatedCode();
+    }
+
+    // Wrap in function
+    if (currentProject.settings.export.functionWrap) {
+        buffer = `(function() {\n${buffer}\n})();`;
+    }
 
     // Output minified HTML & CSS
     const csswring = require('csswring');
