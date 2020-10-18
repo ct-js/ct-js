@@ -257,7 +257,7 @@
         },
         "export": {
             "heading": "Export settings",
-            "functionWrap": "Wrap code in function? (makes debugging almost impossible)",
+            "functionWrap": "Wrap code in function (makes debugging almost impossible, do not enable when developing)",
             "codeModifier": "Code modifier",
             "codeModifiers": {
                 "none": "None",
