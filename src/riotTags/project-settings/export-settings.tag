@@ -12,6 +12,7 @@ export-settings
                 span=`{voc.codeModifiers.${key}}`
                 - if (key === 'obfuscate')
                     hover-hint(text="{voc.obfuscateWarning}" icon="alert-triangle")
+    p {voc.codeModifierAndWrapNote}
 
     script.
         this.namespace = 'settings.export';

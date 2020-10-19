@@ -66,7 +66,7 @@ const injectModules = injections => // async
     }));
 
 // eslint-disable-next-line max-lines-per-function
-const exportCtProject = async (project, projdir) => {
+const exportCtProject = async (project, projdir, production) => {
     currentProject = project;
 
     const {languageJSON} = require('./../i18n');
@@ -76,6 +76,10 @@ const exportCtProject = async (project, projdir) => {
 
     if (project.rooms.length < 1) {
         throw new Error(languageJSON.common.norooms);
+    }
+
+    if (localStorage.forceProductionForDebug === 'yes') {
+        production = true;
     }
 
     await fs.remove(writeDir);
@@ -286,7 +290,7 @@ const exportCtProject = async (project, projdir) => {
     css += fonts.css;
 
     // JS minify
-    if (currentProject.settings.export.codeModifier === 'minify') {
+    if (production && currentProject.settings.export.codeModifier === 'minify') {
         buffer = await (await require('terser').minify(buffer, {
             mangle: {
                 reserved: ['ct']
@@ -298,13 +302,14 @@ const exportCtProject = async (project, projdir) => {
     }
 
     // JS obfuscator
-    if (currentProject.settings.export.codeModifier === 'obfuscate') {
-        buffer = require('javascript-obfuscator').obfuscate(buffer)
-.getObfuscatedCode();
+    if (production && currentProject.settings.export.codeModifier === 'obfuscate') {
+        buffer = require('javascript-obfuscator')
+            .obfuscate(buffer)
+            .getObfuscatedCode();
     }
 
     // Wrap in function
-    if (currentProject.settings.export.functionWrap) {
+    if (production && currentProject.settings.export.functionWrap) {
         buffer = `(function() {\n${buffer}\n})();`;
     }
 
