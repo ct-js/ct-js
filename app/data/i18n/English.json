@@ -257,8 +257,8 @@
         },
         "export": {
             "heading": "Export settings",
-            "functionWrap": "Wrap code in function (makes debugging almost impossible, do not enable when developing)",
-            "codeModifier": "Code modifier",
+            "functionWrap": "Wrap all the code in a function. (Makes debugging harder, but isolates the game's code from outer context. Do not enable while developing the game.)",
+            "codeModifier": "Code transformations",
             "obfuscateWarning": "This option will make your code run 15-80% slower, but will make your code extremely hard to revert back to the original.",
             "codeModifiers": {
                 "none": "None",
