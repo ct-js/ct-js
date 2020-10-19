@@ -10,6 +10,8 @@ export-settings
             label.checkbox
                 input(type="radio" value=key checked=`{exportSettings.codeModifier === '${key}'}` onchange="{wire('this.exportSettings.codeModifier')}")
                 span=`{voc.codeModifiers.${key}}`
+                - if (key === 'obfuscate')
+                    hover-hint(text="{voc.obfuscateWarning}" icon="alert-triangle")
 
     script.
         this.namespace = 'settings.export';
