@@ -42,7 +42,6 @@
     "gulp-svgstore": "^7.0.1",
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulp-zip": "^5.0.1",
-    "javascript-obfuscator": "^2.6.0",
     "jsdoc-x": "^4.1.0",
     "minimist": "^1.2.5",
     "node-notifier": "^5.4.3",
@@ -54,7 +53,6 @@
     "stylint-stylish": "^2.0.0",
     "stylus": "^0.54.7",
     "typescript": "^4.0.3",
-    "terser": "^5.3.5",
     "tsd-jsdoc": "^2.5.0"
   },
   "devDependencies": {
