@@ -29,23 +29,26 @@
     const notifyFailed = () => {
         if (!failed) {
             failed = true;
+            console.error('Starting discord rich presence failed.');
             setTimeout(() => {
-                // eslint-disable-next-line no-underscore-dangle
-                const {delay} = alertify._$$alertify;
-                alertify.delay(1000 * 10);
-                alertify.error('Running discord rich presence failed. If you are running discord, please tell us in the discord server.');
-                alertify.delay(delay);
-            }, 1500);
+                alertify.error('Starting discord rich presence failed.');
+            }, 1750);
         }
     };
 
     const setActivity = limitRate(function setActivity(activity) {
+        if (failed) {
+            return;
+        }
+
         console.debug('Activity:');
         console.debug(activity);
+
         if (!available) {
             console.warn('Didn\'t change discord rich presence because it\'s not available yet.');
             return;
         }
+
         client
             .setActivity(activity)
             .then(() => console.debug('Successfully changed rich presence.'))
@@ -78,7 +81,7 @@
             details,
             state,
             largeImageKey: 'icon-lg',
-            largeImageText: 'ct.js (https://ctjs.rocks/)',
+            largeImageText: 'ct.js',
             smallImageKey: `icon-small-${tab}`,
             smallImageText: state,
             instance: false
@@ -93,19 +96,18 @@
     window.signals.on('projectLoaded', () => {
         startScreen = false;
         // eslint-disable-next-line no-underscore-dangle
-        setTimeout(() => changeDiscordStatus(document.querySelector('main-menu')._tag.tab), 250);
+        setTimeout(() => changeDiscordStatus(window.getTab ? window.getTab() : 'project'), 300);
     });
 
 
     // Make sure we're always updated
     setInterval(() => {
         if (!startScreen) {
-            // eslint-disable-next-line no-underscore-dangle
-            changeDiscordStatus(document.querySelector('main-menu')._tag.tab);
+            changeDiscordStatus(window.getTab ? window.getTab() : 'project');
         } else {
             changeDiscordStatus();
         }
-    }, 1000 * 5);
+    }, 1000 * 6.5);
 
     window.signals.on('resetAll', () => {
         startScreen = true;
@@ -127,7 +129,7 @@
             startTimestamp,
             details: 'Just launched',
             largeImageKey: 'icon-lg',
-            largeImageText: 'ct.js (https://ctjs.rocks/)',
+            largeImageText: 'ct.js',
             instance: false
         });
     });
