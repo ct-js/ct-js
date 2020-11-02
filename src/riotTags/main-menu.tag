@@ -80,10 +80,6 @@ main-menu.flexcol
         };
         this.changeTab(this.tab)();
 
-        window.getTab = () => {
-            return this.tab;
-        };
-
         const assetListener = asset => {
             const [assetType] = asset.split('/');
             this.changeTab(assetType)();

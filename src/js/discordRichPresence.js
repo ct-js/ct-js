@@ -4,59 +4,52 @@
     const startTimestamp = new Date();
     let available = false;
     let failed = false;
-    let startScreen = true;
 
     const RPC = require('discord-rpc');
     const client = new RPC.Client({
         transport: 'ipc'
     });
 
-    const limitRate = function limitRate(func, ms) {
-        // The same may be done with ct.flow.gate + ct.flow.
-        var timer;
-        var delay = function (...args) {
-            if (!timer) {
-                timer = true;
-                setTimeout(() => {
-                    timer = false;
-                }, ms);
-                func(...args);
-            }
-        };
-        return delay;
-    };
-
     const notifyFailed = () => {
         if (!failed) {
             failed = true;
-            console.error('Starting discord rich presence failed.');
+            console.error('Could not enable Discord Rich Presence.');
             setTimeout(() => {
-                alertify.error('Starting discord rich presence failed.');
+                alertify.log('Could not enable Discord Rich Presence.');
             }, 1750);
         }
     };
+    const setActivity = status => {
+        client.setActivity(status)
+        .then(() => console.debug('[discord] Successfully changed rich presence.'))
+        .catch((...err) => {
+            console.error(...err);
+            notifyFailed();
+        });
+    };
 
-    const setActivity = limitRate(function setActivity(activity) {
-        if (failed) {
-            return;
+    let scheduledTimeout = false,
+        scheduledStatus = false;
+    const tryStatusUpdate = () => {
+        if (!scheduledTimeout && scheduledStatus) {
+            setActivity(scheduledStatus);
+            scheduledStatus = false;
+            // eslint-disable-next-line no-use-before-define
+            delay();
         }
-
-        console.debug('Activity:');
-        console.debug(activity);
-
-        if (!available) {
-            console.warn('Didn\'t change discord rich presence because it\'s not available yet.');
-            return;
-        }
-
-        client
-            .setActivity(activity)
-            .then(() => console.debug('Successfully changed rich presence.'))
-            .catch((...err) => {
-                console.error(...err);
-                notifyFailed();
-            });
-    }, 1000 * 2);
+    };
+    const delay = () => {
+        console.debug('[discord] Delaying status update…');
+        // Extra 100ms to avoid race conditions due to network issues
+        scheduledTimeout = setTimeout(() => {
+            scheduledTimeout = false;
+            tryStatusUpdate();
+        }, 15100);
+    };
+    const requestStatusUpdate = status => {
+        scheduledStatus = status;
+        tryStatusUpdate(scheduledStatus);
+    };
 
     const activityMap = {
         debug: 'Testing a game',
@@ -70,15 +63,16 @@
     };
 
     const changeDiscordStatus = (tab) => {
-        let details = window.currentProject ? window.currentProject.settings.authoring.title : null;
-        let state = activityMap[tab];
-        if (!state || startScreen) {
+        let details, state;
+        if (!tab) {
             state = 'Start screen';
             details = void 0;
+        } else {
+            details = window.currentProject ? window.currentProject.settings.authoring.title : null;
+            state = activityMap[tab];
         }
         const activity = {
             startTimestamp,
-            details,
             state,
             largeImageKey: 'icon-lg',
             largeImageText: 'ct.js',
@@ -86,46 +80,32 @@
             smallImageText: state,
             instance: false
         };
-        setActivity(activity);
+        if (details) {
+            activity.details = details;
+        }
+        requestStatusUpdate(activity);
     };
 
     window.signals.on('globalTabChanged', (tab) => {
         changeDiscordStatus(tab);
     });
-
-    window.signals.on('projectLoaded', () => {
-        startScreen = false;
-        // eslint-disable-next-line no-underscore-dangle
-        setTimeout(() => changeDiscordStatus(window.getTab ? window.getTab() : 'project'), 300);
-    });
-
-
-    // Make sure we're always updated
-    setInterval(() => {
-        if (!startScreen) {
-            changeDiscordStatus(window.getTab ? window.getTab() : 'project');
-        } else {
-            changeDiscordStatus();
-        }
-    }, 1000 * 6.5);
-
     window.signals.on('resetAll', () => {
-        startScreen = true;
         changeDiscordStatus();
     });
 
     client
-        .login({
-            clientId: appId
-        })
-        .catch((...err) => {
-            console.error(...err);
-            notifyFailed();
-        });
+    .login({
+        clientId: appId
+    })
+    .catch((...err) => {
+        console.error(...err);
+        notifyFailed();
+    });
+
     client.on('ready', () => {
         available = true;
-        console.debug('Ready to use discord rich presence!');
-        setActivity({
+        console.debug('[discord] Ready to use discord rich presence!');
+        requestStatusUpdate({
             startTimestamp,
             details: 'Just launched',
             largeImageKey: 'icon-lg',
