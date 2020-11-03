@@ -1,47 +1,33 @@
 type-editor.panel.view.flexrow
-    .c3.tall.flexfix
-        .flexfix-header
-            #typetexture.panel(onclick="{changeSprite}")
-                img.ohchangeme(src="{type.texture === -1? 'data/img/notexture.png' : (glob.texturemap[type.texture].src.split('?')[0] + '_prev@2.png?' + getTypeTextureRevision(type)) + getTypeTextureRevision(type)}")
-                div {voc.change}
-            b {voc.name}
-            input#typename.wide(type="text" onchange="{wire('this.type.name')}" value="{type.name}")
-            .anErrorNotice(if="{nameTaken}" ref="errorNotice") {vocGlob.nametaken}
-            br
-            b {voc.depth}
-            input#typedepth.wide(type="number" onchange="{wire('this.type.depth')}" value="{type.depth}")
-        .flexfix-body
-            virtual(each="{extend in libExtends}")
-                label.block
-                    input.wide(
-                        type="checkbox"
-                        value="{type.extends[extend.key] || extend.default}"
-                        onchange="{wire('this.type.extends.'+ extend.key)}"
-                        if="{extend.type === 'checkbox'}"
-                    )
-                    b {extend.name}
-                    span(if="{extend.type !== 'checkbox'}") :
-                    input.wide(
-                        type="text"
-                        value="{type.extends[extend.key] || extend.default}"
-                        onchange="{wire('this.type.extends.'+ extend.key)}"
-                        if="{extend.type === 'text'}"
-                    )
-                    input.wide(
-                        type="number"
-                        value="{type.extends[extend.key] || extend.default}"
-                        onchange="{wire('this.type.extends.'+ extend.key)}"
-                        if="{extend.type === 'number'}"
-                    )
-                    .dim(if="{extend.help}") {extend.help}
-            br
-            docs-shortcut(path="/ct.types.html" button="true" wide="true" title="{voc.learnAboutTypes}")
-        .flexfix-footer
-            button#typedone.wide(onclick="{typeSave}" title="Shift+Control+S" data-hotkey="Control+S")
-                svg.feather
-                    use(xlink:href="data/icons.svg#check")
-                span {voc.done}
-    .c9.tall.borderleft
+    .type-editor-Properties
+        .tall.flexfix.panel.pad
+            .flexfix-header
+                texture-input.wide(
+                    large="yup" showempty="da"
+                    val="{type.texture}"
+                    onselected="{applyTexture}"
+                )
+                b {voc.name}
+                input.wide(type="text" onchange="{wire('this.type.name')}" value="{type.name}")
+                .anErrorNotice(if="{nameTaken}" ref="errorNotice") {vocGlob.nametaken}
+                br
+            .flexfix-body
+                b {voc.depth}
+                input.wide(type="number" onchange="{wire('this.type.depth')}" value="{type.depth}")
+                br
+                label.block.checkbox
+                    input(type="checkbox" checked="{type.extends.visible === void 0 ? true : type.extends.visible}" onchange="{wire('this.type.extends.visible')}")
+                    span {voc.visible}
+                extensions-editor(type="type" entity="{type.extends}" wide="yep" compact="probably")
+                br
+                br
+                docs-shortcut(path="/ct.types.html" button="true" wide="true" title="{voc.learnAboutTypes}")
+            .flexfix-footer
+                button#typedone.wide(onclick="{typeSave}" title="Shift+Control+S" data-hotkey="Control+S")
+                    svg.feather
+                        use(xlink:href="data/icons.svg#check")
+                    span {voc.done}
+    .type-editor-aCodeEditor
         .tabwrap.tall(style="position: relative")
             ul.tabs.nav.nogrow.noshrink
                 li(onclick="{changeTab('typeoncreate')}" class="{active: tab === 'typeoncreate'}" title="{voc.create} (Control+Q)" data-hotkey="Control+q")
@@ -69,7 +55,6 @@ type-editor.panel.view.flexrow
                     .aCodeEditor(ref="typeondraw")
                 #typeondestroy.tabbed(show="{tab === 'typeondestroy'}")
                     .aCodeEditor(ref="typeondestroy")
-    texture-selector(if="{selectingTexture}" onselected="{applyTexture}" oncancelled="{cancelTexture}" ref="textureselector" showempty="sure")
     script.
         const glob = require('./data/node_requires/glob');
         this.glob = glob;
@@ -78,30 +63,6 @@ type-editor.panel.view.flexrow
         this.mixin(window.riotWired);
 
         this.getTypeTextureRevision = type => glob.texturemap[type.texture].g.lastmod;
-
-        const libsDir = './data/ct.libs';
-        const fs = require('fs-extra'),
-              path = require('path');
-        this.libExtends = [];
-        this.refreshExtends = () => {
-            this.libExtends = [];
-            for (const lib in global.currentProject.libs) {
-                fs.readJSON(path.join(libsDir, lib, 'module.json'), (err, moduleJson) => {
-                    if (err) {
-                        return;
-                    }
-                    if (moduleJson.typeExtends) {
-                        this.libExtends.push(...moduleJson.typeExtends);
-                    }
-                    this.update();
-                });
-            }
-        };
-        window.signals.on('modulesChanged', this.refreshExtends);
-        this.on('unmount', () => {
-            window.signals.off('modulesChanged', this.refreshExtends);
-        });
-        this.refreshExtends();
 
         this.type = this.opts.type;
         this.tab = 'typeoncreate';
@@ -215,12 +176,12 @@ type-editor.panel.view.flexrow
         this.changeSprite = () => {
             this.selectingTexture = true;
         };
-        this.applyTexture = texture => () => {
+        this.applyTexture = texture => {
             if (texture === -1) {
                 this.type.texture = -1;
             } else {
                 this.type.texture = texture.uid;
-                if (!this.type.lastmod && this.type.name === 'Type_' + this.type.uid.split('-').pop()) {
+                if (!this.type.lastmod && this.type.name === 'NewType') {
                     this.type.name = texture.name;
                 }
             }
@@ -236,7 +197,9 @@ type-editor.panel.view.flexrow
             if (this.nameTaken) {
                 // animate the error notice
                 require('./data/node_requires/jellify')(this.refs.errorNotice);
-                soundbox.play('Failure');
+                if (localStorage.disableSounds !== 'on') {
+                    soundbox.play('Failure');
+                }
                 return false;
             }
             glob.modified = true;

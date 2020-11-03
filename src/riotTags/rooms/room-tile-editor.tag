@@ -27,6 +27,8 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
             span.act(title="{vocGlob.add}" onclick="{addTileLayer}")
                 svg.feather
                     use(xlink:href="data/icons.svg#plus")
+        .block
+            extensions-editor(type="tileLayer" entity="{parent.currentTileLayer.extends}" compact="yep" wide="sure")
     texture-selector(ref="tilesetPicker" if="{pickingTileset}" oncancelled="{onTilesetCancel}" onselected="{onTilesetSelected}")
     script.
         this.parent.tileX = 0;
@@ -36,8 +38,10 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
         if (!('tiles' in this.opts.room) || !this.opts.room.tiles.length) {
             this.opts.room.tiles = [{
                 depth: -10,
-                tiles: []
+                tiles: [],
+                extends: {}
             }];
+            this.parent.resortRoom();
         }
         [this.parent.currentTileLayer] = this.opts.room.tiles;
         this.parent.currentTileLayerId = 0;
@@ -92,7 +96,8 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
                 if (e.inputValue && Number(e.inputValue)) {
                     var layer = {
                         depth: Number(e.inputValue),
-                        tiles: []
+                        tiles: [],
+                        extends: {}
                     };
                     this.opts.room.tiles.push(layer);
                     this.parent.currentTileLayer = layer;
@@ -108,6 +113,9 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
         };
         this.changeTileLayer = e => {
             this.parent.currentTileLayer = this.opts.room.tiles[Number(e.target.value)];
+            if (!this.parent.currentTileLayer.extends) {
+                this.parent.currentTileLayer.extends = {};
+            }
             this.parent.currentTileLayerId = Number(e.target.value);
         };
         this.switchTiledImage = () => {
@@ -132,6 +140,11 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
                 i = glob.texturemap[g.uid];
             c.width = i.width;
             c.height = i.height;
+            if (global.currentProject.settings.rendering.pixelatedrender) {
+                c.style.imageRendering = 'pixelated';
+            } else {
+                c.style.imageRendering = 'unset';
+            }
             cx.globalAlpha = 1;
             cx.drawImage(i, 0, 0);
             cx.strokeStyle = '#0ff';
@@ -165,13 +178,17 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
             if (!this.parent.currentTileset) {
                 return;
             }
+            // Adjust the pointer coordinates to account for potential scaling
+            const bbox = e.target.getBoundingClientRect();
+            const px = e.layerX / bbox.width * e.target.width,
+                  py = e.layerY / bbox.height * e.target.height;
             var g = this.parent.currentTileset;
             this.parent.tileSpanX = 1;
             this.parent.tileSpanY = 1;
             this.selectingTile = true;
-            this.tileStartX = Math.round((e.layerX - g.offx - g.width * 0.5) / (g.width + g.marginx));
+            this.tileStartX = Math.round((px - g.offx - g.width * 0.5) / (g.width + g.marginx));
             this.tileStartX = Math.max(0, Math.min(g.grid[0], this.tileStartX));
-            this.tileStartY = Math.round((e.layerY - g.offy - g.height * 0.5) / (g.height + g.marginy));
+            this.tileStartY = Math.round((py - g.offy - g.height * 0.5) / (g.height + g.marginy));
             this.tileStartY = Math.max(0, Math.min(g.grid[1], this.tileStartY));
             this.parent.tileX = this.tileStartX;
             this.parent.tileY = this.tileStartY;
@@ -181,10 +198,14 @@ room-tile-editor.room-editor-Tiles.tabbed.tall.flexfix
             if (!this.selectingTile) {
                 return;
             }
+            // Adjust the pointer coordinates to account for potential scaling
+            const bbox = e.target.getBoundingClientRect();
+            const px = e.layerX / bbox.width * e.target.width,
+                  py = e.layerY / bbox.height * e.target.height;
             var g = this.parent.currentTileset;
-            this.tileEndX = Math.round((e.layerX - g.offx - g.width * 0.5) / (g.width + g.marginx));
+            this.tileEndX = Math.round((px - g.offx - g.width * 0.5) / (g.width + g.marginx));
             this.tileEndX = Math.max(0, Math.min(g.grid[0], this.tileEndX));
-            this.tileEndY = Math.round((e.layerY - g.offy - g.height * 0.5) / (g.height + g.marginy));
+            this.tileEndY = Math.round((py - g.offy - g.height * 0.5) / (g.height + g.marginy));
             this.tileEndY = Math.max(0, Math.min(g.grid[1], this.tileEndY));
             this.parent.tileSpanX = 1 + Math.abs(this.tileStartX - this.tileEndX);
             this.parent.tileSpanY = 1 + Math.abs(this.tileStartY - this.tileEndY);

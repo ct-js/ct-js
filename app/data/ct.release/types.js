@@ -1,143 +1,18 @@
 /**
- * @extends {PIXI.TilingSprite}
- */
-class Background extends PIXI.TilingSprite {
-    constructor(bgName, frame, depth, exts) {
-        exts = exts || {};
-        var width = ct.camera.width,
-            height = ct.camera.height;
-        if (exts.repeat === 'no-repeat' || exts.repeat === 'repeat-x') {
-            height = ct.res.getTexture(bgName, frame || 0).orig.height * (exts.scaleY || 1);
-        }
-        if (exts.repeat === 'no-repeat' || exts.repeat === 'repeat-y') {
-            width = ct.res.getTexture(bgName, frame || 0).orig.width * (exts.scaleX || 1);
-        }
-        super(ct.res.getTexture(bgName, frame || 0), width, height);
-        ct.types.list.BACKGROUND.push(this);
-        this.anchor.x = this.anchor.y = 0;
-        this.depth = depth;
-        this.shiftX = this.shiftY = this.movementX = this.movementY = 0;
-        this.parallaxX = this.parallaxY = 1;
-        if (exts) {
-            ct.u.extend(this, exts);
-        }
-        if (this.scaleX) {
-            this.tileScale.x = Number(this.scaleX);
-        }
-        if (this.scaleY) {
-            this.tileScale.y = Number(this.scaleY);
-        }
-        this.reposition();
-    }
-    onStep() {
-        this.shiftX += ct.delta * this.movementX;
-        this.shiftY += ct.delta * this.movementY;
-    }
-    reposition() {
-        const cameraBounds = ct.camera.getBoundingBox();
-        if (this.repeat !== 'repeat-x' && this.repeat !== 'no-repeat') {
-            this.y = cameraBounds.y;
-            this.tilePosition.y = -this.y*this.parallaxY + this.shiftY;
-            this.height = cameraBounds.height;
-        } else {
-            this.y = this.shiftY + cameraBounds.y * (this.parallaxY - 1);
-        }
-        if (this.repeat !== 'repeat-y' && this.repeat !== 'no-repeat') {
-            this.x = cameraBounds.x;
-            this.tilePosition.x = -this.x*this.parallaxX + this.shiftX;
-            this.width = cameraBounds.width;
-        } else {
-            this.x = this.shiftX + cameraBounds.x * (this.parallaxX - 1);
-        }
-    }
-    onDraw() {
-        this.reposition();
-    }
-    static onCreate() {
-        void 0;
-    }
-    static onDestroy() {
-        void 0;
-    }
-}
-/**
- * @extends {PIXI.Container}
- */
-class Tileset extends PIXI.Container {
-    constructor(data) {
-        super();
-        this.depth = data.depth;
-        this.tiles = data.tiles;
-        ct.types.list.TILELAYER.push(this);
-        for (let i = 0, l = data.tiles.length; i < l; i++) {
-            const textures = ct.res.getTexture(data.tiles[i].texture);
-            const sprite = new PIXI.Sprite(textures[data.tiles[i].frame]);
-            sprite.anchor.x = sprite.anchor.y = 0;
-            this.addChild(sprite);
-            sprite.x = data.tiles[i].x;
-            sprite.y = data.tiles[i].y;
-        }
-        const bounds = this.getLocalBounds();
-        const cols = Math.ceil(bounds.width / 1024),
-                rows = Math.ceil(bounds.height / 1024);
-        if (cols < 2 && rows < 2) {
-            if (this.width > 0 && this.height > 0) {
-                this.cacheAsBitmap = true;
-            }
-            return this;
-        }
-        /*const mask = new PIXI.Graphics();
-        mask.lineStyle(0);
-        mask.beginFill(0xffffff);
-        mask.drawRect(0, 0, 1024, 1024);
-        mask.endFill();*/
-        this.cells = [];
-        for (let y = 0; y < rows; y++) {
-            for (let x = 0; x < cols; x++) {
-                const cell = new PIXI.Container();
-                //cell.x = x * 1024 + bounds.x;
-                //cell.y = y * 1024 + bounds.y;
-                this.cells.push(cell);
-            }
-        }
-        for (let i = 0, l = data.tiles.length; i < l; i++) {
-            const tile = this.children[0],
-                    x = Math.floor((tile.x - bounds.x) / 1024),
-                    y = Math.floor((tile.y - bounds.y) / 1024);
-            this.cells[y * cols + x].addChild(tile);
-            /*if (tile.x - x * 1024 + tile.width > 1024) {
-                this.cells[y*cols + x + 1].addChild(tile);
-                if (tile.y - y * 1024 + tile.height > 1024) {
-                    this.cells[(y+1)*cols + x + 1].addChild(tile);
-                }
-            }
-            if (tile.y - y * 1024 + tile.height > 1024) {
-                this.cells[(y+1)*cols + x].addChild(tile);
-            }*/
-        }
-        this.removeChildren();
-        for (let i = 0, l = this.cells.length; i < l; i++) {
-            if (this.cells[i].children.length === 0) {
-                this.cells.splice(i, 1);
-                i--; l--;
-                continue;
-            }
-            //this.cells[i].mask = mask;
-            this.addChild(this.cells[i]);
-            this.cells[i].cacheAsBitmap = true;
-        }
-    }
-}
-/**
  * @extends {PIXI.AnimatedSprite}
  * @class
  * @property {string} type The name of the type from which the copy was created
  * @property {IShapeTemplate} shape The collision shape of a copy
- * @property {number} depth The relative position of a copy in a drawing stack. Higher values will draw the copy on top of those with lower ones
+ * @property {number} depth The relative position of a copy in a drawing stack.
+ * Higher values will draw the copy on top of those with lower ones
  * @property {number} xprev The horizontal location of a copy in the previous frame
  * @property {number} yprev The vertical location of a copy in the previous frame
- * @property {number} xstart The starting location of a copy, meaning the point where it was created — either by placing it in a room with ct.IDE or by calling `ct.types.copy`.
- * @property {number} ystart The starting location of a copy, meaning the point where it was created — either by placing it in a room with ct.IDE or by calling `ct.types.copy`.
+ * @property {number} xstart The starting location of a copy,
+ * meaning the point where it was created — either by placing it in a room with ct.IDE
+ * or by calling `ct.types.copy`.
+ * @property {number} ystart The starting location of a copy,
+ * meaning the point where it was created — either by placing it in a room with ct.IDE
+ * or by calling `ct.types.copy`.
  * @property {number} hspeed The horizontal speed of a copy
  * @property {number} vspeed The vertical speed of a copy
  * @property {number} gravity The acceleration that pulls a copy at each frame
@@ -145,8 +20,9 @@ class Tileset extends PIXI.Container {
  * @property {number} depth The position of a copy in draw calls
  * @property {boolean} kill If set to `true`, the copy will be destroyed by the end of a frame.
  */
-const Copy = (function () {
+const Copy = (function Copy() {
     const textureAccessor = Symbol('texture');
+    let uid = 0;
     class Copy extends PIXI.AnimatedSprite {
         /**
          * Creates an instance of Copy.
@@ -155,7 +31,8 @@ const Copy = (function () {
          * @param {number} [y] The y coordinate of a new copy. Defaults to 0.
          * @param {object} [exts] An optional object with additional properties
          * that will exist prior to a copy's OnCreate event
-         * @param {PIXI.DisplayObject|Room} [container] A container to set as copy's parent before its OnCreate event. Defaults to ct.room.
+         * @param {PIXI.DisplayObject|Room} [container] A container to set as copy's parent
+         * before its OnCreate event. Defaults to ct.room.
          * @memberof Copy
          */
         constructor(type, x, y, exts, container) {
@@ -193,7 +70,7 @@ const Copy = (function () {
                     this.scale.y = exts.ty;
                 }
                 if (exts.tr) {
-                    this.rotation = exts.tr;
+                    this.angle = exts.tr;
                 }
             }
             this.position.set(x || 0, y || 0);
@@ -202,7 +79,7 @@ const Copy = (function () {
             this.speed = this.direction = this.gravity = this.hspeed = this.vspeed = 0;
             this.gravityDir = 270;
             this.depth = 0;
-            this.uid = ++ct.room.uid;
+            this.uid = ++uid;
             if (type) {
                 ct.u.ext(this, {
                     type,
@@ -211,7 +88,7 @@ const Copy = (function () {
                     onDraw: t.onDraw,
                     onCreate: t.onCreate,
                     onDestroy: t.onDestroy,
-                    shape: t.texture ? ct.res.registry[t.texture].shape : {}
+                    shape: ct.res.getTextureShape(t.texture || -1)
                 });
                 if (exts && exts.depth !== void 0) {
                     this.depth = exts.depth;
@@ -221,6 +98,7 @@ const Copy = (function () {
                 } else {
                     ct.types.list[type] = [this];
                 }
+                this.onBeforeCreateModifier();
                 ct.types.templates[type].onCreate.apply(this);
             }
             return this;
@@ -234,7 +112,7 @@ const Copy = (function () {
         set tex(value) {
             this.textures = ct.res.getTexture(value);
             this[textureAccessor] = value;
-            this.shape = value !== -1 ? ct.res.registry[value].shape : {};
+            this.shape = ct.res.getTextureShape(value);
             this.anchor.x = this.textures[0].defaultAnchor.x;
             this.anchor.y = this.textures[0].defaultAnchor.y;
             return value;
@@ -261,7 +139,7 @@ const Copy = (function () {
             this.vspeed *= multiplier;
         }
         get direction() {
-            return (Math.atan2(this.vspeed, this.hspeed) * -180 / Math.PI + 360) % 360;
+            return (Math.atan2(this.vspeed, this.hspeed) * 180 / Math.PI + 360) % 360;
         }
         /**
          * The moving direction of the copy, in degrees, starting with 0 at the right side
@@ -272,20 +150,8 @@ const Copy = (function () {
          */
         set direction(value) {
             var speed = this.speed;
-            this.hspeed = speed * Math.cos(value*Math.PI/-180);
-            this.vspeed = speed * Math.sin(value*Math.PI/-180);
-            return value;
-        }
-        get rotation() {
-            return this.transform.rotation / Math.PI * -180;
-        }
-        /**
-         * The direction of a copy's texture.
-         * @param {number} value New rotation value
-         * @type {number}
-         */
-        set rotation(value) {
-            this.transform.rotation = value * Math.PI / -180;
+            this.hspeed = speed * Math.cos(value * Math.PI / 180);
+            this.vspeed = speed * Math.sin(value * Math.PI / 180);
             return value;
         }
 
@@ -295,21 +161,22 @@ const Copy = (function () {
          */
         move() {
             if (this.gravity) {
-                this.hspeed += this.gravity * ct.delta * Math.cos(this.gravityDir*Math.PI/-180);
-                this.vspeed += this.gravity * ct.delta * Math.sin(this.gravityDir*Math.PI/-180);
+                this.hspeed += this.gravity * ct.delta * Math.cos(this.gravityDir * Math.PI / 180);
+                this.vspeed += this.gravity * ct.delta * Math.sin(this.gravityDir * Math.PI / 180);
             }
             this.x += this.hspeed * ct.delta;
             this.y += this.vspeed * ct.delta;
         }
         /**
-         * Adds a speed vector to the copy, accelerating it by a given delta speed in a given direction.
+         * Adds a speed vector to the copy, accelerating it by a given delta speed
+         * in a given direction.
          * @param {number} spd Additive speed
          * @param {number} dir The direction in which to apply additional speed
          * @returns {void}
          */
         addSpeed(spd, dir) {
-            this.hspeed += spd * Math.cos(dir*Math.PI/-180);
-            this.vspeed += spd * Math.sin(dir*Math.PI/-180);
+            this.hspeed += spd * Math.cos(dir * Math.PI / 180);
+            this.vspeed += spd * Math.sin(dir * Math.PI / 180);
         }
 
         /**
@@ -323,11 +190,17 @@ const Copy = (function () {
             }
             return parent;
         }
+
+        // eslint-disable-next-line class-methods-use-this
+        onBeforeCreateModifier() {
+            // Filled by ct.IDE and catmods
+            /*%onbeforecreate%*/
+        }
     }
     return Copy;
 })();
 
-(function (ct) {
+(function ctTypeAddon(ct) {
     const onCreateModifier = function () {
         /*%oncreate%*/
     };
@@ -339,15 +212,13 @@ const Copy = (function () {
      */
     ct.types = {
         Copy,
-        Background,
-        Tileset,
         /**
          * An object that contains arrays of copies of all types.
          * @type {Object.<string,Array<Copy>>}
          */
         list: {
             BACKGROUND: [],
-            TILELAYER: []
+            TILEMAP: []
         },
         /**
          * A map of all the templates of types exported from ct.IDE.
@@ -359,12 +230,14 @@ const Copy = (function () {
          * @param {string} type The name of the type to use
          * @param {number} [x] The x coordinate of a new copy. Defaults to 0.
          * @param {number} [y] The y coordinate of a new copy. Defaults to 0.
-         * @param {object} [exts] An optional object which parameters will be applied to the copy prior to its OnCreate event.
-         * @param {PIXI.Container} [container] The container to which add the copy. Defaults to the current room.
+         * @param {object} [exts] An optional object which parameters will be applied
+         * to the copy prior to its OnCreate event.
+         * @param {PIXI.Container} [container] The container to which add the copy.
+         * Defaults to the current room.
          * @returns {Copy} the created copy.
          * @alias ct.types.copy
          */
-        make(type, x=0, y=0, exts, container) {
+        make(type, x = 0, y = 0, exts, container) {
             // An advanced constructor. Returns a Copy
             if (exts instanceof PIXI.Container) {
                 container = exts;
@@ -379,27 +252,6 @@ const Copy = (function () {
             ct.stack.push(obj);
             onCreateModifier.apply(obj);
             return obj;
-        },
-        /**
-         * Calls `move` on a given copy, recalculating its position based on its speed.
-         * @param {Copy} o The copy to move
-         * @returns {void}
-         * @deprecated
-         */
-        move(o) {
-            o.move();
-        },
-        /**
-         * Applies an acceleration to the copy, with a given additive speed and direction.
-         * Technically, calls copy's `addSpeed(spd, dir)` method.
-         * @param {any} o The copy to accelerate
-         * @param {any} spd The speed to add
-         * @param {any} dir The direction in which to push the copy
-         * @returns {void}
-         * @deprecated
-         */
-        addSpeed(o, spd, dir) {
-            o.addSpeed(spd, dir);
         },
         /**
          * Applies a function to each copy in the current room
@@ -418,12 +270,25 @@ const Copy = (function () {
             func.apply(obj, this);
         },
         /**
+         * Checks whether there are any copies of this type's name.
+         * Will throw an error if you pass an invalid type name.
+         * @param {string} type The name of a type to check.
+         * @returns {boolean} Returns `true` if at least one copy exists in a room;
+         * `false` otherwise.
+         */
+        exists(type) {
+            if (!(type in ct.types.templates)) {
+                throw new Error(`[ct.types] ct.types.exists: There is no such type ${type}.`);
+            }
+            return ct.types.list[type].length > 0;
+        },
+        /**
          * Checks whether a given object exists in game's world.
          * Intended to be applied to copies, but may be used with other PIXI entities.
          * @param {Copy|Pixi.DisplayObject|any} obj The copy which existence needs to be checked.
          * @returns {boolean} Returns `true` if a copy exists; `false` otherwise.
          */
-        exists(obj) {
+        valid(obj) {
             if (obj instanceof Copy) {
                 return !obj.kill;
             }
@@ -431,6 +296,14 @@ const Copy = (function () {
                 return Boolean(obj.position);
             }
             return Boolean(obj);
+        },
+        /**
+         * Checks whether a given object is a ct.js copy.
+         * @param {any} obj The object which needs to be checked.
+         * @returns {boolean} Returns `true` if the passed object is a copy; `false` otherwise.
+         */
+        isCopy(obj) {
+            return obj instanceof Copy;
         }
     };
     ct.types.copy = ct.types.make;
@@ -439,19 +312,19 @@ const Copy = (function () {
     /*@types@*/
     /*%types%*/
 
-    ct.types.beforeStep = function () {
+    ct.types.beforeStep = function beforeStep() {
         /*%beforestep%*/
     };
-    ct.types.afterStep = function () {
+    ct.types.afterStep = function afterStep() {
         /*%afterstep%*/
     };
-    ct.types.beforeDraw = function () {
+    ct.types.beforeDraw = function beforeDraw() {
         /*%beforedraw%*/
     };
-    ct.types.afterDraw = function () {
+    ct.types.afterDraw = function afterDraw() {
         /*%afterdraw%*/
     };
-    ct.types.onDestroy = function () {
+    ct.types.onDestroy = function onDestroy() {
         /*%ondestroy%*/
     };
 })(ct);

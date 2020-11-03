@@ -5,15 +5,6 @@ room-editor.panel.view
             br
             input.wide(type="text" value="{room.name}" onchange="{wire('this.room.name')}")
             .anErrorNotice(if="{nameTaken}" ref="errorNotice") {vocGlob.nametaken}
-            .fifty.npt.npb.npl
-                b {voc.width}
-                br
-                input.wide(type="number" value="{room.width}" onchange="{wire('this.room.width')}")
-            .fifty.npt.npb.npr
-                b {voc.height}
-                br
-                input.wide(type="number" value="{room.height}" onchange="{wire('this.room.height')}")
-            br
             button.wide(onclick="{openRoomEvents}")
                 svg.feather(if="{room.oncreate || room.onstep || room.ondestroy || room.ondraw}")
                     use(xlink:href="data/icons.svg#check")
@@ -21,13 +12,44 @@ room-editor.panel.view
         .palette
             .tabwrap
                 ul.tabs.nav.noshrink.nogrow
-                    li(onclick="{changeTab('roomcopies')}" class="{active: tab === 'roomcopies'}") {voc.copies}
-                    li(onclick="{changeTab('roombackgrounds')}" class="{active: tab === 'roombackgrounds'}") {voc.backgrounds}
-                    li(onclick="{changeTab('roomtiles')}" class="{active: tab === 'roomtiles'}") {voc.tiles}
+                    li(onclick="{changeTab('roomcopies')}" title="{voc.copies}" class="{active: tab === 'roomcopies'}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#type")
+                        span(if="{sidebarWidth > 500}") {voc.copies}
+                    li(onclick="{changeTab('roombackgrounds')}" title="{voc.backgrounds}" class="{active: tab === 'roombackgrounds'}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#image")
+                        span(if="{sidebarWidth > 500}") {voc.backgrounds}
+                    li(onclick="{changeTab('roomtiles')}" title="{voc.tiles}" class="{active: tab === 'roomtiles'}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#texture")
+                        span(if="{sidebarWidth > 500}") {voc.tiles}
+                    li(onclick="{changeTab('properties')}" title="{voc.properties}" class="{active: tab === 'properties'}")
+                        svg.feather
+                            use(xlink:href="data/icons.svg#settings")
+                        span(if="{sidebarWidth > 500}") {voc.properties}
                 .relative
                     room-type-picker(show="{tab === 'roomcopies'}" current="{currentType}")
                     room-backgrounds-editor(show="{tab === 'roombackgrounds'}" room="{room}")
                     room-tile-editor(show="{tab === 'roomtiles'}" room="{room}")
+                    .pad.panel(show="{tab === 'properties'}")
+                        .fifty.npt.npb.npl
+                            b {voc.width}
+                            br
+                            input.wide(type="number" value="{room.width}" onchange="{wire('this.room.width')}")
+                        .fifty.npt.npb.npr
+                            b {voc.height}
+                            br
+                            input.wide(type="number" value="{room.height}" onchange="{wire('this.room.height')}")
+                        .clear
+                        b {voc.backgroundColor}
+                        br
+                        color-input.wide(onchange="{updateRoomBackground}" color="{room.backgroundColor || '#000000'}")
+                        extensions-editor(entity="{room.extends}" type="room" wide="aye" compact="sure")
+                        label.block.checkbox
+                            input(type="checkbox" checked="{room.extends.isUi}" onchange="{wire('this.room.extends.isUi')}")
+                            b {voc.isUi}
+
         .done.nogrow
             button.wide#roomviewdone(onclick="{roomSave}")
                 svg.feather
@@ -49,22 +71,38 @@ room-editor.panel.view
             button.inline.square(title="{voc.shift}" onclick="{roomShift}")
                 svg.feather
                     use(xlink:href="data/icons.svg#move")
-            span(if="{window.innerWidth - sidebarWidth > 840}") {voc.hotkeysNotice}
-        .zoom
-            b(if="{window.innerWidth - sidebarWidth > 840}") {vocGlob.zoom}
-            div.button-stack
-                button#roomzoom12.inline(if="{window.innerWidth - sidebarWidth > 470}" onclick="{roomToggleZoom(0.125)}" class="{active: zoomFactor === 0.125}") 12%
-                button#roomzoom25.inline(onclick="{roomToggleZoom(0.25)}" class="{active: zoomFactor === 0.25}") 25%
-                button#roomzoom50.inline(if="{window.innerWidth - sidebarWidth > 470}" onclick="{roomToggleZoom(0.5)}" class="{active: zoomFactor === 0.5}") 50%
-                button#roomzoom100.inline(onclick="{roomToggleZoom(1)}" class="{active: zoomFactor === 1}") 100%
-                button#roomzoom200.inline(onclick="{roomToggleZoom(2)}" class="{active: zoomFactor === 2}") 200%
-                button#roomzoom400.inline(if="{window.innerWidth - sidebarWidth > 470}" onclick="{roomToggleZoom(4)}" class="{active: zoomFactor === 4}") 400%
+            button.inline.square(
+                title="{voc.sortHorizontally}"
+                onclick="{sortHorizontally}"
+                if="{tab === 'roomcopies' || tab === 'roomtiles'}"
+            )
+                svg.feather
+                    use(xlink:href="data/icons.svg#sort-horizontal")
+            button.inline.square(
+                title="{voc.sortVertically}"
+                onclick="{sortVertically}"
+                if="{tab === 'roomcopies' || tab === 'roomtiles'}"
+            )
+                svg.feather
+                    use(xlink:href="data/icons.svg#sort-vertical")
+            span(if="{window.innerWidth - sidebarWidth > 940}") {voc.hotkeysNotice}
+        .zoom.flexrow
+            b(if="{window.innerWidth - sidebarWidth > 980}") {vocGlob.zoom}:
+            .spacer
+            b {Math.round(zoomFactor * 100)}%
+            .spacer
+            zoom-slider(onchanged="{setZoom}" ref="zoomslider" value="{zoomFactor}")
         .grid
             button#roomgrid(onclick="{roomToggleGrid}" class="{active: room.gridX > 0}")
                 span {voc[room.gridX > 0? 'gridoff' : 'grid']}
         .center
             button#roomcenter(onclick="{roomToCenter}") {voc.tocenter}
-            span.aMouseCoord(if="{window.innerWidth - sidebarWidth > 470}" ref="mousecoords") ({mouseX}:{mouseY})
+            span.aMouseCoord(show="{window.innerWidth - sidebarWidth > 470}" ref="mousecoords") ({mouseX}:{mouseY})
+        room-copy-properties(
+            if="{this.selectedCopies && this.selectedCopies.length === 1}"
+            copy="{this.selectedCopies[0]}"
+            onchange="{refreshRoomCanvas}" oninput="{refreshRoomCanvas}"
+        )
     room-events-editor(if="{editingCode}" room="{room}")
     context-menu(menu="{roomCanvasCopiesMenu}" ref="roomCanvasCopiesMenu")
     context-menu(menu="{roomCanvasMenu}" ref="roomCanvasMenu")
@@ -121,6 +159,9 @@ room-editor.panel.view
         this.mixin(window.roomTileTools);
 
         this.room = this.opts.room;
+        if (!this.room.extends) {
+            this.room.extends = {};
+        }
 
         this.mouseX = this.mouseY = 0;
         this.roomx = this.room.width / 2;
@@ -130,6 +171,11 @@ room-editor.panel.view
         this.room.gridY = this.room.gridY || this.room.grid || 64;
         this.dragging = false;
         this.tab = 'roomcopies';
+
+        this.updateRoomBackground = (e, color) => {
+            this.room.backgroundColor = color;
+            this.refreshRoomCanvas();
+        };
 
         var updateCanvasSize = () => {
             // Firstly, check that we don't need to reflow the layout due to window shrinking
@@ -218,7 +264,8 @@ room-editor.panel.view
         this.tab = 'roomcopies';
         this.changeTab = tab => () => {
             this.tab = tab;
-            if (tab === 'roombackgrounds') {
+            this.selectedCopies = this.selectedTiles = false;
+            if (tab === 'roombackgrounds' || tab === 'properties') {
                 this.roomUnpickType();
             }
         };
@@ -265,6 +312,9 @@ room-editor.panel.view
             this.lastTileY = null;
             if (this.dragging) {
                 this.dragging = false;
+                this.roomx = Math.round(this.roomx);
+                this.roomy = Math.round(this.roomy);
+                this.refreshRoomCanvas();
             } else if (this.tab === 'roomtiles') {
                 this.onCanvasMouseUpTiles(e);
             } else if (this.tab === 'roomcopies') {
@@ -276,7 +326,7 @@ room-editor.panel.view
         };
         this.drawDeleteCircle = e => {
             // Рисовка кружка для удаления копий
-            var maxdist = Math.max(this.room.gridX, this.room.gridY);
+            var maxdist = Math.max(this.room.gridX, this.room.gridY) || 32;
             this.refreshRoomCanvas(e);
             var cx = this.refs.canvas.x;
             cx.fillStyle = '#F00';
@@ -304,15 +354,15 @@ room-editor.panel.view
             this.refs.mousecoords.innerHTML = `(${this.mouseX}:${this.mouseY})`;
         };
 
-        /** Начинаем перемещение, или же показываем предварительное расположение новой копии */
+        /** Start moving or show a placement preview **/
         this.onCanvasMove = e => {
             e.preventUpdate = true;
             if (this.dragging && !this.movingStuff) {
-                // перетаскивание
-                this.roomx -= Math.floor(e.movementX / this.zoomFactor);
-                this.roomy -= Math.floor(e.movementY / this.zoomFactor);
+                // Drag the viewport
+                this.roomx -= e.movementX / this.zoomFactor;
+                this.roomy -= e.movementY / this.zoomFactor;
                 this.refreshRoomCanvas(e);
-            } else if ( // если зажата мышь и клавиша Shift, то создавать больше копий/тайлов
+            } else if ( // Make more tiles or copies if Shift key is down
                 e.shiftKey && this.mouseDown &&
                 (
                     (this.tab === 'roomcopies' && this.currentType !== -1) ||
@@ -328,36 +378,21 @@ room-editor.panel.view
             this.updateMouseCoords(e);
         };
 
-        /** При прокрутке колёсиком меняем фактор зума */
+        /** Change zoom on mouse wheel */
         this.onCanvasWheel = e => {
             if (e.wheelDelta > 0) {
-                // in
-                if (this.zoomFactor === 2) {
-                    this.zoomFactor = 4;
-                } else if (this.zoomFactor === 1) {
-                    this.zoomFactor = 2;
-                } else if (this.zoomFactor === 0.5) {
-                    this.zoomFactor = 1;
-                } else if (this.zoomFactor === 0.25) {
-                    this.zoomFactor = 0.5;
-                } else if (this.zoomFactor === 0.125) {
-                    this.zoomFactor = 0.25;
-                }
-            } else if (this.zoomFactor === 4) {
-                this.zoomFactor = 2;
-            } else if (this.zoomFactor === 2) {
-                this.zoomFactor = 1;
-            } else if (this.zoomFactor === 1) {
-                this.zoomFactor = 0.5;
-            } else if (this.zoomFactor === 0.5) {
-                this.zoomFactor = 0.25;
-            } else if (this.zoomFactor === 0.25) {
-                this.zoomFactor = 0.125;
+                this.refs.zoomslider.zoomIn();
+            } else {
+                this.refs.zoomslider.zoomOut();
             }
-            this.redrawGrid();
-            this.refreshRoomCanvas(e);
-            this.updateMouseCoords(e);
         };
+        this.setZoom = zoom => {
+            this.zoomFactor = zoom;
+            this.update();
+            this.redrawGrid();
+            this.refreshRoomCanvas();
+        };
+
         this.onCanvasContextMenu = e => {
             this.dragging = false;
             this.mouseDown = false;
@@ -413,7 +448,9 @@ room-editor.panel.view
             if (this.nameTaken) {
                 // animate the error notice
                 require('./data/node_requires/jellify')(this.refs.errorNotice);
-                window.soundbox.play('Failure');
+                if (localStorage.disableSounds !== 'on') {
+                    window.soundbox.play('Failure');
+                }
                 return false;
             }
             this.room.lastmod = Number(new Date());
@@ -430,6 +467,27 @@ room-editor.panel.view
                 this.parent.update();
             });
             return true;
+        };
+
+        this.sortHorizontally = () => {
+            if (this.tab === 'roomcopies') {
+                this.room.copies.sort((a, b) => a.x - b.x);
+            } else {
+                // tiles
+                this.currentTileLayer.tiles.sort((a, b) => a.x - b.x);
+            }
+            this.resortRoom();
+            this.refreshRoomCanvas();
+        };
+        this.sortVertically = () => {
+            if (this.tab === 'roomcopies') {
+                this.room.copies.sort((a, b) => a.y - b.y);
+            } else {
+                // tiles
+                this.currentTileLayer.tiles.sort((a, b) => a.y - b.y);
+            }
+            this.resortRoom();
+            this.refreshRoomCanvas();
         };
 
         this.resortRoom = () => {
@@ -470,6 +528,9 @@ room-editor.panel.view
             canvas.x.globalAlpha = 1;
             // Clear the canvas
             canvas.x.clearRect(0, 0, canvas.width, canvas.height);
+            // Fill it with a background color
+            canvas.x.fillStyle = this.room.backgroundColor || '#000000';
+            canvas.x.fillRect(0, 0, canvas.width, canvas.height);
 
             // Apply camera movement + zoom
             canvas.x.translate(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2));
@@ -477,7 +538,7 @@ room-editor.panel.view
             canvas.x.translate(-this.roomx, -this.roomy);
 
             // Disable pixel interpolation, if needed
-            canvas.x.imageSmoothingEnabled = !global.currentProject.settings.pixelatedrender;
+            canvas.x.imageSmoothingEnabled = !global.currentProject.settings.rendering.pixelatedrender;
 
             for (let i = 0, li = this.stack.length; i < li; i++) {
                 if (this.stack[i].tiles) { // a tile layer
@@ -497,7 +558,7 @@ room-editor.panel.view
                             );
                         }
                     }
-                } else if (this.stack[i].texture) { // это слой-фон
+                } else if (this.stack[i].texture) { // a background layer
                     if (this.stack[i].texture !== -1) {
                         if (!('extends' in this.stack[i])) {
                             this.stack[i].extends = {};
@@ -544,7 +605,7 @@ room-editor.panel.view
                         canvas.x.drawImage(
                             texture,
                             ox, oy, w, h,
-                            -grax * (copy.tx || 1), -gray * (copy.ty || 1), w, h
+                            -grax, -gray, w, h
                         );
                         canvas.x.restore();
                     } else {
@@ -647,43 +708,20 @@ room-editor.panel.view
          * Генерирует миниатюру комнаты
          */
         this.roomGenSplash = function roomGenSplash() {
+            const {imageCover, toBuffer} = require('./data/node_requires/imageUtils');
             return new Promise((accept, decline) => {
-                var c = document.createElement('canvas'),
-                    w, h, k;
-                c.x = c.getContext('2d');
-                c.width = 340;
-                c.height = 256;
-                c.x.clearRect(0, 0, c.width, c.height);
-                w = this.refs.canvas.width;
-                h = this.refs.canvas.height;
-                if (w / c.width > h / c.height) {
-                    k = c.width / w;
-                } else {
-                    k = c.height / h;
-                }
-                if (k > 1) {
-                    k = 1;
-                }
-                c.x.drawImage(
-                    this.refs.canvas,
-                    0, 0, this.refs.canvas.width, this.refs.canvas.height,
-                    (c.width - this.refs.canvas.width * k) / 2,
-                    (c.height - this.refs.canvas.height * k) / 2,
-                    this.refs.canvas.width * k,
-                    this.refs.canvas.height * k
-                );
-                var splashBase64 = c.toDataURL().replace(/^data:image\/\w+;base64,/, '');
-                var buf = new Buffer(splashBase64, 'base64');
-                var nam = global.projdir + '/img/r' + this.room.thumbnail + '.png';
-                fs.writeFile(nam, buf, function roomGenSplashCallback(err) {
+                const c = imageCover(this.refs.canvas, 340, 256);
+                const buf = toBuffer(c);
+                const roomSplashName = global.projdir + '/img/r' + this.room.thumbnail + '.png';
+                fs.writeFile(roomSplashName, buf, err => {
                     if (err) {
                         decline(err);
                     } else {
-                        accept(nam);
+                        accept(roomSplashName);
                     }
                 });
-                var nam2 = global.projdir + '/img/splash.png';
-                fs.writeFile(nam2, buf, function projGenSplashCallback(err) {
+                const projSplashName = global.projdir + '/img/splash.png';
+                fs.writeFile(projSplashName, buf, err => {
                     if (err) {
                         decline(err);
                     }

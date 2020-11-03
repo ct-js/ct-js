@@ -12,6 +12,10 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             svg.feather
                 use(xlink:href="data/icons.svg#life-buoy")
             span {voc.helppages}
+        li(onclick="{changeTab('modulespages')}" class="{active: tab === 'modulespages'}")
+            svg.feather
+                use(xlink:href="data/icons.svg#ctmod")
+            span {voc.modulespages}
     div
         div(show="{tab === 'notepadlocal'}")
             .aCodeEditor(ref="notepadlocal")
@@ -22,13 +26,14 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             button.aHomeButton(title="{voc.backToHome}" onclick="{backToHome}")
                 svg.feather
                     use(xlink:href="data/icons.svg#home")
+        div(show="{tab === 'modulespages'}")
+            docs-panel
 
     button.vertical.dockleft(onclick="{notepadToggle}")
         svg.feather
             use(xlink:href="data/icons.svg#{opened? 'chevron-right' : 'chevron-left'}")
     script.
         const glob = require('./data/node_requires/glob');
-        const hotkey = require('./data/node_requires/hotkeys')(document);
         this.opened = false;
         this.namespace = 'notepad';
         this.mixin(window.riotVoc);
@@ -36,10 +41,14 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             this.opened = !this.opened;
         };
 
-        hotkey.on('F1', () => {
+        const openHelp = () => {
             this.opened = true;
             this.tab = 'helppages';
             this.update();
+        };
+        window.hotkeys.on('F1', openHelp);
+        this.on('unmount', () => {
+            window.hotkeys.off('F1', openHelp);
         });
 
         this.tab = 'notepadlocal';
@@ -66,10 +75,6 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
 
         this.getIfDarkTheme = () =>
             localStorage.UItheme === 'Night' || localStorage.UItheme === 'Horizon';
-
-        this.backToHome = () => {
-            this.refs.helpIframe.contentWindow.location = `http://localhost:${this.server.address().port}/`;
-        };
 
         this.on('update', () => {
             this.notepadlocal.setValue(global.currentProject.notes || '');
@@ -100,18 +105,21 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             this.notepadglobal.dispose();
         });
 
-        const nstatic = require('node-static');
-        const fileServer = new nstatic.Server('data/docs/', {
-            cache: false,
-            serverInfo: 'ctjsgameeditor'
-        });
-
-        this.server = require('http').createServer(function staticServerHandler(request, response) {
-            request.addListener('end', function serveFile() {
-                fileServer.serve(request, response);
-            }).resume();
-        });
-        this.server.listen(0);
+        const fileServerSettings = {
+            public: 'data/docs/',
+            cleanUrls: true
+        };
+        const handler = require('serve-handler');
+        if (!this.docServerStarted) {
+            const fileServer = require('http').createServer((request, response) =>
+                handler(request, response, fileServerSettings));
+            fileServer.listen(0, () => {
+                // eslint-disable-next-line no-console
+                console.info(`[ct.docs] Running docs server at http://localhost:${fileServer.address().port}`);
+            });
+            this.server = fileServer;
+            this.docServerStarted = true;
+        }
 
         var openDocs = e => {
             this.changeTab('helppages')();
@@ -119,6 +127,11 @@ notepad-panel#notepad.panel.dockright(class="{opened: opened}")
             this.opened = true;
             this.update();
         };
+
+        this.backToHome = () => {
+            this.refs.helpIframe.contentWindow.location = `http://localhost:${this.server.address().port}/`;
+        };
+
         window.signals.on('openDocs', openDocs);
         this.on('unmount', () => {
             window.signals.off('openDocs', openDocs);

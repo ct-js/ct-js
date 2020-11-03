@@ -24,19 +24,20 @@ input[type="password"],
 select,
 textarea
     padding 0.1em 0.8em
-    background white
-    border 1px solid bl
-    if (themeDark)
-        border 1px solid bd
+    background background
+    border 1px solid borderPale
     border-radius br
     font inherit
     color inherit
     {trans}
     &:hover
-        border-color bd
+        border-color borderBright
         {transshort}
     &:focus
         border-color acttext
+    .compact
+        padding 0.2em 0.3em
+        line-height 1
 
 input[type="number"]
     padding-right 0
@@ -56,7 +57,7 @@ input[type="reset"],
     font inherit
     font-weight 400
     border-radius br
-    background white
+    background background
     if (themeDark)
         background transparent
     display inline-block
@@ -65,29 +66,29 @@ input[type="reset"],
     {trans}
     &:hover, &.active
         background acttext
-        color white
+        color background
         {transshort}
         if (themeDark)
-            color black
+            color foreground
         if (!themeDark)
             border-color accent1
         svg
-            color white
+            color background
         if (themeDark)
-            color black
+            color foreground
             svg
-                color black
+                color foreground
     &:active, &.selected
         {transshort}
         border-color accent1
         background accent1
-        color white
+        color background
         svg
-            color white
+            color background
         if (themeDark)
-            color black
+            color foreground
             svg
-                color black
+                color foreground
     &.inline
         padding 0.2em 0.8em
         display inline-block
@@ -96,6 +97,12 @@ input[type="reset"],
     &.square
         padding 0.7em
         line-height 1
+    &.tiny
+        padding 0.35rem
+        line-height 1em
+        svg
+            width 1rem
+            height 1rem
     &.square.inline
         padding 0.3em
         margin-left 0
@@ -115,18 +122,17 @@ input[type="reset"],
         top 50%
         transform translate(0, -50%)
 
-/* Большой переключатель */
-siz = 4em
+/* Large checkbox/toggle as seen in the modules tab */
 .bigpower
     cursor pointer
     display block
     float left
-    width siz
-    height siz
+    width 4em
+    height @width
     border-radius 50% 10% 50% 50%
-    background -webkit-linear-gradient(top, white 0, bl 100%)
-    box-shadow 0 0 0.2em snow inset
-    border 1px solid bd
+    background -webkit-linear-gradient(top, background 0, borderPale 100%)
+    box-shadow 0 0 0.2em backgroundDeeper inset
+    border 1px solid borderBright
     if (themeDark)
         border-color act
     text-align center
@@ -151,7 +157,7 @@ siz = 4em
         border-radius 100%
         border 1px solid
         box-sizing border-box
-        background -webkit-linear-gradient(top, bl 0, white 100%)
+        background -webkit-linear-gradient(top, borderPale 0, background 100%)
         color success
     span
         position absolute
@@ -183,7 +189,7 @@ siz = 4em
         &:after
             background error
 
-.button-stack
+.aButtonGroup
     display inline-flex
     margin 0 0.5em
     button, .button
@@ -227,9 +233,9 @@ select
         left -1px // why?
         right -1px
         top 100%
-        background white
+        background background
         color text
-        border 1px solid bd
+        border 1px solid borderBright
         border-radius 0 0 br br
         border-bottom 0
         border-top 1px solid act
@@ -247,6 +253,63 @@ select
         position absolute
         right 0.5em
         top 50%
+
+[type=range]
+    min-height 1.5em
+    background transparent
+    font inherit
+    width 100%
+[type=range], [type=range]::-webkit-slider-thumb
+    -webkit-appearance none
+
+[type=range]::-webkit-slider-runnable-track
+    box-sizing border-box
+    border 1px solid borderBright
+    border-radius br
+    width 100%
+    height 0.75em
+    background backgroundDeeper
+
+thumbWidth = 1.5em
+[type=range]::-webkit-slider-thumb
+    margin-top -0.425em
+    box-sizing border-box
+    border 0
+    width thumbWidth
+    height thumbWidth
+    border-radius 50%
+    background act
+    z-index 2
+    position relative
+
+// Regular range inputs should be wrapped into .aSliderWrap
+
+.aSliderWrap
+    display flex
+    align-items center
+    position relative
+    width 100%
+    height 2em
+    font 1em/1 sans-seri
+
+.aSliderWrap [type=range]
+    flex 1
+    margin 0
+    padding 0
+
+.DataTicks
+    position absolute
+    left (thumbWidth / 2) // pad by half oh thumb's width
+    right (thumbWidth / 2)
+    top 50%
+    margin-top -0.375rem
+    user-select none
+    pointer-events none
+.aDataTick
+    width 1px
+    height 0.75rem
+    background borderBright
+    position absolute
 
 label, .label
     & + &
@@ -282,14 +345,14 @@ fieldset
         {trans}
         &::after
             content ''
-            icon(check, white)
-            width 1rem
+            icon(check, background)
+            width 0.85rem
             height 1rem
             position absolute
-            top -0.025rem
-            left -0.05rem
+            top -0.035rem
+            left -0.045rem
             line-height 1
-            color white
+            color background
             opacity 0
             {trans}
         &:checked
@@ -313,9 +376,10 @@ fieldset
         &:first-child
             margin-top 0
 
-input[type="range"]
+// Range inputs with stacked backgrounds, for usage with color pickers
+
+.aRangePipeStack input[type="range"]
     -webkit-appearance none
-    width 100%
     background transparent
     margin 8px 0
     &:focus
@@ -324,26 +388,22 @@ input[type="range"]
         width 100%
         height 24px
         cursor pointer
-        background snow
-        if (themeDark) // dark themes use an inverted color scheme in sense of variables
-            background white
+        background backgroundDeeper
         border-radius br
-        border 1px solid bl
-        if (themeDark)
-            border 1px solid bd
+        border 1px solid borderBright
     &::-webkit-slider-thumb
-        border 1px solid bd
+        border 1px solid borderBright
         height 40px
         width 19px
         border-radius br
-        background white
+        background background
         if (themeDark)
-            background snow
+            background backgroundDeeper
         cursor pointer
         -webkit-appearance none
         margin-top -9px
     &:focus::-webkit-slider-runnable-track
-        background white
+        background background
     &.transparent
         &::-webkit-slider-runnable-track, &:focus::-webkit-slider-runnable-track
             background transparent
@@ -373,7 +433,7 @@ input[type="range"]
     cursor move
     {shad}
     &.selected
-        box-shadow 0 0 0 2px bl, 0 0 0 4px act, 0 0.1rem 0.2rem 4px rgba(0, 0, 0, 0.5)
+        box-shadow 0 0 0 2px borderPale, 0 0 0 4px act, 0 0.1rem 0.2rem 4px rgba(0, 0, 0, 0.5)
 
 .aClicker
     height 0.75rem
@@ -390,21 +450,15 @@ input[type="range"]
     right 0
     top 0
     bottom 0
-    background rgba(white, 0.65)
-    // @stylint off
-    background-image:
-        linear-gradient(to right, accent1 0, accent1 35%, transparent 35%, transparent 100%),
-        linear-gradient(to left, accent1 0, accent1 35%, transparent 35%, transparent 100%),
-        linear-gradient(to bottom, accent1 0, accent1 35%, transparent 35%, transparent 100%),
-        linear-gradient(to top, accent1 0, accent1 35%, transparent 35%, transparent 100%)
-    // @stylint on
-    background-size 5rem 0.5rem, 5rem 0.5rem, 0.5rem 5rem, 0.5rem 5rem
-    background-repeat repeat-x, repeat-x, repeat-y, repeat-y
-    background-position 0 0, 0 bottom, right 0, 0 0
+    background rgba(background, 0.65)
+    border 0.5rem solid act
+    animation aDropzonePulsate 1.25s ease-in-out infinite
     text-align center
     svg
-        font-size 5rem
         color accent1
+        width 5rem
+        height 5rem
+        stroke-width 1px
     h2
         font-size 2rem
     input
@@ -416,12 +470,20 @@ input[type="range"]
         opacity 0
         cursor -webkit-grabbing
 
+@keyframes aDropzonePulsate
+    0%, 100%
+        border 0.5rem solid act
+    50%
+        border 0.5rem solid rgba(act, 0.35)
+
 .aResizer
-    background snow
+    background backgroundDeeper
+    if (darkTheme)
+        background background // should be greyish on all themes
     flex 0 0 auto
     width 0.75rem
     height 0.75rem
-    border 1px solid bd
+    border 1px solid borderBright
     position relative
     cursor move
     &::before
@@ -429,9 +491,9 @@ input[type="range"]
         width 1.5rem
         height 2px
         box-sizing content-box
-        border 1px solid bl
+        border 1px solid borderPale
         if (themeDark)
-            border 1px solid bd
+            border 1px solid borderBright
         border-left 0
         border-right 0
         position absolute
@@ -450,3 +512,34 @@ input[type="range"]
         border-right 0
         border-left 0
         cursor ns-resize
+
+.aPoint2DInput
+    display flex
+    flex-flow row nowrap
+    width 20rem
+    max-width 100%
+    label
+        flex 1 1 auto
+    input
+        max-width 100%
+        width calc(100% - 3rem)
+    &.compact
+        width 15rem
+    &.wide
+        width 100%
+    span
+        margin-right 0.5rem
+    .spacer
+        flex 0 0 auto
+
+.anActionableIcon
+    color act
+    {trans}
+    opacity 0.35
+    cursor pointer
+    margin 0
+    display inline-block
+    &:hover, &:focus, .menu li:hover &, .menu li:focus &, tr:hover &
+        opacity 1
+    & + &
+        margin-left 0.35rem

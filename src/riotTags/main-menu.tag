@@ -1,10 +1,5 @@
 main-menu.flexcol
     nav.nogrow.flexrow(if="{global.currentProject}")
-        ul#fullscreen.nav
-            li.nbr(onclick="{toggleFullscreen}" title="{voc.min} (F11)")
-                svg.feather
-                    use(xlink:href="data/icons.svg#{fullscreen? 'minimize-2' : 'maximize-2'}" data-hotkey="F11")
-
         ul#app.nav.tabs
             li.it30#ctlogo(onclick="{ctClick}" title="{voc.ctIDE}")
                 svg.feather.nmr
@@ -13,50 +8,51 @@ main-menu.flexcol
             li.it30(onclick="{changeTab('patrons')}" title="{voc.patrons}" class="{active: tab === 'patrons'}")
                 svg.feather
                     use(xlink:href="data/icons.svg#heart")
-            li.it30(onclick="{saveProject}" title="{voc.save} (Control+S)" data-hotkey="Control+s")
+            li.it30.nbr(onclick="{saveProject}" title="{voc.save} (Control+S)" data-hotkey="Control+s")
                 svg.feather
                     use(xlink:href="data/icons.svg#save")
-            li.nbr.it30(onclick="{runProject}" title="{voc.launch} {voc.launchHotkeys}" data-hotkey="F5")
-                svg.feather
-                    use(xlink:href="data/icons.svg#play")
 
         ul#mainnav.nav.tabs
-            li(onclick="{changeTab('settings')}" class="{active: tab === 'settings'}" data-hotkey="Control+1" title="Control+1")
+            li.nbl.it30(onclick="{runProject}" class="{active: tab === 'debug'}" title="{voc.launch} {voc.launchHotkeys}" data-hotkey="F5")
+                svg.feather.rotateccw(show="{exportingProject}")
+                    use(xlink:href="data/icons.svg#refresh-ccw")
+                svg.feather(hide="{exportingProject}")
+                    use(xlink:href="data/icons.svg#play")
+                span(if="{tab !== 'debug'}") {voc.launch}
+                span(if="{tab === 'debug'}") {voc.restart}
+            li(onclick="{changeTab('project')}" class="{active: tab === 'project'}" data-hotkey="Control+1" title="Control+1")
                 svg.feather
-                    use(xlink:href="data/icons.svg#settings")
-                span {voc.settings}
-            li(onclick="{changeTab('modules')}" class="{active: tab === 'modules'}" data-hotkey="Control+2" title="Control+2")
+                    use(xlink:href="data/icons.svg#sliders")
+                span {voc.project}
+            li(onclick="{changeTab('textures')}" class="{active: tab === 'textures'}" data-hotkey="Control+2" title="Control+2")
                 svg.feather
-                    use(xlink:href="data/icons.svg#ctmod")
-                span {voc.modules}
-            li(onclick="{changeTab('texture')}" class="{active: tab === 'texture'}" data-hotkey="Control+3" title="Control+3")
-                svg.feather
-                    use(xlink:href="data/icons.svg#coin")
+                    use(xlink:href="data/icons.svg#texture")
                 span {voc.texture}
-            li(onclick="{changeTab('ui')}" class="{active: tab === 'ui'}" data-hotkey="Control+4" title="Control+4")
+            li(onclick="{changeTab('ui')}" class="{active: tab === 'ui'}" data-hotkey="Control+3" title="Control+3")
                 svg.feather
-                    use(xlink:href="data/icons.svg#droplet")
+                    use(xlink:href="data/icons.svg#ui")
                 span {voc.ui}
-            li(onclick="{changeTab('fx')}" class="{active: tab === 'fx'}" data-hotkey="Control+5" title="Control+5")
+            li(onclick="{changeTab('fx')}" class="{active: tab === 'fx'}" data-hotkey="Control+4" title="Control+4")
                 svg.feather
                     use(xlink:href="data/icons.svg#sparkles")
                 span {voc.fx}
-            li(onclick="{changeTab('sounds')}" class="{active: tab === 'sounds'}" data-hotkey="Control+6" title="Control+6")
+            li(onclick="{changeTab('sounds')}" class="{active: tab === 'sounds'}" data-hotkey="Control+5" title="Control+5")
                 svg.feather
                     use(xlink:href="data/icons.svg#headphones")
                 span {voc.sounds}
-            li(onclick="{changeTab('types')}" class="{active: tab === 'types'}" data-hotkey="Control+7" title="Control+7")
+            li(onclick="{changeTab('types')}" class="{active: tab === 'types'}" data-hotkey="Control+6" title="Control+6")
                 svg.feather
-                    use(xlink:href="data/icons.svg#user")
+                    use(xlink:href="data/icons.svg#type")
                 span {voc.types}
-            li(onclick="{changeTab('rooms')}" class="{active: tab === 'rooms'}" data-hotkey="Control+8" title="Control+8")
+            li(onclick="{changeTab('rooms')}" class="{active: tab === 'rooms'}" data-hotkey="Control+7" title="Control+7")
                 svg.feather
                     use(xlink:href="data/icons.svg#room")
                 span {voc.rooms}
     div.flexitem.relative(if="{global.currentProject}")
-        settings-panel(show="{tab === 'settings'}" data-hotkey-scope="settings")
-        modules-panel(show="{tab === 'modules'}" data-hotkey-scope="modules")
-        textures-panel(show="{tab === 'texture'}" data-hotkey-scope="texture")
+        debugger-screen-embedded(if="{tab === 'debug'}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
+        project-settings(show="{tab === 'project'}" data-hotkey-scope="project")
+        icon-panel(if="{tab === 'icons'}" data-hotkey-scope="icons")
+        textures-panel(show="{tab === 'textures'}" data-hotkey-scope="textures")
         ui-panel(show="{tab === 'ui'}" data-hotkey-scope="ui")
         fx-panel(show="{tab === 'fx'}" data-hotkey-scope="fx")
         sounds-panel(show="{tab === 'sounds'}" data-hotkey-scope="sounds")
@@ -72,33 +68,26 @@ main-menu.flexcol
         const archiver = require('archiver');
         const glob = require('./data/node_requires/glob');
 
-        // Mounts the hotkey plugins, enabling hotkeys on elements with data-hotkey attributes
-        const hotkey = require('./data/node_requires/hotkeys')(document);
-        this.on('unmount', () => {
-            hotkey.unmount();
-        });
-
         this.namespace = 'menu';
         this.mixin(window.riotVoc);
 
-        this.tab = 'settings';
+        this.tab = 'project';
         this.changeTab = tab => () => {
             this.tab = tab;
-            hotkey.cleanScope();
-            hotkey.push(tab);
-            window.signals.trigger('globalTabChanged');
+            window.hotkeys.cleanScope();
+            window.hotkeys.push(tab);
+            window.signals.trigger('globalTabChanged', tab);
             window.signals.trigger(`${tab}Focus`);
         };
-
-        this.fullscreen = false;
-        this.toggleFullscreen = function toggleFullscreen() {
-            this.fullscreen = !this.fullscreen;
-            if (this.fullscreen) {
-                nw.Window.get().enterFullscreen();
-            } else {
-                nw.Window.get().leaveFullscreen();
-            }
+        const assetListener = asset => {
+            const [assetType] = asset.split('/');
+            this.changeTab(assetType)();
+            this.update();
         };
+        window.orders.on('openAsset', assetListener);
+        this.on('unmount', () => {
+            window.orders.off('openAsset', assetListener);
+        });
 
         const languageSubmenu = {
             items: [],
@@ -136,23 +125,24 @@ main-menu.flexcol
                 this.refs.catMenu.toggle();
             }
         };
-        this.saveProject = () => {
-            const YAML = require('js-yaml');
-            const projectYAML = YAML.safeDump(global.currentProject);
-            return fs.outputFile(global.projdir + '.ict', projectYAML)
-            .then(() => {
-                alertify.success(window.languageJSON.common.savedcomm, 'success', 3000);
+        this.saveProject = async () => {
+            try {
+                const YAML = require('js-yaml');
+                const projectYAML = YAML.dump(global.currentProject);
+                await fs.outputFile(global.projdir + '.ict', projectYAML);
                 this.saveRecoveryDebounce();
                 fs.remove(global.projdir + '.ict.recovery')
                 .catch(console.error);
                 glob.modified = false;
-            })
-            .catch(alertify.error);
+                alertify.success(window.languageJSON.common.savedcomm, 'success', 3000);
+            } catch (e) {
+                alertify.error(e);
+            }
         };
         this.saveRecovery = () => {
             if (global.currentProject) {
                 const YAML = require('js-yaml');
-                const recoveryYAML = YAML.safeDump(global.currentProject);
+                const recoveryYAML = YAML.dump(global.currentProject);
                 fs.outputFile(global.projdir + '.ict.recovery', recoveryYAML);
             }
             this.saveRecoveryDebounce();
@@ -164,32 +154,46 @@ main-menu.flexcol
         });
         this.saveRecoveryDebounce();
 
-        const {getWritableDir} = require('./data/node_requires/platformUtils');
+        const {getExportDir} = require('./data/node_requires/platformUtils');
         // Run a local server for ct.js games
         let fileServer;
-        getWritableDir().then(dir => {
-            const nstatic = require('node-static');
-            fileServer = new nstatic.Server(path.join(dir, '/export/'), {
-                cache: false,
-                serverInfo: 'ctjsgameeditor'
+        if (!this.debugServerStarted) {
+            getExportDir().then(dir => {
+                const fileServerSettings = {
+                    public: dir,
+                    cleanUrls: true
+                };
+                const handler = require('serve-handler');
+                fileServer = require('http').createServer((request, response) =>
+                    handler(request, response, fileServerSettings));
+                fileServer.listen(0, () => {
+                    // eslint-disable-next-line no-console
+                    console.info(`[ct.debugger] Running dev server at http://localhost:${fileServer.address().port}`);
+                });
+                this.debugServerStarted = true;
             });
-        });
-        const server = require('http').createServer((request, response) => {
-            request.addListener('end', () => {
-                fileServer.serve(request, response);
-            }).resume();
-        });
-        server.listen(0);
+        }
 
         this.runProject = () => {
             document.body.style.cursor = 'progress';
+            this.exportingProject = true;
+            this.update();
             const runCtExport = require('./data/node_requires/exporter');
             runCtExport(global.currentProject, global.projdir)
             .then(() => {
                 if (localStorage.disableBuiltInDebugger === 'yes') {
-                    nw.Shell.openExternal(`http://localhost:${server.address().port}/`);
+                    // Open in default browser
+                    nw.Shell.openExternal(`http://localhost:${fileServer.address().port}/`);
+                } else if (this.tab === 'debug') {
+                    // Restart the game as we already have the tab opened
+                    this.refs.debugger.restartGame();
                 } else {
-                    window.openDebugger(`http://localhost:${server.address().port}`);
+                    // Open the debugger as usual
+                    this.tab = 'debug';
+                    this.debugParams = {
+                        title: global.currentProject.settings.authoring.title,
+                        link: `http://localhost:${fileServer.address().port}/`
+                    };
                 }
             })
             .catch(e => {
@@ -198,21 +202,35 @@ main-menu.flexcol
             })
             .finally(() => {
                 document.body.style.cursor = '';
+                this.exportingProject = false;
+                this.update();
             });
         };
         this.runProjectAlt = () => {
             const runCtExport = require('./data/node_requires/exporter');
             runCtExport(global.currentProject, global.projdir)
             .then(() => {
-                nw.Shell.openExternal(`http://localhost:${server.address().port}/`);
+                nw.Shell.openExternal(`http://localhost:${fileServer.address().port}/`);
             });
         };
-        hotkey.on('Alt+F5', this.runProjectAlt);
+        window.hotkeys.on('Alt+F5', this.runProjectAlt);
+        this.on('unmount', () => {
+            window.hotkeys.off('Alt+F5', this.runProjectAlt);
+        });
+
+        this.toggleFullscreen = function toggleFullscreen() {
+            nw.Window.get().toggleFullscreen();
+        };
+        window.hotkeys.on('F11', this.toggleFullscreen);
+        this.on('unmount', () => {
+            window.hotkeys.off('F11', this.toggleFullscreen);
+        });
 
         this.zipProject = async () => {
             try {
                 const os = require('os');
                 const path = require('path');
+                const {getWritableDir} = require('./data/node_requires/platformUtils');
 
                 const writable = await getWritableDir();
                 const inDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ctZipProject-')),
@@ -241,12 +259,16 @@ main-menu.flexcol
             }
         };
         this.zipExport = async () => {
-            const writable = await getWritableDir();
+            const {getBuildDir, getExportDir} = require('./data/node_requires/platformUtils');
+            const buildFolder = await getBuildDir();
             const runCtExport = require('./data/node_requires/exporter');
-            const exportFile = path.join(writable, '/export.zip'),
-                  inDir = path.join(writable, '/export/');
+            const exportFile = path.join(
+                buildFolder,
+                `${global.currentProject.settings.authoring.title || 'ct.js game'}.zip`
+            );
+            const inDir = await getExportDir();
             await fs.remove(exportFile);
-            runCtExport(global.currentProject, global.projdir)
+            runCtExport(global.currentProject, global.projdir, true)
             .then(() => {
                 const archive = archiver('zip'),
                       output = fs.createWriteStream(exportFile);
@@ -261,12 +283,6 @@ main-menu.flexcol
                 archive.finalize();
             })
             .catch(alertify.error);
-        };
-        localStorage.UItheme = localStorage.UItheme || 'Day';
-        this.switchTheme = theme => {
-            localStorage.UItheme = theme;
-            document.getElementById('themeCSS').href = `./data/theme${theme}.css`;
-            window.signals.trigger('UIThemeChanged', theme);
         };
 
         const troubleshootingSubmenu = {
@@ -305,6 +321,25 @@ main-menu.flexcol
                     }
                 }
             }, {
+                label: window.languageJSON.menu.forceProductionForDebug,
+                type: 'checkbox',
+                checked: () => localStorage.forceProductionForDebug === 'yes',
+                click: () => {
+                    if (localStorage.forceProductionForDebug === 'yes') {
+                        localStorage.forceProductionForDebug = 'no';
+                    } else {
+                        localStorage.forceProductionForDebug = 'yes';
+                    }
+                }
+            }, {
+                type: 'separator'
+            }, {
+                label: window.languageJSON.menu.openIconList,
+                click: () => {
+                    this.tab = 'icons';
+                    this.update();
+                }
+            }, {
                 type: 'separator'
             }, {
                 icon: 'discord',
@@ -323,33 +358,24 @@ main-menu.flexcol
             }]
         };
 
+        const themeManager = require('./data/node_requires/themes');
+        const themesSubmenu = {
+            items: themeManager.getThemeList().map(theme => ({
+                label: theme.translated,
+                icon: () => localStorage.UItheme === theme.name && 'check',
+                click: async () => {
+                    await themeManager.switchToTheme(theme.name);
+                    this.update();
+                }
+            }))
+        };
         const settingsSubmenu = {
             items: [{
                 label: window.languageJSON.common.language,
                 submenu: languageSubmenu
             }, {
                 label: window.languageJSON.menu.theme,
-                submenu: {
-                    items: [{
-                        label: window.languageJSON.menu.themeDay,
-                        icon: () => localStorage.UItheme === 'Day' && 'check',
-                        click: () => {
-                            this.switchTheme('Day');
-                        }
-                    }, {
-                        label: window.languageJSON.menu.themeNight,
-                        icon: () => localStorage.UItheme === 'Night' && 'check',
-                        click: () => {
-                            this.switchTheme('Night');
-                        }
-                    }, {
-                        label: window.languageJSON.menu.themeHorizon || 'Horizon',
-                        icon: () => localStorage.UItheme === 'Horizon' && 'check',
-                        click: () => {
-                            this.switchTheme('Horizon');
-                        }
-                    }]
-                }
+                submenu: themesSubmenu
             }, {
                 label: window.languageJSON.menu.codeFont,
                 submenu: {
@@ -406,6 +432,18 @@ main-menu.flexcol
                             window.signals.trigger('codeFontUpdated');
                         }
                     }]
+                }
+            }, {
+                label: window.languageJSON.menu.changeDataFolder,
+                click: () => {
+                    require('./data/node_requires/platformUtils').requestWritableDir();
+                }
+            }, {
+                label: window.languageJSON.menu.disableSounds,
+                type: 'checkbox',
+                checked: () => localStorage.disableSounds === 'on',
+                click: () => {
+                    localStorage.disableSounds = (localStorage.disableSounds || 'off') === 'off' ? 'on' : 'off';
                 }
             }, {
                 type: 'separator'
@@ -478,6 +516,46 @@ main-menu.flexcol
             }, {
                 type: 'separator'
             }, {
+                label: window.languageJSON.menu.openProject,
+                icon: 'folder',
+                click: () => {
+                    alertify.confirm(window.languageJSON.common.reallyexit, () => {
+                        window.showOpenDialog({
+                            defaultPath: require('./data/node_requires/resources/projects').getDefaultProjectDir(),
+                            title: window.languageJSON.menu.openProject,
+                            filter: '.ict'
+                        })
+                        .then(projFile => {
+                            if (!projFile) {
+                                return;
+                            }
+                            window.signals.trigger('resetAll');
+                            window.loadProject(projFile);
+                        });
+                    });
+                }
+            }, { // The same as "Open project" item, but shows an examples' folder first
+                label: window.languageJSON.menu.openExample,
+                click: () => {
+                    alertify.confirm(window.languageJSON.common.reallyexit, () => {
+                        window.showOpenDialog({
+                            defaultPath: require('./data/node_requires/resources/projects').getExamplesDir(),
+                            title: window.languageJSON.menu.openProject,
+                            filter: '.ict'
+                        })
+                        .then(projFile => {
+                            if (!projFile) {
+                                return;
+                            }
+                            window.signals.trigger('resetAll');
+                            window.loadProject(projFile);
+                        });
+                    });
+                }
+            }, {
+                label: window.languageJSON.intro.latest,
+                submenu: recentProjectsSubmenu
+            }, {
                 label: window.languageJSON.menu.startScreen,
                 click: () => {
                     alertify.confirm(window.languageJSON.common.reallyexit, e => {
@@ -486,9 +564,6 @@ main-menu.flexcol
                         }
                     });
                 }
-            }, {
-                label: window.languageJSON.intro.latest,
-                submenu: recentProjectsSubmenu
             }, {
                 type: 'separator'
             }, {

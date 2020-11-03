@@ -41,12 +41,16 @@ desktop\.ini
 src/typedefs/ct.js/types.d.ts
 app/examples
 app/data/bundle.js
+app/data/riotTags.js
 app/data/bundle.css
 app/data/node_requires/**/*
+app/data/hotLoadTags
 app/data/fonts/style/.css
 app/data/theme*.css
 app/data/typedefs/global.d.ts
 app/data/typedefs/pixi.js.d.ts
+app/data/icons.svg
+app/data/icons.json
 /app/data/docs
 app/index.html
 app/preview.html
@@ -78,13 +82,12 @@ app/export
 *.ict.recovery
 
 # editor-specific
-/.vscode
+.vscode/settings.json
 
 # docs
 docs/db.json
 docs/node_modules
 docs/public
-app/data/icons.svg
 export.zip
 app/pleaseCtJSLoadWithoutGPUAccelerationMmkay
 app/debugger.html

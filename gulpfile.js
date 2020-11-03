@@ -3,10 +3,12 @@
 /* eslint no-console: 0 */
 const path = require('path'),
       gulp = require('gulp'),
+      changed = require('gulp-changed'),
       concat = require('gulp-concat'),
       replace = require('gulp-replace'),
       sourcemaps = require('gulp-sourcemaps'),
       minimist = require('minimist'),
+      ts = require('gulp-typescript'),
       stylus = require('gulp-stylus'),
       riot = require('gulp-riot'),
       pug = require('gulp-pug'),
@@ -23,7 +25,7 @@ const path = require('path'),
 
       spawnise = require('./node_requires/spawnise');
 
-const nwVersion = '0.34.5',
+const nwVersion = '0.49.1',
       platforms = ['osx64', 'win32', 'win64', 'linux32', 'linux64'],
       nwFiles = ['./app/**', '!./app/export/**', '!./app/projects/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
 
@@ -33,7 +35,13 @@ const npm = (/^win/).test(process.platform) ? 'npm.cmd' : 'npm';
 const pack = require('./app/package.json');
 
 var channelPostfix = argv.channel || false,
-    fixEnabled = argv.fix || false;
+    fixEnabled = argv.fix || false,
+    nightly = argv.nightly || false,
+    buildNumber = argv.buildNum || false;
+
+if (nightly) {
+    channelPostfix = 'nightly';
+}
 
 let errorBoxShown = false;
 const showErrorBox = function () {
@@ -100,14 +108,22 @@ const compilePug = () =>
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./app/'));
 
+const riotSettings = {
+    compact: false,
+    template: 'pug'
+};
 const compileRiot = () =>
-    gulp.src('./src/riotTags/**')
-    .pipe(riot({
-        compact: false,
-        template: 'pug'
-    }))
-    .pipe(concat('riot.js'))
-    .pipe(gulp.dest('./temp/'));
+    gulp.src('./src/riotTags/**/*.tag')
+    .pipe(riot(riotSettings))
+    .pipe(concat('riotTags.js'))
+    .pipe(gulp.dest('./app/data/'));
+
+const compileRiotPartial = path => {
+    console.log(`Updating tag at ${path}…`);
+    return gulp.src(path)
+    .pipe(riot(riotSettings))
+    .pipe(gulp.dest('./app/data/hotLoadTags/'));
+};
 
 const concatScripts = () =>
     streamQueue(
@@ -115,10 +131,11 @@ const concatScripts = () =>
             objectMode: true
         },
         gulp.src('./src/js/3rdparty/riot.min.js'),
-        gulp.src(['./src/js/**', '!./src/js/3rdparty/riot.min.js']),
-        gulp.src('./temp/riot.js')
+        gulp.src(['./src/js/**', '!./src/js/3rdparty/riot.min.js'])
     )
-    .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init({
+        largeFile: true
+    }))
     .pipe(concat('bundle.js'))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./app/data/'))
@@ -133,16 +150,48 @@ const concatScripts = () =>
         console.error('[scripts error]', err);
     })
     .on('change', fileChangeNotifier);
+
 const copyRequires = () =>
-    gulp.src('./src/node_requires/**/*')
+    gulp.src([
+        './src/node_requires/**/*',
+        '!./src/node_requires/**/*.ts'
+    ])
+    .pipe(sourcemaps.init())
+    // ¯\_(ツ)_/¯
+    .pipe(sourcemaps.mapSources((sourcePath) => '../../src/' + sourcePath))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./app/data/node_requires'));
+
+const tsProject = ts.createProject('tsconfig.json');
+
+const processRequiresTS = () =>
+    gulp.src('./src/node_requires/**/*.ts')
+    .pipe(sourcemaps.init())
+    .pipe(tsProject())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./app/data/node_requires'));
+
+const processRequires = gulp.series(copyRequires, processRequiresTS);
+
+const copyInEditorDocs = () =>
+    gulp.src('./docs/docs/ct.*.md')
     .pipe(gulp.dest('./app/data/node_requires'));
 
 const compileScripts = gulp.series(compileRiot, concatScripts);
 
-const icons = () =>
-    gulp.src('./src/icons/**/*.svg')
+const makeIconAtlas = () =>
+    gulp.src('./src/icons/**/*.svg', {
+        base: './src/icons'
+    })
     .pipe(sprite())
     .pipe(gulp.dest('./app/data'));
+
+const writeIconList = () => fs.readdir('./src/icons')
+    .then(files => files.filter(file => path.extname(file) === '.svg'))
+    .then(files => files.map(file => path.basename(file, '.svg')))
+    .then(files => fs.outputJSON('./app/data/icons.json', files));
+
+const icons = gulp.series(makeIconAtlas, writeIconList);
 
 const watchScripts = () => {
     gulp.watch('./src/js/**/*', gulp.series(compileScripts))
@@ -153,12 +202,12 @@ const watchScripts = () => {
     .on('change', fileChangeNotifier);
 };
 const watchRiot = () => {
-    gulp.watch('./src/riotTags/**/*', gulp.series(compileScripts))
-    .on('error', err => {
+    const watcher = gulp.watch('./src/riotTags/**/*', compileRiot);
+    watcher.on('error', err => {
         notifier.notify(makeErrorObj('Riot failure', err));
         console.error('[pug error]', err);
-    })
-    .on('change', fileChangeNotifier);
+    });
+    watcher.on('change', compileRiotPartial);
 };
 const watchStylus = () => {
     gulp.watch('./src/styl/**/*', compileStylus)
@@ -169,7 +218,7 @@ const watchStylus = () => {
     .on('change', fileChangeNotifier);
 };
 const watchPug = () => {
-    gulp.watch('./src/pug/*.pug', compilePug)
+    gulp.watch('./src/pug/**/*.pug', compilePug)
     .on('change', fileChangeNotifier)
     .on('error', err => {
         notifier.notify(makeErrorObj('Pug failure', err));
@@ -177,7 +226,7 @@ const watchPug = () => {
     });
 };
 const watchRequires = () => {
-    gulp.watch('./src/node_requires/**/*', copyRequires)
+    gulp.watch('./src/node_requires/**/*', processRequires)
     .on('change', fileChangeNotifier)
     .on('error', err => {
         notifier.notify(makeErrorObj('Failure of node_requires', err));
@@ -213,6 +262,8 @@ const lintJS = () => {
         './src/js/**/*.js',
         '!./src/js/3rdparty/**/*.js',
         './src/node_requires/**/*.js',
+        './app/data/ct.release/**/*.js',
+        '!./app/data/ct.release/**/*.min.js',
         './src/pug/**/*.pug'
     ])
     .pipe(eslint({
@@ -368,13 +419,20 @@ const build = gulp.parallel([
     compilePug,
     compileStylus,
     compileScripts,
-    copyRequires,
+    processRequires,
+    copyInEditorDocs,
     icons,
     bakeTypedefs
 ]);
 
 const bakePackages = async () => {
     const NwBuilder = require('nw-builder');
+    // Use the appropriate icon for each release channel
+    if (nightly) {
+        await fs.copy('./buildAssets/icon.png', './app/ct_ide.png');
+    } else {
+        await fs.copy('./buildAssets/nightly.png', './app/ct_ide.png');
+    }
     await fs.remove(path.join('./build', `ctjs - v${pack.version}`));
     var nw = new NwBuilder({
         files: nwFiles,
@@ -384,9 +442,29 @@ const bakePackages = async () => {
         buildType: 'versioned',
         // forceDownload: true,
         zip: false,
-        macIcns: './buildAssets/icon.icns'
+        macIcns: nightly ? './buildAssets/nightly.icns' : './buildAssets/icon.icns'
     });
     await nw.build();
+
+    // Copy .itch.toml files for each target platform
+    await Promise.all(platforms.map(platform => {
+        if (platform.indexOf('win') === 0) {
+            return fs.copy(
+                './buildAssets/windows.itch.toml',
+                path.join(`./build/ctjs - v${pack.version}`, platform, '.itch.toml')
+            );
+        }
+        if (platform === 'osx64') {
+            return fs.copy(
+                './buildAssets/mac.itch.toml',
+                path.join(`./build/ctjs - v${pack.version}`, platform, '.itch.toml')
+            );
+        }
+        return fs.copy(
+            './buildAssets/linux.itch.toml',
+            path.join(`./build/ctjs - v${pack.version}`, platform, '.itch.toml')
+        );
+    }));
     console.log('Built to this location:', path.join('./build', `ctjs - v${pack.version}`));
 };
 
@@ -505,13 +583,20 @@ const packages = gulp.series([
     patronsCache,
     examples,
     bakePackages,
-    fixSymlinks,
-    fixPermissions,
+//    fixSymlinks,
+//    fixPermissions,
     zipPackages
 ]);
 
 const deployOnly = () => {
     console.log(`For channel ${channelPostfix}`);
+    if (nightly) {
+        return spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux32`, `comigo/ct-nightly:linux32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', buildNumber])
+        .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux64`, `comigo/ct-nightly:linux64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', buildNumber]))
+        .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/osx64`, `comigo/ct-nightly:osx64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', buildNumber]))
+        .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win32`, `comigo/ct-nightly:win32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', buildNumber]))
+        .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win64`, `comigo/ct-nightly:win64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', buildNumber]));
+    }
     return spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux32`, `comigo/ct:linux32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version])
     .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux64`, `comigo/ct:linux64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]))
     .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/osx64`, `comigo/ct:osx64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]))
@@ -526,9 +611,17 @@ const launchDevMode = done => {
     launchApp();
     done();
 };
+const launchDevModeNoNW = done => {
+    watch();
+    done();
+};
 const defaultTask = gulp.series(build, launchDevMode);
+const devNoNW = gulp.series(build, launchDevModeNoNW);
 
-
+exports.lintJS = lintJS;
+exports.lintTags = lintTags;
+exports.lintStylus = lintStylus;
+exports.lintI18n = lintI18n;
 exports.lint = lint;
 exports.packages = packages;
 exports.patronsCache = patronsCache;
@@ -537,5 +630,6 @@ exports.build = build;
 exports.deploy = deploy;
 exports.deployOnly = deployOnly;
 exports.default = defaultTask;
+exports.dev = devNoNW;
 exports.bakeCompletions = bakeCompletions;
 exports.bakeTypedefs = bakeTypedefs;

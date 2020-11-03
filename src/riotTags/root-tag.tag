@@ -1,14 +1,33 @@
 root-tag
-    main-menu(if="{!selectorVisible}")
-    notepad-panel(if="{!selectorVisible}")
-    project-selector(if="{selectorVisible}")
+    main-menu(if="{projectOpened}")
+    notepad-panel(if="{projectOpened}")
+    dnd-processor(if="{projectOpened}")
+    project-selector(if="{!projectOpened}")
+    writable-folder-prompt(if="{showWritableFolderPrompt}" onsuccess="{onWritableSelected}")
     script.
-        this.selectorVisible = true;
+        this.projectOpened = false;
         window.signals.on('resetAll', () => {
             global.currentProject = false;
-            this.selectorVisible = true;
+            this.projectOpened = false;
             riot.update();
         });
+        window.signals.on('projectLoaded', () => {
+            this.projectOpened = true;
+            this.update();
+        });
+
+        require('./data/node_requires/platformUtils')
+        .getWritableDir()
+        .catch(e => {
+            console.error(e);
+            this.showWritableFolderPrompt = true;
+            this.update();
+        });
+
+        this.onWritableSelected = () => {
+            this.showWritableFolderPrompt = false;
+            this.update();
+        };
 
         const stylesheet = document.createElement('style');
         document.head.appendChild(stylesheet);

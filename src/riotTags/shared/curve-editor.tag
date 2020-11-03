@@ -10,30 +10,30 @@
         Called when a user drags a curve's point.
         Passes the whole curve and an edited point as its arguments.
 
-    @attribute lockstarttime (atomic)
+    @attribute [lockstarttime] (atomic)
         Locks the time of the firts point in the curve.
         Also, it forbids the deletion of this point.
-    @attribute lockendtime (atomic)
+    @attribute [lockendtime] (atomic)
         Locks the time of the last point in the curve.
         Also, it forbids the deletion of this point.
-    @attribute lockstartvalue (atomic)
+    @attribute [lockstartvalue] (atomic)
         Locks the value of the first point in the curve.
         Also, it forbids the deletion of this point.
-    @attribute lockendvalue (atomic)
+    @attribute [lockendvalue] (atomic)
         Locks the value of the last point in the curve.
         Also, it forbids the deletion of this point.
 
-    @attribute timestep (number)
+    @attribute [timestep] (number)
         A step size for a manual point editor. Defaults to 0.01.
-    @attribute valuestep (number)
+    @attribute [valuestep] (number)
         A step size for a manual point editor. Defaults to 0.01.
 
-    @attribute type (string, 'float'|'color')
+    @attribute [type] (string, 'float'|'color')
         Defaults to 'float'; if set to 'color', requires
         an attribute `colorcurve` to be set and allows for color editing.
-    @attribute easing (string, 'linear'|'none')
+    @attribute [easing] (string, 'linear'|'none')
         Defaults to 'linear'.
-    @attribute coloreasing (string, 'linear'|'none')
+    @attribute [coloreasing] (string, 'linear'|'none')
         Defaults to 'linear'.
 
 curve-editor(ref="root")
@@ -46,7 +46,7 @@ curve-editor(ref="root")
                 span(each="{pos in [1, 0.8, 0.6, 0.4, 0.2, 0]}") {niceNumber(min + (pos * (max - min)))}
             svg(xmlns="http://www.w3.org/2000/svg" riot-viewbox="0 0 {width} {height}" ref="graph" onmousemove="{onGraphMouseMove}")
                 defs
-                    filter#greyOutlineEffect
+                    filter#greyOutlineEffect(x="-50%" y="-50%" width="200%" height="200%" filterUnits="userSpaceOnUse")
                         feMorphology(in="SourceAlpha" result="MORPH" operator="dilate" radius="2")
                         feColorMatrix(in="MORPH" result="WHITENED" type="matrix" values="-1 0 0 0.8 0, 0 -1 0 0.8 0, 0 0 -1 0.8 0, 0 0 0 1 0")
                         feMerge
@@ -57,6 +57,7 @@ curve-editor(ref="root")
                         if="{opts.type === 'color' && (ind < opts.curve.length - 1)}"
                         riot-id="{uid}grad{ind}to{ind+1}"
                         x1="0%" y1="0%" x2="100%" y2="0%"
+                        spreadMethod="pad"
                     )
                         stop(offset="0%" style="\
                             stop-color:#{point.value};\
@@ -287,6 +288,7 @@ curve-editor(ref="root")
             this.startMoving(point)(e);
         };
         this.deletePoint = e => {
+            e.preventDefault();
             const o = this.opts;
             if (e.item.point === this.curve[0] && (o.lockstarttime || o.lockstartvalue)) {
                 return;

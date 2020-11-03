@@ -1,3 +1,40 @@
+interface ICtPlaceLineSegment {
+    /** The horizontal coordinate of the starting point of the ray. */
+    x1: number,
+    /** The vertical coordinate of the starting point of the ray. */
+    y1: number,
+    /** The horizontal coordinate of the ending point of the ray. */
+    x2: number,
+    /** The vertical coordinate of the ending point of the ray. */
+    y2: number
+}
+interface ICtPlaceRectangle {
+    /** The left side of the rectangle. */
+    x1?: number,
+    /** The upper side of the rectangle. */
+    y1?: number,
+    /** The right side of the rectangle. */
+    x2?: number,
+    /** The bottom side of the rectangle. */
+    y2?: number,
+    /** The left side of the rectangle. */
+    x?: number,
+    /** The upper side of the rectangle. */
+    y?: number,
+    /** The right side of the rectangle. */
+    width?: number,
+    /** The bottom side of the rectangle. */
+    height?: number
+}
+interface ICtPlaceCircle {
+    /** The horizontal coordinate of the circle's center. */
+    x: number,
+    /** The vertical coordinate of the circle's center. */
+    y: number,
+    /** The radius of the circle. */
+    radius: number
+}
+
 declare namespace ct {
     /**
      * A module for handling collisions.
@@ -38,7 +75,7 @@ declare namespace ct {
          */
         function free(me: Copy, ctype?: string): boolean;
 
-        function occupied(me: Copy, x: number, y: number, ctype?: string, multiple: true): Copy[];
+        function occupied(me: Copy, x: number, y: number, ctype: string|false, multiple: true): Copy[];
         /**
          * Determines if the place in (x,y) is occupied.
          * Optionally can take 'ctype' as a filter for obstacles' collision group (not shape type)
@@ -51,9 +88,9 @@ declare namespace ct {
          *                                   If it is false (default), it will return a copy with the first collision
          * @returns {Copy|Array<Copy>} The collided copy, or an array of all the detected collisions (if `multiple` is `true`)
          */
-        function occupied(me: Copy, x: number, y: number, ctype?: string, multiple?: false|void): Copy | false;
+        function occupied(me: Copy, x: number, y: number, ctype?: string): Copy | false;
 
-        function occupied(me: Copy, ctype?: string, multiple: true): Copy[];
+        function occupied(me: Copy, ctype?: string, multiple?: true): Copy[];
         /**
          * Determines if the copy is in an occupied place.
          * Optionally can take 'ctype' as a filter for obstacles' collision group (not shape type)
@@ -103,20 +140,23 @@ declare namespace ct {
         function meet(me: Copy, type: string, multiple?: false|void): Copy | false;
 
         /**
-         * Checks for a collision between a copy `me` and a tile layer of a given `depth`.
-         * Depth of a tile layer is equal to what you set in the room editor.
+         * Checks for a collision between a copy `me` and a tile layer of a given collision group (`ctype`).
+         * If `ctype` is not set for a tile layer, then ct.place will compare against a tile layer's depth.
+         *
+         * If `x` and `y` are skipped, the current coordinates of `me` will be used.
+         *
          * Each tile is considered a rectangle, and a possible collision mask defined in the graphics asset
          * (in the tileset) is ignored. If `x` and `y` are skipped, the current coordinates of `me` will be used.
          *
          * This method returns either `true` (a copy collides with a tile layer) or `false` (no collision).
          *
          * @param {Copy} me The copy to calculate collisions for
-         * @param {number} [x] The x coordinate to check, as if `me` was placed there
-         * @param {number} [y] The y coordinate to check, as if `me` was placed there
-         * @param {number} depth The depth of a tile layer to test collisions against
+         * @param {number} [x] The x coordinate to check, as if `me` was placed there.
+         * @param {number} [y] The y coordinate to check, as if `me` was placed there.
+         * @param {number} ctype The collision group of tile layers to test against.
          */
-        function tile(me: Copy, x: number, y: number, depth: number): boolean;
-        function tile(me: Copy, depth: number): boolean;
+        function tile(me: Copy, x: number, y: number, ctype: string): boolean;
+        function tile(me: Copy, ctype: string): boolean;
 
         /**
          * Returns the latest distance after calling `ct.place.furthest` or `ct.place.nearest`.
@@ -141,18 +181,44 @@ declare namespace ct {
 
         /**
          * Moves a copy by `stepSize` in a given `direction` untill a `maxLength` is reached
-         * or a copy is next to another colliding copy. You can filter collided copies with `ctype`,
+         * or a copy is next to an obstacle. You can filter collided copies and tiles with `ctype`,
          * and set precision with `stepSize` (default is `1`, which means pixel-by-pixel movement).
          * This function is especially useful for side-view games and any fast-moving copies,
          * as it allows precise movement without clipping or passing through surfaces.
          *
+         * @remarks
+         * You will usually need to premultiply `maxLength` with `ct.delta` so that the speed is consistent
+         * under different FPS rates.
+         *
          * @param {Copy} me The copy that needs to be moved
-         * @param {number} direction The irection in which to perform a movement
+         * @param {number} direction The direction in which to perform a movement
          * @param {number} maxLength The maximum distance a copy can traverse
          * @param {string} [ctype] A collision group to test against. Tests against every copy if no collision group was specified
          * @param {number} [stepSize=1] Precision of movement
+         * @returns {Copy|boolean} If there was no collision and a copy reached its target, returns `false`.
+         * If a copy met an obstacle as another copy, returns this copy. If there was a tile, returns `true`.
          */
-        function moveAlong(me: Copy, direction: number, maxLength: number, ctype?: string, stepSize?: number): Copy | false;
+        function moveAlong(me: Copy, direction: number, maxLength: number, ctype?: string, stepSize?: number): Copy | boolean;
+
+        /**
+         * Similar to ct.place.moveAlong, this method moves a copy by X and Y axes until dx and dy are reached
+         * or a copy meets an obstacle on both axes. If an obstacle was met on one axis, a copy may continue
+         * moving by another axis. You can filter collided copies with `ctype`,
+         * and set precision with `stepSize` (default is `1`, which means pixel-by-pixel movement).
+         * This movement suits characters in top-down and side-view worlds.
+         *
+         * @remarks
+         * You will usually need to premultiply `dx` and `dy` with `ct.delta` so that the speed is consistent
+         * under different FPS rates.
+         *
+         * @param {Copy} me The copy that needs to be moved
+         * @param {number} dx Amount of pixels to move by X axis
+         * @param {number} dy Amount of pixels to move by Y axis
+         * @param {string} [ctype] A collision group to test against. Tests against every copy if no collision group was specified
+         * @param {number} [stepSize=1] Precision of movement
+         * @returns {false|ISeparateMovementResult} `false` if it reached its target, an object with each axis specified otherwise.
+         */
+        function moveByAxes(me: Copy, dx: number, dy: number, ctype?: string, stepSize?: number): false | ISeparateMovementResult;
 
         /**
          * Tries to reach the target with a simple obstacle avoidance algorithm.
@@ -172,6 +238,84 @@ declare namespace ct {
          */
         function go(me: Copy, x: number, y: number, length: number, ctype?: string): void;
 
+
+        /**
+         * Tests for intersections with a line segment.
+         * If `getAll` is set to `true`, returns all the copies that intersect
+         * the line segment; otherwise, returns the first one that fits the conditions.
+         *
+         * @param {ICtPlaceLineSegment} line An object that describes the line segment.
+         * @param {string} [ctype] An optional collision group to trace against.
+         * If omitted, will trace through all the copies in the current room.
+         * @param {boolean} [getAll] Whether to return all the intersections (true),
+         * or return the first one.
+         */
+        function traceLine(line: ICtPlaceLineSegment, cgroup: string|false, getAll: true): Array<Copy>;
+        function traceLine(line: ICtPlaceLineSegment, cgroup: string|false, getAll: false): Copy|false;
+        function traceLine(line: ICtPlaceLineSegment, cgroup?: string): Copy|false;
+
+        /**
+         * Tests for intersections with a filled rectangle.
+         * If `getAll` is set to `true`, returns all the copies that intersect
+         * the rectangle; otherwise, returns the first one that fits the conditions.
+         *
+         * @param {ICtPlaceRectangle} rect An object that describes the line segment.
+         * @param {string} [ctype] An optional collision group to trace against.
+         * If omitted, will trace through all the copies in the current room.
+         * @param {boolean} [getAll] Whether to return all the intersections (true),
+         * or return the first one.
+         */
+        function traceRect(rect: ICtPlaceRectangle, cgroup: string, getAll: true): Array<Copy>;
+        function traceRect(rect: ICtPlaceRectangle, cgroup: string, getAll: false): Copy|false;
+        function traceRect(rect: ICtPlaceRectangle, cgroup?: string): Copy|false;
+
+        /**
+         * Tests for intersections with a filled circle.
+         * If `getAll` is set to `true`, returns all the copies that intersect
+         * the circle; otherwise, returns the first one that fits the conditions.
+         *
+         * @param {ICtPlaceCircle} rect An object that describes the line segment.
+         * @param {string} [ctype] An optional collision group to trace against.
+         * If omitted, will trace through all the copies in the current room.
+         * @param {boolean} [getAll] Whether to return all the intersections (true),
+         * or return the first one.
+         */
+        function traceCircle(circle: ICtPlaceCircle, cgroup: string|false, getAll: true): Array<Copy>;
+        function traceCircle(circle: ICtPlaceCircle, cgroup: string|false, getAll: false): Copy|false;
+        function traceCircle(circle: ICtPlaceCircle, cgroup?: string): Copy|false;
+
+        /**
+         * Tests for intersections with a polyline. It is a hollow shape made
+         * of connected line segments. The shape is not closed unless you add
+         * the closing point by yourself.
+         * If `getAll` is set to `true`, returns all the copies that intersect
+         * the polyline; otherwise, returns the first one that fits the conditions.
+         *
+         * @param {Array<IPoint>} polyline An array of objects with `x` and `y` properties.
+         * @param {string} [ctype] An optional collision group to trace against.
+         * If omitted, will trace through all the copies in the current room.
+         * @param {boolean} [getAll] Whether to return all the intersections (true),
+         * or return the first one.
+         */
+        function tracePolyline(polyline: Array<IPoint>, cgroup: string|false, getAll: true): Array<Copy>;
+        function tracePolyline(polyline: Array<IPoint>, cgroup: string|false, getAll: false): Copy|false;
+        function tracePolyline(polyline: Array<IPoint>, cgroup?: string): Copy|false;
+
+        /**
+         * Tests for intersections with a point.
+         * If `getAll` is set to `true`, returns all the copies that intersect
+         * the point; otherwise, returns the first one that fits the conditions.
+         *
+         * @param {object} point An object with `x` and `y` properties.
+         * @param {string} [ctype] An optional collision group to trace against.
+         * If omitted, will trace through all the copies in the current room.
+         * @param {boolean} [getAll] Whether to return all the intersections (true),
+         * or return the first one.
+         */
+        function tracePoint(point: IPoint, cgroup: string|false, getAll: true): Array<Copy>;
+        function tracePoint(point: IPoint, cgroup: string|false, getAll: false): Copy|false;
+        function tracePoint(point: IPoint, cgroup?: string): Copy|false;
+
         /**
          * Throws a ray from point (x1, y1) to (x2, y2), returning all the instances that touched the ray.
          * The first copy in the returned array is the closest copy, the last one is the furthest.
@@ -182,8 +326,48 @@ declare namespace ct {
          * @param {number} y2 A vertical coordinate of the ending point of the ray.
          * @param {String} [ctype] An optional collision group to trace against. If omitted, will trace through all the copies in the current room.
          *
+         * @deprecated Since v1.4.3. Use ct.place.traceLine instead.
          * @returns {Array<Copy>} Array of all the copies that touched the ray
          */
         function trace(x1: number, y1: number, x2: number, y2: number, ctype?: string): Copy[];
+
+        /**
+         * Enables collision checks on the specified tilemap, with an optional collision group.
+         * @param {Tilemap} tilemap The tilemap on which to enable collisions.
+         * @param {string} ctype Collision group.
+         */
+        function enableTilemapCollisions(tilemap: Tilemap, ctype?: string): void;
     }
+}
+
+interface IPoint {
+    x: number;
+    y: number;
+}
+interface ISeparateMovementResult {
+    x: boolean | Copy;
+    y: boolean | Copy;
+}
+
+interface Copy {
+    /** The current collision group of a copy */
+    ctype: string;
+    /**
+     * Call to perform precise movement with collision checks. It takes gravity
+     * and `ct.delta` into account, too, and uses the `ct.place.moveAlong` method.
+     */
+    moveContinuous(ctype: string, precision?: number): false|Copy;
+    /**
+     * Call to perform precise movement with collision checks. It takes gravity
+     * and `ct.delta` into account, too, and uses the `ct.place.moveByAxes` method.
+     */
+    moveContinuousByAxes(ctype: string, precision?: number): false|ISeparateMovementResult;
+}
+
+interface Tilemap {
+    /**
+     * Enables collision checks on the specified tilemap, with an optional collision group.
+     * @param {string} ctype Collision group.
+     */
+    enableCollisions(ctype?: string): void;
 }

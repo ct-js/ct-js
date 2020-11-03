@@ -112,13 +112,14 @@ textarea
     border-radius 100%
 
 /* display modifiers */
-.block
+/* use double-classing to ensure higher priority over other user-defined CSS rules */
+.block.block
     display block
-.inline
+.inline.inline
     display inline
-.inlineblock
+.inlineblock.inlineblock
     display inline-block
-.relative
+.relative.relative
     position relative
 /* color modifiers */
 .red
@@ -154,6 +155,10 @@ for key, val in shortNames
             {val}-{sval} 0 !important
     .n{key}, .no{val}
         {val} 0 !important
+
+.pad
+    padding 1rem
+    box-sizing border-box
 
 .column
     padding 1rem
@@ -228,6 +233,7 @@ for i in 1 2 3 4 5 6 7 8
 /* misc */
 .alignmiddle
     vertical-align middle !important
+    align-self center
 
 /* utilities */
 .scrollbar-measure

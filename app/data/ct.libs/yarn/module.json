@@ -1,11 +1,15 @@
 {
     "main": {
         "name": "ct.yarn",
-        "version": "0.0.0",
+        "tagline": "Use YarnSpinner projects to create interactive dialogues in your game.",
+        "version": "1.0.0",
         "authors": [{
             "name": "Cosmo Myzrail Gorynych",
             "mail": "admin@nersta.ru"
-        }]
+        }],
+        "categories": [
+            "integrations"
+        ]
     },
     "fields": [{
         "name": "Skip empty lines",

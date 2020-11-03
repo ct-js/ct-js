@@ -1,3 +1,175 @@
+## v1.4.2
+
+*Sat Aug 29 2020*
+
+### ✨ New Features
+
+* Add `tag` catmod, for adding tags for individual copies and rooms.
+* Add a properties panel for tweaking parameters of an individual copy.
+* Add `PIXI.MultiStyleText` module.
+* Add support for moddable extensions for individual copies.
+* Add texture generator for placeholders.
+* Background color control for rooms (finally!)
+* Code completions now suggest names of types, rooms, sounds, actions, and emitters.
+* `ct.place.moveByAxes` and `this.moveContinuousByAxes` for easy movement at platformers and top-down games.
+* `ct.place.moveAlong` now checks against tiles too
+* Fast integer scaling mode for `ct.fittoscreen`, for purely pixelart projects.
+* Hide default cursor at Project -> Render Options -> Hide system cursor
+* Import a texture by pasting it from a clipboard. Will update an existing opened texture as well!
+* In the room editor, Shift+Click now selects the nearest copy or tile.
+* New `select` input type for catmods, as an alternative to `radio`
+* Nightly builds at comigo.itch.io/ct-nightly.
+* Seeded random for `ct.random` module
+* `slider`, `sliderAndNumber` input types for extensions, and additional settings for them and `number` inputs.
+* Sort copies or tiles inside a room with two new buttons at the top-left corner of the room editor. Extremely handy for isometric games!
+* Toggle UI sounds in the Main menu -> Settings
+
+### ⚡️ General Improvements
+
+* A popup to quickly fix backgrounds at the room editor if their texture is not marked for tiled use.
+* Add .itch.toml to simplify run dialog on Linux.
+* Add `dnd-processor` tag that solves edge cases with drag-and-drop behavior and allows dropping any supported files on any tab.
+* Add icons that highlight deprecated and preview modules more clearly.
+* Better zooming controls for room, texture, and emitter editors.
+* Change build, projects', export folders to be stored under the `~/ct.js/` directory.
+* Change `ct.fs` to use app data directories for Linux, Windows, macOS (#226 by @JulianWebb).
+* Decrease threshold that differentiated clicks and drags in room editor, improving placing behavior of multiple tiles/copies.
+* Improve preview making process for textures.
+* Improve tile positioning algorithm for the room editor.
+* Minor UI improvements for the texture viewer.
+* Position context menus so that they don't exceed viewport's size.
+* Rename "Author" field at settings into "Developer" (i18n strings only).
+* Scale smaller tilesets to fit the tile picker, at the room editor.
+* Update Russian UI translation.
+
+### 🐛 Bug Fixes
+
+* A workaround for 'oncancel' not being fired on `input(type="file")` tags. Fixes an issue with invisible inputs overlaying the main menu.
+* Add the missing CSS directive for pixelated projects.
+* Fix checkboxes at extensions and module settings not showing the actual value's state
+* Fix `ct.mouse` returning old coordinates if a camera has moved, but a cursor hasn't.
+* Fix incorrect drawing of scaled copies in the room editor.
+* Fix issues with camera movement at room editor with extreme zooming factors.
+* Fix modules' extensions being parsed at the exporter if they have undefined or unset (equal to -1) secondary keys.
+* Fix overflow issues and wrong initial values for bitmap font generator.
+* Fix regression from v1.4 with blurry particle editor and room view when pixelart rendering was enabled.
+* Fix `user-select` CSS parameter on modules' docs panel.
+* Hotfix: fix font import issues on Windows, as well as fix potential similar issues for other asset types
+
+### 🍱 Demos, Dependencies and Stuff
+
+* Add the missing link to the bitmap fonts page in the navigation panel.
+* At the platformer tutorial, fix a typo in collectibles title.
+* Bump various catmods' versions.
+* Fix small error in describing key input in the asteroid shooter tutorial.
+* Fixed bitmap fonts docs. The `font` in the constructor should be an object.
+* Specify the tab for enemy/asteroid generation code at space shooter tutorial.
+* Update electron-packager to v15.0.0. Fixes build issues for Windows.
+
+### 📝 Docs
+
+* Add info about moddable copies' extensions
+* Document new input types `slider` and `sliderAndNumber`, as well as additional settings for them
+
+### 🌐 Website
+
+* :sparkles: Presskit
+
+### 🌚 Misc
+
+* :fire: Remove keymage.js, as it is not used anymore
+* :fire: Remove keymaster.js, as it is not used anymore
+
+
+## v1.4.1
+
+*Sun Aug 10 2020*
+
+### 🐛 Bug Fixes
+
+* Fix indefinite behavior after placing copies and switching to the properties tab in the room editor
+* Fix loading error while migrating a project without tile layers to v1.4.0
+* Fix regression with custom script typings: they were not loaded on project load
+* Fix type picker being empty right after opening the room editor
+* Icons in the room editor, on the left side, should be centered if no labels are shown next to them.
+
+## v1.4.0
+
+*Sun Aug 09 2020*
+
+### ✨ New Features
+
+* Bitmap fonts — see new docs on how to use them. These fonts solve issues with blurry pixelart fonts in games, and also provide higher performance for dynamic text!
+* `ct.assert` module for readable checks in ct.js projects
+* `ct.camera` now supports direct assignment for its scale, e.g. `ct.camera.scale = 1.5;`
+* `ct.inherit` module that allows you to call parents' code and keep things DRY
+* Custom font selector in the style editor
+* Lucas Dracula theme — A rough port of Arkham theme for VSCode by @lucasmsa
+* Modding: `onbeforecreate` injection
+* Modding: A `code` input type for monospace text input
+* Modding: Add `point2D` input type for modules' settings and injections
+* Modding: Add extensions for rooms with `roomExtends` field
+* Modding: Add extensions to tile layers with `tileLayerExtends` field
+* Modding: Both module settings and asset extensions now can use all the input fields that were previously exclusive to either modules' settings or type extensions
+* Module's settings are now parts of the Project Settings' tab
+* Quickly create a new type by right-clicking an asset in the textures panel
+* Unified module's docs in the side panel
+
+### ⚡️ General Improvements
+
+* Allow `ct.fittoscreen` to toggle fullscreen mode while being in an electron app (in a desktop build)
+  Closes #155
+* Allow games enter fullscreen while being in debugger
+  See #155
+* Better project selector background for night themes
+* Better layout of a type editor
+* Change `ct.place.tile` to check against collision groups (new!) instead of depth
+* Improve Horizon theme
+* Make the structural behavior of TileLayer consistent. Fixes drawing issues with tiles and `ct.place` debug mode
+* Minor UI fixes for the project selector
+* More logical color hierarchy — you will see subtle changes in how certain panels are colored in dark and light themes, and all themes should now have uniform look and feel
+* Move depth input at the type editor into a scrollbox, on par with module-provided fields
+* New icons for the top panel
+* Refurbish project's settings screen
+* Remove empty "help" field from ct.place > module.json
+* Replace node-static for dev and docs servers with serve-handler. Solves rare race conditions while loading docs or a game.
+* Show a loading icon while exporting project
+* The left button group at the topmost tab bar now occupies less space on wider screens
+* Update Russian UI translation
+* Update Spanish translation for ct.IDE. Update by Stuck Up Creations from the Discord server :sparkles:
+* Update debug translation file and comments file
+* Use less restrictive YAML reader/writer to allow some minor save file errors
+
+### 🐛 Bug Fixes
+
+* Do not reuse tiles directly from room templates
+  Closes #191
+* Fix blank autocompletion list at room-events-editor
+  Closes #195
+* Fix `ct.tween.add` not working as expected for useUiDelta
+  See #198
+* Fix the first tile layer not being added into a drawing stack at room-editor, which made tiles invisible unless a copy or background was added
+  Closes #206
+* Fix wrong default setting for `ct.fittoscreen` module
+* Replace unzipper module and fix issues with module imports
+
+### 🍱 Demos, dependencies and Stuff
+
+* Update Howler.js to v2.2.0
+
+### 📝 Docs
+
+* Split "Making catmods" docs into several pages;
+* Document the usage of new asset extensions and input types;
+* Document the usage of BitmapFonts;
+* Update screenshots and directions for tutorials, to reflect UI changes in v1.4.
+
+### 👾 Misc
+
+* :fire: Remove export options: HTML and CSS are now always minified, and JS conversion never worked correctly
+* :fire: Remove a button in the nav that toggles fullscreen view
+* Minor fixes to the debugger files (#197 by @leedigital)
+
 ## v1.3.0
 
 *Wed May 06 2020*

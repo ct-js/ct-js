@@ -1,6 +1,6 @@
-(function () {
+(function timerAddon() {
     const ctTimerTime = Symbol('time');
-    const ctTimerRoomName = Symbol('roomName');
+    const ctTimerRoomUid = Symbol('roomUid');
     const ctTimerTimeLeftOriginal = Symbol('timeLeftOriginal');
     const promiseResolve = Symbol('promiseResolve');
     const promiseReject = Symbol('promiseReject');
@@ -15,10 +15,11 @@
          *
          * @param {number} timeMs The length of the timer, **in milliseconds**
          * @param {string|false} [name=false] The name of the timer
-         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time. if `false`, it will use `ct.delta` for counting time.
+         * @param {boolean} [uiDelta=false] If `true`, it will use `ct.deltaUi` for counting time.
+         * if `false`, it will use `ct.delta` for counting time.
          */
         constructor(timeMs, name = false, uiDelta = false) {
-            this[ctTimerRoomName] = ct.room.name || '';
+            this[ctTimerRoomUid] = ct.room.uid || null;
             this.name = name && name.toString();
             this.isUi = uiDelta;
             this[ctTimerTime] = 0;
@@ -79,7 +80,7 @@
                 return;
             }
             this[ctTimerTime] += this.isUi ? ct.deltaUi : ct.delta;
-            if (ct.room.name !== this[ctTimerRoomName] && this[ctTimerRoomName] !== '') {
+            if (ct.room.uid !== this[ctTimerRoomUid] && this[ctTimerRoomUid] !== null) {
                 this.reject({
                     info: 'Room switch',
                     from: 'ct.timer'
@@ -100,6 +101,9 @@
          * @returns {void}
          */
         resolve() {
+            if (this.settled) {
+                return;
+            }
             this.done = true;
             this.settled = true;
             this[promiseResolve]();
@@ -111,6 +115,9 @@
          * @returns {void}
          */
         reject(message) {
+            if (this.settled) {
+                return;
+            }
             this.rejected = true;
             this.settled = true;
             this[promiseReject](message);
@@ -141,20 +148,22 @@
          * Adds a new timer with a given name
          *
          * @param {number} timeMs The length of the timer, **in milliseconds**
-         * @param {string|false} [name=false] The name of the timer, which you use to access it from `ct.timer.timers`.
+         * @param {string|false} [name=false] The name of the timer, which you use
+         * to access it from `ct.timer.timers`.
          * @returns {CtTimer} The timer
          */
-        add(timeMs, name=false) {
+        add(timeMs, name = false) {
             return new CtTimer(timeMs, name, false);
         },
         /**
          * Adds a new timer with a given name that runs in a UI time scale
          *
          * @param {number} timeMs The length of the timer, **in milliseconds**
-         * @param {string|false} [name=false] The name of the timer, which you use to access it from `ct.timer.timers`.
+         * @param {string|false} [name=false] The name of the timer, which you use
+         * to access it from `ct.timer.timers`.
          * @returns {CtTimer} The timer
          */
-        addUi(timeMs, name=false) {
+        addUi(timeMs, name = false) {
             return new CtTimer(timeMs, name, true);
         },
         /**
