@@ -173,8 +173,7 @@
         "visitDiscordForGamedevSupport": "加入 Discord 服务器以获得游戏开发支持",
         "postAnIssue": "在Github上提交issue…",
         "openProject": "打开项目…",
-        "openExample": "打开示例项目…",
-        "openIconList": "打开 icons 图标列表"
+        "openExample": "打开示例项目…"
     },
     "onboarding": {
         "hoorayHeader": "赞! 您成功创建了一个项目!",
