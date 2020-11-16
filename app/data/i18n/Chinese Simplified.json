@@ -23,8 +23,6 @@
         "exit": "退出",
         "exitconfirm": "确定要退出吗？<br/>所有未保存的更改都将丢失！",
         "fastimport": "快速导入",
-        "language": "语言",
-        "translateToYourLanguage": "将ct.js翻译成您的语言",
         "name": "名称",
         "nametaken": "这个名称已经被使用了",
         "newname": "新名称",
@@ -89,7 +87,9 @@
         "export": "导出",
         "exportPanel": "导出项目",
         "firstrunnotice": "每个平台的第一次运行会比较慢, 因为ct.js会下载并保存打包所需的额外库. 这需要一些时间, 但下一次几乎是瞬间的.",
-        "log": "消息日志"
+        "log": "消息日志",
+        "windowsCrossBuildWarning": "",
+        "cannotBuildForMacOnWin": ""
     },
     "intro": {
         "loading": "请稍等: 小猫正在聚集光速!",
@@ -122,58 +122,6 @@
     },
     "licensepanel": {
         "ctjslicense": "Ct.js 许可证 (MIT)"
-    },
-    "menu": {
-        "ctIDE": "ct.IDE",
-        "exportDesktop": "导出到桌面",
-        "texture": "纹理",
-        "launch": "编译并运行",
-        "launchHotkeys": "(F5; Alt+F5 在默认浏览器中运行)",
-        "license": "许可证",
-        "min": "窗口化",
-        "patrons": "赞助人",
-        "recentProjects": "最近的项目",
-        "restart": "重新启动",
-        "rooms": "房间",
-        "save": "保存项目",
-        "startScreen": "返回启动画面",
-        "project": "项目",
-        "settings": "设置",
-        "sounds": "声音",
-        "successZipExport": "已成功导出到{0}.",
-        "successZipProject": "已成功将项目压缩到{0}.",
-        "ui": "用户界面",
-        "fx": "特效",
-        "theme": "主题",
-        "themeDay": "亮色",
-        "themeNight": "暗色",
-        "themeHorizon": "地平线",
-        "themeHCBlack": "高对比度黑",
-        "themeSpringStream": "春涧流泉",
-        "themeLucasDracula": "卢卡斯德古拉",
-        "types": "类型",
-        "zipExport": "导出为web",
-        "zipProject": "将项目打包到.zip",
-        "codeFontDefault": "默认 (Iosevka Light)",
-        "codeFontOldSchool": "老派",
-        "codeFontSystem": "系统",
-        "codeFontCustom": "自定义...",
-        "newFont": "新字体:",
-        "codeFont": "代码字体",
-        "codeLigatures": "连字",
-        "codeDense": "密集布局",
-        "disableSounds": "关闭 UI 音效",
-        "changeDataFolder": "设置数据文件夹位置",
-        "openIncludeFolder": "打开\"include\"文件夹",
-        "troubleshooting": "问题排查与修复",
-        "toggleDevTools": "打开 Dev Tools",
-        "copySystemInfo": "复制系统信息",
-        "disableBuiltInDebugger": "关闭内置 debugger",
-        "forceProductionForDebug": "强制生产任务用于调试导出",
-        "visitDiscordForGamedevSupport": "加入 Discord 服务器以获得游戏开发支持",
-        "openProject": "打开项目…",
-        "openExample": "打开示例项目…",
-        "openIconList": "打开 icons 图标列表"
     },
     "onboarding": {
         "hoorayHeader": "赞! 您成功创建了一个项目!",
@@ -275,7 +223,10 @@
     "texture": {
         "create": "创建",
         "import": "导入",
-        "skeletons": "骨骼动画"
+        "skeletons": "骨骼动画",
+        "createType": "",
+        "importFromClipboard": "",
+        "generatePlaceholder": ""
     },
     "textureview": {
         "bgcolor": "改变背景颜色",
@@ -310,7 +261,11 @@
         "addPoint": "添加点",
         "moveCenter": "移动轴",
         "movePoint": "移动这个点",
-        "symmetryTool": "对称工具"
+        "symmetryTool": "对称工具",
+        "padding": "",
+        "paddingNotice": "",
+        "updateFromClipboard": "",
+        "previewAnimationNotice": ""
     },
     "sounds": {
         "create": "创建"
@@ -355,7 +310,8 @@
         "strokeweight": "线宽:",
         "testtext": "测试文本 0123 +",
         "textWrap": "自动换行",
-        "textWrapWidth": "最大宽度:"
+        "textWrapWidth": "最大宽度:",
+        "useCustomFont": ""
     },
     "fonts": {
         "fonts": "字体",
@@ -366,7 +322,23 @@
         "typefacename": "字体名称:",
         "fontweight": "字体粗细:",
         "italic": "是否斜体?",
-        "reimport": "重新导入"
+        "reimport": "重新导入",
+        "generateBitmapFont": "",
+        "bitmapFont": "",
+        "bitmapFontSize": "",
+        "bitmapFontLineHeight": "",
+        "resultingBitmapFontName": "",
+        "charset": "",
+        "charsets": {
+            "punctuation": "",
+            "basicLatin": "",
+            "latinExtended": "",
+            "cyrillic": "",
+            "greekCoptic": "",
+            "custom": "",
+            "allInFont": ""
+        },
+        "customCharsetHint": ""
     },
     "particleEmitters": {
         "emittersHeading": "粒子发射器",
@@ -459,7 +431,8 @@
         "draw": "绘制",
         "learnAboutTypes": "了解编码类型",
         "name": "名称:",
-        "step": "同步"
+        "step": "同步",
+        "visible": ""
     },
     "rooms": {
         "create": "添加新的",
@@ -472,7 +445,10 @@
         "parallax": "视差 (X, Y):",
         "repeat": "重复:",
         "scale": "缩放比例 (X, Y):",
-        "shift": "移位 (X, Y):"
+        "shift": "移位 (X, Y):",
+        "notBackgroundTextureWarning": "",
+        "fixBackground": "",
+        "dismissWarning": ""
     },
     "roomtiles": {
         "moveTileLayer": "移动到一个新的深度",
@@ -515,13 +491,25 @@
         "deletetiles": "删除图块",
         "movetilestolayer": "移至图层",
         "shifttiles": "移动瓷砖",
-        "findTileset": "查找一个图集"
+        "findTileset": "查找一个图集",
+        "changecopyrotation": "",
+        "properties": "",
+        "isUi": "",
+        "backgroundColor": "",
+        "sortHorizontally": "",
+        "sortVertically": "",
+        "copyProperties": {
+            "position": "",
+            "rotation": "",
+            "scale": ""
+        }
     },
     "notepad": {
         "local": "项目记事本",
         "global": "全局记事本",
         "helppages": "帮助",
-        "backToHome": "回到文档主页"
+        "backToHome": "回到文档主页",
+        "modulespages": ""
     },
     "patreon": {
         "aboutPatrons": "赞助人是以经常性捐赠的形式表示对Patreon的ComigoGames的支持. 并不是每个人都来自ct.js. 有些是正在使用ComigoGames的其他应用程序. 提示: 如果您是创作者, 并通过Patreon捐赠给ComigoGames, 您将在此处找到指向您页面的链接 — 这就是我对您的创作的小小帮助 :)",
@@ -558,5 +546,80 @@
             "带来光明和希望 🌞",
             "优雅而美丽 🎩"
         ]
+    },
+    "mainMenu": {
+        "troubleshooting": {
+            "heading": "问题排查与修复",
+            "toggleDevTools": "打开 Dev Tools",
+            "copySystemInfo": "复制系统信息",
+            "disableBuiltInDebugger": "关闭内置 debugger",
+            "systemInfoWait": "",
+            "systemInfoDone": "",
+            "disableAcceleration": "",
+            "postAnIssue": ""
+        },
+        "deploy": {
+            "exportDesktop": "导出到桌面",
+            "successZipExport": "已成功导出到{0}.",
+            "zipExport": "导出为web"
+        },
+        "latestProjects": {
+            "recentProjects": "最近的项目"
+        },
+        "settings": {
+            "heading": "设置",
+            "codeFontDefault": "默认 (Iosevka Light)",
+            "codeFontOldSchool": "老派",
+            "codeFontSystem": "系统",
+            "codeFontCustom": "自定义...",
+            "theme": "主题",
+            "themes": {
+                "Day": "亮色",
+                "Night": "暗色",
+                "Horizon": "地平线",
+                "HCBlack": "高对比度黑",
+                "SpringStream": "春涧流泉",
+                "LucasDracula": "卢卡斯德古拉"
+            },
+            "newFont": "新字体:",
+            "language": "语言",
+            "translateToYourLanguage": "将ct.js翻译成您的语言",
+            "codeFont": "代码字体",
+            "codeLigatures": "连字",
+            "codeDense": "密集布局",
+            "disableSounds": "关闭 UI 音效",
+            "changeDataFolder": "设置数据文件夹位置",
+            "forceProductionForDebug": "强制生产任务用于调试导出"
+        },
+        "project": {
+            "heading": "项目",
+            "startScreen": "返回启动画面",
+            "successZipProject": "已成功将项目压缩到{0}.",
+            "save": "保存项目",
+            "zipProject": "将项目打包到.zip",
+            "openIncludeFolder": "打开\"include\"文件夹",
+            "openProject": "打开项目…",
+            "openExample": "打开示例项目…"
+        },
+        "meta": {
+            "license": "许可证",
+            "visitDiscordForGamedevSupport": "加入 Discord 服务器以获得游戏开发支持",
+            "openIconList": "打开 icons 图标列表"
+        }
+    },
+    "appView": {
+        "ctIDE": "ct.IDE",
+        "texture": "纹理",
+        "min": "窗口化",
+        "patrons": "赞助人",
+        "rooms": "房间",
+        "project": "项目",
+        "sounds": "声音",
+        "ui": "用户界面",
+        "fx": "特效",
+        "restart": "重新启动",
+        "launch": "编译并运行",
+        "launchHotkeys": "(F5; Alt+F5 在默认浏览器中运行)",
+        "types": "类型"
     }
 }
