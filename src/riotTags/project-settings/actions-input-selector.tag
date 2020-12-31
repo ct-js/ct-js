@@ -16,7 +16,7 @@ actions-input-selector
                 .anActionMethod(
                     onclick="{selectMethod(module.code+'.'+code)}"
                     each="{name, code in module.methods}"
-                    class="{active: selectedMethod === module.code+'.'+code}"
+                    class="{active: selectedMethods.indexOf(module.code+'.'+code) > -1}"
                     if="{!searchString || code.toLowerCase().indexOf(searchString.toLowerCase()) !== -1 || name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1}"
                 ).npl
                     code.inline.toright {module.code}.{code}
@@ -27,7 +27,7 @@ actions-input-selector
             .flexrow
                 button.nml.secondary(onclick="{cancel}")
                     span {voc.cancel}
-                button.nml.secondary(onclick="{apply}" disabled="{!selectedMethod}")
+                button.nml.secondary(onclick="{apply}" disabled="{selectedMethods.length === 0}")
                     span {voc.select}
     script.
         this.namespace = 'common';
@@ -37,6 +37,8 @@ actions-input-selector
         const fs = require('fs-extra'),
               path = require('path');
         const libsDir = './data/ct.libs';
+
+        this.selectedMethods = [];
 
         this.refreshModules = () => {
             this.inputProviders = [];
@@ -67,21 +69,31 @@ actions-input-selector
             window.signals.off('modulesChanged', this.refreshModules);
         });
 
-        this.selectMethod = code => () => {
-            this.selectedMethod = code;
+        this.selectMethod = (code) => () => {
+            if (this.selectedMethods) {
+                if (this.selectedMethods.indexOf(code) > -1) {
+                    this.selectedMethods = this.selectedMethods.filter((methodCode) => methodCode !== code);
+                } else {
+                    this.selectedMethods.push(code);
+                }
+            } else {
+                this.selectedMethods = [code];
+            }
         };
         this.cancel = () => {
             this.searchString = '';
-            this.selectedMethod = '';
+            this.selectedMethods = [];
             this.parent.addingMethod = false;
             this.parent.update();
         };
         this.apply = () => {
-            this.opts.action.methods.push({
-                code: this.selectedMethod
+            this.selectedMethods.forEach((code) => {
+                this.opts.action.methods.push({
+                    code
+                });
             });
             this.searchString = '';
-            this.selectedMethod = '';
+            this.selectedMethods = [];
             this.parent.addingMethod = false;
             this.parent.update();
         };
