@@ -10,25 +10,32 @@ actions-input-selector
                 )
                 svg.feather
                     use(xlink:href="data/icons.svg#search")
+
         .flexfix-body
             virtual(each="{module in inputProviders}")
                 h2 {module.name}
                 .anActionMethod(
-                    onclick="{selectMethod(module.code+'.'+code)}"
                     each="{name, code in module.methods}"
-                    class="{active: selectedMethods.indexOf(module.code+'.'+code) > -1}"
                     if="{!searchString || code.toLowerCase().indexOf(searchString.toLowerCase()) !== -1 || name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1}"
                 ).npl
-                    code.inline.toright {module.code}.{code}
-                    span   {name}
-                    .clear
+                    label(
+                        class="checkbox"
+                        checked="{selectedMethods.indexOf(module.code+'.'+code) > -1}"
+                    )
+                        input(
+                            type="checkbox"
+                            onchange="{selectMethod(module.code+'.'+code)}"
+                        )
+                        code.inline.toright {module.code}.{code}
+                        span   {name}
+                        .clear
 
         .flexfix-footer
             .flexrow
                 button.nml.secondary(onclick="{cancel}")
                     span {voc.cancel}
                 button.nml.secondary(onclick="{apply}" disabled="{selectedMethods.length === 0}")
-                    span {voc.select}
+                    span {voc.select} {selectedMethods.length || ''}
     script.
         this.namespace = 'common';
         this.mixin(window.riotVoc);
