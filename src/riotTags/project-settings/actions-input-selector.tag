@@ -93,6 +93,10 @@ actions-input-selector
         };
         this.apply = () => {
             this.selectedMethods.forEach((code) => {
+                // Skip input methods that already exist in the action
+                if (this.opts.action.methods.some(method => method.code === code)) {
+                    return;
+                }
                 this.opts.action.methods.push({
                     code
                 });
