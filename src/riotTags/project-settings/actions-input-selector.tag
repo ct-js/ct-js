@@ -14,17 +14,14 @@ actions-input-selector
         .flexfix-body
             virtual(each="{module in inputProviders}")
                 h2 {module.name}
-                .anActionMethod(
+                label.anActionMethod.checkbox(
                     each="{name, code in module.methods}"
-                    if="{!searchString || code.toLowerCase().indexOf(searchString.toLowerCase()) !== -1 || name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1}"
-                ).npl
-                    label(
-                        class="checkbox"
-                        checked="{selectedMethods.indexOf(module.code+'.'+code) > -1}"
+                    if="{!searchString || code.toLowerCase().includes(searchString.toLowerCase()) || name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1}"
                     )
                         input(
+                        onchange="{selectMethod(module.code+'.'+code)}"
+                            checked="{selectedMethods.includes(module.code+'.'+code)}"
                             type="checkbox"
-                            onchange="{selectMethod(module.code+'.'+code)}"
                         )
                         code.inline.toright {module.code}.{code}
                         span   {name}
@@ -70,7 +67,7 @@ actions-input-selector
             });
         };
         this.refreshModules();
-        
+
         window.signals.on('modulesChanged', this.refreshModules);
         this.on('unmount', () => {
             window.signals.off('modulesChanged', this.refreshModules);
@@ -78,8 +75,9 @@ actions-input-selector
 
         this.selectMethod = (code) => () => {
             if (this.selectedMethods) {
-                if (this.selectedMethods.indexOf(code) > -1) {
-                    this.selectedMethods = this.selectedMethods.filter((methodCode) => methodCode !== code);
+                const ind = this.selectedMethods.indexOf(code);
+                if (ind > -1) {
+                    this.selectedMethods.splice(ind, 1);
                 } else {
                     this.selectedMethods.push(code);
                 }
