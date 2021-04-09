@@ -61,8 +61,7 @@
         "addProperty": "Add Property",
         "property": "Property",
         "value": "Value",
-        "delete": "Delete",
-        "ok": "Ok"
+        "delete": "Delete"
     },
     "colorPicker": {
         "current": "New",

@@ -8,23 +8,35 @@
         A function that changes whether this modal is shown
 
 copy-custom-properties-modal
-    .panel(ref="widget" style='overflow: auto; max-height: 600px')
-        h2 {voc.customProperties}
-        button(onclick="{addCustomProperty}") {voc.addProperty}
-        table()
-            tr
-                th {voc.property}
-                th {voc.value}
-                th
-            tr(each="{val, prop in opts.closestcopy.exts}")
-                td
-                    input(name="copyCustomProp" value='{prop}' onchange="{onTableChange}")
-                td
-                    input(name="copyCustomValue" value='{val}' onchange="{onTableChange}")
-                td
-                    button(onclick="{deleteCustomProperty.bind(null, prop)}") {voc.delete}
-        button(onclick="{finished}") {voc.ok}
-                    
+    .panel.flexfix(ref="widget" style='overflow: auto; max-height: 600px')
+        h2.flexfix-header {voc.customProperties}
+        .flexfix-body
+            table.wide.aPaddedTable
+                tr
+                    th {voc.property}
+                    th {voc.value}
+                    th
+                tr(each="{val, prop in opts.closestcopy.exts}")
+                    td
+                        input.wide(name="copyCustomProp" type="text" value="{prop}" onchange="{onTableChange}")
+                    td
+                        input.wide(name="copyCustomValue" type="text" value="{val}" onchange="{onTableChange}")
+                    td
+                        button.toright.square.inline(onclick="{deleteCustomProperty.bind(null, prop)}" title="{voc.delete}")
+                            svg.feather
+                                use(xlink:href="data/icons.svg#trash")
+                        .clear
+            p
+        .flexrow.flexfix-footer
+            .filler
+            button.nogrow(onclick="{addCustomProperty}")
+                svg.feather
+                    use(xlink:href="data/icons.svg#plus")
+                span {voc.addProperty}
+            button.nogrow(onclick="{finished}")
+                svg.feather
+                    use(xlink:href="data/icons.svg#check")
+                span {vocGlob.apply}
     script.
         /* global net */
         this.namespace = 'copyCustomProperties';
