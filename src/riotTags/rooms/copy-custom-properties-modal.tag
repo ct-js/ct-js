@@ -20,7 +20,7 @@ copy-custom-properties-modal
                     td
                         input.wide(name="copyCustomProp" type="text" value="{prop}" onchange="{onTableChange}")
                     td
-                        input.wide(name="copyCustomValue" type="text" value="{val}" onchange="{onTableChange}")
+                        input.wide(name="copyCustomValue" type="text" value="{JSON.stringify(val)}" onchange="{onTableChange}")
                     td
                         button.toright.square.inline(onclick="{deleteCustomProperty.bind(null, prop)}" title="{voc.delete}")
                             svg.feather
