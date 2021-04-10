@@ -433,13 +433,11 @@
                             }
                         });
                     }
-                },{
+                }, {
                     label: window.languageJSON.roomview.customProperties,
                     click: () => {
-                        var copy = this.room.copies[this.closestPos];
-
                         this.closestCopy = this.room.copies[this.closestPos];
-                        this.changeShowCopyCustomPropertiesModal(true);
+                        this.toggleCopyProperties(true);
                     }
                 }]
             };

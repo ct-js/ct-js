@@ -38,7 +38,6 @@ copy-custom-properties-modal
                     use(xlink:href="data/icons.svg#check")
                 span {vocGlob.apply}
     script.
-        /* global net */
         this.namespace = 'copyCustomProperties';
         this.mixin(window.riotVoc);
         if (!this.opts.closestcopy.exts) {
@@ -47,19 +46,19 @@ copy-custom-properties-modal
         // an ID to use as newly created property names
         this.currentId = 1;
 
-        this.onTableChange = (e) => {
+        this.onTableChange = () => {
             // read all properties from the table
-            var propElements = document.getElementsByName("copyCustomProp");
+            var propElements = document.getElementsByName('copyCustomProp');
             var props = [];
-            for (prop of propElements) {
+            for (const prop of propElements) {
                 props.push(prop.value);
             }
 
             // read all values from the table
-            var valueElements = document.getElementsByName("copyCustomValue");
+            var valueElements = document.getElementsByName('copyCustomValue');
             var values = [];
 
-            for (value of valueElements) {
+            for (const value of valueElements) {
                 // attempt to parse the value
                 // only strings will be unparsable with the JSON.parse method
                 var trueValue;
@@ -70,7 +69,7 @@ copy-custom-properties-modal
                 }
                 values.push(trueValue);
             }
-            
+
             var newExts = {};
 
             props.forEach((prop, index) => {
@@ -78,17 +77,17 @@ copy-custom-properties-modal
             });
 
             this.opts.closestcopy.exts = newExts;
-        }
+        };
 
-        this.addCustomProperty = (e) => {
-            this.opts.closestcopy.exts['' + this.currentId] = '';
+        this.addCustomProperty = () => {
+            this.opts.closestcopy.exts['newProperty' + this.currentId] = '';
             this.currentId++;
-        }
+        };
 
         this.deleteCustomProperty = (prop) => {
             delete this.opts.closestcopy.exts[prop];
-        }
+        };
 
         this.finished = () => {
             this.opts.showme(false);
-        }
+        };
