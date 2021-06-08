@@ -273,13 +273,13 @@ rooms:
       this.asteroidTimer -= ct.delta;
       if (this.asteroidTimer <= 0) {
           this.asteroidTimer = ct.random.range(20, 200);
-          ct.types.copy(ct.random.dice('Asteroid_Big', 'Asteroid_Medium'), ct.random(ct.width), -100);
+          ct.types.copy(ct.random.dice('Asteroid_Big', 'Asteroid_Medium'), ct.random(ct.camera.width), -100);
       }
 
       this.enemyTimer -= ct.delta;
       if (this.enemyTimer <= 0) {
           this.enemyTimer = ct.random.range(180, 400);
-          ct.types.copy('EnemyShip', ct.random(ct.width), -100);
+          ct.types.copy('EnemyShip', ct.random(ct.camera.width), -100);
       }
     ondraw: |-
       this.scoreLabel.text = 'Score: ' + this.score;
