@@ -133,7 +133,7 @@ room-editor.panel.view
             )
                 svg.feather
                     use(xlink:href="data/icons.svg#sort-vertical")
-            span(if="{window.innerWidth - sidebarWidth > 940}") {voc.hotkeysNotice}
+            span(if="{window.innerWidth - sidebarWidth > 940}") {isMac ? voc.hotkeysNoticeMac : voc.hotkeysNotice}
         .zoom.flexrow
             b(if="{window.innerWidth - sidebarWidth > 980}") {vocGlob.zoom}:
             .spacer
@@ -196,6 +196,7 @@ room-editor.panel.view
             document.removeEventListener('mouseup', gutterUp);
         });
 
+        this.isMac = navigator.platform.indexOf('Mac') !== -1;
         this.editingCode = false;
         this.forbidDrawing = false;
         const fs = require('fs-extra');
@@ -455,6 +456,10 @@ room-editor.panel.view
         };
 
         this.onCanvasContextMenu = e => {
+            if (this.isMac && e.altKey)  {
+                e.preventDefault();
+                return true; 
+            }
             this.dragging = false;
             this.mouseDown = false;
             if (this.tab === 'roomcopies') {

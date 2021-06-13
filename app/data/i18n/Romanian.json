@@ -386,6 +386,7 @@
         "gridoff": "Dezactivează grilă",
         "gridsize": "Mărimea grilei:",
         "hotkeysNotice": "Ctrl = Șterge, Alt = Fără grilă, Shift = Multiplu",
+        "hotkeysNoticeMac": "Ctrl+Alt = Șterge, Alt = Fără grilă, Shift = Multiplu",
         "hotkeysNoticeMovement": "Ctrl = Șterge, Shift = Selectare",
         "tocenter": "La centru",
         "selectbg": "Selectează tileset",

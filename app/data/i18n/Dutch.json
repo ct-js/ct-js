@@ -483,6 +483,7 @@
         "gridoff": "Raster uitschakelen",
         "gridsize": "Raster grootte:",
         "hotkeysNotice": "Ctrl = Verwijder, Alt = Geen raster, Shift = Meerdere",
+        "hotkeysNoticeMac": "Ctrl+Alt = Verwijder, Alt = Geen raster, Shift = Meerdere",
         "hotkeysNoticeMovement": "Ctrl = Verwijder, Shift = Selecteer",
         "tocenter": "Centreren",
         "selectbg": "Selecteer tegelset",

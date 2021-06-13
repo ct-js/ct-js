@@ -1,6 +1,7 @@
 (function roomCopyTools() {
     const clickThreshold = 10;
     const glob = require('./data/node_requires/glob');
+    const isMac = navigator.platform.indexOf('Mac') !== -1;
 
     const drawInsertPreview = function (e) {
         let img, texture, w, h, grax, gray, ox, oy;
@@ -230,7 +231,7 @@
             };
             /* eslint max-depth: 0 */
             this.onCanvasMoveCopies = e => {
-                if (e.ctrlKey) {
+                if (e.ctrlKey && (!isMac || e.altKey)) {
                     if (this.mouseDown && this.room.copies.length !== 0) {
                         var l,
                             fromx = this.xToRoom(e.offsetX),

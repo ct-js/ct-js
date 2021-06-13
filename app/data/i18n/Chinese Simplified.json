@@ -483,6 +483,7 @@
         "gridoff": "禁用网格",
         "gridsize": "网格大小:",
         "hotkeysNotice": "Ctrl = 删除, Alt = 无网格, Shift = 多选",
+        "hotkeysNoticeMac": "Ctrl+Alt = 删除, Alt = 无网格, Shift = 多选",
         "hotkeysNoticeMovement": "Ctrl = 删除, Shift = 选择",
         "tocenter": "居中",
         "selectbg": "选择图集",

@@ -417,6 +417,7 @@
         "gridoff": "Desabilitar grade",
         "gridsize": "Tamanho da grade:",
         "hotkeysNotice": "Ctrl = Apagar, Alt = Sem grade, Shift = Múltiplo",
+        "hotkeysNoticeMac": "Ctrl+Alt = Apagar, Alt = Sem grade, Shift = Múltiplo",
         "hotkeysNoticeMovement": "Ctrl = Apagar, Shift = Selecionar",
         "tocenter": "Centralizar",
         "selectbg": "Selecionar um conjunto de tiles",
