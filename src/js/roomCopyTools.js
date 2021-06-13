@@ -229,7 +229,7 @@
                     }
                 }
             };
-            /* eslint max-depth: 0 */
+            // eslint-disable-next-line complexity
             this.onCanvasMoveCopies = e => {
                 if (e.ctrlKey && (!isMac || e.altKey)) {
                     if (this.mouseDown && this.room.copies.length !== 0) {
