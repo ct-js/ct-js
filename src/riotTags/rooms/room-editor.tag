@@ -456,9 +456,9 @@ room-editor.panel.view
         };
 
         this.onCanvasContextMenu = e => {
-            if (this.isMac && e.altKey)  {
+            if (this.isMac && e.altKey) {
                 e.preventDefault();
-                return true; 
+                return true;
             }
             this.dragging = false;
             this.mouseDown = false;
