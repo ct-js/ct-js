@@ -517,6 +517,7 @@
         "gridoff": "Disable grid",
         "gridsize": "Grid size:",
         "hotkeysNotice": "Ctrl = Delete, Alt = No grid, Shift = Multiple",
+        "hotkeysNoticeMac": "Ctrl+Alt = Delete, Alt = No grid, Shift = Multiple",
         "hotkeysNoticeMovement": "Ctrl = Delete, Shift = Select",
         "tocenter": "To center",
         "selectbg": "Select tileset",

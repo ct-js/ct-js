@@ -386,6 +386,7 @@
         "gridoff": "Deshabilitar cuadrícula",
         "gridsize": "Tamaño de la cuadrícula:",
         "hotkeysNotice": "Ctrl = Eliminar, Alt = Sin cuadrícula, Shift = Múltiple",
+        "hotkeysNoticeMac": "Ctrl+Alt = Eliminar, Alt = Sin cuadrícula, Shift = Múltiple",
         "hotkeysNoticeMovement": "Ctrl = Eliminar, Shift = Seleccionar",
         "tocenter": "Al centro",
         "selectbg": "Seleccionar tileset",

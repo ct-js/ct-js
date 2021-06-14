@@ -464,6 +464,7 @@
         "gridoff": "Выключить сетку",
         "gridsize": "Размер сетки:",
         "hotkeysNotice": "Ctrl = Удалить, Alt = Без сетки, Shift = Много",
+        "hotkeysNoticeMac": "Ctrl+Alt = Удалить, Alt = Без сетки, Shift = Много",
         "hotkeysNoticeMovement": "Ctrl = Удалить, Shift = Выделить",
         "tocenter": "В центр",
         "selectbg": "Выбрать тайлсет",

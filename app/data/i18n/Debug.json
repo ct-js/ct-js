@@ -317,6 +317,7 @@
         "gridoff": "roomview.gridoff",
         "gridsize": "roomview.gridsize",
         "hotkeysNotice": "roomview.hotkeysNotice",
+        "hotkeysNoticeMac": "roomview.hotkeysNoticeMac",
         "hotkeysNoticeMovement": "roomview.hotkeysNoticeMovement",
         "tocenter": "roomview.tocenter",
         "selectbg": "roomview.selectbg",

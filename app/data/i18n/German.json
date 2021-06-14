@@ -483,6 +483,7 @@
         "gridoff": "Raster deaktivieren",
         "gridsize": "Rastergröße:",
         "hotkeysNotice": "Strg = Entfernen, Alt = Kein Raster, Hochstelltaste = Mehrfach",
+        "hotkeysNoticeMac": "Strg+Alt = Entfernen, Alt = Kein Raster, Hochstelltaste = Mehrfach",
         "hotkeysNoticeMovement": "Strg = Löschen, Hochstelltaste = Auswahl",
         "tocenter": "zum Zentrum",
         "selectbg": "Tileset auswählen",

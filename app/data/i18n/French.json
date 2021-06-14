@@ -480,6 +480,7 @@
         "gridoff": "Désactiver la grille",
         "gridsize": "Taille de la grille",
         "hotkeysNotice": "Ctrl = Supprimer, Alt = Désactive la grille, Shift = Multiplie",
+        "hotkeysNoticeMac": "Ctrl+Alt = Supprimer, Alt = Désactive la grille, Shift = Multiplie",
         "hotkeysNoticeMovement": "Ctrl = Supprimer, Shift = Sélectionner",
         "tocenter": "Au centre",
         "selectbg": "Selectionner un Tileset",

@@ -1,6 +1,7 @@
 (function roomTileTools() {
     const clickThreshold = 10;
     const glob = require('./data/node_requires/glob');
+    const isMac = navigator.platform.indexOf('Mac') !== -1;
 
     const selectATileAt = function (e) {
         var pos = 0,
@@ -47,7 +48,7 @@
     };
     const onCanvasMoveTiles = function (e) {
         // if we delete tiles
-        if (e.ctrlKey) {
+        if (e.ctrlKey && (!isMac || e.altKey)) {
             // and the mouse is held down
             if (this.mouseDown && this.currentTileLayer) {
                 var pos = 0,

@@ -395,6 +395,7 @@
         "gridoff": "Zablokuj siatkę",
         "gridsize": "Rozmiar siatki:",
         "hotkeysNotice": "Ctrl = Usuń, Alt = Brak siatki, Shift = Wielokrotnie",
+        "hotkeysNoticeMac": "Ctrl+Alt = Usuń, Alt = Brak siatki, Shift = Wielokrotnie",
         "hotkeysNoticeMovement": "Ctrl = Usuń, Shift = Wybierz",
         "tocenter": "Na środek",
         "selectbg": "Wybierz tileset",
