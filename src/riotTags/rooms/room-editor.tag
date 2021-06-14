@@ -535,22 +535,24 @@ room-editor.panel.view
             return true;
         };
 
-        this.sortHorizontally = () => {
+        this.sortHorizontally = (e) => {
+            const altKey = e && e.altKey;
             if (this.tab === 'roomcopies') {
-                this.room.copies.sort((a, b) => a.x - b.x);
+                this.room.copies.sort((a, b) => (a.x - b.x) * (altKey ? -1 : 1));
             } else {
                 // tiles
-                this.currentTileLayer.tiles.sort((a, b) => a.x - b.x);
+                this.currentTileLayer.tiles.sort((a, b) => (a.x - b.x) * (altKey ? -1 : 1));
             }
             this.resortRoom();
             this.refreshRoomCanvas();
         };
-        this.sortVertically = () => {
+        this.sortVertically = (e) => {
+            const altKey = e && e.altKey;
             if (this.tab === 'roomcopies') {
-                this.room.copies.sort((a, b) => a.y - b.y);
+                this.room.copies.sort((a, b) => (a.y - b.y) * (altKey ? -1 : 1));
             } else {
                 // tiles
-                this.currentTileLayer.tiles.sort((a, b) => a.y - b.y);
+                this.currentTileLayer.tiles.sort((a, b) => (a.y - b.y) * (altKey ? -1 : 1));
             }
             this.resortRoom();
             this.refreshRoomCanvas();
