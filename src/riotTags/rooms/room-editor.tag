@@ -1,5 +1,6 @@
 room-editor.panel.view
     .toolbar.tall(style="width: {sidebarWidth}px")
+        copy-custom-properties-modal(if="{showCopyPropertiesModal}" closestcopy="{closestCopy}" showme="{toggleCopyProperties}")
         .settings.nogrow.noshrink
             b {voc.name}
             br
@@ -33,22 +34,69 @@ room-editor.panel.view
                     room-backgrounds-editor(show="{tab === 'roombackgrounds'}" room="{room}")
                     room-tile-editor(show="{tab === 'roomtiles'}" room="{room}")
                     .pad.panel(show="{tab === 'properties'}")
-                        .fifty.npt.npb.npl
-                            b {voc.width}
+                        fieldset
+                            .fifty.npt.npb.npl
+                                b {voc.width}
+                                br
+                                input.wide(type="number" value="{room.width}" onchange="{wireAndRedraw('this.room.width')}")
+                            .fifty.npt.npb.npr
+                                b {voc.height}
+                                br
+                                input.wide(type="number" value="{room.height}" onchange="{wireAndRedraw('this.room.height')}")
+                            .clear
+                        fieldset
+                            label.checkbox
+                                input(type="checkbox" checked="{room.restrictCamera}" onchange="{wireAndRedraw('this.room.restrictCamera')}")
+                                span {voc.restrictCamera}
+                            .aPoint2DInput.compact.wide(if="{room.restrictCamera}")
+                                label
+                                    span {voc.minimumX}:
+                                    |
+                                    input.compact(
+                                        step="{room.gridX}" type="number"
+                                        oninput="{wireAndRedraw('this.room.restrictMinX')}"
+                                        value="{room.restrictMinX === void 0 ? 0 : room.restrictMinX}"
+                                    )
+                                .spacer
+                                label
+                                    span.nogrow {voc.minimumY}:
+                                    |
+                                    input.compact(
+                                        step="{room.gridY}" type="number"
+                                        oninput="{wireAndRedraw('this.room.restrictMinY')}"
+                                        value="{room.restrictMinY === void 0 ? 0 : room.restrictMinY}"
+                                    )
+                            .aPoint2DInput.compact.wide(if="{room.restrictCamera}")
+                                label
+                                    span {voc.maximumX}:
+                                    |
+                                    input.compact(
+                                        step="{room.gridX}" type="number"
+                                        oninput="{wireAndRedraw('this.room.restrictMaxX')}"
+                                        value="{room.restrictMaxX === void 0 ? room.width : room.restrictMaxX}"
+                                    )
+                                .spacer
+                                label
+                                    span.nogrow {voc.maximumY}:
+                                    |
+                                    input.compact(
+                                        step="{room.gridY}" type="number"
+                                        oninput="{wireAndRedraw('this.room.restrictMaxY')}"
+                                        value="{room.restrictMaxY === void 0 ? room.height : room.restrictMaxY}"
+                                    )
+
+                        fieldset
+                            b {voc.backgroundColor}
                             br
-                            input.wide(type="number" value="{room.width}" onchange="{wire('this.room.width')}")
-                        .fifty.npt.npb.npr
-                            b {voc.height}
-                            br
-                            input.wide(type="number" value="{room.height}" onchange="{wire('this.room.height')}")
-                        .clear
-                        b {voc.backgroundColor}
-                        br
-                        color-input.wide(onchange="{updateRoomBackground}" color="{room.backgroundColor || '#000000'}")
-                        extensions-editor(entity="{room.extends}" type="room" wide="aye" compact="sure")
-                        label.block.checkbox
-                            input(type="checkbox" checked="{room.extends.isUi}" onchange="{wire('this.room.extends.isUi')}")
-                            b {voc.isUi}
+                            color-input.wide(onchange="{updateRoomBackground}" color="{room.backgroundColor || '#000000'}")
+
+                        fieldset
+                            extensions-editor(entity="{room.extends}" type="room" wide="aye" compact="sure")
+
+                        fieldset
+                            label.block.checkbox
+                                input(type="checkbox" checked="{room.extends.isUi}" onchange="{wire('this.room.extends.isUi')}")
+                                b {voc.isUi}
 
         .done.nogrow
             button.wide#roomviewdone(onclick="{roomSave}")
@@ -157,6 +205,10 @@ room-editor.panel.view
         this.mixin(window.riotWired);
         this.mixin(window.roomCopyTools);
         this.mixin(window.roomTileTools);
+        this.wireAndRedraw = way => e => {
+            this.wire(way)(e);
+            this.refreshRoomCanvas();
+        };
 
         this.room = this.opts.room;
         if (!this.room.extends) {
@@ -171,6 +223,12 @@ room-editor.panel.view
         this.room.gridY = this.room.gridY || this.room.grid || 64;
         this.dragging = false;
         this.tab = 'roomcopies';
+
+        this.toggleCopyProperties = value => {
+            this.showCopyPropertiesModal = value;
+            this.update();
+            this.refreshRoomCanvas();
+        };
 
         this.updateRoomBackground = (e, color) => {
             this.room.backgroundColor = color;
@@ -267,6 +325,9 @@ room-editor.panel.view
             this.selectedCopies = this.selectedTiles = false;
             if (tab === 'roombackgrounds' || tab === 'properties') {
                 this.roomUnpickType();
+            }
+            if (tab !== 'roomcopies') {
+                this.toggleCopyProperties(false);
             }
         };
         this.roomUnpickType = () => {
@@ -651,6 +712,16 @@ room-editor.panel.view
 
             // Outline the starting viewport frame
             this.drawSelection(-1.5, -1.5, this.room.width + 1.5, this.room.height + 1.5);
+
+            // Outline room's limits
+            if (this.room.restrictCamera) {
+                this.drawSelection(
+                    (this.room.restrictMinX || 0) - 1.5,
+                    (this.room.restrictMinY || 0) - 1.5,
+                    (this.room.restrictMaxX === void 0 ? this.room.width : this.room.restrictMaxX) + 1.5,
+                    (this.room.restrictMaxY === void 0 ? this.room.height : this.room.restrictMaxY) + 1.5
+                );
+            }
         };
 
         this.drawSelection = (x1, y1, x2, y2) => {
