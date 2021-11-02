@@ -4,7 +4,8 @@
     "rules": [
     {
         "token": "",
-        "foreground": "#ECEFF4"
+        "foreground": "#ECEFF4",
+		"background": "#2e3440"
     },
     {
         "foreground": "#616E88",
