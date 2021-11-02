@@ -13,6 +13,10 @@
         "token": "comment"
     },
     {
+        "foreground": "#8FBCBB",
+        "token": "pointsOfInterest"
+    },
+    {
         "foreground": "#81A1C1",
         "token": "constant"
     },
