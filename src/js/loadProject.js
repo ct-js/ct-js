@@ -202,14 +202,23 @@
         } catch (err) {
             // no recovery file found
             void 0;
+            return loadProjectFile(proj);
         }
+
+        // Checks if recovery file exists
         if (recoveryStat && recoveryStat.isFile()) {
-            const targetStat = await fs.stat(proj);
-            const voc = window.languageJSON.intro.recovery;
-            const userResponse = await window.alertify
+            // loads the recovery file and main file's contents
+            const textRecoveryDataContents = await fs.readFile(proj + '.recovery', 'utf8');
+            const textProjDataContents = await fs.readFile(proj, 'utf8');
+            // checks if recover file has changes that main file does not
+            if (textRecoveryDataContents !== textProjDataContents) {
+                // if recovery has changes main file doesn't, ask the user if they want to use recovery or main file
+                const targetStat = await fs.stat(proj);
+                const voc = window.languageJSON.intro.recovery;
+                const userResponse = await window.alertify
             .okBtn(voc.loadRecovery)
             .cancelBtn(voc.loadTarget)
-            /* {0} — target file date
+            /*  {0} — target file date
                 {1} — target file state (newer/older)
                 {2} — recovery file date
                 {3} — recovery file state (newer/older)
@@ -219,14 +228,18 @@
                 .replace('{1}', targetStat.mtime < recoveryStat.mtime ? voc.older : voc.newer)
                 .replace('{2}', recoveryStat.mtime.toLocaleString())
                 .replace('{3}', recoveryStat.mtime < targetStat.mtime ? voc.older : voc.newer));
-            window.alertify
+                window.alertify
             .okBtn(window.languageJSON.common.ok)
             .cancelBtn(window.languageJSON.common.cancel);
-            if (userResponse.buttonClicked === 'ok') {
-                return loadProjectFile(proj + '.recovery');
+                if (userResponse.buttonClicked === 'ok') {
+                    return loadProjectFile(proj + '.recovery');
+                }
+                return loadProjectFile(proj);
             }
-            return loadProjectFile(proj);
+            // if recovery file is the same as main file, load main file without asking user
+            if (textRecoveryDataContents === textProjDataContents) {
+                return loadProjectFile(proj);
+            }
         }
-        return loadProjectFile(proj);
     };
 })(this);
