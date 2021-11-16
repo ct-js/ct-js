@@ -102,7 +102,7 @@ room-editor.panel.view
             button.wide#roomviewdone(onclick="{roomSave}")
                 svg.feather
                     use(xlink:href="data/icons.svg#check")
-                span {voc.done}
+                span {window.languageJSON.common.apply}
     .aResizer.vertical(ref="gutter" onmousedown="{gutterMouseDown}")
     .editor(ref="canvaswrap")
         canvas(
