@@ -24,6 +24,21 @@ const getExamplesDir = function (): string {
     }
 };
 
+const getTemplatesDir = function (): string {
+    const path = require('path');
+    try {
+        require('gulp');
+        // Most likely, we are in a dev environment
+        return path.join((nw.App as any).startPath, 'src/projectTemplates');
+    } catch (e) {
+        const {isMac} = require('./../../platformUtils');
+        if (isMac) {
+            return path.join(process.cwd(), 'templates');
+        }
+        return path.join((nw.App as any).startPath, 'templates');
+    }
+};
+
 /**
  * Returns a path that does not end with `.ict`
  * @param  {string} projPath
@@ -59,11 +74,12 @@ const getProjectIct = function (projPath: string): string {
     return projPath;
 };
 
-module.exports = {
+export {
     defaultProject,
     getDefaultProjectDir,
     getProjectThumbnail,
     getProjectIct,
     getProjectDir,
-    getExamplesDir
+    getExamplesDir,
+    getTemplatesDir
 };

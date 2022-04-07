@@ -1,5 +1,7 @@
 'use strict';
 
+const versions = require('./versions');
+
 /* eslint no-console: 0 */
 const path = require('path'),
       gulp = require('gulp'),
@@ -45,7 +47,7 @@ const path = require('path'),
  */
 const nwSource = void 0;
 const nwManifest = void 0;
-const nwVersion = '0.53.1',
+const nwVersion = versions.nwjs,
       platforms = ['osx64', 'win32', 'win64', 'linux32', 'linux64'],
       nwFiles = ['./app/**', '!./app/export/**', '!./app/projects/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
 
@@ -91,7 +93,7 @@ const makeErrorObj = (title, err) => {
         message: err.toString(),
         icon: path.join(__dirname, 'error.png'),
         sound: true,
-        wait: true
+        wait: false
     };
 };
 
@@ -307,7 +309,7 @@ const lintI18n = () => require('./node_requires/i18n')().then(console.log);
 const lint = gulp.series(lintJS, lintTags, lintStylus, lintI18n);
 
 const processToPlatformMap = {
-    'darwin-x64': 'osx64',
+    'darwin-x64': 'darwin',
     'win32-x32': 'win32',
     'win32-x64': 'win64',
     'linux-x32': 'linux32',
@@ -449,12 +451,11 @@ const bakeTypedefs = gulp.series([bakeCtTypedefs, concatTypedefs, copyPixiTypede
 
 
 const build = gulp.parallel([
-    compilePug,
+    gulp.series(icons, compilePug),
     compileStylus,
     compileScripts,
     processRequires,
     copyInEditorDocs,
-    icons,
     bakeTypedefs
 ]);
 
@@ -471,6 +472,8 @@ const bakePackages = async () => {
         files: nwFiles,
         platforms,
         version: nwVersion,
+        downloadUrl: nwSource,
+        manifestUrl: nwManifest,
         flavor: 'sdk',
         buildType: 'versioned',
         // forceDownload: true,
@@ -586,6 +589,12 @@ if ((/^win/).test(process.platform)) {
 const examples = () => gulp.src('./src/examples/**/*')
     .pipe(gulp.dest('./app/examples'));
 
+const templates = () => gulp.src('./src/projectTemplates/**/*')
+    .pipe(gulp.dest('./app/templates'));
+
+const gallery = () => gulp.src('./bundledAssets/**/*')
+    .pipe(gulp.dest('./app/bundledAssets'));
+
 // eslint-disable-next-line valid-jsdoc
 /**
  * @see https://stackoverflow.com/a/22907134
@@ -611,17 +620,21 @@ const patronsCache = done => {
 const packages = gulp.series([
     lint,
     abortOnWindows,
-    build,
-    docs,
-    patronsCache,
-    examples,
+    gulp.parallel([
+        build,
+        docs,
+        patronsCache,
+        examples,
+        templates,
+        gallery
+    ]),
     bakePackages,
 //    fixSymlinks,
 //    fixPermissions,
     zipPackages
 ]);
 
-const deployOnly = () => {
+const deployItchOnly = () => {
     console.log(`For channel ${channelPostfix}`);
     if (nightly) {
         return spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/linux32`, `comigo/ct-nightly:linux32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', buildNumber])
@@ -636,8 +649,29 @@ const deployOnly = () => {
     .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win32`, `comigo/ct:win32${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]))
     .then(() => spawnise.spawn('./butler', ['push', `./build/ctjs - v${pack.version}/win64`, `comigo/ct:win64${channelPostfix ? '-' + channelPostfix : ''}`, '--userversion', pack.version]));
 };
+const sendGithubDraft = async () => {
+    if (nightly) {
+        return; // Do not create github releases for nightlies
+    }
+    const readySteady = (await import('readysteady')).default;
+    const draftData = await readySteady({
+        owner: 'ct-js',
+        repo: 'ct-js',
+        // eslint-disable-next-line id-blacklist
+        tag: `v${pack.version}`,
+        force: true,
+        files: [
+            `./build/ctjs - v${pack.version}/ct.js v${pack.version} for linux32.zip`,
+            `./build/ctjs - v${pack.version}/ct.js v${pack.version} for linux64.zip`,
+            `./build/ctjs - v${pack.version}/ct.js v${pack.version} for osx64.zip`,
+            `./build/ctjs - v${pack.version}/ct.js v${pack.version} for win32.zip`,
+            `./build/ctjs - v${pack.version}/ct.js v${pack.version} for win64.zip`
+        ]
+    });
+    console.log(draftData);
+};
 
-const deploy = gulp.series([packages, deployOnly]);
+const deploy = gulp.series([packages, gulp.parallel([sendGithubDraft, deployItchOnly])]);
 
 const launchDevMode = done => {
     watch();
@@ -661,7 +695,8 @@ exports.patronsCache = patronsCache;
 exports.docs = docs;
 exports.build = build;
 exports.deploy = deploy;
-exports.deployOnly = deployOnly;
+exports.deployItchOnly = deployItchOnly;
+exports.sendGithubDraft = sendGithubDraft;
 exports.default = defaultTask;
 exports.dev = devNoNW;
 exports.bakeCompletions = bakeCompletions;

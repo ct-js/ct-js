@@ -1,5 +1,10 @@
 /*! Made with ct.js http://ctjs.rocks/ */
 
+if (location.protocol === 'file:') {
+    // eslint-disable-next-line no-alert
+    alert('Your game won\'t work like this because\nWeb 👏 builds 👏 require 👏 a web 👏 server!\n\nConsider using a desktop build, or upload your web build to itch.io, GameJolt or your own website.\n\nIf you haven\'t created this game, please contact the developer about this issue.\n\n Also note that ct.js games do not work inside the itch app; you will need to open the game with your browser of choice.');
+}
+
 const deadPool = []; // a pool of `kill`-ed copies for delaying frequent garbage collection
 const copyTypeSymbol = Symbol('I am a ct.js copy');
 setInterval(function cleanDeadPool() {
@@ -16,7 +21,7 @@ const ct = {
      * @type {number}
      */
     speed: [/*@maxfps@*/][0] || 60,
-    types: {},
+    templates: {},
     snd: {},
     stack: [],
     fps: [/*@maxfps@*/][0] || 60,
@@ -36,7 +41,7 @@ const ct = {
      * this.x += this.windSpeed * ct.delta;
      * ```
      *
-     * @type {number}
+     * @template {number}
      */
     delta: 1,
     /**
@@ -47,24 +52,20 @@ const ct = {
      * This is a version for UI elements, as it is not affected by time scaling, and thus works well
      * both with slow-mo effects and game pause.
      *
-     * @type {number}
+     * @template {number}
      */
     deltaUi: 1,
     /**
      * The camera that outputs its view to the renderer.
-     * @type {Camera}
+     * @template {Camera}
      */
     camera: null,
     /**
      * ct.js version in form of a string `X.X.X`.
-     * @type {string}
+     * @template {string}
      */
     version: '/*@ctversion@*/',
     meta: [/*@projectmeta@*/][0],
-    main: {
-        fpstick: 0,
-        pi: 0
-    },
     get width() {
         return ct.pixiApp.renderer.view.width;
     },
@@ -72,7 +73,7 @@ const ct = {
      * Resizes the drawing canvas and viewport to the given value in pixels.
      * When used with ct.fittoscreen, can be used to enlarge/shrink the viewport.
      * @param {number} value New width in pixels
-     * @type {number}
+     * @template {number}
      */
     set width(value) {
         ct.camera.width = ct.roomWidth = value;
@@ -91,7 +92,7 @@ const ct = {
      * Resizes the drawing canvas and viewport to the given value in pixels.
      * When used with ct.fittoscreen, can be used to enlarge/shrink the viewport.
      * @param {number} value New height in pixels
-     * @type {number}
+     * @template {number}
      */
     set height(value) {
         ct.camera.height = ct.roomHeight = value;
@@ -120,13 +121,13 @@ const pixiAppSettings = {
     height: [/*@startheight@*/][0],
     antialias: ![/*@pixelatedrender@*/][0],
     powerPreference: 'high-performance',
-    sharedTicker: true,
+    sharedTicker: false,
     sharedLoader: true
 };
 try {
     /**
      * The PIXI.Application that runs ct.js game
-     * @type {PIXI.Application}
+     * @template {PIXI.Application}
      */
     ct.pixiApp = new PIXI.Application(pixiAppSettings);
 } catch (e) {
@@ -138,12 +139,12 @@ try {
 }
 
 PIXI.settings.ROUND_PIXELS = [/*@pixelatedrender@*/][0];
-PIXI.Ticker.shared.maxFPS = [/*@maxfps@*/][0] || 0;
+ct.pixiApp.ticker.maxFPS = [/*@maxfps@*/][0] || 0;
 if (!ct.pixiApp.renderer.options.antialias) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 }
 /**
- * @type PIXI.Container
+ * @template PIXI.Container
  */
 ct.stage = ct.pixiApp.stage;
 ct.pixiApp.renderer.autoDensity = ct.highDensity;
@@ -478,6 +479,12 @@ ct.u = {
         }
         str += 'is required.';
         throw new Error(str);
+    },
+    numberedString(prefix, input) {
+        return prefix + '_' + input.toString().padStart(2, '0');
+    },
+    getStringNumber(str) {
+        return Number(str.split('_').pop());
     }
 };
 ct.u.ext(ct.u, {// make aliases
@@ -496,7 +503,7 @@ ct.u.ext(ct.u, {// make aliases
     const killRecursive = copy => {
         copy.kill = true;
         if (copy.onDestroy) {
-            ct.types.onDestroy.apply(copy);
+            ct.templates.onDestroy.apply(copy);
             copy.onDestroy.apply(copy);
         }
         for (const child of copy.children) {
@@ -508,10 +515,10 @@ ct.u.ext(ct.u, {// make aliases
         if (stackIndex !== -1) {
             ct.stack.splice(stackIndex, 1);
         }
-        if (copy.type) {
-            const typelistIndex = ct.types.list[copy.type].indexOf(copy);
-            if (typelistIndex !== -1) {
-                ct.types.list[copy.type].splice(typelistIndex, 1);
+        if (copy.template) {
+            const templatelistIndex = ct.templates.list[copy.template].indexOf(copy);
+            if (templatelistIndex !== -1) {
+                ct.templates.list[copy.template].splice(templatelistIndex, 1);
             }
         }
         deadPool.push(copy);
@@ -525,14 +532,14 @@ ct.u.ext(ct.u, {// make aliases
 
     ct.loop = function loop(delta) {
         ct.delta = delta;
-        ct.deltaUi = PIXI.Ticker.shared.elapsedMS / (1000 / (PIXI.Ticker.shared.maxFPS || 60));
+        ct.deltaUi = ct.pixiApp.ticker.elapsedMS / (1000 / (ct.pixiApp.ticker.maxFPS || 60));
         ct.inputs.updateActions();
         ct.timer.updateTimers();
         /*%beforeframe%*/
         for (let i = 0, li = ct.stack.length; i < li; i++) {
-            ct.types.beforeStep.apply(ct.stack[i]);
+            ct.templates.beforeStep.apply(ct.stack[i]);
             ct.stack[i].onStep.apply(ct.stack[i]);
-            ct.types.afterStep.apply(ct.stack[i]);
+            ct.templates.afterStep.apply(ct.stack[i]);
         }
         // There may be a number of rooms stacked on top of each other.
         // Loop through them and filter out everything that is not a room.
@@ -564,9 +571,9 @@ ct.u.ext(ct.u, {// make aliases
         manageCamera();
 
         for (let i = 0, li = ct.stack.length; i < li; i++) {
-            ct.types.beforeDraw.apply(ct.stack[i]);
+            ct.templates.beforeDraw.apply(ct.stack[i]);
             ct.stack[i].onDraw.apply(ct.stack[i]);
-            ct.types.afterDraw.apply(ct.stack[i]);
+            ct.templates.afterDraw.apply(ct.stack[i]);
             ct.stack[i].xprev = ct.stack[i].x;
             ct.stack[i].yprev = ct.stack[i].y;
         }
@@ -580,7 +587,6 @@ ct.u.ext(ct.u, {// make aliases
             ct.rooms.afterDraw.apply(item);
         }
         /*%afterframe%*/
-        ct.main.fpstick++;
         if (ct.rooms.switching) {
             ct.rooms.forceSwitch();
         }

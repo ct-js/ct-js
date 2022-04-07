@@ -8,7 +8,7 @@
           loadingBar = loadingScreen.querySelector('.ct-aLoadingBar');
     const dbFactory = window.dragonBones ? dragonBones.PixiFactory.factory : null;
     /**
-     * An utility object that managess and stores textures and other entities
+     * A utility object that manages and stores textures and other entities
      * @namespace
      */
     ct.res = {
@@ -219,7 +219,7 @@
             .then(() => {
                 /*%start%*/
                 loadingScreen.classList.add('hidden');
-                PIXI.Ticker.shared.add(ct.loop);
+                ct.pixiApp.ticker.add(ct.loop);
                 ct.rooms.forceSwitch(ct.rooms.starting);
             })
             .catch(console.error);

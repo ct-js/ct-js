@@ -28,7 +28,6 @@ iconsize = 1.5rem
 act = #FFCFD4
 acttext = act
 accent1 = #FF70B1
-accent2 = #c38bf7
 error = #FF5370
 red = error
 success = #26E19F
@@ -38,6 +37,7 @@ orange = warning
 
 theme = 'LucasDracula'
 themeDark = true
+themeThickBorders = false
 
 @require 'hvost.styl'
 
@@ -60,8 +60,7 @@ button,
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
-.button,
-.selectbox
+.button
     &:hover, &.active, &:active, &.selected
         color backgroundDeeper
         svg

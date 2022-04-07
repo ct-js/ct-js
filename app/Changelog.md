@@ -1,3 +1,320 @@
+## v2.0.1
+
+*Sat Mar 26 2022*
+
+### ⚡️ General Improvements
+
+* Internal: automate publishing to Github assets with Gulp and Gitlab CI
+
+### 🐛 Bug Fixes
+
+* Fix the missing asset gallery's assets
+
+## v2.0.0
+
+*Sat Mar 26 2022*
+
+### ✨ New Features
+
+#### Major features
+
+* Action presets
+  * Export and import Action presets as JSON files
+* Add a built-in asset gallery of CC0/WTFPL assets
+* Add a Ghost color scheme
+* Appearance section in the type editor that groups ol' Depth and Visible fields with a shiny new Blend Mode selector, Opacity input, and a checkbox for playing the sprite animation automatically
+* Array fields for modded controls and the content editor
+* Built-in sound recorder
+* Content type editor for making customized tables for structural data. Also introduces icon-selector and icon-input tags.
+* ct.pointer module. Closes #314
+* Export to Android with Capacitor framework :tada:
+* i18n support for modded fields
+* ✨Nord Theme for ct.js (#301 by @SaberTooth-Studios)
+  Created Nord UI & Monaco Editor Theme for ct.js, using the NordTheme (nordtheme.com) color pallete, an arctic north-bluish color palette with beautiful and harmonic color contrasts.
+* Project templates functionality; debuting with a platformer template!
+* Revamp of the asset viewer: it now supports grouping your assets with categories, as well as displays handy information in forms of small icons. Besides that, every tab now supports three display modes: list/table view, regular cards, and large grid of cards.
+
+#### Minor or mostly internal additions
+
+* Add a stylebook for CSS classes, found in the Meta panel of the main menu. Also removes some discovered dead classes.   Partially solves #317
+* Add dividers to extension editors' select boxes
+* Add small buttons to the texture editor to copy collision masks from one texture to another
+* ct.u.numberedString, ct.u.getStringNumber methods
+* Internal: expose theme's colors with theme manager's getSwatches method
+* Internal: the reusable collapsible-section now supports adding a custom header with a special yield slot
+* New forms and fillers for the texture generator
+
+### ⚡️ General Improvements
+
+* Actions' input method selector now searches by module's name, too
+* Add a .monospace CSS class
+* Add a wide variant of aButtonGroup to CSS. Add support for wide asset-inputs
+* Add a workaround for Windows' issues with music files and their locking
+* Add an additional language selector to the starting screen
+* Add an alert message to ct.js' main.js file to warn users/developers when they try to run a web build as a web page.
+* Add Japanese UI translation by karintou21
+* Add Russian translation to a good portion of catmods
+* Better display of modules' documentation
+* Change action presets to use ct.pointer instead of deprecated ct.mouse and ct.touch
+* Change exit button text for all editors to "Apply", except for the rooms' event editor. (#309 by @QuickBanjo)
+* Change how compact extended asset fields are defined. Improves the UI of the content editor
+* Create a universal asset picker. Closes #316
+* Ct.js' copies now remember direction if their speed is 0
+* Generate shorter GUIDs for everything with NanoID
+* Icons for room editor's context menus
+* Improvements to `this.tex` property: If you set the texture to the same one, the change will be ignored. If you do change the texture and the previous animation was playing, the new one will play automatically as wel.
+* Layout improvements for the texture editor
+* Make ct.templates.valid a TypeScript type guard
+* Make i18n keys follow camelCase, also fix a few vague names here and there
+* Mark ct.mouse and ct.touch for deprecation. Use ct.pointer instead.
+* Minor edits to i18n linter
+* Minor UI tweaks of the room editor
+* Modals' buttons now have some spacing between them when they stack vertically
+* Optionally show frame indices in the texture editor
+* Remove dead unused properties from the ct object
+* Rename ct.place's ctype into cgroup
+* Rename injects to injections. Injects were just bad English.
+* Rename types into templates
+* Reorder src/tags/project-settings folder
+* Replace "coin" icons to "texture" icons in emitter tandem editor, so it matches the icons used in UI to refer to textures
+* Revert 100% on tables in the content-editor
+* Simple macOS fixes including bumped nwVersion
+* Sound editor now prevents Apply when name is taken. (#311 by @QuickBanjo)
+* Texture inputs (which are used in the type editor and some places in the Project tab) now have a "Clear" button inside them.
+* The `tag` catmod now supports arrays of tags
+* UI improvements for the textures and FX panels
+* UI: better readability for on-canvas labels and buttons, especially for dark color schemes
+* UI: better readability for on-canvas labels and buttons, especially for dark color schemes
+* UI: Quicken icons loading, removing lags on icon-heavy interfaces
+* Use a custom Pixi ticker instead of a shared one. This magically heals FPS drops in platformers **(w h a t)**
+* Widen the columns of the texture editor
+* Write an icon list It seems it was lost while cherry-picking changes from develop.
+
+#### Internal changes
+
+* Add more methods & typings to resources/modules for a more uniform and accessible use elsewhere
+* categorize JS scripts into several folders
+* CI/CD: Partially migrate to Gitlab CI
+* Consistent CSS class naming for building blocks
+* develop branch: Fixed launch.json to work with nwjs extension. (#304 by @QuickBanjo)
+* Fixed launch.json to work with nw.js extension (#303 by @QuickBanjo)
+  Also committing autogenerated change to package.json
+* rename modulesWithDocs to modulesWithFields inside project-settings, as the previous name did not reflect the contents of the actual collection
+* Make a versions.js file that checks and returns used nw.js and pixi.js versions. versions.js should now be used as a source of truth about used nw.js and pixi versions. Closes #305
+* Update ct.sprite for new ct.res API
+* Update gulp-pug to v5
+* Update node-notifier to v10.0.0
+* Update pixi.js to version 5.3.11
+* Update pug to v3
+* Update Russian i18n file
+
+### 🐛 Bug Fixes
+
+* :pencil: Change "An utility that managess" to "A utility that manages" in ct.res comments (#294 by @Tiger-The-Cat )
+* :pencil: Change "There are ariants" to "There are variants" in ct.touch docs (#300 by @Tiger-The-Cat)
+* :pencil: Change two occurences of "ligth" to "light" in ct.light docs (#295 by @Tiger-The-Cat)
+* :pencil: Fix spelling issues in the riot doc format
+* Add missing typings for ct.mouse.hide, ct.mouse.show
+* Add missing variables to UI themes
+* Add the missing injection "beforeframe" to the exporter
+* Ct.js now shows exit confirmation dialogues only when needed. The dialogue now also appears when you close the app with unsaved changes. Closes #302
+* Fittoscreen should not try to change ct.camera if the game hasn't loaded yet. Closes #299
+* Fix ct.place.enableTilemapCollisions' effect being cancelled if called in room's OnCreate event
+* Fix invisible save dialogs covering interface. Closes #293
+* Fix missing port number in debugger's QR-code generator
+* Fix room editor behaving funky when their scaling values are zero.
+* Fix room's properties panel hiding the "apply" button when there are lots of modded properties
+* Fix several issues with insecure dependencies
+* hover-hint tag should be vertically aligned
+* Remove excess keys from the i18n files
+* Remove icons.json that should've been gitignored
+* Remove unused project prop "styletick" (#313 by @QuickBanjo)
+* Set exported games' doctype to html
+* The "Open Project" button in the main menu didn't actually listen to user's decision on whether or not they were sure they wanted to close the current project.
+* Update the sidebar of the Project tab when a new content type was created
+* Workaround for #276 (#281 by @Girgetto)
+
+### 📝 Docs
+
+* :sparkles: Introduction to JavaScript: part III. Arrays and Objects. Co-authored-by: firecakes <alberto19942@gmail.com>
+* :sparkles: Add "Making your own sound module"
+* :sparkles: Add docs for the content subsystem
+* :sparkles: Add docs for the room editor
+* :sparkles: Create a document section for building your game and deploying it online (#69 by @NicBritz)
+* Add an example on spawning a bullet relative to a player in ct.u docs
+* Add fields' "array" type to homepage's notable additions
+* Add the `if` key to modded fields' docs
+* Document new features of modded fields
+* Document v2 changes in ct.u, ct.camera, ct.templates
+* Write about changes in ct.place inside the migration guide
+* Write initial set of notable changes on docs' homepage
+* Move "Actions" page to the "Working with the editor" section
+* Remove v1.x badges from "Fields reference for module settings and additional fields"
+* Update docs for ct.res.
+* Update docs for ct.u.rotateRad, ct.u.rotate, ct.u.uiToGameCoord, ct.u.gameToUiCoord and ct.camera's derived methods
+* Update docs on this.angle, this.rotation
+* Update dragging-copies.md. Removed merge conflict from example code
+* Wording fixes, mainly tons of type -> template replacements
+* :bug: Change "ct.transision" to "ct.transition" (#62 by @Tiger-The-Cat)
+* :bug: Fix a broken warning plaque in the JettyCat tutorial
+* :bento: Update VuePress
+
+### 🌐 Website
+
+* :bug: Change "StromCross" to "StormCross" (#21 by @Tiger-The-Cat)
+* :pencil: Update changelog
+* :zap: Better wording for What's next section
+* :zap: On downloads page, replace the itch.io iframe with a link
+* :zap: Reformat "what's next" section and add a Russian Discord server (shown on Russian locale only)
+* Merge branch 'master' of github.com:ct-js/ct-js-site
+
+### 🍱 Demos, Dependencies and Stuff
+
+* :bug: Example bug fixes (#288 by @markmehere)
+* :zap: Renovate catformer's code
+* Add a bunch of app icons
+* Add typings for font-related JS APIs
+* Apply migration scripts ts to examples and templates, fix Yarn demo's TheGirl position
+* Pull the latest docs
+* Update examples
+* Update nw.js to v0.59.0
+
+## v1.7.0
+
+*Sat Apr 10 2021*
+
+### ✨ New Features
+
+* Add custom properties modal for copies (#275 by @firecakes)
+* Added map() function to ct.u (#274 by @qewer33)
+* Clone projects from the starting screen
+
+### ⚡️ General Improvements
+
+* 🌐 Update Russian i18n file
+* Add an optional "Made with ct.js" logo shown while a game is loading. Can be turned off in Project tab -> Branding section
+* Add more social icons to the starting screen
+
+### 🐛 Bug Fixes
+
+* Fix `emitterTandem.pause()` stopping completely if called several times before calling `emitterTandem.resume()`
+* Fix game's icon not being reset when its texture is deleted
+* Fix page name and app color for exported games
+* Fix targetX and targetY handling for cameras' boundary restrictions
+
+### 🌐 Website
+
+* :bug: Add the missing link to the German translation to the footer
+* :zap: Add a link to Vkontakte to footer
+* :zap: Update "What's next" block
+* :zap: Update navigation bar
+
+## v1.6.2
+
+*Wed Mar 31 2021*
+
+### ⚡️ General Improvements
+
+* Add JS map files for pixi.js
+* Update pixi.js to v5.3.8
+
+### 🐛 Bug Fixes
+
+* :bento: Fix 2DPhysics example
+
+### 🐉 Misc
+
+* Revert "Modify emitter tandems to use ParticleContainer"
+  This reverts commit b8a47f4273fb08e8377c5489ef8e30464bf41845.
+
+## v1.6.1
+
+*Sun Mar 29 2021*
+
+### 🐛 Bug Fixes
+
+* Fix teleport, spin, rotate, and rotateBy methods in ct.matter module
+
+## v1.6.0
+
+*Sun Mar 28 2021*
+
+### ✨ New Features
+
+* Add `ct.filters` module by SN frrom our Discord server. The module allows creating special visual effects with filters or custom shaders, applied to your copies or a whole viewport
+* Add `ct.light` module for adding ambient lighting and textured lights
+* Add `ct.matter` module for 2D physics. See the new example!
+* Bundle `ct.nakama` module by @alexandargyurov — you can now create online games with ct.js!
+* Group modded fields into collapsible sections with a new field type
+* Nano ID catmod of the same-named tiny library by Andrei Sitnik
+* Optionally make a camera stay inside a specific rectangle with new rooms' settings.
+
+### ⚡️ General Improvements
+
+* :bento: Update Electron used in desktop builds to v11.1.1
+* Allow Background class to accept a pixi.js texture
+* Modify emitter tandems to use `PIXI.ParticleContainer`. Provides better performance, and also fixes issue with un-tintable emitters.
+* Renovate `ct.desktop` -> quit method
+* Select only the needed Nw.js version for debugging
+
+### 🐛 Bug Fixes
+
+* Allow resetting values in type and texture inputs at modded fields
+* Fix "}" at the end of some texture files' names
+* Fix bitmap font's XML ("kerings" typo")
+* Fix broken context menu entry for textures to create a type from them
+* Fix crashes of built-in debugger; disable nw and node in the devtools
+* Fix `ct.place.meet` returning duplicated references to copies if querying for multiple obstacles
+* Fix icons for nightly and regular releases
+* Fix Point2D initialization for modded fields
+* In rooms' copy spawning code, check for scaling extensions separately
+* Remove the old main-menu tag
+
+### 🍱 Demos, Dependencies and Stuff
+
+* Update  nw.js to v0.51.1
+
+### 📝 Docs
+
+*  Add "Dragging Copies Around" tutorial by @qewer33
+* :bug: Add missing methods `ct.types.isCopy`, `ct.u.hexToPixi`, `ct.u.pixiToHex`
+* :bug: Add `moveTo` and `teleportTo` methods in `ct.camera` (#49 by @firecakes)
+* :sparkles: Add a list of gamedev resources
+* :zap: Add categories to ct.u methods list
+* :zap: Minor edits for JS intro, pt. 1
+* :zap: Refurbish the home page. Move most old content to "Basic concepts". Add links to tutorials and the cheatsheet.
+* 🐛 remove duplicate instruction to draw `scoreLabel`.
+* Add a memo about `ct.desktop.isNw` and `ct.desktop.isElectron`
+* Fixed typos in the Space Shooter tutorial by @sarturodev
+
+## v1.5.1
+
+*Thu Dec 24 2020*
+
+### ✨ New Features
+
+* New tweening functions (elastic, bounce, and with backwards motion) for ct.tween by kkornushin
+* Two UI themes Pooxel Green and Pooxel Blue for that retro feel 👾
+
+### ⚡️ General Improvements
+
+* Chinese Simplified 100% translated for branch v1.x (#246 & #248 by @emaoshushu)
+* Use nw.js' nightly build 25eea59. Solves issue with restarting ct.js after running a game in it.
+
+### 🐛 Bug Fixes
+
+* Fix `exts` object missing on newly created copies.
+* Fix formatting problem at ct.place docs > Tracing functions > ct.place.traceRect.
+* Partially fix memory leaks in paricle emitter editors.
+
+### 📝 Docs
+
+* Use cgroup instead of ctype in ct.place typings and docs to remove ambiguity with ctypes and regular types
+* :bug: Fix wrong function names at ct.noise
+
+
+## v1.5.0
+
 *Sun Nov 08 2020*
 
 ### ✨ New Features

@@ -31,7 +31,6 @@ iconsize = 1.5rem
 act = #ffff00
 acttext = act
 accent1 = #00ffff
-accent2 = #0099ff
 error = #ff3333
 red = error
 success = #33ff33
@@ -41,6 +40,7 @@ orange = warning
 
 theme = 'HCBlack'
 themeDark = true
+themeThickBorders = false
 
 @require 'hvost.styl'
 
@@ -56,7 +56,7 @@ themeDark = true
 
 @require 'tags/**/*.styl'
 
-button, .button, select, input[type="text"], input[type="number"], input[type="url"], input[type="password"], textarea, .panel
+button, .button, select, input[type="text"], input[type="number"], input[type="url"], input[type="password"], textarea, .aPanel
     border-width 2px
 button, .button
     &:hover, &:focus, &:active, &.selected

@@ -6,7 +6,7 @@ libs:
     mode: scaleFit
   sound.howler: {}
   tween: {}
-types:
+templates:
   - name: Card
     depth: 0
     oncreate: >-
@@ -79,7 +79,7 @@ types:
 
                       // Do the cards match?
                       if (card1.backFrame === card2.backFrame) {
-                          if (ct.types.list['Card'].length > 2) {
+                          if (ct.templates.list['Card'].length > 2) {
                               ct.sound.spawn('Match');
                           } else {
                               ct.sound.spawn('Victory');
@@ -176,7 +176,7 @@ rooms:
       shuffle(this.pictures);
 
       // Get a list of all the Cards in the room and make a copy of that
-      this.cards = ct.types.list['Card'].slice(0);
+      this.cards = ct.templates.list['Card'].slice(0);
       shuffle(this.cards);
 
       // Now, select cards by pairs and set them a unique picture.
@@ -187,7 +187,7 @@ rooms:
           this.pictures.shift();
       }
     onstep: |-
-      if (ct.types.list['Card'].length === 0) {
+      if (ct.templates.list['Card'].length === 0) {
           ct.rooms.switch('Room2');
       }
     ondraw: ''
@@ -272,7 +272,7 @@ rooms:
       shuffle(this.pictures);
 
       // Get a list of all the Cards in the room and make a copy of that
-      this.cards = ct.types.list['Card'].slice(0);
+      this.cards = ct.templates.list['Card'].slice(0);
       shuffle(this.cards);
 
       // Now, select cards by pairs and set them a unique picture.
@@ -283,7 +283,7 @@ rooms:
           this.pictures.shift();
       }
     onstep: |-
-      if (ct.types.list['Card'].length === 0) {
+      if (ct.templates.list['Card'].length === 0) {
           ct.rooms.switch('Room3');
       }
     ondraw: ''
@@ -378,7 +378,7 @@ rooms:
       shuffle(this.pictures);
 
       // Get a list of all the Cards in the room and make a copy of that
-      this.cards = ct.types.list['Card'].slice(0);
+      this.cards = ct.templates.list['Card'].slice(0);
       shuffle(this.cards);
 
       // Now, select cards by pairs and set them a unique picture.
@@ -389,7 +389,7 @@ rooms:
           this.pictures.shift();
       }
     onstep: |-
-      if (ct.types.list['Card'].length === 0) {
+      if (ct.templates.list['Card'].length === 0) {
           ct.rooms.switch('Room3');
       }
     ondraw: ''
@@ -479,7 +479,7 @@ rooms:
     tiles: []
 soundtick: 6
 roomtick: 3
-typetick: 1
+templatetick: 1
 styletick: 0
 starting: 0
 settings:
@@ -487,6 +487,8 @@ settings:
     linux: true
     windows: true
     mac: true
+    functionWrap: false
+    codeModifier: none
   branding:
     icon: -1
     accent: '#446adb'
@@ -497,6 +499,7 @@ settings:
     highDensity: true
     usePixiLegacy: true
     desktopMode: maximized
+    mobileScreenOrientation: unspecified
   authoring:
     title: Memocats
     author: Cosmo Myzrail Gorynych
@@ -508,7 +511,7 @@ settings:
     versionPostfix: ''
   fps: 30
 startroom: 3827e721-5331-49b2-a37a-f868e15cae0d
-ctjsVersion: 1.4.2
+ctjsVersion: 2.0.0
 scripts: []
 fonts: []
 skeletons: []
@@ -567,3 +570,12 @@ textures:
     padding: 1
 texturetick: 2
 emitterTandems: []
+contentTypes: []
+groups:
+  fonts: []
+  textures: []
+  styles: []
+  rooms: []
+  sounds: []
+  emitterTandems: []
+  templates: []

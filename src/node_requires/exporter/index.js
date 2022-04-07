@@ -10,7 +10,8 @@ const {getSounds} = require('./sounds');
 const {stringifyRooms, getStartingRoom} = require('./rooms');
 const {stringifyStyles} = require('./styles');
 const {stringifyTandems} = require('./emitterTandems');
-const {stringifyTypes} = require('./types');
+const {stringifyTemplates} = require('./templates');
+const {stringifyContent} = require('./content');
 const {bundleFonts, bakeBitmapFonts} = require('./fonts');
 const {bakeFavicons} = require('./icons');
 const {getUnwrappedExtends, getCleanKey} = require('./utils');
@@ -121,6 +122,7 @@ const getInjections = async () => {
         afterdraw: '',
         afterstep: '',
 
+        beforeframe: '',
         beforeroomoncreate: '',
         roomoncreate: '',
         roomonleave: '',
@@ -132,7 +134,7 @@ const getInjections = async () => {
         css: '',
         res: '',
         resload: '',
-        types: '',
+        templates: '',
         rooms: '',
         styles: '',
         htmltop: '',
@@ -142,12 +144,12 @@ const getInjections = async () => {
         const libData = await fs.readJSON(path.join(basePath + 'ct.libs/', lib, 'module.json'), {
             encoding: 'utf8'
         });
-        if (await fs.pathExists(path.join(basePath + 'ct.libs/', lib, 'injects'))) {
-            const injectFiles = await fs.readdir(path.join(basePath + 'ct.libs/', lib, 'injects')),
+        if (await fs.pathExists(path.join(basePath + 'ct.libs/', lib, 'injections'))) {
+            const injectFiles = await fs.readdir(path.join(basePath + 'ct.libs/', lib, 'injections')),
                   injectKeys = injectFiles.map(fname => path.basename(fname, path.extname(fname)));
             await Promise.all(injectKeys.map(async (key, ind) => {
                 if (key in injections) {
-                    const injection = await fs.readFile(path.join(basePath + 'ct.libs/', lib, 'injects', injectFiles[ind]), {
+                    const injection = await fs.readFile(path.join(basePath + 'ct.libs/', lib, 'injections', injectFiles[ind]), {
                         encoding: 'utf8'
                     });
                     // false positive??
@@ -171,7 +173,7 @@ const exportCtProject = async (project, projdir, production) => {
     writeDir = await getExportDir();
 
     if (project.rooms.length < 1) {
-        throw new Error(languageJSON.common.norooms);
+        throw new Error(languageJSON.common.noRooms);
     }
 
     if (localStorage.forceProductionForDebug === 'yes') {
@@ -188,14 +190,15 @@ const exportCtProject = async (project, projdir, production) => {
 
     /* Pixi.js */
     if (settings.rendering.usePixiLegacy) {
-        await fs.copyFile(basePath + 'ct.release/pixi-legacy.min.js', path.join(writeDir, '/pixi.min.js'));
-        await fs.copyFile(basePath + 'ct.release/pixi-legacy.min.js.map', path.join(writeDir, '/pixi-legacy.min.js.map'));
+        await fs.copyFile('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js', path.join(writeDir, '/pixi.min.js'));
+        await fs.copyFile('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js.map', path.join(writeDir, '/pixi-legacy.min.js.map'));
     } else {
-        await fs.copyFile(basePath + 'ct.release/pixi.min.js', path.join(writeDir, '/pixi.min.js'));
-        await fs.copyFile(basePath + 'ct.release/pixi.min.js.map', path.join(writeDir, '/pixi.min.js.map'));
+        await fs.copyFile('./node_modules/pixi.js/dist/pixi.min.js', path.join(writeDir, '/pixi.min.js'));
+        await fs.copyFile('./node_modules/pixi.js/dist/pixi.min.js.map', path.join(writeDir, '/pixi.min.js.map'));
     }
     if (project.emitterTandems && project.emitterTandems.length) {
-        await fs.copyFile(basePath + 'ct.release/pixi-particles.min.js', path.join(writeDir, '/pixi-particles.min.js'));
+        await fs.copyFile('./node_modules/pixi-particles/dist/pixi-particles.min.js', path.join(writeDir, '/pixi-particles.min.js'));
+        await fs.copyFile('./node_modules/pixi-particles/dist/pixi-particles.min.js.map', path.join(writeDir, '/pixi-particles.min.js.map'));
     }
 
     const startroom = getStartingRoom(project);
@@ -205,6 +208,7 @@ const exportCtProject = async (project, projdir, production) => {
     const sourcesList = [
         'backgrounds.js',
         'camera.js',
+        'content.js',
         'ct.css',
         'emitters.js',
         'index.html',
@@ -213,7 +217,7 @@ const exportCtProject = async (project, projdir, production) => {
         'res.js',
         'rooms.js',
         'styles.js',
-        'types.js',
+        'templates.js',
         'tilemaps.js',
         'timer.js'
     ];
@@ -275,9 +279,9 @@ const exportCtProject = async (project, projdir, production) => {
         }, injections);
     }
 
-    const types = stringifyTypes(project);
-    buffer += template(await sources['types.js'], {
-        types
+    const templates = stringifyTemplates(project);
+    buffer += template(await sources['templates.js'], {
+        templates
     }, injections);
 
     // Add four files in a sequence, without additional transforms
@@ -307,6 +311,10 @@ const exportCtProject = async (project, projdir, production) => {
     }, injections);
     buffer += '\n';
 
+    const content = stringifyContent(project);
+    buffer += (await sources['content.js']).replace('/*@contentTypes@*/', `"${content}"`);
+    buffer += '\n';
+
     /* User-defined scripts */
     for (const script of project.scripts) {
         buffer += script.code + ';\n';
@@ -334,6 +342,7 @@ const exportCtProject = async (project, projdir, production) => {
     const css = template(await sources['ct.css'], {
         pixelatedrender: project.settings.rendering.pixelatedrender,
         hidecursor: project.settings.rendering.hideCursor,
+        hidemadewithctjs: project.settings.branding.hideLoadingLogo,
         preloaderforeground: preloaderColor1,
         preloaderbackground: preloaderColor2,
         fonts: fonts.css
