@@ -17,7 +17,7 @@
     },
     {
       "foreground": "#616e88",
-      "fontStyle": "#bold",
+      "fontStyle": "bold",
       "token": "comment.block.preprocessor"
     },
     {
@@ -71,7 +71,7 @@
     },
     {
       "foreground": "#8fbcbb",
-      "fontStyle": "#bold",
+      "fontStyle": "bold",
       "token": "entity.other.inherited-class"
     },
     {
@@ -132,7 +132,7 @@
     },
     {
       "foreground": "#d8dee9",
-      "fontStyle": "#bold",
+      "fontStyle": "bold",
       "token": "constant.other.symbol"
     },
     {
@@ -144,7 +144,7 @@
       "token": "markup.deleted"
     },
     {
-      "fontStyle": "#italic",
+      "fontStyle": "italic",
       "token": "markup.italic"
     },
     {
@@ -156,11 +156,11 @@
       "token": "markup.inserted"
     },
     {
-      "fontStyle": "#bold",
+      "fontStyle": "bold",
       "token": "markup.bold"
     },
     {
-      "fontStyle": "#underline",
+      "fontStyle": "underline",
       "token": "markup.underline"
     },
     {
