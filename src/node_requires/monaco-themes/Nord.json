@@ -119,6 +119,26 @@
       "token": "constant.other"
     },
     {
+      "foreground": "#EBCB8B",
+      "token": "regexp"
+    },
+    {
+      "foreground": "#B48EAD",
+      "token": "number"
+    },
+    {
+      "foreground": "#B48EAD",
+      "token": "number.hex"
+    },
+    {
+      "foreground": "#81A1C1",
+      "token": "delimiter"
+    },
+    {
+      "foreground": "#a3be8c",
+      "token": "string"
+    },
+    {
       "foreground": "#a3be8c",
       "token": "string - string source"
     },
