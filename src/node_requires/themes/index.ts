@@ -7,13 +7,16 @@ const builtInThemes = [
     'SpringStream',
     'Ghost',
     'Forest',
+    'Nord',
     'Horizon',
     'PooxelGreen',
     'PooxelBlue',
     'LucasDracula',
     'Night',
     'HCBlack',
-    'Nord'
+    'RosePine',
+    'RosePineMoon',
+    'RosePineDawn'
 ];
 interface ITheme {
     name: string;
