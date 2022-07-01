@@ -6,6 +6,7 @@ background = #fffaf3 // surface
 backgroundDeeper = #faf4ed // base
 shadows = #f2e9e1 // overlay
 
+borderLight = #cecacd // highlight high
 borderPale = #f2e9e1 // overlay
 borderBright = #f2e9e1 // overlay
 
@@ -51,6 +52,15 @@ themeThickBorders = false
 @require 'tabs.styl'
 
 @require 'tags/**/*.styl'
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="password"],
+select,
+textarea,
+.aResizer::before
+    border-color borderLight
 
 #bg
     background borderPale
