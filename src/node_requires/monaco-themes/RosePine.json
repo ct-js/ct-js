@@ -203,7 +203,7 @@
 
     {
       "foreground": "#ebbcba",
-      "token": "identifier.function"
+      "token": "identifier"
     }
   ],
   "colors": {
