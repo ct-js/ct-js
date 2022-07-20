@@ -296,10 +296,16 @@ project-selector
                 title: this.voc.newProject.selectProjectFolder,
                 defaultPath: defaultProjectDir,
                 buttonLabel: this.voc.newProject.saveProjectHere,
-                openDirectory: true
+               // openDirectory: true,
+                saveAs: this.refs.projectname.value.trim()
             });
             if (projPath) {
-                this.newProject(projPath, this.refs.projectname.value.trim());
+                const tmpProjPath = projPath.trim();
+                const offset = tmpProjPath.lastIndexOf('/');
+                const path = tmpProjPath.substring(0, offset);
+                const file = tmpProjPath.substring(offset + 1);
+                this.newProject(path, file);
+                //this.newProject(projPath, this.refs.projectname.value.trim());
             }
         };
 
