@@ -301,11 +301,10 @@ project-selector
             });
             if (projPath) {
                 const tmpProjPath = projPath.trim();
-                const offset = tmpProjPath.lastIndexOf('/');
-                const path = tmpProjPath.substring(0, offset);
-                const file = tmpProjPath.substring(offset + 1);
-                this.newProject(path, file);
-                //this.newProject(projPath, this.refs.projectname.value.trim());
+                const directory = path.dirname(tmpProjPath);
+                const file = path.basename(tmpProjPath);
+                this.newProject(directory, file);
+                // this.newProject(projPath, this.refs.projectname.value.trim());
             }
         };
 
