@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 
 const pckg = require('./package.json');
 const createMainWindow = () => {
@@ -27,3 +27,21 @@ const createMainWindow = () => {
 };
 
 app.on('ready', createMainWindow);
+
+ipcMain.handle('ct.desktop', (event, name, parameter) => {
+    if (name === 'openDevTools') {
+        const webContents = event.sender;
+        const mainWindow = BrowserWindow.fromWebContents(webContents);
+        mainWindow.webContents.openDevTools(parameter);
+        return;
+    }
+    if (name === 'closeDevTools') {
+        const webContents = event.sender;
+        const mainWindow = BrowserWindow.fromWebContents(webContents);
+        mainWindow.webContents.closeDevTools();
+        return;
+    }
+    if (name === 'quit') {
+        app.quit();
+    }
+});
