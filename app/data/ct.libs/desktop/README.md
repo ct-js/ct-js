@@ -2,6 +2,10 @@
 
 A module that provides useful desktop-specific features, such as quitting the game, toggling the debugger/devtools, and more!
 
+Below is a list of all methods, functions, and properties that ct.desktop currently provides.
+
+See the other ct.desktop documentation pages for further information and more detailed examples.
+
 ## .openDevTools(options)
 
 - `options` object (optional)
