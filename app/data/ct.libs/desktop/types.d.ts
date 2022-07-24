@@ -7,11 +7,15 @@ declare namespace ct {
         /**
          * Open the built-in developer tools pannel/debugger
          */
-        function openDevTools(options?: { mode: 'left' | 'right' | 'bottom' | 'undocked' | 'detach', activate?: boolean }): void;
+        function openDevTools(options?: { mode: 'left' | 'right' | 'bottom' | 'undocked' | 'detach', activate: boolean }): void;
         /**
          * Close the built-in developer tools pannel/debugger
          */
         function closeDevTools(): void;
+        /**
+         * Check wheather or not the built in developer tools pannel/debugger is opened
+         */
+        function isDevToolsOpened(): boolean;
         /**
          * Close the game
          */

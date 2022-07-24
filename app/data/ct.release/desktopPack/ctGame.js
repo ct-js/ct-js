@@ -28,20 +28,18 @@ const createMainWindow = () => {
 
 app.on('ready', createMainWindow);
 
-ipcMain.handle('ct.desktop', (event, name, parameter) => {
-    if (name === 'openDevTools') {
-        const webContents = event.sender;
-        const mainWindow = BrowserWindow.fromWebContents(webContents);
-        mainWindow.webContents.openDevTools(parameter);
-        return;
-    }
-    if (name === 'closeDevTools') {
-        const webContents = event.sender;
-        const mainWindow = BrowserWindow.fromWebContents(webContents);
-        mainWindow.webContents.closeDevTools();
-        return;
-    }
-    if (name === 'quit') {
-        app.quit();
-    }
+ipcMain.handle('ct.desktop.openDevTools', async (event, options) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.webContents.openDevTools(options);
+});
+
+ipcMain.handle('ct.desktop.closeDevTools', async (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.webContents.closeDevTools();
+});
+
+ipcMain.handle('ct.desktop.quit', () => {
+    app.quit();
 });

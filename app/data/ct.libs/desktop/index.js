@@ -12,7 +12,7 @@ ct.desktop = {
             }
         } else if (ct.desktop.isElectron) {
             const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop', 'openDevTools', options);
+            ipcRenderer.invoke('ct.desktop.openDevTools', options);
         } else {
             //eslint-disable-next-line no-console
             console.error('[ct.desktop/openDevTools] Unknown environment :c Are we in a browser?');
@@ -29,7 +29,7 @@ ct.desktop = {
             }
         } else if (ct.desktop.isElectron) {
             const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop', 'closeDevTools');
+            ipcRenderer.invoke('ct.desktop.closeDevTools');
         } else {
             //eslint-disable-next-line no-console
             console.error('[ct.desktop/closeDevTools] Unknown environment :c Are we in a browser?');
@@ -39,13 +39,13 @@ ct.desktop = {
         if (ct.desktop.isNw) {
             if (window.iAmInCtIdeDebugger) {
                 // eslint-disable-next-line no-console
-                console.warn('We can\'t quit because ct.js\'s editor would quit as well. Let\'s imagine that the game has exited! :D');
+                console.warn('We can\'t quit because ct.js\'s editor would close as well. Let\'s imagine that the game has exited! :D');
             } else {
                 nw.App.quit();
             }
         } else if (ct.desktop.isElectron) {
             const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop', 'quit');
+            ipcRenderer.invoke('ct.desktop.quit');
         } else {
             console.error('[ct.desktop/quit] Unknown environment :c Are we in a browser?');
         }
