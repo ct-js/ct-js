@@ -44,49 +44,49 @@ ipcMain.handle('ct.desktop.quit', () => {
     app.quit();
 });
 
-ipcMain.handle('ct.desktop.show', (event) => {
+ipcMain.handle('ct.desktop.show', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.show();
 });
 
-ipcMain.handle('ct.desktop.hide', (event) => {
+ipcMain.handle('ct.desktop.hide', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.hide();
 });
 
-ipcMain.handle('ct.desktop.maximize', (event) => {
+ipcMain.handle('ct.desktop.maximize', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.maximize();
 });
 
-ipcMain.handle('ct.desktop.unmaximize', (event) => {
+ipcMain.handle('ct.desktop.unmaximize', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.unmaximize();
 });
 
-ipcMain.handle('ct.desktop.minimize', (event) => {
+ipcMain.handle('ct.desktop.minimize', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.minimize();
 });
 
-ipcMain.handle('ct.desktop.restore', (event) => {
+ipcMain.handle('ct.desktop.restore', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.restore();
 });
 
-ipcMain.handle('ct.desktop.fullscreen', (event) => {
+ipcMain.handle('ct.desktop.fullscreen', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.setFullScreen(true);
 });
 
-ipcMain.handle('ct.desktop.unfullscreen', (event) => {
+ipcMain.handle('ct.desktop.unfullscreen', async (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
     await mainWindow.setFullScreen(false);
