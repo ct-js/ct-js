@@ -1,10 +1,10 @@
 # Desktop features - App & Window Management
 
-Since ct.js desktop exports use [Electron](https://electronjs.org/), the app and window can be managed using javascript. With the help of [IPC (Inter-Process Communication) in Electron](https://www.electronjs.org/docs/latest/tutorial/ipc) and this ct.desktop module, you can easily controll your app and it's window in ct.js!
+Since ct.js desktop exports use [Electron](https://electronjs.org/), the app and window can be managed using javascript. With the help of [IPC (Inter-Process Communication) in Electron](https://www.electronjs.org/docs/latest/tutorial/ipc) and this module, ct.desktop, you can easily controll your app and it's window in ct.js!
 
-You can change the default settings of your app and its window in the project settings section, without using this module. This module is only neccecary to change these settings in-game and set more advanced options.
+The default behavior of your game's desktop exports can be set under `Project` > `Render Options` > `Desktop builds`. This module, ct.desktop, lets you change these settings in-game; programatically. It also lets you set some more advanced settings.
 
-Below is a list of methods and functions that ct.desktop provides for interacting with the app lifecycle and window.
+Below is a list of methods and functions that ct.desktop provides for interacting with the app and it's window.
 
 ## .quit()
 
