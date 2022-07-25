@@ -43,3 +43,51 @@ ipcMain.handle('ct.desktop.closeDevTools', async (event) => {
 ipcMain.handle('ct.desktop.quit', () => {
     app.quit();
 });
+
+ipcMain.handle('ct.desktop.show', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.show();
+});
+
+ipcMain.handle('ct.desktop.hide', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.hide();
+});
+
+ipcMain.handle('ct.desktop.maximize', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.maximize();
+});
+
+ipcMain.handle('ct.desktop.unmaximize', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.unmaximize();
+});
+
+ipcMain.handle('ct.desktop.minimize', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.minimize();
+});
+
+ipcMain.handle('ct.desktop.restore', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.restore();
+});
+
+ipcMain.handle('ct.desktop.fullscreen', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.setFullScreen(true);
+});
+
+ipcMain.handle('ct.desktop.unfullscreen', (event) => {
+    const webContents = event.sender;
+    const mainWindow = BrowserWindow.fromWebContents(webContents);
+    await mainWindow.setFullScreen(false);
+});
