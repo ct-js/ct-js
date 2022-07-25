@@ -13,13 +13,41 @@ declare namespace ct {
          */
         function closeDevTools(): void;
         /**
-         * Check wheather or not the built in developer tools pannel/debugger is opened
-         */
-        function isDevToolsOpened(): boolean;
-        /**
          * Close the game
          */
         function quit(): void;
+        /**
+         * Show and focus onto the window
+         */
+        function show(): void;
+        /**
+         * Hide the window
+         */
+        function hide(): void;
+        /**
+         * Maximize the window; and also show (but not focus) the window if it isn't already visible
+         */
+        function maximize(): void;
+        /**
+         * Unmaximize the window
+         */
+        function unmaximize(): void;
+        /**
+         * Minimize the window
+         */
+        function minimize(): void;
+        /**
+         * Restore the window to its previous state
+         */
+        function restore(): void;
+        /**
+         * Enter fullscreen mode
+         */
+        function fullscreen(): void;
+        /**
+         * Leave fullscreen mode
+         */
+        function unfullscreen(): void;
         /**
          * Whether or not the game is running as a desktop app
          */
