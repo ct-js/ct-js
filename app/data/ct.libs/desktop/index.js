@@ -1,5 +1,5 @@
 ct.desktop = {
-    isNw: window.nw && window.nw.App,
+    isNw: (window.nw && window.nw.App) || (nw && nw.App),
     isElectron: null,
     openDevTools(options) {
         if (ct.desktop.isNw) {
