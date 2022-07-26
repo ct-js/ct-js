@@ -1,21 +1,26 @@
 ct.desktop = {
     isNw: Boolean(window.nw && window.nw.App),
     isElectron: null,
-    openDevTools(options) {
+    //eslint-disable-next-line consistent-return
+    desktopFeature(feature) {
         if (ct.desktop.isNw) {
             if (window.iAmInCtIdeDebugger) {
                 // eslint-disable-next-line no-console
-                console.warn('We can\'t open the debugger because it should be open in ct.js\'s editor already! Let\'s imagine it opened just now like it would in a desktop export! :D');
+                console.warn('[ct.desktop.' + feature.name + '] Game is running inside ct.js\'s debugger, Desktop features only work in desktop exports! :c');
+            } else if (feature.return === true) {
+                return nw[feature.nw.namespace][feature.nw.method](feature.nw.parameter);
             } else {
-                const win = nw.Window.get();
-                win.showDevTools();
+                nw[feature.nw.namespace][feature.nw.method](feature.nw.parameter);
             }
         } else if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.openDevTools', options);
+            if (feature.return === true) {
+                const {ipcRenderer} = require('electron');
+                ipcRenderer.invoke(feature.electron.channel, feature.electron.parameter);
+                return ipcRenderer.on(feature.electron.channel, (event, message) => message);
+            }
         } else {
             //eslint-disable-next-line no-console
-            console.error('[ct.desktop.openDevTools] Unknown environment :c Are we in a browser?');
+            console.error('[ct.desktop.' + feature.name + '] Unknown environment :c Are we in a browser?');
         }
     },
     closeDevTools() {
