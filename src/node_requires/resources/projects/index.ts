@@ -20,7 +20,8 @@ const getExamplesDir = function (): string {
         if (isMac) {
             return path.join(process.cwd(), 'examples');
         }
-        return path.join((nw.App as any).startPath, 'examples');
+        // return path.join((nw.App as any).startPath, 'examples');
+        return path.join(path.dirname(process.execPath), "examples");
     }
 };
 
@@ -30,12 +31,14 @@ const getTemplatesDir = function (): string {
         require('gulp');
         // Most likely, we are in a dev environment
         return path.join((nw.App as any).startPath, 'src/projectTemplates');
+        // return path.join((nw.App as any).startPath, 'src/projectTemplates');
     } catch (e) {
         const {isMac} = require('./../../platformUtils');
         if (isMac) {
             return path.join(process.cwd(), 'templates');
-        }
-        return path.join((nw.App as any).startPath, 'templates');
+        };
+        // return path.join((nw.App as any).startPath, "templates");
+        return path.join(path.dirname(process.execPath), "templates");
     }
 };
 
