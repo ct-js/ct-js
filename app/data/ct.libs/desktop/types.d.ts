@@ -5,6 +5,10 @@ declare namespace ct {
   */
     namespace desktop {
         /**
+         * Generate a ct.desktop function (not intended for direct use in ct.js games)
+         */
+        function desktopFeature(feature: { name: string, parameter?: string, return?: boolean, nw: { namespace: 'win' | 'App', method?: string }, electron?: { channel?: string, parameter?: string } }): void;
+        /**
          * Open the built-in developer tools pannel/debugger
          */
         function openDevTools(options?: { mode: 'left' | 'right' | 'bottom' | 'undocked' | 'detach', activate: boolean }): void;
@@ -12,6 +16,10 @@ declare namespace ct {
          * Close the built-in developer tools pannel/debugger
          */
         function closeDevTools(): void;
+        /**
+         * Check whether or not the built-in developer tools pannel/debugger is open
+         */
+        function isDevToolsOpen(): boolean;
         /**
          * Close the game
          */
