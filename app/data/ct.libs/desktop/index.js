@@ -1,203 +1,174 @@
 ct.desktop = {
-    isNw: Boolean(window.nw && window.nw.App),
+    /* Initialize Properties */
+    isNw: null,
     isElectron: null,
+    isDesktop: null,
+
+    /* Define Main Function */
     //eslint-disable-next-line consistent-return
     desktopFeature(feature) {
+        /* Set Defaults for Undefined Parameters */
+        feature.return ||= false;
+        feature.electron ||= {};
+        feature.nw.method ||= feature.name;
+        feature.nw.parameter ||= feature.parameter;
+        feature.electron.channel ||= feature.name;
+        feature.electron.parameter ||= feature.parameter;
+        feature.electron.returnTimeout ||= 10;
+        /* Define Functionality for NW.js */
         if (ct.desktop.isNw) {
             if (window.iAmInCtIdeDebugger) {
                 // eslint-disable-next-line no-console
-                console.warn('[ct.desktop.' + feature.name + '] Game is running inside ct.js\'s debugger, Desktop features only work in desktop exports! :c');
-            } else if (feature.return === true) {
-                return nw[feature.nw.namespace][feature.nw.method](feature.nw.parameter);
-            } else {
+                console.warn('[ct.desktop.' + feature.name + '] The game is running inside ct.js\'s debugger, desktop features will only work in desktop exports! :c');
+            } else if (feature.return === true && feature.nw.namespace === 'win') {
+                const win = nw.Window.get();
+                return win[feature.nw.method](feature.nw.parameter);
+            } else if (feature.return === true && feature.nw.namespace === 'App') {
+                return nw[feature.nw.namesapce][feature.nw.method](feature.nw.parameter);
+            } else if (feature.return === false && feature.nw.namesapce === 'win') {
+                const win = nw.Window.get();
+                win[feature.nw.method](feature.nw.parameter);
+            } else if (feature.return === false && feature.nw.namesapce === 'App') {
                 nw[feature.nw.namespace][feature.nw.method](feature.nw.parameter);
+            } else {
+                console.error('[ct.desktop.' + feature.name + '] Desktop feature\'s NW.js functionality failed :c');
             }
+        /* Define Functionality for Electron */
         } else if (ct.desktop.isElectron) {
             if (feature.return === true) {
                 const {ipcRenderer} = require('electron');
-                ipcRenderer.invoke(feature.electron.channel, feature.electron.parameter);
-                return ipcRenderer.on(feature.electron.channel, (event, message) => message);
+                return ipcRenderer.sendSync('ct.desktop.' + feature.electron.channel, feature.electron.parameter);
+            } else if (feature.return === false) {
+                const {ipcRenderer} = require('electron');
+                ipcRenderer.invoke('ct.desktop.' + feature.electron.channel, feature.electron.parameter);
+            } else {
+                console.error('[ct.desktop.' + feature.name + '] Desktop feature\'s Electron functionality failed :c');
             }
+        /* Define Functionality for Unkown Environments */
         } else {
-            //eslint-disable-next-line no-console
             console.error('[ct.desktop.' + feature.name + '] Unknown environment :c Are we in a browser?');
         }
     },
-    closeDevTools() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t close the debugger because this is running inside of ct.js\'s editor! Let\'s imagine it actually did close like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.closeDevTools();
+
+    /* Define Methods Using Main Function */
+    openDevTools(options) {
+        ct.desktop.desktopFeature({
+            name: 'openDevTools',
+            nw: {
+                namespace: 'win',
+                method: 'showDevTools'
+            },
+            electron: {
+                parameter: options
             }
-        } else if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.closeDevTools');
-        } else {
-            //eslint-disable-next-line no-console
-            console.error('[ct.desktop.closeDevTools] Unknown environment :c Are we in a browser?');
-        }
+        });
+    },
+    closeDevTools() {
+        this.desktopFeature({
+            name: 'closeDevTools',
+            nw: {
+                namespace: 'win'
+            }
+        });
+    },
+    isDevToolsOpen() {
+        return this.desktopFeature({
+            name: 'isDevToolsOpen',
+            return: true,
+            nw: {
+                namespace: 'win'
+            },
+            electron: {
+                channel: 'isDevToolsOpened'
+            }
+        });
     },
     quit() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t quit because ct.js\'s editor would close as well. Let\'s imagine that the game has exited like it would in a desktop export! :D');
-            } else {
-                nw.App.quit();
+        this.desktopFeature({
+            name: 'quit',
+            nw: {
+                namespace: 'App'
             }
-        } else if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.quit');
-        } else {
-            console.error('[ct.desktop.quit] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     show() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t show the window because ct.js\'s editor is already showing. Let\'s imagine it just showed and refocused like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.show();
+        this.desktopFeature({
+            name: 'show',
+            nw: {
+                namespace: 'win'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.show');
-        } else {
-            console.error('[ct.desktop.show] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     hide() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t hide the window because it is running in ct.js\'s editor. Let\'s imagine it became hidden like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.hide();
+        this.desktopFeature({
+            name: 'hide',
+            nw: {
+                namespace: 'win'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.hide');
-        } else {
-            console.error('[ct.desktop.hide] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     maximize() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t maximize the window because it is running in ct.js\'s editor. Let\'s imagine it became maximized like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.maximize();
+        this.desktopFeature({
+            name: 'maximize',
+            nw: {
+                namespace: 'win'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.maximize');
-        } else {
-            console.error('[ct.desktop.maximize] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     unmaximize() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t unmaximize the window because it is running in ct.js\'s editor. Let\'s imagine it unmaximized like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.unmaximize();
+        this.desktopFeature({
+            name: 'unmaximize',
+            nw: {
+                namespace: 'win'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.unmaximize');
-        } else {
-            console.error('[ct.desktop.unmaximize] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     minimize() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t minimize the window because it is running in ct.js\'s editor. Let\'s imagine it minimize like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.minimize();
+        this.desktopFeature({
+            name: 'minimize',
+            nw: {
+                namespace: 'win'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.minimize');
-        } else {
-            console.error('[ct.desktop.minimize] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     restore() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t restore the window because it is running in ct.js\'s editor. Let\'s imagine it restored like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.restore();
+        this.desktopFeature({
+            name: 'restore',
+            nw: {
+                namespace: 'win'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.restore');
-        } else {
-            console.error('[ct.desktop.restore] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     fullscreen() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t fullscreen the window because it is running in ct.js\'s editor. Let\'s imagine it fullscreened like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.enterFullscreen();
+        this.desktopFeature({
+            name: 'fullscreen',
+            nw: {
+                namespace: 'win',
+                method: 'enterFullscreen'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.fullscreen');
-        } else {
-            console.error('[ct.desktop.fullscreen] Unknown environment :c Are we in a browser?');
-        }
+        });
     },
     unfullscreen() {
-        if (ct.desktop.isNw) {
-            if (window.iAmInCtIdeDebugger) {
-                // eslint-disable-next-line no-console
-                console.warn('We can\'t leave fullscreen because the game is running in ct.js\'s editor. Let\'s imagine it left fullscreen like it would in a desktop export! :D');
-            } else {
-                const win = nw.Window.get();
-                win.leaveFullscreen();
+        this.desktopFeature({
+            name: 'unfullscreen',
+            nw: {
+                namespace: 'win',
+                method: 'leaveFullscreen'
             }
-        }
-        if (ct.desktop.isElectron) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.invoke('ct.desktop.unfullscreen');
-        } else {
-            console.error('[ct.desktop.unfullscreen] Unknown environment :c Are we in a browser?');
-        }
+        });
     }
 };
 
+/* Set Prevously Initialized Properties */
+try {
+    ct.desktop.isNw = Boolean(nw && nw.App);
+} catch (e) {
+    ct.desktop.isNw = false;
+}
 try {
     require('electron');
     ct.desktop.isElectron = true;
 } catch (e) {
     ct.desktop.isElectron = false;
 }
-
 ct.desktop.isDesktop = ct.desktop.isNw || ct.desktop.isElectron;
