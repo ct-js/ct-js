@@ -107,6 +107,16 @@ ct.desktop = {
             }
         });
     },
+    isVisible() {
+        return this.desktopFeature({
+            name: 'isVisible',
+            return: true,
+            nw: {
+                namespace: 'win'
+            },
+            electron: {}
+        });
+    },
     maximize() {
         this.desktopFeature({
             name: 'maximize',
@@ -121,6 +131,16 @@ ct.desktop = {
             nw: {
                 namespace: 'win'
             }
+        });
+    },
+    isMaximized() {
+        return this.desktopFeature({
+            name: 'isMaximized',
+            return: true,
+            nw: {
+                namespace: 'win'
+            },
+            electron: {}
         });
     },
     minimize() {
@@ -139,6 +159,16 @@ ct.desktop = {
             }
         });
     },
+    isMinimized() {
+        return this.desktopFeature({
+            name: 'isMinimized',
+            return: true,
+            nw: {
+                namespace: 'win'
+            },
+            electron: {}
+        });
+    },
     fullscreen() {
         this.desktopFeature({
             name: 'fullscreen',
@@ -155,6 +185,16 @@ ct.desktop = {
                 namespace: 'win',
                 method: 'leaveFullscreen'
             }
+        });
+    },
+    isFullscreen() {
+        return this.desktopFeature({
+            name: 'isFullscreen',
+            return: true,
+            nw: {
+                namespace: 'win'
+            },
+            electron: {}
         });
     }
 };
