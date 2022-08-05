@@ -65,7 +65,7 @@ ipcMain.handle('ct.desktop.hide', (event) => {
 ipcMain.on('ct.desktop.isVisible', (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.webContents.isVisible();
+    event.returnValue = mainWindow.isVisible();
 });
 
 ipcMain.handle('ct.desktop.maximize', (event) => {
@@ -83,7 +83,7 @@ ipcMain.handle('ct.desktop.unmaximize', (event) => {
 ipcMain.on('ct.desktop.isMaximized', (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.webContents.isMaximized();
+    event.returnValue = mainWindow.isMaximized();
 });
 
 ipcMain.handle('ct.desktop.minimize', (event) => {
@@ -101,7 +101,7 @@ ipcMain.handle('ct.desktop.restore', (event) => {
 ipcMain.on('ct.desktop.isMinimized', (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.webContents.isMinimized();
+    event.returnValue = mainWindow.isMinimized();
 });
 
 ipcMain.handle('ct.desktop.fullscreen', (event) => {
@@ -119,5 +119,5 @@ ipcMain.handle('ct.desktop.unfullscreen', (event) => {
 ipcMain.on('ct.desktop.isFullscreen', (event) => {
     const webContents = event.sender;
     const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.webContents.isFullscreen();
+    event.returnValue = mainWindow.isFullscreen();
 });

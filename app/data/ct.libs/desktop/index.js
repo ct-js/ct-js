@@ -52,7 +52,7 @@ ct.desktop = {
 
     /* Define Methods Using Main Function */
     openDevTools(options) {
-        ct.desktop.desktopFeature({
+        this.desktopFeature({
             name: 'openDevTools',
             nw: {
                 namespace: 'win',
