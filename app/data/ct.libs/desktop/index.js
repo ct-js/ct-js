@@ -9,12 +9,10 @@ ct.desktop = {
     desktopFeature(feature) {
         /* Set Defaults for Undefined Parameters */
         feature.return ||= false;
-        feature.electron ||= {};
         feature.nw.method ||= feature.name;
         feature.nw.parameter ||= feature.parameter;
-        feature.electron.channel ||= feature.name;
+        feature.electron.method ||= feature.name;
         feature.electron.parameter ||= feature.parameter;
-        feature.electron.returnTimeout ||= 10;
         /* Define Functionality for NW.js */
         if (ct.desktop.isNw) {
             if (window.iAmInCtIdeDebugger) {
@@ -59,6 +57,7 @@ ct.desktop = {
                 method: 'showDevTools'
             },
             electron: {
+                namespace: 'mainWindow.webContents',
                 parameter: options
             }
         });
@@ -68,6 +67,9 @@ ct.desktop = {
             name: 'closeDevTools',
             nw: {
                 namespace: 'win'
+            },
+            electron: {
+                namespace: 'mainWindow.webContents'
             }
         });
     },
@@ -79,7 +81,8 @@ ct.desktop = {
                 namespace: 'win'
             },
             electron: {
-                channel: 'isDevToolsOpened'
+                namespace: 'mainWindow.webContents',
+                method: 'isDevToolsOpened'
             }
         });
     },
@@ -88,6 +91,9 @@ ct.desktop = {
             name: 'quit',
             nw: {
                 namespace: 'App'
+            },
+            electron: {
+                namespace: 'app'
             }
         });
     },
