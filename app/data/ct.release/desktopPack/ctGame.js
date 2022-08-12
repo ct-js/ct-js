@@ -28,96 +28,42 @@ const createMainWindow = () => {
 
 app.on('ready', createMainWindow);
 
-ipcMain.handle('ct.desktop.openDevTools', (event, options) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.webContents.openDevTools(options);
-});
-
-ipcMain.handle('ct.desktop.closeDevTools', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.webContents.closeDevTools();
-});
-
-ipcMain.on('ct.desktop.isDevToolsOpened', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.webContents.isDevToolsOpened();
-});
-
-ipcMain.handle('ct.desktop.quit', () => {
-    app.quit();
-});
-
-ipcMain.handle('ct.desktop.show', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.show();
-});
-
-ipcMain.handle('ct.desktop.hide', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.hide();
-});
-
-ipcMain.on('ct.desktop.isVisible', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.isVisible();
-});
-
-ipcMain.handle('ct.desktop.maximize', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.maximize();
-});
-
-ipcMain.handle('ct.desktop.unmaximize', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.unmaximize();
-});
-
-ipcMain.on('ct.desktop.isMaximized', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.isMaximized();
-});
-
-ipcMain.handle('ct.desktop.minimize', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.minimize();
-});
-
-ipcMain.handle('ct.desktop.restore', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.restore();
-});
-
-ipcMain.on('ct.desktop.isMinimized', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.isMinimized();
-});
-
-ipcMain.handle('ct.desktop.fullscreen', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.setFullScreen(true);
-});
-
-ipcMain.handle('ct.desktop.unfullscreen', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    mainWindow.setFullScreen(false);
-});
-
-ipcMain.on('ct.desktop.isFullscreen', (event) => {
-    const webContents = event.sender;
-    const mainWindow = BrowserWindow.fromWebContents(webContents);
-    event.returnValue = mainWindow.isFullscreen();
+ipcMain.on('ct.desktop', (event, feature, parameter) => {
+    if (feature.return === true) {
+        if (feature.electron.namespace.split('.').length === 1) {
+            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
+                const webContents = event.sender;
+                const mainWindow = BrowserWindow.fromWebContents(webContents);
+                event.returnValue = mainWindow[feature.electron.method](parameter);
+            } else {
+                event.returnValue = this[feature.electron.namespace.split('.')[0]][feature.electron.method](parameter);
+            }
+        } else if (feature.electron.namespace.split('.').length === 2) {
+            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
+                const webContents = event.sender;
+                const mainWindow = BrowserWindow.fromWebContents(webContents);
+                event.returnValue = mainWindow[feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
+            } else {
+                event.returnValue = this[feature.electron.namespace.split('.')[0]][feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
+            }
+        }
+    } else if (feature.return === false) {
+        if (feature.electron.namespace.split('.').length === 1) {
+            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
+                const webContents = event.sender;
+                const mainWindow = BrowserWindow.fromWebContents(webContents);
+                mainWindow[feature.electron.method](parameter);
+            } else {
+                this[feature.electron.namespace.split('.')[0]][feature.electron.method](parameter);
+            }
+        } else if (feature.electron.namespace.split('.').length === 2) {
+            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
+                const webContents = event.sender;
+                const mainWindow = BrowserWindow.fromWebContents(webContents);
+                mainWindow[feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
+            } else {
+                this[feature.electron.namespace.split('.')[0]][feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
+            }
+        }
+    }
 });

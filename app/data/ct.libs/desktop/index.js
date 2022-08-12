@@ -37,10 +37,10 @@ ct.desktop = {
         } else if (ct.desktop.isElectron) {
             if (feature.return === true) {
                 const {ipcRenderer} = require('electron');
-                return ipcRenderer.sendSync('ct.desktop.' + feature.electron.channel, feature.electron.parameter);
+                return ipcRenderer.sendSync('ct.desktop', feature, feature.electron.parameter);
             } else if (feature.return === false) {
                 const {ipcRenderer} = require('electron');
-                ipcRenderer.invoke('ct.desktop.' + feature.electron.channel, feature.electron.parameter);
+                ipcRenderer.sendSync('ct.desktop', feature, feature.electron.parameter);
             } else {
                 console.error('[ct.desktop.' + feature.name + '] Desktop feature\'s Electron functionality failed :c');
             }
