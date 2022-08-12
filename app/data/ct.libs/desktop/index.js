@@ -21,12 +21,12 @@ ct.desktop = {
             } else if (feature.return === true && feature.nw.namespace === 'win') {
                 const win = nw.Window.get();
                 return win[feature.nw.method](feature.nw.parameter);
-            } else if (feature.return === true && feature.nw.namespace === 'App') {
+            } else if (feature.return === true) {
                 return nw[feature.nw.namesapce][feature.nw.method](feature.nw.parameter);
             } else if (feature.return === false && feature.nw.namesapce === 'win') {
                 const win = nw.Window.get();
                 win[feature.nw.method](feature.nw.parameter);
-            } else if (feature.return === false && feature.nw.namesapce === 'App') {
+            } else if (feature.return === false) {
                 nw[feature.nw.namespace][feature.nw.method](feature.nw.parameter);
             } else {
                 console.error('[ct.desktop.' + feature.name + '] Desktop feature\'s NW.js functionality failed :c');
@@ -50,7 +50,7 @@ ct.desktop = {
 
     /* Define Methods Using Main Function */
     openDevTools(options) {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'openDevTools',
             nw: {
                 namespace: 'win',
@@ -63,7 +63,7 @@ ct.desktop = {
         });
     },
     closeDevTools() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'closeDevTools',
             nw: {
                 namespace: 'win'
@@ -74,7 +74,7 @@ ct.desktop = {
         });
     },
     isDevToolsOpen() {
-        return this.desktopFeature({
+        return ct.desktop.desktopFeature({
             name: 'isDevToolsOpen',
             return: true,
             nw: {
@@ -87,7 +87,7 @@ ct.desktop = {
         });
     },
     quit() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'quit',
             nw: {
                 namespace: 'App'
@@ -98,41 +98,52 @@ ct.desktop = {
         });
     },
     show() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'show',
             nw: {
                 namespace: 'win'
+            },
+            electron: {
+                namespace: 'mainWindow'
             }
         });
     },
     hide() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'hide',
             nw: {
                 namespace: 'win'
+            },
+            electron: {
+                namespace: 'mainWindow'
             }
         });
     },
     isVisible() {
-        return this.desktopFeature({
+        return ct.desktop.desktopFeature({
             name: 'isVisible',
             return: true,
             nw: {
                 namespace: 'win'
             },
-            electron: {}
+            electron: {
+                namespace: 'mainWindow'
+            }
         });
     },
     maximize() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'maximize',
             nw: {
                 namespace: 'win'
+            },
+            electron: {
+                namespace: 'mainWindow'
             }
         });
     },
     unmaximize() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'unmaximize',
             nw: {
                 namespace: 'win'
@@ -140,67 +151,89 @@ ct.desktop = {
         });
     },
     isMaximized() {
-        return this.desktopFeature({
+        return ct.desktop.desktopFeature({
             name: 'isMaximized',
             return: true,
             nw: {
                 namespace: 'win'
             },
-            electron: {}
+            electron: {
+                namespace: 'mainWindow'
+            }
         });
     },
     minimize() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'minimize',
             nw: {
                 namespace: 'win'
+            },
+            electron: {
+                namespace: 'mainWindow'
             }
         });
     },
     restore() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'restore',
             nw: {
                 namespace: 'win'
+            },
+            electron: {
+                namespace: 'mainWindow'
             }
         });
     },
     isMinimized() {
-        return this.desktopFeature({
+        return ct.desktop.desktopFeature({
             name: 'isMinimized',
             return: true,
             nw: {
                 namespace: 'win'
             },
-            electron: {}
+            electron: {
+                namespace: 'mainWindow'
+            }
         });
     },
     fullscreen() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'fullscreen',
             nw: {
                 namespace: 'win',
                 method: 'enterFullscreen'
+            },
+            electron: {
+                namespace: 'mainWindow',
+                method: 'setFullscreen',
+                parameter: true
             }
         });
     },
     unfullscreen() {
-        this.desktopFeature({
+        ct.desktop.desktopFeature({
             name: 'unfullscreen',
             nw: {
                 namespace: 'win',
                 method: 'leaveFullscreen'
+            },
+            electron: {
+                namespace: 'mainWindow',
+                method: 'setFullscreen',
+                parameter: false
             }
         });
     },
     isFullscreen() {
-        return this.desktopFeature({
+        return ct.desktop.desktopFeature({
             name: 'isFullscreen',
             return: true,
             nw: {
                 namespace: 'win'
             },
-            electron: {}
+            electron: {
+                namespace: 'mainWindow'
+            }
         });
     }
 };
