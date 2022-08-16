@@ -53,16 +53,20 @@ ipcMain.on('ct.desktop', (event, feature, parameter) => {
                 const webContents = event.sender;
                 const mainWindow = BrowserWindow.fromWebContents(webContents);
                 mainWindow[feature.electron.method](parameter);
+                event.returnValue = true;
             } else {
                 this[feature.electron.namespace.split('.')[0]][feature.electron.method](parameter);
+                event.returnValue = true;
             }
         } else if (feature.electron.namespace.split('.').length === 2) {
             if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
                 const webContents = event.sender;
                 const mainWindow = BrowserWindow.fromWebContents(webContents);
                 mainWindow[feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
+                event.returnValue = true;
             } else {
                 this[feature.electron.namespace.split('.')[0]][feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
+                event.returnValue = true;
             }
         }
     }
