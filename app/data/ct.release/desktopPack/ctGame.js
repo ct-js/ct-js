@@ -1,8 +1,9 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
-
 const pckg = require('./package.json');
+
+let mainWindow;
 const createMainWindow = () => {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: pckg.window.width,
         height: pckg.window.height,
         center: true,
@@ -29,45 +30,10 @@ const createMainWindow = () => {
 app.on('ready', createMainWindow);
 
 ipcMain.on('ct.desktop', (event, feature, parameter) => {
-    if (feature.return === true) {
-        if (feature.electron.namespace.split('.').length === 1) {
-            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
-                const webContents = event.sender;
-                const mainWindow = BrowserWindow.fromWebContents(webContents);
-                event.returnValue = mainWindow[feature.electron.method](parameter);
-            } else {
-                event.returnValue = this[feature.electron.namespace.split('.')[0]][feature.electron.method](parameter);
-            }
-        } else if (feature.electron.namespace.split('.').length === 2) {
-            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
-                const webContents = event.sender;
-                const mainWindow = BrowserWindow.fromWebContents(webContents);
-                event.returnValue = mainWindow[feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
-            } else {
-                event.returnValue = this[feature.electron.namespace.split('.')[0]][feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
-            }
-        }
-    } else if (feature.return === false) {
-        if (feature.electron.namespace.split('.').length === 1) {
-            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
-                const webContents = event.sender;
-                const mainWindow = BrowserWindow.fromWebContents(webContents);
-                mainWindow[feature.electron.method](parameter);
-                event.returnValue = true;
-            } else {
-                this[feature.electron.namespace.split('.')[0]][feature.electron.method](parameter);
-                event.returnValue = true;
-            }
-        } else if (feature.electron.namespace.split('.').length === 2) {
-            if (feature.electron.namespace.split('.')[0] === 'mainWindow') {
-                const webContents = event.sender;
-                const mainWindow = BrowserWindow.fromWebContents(webContents);
-                mainWindow[feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
-                event.returnValue = true;
-            } else {
-                this[feature.electron.namespace.split('.')[0]][feature.electron.namespace.split('.')[1]][feature.electron.method](parameter);
-                event.returnValue = true;
-            }
-        }
+    const namespace = feature.electron.namespace.split('.');
+    if (namespace.length === 1) {
+        event.returnValue = this[namespace[0]][feature.electron.method](parameter);
+    } else if (feature.electron.namespace.split('.').length === 2) {
+        event.returnValue = this[namespace[0]][namespace[1]][feature.electron.method](parameter);
     }
 });
