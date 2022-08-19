@@ -32,8 +32,16 @@ app.on('ready', createMainWindow);
 ipcMain.on('ct.desktop', (event, feature, parameter) => {
     const namespace = feature.electron.namespace.split('.');
     if (namespace.length === 1) {
-        event.returnValue = this[namespace[0]][feature.electron.method](parameter);
-    } else if (feature.electron.namespace.split('.').length === 2) {
-        event.returnValue = this[namespace[0]][namespace[1]][feature.electron.method](parameter);
+        if (namespace[0] === 'app') {
+            event.returnValue = app[feature.electron.method](parameter);
+        } else if (namespace[0] === 'mainWindow') {
+            event.returnValue = mainWindow[feature.electron.method](parameter);
+        }
+    } else if (namespace.length === 2) {
+        if (namespace[0] === 'app') {
+            event.returnValue = app[namespace[1]][feature.electron.method](parameter);
+        } else if (namespace[0] === 'mainWindow') {
+            event.returnValue = mainWindow[namespace[1]][feature.electron.method](parameter);
+        }
     }
 });
