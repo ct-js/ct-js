@@ -18,30 +18,16 @@ ct.desktop = {
             if (window.iAmInCtIdeDebugger) {
                 // eslint-disable-next-line no-console
                 console.warn('[ct.desktop.' + feature.name + '] The game is running inside ct.js\'s debugger, desktop features will only work in desktop exports! :c');
-            } else if (feature.return === true && feature.nw.namespace === 'win') {
+            } else if (feature.nw.namespace === 'win') {
                 const win = nw.Window.get();
                 return win[feature.nw.method](feature.nw.parameter);
-            } else if (feature.return === true) {
-                return nw[feature.nw.namesapce][feature.nw.method](feature.nw.parameter);
-            } else if (feature.return === false && feature.nw.namesapce === 'win') {
-                const win = nw.Window.get();
-                win[feature.nw.method](feature.nw.parameter);
-            } else if (feature.return === false) {
-                nw[feature.nw.namespace][feature.nw.method](feature.nw.parameter);
             } else {
-                console.error('[ct.desktop.' + feature.name + '] Desktop feature\'s NW.js functionality failed :c');
+                return nw[feature.nw.namesapce][feature.nw.method](feature.nw.parameter);
             }
         /* Define Functionality for Electron */
         } else if (ct.desktop.isElectron) {
-            if (feature.return === true) {
-                const {ipcRenderer} = require('electron');
-                return ipcRenderer.sendSync('ct.desktop', feature, feature.electron.parameter);
-            } else if (feature.return === false) {
-                const {ipcRenderer} = require('electron');
-                ipcRenderer.sendSync('ct.desktop', feature, feature.electron.parameter);
-            } else {
-                console.error('[ct.desktop.' + feature.name + '] Desktop feature\'s Electron functionality failed :c');
-            }
+            const {ipcRenderer} = require('electron');
+            return ipcRenderer.sendSync('ct.desktop', feature);
         /* Define Functionality for Unkown Environments */
         } else {
             console.error('[ct.desktop.' + feature.name + '] Unknown environment :c Are we in a browser?');
