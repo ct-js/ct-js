@@ -3,26 +3,37 @@ ct.desktop = {
     isNw: null,
     isElectron: null,
     isDesktop: null,
-
     /* Define Main Function */
     //eslint-disable-next-line consistent-return
     desktopFeature(feature) {
         /* Set Defaults for Undefined Parameters */
-        feature.return ||= false;
         feature.nw.method ||= feature.name;
         feature.nw.parameter ||= feature.parameter;
         feature.electron.method ||= feature.name;
         feature.electron.parameter ||= feature.parameter;
         /* Define Functionality for NW.js */
         if (ct.desktop.isNw) {
+            /* Create Local Variables Based on Parameters */
+            const namespace = feature.nw.namespace.split('.');
+            /* If running in ct.js's debugger */
             if (window.iAmInCtIdeDebugger) {
                 // eslint-disable-next-line no-console
-                console.warn('[ct.desktop.' + feature.name + '] The game is running inside ct.js\'s debugger, desktop features will only work in desktop exports! :c');
-            } else if (feature.nw.namespace === 'win') {
-                const win = nw.Window.get();
-                return win[feature.nw.method](feature.nw.parameter);
-            } else {
-                return nw[feature.nw.namesapce][feature.nw.method](feature.nw.parameter);
+                console.warn('[' + feature.name + '] - The game is running inside ct.js\'s debugger, desktop features will only work in desktop exports! :c');
+            /* If running in NW.js, not in ct.js's debugger */
+            } else if (namespace.length === 1) {
+                if (namespace[0] === 'win') {
+                    const win = nw.Window.get();
+                    return win[feature.nw.method](feature.nw.parameter);
+                } else if (namespace[0] !== 'win') {
+                    return nw[namespace[0]][feature.nw.method](feature.nw.parameter);
+                }
+            } else if (namespace.length === 2) {
+                if (namespace[0] === 'win') {
+                    const win = nw.Window.get();
+                    return win[namespace[1]][feature.nw.method](feature.nw.parameter);
+                } else if (namespace[0] !== 'win') {
+                    return nw[namespace[0]][namespace[1]][feature.nw.method](feature.nw.parameter);
+                }
             }
         /* Define Functionality for Electron */
         } else if (ct.desktop.isElectron) {
@@ -30,14 +41,13 @@ ct.desktop = {
             return ipcRenderer.sendSync('ct.desktop', feature);
         /* Define Functionality for Unkown Environments */
         } else {
-            console.error('[ct.desktop.' + feature.name + '] Unknown environment :c Are we in a browser?');
+            console.error('[' + feature.name + '] - Unknown environment :c Are we in a browser?');
         }
     },
-
     /* Define Methods Using Main Function */
     openDevTools(options) {
         ct.desktop.desktopFeature({
-            name: 'openDevTools',
+            name: 'ct.desktop.openDevTools',
             nw: {
                 namespace: 'win',
                 method: 'showDevTools'
@@ -50,7 +60,7 @@ ct.desktop = {
     },
     closeDevTools() {
         ct.desktop.desktopFeature({
-            name: 'closeDevTools',
+            name: 'ct.desktop.closeDevTools',
             nw: {
                 namespace: 'win'
             },
@@ -61,8 +71,7 @@ ct.desktop = {
     },
     isDevToolsOpen() {
         return ct.desktop.desktopFeature({
-            name: 'isDevToolsOpen',
-            return: true,
+            name: 'ct.desktop.isDevToolsOpen',
             nw: {
                 namespace: 'win'
             },
@@ -74,7 +83,7 @@ ct.desktop = {
     },
     quit() {
         ct.desktop.desktopFeature({
-            name: 'quit',
+            name: 'ct.desktop.quit',
             nw: {
                 namespace: 'App'
             },
@@ -85,7 +94,7 @@ ct.desktop = {
     },
     show() {
         ct.desktop.desktopFeature({
-            name: 'show',
+            name: 'ct.desktop.show',
             nw: {
                 namespace: 'win'
             },
@@ -96,7 +105,7 @@ ct.desktop = {
     },
     hide() {
         ct.desktop.desktopFeature({
-            name: 'hide',
+            name: 'ct.desktop.hide',
             nw: {
                 namespace: 'win'
             },
@@ -107,8 +116,7 @@ ct.desktop = {
     },
     isVisible() {
         return ct.desktop.desktopFeature({
-            name: 'isVisible',
-            return: true,
+            name: 'ct.desktop.isVisible',
             nw: {
                 namespace: 'win'
             },
@@ -119,7 +127,7 @@ ct.desktop = {
     },
     maximize() {
         ct.desktop.desktopFeature({
-            name: 'maximize',
+            name: 'ct.desktop.maximize',
             nw: {
                 namespace: 'win'
             },
@@ -130,7 +138,7 @@ ct.desktop = {
     },
     unmaximize() {
         ct.desktop.desktopFeature({
-            name: 'unmaximize',
+            name: 'ct.desktop.unmaximize',
             nw: {
                 namespace: 'win'
             }
@@ -138,8 +146,7 @@ ct.desktop = {
     },
     isMaximized() {
         return ct.desktop.desktopFeature({
-            name: 'isMaximized',
-            return: true,
+            name: 'ct.desktop.isMaximized',
             nw: {
                 namespace: 'win'
             },
@@ -150,7 +157,7 @@ ct.desktop = {
     },
     minimize() {
         ct.desktop.desktopFeature({
-            name: 'minimize',
+            name: 'ct.desktop.minimize',
             nw: {
                 namespace: 'win'
             },
@@ -161,7 +168,7 @@ ct.desktop = {
     },
     restore() {
         ct.desktop.desktopFeature({
-            name: 'restore',
+            name: 'ct.desktop.restore',
             nw: {
                 namespace: 'win'
             },
@@ -172,8 +179,7 @@ ct.desktop = {
     },
     isMinimized() {
         return ct.desktop.desktopFeature({
-            name: 'isMinimized',
-            return: true,
+            name: 'ct.desktop.isMinimized',
             nw: {
                 namespace: 'win'
             },
@@ -184,7 +190,7 @@ ct.desktop = {
     },
     fullscreen() {
         ct.desktop.desktopFeature({
-            name: 'fullscreen',
+            name: 'ct.desktop.fullscreen',
             nw: {
                 namespace: 'win',
                 method: 'enterFullscreen'
@@ -198,7 +204,7 @@ ct.desktop = {
     },
     unfullscreen() {
         ct.desktop.desktopFeature({
-            name: 'unfullscreen',
+            name: 'ct.desktop.unfullscreen',
             nw: {
                 namespace: 'win',
                 method: 'leaveFullscreen'
@@ -212,8 +218,7 @@ ct.desktop = {
     },
     isFullscreen() {
         return ct.desktop.desktopFeature({
-            name: 'isFullscreen',
-            return: true,
+            name: 'ct.desktop.isFullscreen',
             nw: {
                 namespace: 'win'
             },
@@ -223,7 +228,6 @@ ct.desktop = {
         });
     }
 };
-
 /* Set Prevously Initialized Properties */
 try {
     ct.desktop.isNw = Boolean(nw && nw.App);

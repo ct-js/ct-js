@@ -1,17 +1,15 @@
 declare namespace ct {
   /**
-  * A module that provides desktop features,
-  * such as quitting the game, toggling the debugger/devtools, and more!
+  * A module that provides useful desktop-specific features,
+  * such as manipulating the window, toggling the debugger/devtools, and more!
   */
     namespace desktop {
         /**
-         * The main functionality of ct.desktop's methods
-         * (not intended for use directly in ct.js games)
+         * Validate environment and run framework-specific methods
          */
         function desktopFeature(feature: {
           name: string,
           parameter?: string,
-          return?: boolean,
           nw: {
             namespace: string,
             method?: string,
