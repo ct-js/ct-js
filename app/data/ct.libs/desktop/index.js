@@ -7,9 +7,9 @@ ct.desktop = {
     //eslint-disable-next-line consistent-return
     desktopFeature(feature) {
         /* Set Defaults for Undefined Parameters */
-        feature.nw.method ||= feature.name;
+        feature.nw.method ||= feature.name.split('.')[feature.name.split('.').length - 1];
         feature.nw.parameter ||= feature.parameter;
-        feature.electron.method ||= feature.name;
+        feature.electron.method ||= feature.name.split('.')[feature.name.split('.').length - 1];
         feature.electron.parameter ||= feature.parameter;
         /* Define Functionality for NW.js */
         if (ct.desktop.isNw) {

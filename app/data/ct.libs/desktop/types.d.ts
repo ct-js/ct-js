@@ -20,7 +20,7 @@ declare namespace ct {
             method?: string,
             parameter?: string
           }
-        }): void;
+        }): unknown;
         /**
          * Open the built-in developer tools pannel/debugger
          */
