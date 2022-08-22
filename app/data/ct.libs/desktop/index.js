@@ -197,7 +197,7 @@ ct.desktop = {
             },
             electron: {
                 namespace: 'mainWindow',
-                method: 'setFullscreen',
+                method: 'setFullScreen',
                 parameter: true
             }
         });
@@ -211,7 +211,7 @@ ct.desktop = {
             },
             electron: {
                 namespace: 'mainWindow',
-                method: 'setFullscreen',
+                method: 'setFullScreen',
                 parameter: false
             }
         });
@@ -223,7 +223,8 @@ ct.desktop = {
                 namespace: 'win'
             },
             electron: {
-                namespace: 'mainWindow'
+                namespace: 'mainWindow',
+                method: 'isFullScreen'
             }
         });
     }
