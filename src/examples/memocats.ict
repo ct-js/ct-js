@@ -6,6 +6,15 @@ libs:
     mode: scaleFit
   sound.howler: {}
   tween: {}
+  pointer:
+    preventdefault: false
+    startlocked: false
+  place:
+    undefined: ''
+    gridX: 512
+    gridY: 512
+    debugMode: false
+    debugText: 16
 templates:
   - name: Card
     depth: 0
@@ -71,9 +80,9 @@ templates:
           */
 
           // If mouse was clicked and the card isn't blocked…
-          if (ct.mouse.pressed && !this.block) {
+          if (ct.pointer.collides(this,undefined,true) && !this.block) {
               // …if player clicked exactly this card…
-              if (ct.u.pointRectangle(ct.mouse.x, ct.mouse.y, this)) {
+              if (ct.u.pointRectangle(ct.pointer.x, ct.pointer.y, this)) {
                   // Flip a card
                   this.flipped = !this.flipped;
                   ct.sound.spawn('Paper');
