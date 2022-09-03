@@ -1,6 +1,7 @@
 const glob = require('./../glob');
 const {getUnwrappedExtends} = require('./utils');
 import {getBaseScripts} from './scriptableProcessor';
+import {getTextureFromId} from '../resources/textures';
 
 const getStartingRoom = (proj: IProject): IRoom => {
     let [startroom] = proj.rooms; // picks the first room by default
@@ -40,8 +41,32 @@ interface IExportedTile {
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    opacity: number,
+    rotation: number,
+    scale: {
+        x: number,
+        y: number
+    },
+    tint: number
 }
+type ExportedCopy = Omit<IRoomCopy, 'uid'> & {template: string};
+
+type ExportedBg = {
+    texture: string,
+    depth: number,
+    exts: {
+        movementX: number,
+        movementY: number,
+        parallaxX: number,
+        parallaxY: number,
+        repeat: 'repeat' | 'no-repeat' | 'repeat-x' | 'repeat-y',
+        scaleX: number,
+        scaleY: number,
+        shiftX: number,
+        shiftY: number
+    }
+};
 
 // eslint-disable-next-line max-lines-per-function
 const stringifyRooms = (proj: IProject): IScriptablesFragment => {
@@ -52,17 +77,32 @@ const stringifyRooms = (proj: IProject): IScriptablesFragment => {
     let rootRoomOnLeave = '';
 
     for (const r of proj.rooms) {
-        const roomCopy = JSON.parse(JSON.stringify(r.copies));
-        const objs = [];
-        for (const copy of roomCopy) {
-            copy.template = proj.templates[glob.templatemap[copy.uid]].name;
-            delete copy.uid;
-            objs.push(copy);
+        const objs: ExportedCopy[] = [];
+        for (const copy of r.copies) {
+            const exportableCopy = {
+                ...copy,
+                template: proj.templates[glob.templatemap[copy.uid]].name
+            };
+            delete exportableCopy.uid;
+            objs.push(exportableCopy);
         }
-        const bgsCopy = JSON.parse(JSON.stringify(r.backgrounds));
-        for (const bg in bgsCopy) {
-            bgsCopy[bg].texture = glob.texturemap[bgsCopy[bg].texture].g.name;
-            bgsCopy[bg].depth = Number(bgsCopy[bg].depth);
+        const bgs: ExportedBg[] = [];
+        for (const bg of r.backgrounds) {
+            bgs.push({
+                texture: getTextureFromId(bg.texture as string).name,
+                depth: Number(bg.depth),
+                exts: {
+                    movementX: bg.movementX,
+                    movementY: bg.movementY,
+                    parallaxX: bg.parallaxX,
+                    parallaxY: bg.parallaxY,
+                    repeat: bg.repeat,
+                    scaleX: bg.scaleX,
+                    scaleY: bg.scaleY,
+                    shiftX: bg.shiftX,
+                    shiftY: bg.shiftY
+                }
+            });
         }
 
         const tileLayers = [];
@@ -75,19 +115,22 @@ const stringifyRooms = (proj: IProject): IScriptablesFragment => {
                     extends: tileLayer.extends ? getUnwrappedExtends(tileLayer.extends) : {}
                 };
                 for (const tile of tileLayer.tiles) {
-                    for (let x = 0; x < tile.grid[2]; x++) {
-                        for (let y = 0; y < tile.grid[3]; y++) {
-                            const texture = glob.texturemap[tile.texture].g;
-                            layer.tiles.push({
-                                texture: texture.name,
-                                frame: tile.grid[0] + x + (y + tile.grid[1]) * texture.grid[0],
-                                x: tile.x + x * (texture.width + texture.marginx),
-                                y: tile.y + y * (texture.height + texture.marginy),
-                                width: texture.width,
-                                height: texture.height
-                            });
-                        }
-                    }
+                    const texture = glob.texturemap[tile.texture].g;
+                    layer.tiles.push({
+                        texture: texture.name,
+                        frame: tile.frame,
+                        x: tile.x,
+                        y: tile.y,
+                        width: texture.width,
+                        height: texture.height,
+                        opacity: tile.opacity,
+                        rotation: tile.rotation,
+                        scale: {
+                            x: tile.scale.x,
+                            y: tile.scale.y
+                        },
+                        tint: tile.tint
+                    });
                 }
                 tileLayers.push(layer);
             }
@@ -103,7 +146,7 @@ ct.rooms.templates['${r.name}'] = {
     height: ${r.height},` +
     /* JSON.parse is faster at loading big objects */`
     objects: JSON.parse('${JSON.stringify(objs).replace(/\\/g, '\\\\')}'),
-    bgs: JSON.parse('${JSON.stringify(bgsCopy).replace(/\\/g, '\\\\')}'),
+    bgs: JSON.parse('${JSON.stringify(bgs).replace(/\\/g, '\\\\')}'),
     tiles: JSON.parse('${JSON.stringify(tileLayers).replace(/\\/g, '\\\\')}'),
     backgroundColor: '${r.backgroundColor || '#000000'}',
     ${constraints ? 'cameraConstraints: ' + JSON.stringify(constraints) + ',' : ''}
@@ -119,6 +162,7 @@ ct.rooms.templates['${r.name}'] = {
     onCreate() {
         ${scriptableCode.thisOnCreate}
     },
+    isUi: ${r.isUi},
     extends: ${r.extends ? JSON.stringify(getUnwrappedExtends(r.extends), null, 4) : '{}'}
 }
         `;

@@ -50,6 +50,8 @@
         "zoom": "Zoom",
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
+        "undo": "Undo",
+        "redo": "Redo",
         "fieldTypes": {
             "checkbox": "Checkbox",
             "code": "Codebox",
@@ -160,13 +162,6 @@
         "old": "Old",
         "projectPalette": "Project's Palette"
     },
-    "copyCustomProperties": {
-        "customProperties": "Custom Properties",
-        "addProperty": "Add Property",
-        "property": "Property",
-        "value": "Value",
-        "delete": "Delete"
-    },
     "curveEditor": {
         "curveLineHint": "Click the curve to add a point",
         "dragPointHint": "Drag to move the point, right-click to delete it",
@@ -262,6 +257,7 @@
         "itch": "Ct.js' store page on itch.io",
         "vkontakte": "Vkontakte public community",
         "patreon": "Support ct.js on Patreon!",
+        "boosty": "Support ct.js on Boosty!",
         "createOrBrowseJunction": "or"
     },
     "onboarding": {
@@ -725,11 +721,11 @@
     "roomBackgrounds": {
         "add": "Add a Background",
         "depth": "Depth:",
-        "movement": "Movement speed (X, Y):",
-        "parallax": "Parallax (X, Y):",
+        "movement": "Movement speed:",
+        "parallax": "Parallax:",
         "repeat": "Repeat:",
-        "scale": "Scaling (X, Y):",
-        "shift": "Shift (X, Y):",
+        "scale": "Scaling:",
+        "shift": "Shift:",
         "notBackgroundTextureWarning": "This texture is not marked as a background. It will have gaps when exported.",
         "fixBackground": "Fix it.",
         "dismissWarning": "Dismiss."
@@ -738,14 +734,22 @@
         "moveTileLayer": "Move to a new depth",
         "show": "Show the layer",
         "hide": "Hide the layer",
-        "findTileset": "Find a Tileset"
+        "findTileset": "Find a Tileset",
+        "addTileLayer": "Add a tile layer"
     },
     "roomView": {
         "name": "Name:",
         "width": "View width:",
         "height": "View height:",
         "isUi": "Is a UI layer?",
-        "events": "Room events",
+        "simulate": "Simulate",
+        "grid": "Grid",
+        "toggleDiagonalGrid": "Diagonal grid",
+        "changeGridSize": "Change cell size",
+        "events": "Events",
+        "gridOff": "Disable grid",
+        "xrayMode": "X-ray mode",
+        "colorizeTileLayers": "Colorize tile layers",
         "copies": "Copies",
         "backgrounds": "Backgrounds",
         "backgroundColor": "Background color:",
@@ -754,7 +758,6 @@
         "add": "Add",
         "none": "Nothing",
         "done": "Done",
-        "grid": "Set grid",
         "hotkeysNotice": "Ctrl = Delete, Alt = No grid, Shift = Multiple",
         "hotkeysNoticeMovement": "Ctrl = Delete, Shift = Select",
         "shift": "Shift everything",
@@ -769,17 +772,26 @@
         "selectAndMove": "Select and Move",
         "customProperties": "Custom Properties",
         "findTileset": "Find a tileset",
+        "resetView": "Reset view",
         "copyProperties": {
             "position": "Position",
             "rotation": "Rotation",
-            "scale": "Scale"
+            "scale": "Scale",
+            "opacity": "Opacity",
+            "tint": "Tint",
+            "multipleValues": "(Multiple)"
+        },
+        "copyCustomProperties": {
+            "addProperty": "Add Property",
+            "property": "Property",
+            "value": "Value",
+            "nameOccupied": "This property is used by ct.js! You should come up with a different name."
         },
         "restrictCamera": "Keep camera in a rectangle",
         "minimumX": "Min X",
         "minimumY": "Min Y",
         "maximumX": "Max X",
         "maximumY": "Max Y",
-        "gridOff": "Disable grid",
         "gridSize": "Grid size:",
         "toCenter": "To center",
         "shiftLabel": "Shift by:",
@@ -791,7 +803,14 @@
         "deleteTiles": "Delete tiles",
         "moveTilesToLayer": "Move to layer",
         "shiftTiles": "Shift tiles",
-        "changeCopyRotation": "Rotate"
+        "changeCopyRotation": "Rotate",
+        "tools": {
+            "select": "Select tool",
+            "addCopies": "Add copies",
+            "addTiles": "Add tiles",
+            "manageBackgrounds": "Manage backgrounds",
+            "roomProperties": "Room properties"
+        }
     },
     "styleView": {
         "active": "Active",
@@ -899,7 +918,20 @@
         "typefaceName": "Typeface name:"
     },
     "licensePanel": {
-        "ctjsLicense": "Ct.js License (MIT)"
+        "ctjsLicense": "Ct.js License (MIT)",
+        "faq": "Frequently asked questions (non-normative section)",
+        "whoOwnsGamesQ": "Who owns games created in ct.js?",
+        "whoOwnsGamesA": "You and only you. Ct.js does not own anything you create in any way.",
+        "sellingGamesQ": "Can I sell games made in ct.js?",
+        "sellingGamesA": "Yes, you can sell your games and other projects, gather donations, and use your games in any other commercial applications.",
+        "possibleFeesQ": "Do I need to pay for ct.js? Will ct.js become paid someday?",
+        "possibleFeesA": "No, ct.js is free and will always be so. It doesn't have any hidden fees like Unity or Unreal Engine that require you paying after you earn a specific amount of money. Ct.js is open-source, and even if there will be any paid versions, the product you have now will always be accessible free of charge. You can send a donation or become a patron, though! It will help us pay bills and make ct.js better!",
+        "useInStudioQ": "Can I use ct.js in a studio or schools?",
+        "useInStudioA": "Sure, why not? Ct.js is open for personal, commercial, educational use, and whatnot. Just don't break the law, ok?",
+        "attributionQ": "Do I need to attribute ct.js or its developers? Can I disable its logo on the loading screen?",
+        "attributionA": "You can disable the ct.js logo, as the code of your game already has the necessary attributions.",
+        "attributionAAssets": "Some of the examples and demos may contain material that needs attribution, but that is already included in them.",
+        "theLicense": "The license (legal document)"
     },
     "scriptables": {
         "addEvent": "Add an event",
@@ -943,10 +975,18 @@
         "coreParameterizedNames": {
             "OnActionPress": "On %%action%% press",
             "OnActionRelease": "On %%action%% release",
-            "OnActionDown": "On %%action%% down"
+            "OnActionDown": "On %%action%% down",
+            "Timer1": "1 • %%name%% (Timer)",
+            "Timer2": "2 • %%name%% (Timer)",
+            "Timer3": "3 • %%name%% (Timer)",
+            "Timer4": "4 • %%name%% (Timer)",
+            "Timer5": "5 • %%name%% (Timer)",
+            "Timer6": "6 • %%name%% (Timer)"
         },
         "coreEventsArguments": {
-            "action": "Action"
+            "action": "Action",
+            "name": "Name",
+            "isUi": "UI event"
         },
         "coreEventsLocals": {
             "OnActionDown_value": "Current action's value",
@@ -984,6 +1024,7 @@
         "depth": "Depth:",
         "opacity": "Opacity:",
         "blendMode": "Blend mode:",
+        "animationFPS": "Animation FPS:",
         "playAnimationOnStart": "Play animation on start",
         "loopAnimation": "Loop animation",
         "blendModes": {

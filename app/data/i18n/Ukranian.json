@@ -125,7 +125,9 @@
                 "скелетного спрайту",
                 "скелетних спрайтів"
             ]
-        }
+        },
+        "next": "",
+        "previous": ""
     },
     "colorPicker": {
         "old": "Старий",
@@ -643,14 +645,36 @@
         "ui": "Інтерфейс",
         "fx": "Ефекти",
         "restart": "Перезапустити",
-        "templates": "Шаблони"
-    },
-    "copyCustomProperties": {
-        "customProperties": "Користувацькі поля",
-        "addProperty": "Додати поле",
-        "property": "Ім'я поля",
-        "value": "Значення",
-        "delete": "Видалити"
+        "templates": "Шаблони",
+        "tour": {
+            "header": "",
+            "aboutTour": "",
+            "helpPanel": "",
+            "helpPanelTabs": "",
+            "projectResources": "",
+            "tabTextures": "",
+            "tabTexturesImport": "",
+            "tabTexturesGallery": "",
+            "tabTexturesClipboard": "",
+            "tabTexturesPlaceholders": "",
+            "tabTemplates": "",
+            "tabRooms": "",
+            "tabSounds": "",
+            "tabSoundsImport": "",
+            "tabSoundsGallery": "",
+            "tabSoundsRecord": "",
+            "tabInterlude": "",
+            "tabUI": "",
+            "tabFX": "",
+            "tabProject": "",
+            "tabProjectModules": "",
+            "tabProjectModuleDocs": "",
+            "tabMainMenu": "",
+            "tabMainMenuSettings": "",
+            "tabMainMenuMeta": "",
+            "helpPanelReminder": "",
+            "buttonStartTutorial": ""
+        }
     },
     "assetViewer": {
         "addNewGroup": "Нова група",
@@ -721,7 +745,13 @@
         "copyProperties": {
             "position": "Позиція",
             "rotation": "Поворот",
-            "scale": "Розмір"
+            "scale": "Розмір",
+            "multipleValues": ""
+        },
+        "copyCustomProperties": {
+            "addProperty": "Додати поле",
+            "property": "Ім'я поля",
+            "value": "Значення"
         },
         "customProperties": "Користувацькі поля",
         "restrictCamera": "Обмежити камеру в прямокутнику",
@@ -741,7 +771,19 @@
         "deleteTiles": "Видалити плитки",
         "moveTilesToLayer": "Перемістити до іншого шару",
         "shiftTiles": "Змістити плитки",
-        "changeCopyRotation": "Повернути"
+        "changeCopyRotation": "Повернути",
+        "simulate": "",
+        "toggleDiagonalGrid": "",
+        "changeGridSize": "",
+        "xrayMode": "",
+        "colorizeTileLayers": "",
+        "tools": {
+            "select": "",
+            "addCopies": "",
+            "addTiles": "",
+            "manageBackgrounds": "",
+            "roomProperties": ""
+        }
     },
     "styleView": {
         "active": "Активно?",
@@ -875,7 +917,8 @@
             "multiply": "Помножити (затемнення)",
             "screen": "Екран (освітлення)"
         },
-        "loopAnimation": "Циклічна анімація"
+        "loopAnimation": "Циклічна анімація",
+        "animationFPS": ""
     },
     "assetInput": {
         "changeAsset": "Натисніть, щоб замінити ассет",
@@ -883,7 +926,7 @@
         "selectAssetHeader": "Вибрати асет"
     },
     "builtinAssetGallery": {
-        "galleryTip": "Це вбудована галерея різних безкоштовних текстур і звуків. Вони всі під ліцензією CCO, WTFPL, або на спец. правах для движка ct.js, і ти можеш використовувати їх як завгодно, в комерційних проектах і не тільки." ,
+        "galleryTip": "Це вбудована галерея різних безкоштовних текстур і звуків. Вони всі під ліцензією CCO, WTFPL, або на спец. правах для движка ct.js, і ти можеш використовувати їх як завгодно, в комерційних проектах і не тільки.",
         "assetGalleryHeader": "Асети",
         "importIntoProject": "Вставити в проект",
         "importAll": "Імпортувати все",
@@ -909,7 +952,8 @@
             "actions": "Дії",
             "pointer": "Події покажчика",
             "misc": "Різне",
-            "animation": "Анімація"
+            "animation": "Анімація",
+            "timers": ""
         },
         "coreEvents": {
             "OnCreate": "Створення",
@@ -931,7 +975,8 @@
             "OnActionDown": "Дія натиснута",
             "OnFrameChange": "Зміна кадру",
             "OnAnimationLoop": "Перепуск анімації",
-            "OnAnimationComplete": "Кінець анімації"
+            "OnAnimationComplete": "Кінець анімації",
+            "Timer": ""
         },
         "coreParameterizedNames": {
             "OnActionPress": "При натисканні %%action%%",
@@ -942,7 +987,8 @@
             "action": "Дія"
         },
         "coreEventsLocals": {
-            "OnActionDown_value": "Поточне значення дії"
+            "OnActionDown_value": "Поточне значення дії",
+            "OnActionPress_value": ""
         },
         "coreEventsDescriptions": {
             "OnCreate": "Спрацьовує під час створення копії.",
@@ -955,7 +1001,8 @@
             "OnActionRelease": "Спрацьовує, коли дія перестає бути активною - коли відпускають клавіші, джойстики і т.п.",
             "OnActionDown": "Спрацьовує кожен кадр, доки методи введення цієї дії активні.",
             "OnAnimationLoop": "Спрацьовує щоразу, коли циклічна анімація добігає кінця.",
-            "OnAnimationComplete": "Спрацьовує один раз, коли нециклічна анімація закінчується."
+            "OnAnimationComplete": "Спрацьовує один раз, коли нециклічна анімація закінчується.",
+            "Timer": ""
         }
     }
 }

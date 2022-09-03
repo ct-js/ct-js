@@ -2,6 +2,7 @@ window.migrationProcess = window.migrationProcess || [];
 
 window.migrationProcess.push({
     version: '2.1.0',
+    // eslint-disable-next-line max-lines-per-function
     process: project => new Promise(resolve => {
         const templateEventMap = {
             oncreate: 'OnCreate',
