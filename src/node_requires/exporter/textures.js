@@ -181,54 +181,60 @@ const getPackerFor = (textures, spritedTextures) => {
     const animationsByTextures = spritedTextures
         .map(getTextureFrameCrops);
     const animations = [].concat(...animationsByTextures);
-    const initAllTags = () => {
-        const result = {};
-        textures.forEach(tex => { result[tex.name] = -1; });
-        return result;
-    };
-
-    if (animations.length) {
-        packer.addArray(animations);
-
-        let failedPacks = [];
-
-        let allTags = initAllTags();
+    const getFailedPacks = () => {
+        const failedPacks = [];
+        const allTags = {};
+        textures.forEach(tex => { allTags[tex.name] = -1; });
         packer.bins.forEach((bin, binInd) => bin.rects.forEach(rect => {
             if (allTags[rect.tag] < 0) allTags[rect.tag] = binInd;
             else if (allTags[rect.tag] !== binInd
                 && failedPacks.indexOf(rect.tag) < 0) failedPacks.push(rect.tag);
         }));
+        return failedPacks;
+    };
+
+    if (animations.length) {
+        packer.addArray(animations);
+
+        let failedPacks = getFailedPacks();
+
+        const addToFailedPacks = (newPacks) => {
+            failedPacks = failedPacks.concat(newPacks.filter(tag =>
+                failedPacks.indexOf(tag) === -1
+            ));
+        };
 
         if (failedPacks.length) {
-            // eslint-disable-next-line no-console
-            console.warn("Packing failed...repacking...");
-    
-            packer.reset();
-    
-            packer.addArray(animations.filter(tex => failedPacks.indexOf(tex.tag) > -1));
-            packer.next();
-            packer.addArray(animations.filter(tex => failedPacks.indexOf(tex.tag) < 0));
-    
-            failedPacks = [];
-            allTags = initAllTags();
-            packer.bins.forEach((bin, binInd) => bin.rects.forEach(rect => {
-                if (allTags[rect.tag] < 0) allTags[rect.tag] = binInd;
-                else if (allTags[rect.tag] !== binInd
-                    && failedPacks.indexOf(rect.tag) < 0) failedPacks.push(rect.tag);
-            }));
-            
-            if (failedPacks.length) {
+            let firstRepack = true;
+            let newFailedPacks = [];
+
+            do {
+                const lastFailedPack = failedPacks;
+
                 // eslint-disable-next-line no-console
-                console.warn("Repacking failed...repacking...");
-            
+                console.warn("Packing failed...repacking...");
+
                 packer.reset();
-    
-                failedPacks.forEach(tag => {
-                    packer.addArray(animations.filter(tex => tex.tag === tag));
+                if (firstRepack) {
+                    packer.addArray(animations.filter(tex => lastFailedPack.indexOf(tex.tag) > -1));
                     packer.next();
-                });
-                packer.addArray(animations.filter(tex => failedPacks.indexOf(tex.tag) < 0));
-            }
+                }
+                else {
+                    textures.forEach(tex => {
+                        const tag = tex.name;
+                        if (lastFailedPack.indexOf(tag) > -1) {
+                            packer.addArray(animations.filter(tex => tex.tag === tag));
+                            packer.next();
+                        }
+                    });
+                }
+                packer.addArray(animations.filter(tex => lastFailedPack.indexOf(tex.tag) < 0));
+
+                newFailedPacks = getFailedPacks();
+                firstRepack = false;
+                addToFailedPacks(newFailedPacks);
+            
+            } while (newFailedPacks.length);
         }
     }
 
