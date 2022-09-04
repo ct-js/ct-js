@@ -88,9 +88,11 @@ texture-editor.aPanel.aView
                     label.checkbox(if="{opts.texture.width > 10 && opts.texture.height > 10}")
                         input(checked="{prevShowFrameIndices}" onchange="{wire('this.prevShowFrameIndices')}" type="checkbox")
                         span   {voc.showFrameIndices}
+                fieldset
                     label.checkbox
                         input(checked="{texture.isBlank}" onchange="{wire('this.texture.isBlank')}" type="checkbox")
                         span   {voc.blankTexture}
+                        hover-hint(text="{voc.blankTextureNotice}")
             .flexfix-footer
                 button.wide(onclick="{textureSave}" title="Shift+Control+S" data-hotkey="Control+S")
                     svg.feather
