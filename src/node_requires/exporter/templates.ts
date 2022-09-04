@@ -32,7 +32,7 @@ const stringifyTemplates = function (proj: IProject): IScriptablesFragment {
     let rootRoomOnDraw = '';
     let rootRoomOnLeave = '';
     const blankTextures = proj.textures
-        .filter(tex => (tex as any).isBlank)
+        .filter(tex => tex.isBlank)
         .map(tex => ({
             uid: tex.uid,
             anchorX: tex.axis[0] / tex.width,
