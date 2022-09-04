@@ -902,9 +902,10 @@ texture-editor.aPanel.aView
             const tc = textureCanvas;
             tc.width = tc.img.width;
             tc.height = tc.img.height;
+            const minSide = Math.min(this.texture.width, this.texture.height);
             tc.x.strokeStyle = '#0ff';
             tc.x.lineWidth = 1;
-            tc.x.font = '24px sans-serif';
+            tc.x.font = `${Math.min(24, minSide)}px sans-serif`;
             tc.x.textAlign = 'left';
             tc.x.textBaseline = 'top';
             tc.x.globalCompositeOperation = 'source-over';
@@ -927,8 +928,8 @@ texture-editor.aPanel.aView
                     tc.x.lineWidth = 1;
                     tc.x.strokeRect(x, y, w, h);
                     if (this.prevShowFrameIndices &&
-                        this.opts.texture.width > 10 &&
-                        this.opts.texture.height > 10
+                        this.opts.texture.width > 8 &&
+                        this.opts.texture.height > 8
                     ) {
                         tc.x.lineWidth = 2;
                         tc.x.globalAlpha = 1;
