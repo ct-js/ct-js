@@ -18,12 +18,11 @@ const getTextureInfo = (blankTextures: IBlankTexture[], template: ITemplate) => 
         anchorY: ${blankTexture.anchorY},
         height: ${blankTexture.height},
         width: ${blankTexture.width},`;
-    }
-    else if (template.texture !== -1) {
+    } else if (template.texture !== -1) {
         return `texture: "${getTextureFromId(template.texture).name}",`;
     }
     return '';
-}
+};
 
 const stringifyTemplates = function (proj: IProject): IScriptablesFragment {
     /* Stringify templates */
@@ -39,7 +38,7 @@ const stringifyTemplates = function (proj: IProject): IScriptablesFragment {
             anchorX: tex.axis[0] / tex.width,
             anchorY: tex.axis[1] / tex.height,
             height: tex.height,
-            width: tex.width,
+            width: tex.width
         }));
 
     for (const k in proj.templates) {
