@@ -184,11 +184,16 @@ const getPackerFor = (textures, spritedTextures) => {
     const getFailedPacks = () => {
         const failedPacks = [];
         const allTags = {};
-        textures.forEach(tex => { allTags[tex.name] = -1; });
+        textures.forEach(tex => {
+            allTags[tex.name] = -1;
+        });
         packer.bins.forEach((bin, binInd) => bin.rects.forEach(rect => {
-            if (allTags[rect.tag] < 0) allTags[rect.tag] = binInd;
-            else if (allTags[rect.tag] !== binInd
-                && failedPacks.indexOf(rect.tag) < 0) failedPacks.push(rect.tag);
+            if (allTags[rect.tag] < 0) {
+                allTags[rect.tag] = binInd;
+            } else if (allTags[rect.tag] !== binInd &&
+                failedPacks.indexOf(rect.tag) < 0) {
+                failedPacks.push(rect.tag);
+            }
         }));
         return failedPacks;
     };
@@ -200,8 +205,7 @@ const getPackerFor = (textures, spritedTextures) => {
 
         const addToFailedPacks = (newPacks) => {
             failedPacks = failedPacks.concat(newPacks.filter(tag =>
-                failedPacks.indexOf(tag) === -1
-            ));
+                failedPacks.indexOf(tag) === -1));
         };
 
         if (failedPacks.length) {
@@ -212,14 +216,13 @@ const getPackerFor = (textures, spritedTextures) => {
                 const lastFailedPack = failedPacks;
 
                 // eslint-disable-next-line no-console
-                console.warn("Packing failed...repacking...");
+                console.warn('Packing failed...repacking...');
 
                 packer.reset();
                 if (firstRepack) {
                     packer.addArray(animations.filter(tex => lastFailedPack.indexOf(tex.tag) > -1));
                     packer.next();
-                }
-                else {
+                } else {
                     textures.forEach(tex => {
                         const tag = tex.name;
                         if (lastFailedPack.indexOf(tag) > -1) {
@@ -233,7 +236,6 @@ const getPackerFor = (textures, spritedTextures) => {
                 newFailedPacks = getFailedPacks();
                 firstRepack = false;
                 addToFailedPacks(newFailedPacks);
-            
             } while (newFailedPacks.length);
         }
     }
@@ -243,19 +245,23 @@ const getPackerFor = (textures, spritedTextures) => {
 
 const isBigTexture = (texture) => {
     const area = texture.grid[0] * texture.width * texture.grid[1] * texture.height;
-    if (area > atlasWidth * atlasHeight * 0.9) return true;
-    if (texture.width > atlasWidth) return true;
-    if (texture.height > atlasHeight) return true;
+    if (area > atlasWidth * atlasHeight * 0.9) {
+        return true;
+    }
+    if (texture.width > atlasWidth) {
+        return true;
+    }
+    if (texture.height > atlasHeight) {
+        return true;
+    }
     return false;
 };
 
 const packImages = async (proj, writeDir) => {
-    const textures = proj.textures.filter(tex => !tex.isBlank);
+    const {textures} = proj;
     const bigTextures = textures.filter(isBigTexture);
-    const spritedTextures = textures.filter(
-        tex => !tex.tiled && bigTextures.indexOf(tex) < 0);
-    const tiledTextures = textures.filter(
-        tex => tex.tiled && bigTextures.indexOf(tex) < 0);
+    const spritedTextures = textures.filter(tex => !tex.tiled && bigTextures.indexOf(tex) < 0);
+    const tiledTextures = textures.filter(tex => tex.tiled && bigTextures.indexOf(tex) < 0);
 
     // Write functions will be run in parallel,
     // and this array will block the finalization of the function
@@ -266,25 +272,27 @@ const packImages = async (proj, writeDir) => {
     const atlases = [];
     packer.bins.map(drawAtlasFromBin).forEach((atlas, ind) => {
         writePromises.push(fs.outputJSON(`${writeDir}/img/a${ind}.json`, atlas.json));
-        var atlasBase64 = atlas.canvas.toDataURL().replace(/^data:image\/\w+;base64,/, '');
-        var buf = Buffer.from(atlasBase64, 'base64');
+        const atlasBase64 = atlas.canvas.toDataURL().replace(/^data:image\/\w+;base64,/, '');
+        const buf = Buffer.from(atlasBase64, 'base64');
         writePromises.push(fs.writeFile(`${writeDir}/img/a${ind}.png`, buf));
         atlases.push(`./img/a${ind}.json`);
     });
     bigTextures.forEach((texture, btInd) => {
         const tw = texture.grid[0] * (texture.width + texture.padding * 2);
         const th = texture.grid[1] * (texture.height + texture.padding * 2);
-        const bigPacker = new Packer(tw, th, 0, { smart: false });
+        const bigPacker = new Packer(tw, th, 0, {
+            smart: false
+        });
         bigPacker.addArray(getTextureFrameCrops(texture));
         if (bigPacker.bins.length > 1) {
             // eslint-disable-next-line no-console
-            console.warn("Big packer has failed!");
+            console.warn('Big packer has failed!');
         }
         const ind = packer.bins.length + btInd;
         const atlas = drawAtlasFromBin(bigPacker.bins[0], ind);
         writePromises.push(fs.outputJSON(`${writeDir}/img/a${ind}.json`, atlas.json));
-        var atlasBase64 = atlas.canvas.toDataURL().replace(/^data:image\/\w+;base64,/, '');
-        var buf = Buffer.from(atlasBase64, 'base64');
+        const atlasBase64 = atlas.canvas.toDataURL().replace(/^data:image\/\w+;base64,/, '');
+        const buf = Buffer.from(atlasBase64, 'base64');
         writePromises.push(fs.writeFile(`${writeDir}/img/a${ind}.png`, buf));
         atlases.push(`./img/a${ind}.json`);
     });
@@ -306,7 +314,7 @@ const packImages = async (proj, writeDir) => {
         atlas.width = tex.width;
         atlas.height = tex.height;
         atlas.x.drawImage(img, 0, 0);
-        var buf = new Buffer(atlas.toDataURL().replace(/^data:image\/\w+;base64,/, ''), 'base64');
+        const buf = Buffer.from(atlas.toDataURL().replace(/^data:image\/\w+;base64,/, ''), 'base64');
         writePromises.push(fs.writeFile(`${writeDir}/img/t${tiledCounter}.png`, buf));
         tiledCounter++;
     }
