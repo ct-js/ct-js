@@ -88,6 +88,9 @@ texture-editor.aPanel.aView
                     label.checkbox(if="{opts.texture.width > 10 && opts.texture.height > 10}")
                         input(checked="{prevShowFrameIndices}" onchange="{wire('this.prevShowFrameIndices')}" type="checkbox")
                         span   {voc.showFrameIndices}
+                    label.checkbox
+                        input(checked="{texture.isBlank}" onchange="{wire('this.texture.isBlank')}" type="checkbox")
+                        span   {voc.blankTexture}
             .flexfix-footer
                 button.wide(onclick="{textureSave}" title="Shift+Control+S" data-hotkey="Control+S")
                     svg.feather
@@ -899,7 +902,7 @@ texture-editor.aPanel.aView
             tc.height = tc.img.height;
             tc.x.strokeStyle = '#0ff';
             tc.x.lineWidth = 1;
-            tc.x.font = '10px sans-serif';
+            tc.x.font = '24px sans-serif';
             tc.x.textAlign = 'left';
             tc.x.textBaseline = 'top';
             tc.x.globalCompositeOperation = 'source-over';

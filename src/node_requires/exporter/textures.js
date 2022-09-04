@@ -250,7 +250,7 @@ const isBigTexture = (texture) => {
 };
 
 const packImages = async (proj, writeDir) => {
-    const textures = proj.textures;
+    const textures = proj.textures.filter(tex => !tex.isBlank);
     const bigTextures = textures.filter(isBigTexture);
     const spritedTextures = textures.filter(
         tex => !tex.tiled && bigTextures.indexOf(tex) < 0);
