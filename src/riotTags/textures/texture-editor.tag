@@ -314,6 +314,8 @@ texture-editor.aPanel.aView
         const path = require('path'),
               fs = require('fs-extra');
         const glob = require('./data/node_requires/glob');
+        const {getSwatch} = require('./data/node_requires/themes');
+
         this.namespace = 'textureView';
         this.mixin(window.riotVoc);
         this.mixin(window.riotWired);
@@ -608,47 +610,7 @@ texture-editor.aPanel.aView
             );
             // shape
             if (this.prevShowMask) {
-                grprCanvas.x.globalAlpha = 0.5;
-                grprCanvas.x.fillStyle = '#ff0';
-                if (this.texture.shape === 'rect') {
-                    grprCanvas.x.fillRect(
-                        this.texture.axis[0] - this.texture.left,
-                        this.texture.axis[1] - this.texture.top,
-                        this.texture.right + this.texture.left,
-                        this.texture.bottom + this.texture.top
-                    );
-                } else if (this.texture.shape === 'circle') {
-                    grprCanvas.x.beginPath();
-                    grprCanvas.x.arc(
-                        this.texture.axis[0], this.texture.axis[1],
-                        this.texture.r,
-                        0, 2 * Math.PI
-                    );
-                    grprCanvas.x.fill();
-                } else if (this.texture.shape === 'strip' && this.texture.stripPoints.length) {
-                    grprCanvas.x.strokeStyle = '#ff0';
-                    grprCanvas.x.lineWidth = 3;
-                    grprCanvas.x.beginPath();
-                    grprCanvas.x.moveTo(
-                        this.texture.stripPoints[0].x + this.texture.axis[0],
-                        this.texture.stripPoints[0].y + this.texture.axis[1]
-                    );
-                    for (let i = 1, l = this.texture.stripPoints.length; i < l; i++) {
-                        grprCanvas.x.lineTo(
-                            this.texture.stripPoints[i].x + this.texture.axis[0],
-                            this.texture.stripPoints[i].y + this.texture.axis[1]
-                        );
-                    }
-                    if (this.texture.closedStrip) {
-                        grprCanvas.x.closePath();
-                    }
-                    grprCanvas.x.stroke();
-                }
-                grprCanvas.x.globalAlpha = 1;
-                grprCanvas.x.fillStyle = '#f33';
-                grprCanvas.x.beginPath();
-                grprCanvas.x.arc(this.texture.axis[0], this.texture.axis[1], 3, 0, 2 * Math.PI);
-                grprCanvas.x.fill();
+                this.drawMask(grprCanvas, grprCanvas.x);
             }
         };
         /**
@@ -835,44 +797,43 @@ texture-editor.aPanel.aView
             }
         };
 
-        this.drawMask = () => {
-            const tc = textureCanvas;
-            tc.x.fillStyle = '#ff0';
-            tc.x.globalAlpha = 0.5;
+        this.drawMask = (tc, context) => {
+            context.fillStyle = getSwatch('accent1');
+            context.globalAlpha = 0.5;
             if (this.texture.shape === 'rect') {
-                tc.x.fillRect(
+                context.fillRect(
                     this.texture.axis[0] - this.texture.left,
                     this.texture.axis[1] - this.texture.top,
                     this.texture.right + this.texture.left,
                     this.texture.bottom + this.texture.top
                 );
             } else if (this.texture.shape === 'circle') {
-                tc.x.beginPath();
-                tc.x.arc(
+                context.beginPath();
+                context.arc(
                     this.texture.axis[0],
                     this.texture.axis[1],
                     this.texture.r,
                     0, 2 * Math.PI
                 );
-                tc.x.fill();
+                context.fill();
             } else if (this.texture.shape === 'strip' && this.texture.stripPoints.length) {
-                tc.x.strokeStyle = '#ff0';
-                tc.x.lineWidth = 3;
-                tc.x.beginPath();
-                tc.x.moveTo(
+                context.strokeStyle = getSwatch('accent1');
+                context.lineWidth = 3;
+                context.beginPath();
+                context.moveTo(
                     this.texture.stripPoints[0].x + this.texture.axis[0],
                     this.texture.stripPoints[0].y + this.texture.axis[1]
                 );
                 for (let i = 1, l = this.texture.stripPoints.length; i < l; i++) {
-                    tc.x.lineTo(
+                    context.lineTo(
                         this.texture.stripPoints[i].x + this.texture.axis[0],
                         this.texture.stripPoints[i].y + this.texture.axis[1]
                     );
                 }
                 if (this.texture.closedStrip) {
-                    tc.x.closePath();
+                    context.closePath();
                 }
-                tc.x.stroke();
+                context.stroke();
 
                 if (this.texture.symmetryStrip) {
                     const movablePoints = this.getMovableStripPoints();
@@ -880,21 +841,22 @@ texture-editor.aPanel.aView
                     const axisPoint2 = movablePoints[movablePoints.length - 1];
 
                     // Draw symmetry axis
-                    tc.x.strokeStyle = '#f00';
-                    tc.x.lineWidth = 3;
-                    tc.x.beginPath();
-                    tc.x.moveTo(
+                    context.strokeStyle = getSwatch('act');
+                    context.lineWidth = 3;
+                    context.beginPath();
+                    context.moveTo(
                         axisPoint1.x + this.texture.axis[0],
                         axisPoint1.y + this.texture.axis[1]
                     );
-                    tc.x.lineTo(
+                    context.lineTo(
                         axisPoint2.x + this.texture.axis[0],
                         axisPoint2.y + this.texture.axis[1]
                     );
-                    tc.x.stroke();
+                    context.stroke();
                 }
             }
         };
+
         /**
          * Redraws the canvas with the full image, its collision mask, and its slicing grid
          */
@@ -903,7 +865,7 @@ texture-editor.aPanel.aView
             tc.width = tc.img.width;
             tc.height = tc.img.height;
             const minSide = Math.min(this.texture.width, this.texture.height);
-            tc.x.strokeStyle = '#0ff';
+            tc.x.strokeStyle = getSwatch('act');
             tc.x.lineWidth = 1;
             tc.x.font = `${Math.min(24, minSide)}px sans-serif`;
             tc.x.textAlign = 'left';
@@ -924,7 +886,7 @@ texture-editor.aPanel.aView
                           w = this.texture.width,
                           h = this.texture.height;
                     tc.x.globalAlpha = 0.5;
-                    tc.x.strokeStyle = '#0ff';
+                    tc.x.strokeStyle = getSwatch('act');
                     tc.x.lineWidth = 1;
                     tc.x.strokeRect(x, y, w, h);
                     if (this.prevShowFrameIndices &&
@@ -933,7 +895,7 @@ texture-editor.aPanel.aView
                     ) {
                         tc.x.lineWidth = 2;
                         tc.x.globalAlpha = 1;
-                        tc.x.strokeStyle = '#000';
+                        tc.x.strokeStyle = getSwatch('act');
                         tc.x.fillStyle = '#fff';
                         tc.x.strokeText(i, x + 2, y + 2);
                         tc.x.fillText(i, x + 2, y + 2);
@@ -941,7 +903,7 @@ texture-editor.aPanel.aView
                 }
             }
             if (this.prevShowMask) {
-                this.drawMask();
+                this.drawMask(tc, tc.x);
             }
         };
 
