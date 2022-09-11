@@ -48,6 +48,7 @@
         "zoom": "拡大",
         "zoomIn": "ズームイン",
         "zoomOut": "ズームアウト",
+        "typescript": "",
         "fieldTypes": {
             "checkbox": "チェックボックス",
             "code": "コード",

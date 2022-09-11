@@ -46,6 +46,7 @@
         "nothingToShowFiller": "common.nothingToShowFiller",
         "required": "common.required",
         "settings": "common.settings",
+        "typescript": "common.typescript",
         "fieldTypes": {
             "checkbox": "common.fieldTypes.checkbox",
             "code": "common.fieldTypes.code",

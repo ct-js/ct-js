@@ -46,6 +46,7 @@
         "nothingToShowFiller": "这里没有什么可以展示的",
         "required": "必需",
         "settings": "设置",
+        "typescript": "",
         "fieldTypes": {
             "checkbox": "复选",
             "code": "程序代码",

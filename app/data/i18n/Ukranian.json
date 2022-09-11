@@ -46,6 +46,7 @@
         "nothingToShowFiller": "Нема чого показувати!",
         "required": "Потрібно",
         "settings": "Налаштування",
+        "typescript": "",
         "fieldTypes": {
             "checkbox": "Чекбокс",
             "code": "Поле з кодом",

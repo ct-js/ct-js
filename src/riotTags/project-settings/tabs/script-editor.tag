@@ -1,6 +1,12 @@
 script-editor.aView
     .flexfix.tall
         div.flexfix-header
+            label.toright.checkbox
+                input(
+                    type="checkbox" checked="{script.typescript}"
+                    onchange="{toggleTypescript}"
+                )
+                b {voc.typescript}
             b {voc.name}
             input(type="text" value="{script.name}" onchange="{updateScriptName}")
         .flexfix-body
@@ -42,6 +48,10 @@ script-editor.aView
             // Manually destroy the editor to free up the memory
             this.editor.dispose();
         });
+
+        this.toggleTypescript = () => {
+            this.script.typescript = !this.script.typescript;
+        };
 
         this.saveScript = () => {
             const glob = require('./data/node_requires/glob');

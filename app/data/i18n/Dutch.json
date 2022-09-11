@@ -46,6 +46,7 @@
         "nothingToShowFiller": "Hier is niets te zien!",
         "required": "Vereist",
         "settings": "Instellingen",
+        "typescript": "",
         "fieldTypes": {
             "checkbox": "Selectievakje",
             "code": "Codebox",

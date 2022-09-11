@@ -52,6 +52,7 @@
         "zoomOut": "Zoom out",
         "undo": "Undo",
         "redo": "Redo",
+        "typescript": "Allow TypeScript",
         "fieldTypes": {
             "checkbox": "Checkbox",
             "code": "Codebox",

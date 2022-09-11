@@ -373,7 +373,13 @@ const exportCtProject = async (
 
     /* User-defined scripts */
     for (const script of project.scripts) {
-        buffer += script.code + ';\n';
+        if (script.typescript) {
+            const transform = require("sucrase").transform;
+            buffer += transform(script.code, {transforms: ["typescript" ]}).code + ';\n';
+        }
+        else {
+            buffer += script.code + ';\n';
+        }
     }
 
     /* passthrough copy of files in the `include` folder */
