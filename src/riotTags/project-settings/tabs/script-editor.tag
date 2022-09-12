@@ -26,7 +26,7 @@ script-editor.aView
         this.on('mount', () => {
             setTimeout(() => {
                 var editorOptions = {
-                    language: 'javascript'
+                    language: 'typescript'
                 };
                 this.editor = window.setupCodeEditor(this.refs.editor, editorOptions);
                 this.editor.onDidChangeModelContent(() => {
