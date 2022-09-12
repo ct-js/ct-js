@@ -66,10 +66,10 @@
             "text": "テキスト",
             "textfield": "テキストボックス",
             "texture": "テクスチャー",
-            "template": "",
-            "room": "",
-            "sound": "",
-            "tandem": ""
+            "template": "テンプレート",
+            "room": "ルーム",
+            "sound": "音",
+            "tandem": "パーティクル　エミッター"
         },
         "newName": "新しい名前:",
         "saveProject": "プロジェクトを保存",
@@ -207,11 +207,11 @@
     "extensionsEditor": {
         "noEntries": "まだエントリーがありません",
         "addRow": "行を追加",
-        "actions": "",
-        "values": "",
-        "moveDown": "",
-        "moveUp": "",
-        "deleteRow": ""
+        "actions": "アクション",
+        "values": "値",
+        "moveDown": "下",
+        "moveUp": "上",
+        "deleteRow": "行を削除"
     },
     "groupEditor": {
         "groupEditor": "グループエディタ",
@@ -970,30 +970,38 @@
             "Timer": "Timer $1"
         },
         "coreParameterizedNames": {
-            "OnActionPress": "",
-            "OnActionRelease": "",
-            "OnActionDown": ""
+            "OnActionPress": " %%アクション%% が押される",
+            "OnActionRelease": " %%アクション%% が押されなくなる",
+            "OnActionDown": " %%アクション%% がダウンする",
+            "Timer1": "1 • %%name%% (Timer)",
+            "Timer2": "2 • %%name%% (Timer)",
+            "Timer3": "3 • %%name%% (Timer)",
+            "Timer4": "4 • %%name%% (Timer)",
+            "Timer5": "5 • %%name%% (Timer)",
+            "Timer6": "6 • %%name%% (Timer)"
         },
         "coreEventsArguments": {
-            "action": ""
+            "action": "アクション",
+            "name": "名前",
+            "isUi": "UI イベント"
         },
         "coreEventsLocals": {
-            "OnActionDown_value": "",
-            "OnActionPress_value": ""
+            "OnActionDown_value": "現在のアクションの値",
+            "OnActionPress_value": "現在のアクションの値"
         },
         "coreEventsDescriptions": {
-            "OnCreate": "",
-            "OnRoomStart": "",
-            "OnStep": "",
-            "OnDraw": "",
-            "OnDestroy": "",
-            "OnRoomEnd": "",
-            "OnActionPress": "",
-            "OnActionRelease": "",
-            "OnActionDown": "",
-            "OnAnimationLoop": "",
-            "OnAnimationComplete": "",
-            "Timer": ""
+            "OnCreate": "コピーが作成されたときにトリガーされます。",
+            "OnRoomStart": "このルームに切り替えるか、レイヤーとして追加することによって、このルームが作成されたときにトリガーされます。",
+            "OnStep": "すべてのフレームの開始時に発生します。",
+            "OnDraw": "各フレームの最後に発生します。 アニメーションの更新に適しています。",
+            "OnDestroy": "このコピーが破棄されると、\"frame start\" と \"frame end\" の間で発生します。",
+            "OnRoomEnd": "別のルームに切り替えたとき、またはレイヤーとして追加された後にこのルームが削除されたときにトリガーされます。",
+            "OnActionPress": "ジョイスティックを押す、クリックする、フリックするなどして、アクションの入力がアクティブになったときに発生します。",
+            "OnActionRelease": "ボタンを離したり、ジョイスティックを倒さないなどして、アクションの入力が非アクティブになったときに発生します。",
+            "OnActionDown": "アクションの入力がアクティブな場合、すべてのフレームで実行されます。",
+            "OnAnimationLoop": "アニメーションが再開するたびに発生します。",
+            "OnAnimationComplete": "ループしないアニメーションが終了すると発生します。",
+            "Timer": "this.timer$1 = 3; を使用して、このタイマーの期間を秒単位で設定します。"
         }
 },
         "templates": {
@@ -1010,9 +1018,9 @@
             "name": "名前:",
             "step": "ステップ",
             "visible": "可視",
-            "appearance": "",
-            "opacity": "",
-            "blendMode": "",
+            "appearance": "外観",
+            "opacity": "不透明度",
+            "blendMode": "ブレンド モード:",
             "animationFPS": "アニメーション FPS:",
             "playAnimationOnStart": "開始時にアニメーションを再生します",
             "loopAnimation": "ループアニメーション",
