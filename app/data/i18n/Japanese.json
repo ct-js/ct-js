@@ -125,7 +125,7 @@
                 "透過スプライト",
                 "透過スプライト"
             ]
-        },
+        }
     },
     "assetInput": {
         "changeAsset": "アセットを変更する",
@@ -712,8 +712,7 @@
             "helpPanelReminder": "また、ビルトイン ドキュメントも忘れないでください。独自のプロジェクトを開始する前に、公式のチュートリアルを完了することをお勧めします。",
             "buttonStartTutorial": "チュートリアルを開く"
         }
-        }
-    },
+        },
     "roomBackgrounds": {
         "add": "背景を追加",
         "depth": "階層:",
@@ -779,7 +778,7 @@
         "copyCustomProperties": {
             "addProperty": "プロパティを追加",
             "property": "プロパティ",
-            "value": "数字"
+            "value": "数字",
             "nameOccupied": "このプロパティは ct.js で使用されます！別の名前にしてください。"
         },
         "restrictCamera": "カメラを四角に収める",
@@ -915,7 +914,7 @@
         "typefaceName": "書体名:"
     },
     "licensePanel": {
-        "ctjsLicense": "Ct.js ライセンス (MIT)"
+        "ctjsLicense": "Ct.js ライセンス (MIT)",
         "faq": "よくある質問 (非規範的なセクション)",
         "whoOwnsGamesQ": "ct.js で作成されたゲームは誰のものになりますか？",
         "whoOwnsGamesA": "あなたです。 Ct.js は、あなたが作成したものをいかなる方法でも所有しません。",
