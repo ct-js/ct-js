@@ -25,7 +25,7 @@ script-editor.aView
         });
         this.on('mount', () => {
             setTimeout(() => {
-                var editorOptions = {
+                const editorOptions = {
                     language: 'typescript'
                 };
                 this.editor = window.setupCodeEditor(this.refs.editor, editorOptions);
