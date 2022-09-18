@@ -49,7 +49,7 @@ const nwSource = void 0;
 const nwManifest = void 0;
 const nwVersion = versions.nwjs,
       platforms = ['osx64', 'win32', 'win64', 'linux32', 'linux64'],
-      nwFiles = ['./app/package.json', './app/**', '!./app/export/**', '!./app/projects/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
+      nwFiles = ['./app/**', '!./app/export/**', '!./app/projects/**', '!./app/exportDesktop/**', '!./app/cache/**', '!./app/.vscode/**', '!./app/JamGames/**'];
 
 const argv = minimist(process.argv.slice(2));
 const npm = (/^win/).test(process.platform) ? 'npm.cmd' : 'npm';
