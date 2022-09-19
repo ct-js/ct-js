@@ -1,6 +1,6 @@
 {
   "name": "ctjsbuildenvironment",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "",
   "directories": {
     "doc": "docs"
@@ -43,7 +43,8 @@
     "jsdoc-x": "^4.1.0",
     "minimist": "^1.2.6",
     "node-notifier": "^10.0.1",
-    "nw-builder": "https://github.com/markmehere/nw-builder#osx-arm64",
+    "nw-builder-arm": "https://github.com/markmehere/nw-builder-arm#osx-arm64",
+    "nw-builder": "3.8.3-beta.1",
     "pug": "^3.0.2",
     "readysteady": "^1.1.4",
     "riot": "^3.13.2",
