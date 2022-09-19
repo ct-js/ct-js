@@ -539,12 +539,6 @@ const bakePackages = async () => {
     console.log('Built to this location:', path.join('./build', `ctjs - v${pack.version}`));
 };
 
-const oldSymlink = fs.symlink;
-fs.symlink = (target, destination) => {
-    console.log('link', target, '<==', destination);
-    return oldSymlink(target, destination);
-};
-
 const abortOnWindows = done => {
     if ((/^win/).test(process.platform) && platforms.indexOf('osx64') !== -1) {
         throw new Error('Sorry, but building ct.js for mac is not possible on Windows due to Windows\' specifics. You can edit `platforms` at gulpfile.js if you don\'t need a package for mac.');
