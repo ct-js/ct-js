@@ -484,35 +484,37 @@ const bakePackages = async () => {
     });
     await nw.build();
 
-    try {
-        const NwBuilderArm = require('nw-builder-arm');
-        const nwarm = new NwBuilderArm({
-            files: nwFiles,
-            platforms: platforms.filter(x => x !== 'osxarm'),
-            version: nwVersion,
-            flavor: 'sdk',
-            buildType: 'versioned',
-            // forceDownload: true,
-            zip: false,
-            macIcns: nightly ? './buildAssets/nightly.icns' : './buildAssets/icon.icns'
-        });
-        await nwarm.build();
-    }
-    catch (err) {
-        console.error(`
-╭──────────────────────────────────────────╮
-│                                          ├──╮
-│    Mac OS X (arm64) build failed! D:     │  │
-│                                          │  │
-│  The arm64 architecture on Mac OS X      │  │
-│  relies upon unofficial builds. Thus it  │  │
-│  may not always succeed. Other builds    │  │
-│  will proceed.                           │  │
-│                                          │  │
-╰─┬────────────────────────────────────────╯  │
-  ╰───────────────────────────────────────────╯
-`);
-        platforms.pop();
+    if (platforms.indexOf('osxarm') > -1) {
+        try {
+            const NwBuilderArm = require('nw-builder-arm');
+            const nwarm = new NwBuilderArm({
+                files: nwFiles,
+                platforms: [ 'osxarm' ],
+                version: nwVersion,
+                flavor: 'sdk',
+                buildType: 'versioned',
+                // forceDownload: true,
+                zip: false,
+                macIcns: nightly ? './buildAssets/nightly.icns' : './buildAssets/icon.icns'
+            });
+            await nwarm.build();
+        }
+        catch (err) {
+            console.error(`
+    ╭──────────────────────────────────────────╮
+    │                                          ├──╮
+    │    Mac OS X (arm64) build failed! D:     │  │
+    │                                          │  │
+    │  The arm64 architecture on Mac OS X      │  │
+    │  relies upon unofficial builds. Thus it  │  │
+    │  may not always succeed. Other builds    │  │
+    │  will proceed.                           │  │
+    │                                          │  │
+    ╰─┬────────────────────────────────────────╯  │
+    ╰───────────────────────────────────────────╯
+    `);
+            platforms.splice(platforms.indexOf('osxarm'), 1);
+        }
     }
 
     // Copy .itch.toml files for each target platform
