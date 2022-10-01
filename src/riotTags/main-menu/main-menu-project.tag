@@ -20,6 +20,9 @@ main-menu-project
         li(onclick="{openExample}")
             .aSpacer
             span {voc.openExample}
+        li(onclick="{startNewWindow}")
+            .aSpacer
+            span {voc.startNewWindow}
         li(onclick="{toStartScreen}")
             .aSpacer
             span {voc.startScreen}
@@ -119,6 +122,22 @@ main-menu-project
                     }
                 });
             }
+        };
+
+        this.startNewWindow = () => {
+            /* eslint-disable camelcase */
+            nw.Window.open('index.html', {
+                icon: 'ct_ide.png',
+                frame: true,
+                width: 1024,
+                height: 720,
+                position: 'center',
+                min_width: 800,
+                min_height: 600,
+                resizable: true,
+                fullscreen: false,
+                title: 'ctjs'
+            });
         };
 
         this.toStartScreen = () => {

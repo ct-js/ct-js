@@ -208,6 +208,21 @@ const openProject = async (proj: string): Promise<void> => {
         const err = new Error(baseMessage);
         throw err;
     }
+    const proceed = await (new Promise((resolve) => {
+        (nw.Window as any).getAll((windows: { window: { path: string } }[]) => {
+            windows.forEach(win => {
+                if (win.window.path === proj) {
+                    const baseMessage = 'You cannot open the same project multiple times.';
+                    alertify.error(baseMessage);
+                    const err = new Error(baseMessage);
+                    throw err;
+                }
+            });
+            (window as any).path = proj;
+            resolve(true);
+        });
+    }));
+    if (!proceed) return;
     sessionStorage.projname = path.basename(proj);
     global.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
 

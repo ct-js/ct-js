@@ -617,6 +617,7 @@
             "openProject": "Abrir um projeto…",
             "openExample": "Abrir um projeto de exemplo…",
             "startScreen": "Retornar à tela inicial",
+            "startNewWindow": "",
             "successZipProject": "Projeto zipado com sucesso para {0}.",
             "zipProject": "Empacotar projeto para .zip",
             "heading": ""
