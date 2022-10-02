@@ -17,8 +17,8 @@
     "width": 1024,
     "height": 720,
     "position": "center",
-    "min_width": 800,
-    "min_height": 600,
+    "min_width": 640,
+    "min_height": 400,
     "resizable": true,
     "fullscreen": false,
     "title": "ctjs"
