@@ -125,19 +125,8 @@ main-menu-project
         };
 
         this.startNewWindow = () => {
-            /* eslint-disable camelcase */
-            nw.Window.open('index.html', {
-                icon: 'ct_ide.png',
-                frame: true,
-                width: 1024,
-                height: 720,
-                position: 'center',
-                min_width: 800,
-                min_height: 600,
-                resizable: true,
-                fullscreen: false,
-                title: 'ctjs'
-            });
+            const windowSettings = require('./package.json').window;
+            nw.Window.open('index.html', windowSettings);
         };
 
         this.toStartScreen = () => {
