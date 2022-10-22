@@ -7,17 +7,18 @@ let writeDir: string;
 
 import {resetEventsCache, populateEventCache} from './scriptableProcessor';
 
-const {packImages} = require('./textures');
-const {packSkeletons} = require('./skeletons');
-const {getSounds} = require('./sounds');
+import {packImages} from './textures';
+import {packSkeletons} from './skeletons';
+import {getSounds} from './sounds';
 import {stringifyRooms, getStartingRoom} from './rooms';
-const {stringifyStyles} = require('./styles');
+import {stringifyStyles} from './styles';
 const {stringifyTandems} = require('./emitterTandems');
 import {stringifyTemplates} from './templates';
 const {stringifyContent} = require('./content');
-const {bundleFonts, bakeBitmapFonts} = require('./fonts');
+import {bundleFonts, bakeBitmapFonts} from './fonts';
 const {bakeFavicons} = require('./icons');
 const {getUnwrappedExtends, getCleanKey} = require('./utils');
+import {getGroups} from './groups';
 
 const ifMatcher = (varName: string, symbol = '@') => new RegExp(`/\\* ?if +${symbol}${varName}${symbol} ?\\*/([\\s\\S]*)(?:/\\* ?else +${symbol}${varName}${symbol} ?\\*/([\\s\\S]*?))?/\\* ?endif +${symbol}${varName}${symbol} ?\\*/`, 'g');
 const varMatcher = (varName: string, symbol = '@') => new RegExp(`/\\* ?${symbol}${varName}${symbol} ?\\*/`, 'g');
@@ -363,7 +364,8 @@ const exportCtProject = async (
         tiledImages,
         bitmapFonts,
         dbSkeletons: skeletons.skeletonsDB,
-        sounds
+        sounds,
+        groups: JSON.stringify(getGroups(project))
     }, injections);
     buffer += '\n';
 
@@ -387,8 +389,10 @@ const exportCtProject = async (
     }));
 
     /* TypeScript */
-    buffer = require("sucrase").transform(buffer, {transforms: ["typescript" ]}).code;
-    
+    buffer = require('sucrase').transform(buffer, {
+        transforms: ['typescript']
+    }).code;
+
     /* HTML & CSS */
     const {substituteHtmlVars} = require('./html');
     const html = substituteHtmlVars(await sources['index.html'], project, injections);
