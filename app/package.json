@@ -13,13 +13,12 @@
   "user-agent": "ct.js game engine %name/%ver (%osinfo) NW.js/%nwver AppleWebkit/%webkit_ver Chromium/%chromium_ver",
   "window": {
     "icon": "ct_ide.png",
-    "toolbar": true,
     "frame": true,
     "width": 1024,
     "height": 720,
     "position": "center",
-    "min_width": 380,
-    "min_height": 380,
+    "min_width": 640,
+    "min_height": 400,
     "resizable": true,
     "fullscreen": false,
     "title": "ctjs"

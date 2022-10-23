@@ -122,10 +122,6 @@ const loadProject = async (projectData: IProject): Promise<void> => {
         }
         localStorage.lastProjects = lastProjects.join(';');
 
-        if (window.currentProject.settings.authoring.title) {
-            document.title = window.currentProject.settings.authoring.title + ' — ct.js';
-        }
-
         glob.scriptTypings = {};
         for (const script of window.currentProject.scripts) {
             glob.scriptTypings[script.name] = [
