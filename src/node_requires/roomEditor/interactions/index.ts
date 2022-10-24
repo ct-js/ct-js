@@ -98,5 +98,5 @@ export const interactions = [
     zoomInteraction,
     goHome,
 
-    tab,
+    tab
 ];
