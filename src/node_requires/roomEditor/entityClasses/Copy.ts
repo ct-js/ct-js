@@ -53,7 +53,7 @@ class Copy extends PIXI.AnimatedSprite {
         return getTemplateFromId(this.templateId as string).playAnimationOnStart;
     }
 
-    serialize(deepCopy: boolean=false): IRoomCopy {
+    serialize(deepCopy = false): IRoomCopy {
         return {
             x: this.x,
             y: this.y,
@@ -66,7 +66,9 @@ class Copy extends PIXI.AnimatedSprite {
             rotation: this.rotation,
             uid: this.templateId,
             exts: deepCopy ? JSON.parse(JSON.stringify(this.copyExts)) : this.copyExts,
-            customProperties: deepCopy ? JSON.parse(JSON.stringify(this.copyCustomProps)) : this.copyCustomProps
+            customProperties: deepCopy ?
+                JSON.parse(JSON.stringify(this.copyCustomProps)) :
+                this.copyCustomProps
         };
     }
     deserialize(copy: IRoomCopy): void {
