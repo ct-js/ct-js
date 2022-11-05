@@ -42,7 +42,7 @@ ct.gamedistribution.init();
 Inside the onclick event add this code:
 
 ```js
-if (ct.gamedistribution.adPlaying == false) {
+if (ct.gamedistribution.adPlaying) {
   ct.gamedistribution.showBanner();
 }
 ```
@@ -110,7 +110,7 @@ There is an option to enable a `GDPR` message to the user but there is no manage
 
 Check if the `Game Distribution SDK` is ready to display Ads.
 ```js
-if (ct.gamedistribution.sdkReady == true) {
+if (ct.gamedistribution.sdkReady) {
         //Usually you don't need to use this method but in case you want.
         //Do something here...
 }
@@ -120,7 +120,7 @@ if (ct.gamedistribution.sdkReady == true) {
 
 In case you don't want to use the built-in `event` to check if the Ad finished, you can use `ct.gamedistribution.isFinished` in `OnStep` like:
 ```js
-if(ct.gamedistribution.isFinished == true){
+if(ct.gamedistribution.isFinished){
     //Reward the player here
     this.coins +=1;
     ct.gamedistribution.isFinished = false;

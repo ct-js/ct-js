@@ -1,8 +1,5 @@
 {
-    /**
-     * Check if an Ad finished.
-     */
-    if (ct.gamedistribution.isFinished == true) {
+    if (ct.gamedistribution.isFinished) {
         ct.gamedistribution.isFinished = false;
         ct.gamedistribution.isPaused = false;
         /*%%USER_CODE%%*/
