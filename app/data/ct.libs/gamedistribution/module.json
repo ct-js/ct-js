@@ -60,7 +60,6 @@
             "type": "checkbox"
         }
 	],
-    "dependencies": ["pointer"],
     "eventCategories": {
         "advertise": {
             "name": "Ads",
@@ -68,24 +67,6 @@
         }
     },
     "events": {
-        
-        "showadonclick": {
-            "name": "Show Ad",
-            "parameterizedName": "Show Ad",
-            "hint": "Select a template e.g. a Button, then on click will show an Ad.",
-            "icon": "eye",
-            "applicable": ["room"],
-            "category": "advertise",
-            "arguments": {
-                "template": {
-                    "name": "Template",
-                    "type": "template"
-                }
-            },
-            "codeTargets": ["thisOnStep"],
-            "locals": {}
-        },
-
         "adfinished": {
             "name": "Ad is finished",
             "parameterizedName": "Check if an Ad is finished.",

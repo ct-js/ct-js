@@ -70,8 +70,15 @@ templates:
           this.y = ct.camera.height/2 + this.height;
         arguments: {}
         lib: core
+      - eventKey: OnPointerClick
+        code: |-
+          if (!ct.gamedistribution.adPlaying) {
+              ct.gamedistribution.showAd();
+          }
+        arguments: {}
+        lib: core
     extends: {}
-    lastmod: 1667640425594
+    lastmod: 1667734402988
     uid: h8mt85WFkKJ9wk
 sounds:
   - name: MainMusic
@@ -133,7 +140,7 @@ rooms:
         customProperties: {}
     tiles: []
     extends: {}
-    lastmod: 1667641374317
+    lastmod: 1667734404081
     events:
       - eventKey: OnRoomStart
         code: >+
@@ -183,11 +190,6 @@ rooms:
         code: ct.room.coins += 1;
         arguments: {}
         lib: gamedistribution
-      - eventKey: showadonclick
-        code: ''
-        arguments:
-          template: h8mt85WFkKJ9wk
-        lib: gamedistribution
     uid: GbBCHk9k5L862K
   - type: room
     oncreate: ''
@@ -208,7 +210,7 @@ rooms:
     copies: []
     tiles: []
     extends: {}
-    lastmod: 1667640947240
+    lastmod: 1667734296869
     events:
       - eventKey: OnRoomStart
         code: 'ct.rooms.append(''UI_Layer'', {isUi: true});'

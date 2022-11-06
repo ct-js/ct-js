@@ -112,7 +112,7 @@ declare namespace ct {
         * Show an Ad when is ready.
         * @return {void}
         */
-        function showBanner(): void;
+        function showAd(): void;
 
         /**
          * This will trigger when the Ad finish.

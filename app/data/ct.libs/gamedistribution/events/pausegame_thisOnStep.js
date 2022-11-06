@@ -1,6 +1,6 @@
 {
-    if(ct.gamedistribution.isPaused == false){
-        if (ct.gamedistribution.adPlaying == true) {
+    if(!ct.gamedistribution.isPaused){
+        if (ct.gamedistribution.adPlaying) {
             ct.gamedistribution.isPaused = true;
             /*%%USER_CODE%%*/
         }

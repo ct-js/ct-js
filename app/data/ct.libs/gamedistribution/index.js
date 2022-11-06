@@ -65,13 +65,13 @@
 				}
 						
 			},
-			showBanner(){
+			showAd(){
 				if (typeof gdsdk !== 'undefined' && gdsdk.showAd !== 'undefined') {
 					gdsdk.showAd();
 				}
 			},
 			isAdFinished(){
-				if( ct.gamedistribution.isFinished == true ) {
+				if(ct.gamedistribution.isFinished) {
 					setTimeout(
 						function() {
 							ct.gamedistribution.isFinished = false;
