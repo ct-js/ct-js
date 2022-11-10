@@ -30,19 +30,19 @@ ct.gamedistribution.init();
 Inside a `Click` event add this code:
 
 ```js
-if (ct.gamedistribution.adPlaying) {
+if (!ct.gamedistribution.adPlaying) {
   ct.gamedistribution.showAd();
 }
 ```
 
-* Now go to your `UI` room and add an event of `Ads` `Check if an Ads finished`
+* Now go to your `UI` room and add an event of `Ads` `Check if an Ads has finished`
 
 * Inside the code and according to your game logic you can add something like this:
 
 ```js
 ct.room.coins +=1;
 ```
-- This way you reward the player with 1 coin after the Ad is finish.
+- This way you reward the player with 1 coin after the Ad has finished.
 
 ## Available methods
 
@@ -81,9 +81,9 @@ if (ct.gamedistribution.sdkReady) {
 }
 ```
 
-### Ad finished, completed.
+### Ad has finished, completed.
 
-In case you don't want to use the built-in `event` to check if the Ad finished, you can use `ct.gamedistribution.isFinished` in `OnStep` like:
+In case you don't want to use the built-in `event` to check if the Ad has finished, you can use `ct.gamedistribution.isFinished` in `OnStep` like:
 ```js
 if(ct.gamedistribution.isFinished){
     //Reward the player here

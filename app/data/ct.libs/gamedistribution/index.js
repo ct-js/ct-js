@@ -70,17 +70,6 @@
 					gdsdk.showAd();
 				}
 			},
-			isAdFinished(){
-				if(ct.gamedistribution.isFinished) {
-					setTimeout(
-						function() {
-							ct.gamedistribution.isFinished = false;
-						},
-						0
-					);
-				return ct.gamedistribution.isFinished;
-				}
-			},
 			pauseGame(){
 				if(ct.gamedistribution.adPlaying){
 					return true;

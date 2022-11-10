@@ -114,23 +114,6 @@ declare namespace ct {
         */
         function showAd(): void;
 
-        /**
-         * This will trigger when the Ad finish.
-         * 
-         * Example of usage:
-         * 
-         * Add this `event` in the left panel
-         * 
-         * Add this in the `code editor`
-         
-         ```js
-          ct.room.coins += 1;
-         ```
-         * This way you reward the player with coins.
-         * @return {boolean}
-         */
-        function isAdFinished(): boolean;
-
 
     }
 }
