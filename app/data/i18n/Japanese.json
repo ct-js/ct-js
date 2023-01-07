@@ -623,7 +623,7 @@
         "folderDoesNotExist": "このフォルダは存在しません。",
         "notADirectory": "これはディレクトリではありません。",
         "folderNotWritable": "このフォルダーへの書き込み権限がありません。別のものを選んでください。",
-        "complete": "フォルダが設定されました。これで問題ないありません。"
+        "complete": "フォルダが設定されました。これで問題ありません。"
     },
     "mainMenu": {
         "troubleshooting": {
