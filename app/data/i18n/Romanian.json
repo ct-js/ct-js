@@ -619,6 +619,7 @@
             "openProject": "",
             "openExample": "",
             "startScreen": "Întoarce-te la ecranul de pornire",
+            "startNewWindow": "",
             "successZipProject": "Proiectul a fost arhivat (zip) cu succes în {0}.",
             "zipProject": "Împachetază proiectul în .zip",
             "heading": ""
@@ -827,7 +828,7 @@
         "fontSize": "Mărimea font-ului:"
     },
     "textureView": {
-        "center": "Axă:",
+        "center": "Axă",
         "cols": "Coloane:",
         "done": "Aplică",
         "fill": "Umplere",

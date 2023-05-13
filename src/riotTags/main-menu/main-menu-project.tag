@@ -20,9 +20,17 @@ main-menu-project
         li(onclick="{openExample}")
             .aSpacer
             span {voc.openExample}
+        li(onclick="{startNewWindow}")
+            .aSpacer
+            span {voc.startNewWindow}
         li(onclick="{toStartScreen}")
             .aSpacer
             span {voc.startScreen}
+    ul.aMenu(if="{window.currentProject.language === 'coffeescript'}")
+        li(onclick="{convertToJs}")
+            svg.icon
+                use(xlink:href="#javascript")
+            span {voc.convertToJs}
     script.
         this.namespace = 'mainMenu.project';
         this.mixin(window.riotVoc);
@@ -121,6 +129,12 @@ main-menu-project
             }
         };
 
+        this.startNewWindow = () => {
+            const windowSettings = require('./package.json').window;
+            nw.Window.open('index.html', windowSettings);
+            window.updateWindowMenu();
+        };
+
         this.toStartScreen = () => {
             const glob = require('./data/node_requires/glob');
             if (!glob.modified) {
@@ -132,4 +146,15 @@ main-menu-project
                     }
                 });
             }
+        };
+
+        this.convertToJs = () => {
+            alertify.confirm(this.voc.confirmationConvertToJs, e => {
+                if (!e) {
+                    return;
+                }
+                const {convertCoffeeToJs} = require('./data/node_requires/resources/projects/convertLanguage');
+                convertCoffeeToJs();
+                this.update();
+            });
         };

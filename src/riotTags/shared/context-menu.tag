@@ -19,6 +19,7 @@
 context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.columns? 'columns: '+opts.menu.columns+';' : ''}")
     a(
         each="{item in opts.menu.items}"
+        if="{!item.if || item.if()}"
         href="javascript: void 0;"
         class="{item.type || 'item'} {checkbox: item.type === 'checkbox'} {submenu: item.submenu}"
         disabled="{item.disabled}"
@@ -29,6 +30,8 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
     )
         svg.context-menu-anIcon(if="{item.icon && item.type !== 'separator' && item.type !== 'checkbox'}" class="{item.iconClass || 'feather'}")
             use(xlink:href="#{item.icon instanceof Function? item.icon() : item.icon}")
+        .context-menu-Swatches(if="{item.swatches?.length}")
+            .context-menu-aSwatch(each="{swatch in item.swatches}" style="background-color: {swatch};")
         input(type="checkbox" checked="{item.checked instanceof Function? item.checked() : item.checked}" if="{item.type === 'checkbox'}")
         span(if="{!item.type !== 'separator'}") {item.label}
         span.hotkey(if="{!item.type !== 'separator' && (item.hotkey || item.hotkeyLabel)}") ({item.hotkeyLabel || item.hotkey})
@@ -74,7 +77,10 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
             }
             this.opts.menu.opened = true;
             this.update();
-            this.root.querySelector('a').focus();
+            const firstA = this.root.querySelector('a');
+            if (firstA) {
+                firstA.focus();
+            }
         };
 
         this.toggle = () => {

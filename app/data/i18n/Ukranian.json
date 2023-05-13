@@ -619,6 +619,7 @@
             "openProject": "Відкрити проект…",
             "openExample": "Відкрити приклад…",
             "startScreen": "До стартового екрану",
+            "startNewWindow": "",
             "successZipProject": "Проект успішно упакований у {0}.",
             "zipProject": "Упакувати проект у .zip",
             "heading": "Проект"
@@ -827,7 +828,7 @@
         "fontSize": "Розмір шрифту:"
     },
     "textureView": {
-        "center": "Вісь обертання:",
+        "center": "Вісь обертання",
         "cols": "Колонок:",
         "done": "Готово",
         "fill": "Заповнити",

@@ -29,16 +29,25 @@ notepad-panel#notepad.aPanel.dockright(class="{opened: opened}")
         div(show="{tab === 'modulespages'}")
             docs-panel
 
-    button.vertical.dockleft(onclick="{notepadToggle}" ref="toggleButton")
+    button.vertical.dockleft.forcebackground(onclick="{notepadToggle}" ref="toggleButton")
         svg.feather
             use(xlink:href="#{opened? 'chevron-right' : 'chevron-left'}")
     script.
         const glob = require('./data/node_requires/glob');
+        const updateEditor = () => {
+            if (this.notepadglobal.getPureValue() !== localStorage.notes) {
+                this.notepadglobal.setValue(localStorage.notes);
+            }
+        };
+
         this.opened = false;
         this.namespace = 'notepad';
         this.mixin(window.riotVoc);
         this.notepadToggle = function notepadToggle() {
             this.opened = !this.opened;
+            if (this.tab === 'notepadglobal') {
+                updateEditor();
+            }
         };
 
         const openHelp = () => {
@@ -53,6 +62,9 @@ notepad-panel#notepad.aPanel.dockright(class="{opened: opened}")
 
         this.tab = 'notepadlocal';
         this.changeTab = tab => () => {
+            if (tab === 'notepadglobal') {
+                updateEditor();
+            }
             this.tab = tab;
         };
         this.on('update', () => {
@@ -71,8 +83,10 @@ notepad-panel#notepad.aPanel.dockright(class="{opened: opened}")
             }
         };
         window.addEventListener('resize', updateEditorSize);
+        window.addEventListener('focus', updateEditor);
         this.on('unmount', () => {
             window.removeEventListener('resize', updateEditorSize);
+            window.removeEventListener('focus', updateEditor);
         });
 
         this.getIfDarkTheme = () =>

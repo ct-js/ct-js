@@ -619,6 +619,7 @@
             "openProject": "",
             "openExample": "",
             "startScreen": "Powróć do ekranu początkowego",
+            "startNewWindow": "",
             "successZipProject": "Pomyślnie spakowano projekt do {0}.",
             "zipProject": "Spakuj projekt do .zip",
             "heading": ""
@@ -827,7 +828,7 @@
         "fontSize": "Rozmiar czcionki:"
     },
     "textureView": {
-        "center": "Oś:",
+        "center": "Oś",
         "cols": "Kolumny:",
         "done": "Zastosuj",
         "fill": "Wypełnij",

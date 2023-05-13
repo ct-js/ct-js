@@ -1,4 +1,5 @@
 content-settings
+    docs-shortcut.toright(path="/content-subsystem.html")
     h1 {voc.heading}
     button(onclick="{addContentType}" if="{contentTypes.length}")
         svg.feather
@@ -41,7 +42,8 @@ content-settings
             name: this.voc.typeName,
             type: 'text',
             key: 'name',
-            help: this.voc.typeNameHint
+            help: this.voc.typeNameHint,
+            required: true
         }, {
             name: this.voc.typeReadableName,
             type: 'text',

@@ -44,7 +44,7 @@ const Copy = (function Copy() {
          * before its OnCreate event. Defaults to ct.room.
          * @memberof Copy
          */
-        // eslint-disable-next-line complexity
+        // eslint-disable-next-line complexity, max-lines-per-function
         constructor(template, x, y, exts, container) {
             container = container || ct.room;
             var t;
@@ -70,6 +70,9 @@ const Copy = (function Copy() {
                 this.blendMode = t.blendMode || PIXI.BLEND_MODES.NORMAL;
                 this.loop = t.loopAnimation;
                 this.animationSpeed = t.animationFPS / 60;
+                if (t.visible === false) { // ignore nullish values
+                    this.visible = false;
+                }
                 if (t.playAnimationOnStart) {
                     this.play();
                 }
@@ -79,6 +82,13 @@ const Copy = (function Copy() {
             } else {
                 super([PIXI.Texture.EMPTY]);
             }
+            const oldScale = this.scale;
+            Object.defineProperty(this, 'scale', {
+                get: () => oldScale,
+                set: value => {
+                    this.scale.x = this.scale.y = Number(value);
+                }
+            });
             // it is defined in main.js
             // eslint-disable-next-line no-undef
             this[copyTypeSymbol] = true;
@@ -109,9 +119,13 @@ const Copy = (function Copy() {
                     onStep: t.onStep,
                     onDraw: t.onDraw,
                     onCreate: t.onCreate,
-                    onDestroy: t.onDestroy,
-                    shape: ct.res.getTextureShape(t.texture || -1)
+                    onDestroy: t.onDestroy
                 });
+                if (exts && exts.tex !== void 0) {
+                    this.shape = ct.res.getTextureShape(exts.tex || -1);
+                } else {
+                    this.shape = ct.res.getTextureShape(t.texture || -1);
+                }
                 if (exts && exts.depth !== void 0) {
                     this.depth = exts.depth;
                 }
