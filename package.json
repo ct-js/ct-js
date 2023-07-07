@@ -49,7 +49,7 @@
     "readysteady": "^1.1.4",
     "riot": "^3.13.2",
     "streamqueue": "^1.1.2",
-    "stylelint": "^14.9.1",
+    "stylelint": "^15.10.1",
     "stylelint-stylus": "^0.16.1",
     "stylus": "^0.58.1",
     "tsd-jsdoc": "^2.5.0",
