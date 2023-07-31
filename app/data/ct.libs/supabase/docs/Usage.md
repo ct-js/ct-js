@@ -24,4 +24,4 @@ These can be found in supabase, under Project Settings > API
 
 Copy the URL and Public anon key and paste it into ct.js, of of these are public, so it is NOT a security risk to have them visible in your game's code.
 
-After this, you can use all of supabase's javascript library, as described in their documentation. Remember to replace `supabase.example()` with `ct.supabase.example()`.
+After this, you can use all of supabase's javascript library, as described in their documentation. Remember to use `ct.supabase.example()` instead of `supabase.example()`.
