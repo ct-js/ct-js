@@ -28,22 +28,22 @@ declare namespace ct {
         function unenroll(params: any): any;
         function getAuthenticatorAssuranceLevel(): any;
       }
-      namespace functions {
-        function invoke(functionName: any, options?: any): any;
-      }
-      function channel(channel: any): any;
-      function removeChannel(channel: any): any;
-      function removeAllChannels(): any;
-      function getChannels(): any;
-      namespace storage {
-        function createBucket(id: any, options?: any): any;
-        function getBucket(id: any): any;
-        function listBuckets(): any;
-        function updateBucket(id: any, options: any): any;
-        function deleteBucket(id: any): any;
-        function emptyBucket(id: any): any;
-        function from(bucket: any): any;
-      }
+    }
+    namespace functions {
+      function invoke(functionName: any, options?: any): any;
+    }
+    function channel(channel: any): any;
+    function removeChannel(channel: any): any;
+    function removeAllChannels(): any;
+    function getChannels(): any;
+    namespace storage {
+      function createBucket(id: any, options?: any): any;
+      function getBucket(id: any): any;
+      function listBuckets(): any;
+      function updateBucket(id: any, options: any): any;
+      function deleteBucket(id: any): any;
+      function emptyBucket(id: any): any;
+      function from(bucket: any): any;
     }
   }
 }
