@@ -7,7 +7,7 @@ move CtAction -> ct.Action
 
 move ct.templates.Tilemap -> ct.Tilemap
 
-TODO: this.zIndex -> this.zIndex, with fallbacks
+TODO: this.depth -> this.zIndex, with fallbacks
     [ ] Background
     [x] Copy
     [ ] TileLayer
