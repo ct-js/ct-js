@@ -146,7 +146,7 @@ skeletons: []
 templates:
   - name: Sand
     depth: 0
-    oncreate: this.depth = (Math.random() - 0.5) * 20;
+    oncreate: this.zIndex = (Math.random() - 0.5) * 20;
     onstep: this.move();
     ondraw: ''
     ondestroy: ''

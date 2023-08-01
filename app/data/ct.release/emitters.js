@@ -83,7 +83,7 @@ class EmitterTandem extends PIXI.Container {
             this.angle = opts.angle;
         }
         this.deltaPosition = opts.position;
-        this.depth = opts.depth;
+        this.zIndex = opts.depth;
         this.frozen = false;
 
         if (this.isUi) {

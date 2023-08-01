@@ -99,7 +99,7 @@ templates:
     oncreate: |-
       this.speed = 10;
       this.direction = 0;
-      this.depth = this.y;
+      this.zIndex = this.y;
     onstep: |-
       this.move();
 
@@ -123,7 +123,7 @@ templates:
     lastmod: 1596073035148
   - name: Wall
     depth: 0
-    oncreate: this.depth = this.y;
+    oncreate: this.zIndex = this.y;
     onstep: this.move();
     ondraw: ''
     ondestroy: ''

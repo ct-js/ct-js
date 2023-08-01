@@ -100,7 +100,7 @@ const Copy = (function Copy() {
             this[zeroDirectionAccessor] = 0;
             this.speed = this.direction = this.gravity = 0;
             this.gravityDir = 90;
-            this.depth = 0;
+            this.zIndex = 0;
             this.timer1 = this.timer2 = this.timer3 = this.timer4 = this.timer5 = this.timer6 = 0;
             if (exts) {
                 ct.u.ext(this, exts);
@@ -127,7 +127,7 @@ const Copy = (function Copy() {
                     this.shape = ct.res.getTextureShape(t.texture || -1);
                 }
                 if (exts && exts.depth !== void 0) {
-                    this.depth = exts.depth;
+                    this.zIndex = exts.depth;
                 }
                 if (ct.templates.list[template]) {
                     ct.templates.list[template].push(this);

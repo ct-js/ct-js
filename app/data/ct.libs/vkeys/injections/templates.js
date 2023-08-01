@@ -49,14 +49,14 @@
         },
         onCreate: function () {
             this.tex = this.opts.texNormal;
-            this.depth = this.opts.depth;
+            this.zIndex = this.opts.depth;
         }
     };
 
     ct.templates.templates.VJOYSTICK = {
         onCreate: function () {
             this.tex = this.opts.tex;
-            this.depth = this.opts.depth;
+            this.zIndex = this.opts.depth;
             this.down = false;
             this.trackball = new PIXI.Sprite(ct.res.getTexture(this.opts.trackballTex, 0));
             this.addChild(this.trackball);

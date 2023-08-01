@@ -11,7 +11,7 @@ class Tilemap extends PIXI.Container {
         super();
         this.pixiTiles = [];
         if (template) {
-            this.depth = template.depth;
+            this.zIndex = template.depth;
             this.tiles = template.tiles.map(tile => ({
                 ...tile
             }));
