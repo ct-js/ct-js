@@ -8,7 +8,6 @@ interface ITemplate extends IScriptable {
     playAnimationOnStart: boolean,
     loopAnimation: boolean,
     animationFPS: number,
-    shape?: any,
     extends: {
         [key: string]: unknown
     }
