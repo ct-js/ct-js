@@ -28,6 +28,22 @@ const ct = {
     templates: {},
     snd: {},
     stack: [],
+    /**
+     * By default onStep runs once each loop with a ct.delta value provided. If this value is
+     * one, onStep runs ct.delta times and if greater than one, onStep runs ct.delta times this
+     * multiplier. If you're able to avoid doubling up, this should provide better performance
+     * in action games.
+     * @type {number}
+     * @default 0
+     */
+    onStepMultiplier: 0,
+    /**
+     * If onStepMultiplier is positive, this indicates which iteration of onStep is executing.
+     * This allows you to only fire only once (e.g. when whichOnStep is zero) even if the onStep
+     * is running multiple times in the loop.
+     * @type {number}
+     */
+    whichOnStep: 0,
     fps: [/*@maxfps@*/][0] || 60,
     /**
      * A measure of how long a frame took time to draw, usually equal to 1 and larger on lags.
@@ -541,10 +557,29 @@ ct.u.ext(ct.u, {// make aliases
         ct.timer.updateTimers();
         /*%beforeframe%*/
         ct.rooms.rootRoomOnStep.apply(ct.room);
+        const storedDelta = ct.delta;
+        const onStepLoops = ct.onStepMultiplier ? ct.onStepMultiplier * (Math.round(ct.delta) || 1) : 1;
+        if (ct.onStepMultiplier) {
+            ct.delta = 1;
+        }
         for (let i = 0, li = ct.stack.length; i < li; i++) {
+            ct.whichOnStep = 0;
             ct.templates.beforeStep.apply(ct.stack[i]);
             ct.stack[i].onStep.apply(ct.stack[i]);
-            ct.templates.afterStep.apply(ct.stack[i]);
+            if (onStepLoops <= 1) {
+                ct.templates.afterStep.apply(ct.stack[i]);
+            }
+        }
+        if (onStepLoops > 1) {
+            for (let j = 1; j < onStepLoops; j++) {
+                ct.whichOnStep = j;
+                for (let i = 0, li = ct.stack.length; i < li; i++) {
+                    ct.stack[i].onStep.apply(ct.stack[i]);
+                    if (j + 1 >= onStepLoops) {
+                        ct.templates.afterStep.apply(ct.stack[i]);
+                    }
+                }
+            }
         }
         // There may be a number of rooms stacked on top of each other.
         // Loop through them and filter out everything that is not a room.
@@ -552,10 +587,28 @@ ct.u.ext(ct.u, {// make aliases
             if (!(item instanceof Room)) {
                 continue;
             }
+            ct.whichOnStep = 0;
             ct.rooms.beforeStep.apply(item);
             item.onStep.apply(item);
-            ct.rooms.afterStep.apply(item);
+            if (onStepLoops <= 1) {
+                ct.rooms.afterStep.apply(item);
+            }
         }
+        if (onStepLoops > 1) {
+            for (let j = 1; j < onStepLoops; j++) {
+                ct.whichOnStep = j;
+                for (const item of ct.stage.children) {
+                    if (!(item instanceof Room)) {
+                        continue;
+                    }
+                    item.onStep.apply(item);
+                    if (j + 1 >= onStepLoops) {
+                        ct.rooms.afterStep.apply(item);
+                    }
+                }
+            }
+        }
+        ct.delta = storedDelta;
         // copies
         for (const copy of ct.stack) {
             // eslint-disable-next-line no-underscore-dangle
