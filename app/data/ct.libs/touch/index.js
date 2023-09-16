@@ -51,7 +51,7 @@
         return -1;
     };
     var handleStart = function (e) {
-        if (![/*%preventdefault%*/][0]) {
+        if (![/*%preventdefault%*/][0] && !ct.permitDefault) {
             e.preventDefault();
         }
         for (let i = 0, l = e.changedTouches.length; i < l; i++) {
@@ -65,7 +65,7 @@
         countTouches();
     };
     var handleMove = function (e) {
-        if (![/*%preventdefault%*/][0]) {
+        if (![/*%preventdefault%*/][0] && !ct.permitDefault) {
             e.preventDefault();
         }
         for (let i = 0, l = e.changedTouches.length; i < l; i++) {
@@ -85,7 +85,7 @@
         }
     };
     var handleRelease = function (e) {
-        if (![/*%preventdefault%*/][0]) {
+        if (![/*%preventdefault%*/][0] && !ct.permitDefault) {
             e.preventDefault();
         }
         var touches = e.changedTouches;

@@ -40,7 +40,9 @@
                     ct.keyboard.string = '';
                 }
             }
-            e.preventDefault();
+            if (!ct.permitDefault) {
+                e.preventDefault();
+            }
         },
         onUp(e) {
             ct.keyboard.shift = e.shiftKey;
@@ -51,7 +53,9 @@
             } else {
                 setKey('Unknown', 0);
             }
-            e.preventDefault();
+            if (!ct.permitDefault) {
+                e.preventDefault();
+            }
         }
     };
 
