@@ -30,11 +30,6 @@ const ct = {
     stack: [],
     fps: [/*@maxfps@*/][0] || 60,
     /**
-     * Temporarily suspend e.preventDefault() calls. For example, to allow for a HTML text
-     * box to be used.
-     */
-    permitDefault: false,
-    /**
      * A measure of how long a frame took time to draw, usually equal to 1 and larger on lags.
      * For example, if it is equal to 2, it means that the previous frame took twice as much time
      * compared to expected FPS rate.

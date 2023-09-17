@@ -27,6 +27,7 @@
         pressed: false,
         down: false,
         released: false,
+        permitDefault: false,
         button: 0,
         hovers(copy) {
             if (!copy.shape) {
@@ -93,7 +94,7 @@
         ct.mouse.down = true;
         ct.mouse.button = e.button;
         window.focus();
-        if (!ct.permitDefault) {
+        if (!ct.mouse.permitDefault) {
             e.preventDefault();
         }
     };
@@ -103,12 +104,12 @@
         ct.mouse.down = false;
         ct.mouse.button = e.button;
         window.focus();
-        if (!ct.permitDefault) {
+        if (!ct.mouse.permitDefault) {
             e.preventDefault();
         }
     };
     ct.mouse.listenerContextMenu = function listenerContextMenu(e) {
-        if (!ct.permitDefault) {
+        if (!ct.mouse.permitDefault) {
             e.preventDefault();
         }
     };
