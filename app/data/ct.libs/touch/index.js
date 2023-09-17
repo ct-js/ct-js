@@ -158,6 +158,7 @@
         yui: 0,
         xuiprev: 0,
         yuiprev: 0,
+        permitDefault: false,
         clear() {
             ct.touch.events.length = 0;
             ct.touch.clearReleased();
