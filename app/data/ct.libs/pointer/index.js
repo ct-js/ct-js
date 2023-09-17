@@ -236,7 +236,7 @@
                 passive: false
             });
             document.addEventListener('contextmenu', e => {
-                if (![/*%preventdefault%*/][0] && !ct.permitDefault) {
+                if (![/*%preventdefault%*/][0] && !ct.pointer.permitDefault) {
                     e.preventDefault();
                 }
             });
