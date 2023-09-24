@@ -1,4 +1,5 @@
 import {imageContain, toBuffer, crop} from '../../utils/imageUtils';
+import { TexturePreviewer } from '../preview/texture';
 
 /**
  * Gets the ct.js texture object by its id.
@@ -14,30 +15,7 @@ const getTextureFromId = (id: string): ITexture => {
 };
 const getById = getTextureFromId;
 
-/**
- * Retrieves the full path to a thumbnail of a given texture.
- * @param {string|ITexture} texture Either the id of the texture, or its ct.js object
- * @param {boolean} [x2] If set to true, returns a 128x128 image instead of 64x64.
- * @param {boolean} [fs] If set to true, returns a file system path, not a URI.
- * @returns {string} The full path to the thumbnail.
- */
-const getTexturePreview = function (
-    texture: assetRef | ITexture,
-    x2?: boolean,
-    fs?: boolean
-): string {
-    if (texture === -1) {
-        return 'data/img/notexture.png';
-    }
-    if (typeof texture === 'string') {
-        texture = getTextureFromId(texture);
-    }
-    if (fs) {
-        return `${global.projdir}/img/${texture.origname}_prev${x2 ? '@2' : ''}.png`;
-    }
-    return `file://${global.projdir.replace(/\\/g, '/')}/img/${texture.origname}_prev${x2 ? '@2' : ''}.png?cache=${texture.lastmod}`;
-};
-const getThumbnail = getTexturePreview;
+const getThumbnail = TexturePreviewer.getClassic;
 
 /**
  * Retrieves a full path to the source image of a given texture
@@ -133,13 +111,15 @@ const populatePixiTextureCache = async (project: IProject): Promise<void> => {
 };
 // async
 const getDOMImage = function (
-    texture: assetRef | ITexture,
+    texture: assetRef | ITexture | ISkeleton,
     deflt?: string
 ): Promise<HTMLImageElement> {
     let path;
     const img = document.createElement('img');
     if (texture === -1 || !texture) {
         path = deflt || 'data/img/notexture.png';
+    } else if (typeof texture === 'object' && texture.origname.endsWith('_ske.json')) {
+        path = 'file://' + global.projdir.replace(/\\/g, '/') + '/img/' + texture.origname.replace('_ske.json', '_tex.png') + '?' + texture.lastmod;
     } else {
         if (typeof texture === 'string') {
             texture = getTextureFromId(texture);
@@ -208,29 +188,6 @@ const getTextureFromName = function (name: string): ITexture {
         throw new Error(`Attempt to get a non-existent texture with name ${name}`);
     }
     return texture;
-};
-const textureGenPreview = async function textureGenPreview(
-    texture: string | ITexture,
-    destination: string,
-    size: number
-): Promise<string> {
-    if (typeof texture === 'string') {
-        texture = getTextureFromId(texture);
-    }
-
-    const source = await getDOMImage(texture);
-    const frame = crop(
-        source,
-        texture.offx,
-        texture.offy,
-        texture.width,
-        texture.height
-    );
-    const c = imageContain(frame, size, size);
-    const buf = toBuffer(c);
-    const fs = require('fs-extra');
-    await fs.writeFile(destination, buf);
-    return destination;
 };
 
 const texturePostfixParser = /_(?<cols>\d+)x(?<rows>\d+)(?:@(?<until>\d+))?$/;
@@ -332,8 +289,7 @@ const importImageToTexture = async (
     }
 
     await Promise.all([
-        textureGenPreview(obj, dest + '_prev.png', 64),
-        textureGenPreview(obj, dest + '_prev@2.png', 128),
+        TexturePreviewer.save(obj),
         texturesFromCtTexture(obj)
     ]);
 
@@ -380,7 +336,6 @@ export {
     getTextureFromId,
     getById,
     getTextureFromName,
-    getTexturePreview,
     getCleanTextureName,
     getThumbnail,
     getTexturePivot,
@@ -389,6 +344,5 @@ export {
     setPixelart,
     getPixiTexture,
     getDOMImage,
-    importImageToTexture,
-    textureGenPreview
+    importImageToTexture
 };

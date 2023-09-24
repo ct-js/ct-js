@@ -2,6 +2,7 @@ import {populatePixiTextureCache, resetPixiTextureCache, setPixelart} from '../t
 import {loadAllTypedefs, resetTypedefs} from '../modules/typedefs';
 import {unloadAllEvents, loadAllModulesEvents} from '../../events';
 import * as path from 'path';
+import { preparePreviews } from '../preview';
 
 const fs = require('fs-extra');
 
@@ -136,10 +137,12 @@ const loadProject = async (projectData: IProject): Promise<void> => {
         unloadAllEvents();
         resetPixiTextureCache();
         setPixelart(projectData.settings.rendering.pixelatedrender);
+        const recoveryExists = fs.existsSync(global.projdir + '.ict.recovery');
         await Promise.all([
             loadAllModulesEvents(),
             populatePixiTextureCache(projectData)
         ]);
+        await preparePreviews(projectData, !recoveryExists);
 
         window.signals.trigger('projectLoaded');
         setTimeout(() => {

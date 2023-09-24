@@ -526,16 +526,13 @@ texture-editor.aDimmer.pointer.pad.fadein(onclick="{tryClose}")
                     textureCanvas.img = image;
                     this.texture.lastmod = Number(new Date());
 
-                    const {textureGenPreview} = require('./data/node_requires/resources/textures');
-                    textureGenPreview(this.texture, dest + '_prev.png', 64, () => {
+                    const {TexturePreviewer} = require('./data/node_requires/resources/preview/style');
+                    TexturePreviewer.save(this.texture).then(() => {
                         this.update();
-                    });
-                    textureGenPreview(this.texture, dest + '_prev@2.png', 128);
-                    setTimeout(() => {
                         this.refreshTextureCanvas();
                         this.parent.fillTextureMap();
                         this.launchTexturePreview();
-                    }, 0);
+                    });
                 };
                 image.onerror = e => {
                     alertify.error(e);
@@ -993,13 +990,13 @@ texture-editor.aDimmer.pointer.pad.fadein(onclick="{tryClose}")
             this.parent.fillTextureMap();
             glob.modified = true;
             this.texture.lastmod = Number(new Date());
-            const {textureGenPreview, updatePixiTexture} = require('./data/node_requires/resources/textures');
+            const {updatePixiTexture} = require('./data/node_requires/resources/textures');
             updatePixiTexture(this.texture)
             .then(() => {
                 window.signals.trigger('pixiTextureChanged', this.texture.uid);
             });
-            textureGenPreview(this.texture, global.projdir + '/img/' + this.texture.origname + '_prev@2.png', 128);
-            textureGenPreview(this.texture, global.projdir + '/img/' + this.texture.origname + '_prev.png', 64)
+            const {TexturePreviewer} = require('./data/node_requires/resources/preview/texture');
+            TexturePreviewer.save(this.texture)
             .then(() => {
                 this.opts.onclose();
             });

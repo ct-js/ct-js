@@ -5,6 +5,7 @@ declare interface ISkeleton extends IAsset {
 }
 
 const path = require('path');
+const { SkeletonPreviewer } = require('./preview/skeleton');
 
 const getSkeletonData = function getSkeletonData(skeleton: ISkeleton, fs?: boolean): string {
     if (fs) {
@@ -30,57 +31,7 @@ const getSkeletonTexture = function getSkeletonTexture(skeleton: ISkeleton, fs?:
     return `file://${global.projdir}/img/${slice}_tex.png`;
 };
 
-const getSkeletonPreview = function getSkeletonPreview(skeleton: ISkeleton, fs: boolean): string {
-    if (fs) {
-        return path.join(global.projdir, 'img', `${skeleton.origname}_prev.png`);
-    }
-    return `file://${global.projdir.replace(/\\/g, '/')}/img/${skeleton.origname}_prev.png`;
-};
-
-/**
- * Generates a square thumbnail of a given skeleton
- * @param {String} skeleton The skeleton object to generate a preview for.
- * @returns {Promise<void>} Resolves after creating a thumbnail.
- */
-const skeletonGenPreview = function (skeleton: ISkeleton): Promise<void> {
-    const loader = new PIXI.Loader(),
-          dbf = dragonBones.PixiFactory.factory;
-    const fs = require('fs-extra');
-    return new Promise((resolve, reject) => {
-        // Draw the armature on a canvas/in a Pixi.js app
-        const skelData = getSkeletonData(skeleton),
-              texData = getSkeletonTextureData(skeleton),
-              tex = getSkeletonTexture(skeleton);
-        loader.add(skelData, skelData)
-              .add(texData, texData)
-              .add(tex, tex);
-        loader.load(() => {
-            dbf.parseDragonBonesData(loader.resources[skelData].data);
-            dbf.parseTextureAtlasData(
-                loader.resources[texData].data,
-                loader.resources[tex].texture
-            );
-            const skel = dbf.buildArmatureDisplay('Armature', loader.resources[skelData].data.name);
-
-            const app = new PIXI.Application();
-
-            const rawSkelBase64 = app.renderer.plugins.extract.base64(skel);
-            const skelBase64 = rawSkelBase64.replace(/^data:image\/\w+;base64,/, '');
-            const buf = new Buffer(skelBase64, 'base64');
-
-            fs.writeFile(getSkeletonPreview(skeleton, true), buf)
-            .then(() => {
-                // Clean memory from DragonBones' armatures
-                // eslint-disable-next-line no-underscore-dangle
-                delete (dbf as any)._dragonBonesDataMap[loader.resources[skelData].data.name];
-                // eslint-disable-next-line no-underscore-dangle
-                delete (dbf as any)._textureAtlasDataMap[loader.resources[skelData].data.name];
-            })
-            .then(resolve)
-            .catch(reject);
-        });
-    });
-};
+const getSkeletonPreview = SkeletonPreviewer.getClassic;
 
 const importSkeleton = async function importSkeleton(source: string, group?: string) {
     const generateGUID = require('./../generateGUID');
@@ -103,7 +54,7 @@ const importSkeleton = async function importSkeleton(source: string, group?: str
         group,
         uid
     };
-    await skeletonGenPreview(skel);
+    await SkeletonPreviewer.save(skel);
     global.currentProject.skeletons.push(skel);
     window.signals.trigger('skeletonImported', skel);
 };
@@ -113,6 +64,5 @@ module.exports = {
     getSkeletonTextureData,
     getSkeletonTexture,
     getSkeletonPreview,
-    skeletonGenPreview,
     importSkeleton
 };

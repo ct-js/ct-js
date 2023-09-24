@@ -20,13 +20,14 @@ styles-panel.tall.fifty
     context-menu(menu="{styleMenu}" ref="styleMenu")
     script.
         const generateGUID = require('./data/node_requires/generateGUID');
+        const {StylePreviewer} = require('./data/node_requires/resources/preview/style');
 
         this.editingStyle = false;
 
         this.namespace = 'styles';
         this.mixin(window.riotVoc);
 
-        this.thumbnails = style => `file://${window.global.projdir}/img/${style.origname}_prev.png?${style.lastmod}`;
+        this.thumbnails = style => StylePreviewer.get(style, false);
 
         this.styleCreate = e => {
             if (this.editingStyle) {

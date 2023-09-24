@@ -143,7 +143,7 @@ asset-viewer.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compact
                 .aCard-aThumbnail
                     img(
                         if="{parent.opts.thumbnails && !parent.opts.useicons}"
-                        src="{parent.opts.thumbnails(asset, currentLayout === 'largeCards', false)}"
+                        src="{parent.opts.thumbnails(asset, true, false)}"
                     )
                     svg.feather.group-icon.act(if="{parent.opts.thumbnails && parent.opts.useicons}")
                         use(xlink:href="#{parent.opts.thumbnails(asset)}")

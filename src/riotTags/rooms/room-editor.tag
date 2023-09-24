@@ -515,12 +515,9 @@ room-editor.aPanel.aView
             if (this.pixiEditor.currentSelection.size && this.refs.propertiesPanel) {
                 this.refs.propertiesPanel.applyChanges();
             }
-            const {writeRoomPreview} = require('./data/node_requires/resources/rooms');
             this.pixiEditor.serialize();
-            await Promise.all([
-                writeRoomPreview(this.opts.room, this.pixiEditor.getSplashScreen(true), true),
-                writeRoomPreview(this.opts.room, this.pixiEditor.getSplashScreen(false), false)
-            ]);
+            const {RoomPreviewer} = require('./data/node_requires/resources/preview/room');
+            await RoomPreviewer.save(this.opts.room, currentProject.rooms[0] === this.opts.room);
             this.opts.onclose();
         };
 

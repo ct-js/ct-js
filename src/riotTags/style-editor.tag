@@ -150,8 +150,6 @@ style-editor.aPanel.aView
         oncancelled="{cancelCustomFontSelector}"
     )
     script.
-        const fs = require('fs-extra');
-
         this.namespace = 'styleView';
         this.mixin(window.riotVoc);
         this.mixin(window.riotWired);
@@ -289,32 +287,11 @@ style-editor.aPanel.aView
                 return false;
             }
             this.styleobj.lastmod = Number(new Date());
-            this.styleGenPreview(global.projdir + '/img/' + this.styleobj.origname + '_prev@2.png', 128);
-            this.styleGenPreview(global.projdir + '/img/' + this.styleobj.origname + '_prev.png', 64).then(() => {
+            const {StylePreviewer} = require('./data/node_requires/resources/preview/style');
+            StylePreviewer.save(this.styleobj).then(() => {
                 this.parent.editingStyle = false;
                 this.parent.update();
             });
             require('./data/node_requires/glob').modified = true;
             return true;
-        };
-
-        /**
-         * Generates a thumbnail for the current style
-         * @returns {Promise}
-         */
-        this.styleGenPreview = function styleGenPreview(destination) {
-            return new Promise((accept, decline) => {
-                var img = this.pixiApp.renderer.plugins.extract.base64(this.labelThumbnail);
-
-                var thumbnailBase64 = img.replace(/^data:image\/\w+;base64,/, '');
-                var buf = Buffer.from(thumbnailBase64, 'base64');
-                fs.writeFile(destination, buf, err => {
-                    if (err) {
-                        console.error(err);
-                        decline(err);
-                    } else {
-                        accept(destination);
-                    }
-                });
-            });
         };

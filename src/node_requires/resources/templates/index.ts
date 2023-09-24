@@ -1,5 +1,6 @@
 import {get as getDefaultTemplate} from './defaultTemplate';
-import {getTexturePreview, getPixiTexture as getTexturePixiTexture} from '../textures';
+import {getPixiTexture as getTexturePixiTexture} from '../textures';
+import {TexturePreviewer} from '../preview/texture';
 
 const createNewTemplate = function createNewTemplate(name: string): ITemplate {
     const template = getDefaultTemplate();
@@ -46,9 +47,9 @@ const getTemplatePreview = function getTemplatePreview(
         template = getTemplateFromId(template);
     }
     if (template === -1) {
-        return getTexturePreview(-1, x2, fs);
+        return TexturePreviewer.get(-1, fs);
     }
-    return getTexturePreview(template.texture, x2, fs);
+    return TexturePreviewer.get(template.texture, fs);
 };
 const getThumbnail = getTemplatePreview;
 

@@ -31,7 +31,7 @@ fonts-panel.flexfix.tall.fifty
         this.namespace = 'fonts';
         this.mixin(window.riotVoc);
 
-        this.thumbnails = require('./data/node_requires/resources/fonts').getFontPreview;
+        this.thumbnails = require('./data/node_requires/resources/fonts').getThumbnail;
         this.names = font => `${font.typefaceName} ${font.weight} ${font.italic ? this.voc.italic : ''}`;
 
         this.setUpPanel = () => {

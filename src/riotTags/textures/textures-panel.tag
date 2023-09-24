@@ -78,7 +78,7 @@ textures-panel.aPanel.aView
         this.editing = false;
         this.dropping = false;
 
-        this.textureThumbnails = require('./data/node_requires/resources/textures').getTexturePreview;
+        this.textureThumbnails = require('./data/node_requires/resources/textures').getThumbnail;
         const iconMap = {
             rect: 'square',
             circle: 'circle',

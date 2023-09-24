@@ -135,7 +135,7 @@ rooms-panel.aPanel.aView
             this.refs.roomMenu.popup(e.clientX, e.clientY);
             e.preventDefault();
         };
-        this.thumbnails = require('./data/node_requires/resources/rooms').getRoomPreview;
+        this.thumbnails = require('./data/node_requires/resources/rooms').getThumbnail;
         this.icons = room => {
             const icons = [];
             if (room.uid === window.currentProject.startroom) {
