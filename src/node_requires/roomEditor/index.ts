@@ -17,6 +17,7 @@ import {getPixiSwatch} from './../themes';
 import {defaultTextStyle, recolorFilters, eraseCursor, toPrecision, snapToDiagonalGrid, snapToRectangularGrid} from './common';
 import {getTemplateFromId} from '../resources/templates';
 import {ease, Easing} from 'node_modules/pixi-ease';
+import { RoomEditorPreview } from './previewer';
 
 
 const roomEditorDefaults = {
@@ -727,24 +728,28 @@ class RoomEditor extends PIXI.Application {
      * as it repositions the room.
      */
     getSplashScreen(big: boolean): HTMLCanvasElement {
+        return RoomEditor.getRoomPreview(this.ctRoom, big);
+    }
+
+    static getRoomPreview(room: IRoom, big: boolean): HTMLCanvasElement {
         const w = big ? 340 : 64,
               h = big ? 256 : 64;
         const renderTexture = PIXI.RenderTexture.create({
             width: w,
             height: h
         });
-        this.overlays.visible = false;
-        this.transformer.visible = false;
-        this.pointerCoords.visible = false;
-        this.clicktrap.width = w;
-        this.clicktrap.height = h;
-        this.clicktrap.alpha = 1;
-        this.clicktrap.tint = this.renderer.backgroundColor;
-        this.room.scale.set(Math.min(w / this.ctRoom.width, h / this.ctRoom.height));
-        this.room.x = (w - this.ctRoom.width * this.room.scale.x) / 2;
-        this.room.y = (h - this.ctRoom.height * this.room.scale.y) / 2;
-        this.renderer.render(this.stage, renderTexture);
-        return this.renderer.extract.canvas(renderTexture);
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const pixelart = Boolean(currentProject.settings.rendering.pixelatedrender);
+        const scale = Math.min(w / room.width, h / room.height);
+        const preview = new RoomEditorPreview({ view: canvas }, room, pixelart, {
+            x: (w - room.width * scale) / 2,
+            y: (h - room.height * scale) / 2,
+            scale
+        });
+        preview.renderer.render(preview.stage, renderTexture);
+        return preview.renderer.extract.canvas(renderTexture);
     }
 }
 

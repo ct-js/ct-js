@@ -1,6 +1,7 @@
 import {RoomEditor} from '..';
 import {getPixiTexture, getTemplateFromId} from '../../resources/templates';
 import {getTexturePivot} from '../../resources/textures';
+import { RoomEditorPreview } from '../previewer';
 
 /**
  * @notice This class automatically adds and removes itself from editor's copy list
@@ -11,11 +12,11 @@ class Copy extends PIXI.AnimatedSprite {
     copyCustomProps: Record<string, unknown>;
     cachedTemplate: ITemplate;
     isGhost: boolean;
-    editor: RoomEditor;
+    editor: RoomEditor | RoomEditorPreview;
     autoUpdate: boolean;
     update: (deltaTime: number) => void;
 
-    constructor(copyInfo: IRoomCopy, editor: RoomEditor, isGhost?: boolean) {
+    constructor(copyInfo: IRoomCopy, editor: RoomEditor | RoomEditorPreview, isGhost?: boolean) {
         super(getPixiTexture(copyInfo.uid));
         this.editor = editor;
         this.templateId = copyInfo.uid;
