@@ -35,12 +35,11 @@ export class StylePreviewer {
         });
         const pixiStyle = new PIXI.TextStyle(styleToTextStyle(style));
         const fontSize = parseInt(`${pixiStyle.fontSize}`, 10);
-        if (fontSize > 96) {
-            pixiStyle.fontSize = "96px";
-            pixiStyle.lineHeight = 96;
+        pixiStyle.lineHeight = 0;
+        if (fontSize > 82) {
+            pixiStyle.fontSize = "82px";
         } else if (fontSize < 12) {
             pixiStyle.fontSize = "12px";
-            pixiStyle.lineHeight = 12;
         }
         const labelThumbnail = new PIXI.Text("Aa", pixiStyle);
         labelThumbnail.anchor.x = 0.5;
@@ -48,11 +47,17 @@ export class StylePreviewer {
         labelThumbnail.x = 64;
         labelThumbnail.y = 64;
         labelThumbnail.visible = true;
+        const darkColor = (x: string, min: string = 'D') => x !== undefined && (x[0] !== '#' || x[1] <= min || x[3] <= min || x[5] <= min);
+        const darkFill = style.fill === undefined ||
+            (Number(style.fill.type) === 0 && darkColor(style.fill.color)) ||
+            (Number(style.fill.type) === 1 && (darkColor(style.fill.color1, 'B') || darkColor(style.fill.color2, 'B')));
+        const darkStroke = style.stroke && style.stroke.weight >= 1 && darkColor(style.stroke.color);
+        const lightColor = !darkFill && !darkStroke;
         const graphics = new PIXI.Graphics();
-        graphics.beginFill(0xffffff); // Set fill color to red
-        graphics.drawRect(0, 0, 128, 128); // Draw a 100x100 rectangle
+        graphics.beginFill(lightColor ? 0x000000 : 0xffffff);
+        graphics.drawCircle(64, 64, 64);
         graphics.endFill();
-        graphics.alpha = 0.0;
+        graphics.alpha = lightColor ? 1.0 : 0.0;
         pixiApp.stage.addChild(graphics);
         pixiApp.stage.addChild(labelThumbnail);
         return Promise.resolve(pixiApp.renderer.extract.canvas(pixiApp.stage));
