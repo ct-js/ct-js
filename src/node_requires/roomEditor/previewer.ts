@@ -50,7 +50,7 @@ export class RoomEditorPreview extends PIXI.Application {
             height: room.height
         }));
 
-        // delete this block if you want a transparent period
+        // delete this block if you want a transparent preview
         const background = new PIXI.Graphics();
         background.beginFill(PIXI.utils.string2hex(room.backgroundColor));
         background.drawRect(0, 0, room.width, room.height);
