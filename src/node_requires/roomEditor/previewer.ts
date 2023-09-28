@@ -50,6 +50,13 @@ export class RoomEditorPreview extends PIXI.Application {
             height: room.height
         }));
 
+        // delete this block if you want a transparent period
+        const background = new PIXI.Graphics();
+        background.beginFill(PIXI.utils.string2hex(room.backgroundColor));
+        background.drawRect(0, 0, room.width, room.height);
+        background.endFill();
+        this.stage.addChild(background);
+
         this.ctRoom = room;
         this.room.sortableChildren = true;
         this.room.scale.set(roomSettings.scale);
