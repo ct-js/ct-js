@@ -142,7 +142,8 @@ const pixiAppSettings = {
     antialias: ![/*@pixelatedrender@*/][0],
     powerPreference: 'high-performance',
     sharedTicker: false,
-    sharedLoader: true
+    sharedLoader: true,
+    transparent: [/*@transparent@*/][0]
 };
 try {
     /**
