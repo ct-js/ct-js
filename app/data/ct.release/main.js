@@ -29,10 +29,17 @@ const ct = {
     snd: {},
     stack: [],
     /**
-     * By default onStep runs once each loop with a ct.delta value provided. If this value is
-     * one, onStep runs ct.delta times and if greater than one, onStep runs ct.delta times this
-     * multiplier. If you're able to avoid doubling up, this should provide better performance
-     * in action games.
+     * A calculated value representing the number of times of onStep will be called in this
+     * render.
+     * @type {number}
+     * @default 1
+     */
+    onStepLoops: 1,
+    /**
+     * By default onStep runs once each render with a ct.delta value provided. If this value is
+     * one, onStep runs ct.delta times each render and if greater than one, onStep runs ct.delta
+     * times this multiplier. This can be helpful for small object collision in high-speed action
+     * games.
      * @type {number}
      * @default 0
      */
@@ -40,7 +47,7 @@ const ct = {
     /**
      * If onStepMultiplier is positive, this indicates which iteration of onStep is executing.
      * This allows you to only fire only once (e.g. when whichOnStep is zero) even if the onStep
-     * is running multiple times in the loop.
+     * is running multiple times this render.
      * @type {number}
      */
     whichOnStep: 0,
@@ -551,6 +558,7 @@ ct.u.ext(ct.u, {// make aliases
         }
     };
 
+    // eslint-disable-next-line complexity
     ct.loop = function loop() {
         ct.delta = ct.pixiApp.ticker.deltaMS / (1000 / (ct.pixiApp.ticker.maxFPS || 60));
         ct.deltaUi = ct.pixiApp.ticker.elapsedMS / (1000 / (ct.pixiApp.ticker.maxFPS || 60));
@@ -559,56 +567,52 @@ ct.u.ext(ct.u, {// make aliases
         /*%beforeframe%*/
         ct.rooms.rootRoomOnStep.apply(ct.room);
         const storedDelta = ct.delta;
-        const onStepLoops = ct.onStepMultiplier ? ct.onStepMultiplier * (Math.round(ct.delta) || 1) : 1;
-        if (ct.onStepMultiplier) {
-            ct.delta = 1;
-        }
+        ct.onStepLoops = ct.onStepMultiplier ? Math.round(ct.onStepMultiplier * ct.delta) || 1 : 1;
+        ct.delta = ct.onStepMultiplier ? 1 : ct.delta;
+        const rooms = ct.stage.children.filter(item => item instanceof Room);
+
+        // items
         for (let i = 0, li = ct.stack.length; i < li; i++) {
             ct.whichOnStep = 0;
             ct.templates.beforeStep.apply(ct.stack[i]);
             ct.stack[i].onStep.apply(ct.stack[i]);
-            if (onStepLoops <= 1) {
+            if (ct.onStepLoops <= 1) {
                 ct.templates.afterStep.apply(ct.stack[i]);
             }
         }
-        if (onStepLoops > 1) {
-            for (let j = 1; j < onStepLoops; j++) {
-                ct.whichOnStep = j;
-                for (let i = 0, li = ct.stack.length; i < li; i++) {
-                    ct.stack[i].onStep.apply(ct.stack[i]);
-                    if (j + 1 >= onStepLoops) {
-                        ct.templates.afterStep.apply(ct.stack[i]);
-                    }
-                }
-            }
-        }
-        // There may be a number of rooms stacked on top of each other.
-        // Loop through them and filter out everything that is not a room.
-        for (const item of ct.stage.children) {
-            if (!(item instanceof Room)) {
-                continue;
-            }
-            ct.whichOnStep = 0;
+
+        // rooms
+        for (const item of rooms) {
             ct.rooms.beforeStep.apply(item);
             item.onStep.apply(item);
-            if (onStepLoops <= 1) {
+            if (ct.onStepLoops <= 1) {
                 ct.rooms.afterStep.apply(item);
             }
         }
-        if (onStepLoops > 1) {
-            for (let j = 1; j < onStepLoops; j++) {
+
+        if (ct.onStepLoops > 1) {
+            for (let j = 1; j < ct.onStepLoops; j++) {
+                const lastLoop = j + 1 >= ct.onStepLoops;
                 ct.whichOnStep = j;
-                for (const item of ct.stage.children) {
-                    if (!(item instanceof Room)) {
-                        continue;
+
+                // items again
+                for (let i = 0, li = ct.stack.length; i < li; i++) {
+                    ct.stack[i].onStep.apply(ct.stack[i]);
+                    if (lastLoop) {
+                        ct.templates.afterStep.apply(ct.stack[i]);
                     }
+                }
+
+                // rooms again
+                for (const item of rooms) {
                     item.onStep.apply(item);
-                    if (j + 1 >= onStepLoops) {
+                    if (lastLoop) {
                         ct.rooms.afterStep.apply(item);
                     }
                 }
             }
         }
+
         ct.delta = storedDelta;
         // copies
         for (const copy of ct.stack) {

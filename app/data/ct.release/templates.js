@@ -242,6 +242,8 @@ const Copy = (function Copy() {
             }
             this.x += this.hspeed * ct.delta;
             this.y += this.vspeed * ct.delta;
+            // eslint-disable-next-line no-underscore-dangle
+            delete this._shape;
         }
         /**
          * Adds a speed vector to the copy, accelerating it by a given delta speed
