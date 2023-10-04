@@ -109,6 +109,7 @@ ct.backgrounds = {
     Background,
     /**
      * An object that contains all the backgrounds of the current room. 
+     * @type {Object.<string,Array<Background>>}
      */
     list: {},
     /**
