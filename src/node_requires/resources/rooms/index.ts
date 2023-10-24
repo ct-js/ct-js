@@ -1,5 +1,5 @@
 import {RoomPreviewer} from '../preview/room';
-import {getOfType} from '..';
+import {IAssetContextItem, getOfType} from '..';
 
 const getDefaultRoom = require('./defaultRoom').get;
 const fs = require('fs-extra');
@@ -15,7 +15,7 @@ const createNewRoom = async function createNewRoom(name: string): Promise<IRoom>
     return room;
 };
 
-export const getStartingRoom = (): IRoom => {
+const getStartingRoom = (): IRoom => {
     const rooms = getOfType('room');
     if (global.currentProject.startroom && global.currentProject.startroom !== -1) {
         return rooms.find(room => room.uid === global.currentProject.startroom);
@@ -24,16 +24,34 @@ export const getStartingRoom = (): IRoom => {
 };
 
 const getThumbnail = RoomPreviewer.getClassic;
-export const areThumbnailsIcons = false;
+const areThumbnailsIcons = false;
 
-export const removeAsset = (room: IRoom): void => {
+const removeAsset = (room: IRoom): void => {
     if (global.currentProject.startroom === room.uid) {
         global.currentProject.startroom = -1;
     }
 };
 
+const assetContextMenuItems: IAssetContextItem[] = [
+    {
+        icon: 'play',
+        vocPath: 'rooms.makeStarting',
+        action: async (
+            asset: ISkeleton,
+            collection: folderEntries,
+            folder: IAssetFolder
+        ) => {
+            global.currentProject.startroom = asset.uid;
+        }
+    }
+];
+
 export {
     createNewRoom,
+    getStartingRoom,
+    areThumbnailsIcons,
+    removeAsset,
+    assetContextMenuItems,
     createNewRoom as createAsset,
     getThumbnail
 };
