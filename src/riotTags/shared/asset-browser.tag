@@ -183,6 +183,7 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
         this.mixin(require('./data/node_requires/riotMixins/niceTime').default);
         this.sort = 'type';
         this.sortReverse = false;
+        this.lodash = require('lodash');
 
         const resources = require('data/node_requires/resources');
         this.assetTypes = this.opts.assettypes ? this.opts.assettypes.split(',') : ['all'];
@@ -536,6 +537,7 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
             this.contextMenuAsset = item;
             const contextActions = resources.getContextActions(item);
             if (contextActions.length > 0) {
+                contextActions.forEach(contextAction => contextAction.label = this.lodash.get(this.vocFull, contextAction.vocPath, ' '));
                 contextActions.push({
                     type: 'separator'
                 });
