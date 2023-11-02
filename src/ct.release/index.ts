@@ -1,4 +1,4 @@
-import * as pixiMod from 'node_modules/pixi.js';
+import type * as pixiMod from 'node_modules/pixi.js';
 declare var PIXI: typeof pixiMod;
 
 /*! Made with ct.js http://ctjs.rocks/ */
@@ -14,7 +14,7 @@ import resM from 'res';
 import roomsM, {Room} from './rooms';
 import soundsM from 'sounds';
 import stylesM from 'styles';
-import templatesM, {Copy} from './templates';
+import templatesM, {BasicCopy} from './templates';
 import emittersM from './emitters';
 import tilemapsM, {Tilemap} from './tilemaps';
 import timerM from './timer';
@@ -133,7 +133,7 @@ export const settings = {
     }
 };
 
-export const stack: (Copy | Background)[] = [];
+export const stack: (BasicCopy | Background)[] = [];
 
 /** The PIXI.Application that runs ct.js game */
 export let pixiApp: pixiMod.Application;
@@ -168,25 +168,28 @@ export let pixiApp: pixiMod.Application;
 
 let loading: Promise<void>;
 {
-    const killRecursive = (copy: Copy | Background) => {
+    const killRecursive = (copy: (BasicCopy & pixiMod.DisplayObject) | Background) => {
         copy.kill = true;
-        if (copy instanceof Copy && copy.onDestroy) {
+        if (templatesM.isCopy(copy) && (copy as BasicCopy).onDestroy) {
             templatesM.onDestroy.apply(copy);
-            copy.onDestroy.apply(copy);
+            (copy as BasicCopy).onDestroy.apply(copy);
         }
         for (const child of copy.children) {
             if (templatesM.isCopy(child)) {
-                killRecursive(child as Copy); // bruh
+                killRecursive(child as (BasicCopy & pixiMod.DisplayObject)); // bruh
             }
         }
         const stackIndex = stack.indexOf(copy);
         if (stackIndex !== -1) {
             stack.splice(stackIndex, 1);
         }
-        if (copy instanceof Copy && copy.template) {
-            const templatelistIndex = templatesM.list[copy.template].indexOf(copy);
+        if (templatesM.isCopy(copy) && (copy as BasicCopy).template) {
+            const templatelistIndex = templatesM
+                .list[(copy as BasicCopy & pixiMod.DisplayObject).template]
+                .indexOf((copy as BasicCopy & pixiMod.DisplayObject));
             if (templatelistIndex !== -1) {
-                templatesM.list[copy.template].splice(templatelistIndex, 1);
+                templatesM.list[(copy as BasicCopy & pixiMod.DisplayObject).template]
+                    .splice(templatelistIndex, 1);
             }
         }
         deadPool.push(copy);
@@ -225,8 +228,9 @@ let loading: Promise<void>;
         for (const copy of stack) {
             // eslint-disable-next-line no-underscore-dangle
             if (copy.kill && !copy._destroyed) {
-                killRecursive(copy); // This will also allow a parent to eject children
-                                     // to a new container before they are destroyed as well
+                // This will also allow a parent to eject children
+                // to a new container before they are destroyed as well
+                killRecursive(copy as (BasicCopy & pixiMod.DisplayObject));
                 copy.destroy({
                     children: true
                 });

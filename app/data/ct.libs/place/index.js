@@ -955,7 +955,7 @@ const place = (function ctPlace() {
     setInterval(function switchCtPlaceGoDirection() {
         place.m *= -1;
     }, 789);
-    Object.defineProperty(templates.Copy.prototype, 'cgroup', {
+    Object.defineProperty(templates.CopyProto, 'cgroup', {
         set: function (value) {
             this.$cgroup = value;
         },
@@ -963,7 +963,7 @@ const place = (function ctPlace() {
             return this.$cgroup;
         }
     });
-    Object.defineProperty(templates.Copy.prototype, 'moveContinuous', {
+    Object.defineProperty(templates.CopyProto, 'moveContinuous', {
         value: function (cgroup, precision) {
             if (this.gravity) {
                 this.hspeed += this.gravity * u.delta * Math.cos(this.gravityDir * Math.PI / 180);
@@ -972,12 +972,12 @@ const place = (function ctPlace() {
             return place.moveAlong(this, this.direction, this.speed * u.delta, cgroup, precision);
         }
     });
-    Object.defineProperty(templates.Copy.prototype, 'moveBullet', {
+    Object.defineProperty(templates.CopyProto, 'moveBullet', {
         value: function (cgroup, precision) {
             return this.moveContinuous(cgroup, precision);
         }
     });
-    Object.defineProperty(templates.Copy.prototype, 'moveContinuousByAxes', {
+    Object.defineProperty(templates.CopyProto, 'moveContinuousByAxes', {
         value: function (cgroup, precision) {
             if (this.gravity) {
                 this.hspeed += this.gravity * u.delta * Math.cos(this.gravityDir * Math.PI / 180);
@@ -992,7 +992,7 @@ const place = (function ctPlace() {
             );
         }
     });
-    Object.defineProperty(templates.Copy.prototype, 'moveSmart', {
+    Object.defineProperty(templates.CopyProto, 'moveSmart', {
         value: function (cgroup, precision) {
             return this.moveContinuousByAxes(cgroup, precision);
         }

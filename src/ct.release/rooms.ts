@@ -1,18 +1,18 @@
 import uLib from './u';
 import backgrounds, {Background} from './backgrounds';
-import templatesLib, {Copy} from './templates';
+import templatesLib, {BasicCopy} from './templates';
 import tilemapsLib, {Tilemap} from './tilemaps';
 import mainCamera from './camera';
-import {deadPool, pixiApp, stack} from '.';
+import {copyTypeSymbol, deadPool, pixiApp, stack} from '.';
 import {ExportedRoom} from './../node_requires/exporter/_exporterContracts';
 import {updateViewport} from 'fittoscreen';
 import {runBehaviors} from './behaviors';
 
-import * as pixiMod from 'node_modules/pixi.js';
+import type * as pixiMod from 'node_modules/pixi.js';
 declare var PIXI: typeof pixiMod;
 
 type RoomMergeResult = {
-    copies: Copy[];
+    copies: BasicCopy[];
     tileLayers: Tilemap[];
     backgrounds: Background[];
 };
@@ -251,8 +251,8 @@ const roomsLib = {
         room.kill = true;
         pixiApp.stage.removeChild(room);
         for (const copy of room.children) {
-            if (copy instanceof Copy) {
-                copy.kill = true;
+            if (copyTypeSymbol in copy) {
+                (copy as BasicCopy).kill = true;
             }
         }
         room.onLeave();

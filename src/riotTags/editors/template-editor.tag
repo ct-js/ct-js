@@ -9,6 +9,46 @@ mixin templateProperties
             asset="{parent.asset}"
         )
     collapsible-section.aPanel(
+        if="{asset.baseClass === 'NineSlicePlane'}"
+        heading="{voc.panelHeading}"
+        storestatekey="templateNineSlice"
+        hlevel="4"
+    )
+        .aNinePatchGrid
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            .aNinePatchBg
+            input.aNinePatchElement.top(
+                title="{parent.voc.nineSliceTop}"
+                type="number" min="1" step="8"
+                value="{parent.asset.nineSliceSettings.top}"
+                oninput="{parent.wire('asset.nineSliceSettings.top')}"
+            )
+            input.aNinePatchElement.right(
+                title="{parent.voc.nineSliceRight}"
+                type="number" min="1" step="8"
+                value="{parent.asset.nineSliceSettings.right}"
+                oninput="{parent.wire('asset.nineSliceSettings.right')}"
+            )
+            input.aNinePatchElement.bottom(
+                title="{parent.voc.nineSliceBottom}"
+                type="number" min="1" step="8"
+                value="{parent.asset.nineSliceSettings.bottom}"
+                oninput="{parent.wire('asset.nineSliceSettings.bottom')}"
+            )
+            input.aNinePatchElement.left(
+                title="{parent.voc.nineSliceLeft}"
+                type="number" min="1" step="8"
+                value="{parent.asset.nineSliceSettings.left}"
+                oninput="{parent.wire('asset.nineSliceSettings.left')}"
+            )
+    collapsible-section.aPanel(
         heading="{voc.appearance}"
         storestatekey="templateEditorAppearance"
         hlevel="4"
@@ -71,18 +111,31 @@ template-editor.aPanel.aView.flexrow
         .tall.flexfix.aPanel.pad
             .flexfix-header
                 asset-input.wide(
-                    assettypes="texture,skeleton"
+                    if="{['AnimatedSprite', 'NineSlicePlane'].includes(asset.baseClass)}"
+                    assettypes="{asset.baseClass === 'AnimatedSprite' && 'texture,skeleton' || 'texture'}"
                     assetid="{asset.texture || -1}"
                     large="large"
                     allowclear="allowclear"
                     onchanged="{applyTexture}"
                 )
+                asset-input.wide(
+                    if="{asset.baseClass === 'Text'}"
+                    assettypes="texture,skeleton"
+                    assetid="{asset.textStyle || -1}"
+                    large="large"
+                    allowclear="allowclear"
+                    onchanged="{applyStyle}"
+                )
                 .aSpacer
-                .center
-                    svg.feather
-                        use(xlink:href="#template")
-                    b
-                        code  {asset.name}
+                .relative
+                    button.wide.flexrow(onclick="{showbaseClassMenu}")
+                        svg.feather.nogrow.alignmiddle
+                            use(xlink:href="#{baseClassToIcon[asset.baseClass]}")
+                        span.nogrow.alignmiddle {voc.baseClass[asset.baseClass]}
+                        .aSpacer
+                        svg.feather.nogrow.alignmiddle
+                            use(xlink:href="#chevron-down")
+                    context-menu.wide(menu="{baseClassMenu}" style="position: absolute; top: 100%" ref="baseClassMenu")
                 .aSpacer
             .flexfix-body(if="{localStorage.altTemplateLayout !== 'on'}")
                 +eventsList()
@@ -156,6 +209,26 @@ template-editor.aPanel.aView.flexrow
             this.update();
         };
         this.updateBehaviorExtends();
+
+        this.baseClassToIcon = {
+            AnimatedSprite: 'template',
+            Text: 'font',
+            NineSlicePlane: 'ninepatch'
+        };
+        this.baseClassMenu = {
+            opened: false,
+            items: ['AnimatedSprite', 'Text', 'NineSlicePlane'].map(baseClass => ({
+                icon: this.baseClassToIcon[baseClass],
+                label: this.voc.baseClass[baseClass],
+                click: () => {
+                    this.asset.baseClass = baseClass;
+                    this.update();
+                }
+            }))
+        };
+        this.showbaseClassMenu = () => {
+            this.refs.baseClassMenu.toggle();
+        };
 
         this.changeTab = tab => () => {
             this.tab = tab;

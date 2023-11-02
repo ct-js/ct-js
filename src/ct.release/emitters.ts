@@ -1,9 +1,9 @@
+import uLib from './u';
 import resLib from './res';
 import roomsLib, {Room} from './rooms';
-import type {Copy} from './templates';
+import type {BasicCopy} from './templates';
 
-import * as pixiMod from 'node_modules/pixi.js';
-import uLib from './u';
+import type * as pixiMod from 'node_modules/pixi.js';
 declare var PIXI: typeof pixiMod;
 
 import type {Emitter} from 'node_modules/@pixi/particle-emitter';
@@ -74,8 +74,8 @@ interface ITandemSettings {
  */
 class EmitterTandem extends PIXI.Container {
     /** A copy to follow */
-    follow?: Copy | pixiMod.DisplayObject;
-    appendant?: Copy | pixiMod.DisplayObject;
+    follow?: BasicCopy | pixiMod.DisplayObject;
+    appendant?: BasicCopy | pixiMod.DisplayObject;
     /** If set to true, the tandem will stop updating its emitters */
     frozen = false;
     stopped = false;
@@ -347,7 +347,7 @@ const emittersLib = {
      * @returns {EmitterTandem} The newly created emitter tandem.
      */
     append(
-        parent: Copy | pixiMod.DisplayObject,
+        parent: BasicCopy | pixiMod.DisplayObject,
         name: string,
         settings: ITandemSettings
     ): EmitterTandem {
@@ -365,7 +365,7 @@ const emittersLib = {
             console.error(parent);
             throw new Error('[emitters] An attempt to append an emitter to an entity that doesn\'t support children.');
         }
-        parent.addChild(tandem);
+        (parent as pixiMod.Container).addChild(tandem);
         return tandem;
     },
     /**
@@ -377,7 +377,7 @@ const emittersLib = {
      * @returns The newly created emitter tandem.
      */
     follow(
-        parent: Copy | pixiMod.DisplayObject,
+        parent: BasicCopy | pixiMod.DisplayObject,
         name: string,
         settings: ITandemSettings
     ): EmitterTandem {

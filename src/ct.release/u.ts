@@ -1,7 +1,7 @@
-import {Copy} from './templates';
+import {BasicCopy} from './templates';
 import timerLib, {CtTimer} from './timer';
 
-import * as pixiMod from 'node_modules/pixi.js';
+import type * as pixiMod from 'node_modules/pixi.js';
 declare var PIXI: typeof pixiMod;
 
 /**
@@ -236,7 +236,7 @@ const uLib = {
      * the two opposite corners of the rectangle.
      * @returns {boolean} `true` if the point is inside the rectangle, `false` otherwise.
      */
-    prect(x: number, y: number, arg: (Copy | Array<number>)): boolean {
+    prect(x: number, y: number, arg: (BasicCopy | Array<number>)): boolean {
         var xmin, xmax, ymin, ymax;
         if (arg instanceof Array) {
             xmin = Math.min(arg[0], arg[2]);
@@ -263,7 +263,7 @@ const uLib = {
      * and `r` defines the radius of it.
      * @returns {boolean} `true` if the point is inside the circle, `false` otherwise
      */
-    pcircle(x: number, y: number, arg: (Copy | Array<number>)): boolean {
+    pcircle(x: number, y: number, arg: (BasicCopy | Array<number>)): boolean {
         if (arg instanceof Array) {
             return uLib.pdc(x, y, arg[0], arg[1]) < arg[2];
         }

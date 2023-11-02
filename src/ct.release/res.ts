@@ -5,7 +5,7 @@ import uLib from './u';
 // import {Spine, ISkeletonData} from 'node_modules/pixi-spine';
 import {TextureShape, ExportedTiledTexture, ExportedSkeleton} from '../node_requires/exporter/_exporterContracts';
 
-import * as pixiMod from 'node_modules/pixi.js';
+import type * as pixiMod from 'node_modules/pixi.js';
 declare var PIXI: typeof pixiMod;
 
 export type CtjsTexture = pixiMod.Texture & {

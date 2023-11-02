@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 /* eslint-disable spaced-comment */
 /// <reference path="../resources/textures/ITexture.d.ts" />
+/// <reference path="../resources/templates/ITemplate.d.ts" />
 /// <reference path="../resources/emitterTandems/types.d.ts" />
 /// <reference path="../resources/rooms/IRoom.d.ts" />
 /// <reference path="../resources/projects/IProject.d.ts" />
@@ -112,11 +113,15 @@ export type ExportedRoom = {
 }
 
 export type ExportedTemplate = {
+    name: string;
     texture?: string;
+    textStyle?: string;
+    defaultText?: string;
     anchorX?: number;
     anchorY?: number;
     height?: number;
     width?: number;
+    baseClass: ITemplate['baseClass'];
     depth: number;
     blendMode: PIXI.BLEND_MODES;
     animationFPS: number;
@@ -124,6 +129,7 @@ export type ExportedTemplate = {
     loopAnimation: boolean;
     visible: boolean;
     behaviors: string[];
+    nineSliceSettings?: ITemplate['nineSliceSettings'];
     onStep: () => void;
     onDraw: () => void;
     onDestroy: () => void;

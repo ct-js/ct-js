@@ -3,7 +3,7 @@ import uLib from './u';
 import templatesLib from './templates';
 import roomsLib from 'rooms';
 
-import * as pixiMod from 'node_modules/pixi.js';
+import type * as pixiMod from 'node_modules/pixi.js';
 declare var PIXI: typeof pixiMod;
 
 import {ExportedTilemap, ExportedTile, TextureShape} from './../node_requires/exporter/_exporterContracts';

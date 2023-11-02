@@ -1150,6 +1150,16 @@
             "add": "Add (burn)",
             "multiply": "Multiply (darken)",
             "screen": "Screen (lighten)"
-        }
+        },
+        "baseClass": {
+            "AnimatedSprite": "Animated sprite",
+            "Text": "Text",
+            "NineSlicePlane": "Panel"
+        },
+        "nineSliceTop": "Top slice, in pixels",
+        "nineSliceRight": "Right slice, in pixels",
+        "nineSliceBottom": "Bottom slice, in pixels",
+        "nineSliceLeft": "Left slice, in pixels",
+        "panelHeading": "Texture slicing settings"
     }
 }
