@@ -185,16 +185,7 @@
       ]
     }
   ],
-  "roomExtends": [
-    {
-      "name": "Gravity",
-      "name_Ru": "Гравитация",
-      "type": "point2D",
-      "key": "matterGravity",
-      "step": 0.1,
-      "default": [0, 9.8]
-    }
-  ],
+
   "tileLayerExtends": [
     {
       "name": "Convert to static bodies",
