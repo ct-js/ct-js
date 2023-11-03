@@ -11,6 +11,8 @@
     @method updatePropList
         Call this on selection change to re-scan the selection for values
 
+// TODO: font props and history writing for them
+
 room-entities-properties
     div(if="{opts.pixieditor?.currentSelection.size && changes}")
         // Basic properties

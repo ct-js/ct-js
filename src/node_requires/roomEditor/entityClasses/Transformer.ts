@@ -1,4 +1,6 @@
 import {RoomEditor} from '..';
+import {Copy} from './Copy';
+import {Tile} from './Tile';
 
 import {getPixiSwatch} from '../../themes';
 import {rotateCursor} from '../common';
@@ -7,6 +9,17 @@ import {ease} from 'node_modules/pixi-ease';
 import {rotateRad, pdc} from '../../utils/trigo';
 
 import * as PIXI from 'node_modules/pixi.js';
+
+const nullPoint = {
+    x: 0,
+    y: 0
+};
+const getAnchor = (obj: Copy | Tile): {x: number, y: number} => {
+    if (obj instanceof Copy) {
+        return obj.sprite?.anchor ?? obj.text?.anchor ?? nullPoint;
+    }
+    return obj.anchor;
+};
 
 export class Handle extends PIXI.Graphics {
     cursor: string;
@@ -103,9 +116,10 @@ export class Transformer extends PIXI.Container {
         for (const elt of this.editor.currentSelection) {
             const w = elt.width,
                   h = elt.height,
+                  anchor = getAnchor(elt),
                   // IDK why this works
-                  px = Math.sign(elt.scale.x) === -1 ? 1 - elt.anchor.x : elt.anchor.x,
-                  py = Math.sign(elt.scale.y) === -1 ? 1 - elt.anchor.y : elt.anchor.y;
+                  px = Math.sign(elt.scale.x) === -1 ? 1 - anchor.x : anchor.x,
+                  py = Math.sign(elt.scale.y) === -1 ? 1 - anchor.y : anchor.y;
             const tl = rotateRad(-w * px, -h * py, elt.rotation),
                   tr = rotateRad(w * (1 - px), -h * py, elt.rotation),
                   bl = rotateRad(-w * px, h * (1 - py), elt.rotation),
@@ -173,6 +187,7 @@ export class Transformer extends PIXI.Container {
                 initial.scale.y *
                 (sin ** 2 * this.applyScaleX * flip + cos ** 2 * this.applyScaleY)
             );
+            (elt as Copy).updateNinePatch?.();
         }
     }
 
@@ -180,9 +195,10 @@ export class Transformer extends PIXI.Container {
         for (const elt of this.editor.currentSelection) {
             const w = elt.width,
                   h = elt.height,
+                  anchor = getAnchor(elt),
                   // IDK why this works
-                  px = Math.sign(elt.scale.x) === -1 ? 1 - elt.anchor.x : elt.anchor.x,
-                  py = Math.sign(elt.scale.y) === -1 ? 1 - elt.anchor.y : elt.anchor.y,
+                  px = Math.sign(elt.scale.x) === -1 ? 1 - anchor.x : anchor.x,
+                  py = Math.sign(elt.scale.y) === -1 ? 1 - anchor.y : anchor.y,
                   {x, y} = this.editor.room.toGlobal(elt.position),
                   sx = this.editor.camera.scale.x,
                   sy = this.editor.camera.scale.y;

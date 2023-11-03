@@ -61,7 +61,7 @@ class RoomEditor extends PIXI.Application {
     history = new History(this);
     riotEditor: IRoomEditorRiotTag;
     ctRoom: IRoom;
-    currentSelection: Set<PIXI.Sprite> = new Set();
+    currentSelection: Set<Copy | Tile> = new Set();
     clipboard: Set<tileClipboardData | copyClipboardData> = new Set();
     /** A sprite that catches any click events */
     clicktrap = new PIXI.Sprite(PIXI.Texture.WHITE);
@@ -425,7 +425,7 @@ class RoomEditor extends PIXI.Application {
             return;
         }
         for (const copy of this.copies) {
-            copy.update(this.ticker.deltaTime);
+            copy.sprite?.update(this.ticker.deltaTime);
         }
     }
     deleteSelected(): void {

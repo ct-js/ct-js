@@ -322,6 +322,7 @@ const mix = (
     }
 };
 
+// eslint-disable-next-line complexity
 export const makeCopy = (
     template: string,
     parent: pixiMod.Container,
@@ -342,6 +343,10 @@ export const makeCopy = (
         ) as CopyText;
         mix(copy, t, parent);
         Object.assign(copy, exts);
+        copy.scale.set(
+            (exts.scaleX as number) ?? 1,
+            (exts.scaleY as number) ?? 1
+        );
         return copy;
     }
 
@@ -359,6 +364,14 @@ export const makeCopy = (
             t.nineSliceSettings?.bottom ?? 16
         ) as CopyPanel;
         mix(copy, t, parent);
+        const baseWidth = copy.width,
+              baseHeight = copy.height;
+        if ('scaleX' in exts) {
+            copy.width = baseWidth * (exts.scaleX as number);
+        }
+        if ('scaleY' in exts) {
+            copy.height = baseHeight * (exts.scaleY as number);
+        }
         Object.assign(copy, exts);
         return copy;
     }
@@ -366,6 +379,10 @@ export const makeCopy = (
         const copy = new PIXI.AnimatedSprite(textures) as CopyAnimatedSprite;
         copy.anchor.x = t.anchorX ?? textures[0].defaultAnchor.x ?? 0;
         copy.anchor.y = t.anchorY ?? textures[0].defaultAnchor.y ?? 0;
+        copy.scale.set(
+            (exts.scaleX as number) ?? 1,
+            (exts.scaleY as number) ?? 1
+        );
         mix(copy, t, parent);
         Object.assign(copy, exts);
         return copy;

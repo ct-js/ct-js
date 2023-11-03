@@ -68,7 +68,7 @@ export type change = transformation | deletion | creation |
                      backgroundCreation | backgroundDeletion |
                      propChange;
 
-const snapshotTransform = (entity: PIXI.Sprite): transformationSnapshot => ({
+const snapshotTransform = (entity: Copy | Tile): transformationSnapshot => ({
     position: {
         x: entity.position.x,
         y: entity.position.y
@@ -78,7 +78,7 @@ const snapshotTransform = (entity: PIXI.Sprite): transformationSnapshot => ({
         x: entity.scale.x,
         y: entity.scale.y
     },
-    tint: entity.tint as number,
+    tint: ((entity as Copy).sprite ?? (entity as Copy).text ?? (entity as Tile)).tint as number,
     alpha: entity.alpha
 });
 
@@ -108,9 +108,12 @@ export class History {
                 const [entity, [before]] = transform;
                 entity.position.set(before.position.x, before.position.y);
                 entity.scale.set(before.scale.x, before.scale.y);
+                (entity as Copy).updateNinePatch?.();
                 entity.alpha = before.alpha;
                 entity.rotation = before.rotation;
-                entity.tint = before.tint;
+                // Why do I ever need to type-annotate this?
+                ((entity as Copy).sprite ?? (entity as Copy).text ?? (entity as Tile)).tint =
+                    before.tint;
                 this.editor.currentSelection.add(entity);
             }
             this.editor.transformer.setup(true);
@@ -180,7 +183,9 @@ export class History {
                 entity.scale.set(after.scale.x, after.scale.y);
                 entity.alpha = after.alpha;
                 entity.rotation = after.rotation;
-                entity.tint = after.tint;
+                (entity as Copy).updateNinePatch?.();
+                ((entity as Copy).sprite ?? (entity as Copy).text ?? (entity as Tile)).tint =
+                    after.tint;
                 this.editor.currentSelection.add(entity);
             }
             this.editor.transformer.setup(true);
@@ -281,6 +286,7 @@ export class History {
             }
             riot.refs.backgroundsEditor?.update();
         }
+        // TODO: prop updates for text labels
     }
 
     get canUndo(): boolean {
