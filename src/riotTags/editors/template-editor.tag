@@ -76,14 +76,14 @@ mixin templateProperties
                     option(value="multiply" selected="{parent.asset.blendMode === 'multiply'}") {parent.voc.blendModes.multiply}
                     option(value="screen" selected="{parent.asset.blendMode === 'screen'}") {parent.voc.blendModes.screen}
         fieldset
-            label.flexrow
+            label.flexrow(if="{parent.asset.baseClass === 'AnimatedSprite'}")
                 b.nogrow.alignmiddle {parent.voc.animationFPS}
                 .aSpacer.nogrow
                 input.alignmiddle(type="number" max="60" min="1" step="1" value="{parent.asset.animationFPS ?? 60}" onchange="{parent.wire('asset.animationFPS')}")
-            label.block.checkbox
+            label.block.checkbox(if="{parent.asset.baseClass === 'AnimatedSprite'}")
                 input(type="checkbox" checked="{parent.asset.playAnimationOnStart}" onchange="{parent.wire('asset.playAnimationOnStart')}")
                 span {parent.voc.playAnimationOnStart}
-            label.block.checkbox
+            label.block.checkbox(if="{parent.asset.baseClass === 'AnimatedSprite'}")
                 input(type="checkbox" checked="{parent.asset.loopAnimation}" onchange="{parent.wire('asset.loopAnimation')}")
                 span {parent.voc.loopAnimation}
             label.block.checkbox

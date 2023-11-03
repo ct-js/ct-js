@@ -114,28 +114,34 @@ export type ExportedRoom = {
 
 export type ExportedTemplate = {
     name: string;
-    texture?: string;
-    textStyle?: string;
-    defaultText?: string;
     anchorX?: number;
     anchorY?: number;
     height?: number;
     width?: number;
-    baseClass: ITemplate['baseClass'];
     depth: number;
     blendMode: PIXI.BLEND_MODES;
-    animationFPS: number;
-    playAnimationOnStart: boolean;
-    loopAnimation: boolean;
     visible: boolean;
     behaviors: string[];
-    nineSliceSettings?: ITemplate['nineSliceSettings'];
     onStep: () => void;
     onDraw: () => void;
     onDestroy: () => void;
     onCreate: () => void;
     extends: Record<string, any>;
-}
+} & ({
+    baseClass: 'AnimatedSprite';
+    animationFPS: number;
+    playAnimationOnStart: boolean;
+    loopAnimation: boolean;
+    texture?: string;
+} | {
+    baseClass: 'Text';
+    textStyle: string | -1;
+    defaultText: string;
+} | {
+    baseClass: 'NineSlicePlane';
+    nineSliceSettings: ITemplate['nineSliceSettings'];
+    texture?: string;
+});
 
 export type ExportedMeta = {
     name: string;

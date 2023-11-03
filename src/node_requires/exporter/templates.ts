@@ -27,6 +27,10 @@ const getBaseClassInfo = (blankTextures: IBlankTexture[], template: ITemplate) =
         if (template.baseClass === 'NineSlicePlane') {
             classInfo += `
             nineSliceSettings: ${JSON.stringify(template.nineSliceSettings)},`;
+        } else if (template.baseClass === 'AnimatedSprite') {
+            classInfo += `animationFPS: ${template.animationFPS ?? 60},
+            playAnimationOnStart: ${Boolean(template.playAnimationOnStart)},
+            loopAnimation: ${Boolean(template.loopAnimation)},`;
         }
         return classInfo;
     }
@@ -67,9 +71,6 @@ templates.templates["${template.name}"] = {
     name: ${JSON.stringify(template.name)},
     depth: ${template.depth},
     blendMode: PIXI.BLEND_MODES.${template.blendMode?.toUpperCase() ?? 'NORMAL'},
-    animationFPS: ${template.animationFPS ?? 60},
-    playAnimationOnStart: ${Boolean(template.playAnimationOnStart)},
-    loopAnimation: ${Boolean(template.loopAnimation)},
     visible: ${Boolean(template.visible ?? true)},
     baseClass: "${template.baseClass}",
     ${baseClassInfo}

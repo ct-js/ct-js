@@ -236,18 +236,21 @@ const Copy = function (
     container = container || roomsLib.current;
     this[copyTypeSymbol] = true;
     if (template) {
-        this._tex = template.texture;
-        this.template = template.name;
         // Early linking so that `this.parent` is available in OnCreate events
         this.parent = container;
         if (template.baseClass === 'AnimatedSprite') {
-            const me = this as BasicCopy & pixiMod.AnimatedSprite;
+            this._tex = template.texture;
+            const me = this as CopyAnimatedSprite;
             me.blendMode = template.blendMode || PIXI.BLEND_MODES.NORMAL;
             me.loop = template.loopAnimation;
             me.animationSpeed = template.animationFPS / 60;
             if (template.playAnimationOnStart) {
                 me.play();
             }
+        } else if (template.baseClass === 'NineSlicePlane') {
+            const me = this as CopyPanel;
+            me.blendMode = template.blendMode || PIXI.BLEND_MODES.NORMAL;
+            this._tex = template.texture;
         }
         (this as Mutable<typeof this>).behaviors = [...template.behaviors];
         if (template.visible === false) { // ignore nullish values
@@ -287,7 +290,9 @@ const Copy = function (
             onCreate: template.onCreate,
             onDestroy: template.onDestroy
         });
-        this.shape = res.getTextureShape(template.texture || -1);
+        if ('texture' in template) {
+            this.shape = res.getTextureShape(template.texture || -1);
+        }
         this.zIndex = template.depth;
         if (templatesLib.list[template.name]) {
             templatesLib.list[template.name].push(this);
@@ -328,7 +333,7 @@ export const makeCopy = (
     const t: ExportedTemplate = templatesLib.templates[template];
     if (t.baseClass === 'Text') {
         let style: ExportedStyle;
-        if (t.textStyle) {
+        if (t.textStyle && t.textStyle !== -1) {
             style = stylesLib.get(t.textStyle);
         }
         const copy = new PIXI.Text(
@@ -365,7 +370,7 @@ export const makeCopy = (
         Object.assign(copy, exts);
         return copy;
     }
-    throw new Error(`[internal -> makeCopy] Unknown base class \`${t.baseClass}\` for template \`${template}\`.`);
+    throw new Error(`[internal -> makeCopy] Unknown base class \`${(t as any).baseClass}\` for template \`${template}\`.`);
 };
 
 const onCreateModifier = function () {
