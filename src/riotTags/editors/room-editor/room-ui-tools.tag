@@ -102,7 +102,7 @@ room-ui-tools
         this.mixin(require('./data/node_requires/riotMixins/wire').default);
 
         const {getById} = require('./data/node_requires/resources');
-        this.getName = () => getById('template', this.opts.selection.templateId);
+        this.getName = () => getById('template', this.opts.selection.templateId).name;
 
         this.memorizeChanges = () => {
             this.opts.pixieditor.history.snapshotUi();
