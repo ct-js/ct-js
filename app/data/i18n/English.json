@@ -98,6 +98,21 @@
         "tileLayer": "tile layer",
         "ctSite": "ct.js homepage",
         "openAssetGallery": "Gallery",
+        "alignModes": {
+            "left": "Left",
+            "right": "Right",
+            "top": "Top",
+            "bottom": "Bottom",
+            "center": "Center",
+            "topLeft": "Top left",
+            "topCenter": "Top center",
+            "topRight": "Top right",
+            "bottomLeft": "Bottom left",
+            "bottomCenter": "Bottom center",
+            "bottomRight": "Bottom right",
+            "fill": "Fill",
+            "Scale": "Scale"
+        },
         "assetTypes": {
             "behavior": [
                 "behavior",
@@ -899,6 +914,14 @@
             "value": "Value",
             "nameOccupied": "This property is used by ct.js! You should come up with a different name."
         },
+        "uiTools": {
+            "noSelectionNotice": "Select a text label to change its properties.",
+            "textSettings": "Text settings",
+            "customText": "Text",
+            "customTextSize": "Font size",
+            "wordWrapWidth": "Wrap at this width",
+            "textAlignment": "Align by"
+        },
         "restrictCamera": "Keep camera in a rectangle",
         "minimumX": "Min X",
         "minimumY": "Min Y",
@@ -921,6 +944,7 @@
             "addCopies": "Add copies",
             "addTiles": "Add tiles",
             "manageBackgrounds": "Manage backgrounds",
+            "uiTools": "UI tools",
             "roomProperties": "Room properties"
         }
     },
@@ -1130,13 +1154,9 @@
     },
     "templateView": {
         "change": "Change sprite",
-        "create": "On Create",
-        "destroy": "On Destroy",
-        "done": "Done",
-        "draw": "Draw",
+        "defaultText": "Default text:",
         "learnAboutTypes": "Learn about coding templates",
         "name": "Name:",
-        "step": "On Step",
         "appearance": "Appearance",
         "visible": "Visible",
         "depth": "Depth:",

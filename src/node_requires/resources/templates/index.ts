@@ -6,6 +6,7 @@ import {getDOMSkeleton, getPixiTexture as getSkeletonPixiTexture} from '../skele
 
 import {TexturePreviewer} from '../preview/texture';
 import {SkeletonPreviewer} from '../preview/skeleton';
+import {StylePreviewer} from '../preview/style';
 
 import * as PIXI from 'node_modules/pixi.js';
 import {getById, getOfType} from '..';
@@ -38,6 +39,12 @@ const getTemplatePreview = function getTemplatePreview(
         template = getById('template', template);
     }
     if (template === -1) {
+        return TexturePreviewer.get(-1, fs);
+    }
+    if (template.baseClass === 'Text') {
+        if (template.textStyle !== -1 && template.textStyle) {
+            return StylePreviewer.get(getById('style', template.textStyle), fs);
+        }
         return TexturePreviewer.get(-1, fs);
     }
     if (template.skeleton && template.skeleton !== -1) {

@@ -15,15 +15,6 @@ mixin templateProperties
         hlevel="4"
     )
         .aNinePatchGrid
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
-            .aNinePatchBg
             input.aNinePatchElement.top(
                 title="{parent.voc.nineSliceTop}"
                 type="number" min="1" step="8"
@@ -75,6 +66,10 @@ mixin templateProperties
                     option(value="add" selected="{parent.asset.blendMode === 'add'}") {parent.voc.blendModes.add}
                     option(value="multiply" selected="{parent.asset.blendMode === 'multiply'}") {parent.voc.blendModes.multiply}
                     option(value="screen" selected="{parent.asset.blendMode === 'screen'}") {parent.voc.blendModes.screen}
+        fieldset(if="{parent.asset.baseClass === 'Text'}")
+            label.block
+                b {parent.voc.defaultText}
+                input(type="text" value="{parent.asset.defaultText}" onchange="{parent.wire('asset.defaultText')}")
         fieldset
             label.flexrow(if="{parent.asset.baseClass === 'AnimatedSprite'}")
                 b.nogrow.alignmiddle {parent.voc.animationFPS}
@@ -120,7 +115,7 @@ template-editor.aPanel.aView.flexrow
                 )
                 asset-input.wide(
                     if="{asset.baseClass === 'Text'}"
-                    assettypes="texture,skeleton"
+                    assettypes="style"
                     assetid="{asset.textStyle || -1}"
                     large="large"
                     allowclear="allowclear"
@@ -233,9 +228,6 @@ template-editor.aPanel.aView.flexrow
         this.changeTab = tab => () => {
             this.tab = tab;
         };
-        this.changeSprite = () => {
-            this.selectingTexture = true;
-        };
         this.applyTexture = id => {
             if (id === -1) {
                 this.asset.texture = -1;
@@ -254,13 +246,22 @@ template-editor.aPanel.aView.flexrow
                     this.asset.texture = -1;
                 }
             }
-            this.selectingTexture = false;
             this.update();
         };
-        this.cancelTexture = () => {
-            this.selectingTexture = false;
+        this.applyStyle = id => {
+            if (id === -1) {
+                this.asset.texture = -1;
+            } else {
+                const asset = resources.getById('style', id);
+                // Set template's name to match the style's one
+                // if user haven't specified their own yet.
+                if (this.asset.name === 'NewTemplate') {
+                    this.asset.name = asset.name;
+                }
+                this.asset.textStyle = id;
+            }
             this.update();
-        };
+        }
         this.saveAsset = () => {
             this.writeChanges();
             return true;
