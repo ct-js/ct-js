@@ -236,7 +236,7 @@ class Copy extends PIXI.Container {
         if (cts.wordWrapWidth) {
             this.text.style.wordWrapWidth = Number(cts.wordWrapWidth);
             this.text.style.wordWrap = true;
-        } else {
+        } else if (this.cachedTemplate.textStyle) {
             this.text.style.wordWrap = this.cachedTemplate.textStyle !== -1 &&
                 getById('style', this.cachedTemplate.textStyle).font.wrap;
         }
