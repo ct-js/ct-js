@@ -119,10 +119,27 @@ interface ICopy {
     getRoom: (this: BasicCopy) => Room;
 }
 
-export type BasicCopy = pixiMod.DisplayObject & ICopy;
-export type CopyAnimatedSprite = pixiMod.AnimatedSprite & ICopy;
-export type CopyPanel = pixiMod.NineSlicePlane & ICopy;
-export type CopyText = pixiMod.Text & ICopy;
+/**
+ * An instance of a ct.js template. Ct.js cannot predict the base class
+ * of a template here, so you may need to add `as Copy...` to further narrow down
+ * the class.
+ */
+export type BasicCopy = Record<string, any> & pixiMod.DisplayObject & ICopy;
+/**
+ * An instance of a ct.js template with Animated Sprite as its base class.
+ * It has functionality of both PIXI.AnimatedSprite and ct.js Copies.
+ */
+export type CopyAnimatedSprite = Record<string, any> & pixiMod.AnimatedSprite & ICopy;
+/**
+ * An instance of a ct.js template with Panel as its base class.
+ * It has functionality of both PIXI.NineSlicePlane and ct.js Copies.
+ */
+export type CopyPanel = Record<string, any> & pixiMod.NineSlicePlane & ICopy;
+/**
+ * An instance of a ct.js template with Text as its base class.
+ * It has functionality of both PIXI.Text and ct.js Copies.
+ */
+export type CopyText = Record<string, any> & pixiMod.Text & ICopy;
 
 export const CopyProto: Partial<BasicCopy> = {
     set tex(value: string) {

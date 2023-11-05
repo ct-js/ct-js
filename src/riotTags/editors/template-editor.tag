@@ -161,7 +161,11 @@ template-editor.aPanel.aView.flexrow
             //        span {voc.step}
             div
                 .tabbed.noborder(show="{tab === 'javascript'}")
-                    code-editor-scriptable(event="{currentSheet}" entitytype="template")
+                    code-editor-scriptable(
+                        event="{currentSheet}"
+                        entitytype="template"
+                        basetype="{baseClassToTS[asset.baseClass]}"
+                    )
                 // .tabbed(show="{tab === 'blocks'}")
                 //     .aBlocksEditor(ref="blocks")
     .template-editor-Properties.nmr(if="{localStorage.altTemplateLayout !== 'on' && !minimizeProps}")
@@ -181,6 +185,12 @@ template-editor.aPanel.aView.flexrow
         this.mixin(require('./data/node_requires/riotMixins/discardio').default);
 
         const resources = require('./data/node_requires/resources');
+
+        this.baseClassToTS = {
+            'AnimatedSprite': 'CopyAnimatedSprite',
+            'Text': 'CopyText',
+            'NineSlicePlane': 'CopyPanel'
+        }
 
         this.getTextureRevision = template => resources.getById(template.texture).lastmod;
 

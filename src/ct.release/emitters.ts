@@ -321,7 +321,7 @@ const emittersLib = {
      * @param {ITandemSettings} [settings] Additional configs for the created tandem.
      * @return {EmitterTandem} The newly created tandem.
      */
-    fire(name: string, x: number, y: number, settings: ITandemSettings): EmitterTandem {
+    fire(name: string, x: number, y: number, settings?: ITandemSettings): EmitterTandem {
         if (!(name in emittersLib.templates)) {
             throw new Error(`[emitters] An attempt to create a non-existent emitter ${name}.`);
         }
@@ -349,10 +349,13 @@ const emittersLib = {
     append(
         parent: BasicCopy | pixiMod.DisplayObject,
         name: string,
-        settings: ITandemSettings
+        settings?: ITandemSettings
     ): EmitterTandem {
         if (!(name in emittersLib.templates)) {
             throw new Error(`[emitters] An attempt to create a non-existent emitter ${name}.`);
+        }
+        if (!(parent instanceof PIXI.Container)) {
+            throw new Error('[emitters] Cannot attach an emitter as the specified parent cannot have child elements.');
         }
         const opts = Object.assign({}, defaultSettings, settings);
         const tandem = new EmitterTandem(emittersLib.templates[name], opts);
@@ -379,7 +382,7 @@ const emittersLib = {
     follow(
         parent: BasicCopy | pixiMod.DisplayObject,
         name: string,
-        settings: ITandemSettings
+        settings?: ITandemSettings
     ): EmitterTandem {
         if (!(name in emittersLib.templates)) {
             throw new Error(`[emitters] An attempt to create a non-existent emitter ${name}.`);
