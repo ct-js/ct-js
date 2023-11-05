@@ -335,12 +335,27 @@ export const makeCopy = (
     if (t.baseClass === 'Text') {
         let style: ExportedStyle;
         if (t.textStyle && t.textStyle !== -1) {
-            style = stylesLib.get(t.textStyle);
+            style = stylesLib.get(t.textStyle, true);
+        }
+        if (exts.customWordWrap) {
+            style.wordWrap = true;
+            style.wordWrapWidth = Number(exts.customWordWrap);
+        }
+        if (exts.customSize) {
+            style.fontSize = Number(exts.customSize);
         }
         const copy = new PIXI.Text(
-            t.defaultText || '',
+            (exts.customText as string) || t.defaultText || '',
             style as unknown as Partial<pixiMod.ITextStyle>
         ) as CopyText;
+        if (exts.customAnchor) {
+            const anchor = exts.customAnchor as {
+                x?: number,
+                y?: number
+            };
+            copy.anchor.set(anchor?.x ?? 0, anchor?.y ?? 0);
+        }
+
         mix(copy, t, parent);
         Object.assign(copy, exts);
         copy.scale.set(

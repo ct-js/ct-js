@@ -143,7 +143,11 @@ export class Room extends PIXI.Container<pixiMod.DisplayObject> {
                         scaleY: copy.scale.y,
                         rotation: copy.rotation,
                         alpha: copy.opacity,
-                        tint: copy.tint
+                        tint: copy.tint,
+                        customSize: copy.customSize,
+                        customWordWrap: copy.customWordWrap,
+                        customText: copy.customText,
+                        customAnchor: copy.customAnchor
                     }
                 );
             }

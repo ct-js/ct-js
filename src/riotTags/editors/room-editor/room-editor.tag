@@ -313,16 +313,28 @@ room-editor.aPanel.aView
             uiTools: 'copiesVisible',
         };
         this.setTool = tool => () => {
+            const prevTool = this.currentTool;
             this.currentTool = tool;
             if (tool in mandatoryVisibilityMap) {
                 this.pixiEditor[mandatoryVisibilityMap[tool]] = true;
             }
+            // Preselect a copy when switching from 'select' to 'uiTools'
+            if (prevTool === 'select' &&
+                tool === 'uiTools' &&
+                this.pixiEditor.currentSelection.size === 1
+            ) {
+                [this.pixiEditor.currentUiSelection] = this.pixiEditor.currentSelection;
+                this.pixiEditor.history.initiateUiChange();
+            }
+
             if (tool !== 'select') {
                 this.pixiEditor.transformer.clear();
             }
             if (tool !== 'uiTools') {
                 this.pixiEditor.currentUiSelection = void 0;
             }
+
+            // Preselect the first tile layer, if another one was not selected before
             if (tool === 'addTiles' && !this.pixiEditor.tileLayers.includes(this.currentTileLayer)) {
                 [this.currentTileLayer] = this.pixiEditor.tileLayers;
             }
