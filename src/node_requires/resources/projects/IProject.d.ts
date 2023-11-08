@@ -69,6 +69,7 @@ declare interface IProject {
             desktopMode: 'maximized' | 'fullscreen' | 'windowed',
             hideCursor: boolean,
             mobileScreenOrientation: 'unspecified' | 'landscape' | 'portrait'
+            rendererBGcolor: string,
         },
         export: {
             windows: boolean,

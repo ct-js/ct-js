@@ -36,6 +36,9 @@ rendering-settings
             label.checkbox
                 input(type="radio" value=key checked=`{renderSettings.mobileScreenOrientation === '${key}'}` onchange="{wire('this.renderSettings.mobileScreenOrientation')}")
                 span=`{voc.screenOrientations.${key}}`
+    b
+        span {voc.rendererBGcolor}
+    color-input(onchange="{wire('global.currentProject.settings.rendering.rendererBGcolor', true)}" color="{global.currentProject.settings.rendering.rendererBGcolor}")
 
     script.
         this.namespace = 'settings.rendering';

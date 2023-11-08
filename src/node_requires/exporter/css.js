@@ -1,5 +1,6 @@
 const substituteCssVars = (str, project, injections) => {
     const Color = global.brehautColor;
+    let rendererBGcolor = project.settings.rendering.rendererBGcolor;
     let color1 = project.settings.branding.accent,
         // eslint-disable-next-line new-cap
         color2 = (Color(project.settings.branding.accent).getLuminance() < 0.5) ? '#ffffff' : '#000000';
@@ -18,6 +19,7 @@ const substituteCssVars = (str, project, injections) => {
             ''))
         .replace(/\/\*@preloaderforeground@\*\//g, color1)
         .replace(/\/\*@preloaderbackground@\*\//g, color2)
+        .replace(/\/\*@rendererbackground@\*\//g, rendererBGcolor)
         .replace('/*%css%*/', () => injections.css);
 };
 module.exports = {

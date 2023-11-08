@@ -388,7 +388,8 @@
                 "landscape": "Landscape",
                 "portrait": "Portrait"
             },
-            "pixelatedRender": "Disable image smoothing here and in exported project (preserve crisp pixels)"
+            "pixelatedRender": "Disable image smoothing here and in exported project (preserve crisp pixels)",
+            "rendererBGcolor": "Renderer Background Color:"
         },
         "scripts": {
             "heading": "Custom scripts",
@@ -773,6 +774,7 @@
         "followTemplate": "Follow a template:",
         "followCodeHint": "Learn how to further tweak this feature with code",
         "isUi": "Is a UI layer?",
+        "transparent": "Transparent Backgroud?",
         "simulate": "Simulate",
         "grid": "Grid",
         "toggleDiagonalGrid": "Diagonal grid",

@@ -4,7 +4,7 @@
     border:0;
 }
 body {
-    background: #000;
+    background: /*@rendererbackground@*/;
     font-family: sans-serif;
     position: relative;
     width: 100%;

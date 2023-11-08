@@ -407,6 +407,7 @@ const exportCtProject = async (
     }));
 
     /* CSS styles for rendering settings and branding */
+    let rendererBGcolor = project.settings.rendering.rendererBGcolor;
     let preloaderColor1 = project.settings.branding.accent,
         preloaderColor2 = (global.brehautColor(preloaderColor1).getLuminance() < 0.5) ? '#ffffff' : '#000000';
     if (project.settings.branding.invertPreloaderScheme) {
@@ -418,6 +419,7 @@ const exportCtProject = async (
         hidemadewithctjs: project.settings.branding.hideLoadingLogo,
         preloaderforeground: preloaderColor1,
         preloaderbackground: preloaderColor2,
+        rendererbackground: rendererBGcolor,
         fonts: fonts.css
     }, injections);
     if (!noMinify) {

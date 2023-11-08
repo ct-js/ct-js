@@ -53,7 +53,8 @@ const defaultProjectTemplate: IProject = {
             highDensity: true,
             desktopMode: 'maximized',
             hideCursor: false,
-            mobileScreenOrientation: 'unspecified'
+            mobileScreenOrientation: 'unspecified',
+            rendererBGcolor: "#000000",
         },
         export: {
             windows: true,

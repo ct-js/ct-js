@@ -118,7 +118,13 @@ room-properties
             color="{opts.room.backgroundColor || '#000000'}"
             hidealpha="hidealpha"
         )
-
+    fieldset
+        label.block.checkbox
+            input(
+                type="checkbox" checked="{opts.room.transparent}"
+                onchange="{handleToggle(opts.room, 'transparent')}"
+            )
+            b {voc.transparent}
     fieldset
         label.block.checkbox
             input(
