@@ -362,7 +362,7 @@ texture-editor(onclick="{tryClose}")
                 button.wide(onclick="{triggerSave}" title="Shift+Control+S" data-hotkey="Control+S")
                     svg.feather
                         use(xlink:href="#save")
-                    span {this.vocGlob.save}
+                    span {this.vocGlob.apply}
     color-picker(
         ref="previewBackgroundColor" if="{changingPreviewBg}"
         hidealpha="true"
