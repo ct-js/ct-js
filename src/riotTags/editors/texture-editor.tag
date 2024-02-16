@@ -361,7 +361,7 @@ texture-editor(onclick="{tryClose}")
             .flexfix-footer
                 button.wide(onclick="{triggerSave}" title="Shift+Control+S" data-hotkey="Control+S")
                     svg.feather
-                        use(xlink:href="#save")
+                        use(xlink:href="#check")
                     span {this.vocGlob.apply}
     color-picker(
         ref="previewBackgroundColor" if="{changingPreviewBg}"
