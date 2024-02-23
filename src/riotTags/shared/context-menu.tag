@@ -27,7 +27,7 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
         tabindex="{'-1': item.type === 'separator'}"
         data-hotkey="{item.hotkey}"
         title="{item.hint}"
-    )
+    ).relative
         svg.context-menu-anIcon(if="{item.icon && item.type !== 'separator' && item.type !== 'checkbox'}" class="{item.iconClass || 'feather'}")
             use(xlink:href="#{item.icon instanceof Function? item.icon() : item.icon}")
         .context-menu-Swatches(if="{item.swatches?.length}")
@@ -37,7 +37,7 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
         span.hotkey(if="{!item.type !== 'separator' && (item.hotkey || item.hotkeyLabel)}") ({item.hotkeyLabel || item.hotkey})
         svg.feather.context-menu-aChevron(if="{item.submenu && item.type !== 'separator'}")
             use(xlink:href="#chevron-right")
-        context-menu(if="{item.submenu && item.type !== 'separator'}" menu="{item.submenu}")
+        context-menu(if="{item.submenu && item.type !== 'separator'}" ref="submenu" menu="{item.submenu}")
     script.
         var noFakeClicks;
         this.onItemClick = e => {
@@ -56,11 +56,39 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
             }
         };
 
+        this.containPosition = () => {
+            const bounds = this.root.getBoundingClientRect();
+            if (bounds.bottom > window.innerHeight) {
+                this.root.style.bottom = 0;
+                this.root.style.top = 'unset';
+            } else if (bounds.top < 0) {
+                this.root.style.top = 0;
+                this.root.style.bottom = 'unset';
+            }
+            if (bounds.right > window.innerWidth) {
+                this.root.style.right = 0;
+                this.root.style.left = 'unset';
+            } else if (bounds.left < 0) {
+                this.root.style.left = 0;
+                this.root.style.right = 'unset';
+            }
+            this.containSubmenus();
+        };
+        this.containSubmenus = () => {
+            if (!this.refs.submenu) {
+                return;
+            }
+            const menus = Array.isArray(this.refs.submenu) ?
+                this.refs.submenu :
+                [this.refs.submenu];
+            menus.forEach(menu => menu.containPosition());
+        };
+
         this.popup = (x, y) => {
             noFakeClicks = true;
             setTimeout(() => {
                 noFakeClicks = false;
-            }, 100);
+            }, 500);
             this.root.style.left = this.root.style.top = this.root.style.right = this.root.style.bottom = 'unset';
             this.root.style.position = 'fixed';
             if (x !== void 0 && y !== void 0) {
@@ -77,6 +105,7 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
             }
             this.opts.menu.opened = true;
             this.update();
+            this.containPosition();
             const firstA = this.root.querySelector('a');
             if (firstA) {
                 firstA.focus();
@@ -92,6 +121,7 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
                 }, 100);
             }
             this.update();
+            this.containPosition();
         };
         this.open = () => {
             noFakeClicks = true;
@@ -100,6 +130,7 @@ context-menu(class="{opened: opts.menu.opened}" ref="root" style="{opts.menu.col
             }, 100);
             this.opts.menu.opened = true;
             this.update();
+            this.containPosition();
         };
         this.close = () => {
             this.opts.menu.opened = false;

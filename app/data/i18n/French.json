@@ -89,12 +89,7 @@
             "sliderAndNumber": "Curseur avec champ de saisie",
             "table": "Table",
             "text": "Texte court",
-            "textfield": "Boîte de texte",
-            "texture": "Texture",
-            "template": "Modèle",
-            "room": "Salle",
-            "sound": "Audio",
-            "tandem": "Système de particules"
+            "textfield": "Boîte de texte"
         },
         "newName": "Nouveau nom :",
         "saveProject": "Sauvegarder le projet",
@@ -103,7 +98,6 @@
         "reallyExitConfirm": "Êtes-vous sur de vouloir quitter ? Tous les changements non sauvegardés seront perdus !",
         "notFoundOrUnknown": "Fichier inconnu. Vérifiez que le fichier existe.",
         "nameTaken": "Ce nom est déjà pris",
-        "fastImport": "Import Rapide",
         "addToNotes": "Ajouter aux notes",
         "noRooms": "Nécessite au moins une salle pour compiler l'application.",
         "tileLayer": "Calque de tuiles",
@@ -112,42 +106,42 @@
         "docsLong": "Documentation",
         "openAssetGallery": "Galerie",
         "assetTypes": {
-            "textures": [
+            "texture": [
                 "texture",
                 "textures",
                 "textures"
             ],
-            "templates": [
+            "template": [
                 "modèle",
                 "modèles",
                 "modèles"
             ],
-            "emitterTandems": [
+            "tandem": [
                 "Émetteur de particules",
                 "Émetteurs de particules",
                 "Émetteurs de particules"
             ],
-            "rooms": [
+            "room": [
                 "salle",
                 "salles",
                 "salles"
             ],
-            "fonts": [
+            "font": [
                 "police",
                 "polices",
                 "polices"
             ],
-            "styles": [
+            "style": [
                 "style",
                 "styles",
                 "styles"
             ],
-            "sounds": [
+            "sound": [
                 "son",
                 "sons",
                 "sons"
             ],
-            "skeletons": [
+            "skeleton": [
                 "sprite articulé",
                 "sprites articulés",
                 "sprites articulés"
@@ -174,16 +168,13 @@
         "envVarNotice": "Vous aurez toujours besoin de définir la variable d’environnement à la main et de redémarrer votre appareil.",
         "downloadAndroidStudio": "Télécharger Android Studio",
         "requiresInternetNotice": "Cette opération nécessite une connexion internet pour mettre en place les projet.",
-        "noJdkFound": "Le JDK 11 est introuvable (la variable d’environnement JAVA_HOME n’est pas définie ou ne pointe pas vers le JDK 11). Vous pouvez l’obtenir ici :",
-        "downloadJDK": "Télécharger le JDK 11"
+        "noJdkFound": "Le JDK 17 est introuvable (la variable d’environnement JAVA_HOME n’est pas définie ou ne pointe pas vers le JDK 17). Vous pouvez l’obtenir ici :",
+        "downloadJDK": "Télécharger le JDK 17"
     },
     "intro": {
         "loading": "Veuillez patientez : nos chatons se préparent à la vitesse de la lumière !",
         "newProject": {
-            "button": "Choisir le dossier puis créer",
             "input": "Nom du projet (lettres et chiffres)",
-            "text": "Créer un nouveau",
-            "saveProjectHere": "Sauvegarder le projet ici",
             "selectProjectFolder": "Choisissez un dossier pour sauvegarder votre projet",
             "nameError": "Mauvais nom de projet"
         },
@@ -273,6 +264,7 @@
             "hideCursor": "Masquer le curseur du système",
             "pixelatedRender": "Désactive le lissage d'image ici et dans le projet exporté (conservez les pixels nets)",
             "usePixiLegacy": "Utiliser une méthode de rendu basé sur le canvas pour supporter les navigateurs plus anciens (ajoute ~20Ko au jeu)",
+            "useTransparent": "",
             "mobileBuilds": "Export mobile",
             "screenOrientation": "Orientation de l’écran :",
             "screenOrientations": {
@@ -386,7 +378,6 @@
         "textures": "Textures"
     },
     "sounds": {
-        "create": "Créer",
         "record": "Enregistrer"
     },
     "styles": {
@@ -428,7 +419,6 @@
         "gravityNotice": "Notez que si elle est différente de (0; 0), l'interpolation de la vitesse sera désactivée, ce qui signifie que seul le premier nœud du graphique de vitesse sera pris en compte.",
         "directionHeading": "Direction",
         "startingDirection": "Direction de départ",
-        "preserveTextureDirection": "Préserver la direction de la texture",
         "rotationHeading": "Rotation",
         "rotationSpeed": "Vitesse de rotation",
         "rotationAcceleration": "Accélération de la rotation",
@@ -444,10 +434,7 @@
         "shapeAndPositioningHeading": "Forme et Positionnement",
         "spawnType": "Type de formes :",
         "spawnShapes": {
-            "point": "Point",
             "rectangle": "Rectangle",
-            "circle": "Cercle",
-            "ring": "Anneau",
             "star": "Étoile"
         },
         "width": "Largeur :",
@@ -637,18 +624,12 @@
     },
     "appView": {
         "ctIDE": "ct.IDE",
-        "texture": "Textures",
         "launch": "Lancer",
         "launchHotkeys": "F5/ Alt+F5 pour lancer dans votre navigateur par défaut",
         "min": "Fenêtré",
         "patrons": "Patrons",
-        "rooms": "Salles",
-        "sounds": "Audio",
-        "ui": "IU",
-        "fx": "Effets spéciaux",
         "restart": "Relancer",
         "project": "Projet",
-        "templates": "Modèles",
         "tour": {
             "header": "Aperçu de ct.js",
             "aboutTour": "Bienvenue dans ct.js ! Cette petite visite va vous présenter les outils principaux de l’éditeur, pour que vous puissiez configurer ct.js et créer de nouvelles ressources.",
@@ -679,17 +660,7 @@
             "buttonStartTutorial": "Ouvrir les tutoriels"
         }
     },
-    "assetViewer": {
-        "addNewGroup": "Créer groupe",
-        "ungrouped": "Sans groupe",
-        "newGroupName": "Nouveau groupe",
-        "groupDeletionConfirmation": "Êtes-vous sûr de vouloir supprimer ce groupe ? Toutes les ressources associées seront retirées de ce groupe."
-    },
-    "groupEditor": {
-        "groupEditor": "Éditeur de groupe",
-        "icon": "Icône :",
-        "color": "Couleur :"
-    },
+    "assetViewer": {},
     "soundRecorder": {
         "recorderHeading": "Enregistreur",
         "record": "Démarrer l’enregistrement",
@@ -838,7 +809,6 @@
         "name": "Nom :",
         "radius": "Rayon :",
         "rectangle": "Rectangle",
-        "reimport": "Réimporter",
         "round": "Cercle",
         "rows": "Lignes :",
         "speed": "Taux de rafraichissement :",
@@ -871,16 +841,8 @@
         "offY": "Décalage Y :",
         "blankTextureNotice": "Exporte l’image comme un rectangle transparent, le rendant invisible pendant le jeu. Pratique pour créer des substituts dans l’éditeur tout en économisant de la place dans l’export du jeu."
     },
-    "soundView": {
-        "import": "Importer",
-        "name": "Nom :",
-        "save": "Sauvegarder",
-        "isMusicFile": "Ceci est une piste musicale",
-        "poolSize": "Taille de la piste :"
-    },
     "fontView": {
         "italic": "Format italique ?",
-        "reimport": "Réimporter",
         "generateBitmapFont": "Générer également une police Bitmap",
         "bitmapFont": "Police Bitmap",
         "bitmapFontSize": "Taille de la police :",
@@ -921,13 +883,8 @@
     },
     "templateView": {
         "change": "Changer de sprite",
-        "create": "À la création",
         "depth": "Profondeur :",
-        "destroy": "À la destruction",
-        "done": "Terminé",
-        "draw": "À l’affichage",
         "name": "Nom :",
-        "step": "À l’étape logique",
         "learnAboutTypes": "En apprendre plus comment coder les modèles",
         "visible": "Visible",
         "appearance": "Apparence",

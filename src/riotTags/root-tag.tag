@@ -1,25 +1,11 @@
 root-tag(class="{pride: localStorage.prideMode === 'on'}")
     app-view(if="{projectOpened}")
-    dnd-processor(if="{projectOpened}")
     project-selector(if="{!projectOpened}")
     writable-folder-prompt(if="{showWritableFolderPrompt}" onsuccess="{onWritableSelected}")
     script.
         this.projectOpened = false;
         window.id = Math.random();
         window.signals.on('resetAll', () => {
-            const glob = require('./data/node_requires/glob');
-            for (const script of window.currentProject.scripts) {
-                if (glob.scriptTypings[script.name]) {
-                    const [deleteTypingsTS, deleteTypingsJS] = glob.scriptTypings[script.name];
-                    if (deleteTypingsTS) {
-                        deleteTypingsTS.dispose();
-                    }
-                    if (deleteTypingsJS) {
-                        deleteTypingsJS.dispose();
-                    }
-                }
-            }
-            glob.scriptTypings = {};
             global.currentProject = false;
             require('./data/node_requires/glob').modified = false;
             this.projectOpened = false;

@@ -1,8 +1,13 @@
-declare interface IResourceGroup {
+// eslint-disable-next-line no-use-before-define
+declare type folderEntries = Array<IAsset | IAssetFolder>;
+declare interface IAssetFolder {
+    readonly type: 'folder';
+    readonly uid: string;
     colorClass: string;
     icon: string;
     name: string;
-    uid: string;
+    lastmod: number;
+    entries: folderEntries;
 }
 declare interface ICtActionInputMethod {
     code: string;
@@ -13,25 +18,19 @@ declare interface ICtAction {
     methods: ICtActionInputMethod[]
 }
 
-declare interface IScript {
+declare interface IProjectScript {
     name: string;
     code: string;
 }
+
+type viewMode = 'asIs' | 'fastScale' | 'fastScaleInteger' | 'expand' | 'scaleFit' | 'scaleFill';
 
 declare interface IContentType {
     entries: Record<string, unknown>[];
     icon: string;
     name: string;
     readableName: string;
-    specification: {
-        name: string;
-        readableName: string;
-        required?: boolean;
-        array?: boolean;
-        type: 'text' | 'textfield' | 'code' | 'number' | 'sliderAndNumber' | 'point2D' |
-              'texture' | 'template' | 'sound' | 'room' | 'tandem' |
-              'checkbox' | 'color';
-    }[];
+    specification: IFieldSchema[];
 }
 
 declare interface IProject {
@@ -40,17 +39,11 @@ declare interface IProject {
     language: 'typescript' | 'coffeescript';
     libs: Record<string, Record<string, unknown>>;
     actions: ICtAction[];
-    scripts: IScript[];
-    textures: ITexture[];
-    skeletons: ISkeleton[];
-    templates: ITemplate[];
-    sounds: ISound[];
-    rooms: IRoom[];
-    startroom: assetRef;
-    emitterTandems: ITandem[];
-    fonts: IFont[];
-    styles: IStyle[];
+    scripts: IProjectScript[];
     contentTypes: IContentType[];
+    assets: folderEntries;
+    startroom: assetRef;
+    backups: number;
     settings: {
         authoring: {
             author: string,
@@ -62,19 +55,24 @@ declare interface IProject {
         },
         rendering: {
             usePixiLegacy: boolean,
+            transparent: boolean,
             maxFPS: 60,
             pixelatedrender: boolean,
             highDensity: boolean,
             desktopMode: 'maximized' | 'fullscreen' | 'windowed',
             hideCursor: boolean,
-            mobileScreenOrientation: 'unspecified' | 'landscape' | 'portrait'
+            mobileScreenOrientation: 'unspecified' | 'landscape' | 'portrait',
+            viewMode: viewMode,
         },
         export: {
+            autocloseDesktop: boolean,
             windows: boolean,
             linux: boolean,
             mac: boolean,
             functionWrap: boolean,
-            codeModifier: 'none' | 'minify' | 'obfuscate'
+            codeModifier: 'none' | 'minify' | 'obfuscate',
+            bundleAssetTree: boolean,
+            bundleAssetTypes: Record<resourceType, boolean>
         },
         branding: {
             icon: assetRef,
@@ -84,16 +82,9 @@ declare interface IProject {
             splashScreen: assetRef,
             forceSmoothIcons: boolean,
             forceSmoothSplashScreen: boolean,
-            hideLoadingLogo: boolean
+            hideLoadingLogo: boolean,
+            alternativeLogo: boolean,
+            customLoadingText: string
         }
     };
-    groups: {
-        emitterTandems: IResourceGroup[],
-        fonts: IResourceGroup[],
-        rooms: IResourceGroup[],
-        sounds: IResourceGroup[],
-        styles: IResourceGroup[],
-        templates: IResourceGroup[],
-        textures: IResourceGroup[]
-    }
 }

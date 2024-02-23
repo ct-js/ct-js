@@ -27,14 +27,14 @@ scripts-settings
         svg.feather
             use(xlink:href="#plus")
         span {voc.addNew}
-    script-editor(if="{currentScript}" script="{currentScript}")
+    project-script-editor(if="{currentScript}" script="{currentScript}")
     script.
         this.namespace = 'settings.scripts';
-        this.mixin(window.riotVoc);
+        this.mixin(require('./data/node_requires/riotMixins/voc').default);
         this.currentProject = global.currentProject;
         this.currentProject.scripts = this.currentProject.scripts || [];
 
-        const glob = require('./data/node_requires/glob');
+        const {dropScriptModel, addScriptModel} = require('./data/node_requires/resources/projects/scripts');
 
         this.addNewScript = () => {
             const oldScriptNames = this.currentProject.scripts.map(script => script.name);
@@ -46,6 +46,7 @@ scripts-settings
                 name: newName,
                 code: `/* ${this.voc.newScriptComment} */`
             };
+            addScriptModel(script);
             this.currentProject.scripts.push(script);
             this.currentScript = script;
         };
@@ -56,10 +57,7 @@ scripts-settings
             const {script} = e.item,
                   ind = this.currentProject.scripts.indexOf(script);
             this.currentProject.scripts.splice(ind, 1);
-            for (const lib of glob.scriptTypings[script.name]) {
-                lib.dispose();
-            }
-            delete glob.scriptTypings[script.name];
+            dropScriptModel(script);
             e.stopPropagation();
         };
 

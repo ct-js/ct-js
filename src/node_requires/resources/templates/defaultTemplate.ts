@@ -1,7 +1,8 @@
 const generateGUID = require('./../../generateGUID');
 
 const defaultTemplate = {
-    type: 'template' as resourceType,
+    type: 'template' as const,
+    baseClass: 'AnimatedSprite' as const,
     name: 'NewTemplate',
     depth: 0,
     texture: -1 as assetRef,
@@ -22,6 +23,7 @@ export const get = function get(): ITemplate {
         }],
         extends: {},
         lastmod: Number(new Date()),
-        uid: generateGUID()
+        uid: generateGUID(),
+        behaviors: []
     });
 };

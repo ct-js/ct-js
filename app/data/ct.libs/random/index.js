@@ -1,9 +1,9 @@
 /* eslint-disable no-mixed-operators */
 /* eslint-disable no-bitwise */
-ct.random = function random(x) {
+const random = function random(x) {
     return Math.random() * x;
 };
-ct.u.ext(ct.random, {
+Object.assign(random, {
     dice(...variants) {
         return variants[Math.floor(Math.random() * variants.length)];
     },
@@ -26,7 +26,7 @@ ct.u.ext(ct.random, {
         return i / coeffs.length + Math.random() / coeffs.length;
     },
     optimistic(exp) {
-        return 1 - ct.random.pessimistic(exp);
+        return 1 - random.pessimistic(exp);
     },
     pessimistic(exp) {
         exp = exp || 2;
@@ -39,7 +39,7 @@ ct.u.ext(ct.random, {
         return Math.random() * 360;
     },
     coord() {
-        return [Math.floor(Math.random() * ct.width), Math.floor(Math.random() * ct.height)];
+        return [Math.floor(Math.random() * camera.width), Math.floor(Math.random() * camera.height)];
     },
     chance(x, y) {
         if (y) {
@@ -49,6 +49,31 @@ ct.u.ext(ct.random, {
     },
     from(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
+    },
+    text(text) {
+        const bracketGroups = [];
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === '{') {
+                bracketGroups.push({
+                    start: i,
+                    end: void 0
+                });
+            } else if (text[i] === '}') {
+                const leaf = bracketGroups.pop();
+                if (!leaf) {
+                    throw new Error(`Unbalanced braces. Faced an extra closing bracket at pos ${i}.`);
+                }
+                leaf.end = i;
+                const tokens = text.slice(leaf.start + 1, leaf.end).split('|');
+                const randomized = tokens[Math.floor(Math.random() * tokens.length)];
+                text = text.slice(0, leaf.start) + randomized + text.slice(leaf.end + 1);
+                i -= leaf.end - leaf.start + 1 - randomized.length;
+            }
+        }
+        if (bracketGroups.length > 0) {
+            throw new Error(`Unbalanced braces. Faced an extra opening bracket at pos ${bracketGroups.pop().start}.`);
+        }
+        return text;
     },
     // Mulberry32, by bryc from https://stackoverflow.com/a/47593316
     createSeededRandomizer(a) {
@@ -62,12 +87,12 @@ ct.u.ext(ct.random, {
 });
 {
     const handle = {};
-    handle.currentRootRandomizer = ct.random.createSeededRandomizer(456852);
-    ct.random.seeded = function seeded() {
+    handle.currentRootRandomizer = random.createSeededRandomizer(456852);
+    random.seeded = function seeded() {
         return handle.currentRootRandomizer();
     };
-    ct.random.setSeed = function setSeed(seed) {
-        handle.currentRootRandomizer = ct.random.createSeededRandomizer(seed);
+    random.setSeed = function setSeed(seed) {
+        handle.currentRootRandomizer = random.createSeededRandomizer(seed);
     };
-    ct.random.setSeed(9323846264);
+    random.setSeed(9323846264);
 }

@@ -62,12 +62,7 @@
             "sliderAndNumber": "common.fieldTypes.sliderAndNumber",
             "table": "common.fieldTypes.table",
             "text": "common.fieldTypes.text",
-            "textfield": "common.fieldTypes.textfield",
-            "texture": "common.fieldTypes.texture",
-            "template": "common.fieldTypes.template",
-            "room": "common.fieldTypes.room",
-            "sound": "common.fieldTypes.sound",
-            "tandem": "common.fieldTypes.tandem"
+            "textfield": "common.fieldTypes.textfield"
         },
         "newName": "common.newName",
         "saveProject": "common.saveProject",
@@ -76,7 +71,6 @@
         "reallyExitConfirm": "common.reallyExitConfirm",
         "notFoundOrUnknown": "common.notFoundOrUnknown",
         "nameTaken": "common.nameTaken",
-        "fastImport": "common.fastImport",
         "addToNotes": "common.addToNotes",
         "noRooms": "common.noRooms",
         "tileLayer": "common.tileLayer",
@@ -85,56 +79,94 @@
         "docsLong": "common.docsLong",
         "openAssetGallery": "common.openAssetGallery",
         "assetTypes": {
-            "textures": [
-                "common.assetTypes.textures.0",
-                "common.assetTypes.textures.1",
-                "common.assetTypes.textures.2"
+            "texture": [
+                "common.assetTypes.texture.0",
+                "common.assetTypes.texture.1",
+                "common.assetTypes.texture.2"
             ],
-            "templates": [
-                "common.assetTypes.templates.0",
-                "common.assetTypes.templates.1",
-                "common.assetTypes.templates.2"
+            "template": [
+                "common.assetTypes.template.0",
+                "common.assetTypes.template.1",
+                "common.assetTypes.template.2"
             ],
-            "emitterTandems": [
-                "common.assetTypes.emitterTandems.0",
-                "common.assetTypes.emitterTandems.1",
-                "common.assetTypes.emitterTandems.2"
+            "tandem": [
+                "common.assetTypes.tandem.0",
+                "common.assetTypes.tandem.1",
+                "common.assetTypes.tandem.2"
             ],
-            "rooms": [
-                "common.assetTypes.rooms.0",
-                "common.assetTypes.rooms.1",
-                "common.assetTypes.rooms.2"
+            "room": [
+                "common.assetTypes.room.0",
+                "common.assetTypes.room.1",
+                "common.assetTypes.room.2"
             ],
-            "fonts": [
-                "common.assetTypes.fonts.0",
-                "common.assetTypes.fonts.1",
-                "common.assetTypes.fonts.2"
+            "font": [
+                "common.assetTypes.font.0",
+                "common.assetTypes.font.1",
+                "common.assetTypes.font.2"
             ],
-            "styles": [
-                "common.assetTypes.styles.0",
-                "common.assetTypes.styles.1",
-                "common.assetTypes.styles.2"
+            "style": [
+                "common.assetTypes.style.0",
+                "common.assetTypes.style.1",
+                "common.assetTypes.style.2"
             ],
-            "sounds": [
-                "common.assetTypes.sounds.0",
-                "common.assetTypes.sounds.1",
-                "common.assetTypes.sounds.2"
+            "sound": [
+                "common.assetTypes.sound.0",
+                "common.assetTypes.sound.1",
+                "common.assetTypes.sound.2"
             ],
-            "skeletons": [
-                "common.assetTypes.skeletons.0",
-                "common.assetTypes.skeletons.1",
-                "common.assetTypes.skeletons.2"
+            "skeleton": [
+                "common.assetTypes.skeleton.0",
+                "common.assetTypes.skeleton.1",
+                "common.assetTypes.skeleton.2"
+            ],
+            "behavior": [
+                "common.assetTypes.behavior.0",
+                "common.assetTypes.behavior.1",
+                "common.assetTypes.behavior.2"
+            ],
+            "script": [
+                "common.assetTypes.script.0",
+                "common.assetTypes.script.1",
+                "common.assetTypes.script.2"
             ]
         },
         "next": "common.next",
         "previous": "common.previous",
         "undo": "common.undo",
-        "redo": "common.redo"
+        "redo": "common.redo",
+        "addBehavior": "common.addBehavior",
+        "copyNamesList": "common.copyNamesList",
+        "copyNamesArray": "common.copyNamesArray",
+        "create": "common.create",
+        "discard": "common.discard",
+        "experimentalFeature": "common.experimentalFeature",
+        "goBack": "common.goBack",
+        "sortByDate": "common.sortByDate",
+        "sortByName": "common.sortByName",
+        "sortByType": "common.sortByType",
+        "reimportSourceMissing": "common.reimportSourceMissing",
+        "dropToImport": "common.dropToImport",
+        "reimport": "common.reimport",
+        "alignModes": {
+            "left": "common.alignModes.left",
+            "right": "common.alignModes.right",
+            "top": "common.alignModes.top",
+            "bottom": "common.alignModes.bottom",
+            "center": "common.alignModes.center",
+            "topLeft": "common.alignModes.topLeft",
+            "topCenter": "common.alignModes.topCenter",
+            "topRight": "common.alignModes.topRight",
+            "bottomLeft": "common.alignModes.bottomLeft",
+            "bottomCenter": "common.alignModes.bottomCenter",
+            "bottomRight": "common.alignModes.bottomRight",
+            "fill": "common.alignModes.fill",
+            "Scale": "common.alignModes.Scale"
+        }
     },
     "colorPicker": {
         "current": "colorPicker.current",
         "globalPalette": "colorPicker.globalPalette",
-        "altClick": "color.altClick",
+        "altClick": "colorPicker.altClick",
         "old": "colorPicker.old",
         "projectPalette": "colorPicker.projectPalette"
     },
@@ -158,17 +190,23 @@
         "downloadAndroidStudio": "exportPanel.downloadAndroidStudio",
         "requiresInternetNotice": "exportPanel.requiresInternetNotice",
         "noJdkFound": "exportPanel.noJdkFound",
-        "downloadJDK": "exportPanel.downloadJDK"
+        "downloadJDK": "exportPanel.downloadJDK",
+        "goodToGo": "exportPanel.goodToGo",
+        "nodeJsNotFound": "exportPanel.nodeJsNotFound",
+        "nodeJsDownloadPage": "exportPanel.nodeJsDownloadPage",
+        "nodeJsIcons": "exportPanel.nodeJsIcons"
     },
     "intro": {
         "loading": "intro.loading",
         "newProject": {
-            "button": "intro.newProject.button",
             "input": "intro.newProject.input",
-            "text": "intro.newProject.text",
-            "saveProjectHere": "intro.newProject.saveProjectHere",
             "selectProjectFolder": "intro.newProject.selectProjectFolder",
-            "nameError": "intro.newProject.nameError"
+            "nameError": "intro.newProject.nameError",
+            "header": "intro.newProject.header",
+            "projectName": "intro.newProject.projectName",
+            "language": "intro.newProject.language",
+            "saveFolder": "intro.newProject.saveFolder",
+            "languageError": "intro.newProject.languageError"
         },
         "recovery": {
             "message": "intro.recovery.message",
@@ -197,8 +235,9 @@
         "templates": "intro.templates",
         "templatesInfo": "intro.templatesInfo",
         "boosty": "intro.boosty",
-        "sponsoredBy": "",
-        "supportedBy": ""
+        "sponsoredBy": "intro.sponsoredBy",
+        "supportedBy": "intro.supportedBy",
+        "nothingToShowFiller": "intro.nothingToShowFiller"
     },
     "modules": {
         "author": "modules.author",
@@ -244,7 +283,6 @@
         "textures": "texture.textures"
     },
     "sounds": {
-        "create": "sounds.create",
         "record": "sounds.record"
     },
     "styles": {
@@ -265,7 +303,8 @@
         "global": "notepad.global",
         "backToHome": "notepad.backToHome",
         "modulesPages": "notepad.modulesPages",
-        "helpPages": "notepad.helpPages"
+        "helpPages": "notepad.helpPages",
+        "docsAndNotes": "notepad.docsAndNotes"
     },
     "curveEditor": {
         "curveLineHint": "curveEditor.curveLineHint",
@@ -326,7 +365,6 @@
         "gravityNotice": "particleEmitters.gravityNotice",
         "directionHeading": "particleEmitters.directionHeading",
         "startingDirection": "particleEmitters.startingDirection",
-        "preserveTextureDirection": "particleEmitters.preserveTextureDirection",
         "rotationHeading": "particleEmitters.rotationHeading",
         "rotationSpeed": "particleEmitters.rotationSpeed",
         "rotationAcceleration": "particleEmitters.rotationAcceleration",
@@ -342,11 +380,9 @@
         "shapeAndPositioningHeading": "particleEmitters.shapeAndPositioningHeading",
         "spawnType": "particleEmitters.spawnType",
         "spawnShapes": {
-            "point": "particleEmitters.spawnShapes.point",
             "rectangle": "particleEmitters.spawnShapes.rectangle",
-            "circle": "particleEmitters.spawnShapes.circle",
-            "ring": "particleEmitters.spawnShapes.ring",
-            "star": "particleEmitters.spawnShapes.star"
+            "star": "particleEmitters.spawnShapes.star",
+            "torus": "particleEmitters.spawnShapes.torus"
         },
         "width": "particleEmitters.width",
         "height": "particleEmitters.height",
@@ -362,7 +398,32 @@
         "alreadyHasAnImportingTexture": "particleEmitters.alreadyHasAnImportingTexture",
         "changeGrid": "particleEmitters.changeGrid",
         "newGridSize": "particleEmitters.newGridSize",
-        "setPreviewTexture": "particleEmitters.setPreviewTexture"
+        "setPreviewTexture": "particleEmitters.setPreviewTexture",
+        "textureMethod": "particleEmitters.textureMethod",
+        "textureMethods": {
+            "random": "particleEmitters.textureMethods.random",
+            "animated": "particleEmitters.textureMethods.animated"
+        },
+        "animatedFramerate": "particleEmitters.animatedFramerate",
+        "easingHeader": "particleEmitters.easingHeader",
+        "easing": {
+            "none": "particleEmitters.easing.none",
+            "linear": "particleEmitters.easing.linear",
+            "smooth": "particleEmitters.easing.smooth"
+        },
+        "movementType": "particleEmitters.movementType",
+        "movementTypes": {
+            "linear": "particleEmitters.movementTypes.linear",
+            "accelerated": "particleEmitters.movementTypes.accelerated"
+        },
+        "rotateTexture": "particleEmitters.rotateTexture",
+        "rotationMethod": "particleEmitters.rotationMethod",
+        "rotationMethods": {
+            "static": "particleEmitters.rotationMethods.static",
+            "dynamic": "particleEmitters.rotationMethods.dynamic"
+        },
+        "burstSpacing": "particleEmitters.burstSpacing",
+        "burstStart": "particleEmitters.burstStart"
     },
     "patreon": {
         "aboutPatrons": "patreon.aboutPatrons",
@@ -388,13 +449,13 @@
             "patreon.aboutFillers.15",
             "patreon.aboutFillers.16"
         ],
-        "sponsors": "",
-        "noSponsorsYet": "",
-        "sponsorsDescription": "",
-        "businessCats": "",
-        "businessCatsDescription": "",
-        "cats": "",
-        "catsDescription": ""
+        "sponsors": "patreon.sponsors",
+        "noSponsorsYet": "patreon.noSponsorsYet",
+        "sponsorsDescription": "patreon.sponsorsDescription",
+        "businessCats": "patreon.businessCats",
+        "businessCatsDescription": "patreon.businessCatsDescription",
+        "cats": "patreon.cats",
+        "catsDescription": "patreon.catsDescription"
     },
     "docsPanel": {
         "documentation": "docsPanel.documentation",
@@ -443,7 +504,11 @@
             "splashScreen": "settings.branding.splashScreen",
             "splashScreenNotice": "settings.branding.splashScreenNotice",
             "forceSmoothIcons": "settings.branding.forceSmoothIcons",
-            "forceSmoothSplashScreen": "settings.branding.forceSmoothSplashScreen"
+            "forceSmoothSplashScreen": "settings.branding.forceSmoothSplashScreen",
+            "alternativeCtjsLogo": "settings.branding.alternativeCtjsLogo",
+            "alternativeCtjsNotice": "settings.branding.alternativeCtjsNotice",
+            "customLoadingText": "settings.branding.customLoadingText",
+            "customLoadingTextHint": "settings.branding.customLoadingTextHint"
         },
         "modules": {
             "heading": "settings.modules.heading"
@@ -463,12 +528,30 @@
             "hideCursor": "settings.rendering.hideCursor",
             "pixelatedRender": "settings.rendering.pixelatedRender",
             "usePixiLegacy": "settings.rendering.usePixiLegacy",
+            "useTransparent": "settings.rendering.useTransparent",
             "mobileBuilds": "settings.rendering.mobileBuilds",
             "screenOrientation": "settings.rendering.screenOrientation",
             "screenOrientations": {
                 "unspecified": "settings.rendering.screenOrientations.unspecified",
                 "landscape": "settings.rendering.screenOrientations.landscape",
                 "portrait": "settings.rendering.screenOrientations.portrait"
+            },
+            "viewportMode": "settings.rendering.viewportMode",
+            "viewportModes": {
+                "asIs": "settings.rendering.viewportModes.asIs",
+                "fastScale": "settings.rendering.viewportModes.fastScale",
+                "fastScaleInteger": "settings.rendering.viewportModes.fastScaleInteger",
+                "expand": "settings.rendering.viewportModes.expand",
+                "scaleFit": "settings.rendering.viewportModes.scaleFit",
+                "scaleFill": "settings.rendering.viewportModes.scaleFill"
+            },
+            "viewportModesDescriptions": {
+                "asIs": "settings.rendering.viewportModesDescriptions.asIs",
+                "fastScale": "settings.rendering.viewportModesDescriptions.fastScale",
+                "fastScaleInteger": "settings.rendering.viewportModesDescriptions.fastScaleInteger",
+                "expand": "settings.rendering.viewportModesDescriptions.expand",
+                "scaleFit": "settings.rendering.viewportModesDescriptions.scaleFit",
+                "scaleFill": "settings.rendering.viewportModesDescriptions.scaleFill"
             }
         },
         "scripts": {
@@ -490,7 +573,12 @@
                 "none": "settings.export.codeModifiers.none",
                 "minify": "settings.export.codeModifiers.minify",
                 "obfuscate": "settings.export.codeModifiers.obfuscate"
-            }
+            },
+            "assetTree": "settings.export.assetTree",
+            "assetTreeNote": "settings.export.assetTreeNote",
+            "exportAssetTree": "settings.export.exportAssetTree",
+            "exportAssetTypes": "settings.export.exportAssetTypes",
+            "autocloseDesktop": "settings.export.autocloseDesktop"
         },
         "content": {
             "heading": "settings.content.heading",
@@ -512,9 +600,15 @@
             "confirmDeletionMessage": "settings.content.confirmDeletionMessage",
             "gotoEntries": "settings.content.gotoEntries",
             "entries": "settings.content.entries",
-            "array": "settings.content.array"
+            "array": "settings.content.array",
+            "fixedLength": "settings.content.fixedLength"
         },
-        "contentTypes": "settings.contentTypes"
+        "contentTypes": "settings.contentTypes",
+        "main": {
+            "heading": "settings.main.heading",
+            "miscHeading": "settings.main.miscHeading",
+            "backups": "settings.main.backups"
+        }
     },
     "extensionsEditor": {
         "noEntries": "extensionsEditor.noEntries",
@@ -571,7 +665,10 @@
             "disableAcceleration": "mainMenu.troubleshooting.disableAcceleration",
             "disableBuiltInDebugger": "mainMenu.troubleshooting.disableBuiltInDebugger",
             "postAnIssue": "mainMenu.troubleshooting.postAnIssue",
-            "heading": "mainMenu.troubleshooting.heading"
+            "heading": "mainMenu.troubleshooting.heading",
+            "disableVulkan": "mainMenu.troubleshooting.disableVulkan",
+            "disableVulkanSDHint": "mainMenu.troubleshooting.disableVulkanSDHint",
+            "restartMessage": "mainMenu.troubleshooting.restartMessage"
         },
         "deploy": {
             "exportDesktop": "mainMenu.deploy.exportDesktop",
@@ -622,7 +719,9 @@
             "startNewWindow": "mainMenu.project.startNewWindow",
             "successZipProject": "mainMenu.project.successZipProject",
             "zipProject": "mainMenu.project.zipProject",
-            "heading": "mainMenu.project.heading"
+            "heading": "mainMenu.project.heading",
+            "convertToJs": "mainMenu.project.convertToJs",
+            "confirmationConvertToJs": "mainMenu.project.confirmationConvertToJs"
         },
         "meta": {
             "license": "mainMenu.meta.license",
@@ -637,18 +736,12 @@
     },
     "appView": {
         "ctIDE": "appView.ctIDE",
-        "texture": "appView.texture",
         "launch": "appView.launch",
         "min": "appView.min",
-        "rooms": "appView.rooms",
-        "sounds": "appView.sounds",
-        "ui": "appView.ui",
         "launchHotkeys": "appView.launchHotkeys",
         "patrons": "appView.patrons",
-        "fx": "appView.fx",
         "restart": "appView.restart",
         "project": "appView.project",
-        "templates": "appView.templates",
         "tour": {
             "header": "appView.tour.header",
             "aboutTour": "appView.tour.aboutTour",
@@ -677,18 +770,24 @@
             "tabMainMenuMeta": "appView.tour.tabMainMenuMeta",
             "helpPanelReminder": "appView.tour.helpPanelReminder",
             "buttonStartTutorial": "appView.tour.buttonStartTutorial"
-        }
+        },
+        "assets": "appView.assets",
+        "applyAssetsQuestion": "appView.applyAssetsQuestion",
+        "applyAssetsExplanation": "appView.applyAssetsExplanation",
+        "unsavedAssets": "appView.unsavedAssets",
+        "runWithoutApplying": "appView.runWithoutApplying",
+        "applyAndRun": "appView.applyAndRun",
+        "cantAddEditor": "appView.cantAddEditor"
     },
     "assetViewer": {
-        "addNewGroup": "assetViewer.addNewGroup",
-        "ungrouped": "assetViewer.ungrouped",
-        "newGroupName": "assetViewer.newGroupName",
-        "groupDeletionConfirmation": "assetViewer.groupDeletionConfirmation"
-    },
-    "groupEditor": {
-        "groupEditor": "groupEditor.groupEditor",
-        "icon": "groupEditor.icon",
-        "color": "groupEditor.color"
+        "root": "assetViewer.root",
+        "toggleFolderTree": "assetViewer.toggleFolderTree",
+        "addNewFolder": "assetViewer.addNewFolder",
+        "newFolderName": "assetViewer.newFolderName",
+        "unwrapFolder": "assetViewer.unwrapFolder",
+        "confirmDeleteFolder": "assetViewer.confirmDeleteFolder",
+        "confirmUnwrapFolder": "assetViewer.confirmUnwrapFolder",
+        "exportBehavior": "assetViewer.exportBehavior"
     },
     "soundRecorder": {
         "recorderHeading": "soundRecorder.recorderHeading",
@@ -716,7 +815,10 @@
         "show": "roomTiles.show",
         "hide": "roomTiles.hide",
         "findTileset": "roomTiles.findTileset",
-        "addTileLayer": "roomTiles.addTileLayer"
+        "addTileLayer": "roomTiles.addTileLayer",
+        "addTileLayerFirst": "roomTiles.addTileLayerFirst",
+        "cacheLayer": "roomTiles.cacheLayer",
+        "cacheLayerWarning": "roomTiles.cacheLayerWarning"
     },
     "roomView": {
         "name": "roomView.name",
@@ -789,9 +891,55 @@
             "addCopies": "roomView.tools.addCopies",
             "addTiles": "roomView.tools.addTiles",
             "manageBackgrounds": "roomView.tools.manageBackgrounds",
-            "roomProperties": "roomView.tools.roomProperties"
+            "roomProperties": "roomView.tools.roomProperties",
+            "uiTools": "roomView.tools.uiTools"
         },
-        "resetView": "roomView.resetView"
+        "resetView": "roomView.resetView",
+        "viewportHeading": "roomView.viewportHeading",
+        "followTemplate": "roomView.followTemplate",
+        "followCodeHint": "roomView.followCodeHint",
+        "sendToBack": "roomView.sendToBack",
+        "sendToFront": "roomView.sendToFront",
+        "emptyTextFiller": "roomView.emptyTextFiller",
+        "uiTools": {
+            "noSelectionNotice": "roomView.uiTools.noSelectionNotice",
+            "textSettings": "roomView.uiTools.textSettings",
+            "customText": "roomView.uiTools.customText",
+            "customTextSize": "roomView.uiTools.customTextSize",
+            "wordWrapWidth": "roomView.uiTools.wordWrapWidth",
+            "textAlignment": "roomView.uiTools.textAlignment",
+            "alignmentSettings": "roomView.uiTools.alignmentSettings",
+            "enableAutoAlignment": "roomView.uiTools.enableAutoAlignment",
+            "autoAlignHint": "roomView.uiTools.autoAlignHint",
+            "frame": "roomView.uiTools.frame",
+            "framePadding": "roomView.uiTools.framePadding",
+            "innerFrameMarker": "roomView.uiTools.innerFrameMarker",
+            "outerFrameMarker": "roomView.uiTools.outerFrameMarker",
+            "constrains": "roomView.uiTools.constrains",
+            "constrainsTooltips": {
+                "left": "roomView.uiTools.constrainsTooltips.left",
+                "right": "roomView.uiTools.constrainsTooltips.right",
+                "top": "roomView.uiTools.constrainsTooltips.top",
+                "bottom": "roomView.uiTools.constrainsTooltips.bottom",
+                "centerVertical": "roomView.uiTools.constrainsTooltips.centerVertical",
+                "centerHorizontal": "roomView.uiTools.constrainsTooltips.centerHorizontal"
+            },
+            "bindings": "roomView.uiTools.bindings",
+            "bindingsHelp": "roomView.uiTools.bindingsHelp",
+            "bindingNames": {
+                "text": "roomView.uiTools.bindingNames.text",
+                "disabled": "roomView.uiTools.bindingNames.disabled",
+                "visible": "roomView.uiTools.bindingNames.visible",
+                "tex": "roomView.uiTools.bindingNames.tex",
+                "tint": "roomView.uiTools.bindingNames.tint",
+                "count": "roomView.uiTools.bindingNames.count"
+            },
+            "bindingTypes": {
+                "string": "roomView.uiTools.bindingTypes.string",
+                "boolean": "roomView.uiTools.bindingTypes.boolean",
+                "number": "roomView.uiTools.bindingTypes.number"
+            }
+        }
     },
     "styleView": {
         "active": "styleView.active",
@@ -838,7 +986,6 @@
         "name": "textureView.name",
         "radius": "textureView.radius",
         "rectangle": "textureView.rectangle",
-        "reimport": "textureView.reimport",
         "round": "textureView.round",
         "rows": "textureView.rows",
         "speed": "textureView.speed",
@@ -869,18 +1016,14 @@
         "marginY": "textureView.marginY",
         "offX": "textureView.offX",
         "offY": "textureView.offY",
-        "blankTextureNotice": "textureView.blankTextureNotice"
-    },
-    "soundView": {
-        "import": "soundView.import",
-        "name": "soundView.name",
-        "save": "soundView.save",
-        "isMusicFile": "soundView.isMusicFile",
-        "poolSize": "soundView.poolSize"
+        "blankTextureNotice": "textureView.blankTextureNotice",
+        "slicing": "textureView.slicing",
+        "viewSettings": "textureView.viewSettings",
+        "exportSettings": "textureView.exportSettings",
+        "axisExplanation": "textureView.axisExplanation"
     },
     "fontView": {
         "italic": "fontView.italic",
-        "reimport": "fontView.reimport",
         "generateBitmapFont": "fontView.generateBitmapFont",
         "bitmapFont": "fontView.bitmapFont",
         "bitmapFontSize": "fontView.bitmapFontSize",
@@ -921,14 +1064,9 @@
     },
     "templateView": {
         "change": "templateView.change",
-        "create": "templateView.create",
         "depth": "templateView.depth",
-        "destroy": "templateView.destroy",
-        "done": "templateView.done",
-        "draw": "templateView.draw",
         "learnAboutTypes": "templateView.learnAboutTypes",
         "name": "templateView.name",
-        "step": "templateView.step",
         "visible": "templateView.visible",
         "appearance": "templateView.appearance",
         "opacity": "templateView.opacity",
@@ -941,7 +1079,42 @@
             "screen": "templateView.blendModes.screen"
         },
         "animationFPS": "templateView.animationFPS",
-        "loopAnimation": "templateView.loopAnimation"
+        "loopAnimation": "templateView.loopAnimation",
+        "hoverTexture": "templateView.hoverTexture",
+        "pressedTexture": "templateView.pressedTexture",
+        "disabledTexture": "templateView.disabledTexture",
+        "defaultText": "templateView.defaultText",
+        "textStyle": "templateView.textStyle",
+        "fieldType": "templateView.fieldType",
+        "fieldTypes": {
+            "text": "templateView.fieldTypes.text",
+            "number": "templateView.fieldTypes.number",
+            "email": "templateView.fieldTypes.email",
+            "password": "templateView.fieldTypes.password"
+        },
+        "useCustomSelectionColor": "templateView.useCustomSelectionColor",
+        "maxLength": "templateView.maxLength",
+        "baseClass": {
+            "AnimatedSprite": "templateView.baseClass.AnimatedSprite",
+            "Text": "templateView.baseClass.Text",
+            "NineSlicePlane": "templateView.baseClass.NineSlicePlane",
+            "Container": "templateView.baseClass.Container",
+            "Button": "templateView.baseClass.Button",
+            "RepeatingTexture": "templateView.baseClass.RepeatingTexture",
+            "SpritedCounter": "templateView.baseClass.SpritedCounter",
+            "TextBox": "templateView.baseClass.TextBox"
+        },
+        "nineSliceTop": "templateView.nineSliceTop",
+        "nineSliceRight": "templateView.nineSliceRight",
+        "nineSliceBottom": "templateView.nineSliceBottom",
+        "nineSliceLeft": "templateView.nineSliceLeft",
+        "autoUpdateNineSlice": "templateView.autoUpdateNineSlice",
+        "autoUpdateNineSliceHint": "templateView.autoUpdateNineSliceHint",
+        "panelHeading": "templateView.panelHeading",
+        "scrollSpeedX": "templateView.scrollSpeedX",
+        "scrollSpeedY": "templateView.scrollSpeedY",
+        "isUi": "templateView.isUi",
+        "defaultCount": "templateView.defaultCount"
     },
     "assetInput": {
         "changeAsset": "assetInput.changeAsset",
@@ -976,7 +1149,9 @@
             "pointer": "scriptables.coreEventsCategories.pointer",
             "misc": "scriptables.coreEventsCategories.misc",
             "animation": "scriptables.coreEventsCategories.animation",
-            "timers": "scriptables.coreEventsCategories.timers"
+            "timers": "scriptables.coreEventsCategories.timers",
+            "input": "scriptables.coreEventsCategories.input",
+            "app": "scriptables.coreEventsCategories.app"
         },
         "coreEvents": {
             "OnCreate": "scriptables.coreEvents.OnCreate",
@@ -999,7 +1174,11 @@
             "OnFrameChange": "scriptables.coreEvents.OnFrameChange",
             "OnAnimationLoop": "scriptables.coreEvents.OnAnimationLoop",
             "OnAnimationComplete": "scriptables.coreEvents.OnAnimationComplete",
-            "Timer": "scriptables.coreEvents.Timer"
+            "Timer": "scriptables.coreEvents.Timer",
+            "OnAppFocus": "scriptables.coreEvents.OnAppFocus",
+            "OnAppBlur": "scriptables.coreEvents.OnAppBlur",
+            "OnTextChange": "scriptables.coreEvents.OnTextChange",
+            "OnTextInput": "scriptables.coreEvents.OnTextInput"
         },
         "coreParameterizedNames": {
             "OnActionPress": "scriptables.coreParameterizedNames.OnActionPress",
@@ -1019,7 +1198,9 @@
         },
         "coreEventsLocals": {
             "OnActionDown_value": "scriptables.coreEventsLocals.OnActionDown_value",
-            "OnActionPress_value": "scriptables.coreEventsLocals.OnActionPress_value"
+            "OnActionPress_value": "scriptables.coreEventsLocals.OnActionPress_value",
+            "OnTextChange_value": "scriptables.coreEventsLocals.OnTextChange_value",
+            "OnTextInput_value": "scriptables.coreEventsLocals.OnTextInput_value"
         },
         "coreEventsDescriptions": {
             "OnCreate": "scriptables.coreEventsDescriptions.OnCreate",
@@ -1033,7 +1214,91 @@
             "OnActionDown": "scriptables.coreEventsDescriptions.OnActionDown",
             "OnAnimationLoop": "scriptables.coreEventsDescriptions.OnAnimationLoop",
             "OnAnimationComplete": "scriptables.coreEventsDescriptions.OnAnimationComplete",
-            "Timer": "scriptables.coreEventsDescriptions.Timer"
-        }
+            "Timer": "scriptables.coreEventsDescriptions.Timer",
+            "OnAppFocus": "scriptables.coreEventsDescriptions.OnAppFocus",
+            "OnAppBlur": "scriptables.coreEventsDescriptions.OnAppBlur",
+            "OnTextChange": "scriptables.coreEventsDescriptions.OnTextChange",
+            "OnTextInput": "scriptables.coreEventsDescriptions.OnTextInput"
+        },
+        "jumpToProblem": "scriptables.jumpToProblem",
+        "staticEventWarning": "scriptables.staticEventWarning",
+        "restrictedEventWarning": "scriptables.restrictedEventWarning",
+        "baseClassWarning": "scriptables.baseClassWarning"
+    },
+    "assetConfirm": {
+        "confirmHeading": "assetConfirm.confirmHeading",
+        "confirmParagraph": "assetConfirm.confirmParagraph"
+    },
+    "behaviorEditor": {
+        "customFields": "behaviorEditor.customFields",
+        "customFieldsDescription": "behaviorEditor.customFieldsDescription"
+    },
+    "createAsset": {
+        "newAsset": "createAsset.newAsset",
+        "placeholderTexture": "createAsset.placeholderTexture",
+        "assetGallery": "createAsset.assetGallery",
+        "behaviorTemplate": "createAsset.behaviorTemplate",
+        "behaviorRoom": "createAsset.behaviorRoom",
+        "behaviorImport": "createAsset.behaviorImport",
+        "behaviorMissingCatmods": "createAsset.behaviorMissingCatmods",
+        "formatError": "createAsset.formatError"
+    },
+    "exporterError": {
+        "exporterErrorHeader": "exporterError.exporterErrorHeader",
+        "errorSource": "exporterError.errorSource",
+        "clueSolutions": {
+            "syntax": "exporterError.clueSolutions.syntax",
+            "eventConfiguration": "exporterError.clueSolutions.eventConfiguration",
+            "emptySound": "exporterError.clueSolutions.emptySound",
+            "emptyEmitter": "exporterError.clueSolutions.emptyEmitter",
+            "windowsFileLock": "exporterError.clueSolutions.windowsFileLock",
+            "noTemplateTexture": "exporterError.clueSolutions.noTemplateTexture"
+        },
+        "stacktrace": "exporterError.stacktrace",
+        "jumpToProblem": "exporterError.jumpToProblem",
+        "saveAndQuit": "exporterError.saveAndQuit"
+    },
+    "folderEditor": {
+        "title": "folderEditor.title",
+        "icon": "folderEditor.icon",
+        "color": "folderEditor.color"
+    },
+    "languageSelector": {
+        "chooseLanguageHeader": "languageSelector.chooseLanguageHeader",
+        "chooseLanguageExplanation": "languageSelector.chooseLanguageExplanation",
+        "coffeeScriptDescription": "languageSelector.coffeeScriptDescription",
+        "pickCoffeeScript": "languageSelector.pickCoffeeScript",
+        "jsAndTs": "languageSelector.jsAndTs",
+        "jsTsDescription": "languageSelector.jsTsDescription",
+        "pickJsTs": "languageSelector.pickJsTs",
+        "acceptAndSpecifyDirectory": "languageSelector.acceptAndSpecifyDirectory"
+    },
+    "newAssetPrompt": {
+        "heading": "newAssetPrompt.heading",
+        "selectNewName": "newAssetPrompt.selectNewName"
+    },
+    "scriptView": {
+        "runAutomatically": "scriptView.runAutomatically",
+        "language": "scriptView.language",
+        "convertToJavaScript": "scriptView.convertToJavaScript"
+    },
+    "soundView": {
+        "variants": "soundView.variants",
+        "addVariant": "soundView.addVariant",
+        "preload": "soundView.preload",
+        "volume": "soundView.volume",
+        "pitch": "soundView.pitch",
+        "distortion": "soundView.distortion",
+        "effects": "soundView.effects",
+        "reverb": "soundView.reverb",
+        "reverbDuration": "soundView.reverbDuration",
+        "reverbDecay": "soundView.reverbDecay",
+        "reverseReverb": "soundView.reverseReverb",
+        "equalizer": "soundView.equalizer",
+        "hertz": "soundView.hertz",
+        "positionalAudio": "soundView.positionalAudio",
+        "falloff": "soundView.falloff",
+        "refDistance": "soundView.refDistance",
+        "positionalAudioHint": "soundView.positionalAudioHint"
     }
 }

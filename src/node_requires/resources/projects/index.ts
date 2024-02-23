@@ -1,9 +1,16 @@
-import {populatePixiTextureCache, resetPixiTextureCache, setPixelart} from '../textures';
+import {populatePixiTextureCache, resetDOMTextureCache, resetPixiTextureCache, setPixelart} from '../textures';
 import {loadAllTypedefs, resetTypedefs} from '../modules/typedefs';
+import {loadScriptModels} from './scripts';
 import {unloadAllEvents, loadAllModulesEvents} from '../../events';
-import * as path from 'path';
+import {buildAssetMap} from '..';
+import {preparePreviews} from '../preview';
+import {refreshFonts} from '../fonts';
+import {updateContentTypedefs} from '../content';
 
-const fs = require('fs-extra');
+import {getLanguageJSON} from '../../i18n';
+
+import * as path from 'path';
+import fs from 'fs-extra';
 
 // @see https://semver.org/
 const semverRegex = /(\d+)\.(\d+)\.(\d+)(-[A-Za-z.-]*(\d+)?[A-Za-z.-]*)?/;
@@ -103,13 +110,14 @@ const adapter = async (project: Partial<IProject>) => {
 const loadProject = async (projectData: IProject): Promise<void> => {
     const glob = require('../../glob');
     window.currentProject = projectData;
-    window.alertify.log(window.languageJSON.intro.loadingProject);
+    window.alertify.log(getLanguageJSON().intro.loadingProject);
     glob.modified = false;
 
     try {
         await adapter(projectData);
         fs.ensureDir(global.projdir);
         fs.ensureDir(global.projdir + '/img');
+        fs.ensureDir(global.projdir + '/skel');
         fs.ensureDir(global.projdir + '/snd');
 
         const lastProjects = localStorage.lastProjects ? localStorage.lastProjects.split(';') : [];
@@ -122,40 +130,81 @@ const loadProject = async (projectData: IProject): Promise<void> => {
         }
         localStorage.lastProjects = lastProjects.join(';');
 
-        glob.scriptTypings = {};
-        for (const script of window.currentProject.scripts) {
-            glob.scriptTypings[script.name] = [
-                monaco.languages.typescript.javascriptDefaults.addExtraLib(script.code),
-                monaco.languages.typescript.typescriptDefaults.addExtraLib(script.code)
-            ];
-        }
-
+        loadScriptModels(projectData);
         resetTypedefs();
         loadAllTypedefs();
+        updateContentTypedefs(projectData);
 
         unloadAllEvents();
+        buildAssetMap(projectData);
         resetPixiTextureCache();
         setPixelart(projectData.settings.rendering.pixelatedrender);
+        refreshFonts();
+        const recoveryExists = fs.existsSync(global.projdir + '.ict.recovery');
         await Promise.all([
             loadAllModulesEvents(),
-            populatePixiTextureCache(projectData)
+            populatePixiTextureCache(),
+            resetDOMTextureCache()
         ]);
+        await preparePreviews(projectData, !recoveryExists);
 
         window.signals.trigger('projectLoaded');
         setTimeout(() => {
             window.riot.update();
         }, 0);
     } catch (err) {
-        window.alertify.alert(window.languageJSON.intro.loadingProjectError + err);
+        window.alertify.alert(getLanguageJSON().intro.loadingProjectError + err);
     }
 };
 
+const statExists = async (toTest: string): Promise<false | [string, fs.Stats]> => {
+    try {
+        return [toTest, await fs.stat(toTest)];
+    } catch (oO) {
+        void oO;
+        return false;
+    }
+};
 export const saveProject = async (): Promise<void> => {
     const YAML = require('js-yaml');
     const glob = require('../../glob');
     const projectYAML = YAML.dump(global.currentProject);
-    await fs.outputFile(global.projdir + '.ict', projectYAML);
-    fs.remove(global.projdir + '.ict.recovery')
+    const basePath = global.projdir + '.ict';
+    // Make backup files
+    const savedBefore = await (async () => {
+        try {
+            await fs.access(basePath);
+            return true;
+        } catch (oO) {
+            return false;
+        }
+    })();
+    const backups = global.currentProject.backups ?? 3;
+    if (savedBefore && backups) {
+        const backupFiles = [];
+        // Fetch metadata about backup files, if they exist
+        for (let i = 0; i < backups; i++) {
+            backupFiles.push(statExists(basePath + '.backup' + i));
+        }
+        const backupStats = (await Promise.all(backupFiles)).filter(a => a) as [string, fs.Stats][];
+        let backupTarget = '.backup0';
+        if (backupStats.length) {
+            // Find the name for a new backup file
+            if (backupStats.length < backups) { // Assuming no backups were removed
+                backupTarget = `.backup${backupStats.length}`;
+            } else {
+                // Oldest will be the first
+                backupStats.sort((a, b) => a[1].mtimeMs - b[1].mtimeMs);
+                backupTarget = path.extname(backupStats[0][0]);
+            }
+        }
+        // Rename the old ict file
+        await fs.move(basePath, basePath + backupTarget, {
+            overwrite: true
+        });
+    }
+    await fs.outputFile(basePath, projectYAML);
+    fs.remove(basePath + '.recovery')
     .catch(console.error);
     glob.modified = false;
 };
@@ -190,7 +239,7 @@ const readProjectFile = async (proj: string) => {
         throw e;
     }
     if (!projectData) {
-        window.alertify.error(window.languageJSON.common.wrongFormat);
+        window.alertify.error(getLanguageJSON().common.wrongFormat);
         return;
     }
     try {
@@ -215,7 +264,7 @@ const openProject = async (proj: string): Promise<void | false | Promise<void>> 
         throw err;
     }
     const proceed = await (new Promise((resolve) => {
-        // eslint-disable-next-line camelcase
+        // eslint-disable-next-line camelcase, @typescript-eslint/no-explicit-any
         (nw.Window as any).getAll((windows: NWJS_Helpers.win[]) => {
             windows.forEach(win => {
                 if ((win.window as Window).path === proj &&
@@ -227,7 +276,7 @@ const openProject = async (proj: string): Promise<void | false | Promise<void>> 
                     throw err;
                 }
             });
-            (window as any).path = proj;
+            window.path = proj;
             resolve(true);
         });
     }));
@@ -247,7 +296,7 @@ const openProject = async (proj: string): Promise<void | false | Promise<void>> 
     }
     if (recoveryStat && recoveryStat.isFile()) {
         const targetStat = await fs.stat(proj);
-        const voc = window.languageJSON.intro.recovery;
+        const voc = getLanguageJSON().intro.recovery;
         const userResponse = await window.alertify
             .okBtn(voc.loadRecovery)
             .cancelBtn(voc.loadTarget)
@@ -262,8 +311,8 @@ const openProject = async (proj: string): Promise<void | false | Promise<void>> 
                 .replace('{2}', recoveryStat.mtime.toLocaleString())
                 .replace('{3}', recoveryStat.mtime < targetStat.mtime ? voc.older : voc.newer));
         window.alertify
-            .okBtn(window.languageJSON.common.ok)
-            .cancelBtn(window.languageJSON.common.cancel);
+            .okBtn(getLanguageJSON().common.ok)
+            .cancelBtn(getLanguageJSON().common.cancel);
         if (userResponse.buttonClicked === 'ok') {
             return readProjectFile(proj + '.recovery');
         }
@@ -288,6 +337,7 @@ const getExamplesDir = function (): string {
     try {
         require('gulp');
         // Most likely, we are in a dev environment
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return path.join((nw.App as any).startPath, 'src/examples');
     } catch (e) {
         const {isMac} = require('./../../platformUtils');
@@ -304,6 +354,7 @@ const getTemplatesDir = function (): string {
     try {
         require('gulp');
         // Most likely, we are in a dev environment
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return path.join((nw.App as any).startPath, 'src/projectTemplates');
     } catch (e) {
         const {isMac} = require('./../../platformUtils');

@@ -62,12 +62,7 @@
             "sliderAndNumber": "带有数字输入的滑块",
             "table": "表格",
             "text": "短文本",
-            "textfield": "文本框",
-            "texture": "纹理",
-            "template": "模板",
-            "room": "房间",
-            "sound": "声音",
-            "tandem": "粒子发射器"
+            "textfield": "文本框"
         },
         "newName": "新名称",
         "saveProject": "保存项目",
@@ -76,7 +71,6 @@
         "reallyExitConfirm": "您确定要退出吗? 所有未保存的更改都将丢失.",
         "notFoundOrUnknown": "未知的文件. 请确认文件是否真实存在",
         "nameTaken": "这个名称已经被使用了",
-        "fastImport": "快速导入",
         "addToNotes": "添加到记事本",
         "noRooms": "您需要至少一个房间来编译您的应用.",
         "tileLayer": "平铺层",
@@ -85,42 +79,42 @@
         "docsLong": "文档",
         "openAssetGallery": "图库",
         "assetTypes": {
-            "textures": [
+            "texture": [
                 "纹理",
                 "纹理",
                 "纹理"
             ],
-            "templates": [
+            "template": [
                 "模板",
                 "模板",
                 "模板"
             ],
-            "emitterTandems": [
+            "tandem": [
                 "发射器串联",
                 "发射器串联",
                 "发射器串联"
             ],
-            "rooms": [
+            "room": [
                 "房间",
                 "房间",
                 "房间"
             ],
-            "fonts": [
+            "font": [
                 "字体",
                 "字体",
                 "字体"
             ],
-            "styles": [
+            "style": [
                 "样式",
                 "样式",
                 "样式"
             ],
-            "sounds": [
+            "sound": [
                 "声音",
                 "声音",
                 "声音"
             ],
-            "skeletons": [
+            "skeleton": [
                 "骨骼精灵图形",
                 "骨骼精灵图形",
                 "骨骼精灵图形"
@@ -177,16 +171,13 @@
         "envVarNotice": "你可能仍然需要手动设置此环境变量并重新启动设备",
         "downloadAndroidStudio": "下载 Android Studio",
         "requiresInternetNotice": "此操作需要Internet连接来设置每个项目",
-        "noJdkFound": "没有找到JDK 11 (JAVA HOME环境变量没有设置或没有指向JDK 11). 你可以在这里获得JDK 11:",
-        "downloadJDK": "下载 JDK 11"
+        "noJdkFound": "没有找到JDK 17 (JAVA HOME环境变量没有设置或没有指向JDK 17). 你可以在这里获得JDK 17:",
+        "downloadJDK": "下载 JDK 17"
     },
     "intro": {
         "loading": "请稍等: 小猫正在聚集光速!",
         "newProject": {
-            "button": "创建",
             "input": "项目名称 (字母和数字)",
-            "text": "新的项目",
-            "saveProjectHere": "在这里保存项目",
             "selectProjectFolder": "选择存储项目的文件夹",
             "nameError": "项目名称错误"
         },
@@ -292,6 +283,7 @@
             },
             "pixelatedRender": "在此处和导出的项目中禁用图像平滑 (保留清晰像素)",
             "usePixiLegacy": "添加一个传统的, 基于画布的渲染器来支持旧的浏览器和显卡(你的游戏增加~20kb)",
+            "useTransparent": "",
             "mobileBuilds": "移动端构建",
             "screenOrientation": "屏幕方向:",
             "screenOrientations": {
@@ -389,7 +381,6 @@
         "textures": "纹理"
     },
     "sounds": {
-        "create": "创建",
         "record": "记录"
     },
     "styles": {
@@ -431,7 +422,6 @@
         "gravityNotice": "注意，如果它不同于(0;0)，速度插值将被禁用，这意味着只有速度图的第一个节点将有效果.",
         "directionHeading": "方向",
         "startingDirection": "开始方向",
-        "preserveTextureDirection": "保持纹理旋转方向",
         "rotationHeading": "旋转",
         "rotationSpeed": " 旋转速度",
         "rotationAcceleration": " 旋转加速度:",
@@ -447,10 +437,7 @@
         "shapeAndPositioningHeading": "形状和位置",
         "spawnType": "形态类型:",
         "spawnShapes": {
-            "point": "点",
             "rectangle": "矩形",
-            "circle": "圆形",
-            "ring": "环形",
             "star": "星形"
         },
         "width": "宽度:",
@@ -587,18 +574,12 @@
     },
     "appView": {
         "ctIDE": "ct.IDE",
-        "texture": "纹理",
         "min": "窗口化",
         "patrons": "赞助人",
-        "rooms": "房间",
         "project": "项目",
-        "sounds": "声音",
-        "ui": "用户界面",
-        "fx": "特效",
         "restart": "重新启动",
         "launch": "编译并运行",
         "launchHotkeys": "(F5; Alt+F5 在默认浏览器中运行)",
-        "templates": "类型",
         "tour": {
             "header": "Ct.js 概述",
             "aboutTour": "欢迎来到 ct.js! 这个小指南将向您展示这个编辑器中的主要控件, 以便您了解如何配置 ct.js 和创建新资产.",
@@ -679,17 +660,7 @@
         "folderNotWritable": "您没有权限写入这个文件夹. 选择其他试试",
         "complete": "文件夹已设置, 一切正常✅"
     },
-    "assetViewer": {
-        "addNewGroup": "新分组",
-        "ungrouped": "显示未分组",
-        "newGroupName": "新分组",
-        "groupDeletionConfirmation": "是否确定删除该分组? 所有资产将成为未分组"
-    },
-    "groupEditor": {
-        "groupEditor": "分组编辑器",
-        "icon": "图标",
-        "color": "颜色"
-    },
+    "assetViewer": {},
     "soundRecorder": {
         "recorderHeading": "录音机",
         "record": "开始录音",
@@ -838,7 +809,6 @@
         "name": "名称:",
         "radius": "半径:",
         "rectangle": "矩形",
-        "reimport": "重新导入",
         "round": "圆",
         "rows": "行",
         "speed": "帧率:",
@@ -871,16 +841,8 @@
         "offY": "位移 Y:",
         "blankTextureNotice": "将图像导出为透明矩形, 因此在游戏中不可见. 用于为ct.js编辑器设置占位符, 同时保持包的大小较轻."
     },
-    "soundView": {
-        "import": "导入",
-        "name": "名称:",
-        "save": "保存",
-        "isMusicFile": "这是一个音乐曲目",
-        "poolSize": "缓冲池大小"
-    },
     "fontView": {
         "italic": "是否斜体?",
-        "reimport": "重新导入",
         "generateBitmapFont": "同时生成位图字体",
         "bitmapFont": "位图字体",
         "bitmapFontSize": "字体大小:",
@@ -921,14 +883,9 @@
     },
     "templateView": {
         "change": "改变精灵",
-        "create": "创建时",
         "depth": "深度:",
-        "destroy": "销毁时",
-        "done": "完成",
-        "draw": "绘制",
         "learnAboutTypes": "了解编码类型",
         "name": "名称:",
-        "step": "同步",
         "visible": "显示",
         "appearance": "外观",
         "opacity": "不透明度:",

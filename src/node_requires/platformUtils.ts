@@ -1,12 +1,22 @@
-import {dirname} from "path";
-
-const fs = require('fs-extra');
-const os = require('os');
-const path = require('path');
+import fs from 'fs-extra';
+import {getLanguageJSON} from './i18n';
+import os from 'os';
+import path from 'path';
 
 const isWin = (/win[0-9]+/).test(os.platform());
 const isLinux = os.platform() === 'linux';
 const isMac = !(isWin || isLinux);
+let isNodeInstalled = false;
+
+const execa = require('execa');
+(async () => {
+    try {
+        await execa('node', ['-v']);
+        isNodeInstalled = true;
+    } catch (e) {
+        isNodeInstalled = false;
+    }
+})();
 
 // We compute a directory once and store it forever
 let exportDir: string,
@@ -21,6 +31,9 @@ const mod = {
     isWindows: isWin,
     isLinux,
     isMac,
+    get isNodeInstalled(): boolean {
+        return isNodeInstalled;
+    },
 
     /**
      * Checks whether a given directory is writable
@@ -57,6 +70,7 @@ const mod = {
 
         const exec = path.dirname(process.cwd()).replace(/\\/g, '/');
         // The `HOME` variable is not always available in ct.js on Windows
+        // eslint-disable-next-line no-process-env
         const home = process.env.HOME || ((process.env.HOMEDRIVE || '') + process.env.HOMEPATH);
 
         const execWritable = mod.checkWritable(exec);
@@ -92,7 +106,7 @@ const mod = {
         };
     },
     requestWritableDir: async (): Promise<boolean> => {
-        const voc = window.languageJSON.writableFolderSelector;
+        const voc = getLanguageJSON().writableFolderSelector;
         const folder = await window.showOpenDialog({
             openDirectory: true,
             title: voc.headerSelectFolderForData
@@ -123,8 +137,10 @@ const mod = {
             // Okay, we are in a dev mode
             require('gulp');
             if (createHref) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 return ('file://' + path.posix.normalize(path.join((nw.App as any).startPath, 'bundledAssets')));
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return path.join((nw.App as any).startPath, 'bundledAssets');
         } catch {
             if (createHref) {

@@ -3,12 +3,14 @@ type ScriptableCode = Record<EventCodeTargets, string>;
 import {ExporterError, highlightProblem} from './ExporterError';
 const {getEventByLib} = require('../events');
 import {readFile} from 'fs-extra';
+import {getName, getById} from '../resources';
 import {getModulePathByName, loadModuleByName} from './../resources/modules';
 import {join} from 'path';
+import {embedStaticBehaviors} from './behaviors';
 const coffeeScript = require('coffeescript');
 const typeScript = require('sucrase').transform;
 
-const coffeeScriptOptions = {
+export const coffeeScriptOptions = {
     sourceMap: false,
     bare: true,
     header: false
@@ -68,14 +70,6 @@ const getFromCache = (event: IScriptableEvent, target: string): string => {
     return eventsCache[cacheName];
 };
 
-const resourcesAPI = require('./../resources');
-const getAssetName = (assetId: string, assetType: resourceType) => {
-    if (resourcesAPI[assetType + 's'].getName) {
-        return resourcesAPI[assetType + 's'].getName(assetId);
-    }
-    return resourcesAPI[assetType + 's'].getById(assetId).name;
-};
-
 // eslint-disable-next-line max-lines-per-function
 const getBaseScripts = function (entity: IScriptable, project: IProject): ScriptableCode {
     const domains = {
@@ -88,6 +82,9 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         rootRoomOnDraw: '',
         rootRoomOnLeave: ''
     };
+    if (entity.type !== 'behavior') {
+        entity = embedStaticBehaviors(entity as IScriptableBehaviors, project);
+    }
     for (const event of entity.events) {
         const {lib, eventKey} = event;
         let {code} = event;
@@ -141,7 +138,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
                 const exp = new RegExp(`/\\*%%${argCode}%%\\*/`, 'g');
                 const argType = eventSpec.arguments[argCode].type;
                 if (['template', 'room', 'sound', 'tandem', 'font', 'style', 'texture'].indexOf(argType) !== -1) {
-                    const value = getAssetName(String(eventArgs[argCode]), argType as resourceType);
+                    const value = getName(getById(argType, String(eventArgs[argCode])));
                     resultingCode = resultingCode.replace(exp, `'${value.replace(/'/g, '\\\'')}'`);
                 } else if (typeof eventArgs[argCode] === 'string') {
                     // Wrap the value into singular quotes, escape existing quotes

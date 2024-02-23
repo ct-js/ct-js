@@ -1,5 +1,6 @@
 const defaultProjectTemplate: IProject = {
     ctjsVersion: process.versions.ctjs,
+    backups: 3,
     language: 'typescript',
     notes: '/* empty */',
     libs: {
@@ -7,35 +8,16 @@ const defaultProjectTemplate: IProject = {
             gridX: 1024,
             gridY: 1024
         },
-        fittoscreen: {
-            mode: 'scaleFit'
-        },
         pointer: {},
         keyboard: {},
         'keyboard.polyfill': {},
-        'sound.howler': {}
+        'pointer.polyfill': {}
     },
-    textures: [],
-    skeletons: [],
-    templates: [],
-    sounds: [],
-    styles: [],
-    fonts: [],
-    rooms: [],
-    actions: [],
-    emitterTandems: [],
-    scripts: [],
     startroom: -1,
     contentTypes: [],
-    groups: {
-        fonts: [],
-        textures: [],
-        styles: [],
-        rooms: [],
-        templates: [],
-        sounds: [],
-        emitterTandems: []
-    },
+    actions: [],
+    scripts: [],
+    assets: [],
     settings: {
         authoring: {
             author: '',
@@ -47,19 +29,34 @@ const defaultProjectTemplate: IProject = {
         },
         rendering: {
             usePixiLegacy: true,
+            transparent: false,
             maxFPS: 60,
             pixelatedrender: false,
             highDensity: true,
             desktopMode: 'maximized',
             hideCursor: false,
-            mobileScreenOrientation: 'unspecified'
+            mobileScreenOrientation: 'unspecified',
+            viewMode: 'scaleFit'
         },
         export: {
+            autocloseDesktop: true,
             windows: true,
             linux: true,
             mac: true,
             functionWrap: false,
-            codeModifier: 'none'
+            codeModifier: 'none',
+            bundleAssetTree: false,
+            bundleAssetTypes: {
+                texture: true,
+                template: true,
+                room: true,
+                behavior: false,
+                font: false,
+                sound: false,
+                style: false,
+                tandem: false,
+                script: false
+            }
         },
         branding: {
             accent: '#446adb', // ct.js' crystal blue
@@ -68,7 +65,9 @@ const defaultProjectTemplate: IProject = {
             splashScreen: -1,
             forceSmoothIcons: false,
             forceSmoothSplashScreen: false,
-            hideLoadingLogo: false
+            hideLoadingLogo: false,
+            alternativeLogo: false,
+            customLoadingText: ''
         }
     }
 };

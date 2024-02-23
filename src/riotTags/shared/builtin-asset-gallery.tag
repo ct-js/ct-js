@@ -4,7 +4,15 @@
     @attribute type (string)
         The type of assets to show. Currently supports "textures" and "sounds"
 
-    @attribute onclose (riot function)
+    @attribute [sound] (ISound)
+        The sound that will receive sound files as its variants.
+        Required for the "sounds" type.
+
+    @attribute [folder] (IAssetFolder | null)
+        The target folder for new assets to be put to, or null for the project's root.
+        Required for the "textures" asset type.
+
+    @attribute [onclose] (riot function)
         A callback that is triggered when a user makes an action to close the gallery
 
 builtin-asset-gallery.aPanel.aView.pad
@@ -46,7 +54,7 @@ builtin-asset-gallery.aPanel.aView.pad
                     svg.feather.rotate(if="{massImportInProgress}")
                         use(xlink:href="#refresh-cw")
                     span {voc.importAll}
-                button(onclick="{opts.onclose}")
+                button(onclick="{opts.onclose}" if="{opts.onclose}")
                     svg.feather
                         use(xlink:href="#log-out")
                     span {vocGlob.close}
@@ -57,7 +65,7 @@ builtin-asset-gallery.aPanel.aView.pad
                 svg.feather
                     use(xlink:href="#chevron-right")
                 |
-                .a.inline(onclick="{returnToGallery}") {vocGlob.assetTypes[opts.type][2]}
+                .a.inline(onclick="{returnToGallery}") {vocGlob.assetTypes[opts.type.slice(0, -1)][1]}
                 |
                 span(if="{currentSet}")
                     svg.feather
@@ -111,10 +119,12 @@ builtin-asset-gallery.aPanel.aView.pad
     )
     script.
         this.namespace = 'builtinAssetGallery';
-        this.mixin(window.riotVoc);
+        this.mixin(require('./data/node_requires/riotMixins/voc').default);
         const fs = require('fs-extra'),
               path = require('path');
+        const {createAsset, isNameOccupied} = require('./data/node_requires/resources');
         const {getGalleryDir} = require('./data/node_requires/platformUtils');
+
         const root = path.join(getGalleryDir(), this.opts.type);
         this.root = root;
         this.galleryBaseHref = getGalleryDir(this);
@@ -190,9 +200,9 @@ builtin-asset-gallery.aPanel.aView.pad
                 return true;
             }
             if (fileType === 'image') {
-                return window.currentProject.textures.find(texture => texture.name === name);
+                return isNameOccupied('texture', name);
             }
-            return window.currentProject.sounds.find(sound => sound.name === name);
+            return false;
         };
 
         this.playSound = sound => () => {
@@ -202,27 +212,24 @@ builtin-asset-gallery.aPanel.aView.pad
             this.currentSound = void 0;
         };
 
-        const {importImageToTexture} = require('./data/node_requires/resources/textures');
-        const {createNewSound, addSoundFile} = require('./data/node_requires/resources/sounds');
-        this.importIntoProject = entry => () => {
+        const {addSoundFile} = require('./data/node_requires/resources/sounds');
+        this.importIntoProject = entry => async () => {
             if (this.checkNameOccupied(entry.type, entry.name)) {
                 window.alertify.error(this.voc.cannotImportNameOccupied.replace('$1', entry.name));
             }
             if (entry.type === 'image') {
-                importImageToTexture(entry.path)
-                .then(() => {
-                    window.alertify.success(this.vocGlob.done);
-                    this.update();
+                await createAsset('texture', this.opts.folder || null, {
+                    src: entry.path,
+                    name: path.basename(entry.path, path.extname(entry.path))
                 });
             } else if (entry.type === 'sound') {
-                const sound = createNewSound(entry.name);
-                addSoundFile(sound, entry.path)
-                .then(() => {
-                    window.signals.trigger('soundCreated');
-                    window.alertify.success(this.vocGlob.done);
-                    this.update();
-                });
+                await addSoundFile(this.opts.sound, entry.path);
+            } else {
+                window.alertify.error(this.vocGlob.wrongFormat);
+                return;
             }
+            window.alertify.success(this.vocGlob.done);
+            this.update();
         };
 
         this.importAllPossible = async () => {
@@ -234,12 +241,14 @@ builtin-asset-gallery.aPanel.aView.pad
                 .map(entry => {
                     if (entry.type === 'image') {
                         texturesPresent = true;
-                        return importImageToTexture(entry.path, false, false, true);
+                        return createAsset('texture', this.opts.folder || null, {
+                            src: entry.path,
+                            name: path.basename(entry.path, path.extname(entry.path))
+                        });
                     }
                     if (entry.type === 'sound') {
                         soundsPresent = true;
-                        const sound = createNewSound(entry.name);
-                        return addSoundFile(sound, entry.path);
+                        return addSoundFile(this.opts.sound, entry.path);
                     }
                     // Unknown asset type
                     return Promise.resolve();

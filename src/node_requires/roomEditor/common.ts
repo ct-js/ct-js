@@ -1,3 +1,6 @@
+import * as PIXI from 'node_modules/pixi.js';
+import {BaseClassCapability, baseClassCapabilities} from '../resources/templates';
+
 interface ISimplePoint {
     x: number;
     y: number;
@@ -70,52 +73,82 @@ export const rotateCursor = 'url("data/cursorRotate.svg") 12 12, pointer';
  * 4: Blue
  * 5: Magenta
  */
-export const recolorFilters: PIXI.filters.ColorMatrixFilter[] = [];
+export const recolorFilters: PIXI.ColorMatrixFilter[] = [];
 for (let i = 0; i < 6; i++) {
-    const filter = new PIXI.filters.ColorMatrixFilter();
+    const filter = new PIXI.ColorMatrixFilter();
     recolorFilters.push(filter);
 }
 /* eslint-disable array-element-newline, no-underscore-dangle, no-multi-spaces */
-recolorFilters[0]._loadMatrix([
+recolorFilters[0].matrix = [
     1,    1,    1,    0,  0,
     0.1,  0.1,  0.1,  0,  0,
     0.1,  0.1,  0.1,  0,  0,
     0,    0,    0,    1,  0
-], false);
-recolorFilters[1]._loadMatrix([
+];
+recolorFilters[1].matrix = [
     0.5,  0.5,  0.5,  0,  0,
     0.5,  0.5,  0.5,  0,  0,
     0.1,  0.1,  0.1,  0,  0,
     0,    0,    0,    1,  0
-], false);
-recolorFilters[2]._loadMatrix([
+];
+recolorFilters[2].matrix = [
     0.1,  0.1,  0.1,  0,  0,
     1,    1,    1,    0,  0,
     0.1,  0.1,  0.1,  0,  0,
     0,    0,    0,    1,  0
-], false);
-recolorFilters[3]._loadMatrix([
+];
+recolorFilters[3].matrix = [
     0.1,  0.1,  0.1,  0,  0,
     0.5,  0.5,  0.5,  0,  0,
     0.5,  0.5,  0.5,  0,  0,
     0,    0,    0,    1,  0
-], false);
-recolorFilters[4]._loadMatrix([
+];
+recolorFilters[4].matrix = [
     0.1,  0.1,  0.1,  0,  0,
     0.1,  0.1,  0.1,  0,  0,
     1,    1,    1,    0,  0,
     0,    0,    0,    1,  0
-], false);
-recolorFilters[5]._loadMatrix([
+];
+recolorFilters[5].matrix = [
     0.5,  0.5,  0.5,  0,  0,
     0.1,  0.1,  0.1,  0,  0,
     0.5,  0.5,  0.5,  0,  0,
     0,    0,    0,    1,  0
-], false);
+];
 /* eslint-enable array-element-newline, no-underscore-dangle, no-multi-spaces*/
 
 export const toPrecision = (input: number, precision: number): number => {
     const mantissa = input % 1;
     const whole = input > 0 ? Math.floor(input) : Math.ceil(input);
     return whole + Math.round(mantissa * (10 ** precision)) / (10 ** precision);
+};
+
+export const copyBindingTypes: Record<CopyBinding, CopyBindingValType> = {
+    disabled: 'boolean',
+    tex: 'string',
+    text: 'string',
+    visible: 'boolean',
+    tint: 'number',
+    count: 'number'
+};
+const bindingsMap: Partial<Record<BaseClassCapability, CopyBinding[]>> = {
+    textured: ['tex', 'tint'],
+    visualStates: ['disabled'],
+    text: ['text', 'tint'],
+    embeddedText: ['text'],
+    repeater: ['count']
+};
+export const getBindingsForBaseClass = (baseClass: TemplateBaseClass): CopyBinding[] => {
+    const bindings: CopyBinding[] = ['visible'];
+    for (const capability of baseClassCapabilities[baseClass]) {
+        if (!(capability in bindingsMap)) {
+            continue;
+        }
+        for (const binding of bindingsMap[capability]) {
+            if (!bindings.includes(binding)) {
+                bindings.push(binding);
+            }
+        }
+    }
+    return bindings;
 };

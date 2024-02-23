@@ -10,31 +10,37 @@
     };
 
     const createTemplateProposals = function createTemplateProposals(range) {
+        const {getOfType} = require('./data/node_requires/resources');
         // filtering is done by the Monaco editor
-        return global.currentProject.templates.map(template => ({
+        return getOfType('template').map(template => ({
             label: template.name,
             kind: monaco.languages.CompletionItemKind.Value,
             insertText: `'${template.name}'`,
             range
-        })).sort((a, b) => a.label.localeCompare(b.label));
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
     };
 
     const createRoomProposals = function createRoomProposals(range) {
-        return global.currentProject.rooms.map(room => ({
+        const {getOfType} = require('./data/node_requires/resources');
+        return getOfType('room').map(room => ({
             label: room.name,
             kind: monaco.languages.CompletionItemKind.Value,
             insertText: `'${room.name}'`,
             range
-        })).sort((a, b) => a.label.localeCompare(b.label));
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
     };
 
     const createSoundProposals = function createSoundProposals(range) {
-        return global.currentProject.sounds.map(sound => ({
+        const {getOfType} = require('./data/node_requires/resources');
+        return getOfType('sound').map(sound => ({
             label: sound.name,
             kind: monaco.languages.CompletionItemKind.Value,
             insertText: `'${sound.name}'`,
             range
-        })).sort((a, b) => a.label.localeCompare(b.label));
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
     };
 
     const createActionProposals = function createActionProposals(range) {
@@ -47,12 +53,25 @@
     };
 
     const createPSProposals = function createPSProposals(range) {
-        return global.currentProject.emitterTandems.map(et => ({
+        const {getOfType} = require('./data/node_requires/resources');
+        return getOfType('tandem').map(et => ({
             label: et.name,
             kind: monaco.languages.CompletionItemKind.Value,
             insertText: `'${et.name}'`,
             range
-        })).sort((a, b) => a.label.localeCompare(b.label));
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    };
+
+    const createScriptProposals = function createScriptProposals(range) {
+        const {getOfType} = require('./data/node_requires/resources');
+        return getOfType('script').map(et => ({
+            label: et.name,
+            kind: monaco.languages.CompletionItemKind.Value,
+            insertText: `${et.name}()`,
+            range
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
     };
 
     const checkMatch = function checkMatch(model, position, regex) {
@@ -66,7 +85,7 @@
     };
 
     const provideTemplateNames = function provideTemplateNames(model, position) {
-        if (!checkMatch(model, position, /ct\.templates\.((make|copy|exists)\(|list\[|templates\[)$/)) {
+        if (!checkMatch(model, position, /templates\.((make|copy|exists)\(|list\[|templates\[)$/)) {
             return {
                 suggestions: []
             };
@@ -77,7 +96,7 @@
         };
     };
     const provideTemplateNamesCS = function provideTemplateNamesCS(model, position) {
-        if (!checkMatch(model, position, /ct\.templates\.((make|copy|exists)( |\()|list\[|templates\[)$/)) {
+        if (!checkMatch(model, position, /templates\.((make|copy|exists)( |\()|list\[|templates\[)$/)) {
             return {
                 suggestions: []
             };
@@ -89,7 +108,7 @@
     };
 
     const provideRoomNames = function provideRoomNames(model, position) {
-        if (!checkMatch(model, position, /ct\.rooms\.((switch|append|prepend|merge)\(|templates\[|list\[)$/)) {
+        if (!checkMatch(model, position, /rooms\.((switch|append|prepend|merge)\(|templates\[|list\[)$/)) {
             return {
                 suggestions: []
             };
@@ -100,7 +119,7 @@
         };
     };
     const provideRoomNamesCS = function provideRoomNamesCS(model, position) {
-        if (!checkMatch(model, position, /ct\.rooms\.((switch|append|prepend|merge)( |\()|templates\[|list\[)$/)) {
+        if (!checkMatch(model, position, /rooms\.((switch|append|prepend|merge)( |\()|templates\[|list\[)$/)) {
             return {
                 suggestions: []
             };
@@ -112,7 +131,7 @@
     };
 
     const provideSoundNames = function provideSoundNames(model, position) {
-        if (!checkMatch(model, position, /ct\.sound\.(spawn|volume|fade|stop|pause|resume|position|load|playing)\($/)) {
+        if (!checkMatch(model, position, /sounds\.(play|playAt|volume|fade|stop|pause|resume|position|load|playing)\($/)) {
             return {
                 suggestions: []
             };
@@ -123,7 +142,7 @@
         };
     };
     const provideSoundNamesCS = function provideSoundNamesCS(model, position) {
-        if (!checkMatch(model, position, /ct\.sound\.(spawn|volume|fade|stop|pause|resume|position|load|playing)( |\()$/)) {
+        if (!checkMatch(model, position, /sounds\.(play|volume|fade|stop|pause|resume|position|load|playing)( |\()$/)) {
             return {
                 suggestions: []
             };
@@ -136,7 +155,7 @@
 
     // Suits both coffeescript and typescript
     const provideActionNames = function provideActionNames(model, position) {
-        if (!checkMatch(model, position, /ct\.actions\.$/)) {
+        if (!checkMatch(model, position, /actions\.$/)) {
             return {
                 suggestions: []
             };
@@ -148,7 +167,7 @@
     };
 
     const providePSNames = function providePSNames(model, position) {
-        if (!checkMatch(model, position, /ct\.emitters\.(fire|append|follow)\($/)) {
+        if (!checkMatch(model, position, /emitters\.(fire|append|follow)\($/)) {
             return {
                 suggestions: []
             };
@@ -159,7 +178,7 @@
         };
     };
     const providePSNamesCS = function providePSNamesCS(model, position) {
-        if (!checkMatch(model, position, /ct\.emitters\.(fire|append|follow)(\(| )$/)) {
+        if (!checkMatch(model, position, /emitters\.(fire|append|follow)(\(| )$/)) {
             return {
                 suggestions: []
             };
@@ -167,6 +186,19 @@
         const range = getInsertRange(model, position);
         return {
             suggestions: createPSProposals(range)
+        };
+    };
+
+    // Suits both coffeescript and typescript
+    const provideScriptNames = function provideScriptNames(model, position) {
+        if (!checkMatch(model, position, /scripts\.$/)) {
+            return {
+                suggestions: []
+            };
+        }
+        const range = getInsertRange(model, position);
+        return {
+            suggestions: createScriptProposals(range)
         };
     };
 
@@ -211,6 +243,14 @@
         monaco.languages.registerCompletionItemProvider('coffeescript', {
             provideCompletionItems: providePSNamesCS,
             triggerCharacters: ['(', ' ']
+        });
+        monaco.languages.registerCompletionItemProvider('typescript', {
+            provideCompletionItems: provideScriptNames,
+            triggerCharacters: ['.']
+        });
+        monaco.languages.registerCompletionItemProvider('coffeescript', {
+            provideCompletionItems: provideScriptNames,
+            triggerCharacters: ['.']
         });
     });
 })();

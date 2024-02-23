@@ -1,4 +1,4 @@
-## ct.desktop.openDevTools(options)
+## desktop.openDevTools(options)
 
 - `options` object (optional)
   - `mode` string - Opens the devtools with specified dock state, can be `left`, `right`, `bottom`, `undocked`, or `detach`.
@@ -6,43 +6,55 @@
 
 Opens the built-in developer tools pannel/debugger
 
+> ⚠️ This method is not supported on Neutralino.js framework (default ct.js framework for desktop builds).
+
 ### Example:
 
 ```javascript
 if (aReasonToOpenDebugger === true) {
-  ct.desktop.openDevTools({ mode: "right" });
+  desktop.openDevTools({ mode: "right" });
 }
 ```
 
-## ct.desktop.closeDevTools()
+## desktop.closeDevTools()
 
 Closes the built-in developer tools pannel/debugger
+
+> ⚠️ This method is not supported on Neutralino.js framework (default ct.js framework for desktop builds).
 
 ### Example:
 
 ```javascript
 if (aReasonToCloseDebugger === true) {
-    ct.desktop.closeDevTools();
+    desktop.closeDevTools();
 }
 ```
 
-## ct.desktop.isDevToolsOpen()
+## desktop.restartWithDevtools()
+
+Restarts the game and opens developer tools after that.
+
+> ⚠️ This method is **only** supported on Neutralino.js framework (default ct.js framework for desktop builds).
+
+## desktop.isDevToolsOpen()
 
 Checks whether the built-in developer tools pannel/debugger is open
 
 Returns `boolean`
 
+> ⚠️ This method is not supported on Neutralino.js framework (default ct.js framework for desktop builds).
+
 ### Example:
 
 ```javascript
-if (ct.desktop.isDevToolsOpen() === true) {
+if (desktop.isDevToolsOpen() === true) {
     /* do something if devtools is open */
-} else if (ct.desktop.isDevToolsOpen() === false) {
+} else if (desktop.isDevToolsOpen() === false) {
     /* do something if devtools is not open */
 }
 ```
 
-## ct.desktop.quit()
+## desktop.quit()
 
 Closes the game
 
@@ -50,11 +62,11 @@ Closes the game
 
 ```javascript
 if (itsTimeToExitNow === true) {
-    ct.desktop.quit();
+    desktop.quit();
 }
 ```
 
-## ct.desktop.show()
+## desktop.show()
 
 Shows and focuses on the window
 
@@ -62,11 +74,11 @@ Shows and focuses on the window
 
 ```javascript
 if (reasonToFocusWindow === true) {
-    ct.desktop.show();
+    desktop.show();
 }
 ```
 
-## ct.desktop.hide()
+## desktop.hide()
 
 Hides the window
 
@@ -74,33 +86,35 @@ Hides the window
 
 `.hide()` will make the window completly invisible and will not show the window in any operating system menus (Although the app's process will still show in task manager) It will appear as if the app isnt open at all (even though it is actually running)
 
-**It's nearly impossible to close the window when it's hidden, so make sure you use `.show()` later in your code to make sure the user can see your app!** The only way to close a window hidden with `.hide()` is to kill it's process. 
+**It's nearly impossible to close the window when it's hidden, so make sure you use `.show()` later in your code to make sure the user can see your app!** The only way to close a window hidden with `.hide()` is to kill it's process.
 
 ### Example:
 
 ```javascript
 if (timeToHide === true) {
-    ct.desktop.hide();
+    desktop.hide();
 }
 ```
 
-## ct.desktop.isVisible()
+## desktop.isVisible()
 
 Checks whether or not the window is visible
 
-Returns `boolean`
+Returns a `Promise` that resolves into `boolean`.
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isVisible() === true) {
-    /* do something if the window is showing */
-} else if (ct.desktop.isVisible() === false) {
-    /* do something if the window is hidden */
-}
+desktop.isVisible().then(isVisible => {
+    if (isVisible) {
+        /* do something when the window is visible */
+    } else {
+        /* do something when the window is not visible */
+    }
+});
 ```
 
-## ct.desktop.maximize()
+## desktop.maximize()
 
 Maximizes the window; this will also show (but not focus) the window if it isn't already visible
 
@@ -108,11 +122,11 @@ Maximizes the window; this will also show (but not focus) the window if it isn't
 
 ```javascript
 if (maximizeMe === true) {
-    ct.desktop.maximize();
+    desktop.maximize();
 }
 ```
 
-## ct.desktop.unmaximize()
+## desktop.unmaximize()
 
 Unmaximizes the window
 
@@ -120,27 +134,30 @@ Unmaximizes the window
 
 ```javascript
 if (maximizeMe === false) {
-    ct.desktop.unmaximize();
+    desktop.unmaximize();
 }
 ```
 
-## ct.desktop.isMaximized()
+## desktop.isMaximized()
 
 Checks whether or not the window is maximized
 
-Returns `boolean`
+Returns a `Promise` that resolves into `boolean`.
+
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isMaximized() === true) {
-    /* do something if the window is maximized */
-} else if (ct.desktop.isMaximized() === false) {
-    /* do something if the window is maximized */
-}
+desktop.isMaximized().then(isMaximized => {
+    if (isMaximized) {
+        /* do something when maximized */
+    } else {
+        /* do something when not maximized */
+    }
+});
 ```
 
-## ct.desktop.minimize()
+## desktop.minimize()
 
 Minimizes the window
 
@@ -148,11 +165,11 @@ Minimizes the window
 
 ```javascript
 if (minimizeMe === true) {
-    ct.desktop.minimize();
+    desktop.minimize();
 }
 ```
 
-## ct.desktop.restore()
+## desktop.restore()
 
 Restores the window from to its previous state
 
@@ -160,27 +177,29 @@ Restores the window from to its previous state
 
 ```javascript
 if (reasonToResetWindow) {
-    ct.desktop.restore();
+    desktop.restore();
 }
 ```
 
-## ct.desktop.isMinimized()
+## desktop.isMinimized()
 
 Checks whether or not the window is maximized
 
-Returns `boolean`
+Returns a `Promise` that resolves into `boolean`.
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isMinimized() === true) {
-    /* do something if the window is minimized */
-} else if (ct.desktop.isMinimized() === false) {
-    /* do something if the window is minimized */
-}
+desktop.isMinimized().then(isMinimized => {
+    if (isMinimized) {
+        /* do something when minimized */
+    } else {
+        /* do something when not minimized */
+    }
+});
 ```
 
-## ct.desktop.fullscreen()
+## desktop.fullscreen()
 
 Enters fullscreen mode
 
@@ -188,11 +207,11 @@ Enters fullscreen mode
 
 ```javascript
 if (BE_FULLSCREEN === true) {
-    ct.desktop.fullscreen();
+    desktop.fullscreen();
 }
 ```
 
-## ct.desktop.unfullscreen()
+## desktop.unfullscreen()
 
 Leaves fullscreen mode
 
@@ -200,65 +219,67 @@ Leaves fullscreen mode
 
 ```javascript
 if (BE_FULLSCREEN === false) {
-    ct.desktop.unfullscreen();
+    desktop.unfullscreen();
 }
 ```
 
-## ct.desktop.isFullscreen()
+## desktop.isFullscreen()
 
 Checks whether or not the window is fullscreen
 
-Returns `boolean`
+Returns a `Promise` that resolves into a `boolean`.
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isFullscreen() === true) {
-    /* do something if the window is fullscreen */
-} else if (ct.desktop.isFullscreen() === false) {
-    /* do something if the window is fullscreen */
-}
+desktop.isFullscreen().then(isFullscreen => {
+    if (isFullscreen) {
+        /* do something when in fullscreen mode */
+    } else {
+        /* do something when not in fullscreen mode */
+    }
+});
 ```
 
-## ct.desktop.isDesktop
+## desktop.isDesktop
 
 Whether or not the game is running as a desktop app
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isDesktop === true) {
+if (desktop.isDesktop === true) {
     /* Do something only in the desktop app */
-} else if (ct.desktop.isDesktop === false) {
+} else if (desktop.isDesktop === false) {
     /* Do something on all platforms other than desktop */
 }
 ```
 
-## ct.desktop.isNw
+## desktop.isNw
 
 Whether or not the game is running as a desktop app using NW.js
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isNw === true) {
+if (desktop.isNw === true) {
     /* Do something only in nw.js */
 }
 ```
 
-## ct.desktop.isElectron
+## desktop.isElectron
 
 Whether or not the game is running as a desktop app using Electron
 
 ### Example:
 
 ```javascript
-if (ct.desktop.isElectron === true) {
+if (desktop.isElectron === true) {
     /* Do something only in Electron */
 }
 ```
 
-## ct.desktop.desktopFeature(feature)
+## desktop.desktopFeature(feature)
 
 - `feature` object
   - `name` string
@@ -268,6 +289,10 @@ if (ct.desktop.isElectron === true) {
     - `method` string (optional) - Defaults to `feature.name`
     - `parameter` string (optional) - Defaults to `feature.parameter`
   - `electron` object - Options for Electron
+    - `namespace` string
+    - `method` string (optional) - Defaults to `feature.name`
+    - `parameter` string (optional) - Defaults to `feature.parameter`
+  - `neutralino` object - Options for Neutralino.js
     - `namespace` string
     - `method` string (optional) - Defaults to `feature.name`
     - `parameter` string (optional) - Defaults to `feature.parameter`
@@ -281,7 +306,7 @@ Returns `feature.nw.namespace[feature.nw.method](feature.nw.parameter)` or `feat
 ### Example:
 
 ```javascript
-ct.desktop.desktopFeature({
+desktop.desktopFeature({
     name: 'customDesktopStuff',
     parameter: someParameter,
     nw: {

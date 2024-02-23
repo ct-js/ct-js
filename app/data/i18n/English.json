@@ -6,6 +6,7 @@
     },
     "common": {
         "add": "Add",
+        "addBehavior": "Add a Behavior",
         "apply": "Apply",
         "cancel": "Cancel",
         "cannotBeEmpty": "This cannot be empty",
@@ -15,17 +16,23 @@
         "contribute": "Contribute",
         "copy": "Copy",
         "copyName": "Copy the name",
+        "copyNamesList": "Copy the names as a list",
+        "copyNamesArray": "Copy the names as array elements",
         "couldNotLoadFromClipboard": "Could not load data from clipboard",
+        "create": "Create",
         "cut": "Cut",
         "delete": "Delete",
+        "discard": "Discard",
         "docsShort": "Docs",
         "docsLong": "Documentation",
         "donate": "Donate",
         "done": "Done!",
         "duplicate": "Duplicate",
-        "exit": "Exit",
         "edit": "Edit",
+        "exit": "Exit",
+        "experimentalFeature": "This is an experimental feature.",
         "filter": "Filter:",
+        "goBack": "Go back",
         "loading": "Loading…",
         "name": "Name:",
         "next": "Next",
@@ -45,6 +52,9 @@
         "search": "Search:",
         "settings": "Settings",
         "sort": "Sort:",
+        "sortByDate": "Sort by date",
+        "sortByName": "Sort by name",
+        "sortByType": "Sort by type",
         "wrongFormat": "Wrong file format",
         "yes": "Yes",
         "zoom": "Zoom",
@@ -68,12 +78,7 @@
             "sliderAndNumber": "Slider with a number input",
             "table": "Table",
             "text": "Short text",
-            "textfield": "Textbox",
-            "texture": "Texture",
-            "template": "Template",
-            "room": "Room",
-            "sound": "Sound",
-            "tandem": "Particle emitter"
+            "textfield": "Textbox"
         },
         "newName": "New name:",
         "saveProject": "Save project",
@@ -81,55 +86,86 @@
         "savedMessage": "Your project was succesfully saved.",
         "reallyExitConfirm": "Are you sure you want to exit? All unsaved changes will be lost.",
         "notFoundOrUnknown": "Unknown file. Make sure the file really exists",
+        "reimportSourceMissing": "Can't reimport: the source file is now missing.",
         "nameTaken": "This name is already taken",
-        "fastImport": "Fast Import",
+        "dropToImport": "Drop here to import",
+        "reimport": "Reimport",
         "addToNotes": "Add to notes",
         "noRooms": "You need at least one room to compile your app.",
         "tileLayer": "tile layer",
         "ctSite": "ct.js homepage",
         "openAssetGallery": "Gallery",
+        "alignModes": {
+            "left": "Left",
+            "right": "Right",
+            "top": "Top",
+            "bottom": "Bottom",
+            "center": "Center",
+            "topLeft": "Top left",
+            "topCenter": "Top center",
+            "topRight": "Top right",
+            "bottomLeft": "Bottom left",
+            "bottomCenter": "Bottom center",
+            "bottomRight": "Bottom right",
+            "fill": "Fill",
+            "Scale": "Scale"
+        },
         "assetTypes": {
-            "textures": [
+            "behavior": [
+                "behavior",
+                "behaviors",
+                "behaviors"
+            ],
+            "texture": [
                 "texture",
                 "textures",
                 "textures"
             ],
-            "templates": [
+            "template": [
                 "template",
                 "templates",
                 "templates"
             ],
-            "emitterTandems": [
+            "tandem": [
                 "emitter tandem",
                 "emitter tandems",
                 "emitter tandems"
             ],
-            "rooms": [
+            "room": [
                 "room",
                 "rooms",
                 "rooms"
             ],
-            "fonts": [
+            "font": [
                 "font",
                 "fonts",
                 "fonts"
             ],
-            "styles": [
+            "script": [
+                "script",
+                "scripts",
+                "scripts"
+            ],
+            "style": [
                 "style",
                 "styles",
                 "styles"
             ],
-            "sounds": [
+            "sound": [
                 "sound",
                 "sounds",
                 "sounds"
             ],
-            "skeletons": [
+            "skeleton": [
                 "skeletal sprite",
                 "skeletal sprites",
                 "skeletal sprites"
             ]
         }
+    },
+    "assetConfirm": {
+        "confirmHeading": "Select action",
+        "confirmParagraph": "The $1 asset has unapplied changes. What would you like to do with it?"
     },
     "assetInput": {
         "changeAsset": "Press to change the asset",
@@ -137,10 +173,18 @@
         "selectAssetHeader": "Select an asset"
     },
     "assetViewer": {
-        "addNewGroup": "New Group",
-        "ungrouped": "Show ungrouped",
-        "newGroupName": "New group",
-        "groupDeletionConfirmation": "Are you sure you want to delete this group? All its assets will be ungrouped."
+        "root": "Root",
+        "toggleFolderTree": "Toggle folder tree visibility",
+        "addNewFolder": "New Folder",
+        "newFolderName": "New folder",
+        "unwrapFolder": "Unwrap the folder",
+        "confirmDeleteFolder": "Are you sure you want to delete this folder? All its contents will be deleted as well.",
+        "confirmUnwrapFolder": "Are you sure you want to unwrap this folder? All its contents will be placed in the current folder.",
+        "exportBehavior": "Export this behavior"
+    },
+    "behaviorEditor": {
+        "customFields": "Custom Fields",
+        "customFieldsDescription": "Custom fields can be used to add additional inputs to assets' editors. These fields will be available in the properties panel, and be available as properties of the \"this\" object. For example, if you create a field with a name \"sausage\", you can read it in events as \"this.sausage\"."
     },
     "builtinAssetGallery": {
         "galleryTip": "This is a free, built-in gallery of various textures and sounds. All the assets are CC0 or WTFPL, or are released under special terms for use in ct.js. In any way, you can use these assets however you like, in commercial and other projects.",
@@ -162,6 +206,16 @@
         "altClick": "Alt-click to delete",
         "old": "Old",
         "projectPalette": "Project's Palette"
+    },
+    "createAsset": {
+        "newAsset": "New Asset",
+        "placeholderTexture": "Placeholder texture",
+        "assetGallery": "Built-in asset gallery",
+        "behaviorTemplate": "Behavior for templates",
+        "behaviorRoom": "Behavior for rooms",
+        "behaviorImport": "Import from file",
+        "behaviorMissingCatmods": "Your project is missing these catmods: $1. Enable them first.",
+        "formatError": "The opened file has a malformed format or, perhaps, was made for an incompatible version of ct.js."
     },
     "curveEditor": {
         "curveLineHint": "Click the curve to add a point",
@@ -197,6 +251,7 @@
         "export": "Export",
         "exportPanel": "Export the Project",
         "log": "Message Log",
+        "goodToGo": "Good to go! 👍",
         "windowsCrossBuildWarning": "To build for Windows from Linux/MacOS, you need Wine installed in your system. Install instructions are all different for various platforms, so you better google it yourself :)",
         "cannotBuildForMacOnWin": "Unfortunately, Windows can only produce broken Mac packages. Try using a Linux machine; for example, in a virtual one. It is 100% free!",
         "projectTitleRequired": "You must add a title to your project in the Project tab → Authoring → Name.",
@@ -204,9 +259,12 @@
         "noAndroidSdkFound": "No Android SDK was found (ANDROID_SDK_ROOT environment variable is not set). You can get Android SDK by installing Android Studio:",
         "envVarNotice": "You may still need to set this environment variable manually and restart your device.",
         "downloadAndroidStudio": "Download Android Studio",
+        "nodeJsNotFound": "Node.js was not found in your system.",
+        "nodeJsDownloadPage": "Download Node.js",
+        "nodeJsIcons": "Node.js is optional but is required to patch Windows executables to add metadata and icons. If you don't install node.js, your game won't have a proper icon on Windows.",
         "requiresInternetNotice": "This operation requires Internet connection to setup each project.",
-        "noJdkFound": "No JDK 11 was found (JAVA_HOME environment variable is not set or doesn't point to JDK 11). You can get JDK 11 here:",
-        "downloadJDK": "Download JDK 11",
+        "noJdkFound": "No JDK 17 was found (JAVA_HOME environment variable is not set or doesn't point to JDK 17). You can get JDK 17 here:",
+        "downloadJDK": "Download JDK 17",
         "firstRunNotice": "The first run for each platform will be slow as ct.js will download and save additional libraries needed for packing. It will take some time, but next times will be almost instant."
     },
     "exporterError": {
@@ -217,7 +275,8 @@
             "eventConfiguration": "One of the events is misconfigured, having empty fields. Go to the asset and edit its event's parameters.",
             "emptySound": "One of your sounds does not have any sound files attached. Import a sound file to it or remove this empty sound.",
             "emptyEmitter": "One of your particle systems is missing a texture in its emitter. You will need to either set a texture to it or remove the emitter.",
-            "windowsFileLock": "This is a Windows-specific problem with a locked file. Make sure you've closed all external browsers that launched the game, then try exporting again. If it doesn't help, restart ct.js."
+            "windowsFileLock": "This is a Windows-specific problem with a locked file. Make sure you've closed all external browsers that launched the game, then try exporting again. If it doesn't help, restart ct.js.",
+            "noTemplateTexture": "One of your templates is missing a texture. You need to set a texture to it."
         },
         "stacktrace": "Call stack",
         "jumpToProblem": "Jump to the problem",
@@ -232,20 +291,22 @@
         "moveUp": "Move up",
         "deleteRow": "Delete row"
     },
-    "groupEditor": {
-        "groupEditor": "Group Editor",
+    "folderEditor": {
+        "title": "Folder Settings",
         "icon": "Icon:",
         "color": "Color:"
     },
     "intro": {
         "loading": "Please wait: kittens are gathering speed of light!",
         "newProject": {
-            "button": "Select folder and create",
-            "input": "Project's name (letters and digits)",
-            "text": "Create new",
-            "saveProjectHere": "Save the project here",
+            "header": "Create new",
+            "projectName": "Name:",
+            "language": "Coding language:",
+            "saveFolder": "Project's folder:",
+            "input": "(letters and digits only)",
             "selectProjectFolder": "Select a folder in which to store your project",
-            "nameError": "Wrong project name"
+            "nameError": "Wrong project name",
+            "languageError": "You must specify a programming language"
         },
         "recovery": {
             "message": "<h2 class=\"nmt\">Recovery</h2><p>ct.js has found a recovery file. Possibly, your project was not saved correctly or ct.js was shut down in case of some emergency. Here is when these files were lastly modified:</p><p>Your chosen file: {0} {1}<br/>Recovery file: {2} {3}</p><p>What file should ct.js open?</p>",
@@ -262,6 +323,7 @@
         "cloneProject": "Clone this project into a new location",
         "browse": "Browse",
         "latest": "Latest projects",
+        "nothingToShowFiller": "There is nothing to show here! Try Examples or create your own project below.",
         "examples": "Examples",
         "templates": "Templates",
         "templatesInfo": "You can kickstart your game development by using one of these templates. They contain placeholder graphics only but have working mechanics. Selecting a project will open a save directory selector for your new project.",
@@ -318,6 +380,11 @@
             "importErrorMissingModules": "Cannot import action preset as your ct.js installation lacks following modules: $1.",
             "importErrorNotCtJsPreset": "This file doesn't look like ct.js' actions preset."
         },
+        "main": {
+            "heading": "Main settings",
+            "miscHeading": "Other settings",
+            "backups": "Number of backup files to keep:"
+        },
         "authoring": {
             "heading": "Authoring",
             "author": "Developer:",
@@ -339,7 +406,11 @@
             "forceSmoothIcons": "Use smooth icons regardless of rendering settings",
             "forceSmoothSplashScreen": "Use smooth splash screen images regardless of rendering settings",
             "invertPreloaderScheme": "Invert preloader's color scheme",
-            "hideLoadingLogo": "Hide \"Made with ct.js\" graphics on the loading screen"
+            "alternativeCtjsLogo": "Use alternative ct.js logo",
+            "alternativeCtjsNotice": "Replaces \"Made with ct.js\" on the splash screen with a regular ct.js logo. Helpful when your distributor is a prick.",
+            "hideLoadingLogo": "Hide \"Made with ct.js\" graphics on the loading screen",
+            "customLoadingText": "Custom loading text",
+            "customLoadingTextHint": "You can put a whitespace (not an empty string) if you want to hide the loading text."
         },
         "content": {
             "heading": "Content type editor",
@@ -356,6 +427,7 @@
             "fieldNameHint": "The name of the field as it will be used in code. For example: power, hp, spawnType.",
             "fieldReadableName": "Readable name",
             "fieldReadableNameHint": "The readable version of the name, which is used in the content editor.",
+            "fixedLength": "Fixed length",
             "fieldType": "Type",
             "array": "Array",
             "deleteContentType": "Delete this content type",
@@ -373,6 +445,24 @@
             "maxFPS": "Max framerate:",
             "hideCursor": "Hide system cursor",
             "usePixiLegacy": "Add a legacy, canvas-based renderer to support older browsers and graphics cards (adds ~20kb up to your game)",
+            "viewportMode": "Viewport mode",
+            "viewportModes": {
+                "asIs": "Not managed",
+                "fastScale": "Fast scaling",
+                "fastScaleInteger": "Fast scaling by integers",
+                "expand": "Expand",
+                "scaleFit": "Quality scaling with letterboxes",
+                "scaleFill": "Quality scaling without letterboxing"
+            },
+            "viewportModesDescriptions": {
+                "asIs": "disables any viewport management; the rendered canvas will be placed as is in the top-left corner.",
+                "fastScale": "the viewport will proportionally fill the screen without changing the resolution.",
+                "fastScaleInteger": "the viewport will be positioned at the middle of the screen, and will be scaled by whole numbers (x2, x3, x4 and so on).",
+                "expand": "the viewport will fill the whole screen. The camera will expand to accommodate the new area.",
+                "scaleFit": "the viewport will proportionally fill the screen, leaving letterboxes around the base viewport. The resolution is changed to match the screen.",
+                "scaleFill": "the viewport fills the screen, expanding the camera to avoid letterboxing. The resolution is changed to match the screen."
+            },
+            "useTransparent": "Use a transparent PIXI background",
             "desktopBuilds": "Desktop builds",
             "launchMode": "Launch mode:",
             "launchModes": {
@@ -407,7 +497,12 @@
                 "none": "None",
                 "minify": "Minify",
                 "obfuscate": "Obfuscate"
-            }
+            },
+            "assetTree": "Asset tree",
+            "assetTreeNote": "You can export the asset tree to explore it in game runtime as res.tree, but it also displays your project structure and adds a bit of weight to the exported project.",
+            "exportAssetTree": "Export the asset tree",
+            "exportAssetTypes": "Export these asset types only:",
+            "autocloseDesktop": "Exit the app when a user presses the \"Close\" button."
         },
         "catmodsSettings": "Catmods' settings",
         "contentTypes": "Content Types"
@@ -446,6 +541,10 @@
             "networking": "Networking"
         }
     },
+    "newAssetPrompt": {
+        "heading": "Create new asset",
+        "selectNewName": "The name of the new asset:"
+    },
     "texture": {
         "create": "Create",
         "import": "Import",
@@ -477,7 +576,6 @@
         "fillerLabel": "Text label"
     },
     "sounds": {
-        "create": "Create",
         "record": "Record"
     },
     "soundRecorder": {
@@ -505,7 +603,19 @@
         "to": "To:",
         "textureHeading": "Texture",
         "selectTexture": "Select…",
+        "textureMethod": "Use multiple frames as:",
+        "textureMethods": {
+            "random": "Random",
+            "animated": "Animation"
+        },
+        "animatedFramerate": "Framerate:",
         "importBuiltin": "Import default…",
+        "easingHeader": "Easing",
+        "easing": {
+            "none": "Stepped",
+            "linear": "Linear",
+            "smooth": "Smooth"
+        },
         "colorAndOpacityHeading": "Color and Opacity",
         "stepped": "Stepped",
         "steppedColor": "Stepped color",
@@ -520,6 +630,11 @@
         "minimumSize": "Minimum size:",
         "minimumSizeHint": "Setting it to lower values will randomize the size of each particle. The lower the values, the stronger the effect.",
         "velocityHeading": "Velocity",
+        "movementType": "Movement type:",
+        "movementTypes": {
+            "linear": "Linear",
+            "accelerated": "With gravity"
+        },
         "velocity": "Velocity:",
         "minimumSpeed": "Minimum speed:",
         "minimumSpeedHint": "Setting it to lower values will randomize the speed of each particle; the lower the value, the slower the particle may be.",
@@ -528,11 +643,18 @@
         "gravityNotice": "Note that if it differs from (0;0), velocity interpolation will be disabled, meaning that only the first node of the velocity graph will have the effect.",
         "directionHeading": "Direction",
         "startingDirection": "Starting direction",
-        "preserveTextureDirection": "Preserve texture rotation",
+        "rotateTexture": "Rotate the texture along the movement direction",
         "rotationHeading": "Rotation",
+        "rotationMethod": "Texture rotation:",
+        "rotationMethods": {
+            "static": "Fixed",
+            "dynamic": "Dynamic"
+        },
         "rotationSpeed": "Rotation speed",
         "rotationAcceleration": "Rotation acceleration:",
         "spawningHeading": "Spawning",
+        "burstSpacing": "Spacing between rays, in degrees:",
+        "burstStart": "Starting direction, in degrees:",
         "timeBetweenBursts": "Time between bursts:",
         "spawnAtOnce": "Spawn at once:",
         "chanceToSpawn": "Chance to spawn a particle:",
@@ -544,10 +666,8 @@
         "shapeAndPositioningHeading": "Shape and Positioning",
         "spawnType": "Shape type:",
         "spawnShapes": {
-            "point": "Point",
             "rectangle": "Rectangle",
-            "circle": "Circle",
-            "ring": "Ring",
+            "torus": "Circular",
             "star": "Star"
         },
         "width": "Width:",
@@ -575,7 +695,8 @@
         "global": "Global notepad",
         "backToHome": "Back to docs' homepage",
         "modulesPages": "Modules' docs",
-        "helpPages": "Learn"
+        "helpPages": "Learn",
+        "docsAndNotes": "Docs & Notes"
     },
     "patreon": {
         "aboutPatrons": "Patrons are people who show their support to ComigoGames at Boosty, in form of recurring donations, similarly to subscriptions on Patreon.",
@@ -627,6 +748,7 @@
     },
     "mainMenu": {
         "troubleshooting": {
+            "heading": "Troubleshooting",
             "toggleDevTools": "Toggle Dev Tools",
             "copySystemInfo": "Copy system information",
             "systemInfoWait": "Wait a bit, I'm gathering the data…",
@@ -634,7 +756,9 @@
             "disableAcceleration": "Disable graphics acceleration (needs restart)",
             "disableBuiltInDebugger": "Disable built-in debugger",
             "postAnIssue": "Post an issue on Github…",
-            "heading": "Troubleshooting"
+            "disableVulkan": "Disable Vulkan support",
+            "disableVulkanSDHint": "Fixes \"no WebGL support\" issues on SteamDeck and some other Linux systems. Requires a restart to take effect.",
+            "restartMessage": "Please restart the app to apply the changes."
         },
         "deploy": {
             "heading": "Deploy",
@@ -702,18 +826,19 @@
     },
     "appView": {
         "ctIDE": "ct.IDE",
-        "texture": "Textures",
         "launch": "Launch",
         "launchHotkeys": "(F5; Alt+F5 to run in your default browser)",
         "min": "Windowed",
         "patrons": "Patrons",
         "restart": "Restart",
-        "rooms": "Rooms",
         "project": "Project",
-        "sounds": "Sounds",
-        "ui": "UI",
-        "fx": "FX",
-        "templates": "Templates",
+        "assets": "Assets",
+        "applyAssetsQuestion": "Apply assets before launching?",
+        "applyAssetsExplanation": "Some assets were not applied and their changes won't be reflected in the exported project. Do you want to apply them now?",
+        "unsavedAssets": "Unsaved assets:",
+        "runWithoutApplying": "Launch anyway",
+        "applyAndRun": "Apply and run",
+        "cantAddEditor": "Cannot add another editor. Please close some tabs with room, style, or tandem editors.",
         "tour": {
             "header": "Ct.js overview",
             "aboutTour": "Welcome to ct.js! This little tour will show you the main controls in this editor, so you know how to configure ct.js and create new assets.",
@@ -762,7 +887,9 @@
         "hide": "Hide the layer",
         "findTileset": "Find a Tileset",
         "addTileLayer": "Add a tile layer",
-        "addTileLayerFirst": "Firstly add a tile layer in the left panel!"
+        "addTileLayerFirst": "Firstly add a tile layer in the left panel!",
+        "cacheLayer": "Cache this layer",
+        "cacheLayerWarning": "Caching greatly speeds up rendering of tile layers. You should disable this option only if you need to change this tile layer dynamically during the game."
     },
     "roomView": {
         "name": "Name:",
@@ -771,7 +898,7 @@
         "height": "View height:",
         "followTemplate": "Follow a template:",
         "followCodeHint": "Learn how to further tweak this feature with code",
-        "isUi": "Is a UI layer?",
+        "isUi": "Is this room a UI layer?",
         "simulate": "Simulate",
         "grid": "Grid",
         "toggleDiagonalGrid": "Diagonal grid",
@@ -799,10 +926,13 @@
         "shiftCopies": "Shift copies",
         "sortHorizontally": "Sort horizontally",
         "sortVertically": "Sort vertically",
+        "sendToBack": "Send to back",
+        "sendToFront": "Send to front",
         "selectAndMove": "Select and Move",
         "customProperties": "Custom Properties",
         "findTileset": "Find a tileset",
         "resetView": "Reset view",
+        "emptyTextFiller": "<Empty>",
         "copyProperties": {
             "position": "Position",
             "rotation": "Rotation",
@@ -816,6 +946,45 @@
             "property": "Property",
             "value": "Value",
             "nameOccupied": "This property is used by ct.js! You should come up with a different name."
+        },
+        "uiTools": {
+            "noSelectionNotice": "Select a copy to align it or change its text label.",
+            "textSettings": "Text settings",
+            "customText": "Text",
+            "customTextSize": "Font size",
+            "wordWrapWidth": "Wrap at this width",
+            "textAlignment": "Align by",
+            "alignmentSettings": "Auto-align",
+            "enableAutoAlignment": "Enable auto-alignment",
+            "autoAlignHint": "When turned on, this element will automatically align itself relative to the boundaries of the specified portion of a room, defined as a \"frame\". It is useful when using Expand and Quality Scaling without Letterboxing rendering modes, as the camera changes proportions in those viewport modes.",
+            "frame": "Frame position, in %:",
+            "framePadding": "Frame padding, in pixels:",
+            "innerFrameMarker": "Inner frame",
+            "outerFrameMarker": "Outer frame",
+            "constrains": "Constrains:",
+            "constrainsTooltips": {
+                "left": "Lock the size of the gap to the left side of the frame",
+                "right": "Lock the size of the gap to the right side of the frame",
+                "top": "Lock the size of the gap to the top side of the frame",
+                "bottom": "Lock the size of the gap to the bottom side of the frame",
+                "centerVertical": "Place vertically relative to the center of the frame",
+                "centerHorizontal": "Place horizontally relative to the center of the frame"
+            },
+            "bindings": "Bindings",
+            "bindingsHelp": "You can write JavaScript expressions here that will be evaluated each frame and will update the corresponding properties of the copy.",
+            "bindingNames": {
+                "text": "Text:",
+                "disabled": "Disable:",
+                "visible": "Visibility:",
+                "tex": "Texture:",
+                "tint": "Tint:",
+                "count": "Sprite count:"
+            },
+            "bindingTypes": {
+                "string": "String value",
+                "boolean": "Boolean value (true or false)",
+                "number": "Number"
+            }
         },
         "restrictCamera": "Keep camera in a rectangle",
         "minimumX": "Min X",
@@ -839,6 +1008,7 @@
             "addCopies": "Add copies",
             "addTiles": "Add tiles",
             "manageBackgrounds": "Manage backgrounds",
+            "uiTools": "UI tools",
             "roomProperties": "Room properties"
         }
     },
@@ -891,7 +1061,6 @@
         "name": "Name:",
         "radius": "Radius:",
         "rectangle": "Rectangle",
-        "reimport": "Reimport",
         "round": "Circle",
         "rows": "Rows:",
         "speed": "Framerate:",
@@ -924,16 +1093,32 @@
         "offX": "Offset X:",
         "offY": "Offset Y:"
     },
+    "scriptView": {
+        "runAutomatically": "Execute at game start",
+        "language": "Language:",
+        "convertToJavaScript": "Convert to JavaScript"
+    },
     "soundView": {
-        "import": "Import",
-        "name": "Name:",
-        "save": "Save",
-        "isMusicFile": "This is a musical track",
-        "poolSize": "Pool size:"
+        "variants": "Variants",
+        "addVariant": "Add from file…",
+        "preload": "Load on game start",
+        "volume": "Volume",
+        "pitch": "Pitch",
+        "distortion": "Distortion",
+        "effects": "Effects",
+        "reverb": "Reverb",
+        "reverbDuration": "Duration",
+        "reverbDecay": "Decay",
+        "reverseReverb": "Reverse",
+        "equalizer": "Equalizer",
+        "hertz": "Hz",
+        "positionalAudio": "3D audio",
+        "falloff": "Falloff:",
+        "refDistance": "Falloff start:",
+        "positionalAudioHint": "This affects only the sounds.playAt method. The falloff sets how quickly a sound fades away, with 0 being no falloff and large values meaning near-instant fall to silence. Falloff start describes the distance after which a sound starts to fade away, with 1 being half the screen."
     },
     "fontView": {
         "italic": "Is italic?",
-        "reimport": "Reimport",
         "generateBitmapFont": "Also generate a bitmap font",
         "bitmapFont": "Bitmap font",
         "bitmapFontSize": "Font size:",
@@ -977,14 +1162,19 @@
         "eventAlreadyExists": "The same event already exists!",
         "localEventVars": "Local variables",
         "createEventHint": "Create your first event in the left column, and define your logic here",
-        "jumpToProblem": "Jump to problem",
+        "jumpToProblem": "Jump to the Problem",
+        "staticEventWarning": "This event makes this behavior static. You will not be able to add or remove it dynamically in-game with the Behaviors API, but otherwise it will be perfectly usable.",
+        "restrictedEventWarning": "This event will work only on templates with the following base classes: $1. This event won't work when applied to templates of other base classes.",
+        "baseClassWarning": "This event doesn't work with the current base class.",
         "coreEventsCategories": {
             "lifecycle": "Lifecycle",
             "actions": "Actions",
             "pointer": "Pointer events",
             "misc": "Miscellaneous",
             "animation": "Animation",
-            "timers": "Timers"
+            "input": "Input",
+            "timers": "Timers",
+            "app": "Application"
         },
         "coreEvents": {
             "OnCreate": "Creation",
@@ -1007,7 +1197,11 @@
             "OnFrameChange": "Frame change",
             "OnAnimationLoop": "Animation loop",
             "OnAnimationComplete": "Animation completed",
-            "Timer": "Timer $1"
+            "Timer": "Timer $1",
+            "OnAppFocus": "App is active",
+            "OnAppBlur": "App is in background",
+            "OnTextChange": "On text change",
+            "OnTextInput": "On text input"
         },
         "coreParameterizedNames": {
             "OnActionPress": "On %%action%% press",
@@ -1027,7 +1221,9 @@
         },
         "coreEventsLocals": {
             "OnActionDown_value": "Current action's value",
-            "OnActionPress_value": "Current action's value"
+            "OnActionPress_value": "Current action's value",
+            "OnTextChange_value": "New text value",
+            "OnTextInput_value": "New text value"
         },
         "coreEventsDescriptions": {
             "OnCreate": "Triggers when your copy is created.",
@@ -1041,21 +1237,25 @@
             "OnActionDown": "Runs every frame if an action's input is active.",
             "OnAnimationLoop": "Fires every time an animation restarts.",
             "OnAnimationComplete": "Fires once a non-looping animation finishes.",
-            "Timer": "Set the duration for this timer in seconds with this.timer$1 = 3;"
+            "Timer": "Set the duration for this timer in seconds with this.timer$1 = 3;",
+            "OnAppFocus": "Triggers when a user goes back to your application.",
+            "OnAppBlur": "Triggers when a user switches from your game to something else — by switching tabs, switching to another window, or minimizing the game.",
+            "OnTextChange": "Fires when a user finishes editing this field by clicking outside of it or by pressing Enter key.",
+            "OnTextInput": "Fires each time a user changes the value of this field."
         }
     },
     "templates": {
         "create": "Create"
     },
     "templateView": {
-        "change": "Change sprite",
-        "create": "On Create",
-        "destroy": "On Destroy",
-        "done": "Done",
-        "draw": "Draw",
+        "change": "Change texture",
+        "hoverTexture": "Texture on hover",
+        "pressedTexture": "Texture when pressed",
+        "disabledTexture": "Texture when disabled",
+        "defaultText": "Default text:",
+        "textStyle": "Text style",
         "learnAboutTypes": "Learn about coding templates",
         "name": "Name:",
-        "step": "On Step",
         "appearance": "Appearance",
         "visible": "Visible",
         "depth": "Depth:",
@@ -1069,6 +1269,36 @@
             "add": "Add (burn)",
             "multiply": "Multiply (darken)",
             "screen": "Screen (lighten)"
-        }
+        },
+        "fieldType": "Field type:",
+        "fieldTypes": {
+            "text": "Text",
+            "number": "Number",
+            "email": "E-mail",
+            "password": "Password"
+        },
+        "useCustomSelectionColor": "Use a custom color for selected text",
+        "maxLength": "Max length:",
+        "baseClass": {
+            "AnimatedSprite": "Animated sprite",
+            "Text": "Text",
+            "NineSlicePlane": "Panel",
+            "Container": "Container",
+            "Button": "Button",
+            "RepeatingTexture": "Repeating texture",
+            "SpritedCounter": "Sprited Counter",
+            "TextBox": "Text box"
+        },
+        "nineSliceTop": "Top slice, in pixels",
+        "nineSliceRight": "Right slice, in pixels",
+        "nineSliceBottom": "Bottom slice, in pixels",
+        "nineSliceLeft": "Left slice, in pixels",
+        "autoUpdateNineSlice": "Automatically update collision shape",
+        "autoUpdateNineSliceHint": "If a panel changes its size, it will automatically update its collision shape. You usually don't need that for purely cosmetic elements, or the ones that never change their size after creation. You can still update its collision shape at any time with u.reshapeNinePatch(this) call.",
+        "panelHeading": "Texture slicing settings",
+        "scrollSpeedX": "Scroll speed by X:",
+        "scrollSpeedY": "Scroll speed by Y:",
+        "isUi": "Use UI time",
+        "defaultCount": "Default sprite count:"
     }
 }

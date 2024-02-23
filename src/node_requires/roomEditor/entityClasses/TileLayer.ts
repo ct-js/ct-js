@@ -1,5 +1,8 @@
 import {Tile} from './Tile';
 import {RoomEditor} from '..';
+import {RoomEditorPreview} from '../previewer';
+
+import * as PIXI from 'node_modules/pixi.js';
 
 let idCounter = 0;
 
@@ -10,9 +13,10 @@ export const resetCounter = (): void => {
 export class TileLayer extends PIXI.Container {
     extends: Record<string, unknown>;
     children: Tile[];
-    editor: RoomEditor;
+    editor: RoomEditor | RoomEditorPreview;
     id: number;
-    constructor(tileLayer: ITileLayerTemplate, editor: RoomEditor) {
+    shouldCache: boolean;
+    constructor(tileLayer: ITileLayerTemplate, editor: RoomEditor | RoomEditorPreview) {
         super();
         this.editor = editor;
         this.id = idCounter++;
@@ -41,7 +45,7 @@ export class TileLayer extends PIXI.Container {
             this.editor.tiles.delete(tile);
         }
         this.parent.removeChild(this);
-        if (writeToHistory) {
+        if (writeToHistory && this.editor instanceof RoomEditor) {
             this.editor.history.pushChange({
                 type: 'tileLayerDeletion',
                 deleted: this
@@ -58,15 +62,19 @@ export class TileLayer extends PIXI.Container {
     }
     hide(): void {
         this.alpha = 0;
+        this.eventMode = 'none';
     }
     show(): void {
         this.alpha = 1;
+        this.eventMode = 'auto';
     }
     showToggle(): boolean {
         if (this.alpha === 0) {
             this.alpha = 1;
+            this.eventMode = 'auto';
         } else {
             this.alpha = 0;
+            this.eventMode = 'none';
         }
         return this.isHidden;
     }
@@ -75,11 +83,13 @@ export class TileLayer extends PIXI.Container {
             depth: this.zIndex,
             tiles: this.children.map(c => c.serialize()),
             extends: this.extends,
-            hidden: !this.visible
+            hidden: !this.visible,
+            cache: this.shouldCache
         };
     }
     deserialize(tileLayer: ITileLayerTemplate): void {
         this.zIndex = tileLayer.depth;
+        this.shouldCache = tileLayer.cache ?? true;
         this.extends = tileLayer.extends || {};
         for (const tile of tileLayer.tiles) {
             const pixiTile = new Tile(tile, this.editor);

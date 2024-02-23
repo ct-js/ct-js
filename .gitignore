@@ -32,6 +32,7 @@ build/Release
 node_modules
 bower_components
 
+.tmp
 temp/
 desktop\.ini
 *.png~
@@ -40,6 +41,8 @@ desktop\.ini
 # Generated files
 src/typedefs/ct.js/types.d.ts
 app/data/ctLibJSDocAst.json
+app/data/ct.release/**
+app/data/ct.shared/**
 app/examples
 app/templates
 app/bundledAssets
@@ -53,7 +56,7 @@ app/data/hotLoadTags
 app/data/fonts/style/.css
 app/data/theme*.css
 app/data/typedefs/global.d.ts
-app/data/typedefs/pixi.js.d.ts
+app/data/typedefs/ct.d.ts
 app/data/icons.svg
 app/data/icons.json
 /app/data/docs
@@ -71,6 +74,9 @@ builds
 build
 cache
 tempChangelog.md
+prev
+trash
+/Changelog.md
 
 # tests
 error_screenshots/
@@ -85,10 +91,14 @@ app/Screenshot of *.png
 app/export.zip
 app/export
 *.ict.recovery
+*.ict.backup*
 
 # editor-specific
 .vscode/settings.json
 .vscode/launch.json
+
+# sensitive info
+*.pfx
 
 # docs
 docs/db.json
@@ -101,3 +111,8 @@ app/debugger.html
 
 **/**/*.orig
 app/data/ct.libs/gamedistribution/.vscode/settings.json
+
+# neutralino binaries
+src/ct.release/desktopPack/bin
+src/ct.release/desktopPack/game/neutralino.js
+app/data/ct.shared/ctSound.js

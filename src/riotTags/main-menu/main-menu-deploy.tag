@@ -7,17 +7,19 @@ main-menu-deploy
             span {voc.zipExport}
         li(onclick="{toggleDesktopExporter}")
             svg.feather
-                use(xlink:href="#package")
+                use(xlink:href="#monitor")
             span {voc.exportDesktop}
-        li(onclick="{toggleMobileExporter}")
+        li(onclick="{toggleMobileExporter}" title="{vocGlob.experimentalFeature}")
             svg.feather
                 use(xlink:href="#smartphone")
             span {voc.exportAndroid}
-    export-panel(show="{showDesktopExporter}" onclose="{hideDesktopExporter}")
+            svg.feather.dim
+                use(xlink:href="#test-tube")
+    export-desktop-panel(show="{showDesktopExporter}" onclose="{hideDesktopExporter}")
     export-mobile-panel(show="{showMobileExporter}" onclose="{hideMobileExporter}")
     script.
         this.namespace = 'mainMenu.deploy';
-        this.mixin(window.riotVoc);
+        this.mixin(require('./data/node_requires/riotMixins/voc').default);
 
         this.exportForWeb = async () => {
             const fs = require('fs-extra'),

@@ -1,5 +1,5 @@
-const fs = require('fs-extra'),
-      path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 const basePath = './data/';
 
 let currentProject: IProject;
@@ -8,24 +8,32 @@ let writeDir: string;
 import {resetEventsCache, populateEventCache} from './scriptableProcessor';
 import {ExporterError, highlightProblem} from './ExporterError';
 
+import {ExportedMeta} from './_exporterContracts';
+
 import {packImages} from './textures';
-import {packSkeletons} from './skeletons';
 import {getSounds} from './sounds';
 import {stringifyRooms, getStartingRoom} from './rooms';
 import {stringifyStyles} from './styles';
-const {stringifyTandems} = require('./emitterTandems');
+import {stringifyTandems} from './emitterTandems';
 import {stringifyTemplates} from './templates';
-const {stringifyContent} = require('./content');
+import {stringifyBehaviors} from './behaviors';
+import {stringifyContent} from './content';
 import {bundleFonts, bakeBitmapFonts} from './fonts';
+import {getAssetTree} from './assetTree';
 import {bakeFavicons} from './icons';
-const {getUnwrappedExtends, getCleanKey} = require('./utils');
+import {getUnwrappedExtends, getCleanKey} from './utils';
 import {revHash} from './../utils/revHash';
-import {getGroups} from './groups';
 import {substituteHtmlVars} from './html';
+import {stringifyScripts, getStartupScripts} from './scripts';
 const typeScript = require('sucrase').transform;
 
-const ifMatcher = (varName: string, symbol = '@') => new RegExp(`/\\* ?if +${symbol}${varName}${symbol} ?\\*/([\\s\\S]*)(?:/\\* ?else +${symbol}${varName}${symbol} ?\\*/([\\s\\S]*?))?/\\* ?endif +${symbol}${varName}${symbol} ?\\*/`, 'g');
-const varMatcher = (varName: string, symbol = '@') => new RegExp(`/\\* ?${symbol}${varName}${symbol} ?\\*/`, 'g');
+import {getByTypes} from '../resources';
+import {getVariantPath} from '../resources/sounds';
+import {getLanguageJSON} from './../i18n';
+import {getExportDir} from './../platformUtils';
+
+const ifMatcher = (varName: string, symbol = '@') => new RegExp(`/\\*\\!? ?if +${symbol}${varName}${symbol} ?\\*/([\\s\\S]*)(?:/\\*\\!? ?else +${symbol}${varName}${symbol} ?\\*/([\\s\\S]*?))?/\\*\\!? ?endif +${symbol}${varName}${symbol} ?\\*/`, 'g');
+const varMatcher = (varName: string, symbol = '@') => new RegExp(`/\\*\\!? ?${symbol}${varName}${symbol} ?\\*/`, 'g');
 
 /**
  * A little home-brewn string templating function for JS and CSS.
@@ -208,20 +216,20 @@ const getInjections = async () => {
 const exportCtProject = async (
     project: IProject,
     projdir: string,
-    production: boolean
+    production: boolean,
+    desktop: boolean
 ): Promise<string> => {
     window.signals.trigger('exportProject');
     currentProject = project;
+    const assets = getByTypes();
     await removeBrokenModules(project);
     resetEventsCache();
 
-    const {languageJSON} = require('./../i18n');
     const {settings} = project;
-    const {getExportDir} = require('./../platformUtils');
     writeDir = await getExportDir();
 
-    if (project.rooms.length < 1) {
-        throw new Error(languageJSON.common.noRooms);
+    if (assets.room.length < 1) {
+        throw new Error(getLanguageJSON().common.noRooms);
     }
 
     if (localStorage.forceProductionForDebug === 'yes') {
@@ -229,7 +237,20 @@ const exportCtProject = async (
     }
     const noMinify = currentProject.settings.export.codeModifier === 'none';
 
-    await fs.remove(writeDir);
+    const preserveItems: string[] = [];
+    // Preserve texture atlas data if textures were not changed
+    if (sessionStorage.canSkipTextureGeneration === 'yes') {
+        preserveItems.push('img');
+    }
+    if (!preserveItems.length || production) {
+        await fs.remove(writeDir);
+    } else {
+        const items = await fs.readdir(writeDir);
+        const removalOps = items
+            .filter(item => !preserveItems.includes(item))
+            .map(item => fs.remove(path.join(writeDir, item)));
+        await Promise.all(removalOps);
+    }
     await Promise.all([
         fs.ensureDir(path.join(writeDir, '/img/')),
         fs.ensureDir(path.join(writeDir, '/snd/'))
@@ -239,38 +260,15 @@ const exportCtProject = async (
     let cssBundleFilename = 'ct.css',
         jsBundleFilename = 'ct.js';
 
-    /* Pixi.js */
-    if (settings.rendering.usePixiLegacy) {
-        await fs.copyFile('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js', path.join(writeDir, '/pixi.min.js'));
-        await fs.copyFile('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js.map', path.join(writeDir, '/pixi-legacy.min.js.map'));
-    } else {
-        await fs.copyFile('./node_modules/pixi.js/dist/pixi.min.js', path.join(writeDir, '/pixi.min.js'));
-        await fs.copyFile('./node_modules/pixi.js/dist/pixi.min.js.map', path.join(writeDir, '/pixi.min.js.map'));
-    }
-    if (project.emitterTandems && project.emitterTandems.length) {
-        await fs.copyFile('./node_modules/pixi-particles/dist/pixi-particles.min.js', path.join(writeDir, '/pixi-particles.min.js'));
-        await fs.copyFile('./node_modules/pixi-particles/dist/pixi-particles.min.js.map', path.join(writeDir, '/pixi-particles.min.js.map'));
-    }
-
     const startroom = getStartingRoom(project);
 
     /* Load source files in parallel */
     const sources: Record<string, Promise<string>> = {};
     const sourcesList = [
-        'backgrounds.js',
-        'camera.js',
-        'content.js',
+        'pixi.js',
+        'ct.js',
         'ct.css',
-        'emitters.js',
-        'index.html',
-        'inputs.js',
-        'main.js',
-        'res.js',
-        'rooms.js',
-        'styles.js',
-        'templates.js',
-        'tilemaps.js',
-        'timer.js'
+        'index.html'
     ];
     for (const file of sourcesList) {
         sources[file] = fs.readFile(path.join(basePath, 'ct.release', file), {
@@ -278,112 +276,49 @@ const exportCtProject = async (
         });
     }
     /* assets — run in parallel */
-    const texturesTask = packImages(project, writeDir, production);
-    const skeletonsTask = packSkeletons(project, projdir, writeDir);
-    const bitmapFontsTask = bakeBitmapFonts(project, projdir, writeDir);
+    const texturesTask = packImages(assets.texture, writeDir, production);
+    const bitmapFontsTask = bakeBitmapFonts(assets.font, projdir, writeDir);
     const favicons = bakeFavicons(project, writeDir, production);
+    const modulesTask = addModules();
     /* Run event cache population in parallel as well */
     const cacheHandle = populateEventCache(project);
 
-    let buffer = template(await sources['main.js'], {
-        startwidth: startroom.width,
-        startheight: startroom.height,
-        pixelatedrender: Boolean(settings.rendering.pixelatedrender),
-        highDensity: Boolean(settings.rendering.highDensity),
-        maxfps: Number(settings.rendering.maxFPS),
-        ctversion: process.versions.ctjs,
-        projectmeta: {
-            name: settings.authoring.title,
-            author: settings.authoring.author,
-            site: settings.authoring.site,
-            version: settings.authoring.version.join('.') + settings.authoring.versionPostfix
-        }
-    }, injections);
-    buffer += '\n';
-
     let actionsSetup = '';
     for (const action of project.actions) {
-        actionsSetup += `ct.inputs.addAction('${action.name}', ${JSON.stringify(action.methods)});\n`;
+        actionsSetup += `inputs.addAction('${action.name}', ${JSON.stringify(action.methods)});\n`;
     }
-    // This section is synchronous to the possible extent, no race conditions possible here
-    /* eslint-disable require-atomic-updates */
-    buffer += template(await sources['inputs.js'], {
-        actions: actionsSetup
-    }, injections);
-    buffer += '\n';
+    const projectmeta: ExportedMeta = {
+        name: settings.authoring.title,
+        author: settings.authoring.author,
+        site: settings.authoring.site,
+        version: settings.authoring.version.join('.') + settings.authoring.versionPostfix
+    };
 
-    // Process all the scriptables to get combined code for root rooms
+    // Process all the scriptables to get combined code for the root rooms
     await cacheHandle;
-
-    const rooms = stringifyRooms(project);
-    const templates = stringifyTemplates(project);
+    const fonts = await bundleFonts(assets.font, projdir, writeDir);
+    const rooms = stringifyRooms(assets, project);
+    const templates = stringifyTemplates(assets, project);
+    const behaviors = stringifyBehaviors(assets.behavior, project);
     const rootRoomOnCreate = rooms.rootRoomOnCreate + '\n' + templates.rootRoomOnCreate;
     const rootRoomOnStep = rooms.rootRoomOnStep + '\n' + templates.rootRoomOnStep;
     const rootRoomOnDraw = rooms.rootRoomOnDraw + '\n' + templates.rootRoomOnDraw;
     const rootRoomOnLeave = rooms.rootRoomOnLeave + '\n' + templates.rootRoomOnLeave;
-    buffer += template(await sources['rooms.js'], {
-        startroom: startroom.name,
-        rooms: rooms.libCode,
-        rootRoomOnCreate,
-        rootRoomOnStep,
-        rootRoomOnDraw,
-        rootRoomOnLeave
-    }, injections);
-    buffer += '\n';
 
-    const styles = stringifyStyles(project);
-    buffer += template(await sources['styles.js'], {
-        styles
-    }, injections);
-    buffer += '\n';
-
-    if (project.emitterTandems && project.emitterTandems.length) {
-        const tandems = stringifyTandems(project);
-        buffer += template(await sources['emitters.js'], {
-            tandemTemplates: tandems
-        }, injections);
+    const soundCopyPromises = [];
+    for (const sound of assets.sound) {
+        for (const variant of sound.variants) {
+            const source = getVariantPath(sound, variant);
+            const ext = path.extname(source);
+            soundCopyPromises.push(fs.copy(source, path.join(writeDir, '/snd/', `${variant.uid}${ext}`)));
+        }
     }
 
-    buffer += template(await sources['templates.js'], {
-        templates: templates.libCode
-    }, injections);
-
-    // Add four files in a sequence, without additional transforms
-    buffer += (
-        await Promise.all(['backgrounds.js', 'tilemaps.js', 'camera.js', 'timer.js']
-            .map(source => sources[source]))
-    ).join('\n');
-
-    const fonts = await bundleFonts(project, projdir, writeDir);
-    buffer += fonts.js;
-    /* eslint-enable require-atomic-updates */
-
-    /* Add catmods */
-    buffer += await addModules();
-
-    /* ct.res goes after all the code, but before user-defined scripts */
-    const {atlases, tiledImages} = await texturesTask;
-    const skeletons = await skeletonsTask;
-    const bitmapFonts = await bitmapFontsTask;
-    const sounds = getSounds(project);
-    buffer += template(await sources['res.js'], {
-        atlases,
-        tiledImages,
-        bitmapFonts,
-        dbSkeletons: skeletons.skeletonsDB,
-        sounds,
-        groups: JSON.stringify(getGroups(project))
-    }, injections);
-    buffer += '\n';
-
-    const content = stringifyContent(project);
-    buffer += (await sources['content.js']).replace('/*@contentTypes@*/', `"${content}"`);
-    buffer += '\n';
-
     /* User-defined scripts */
+    let userScripts = '';
     for (const script of project.scripts) {
         try {
-            buffer += typeScript(script.code, {
+            userScripts += typeScript(script.code, {
                 transforms: ['typescript']
             }).code + ';\n';
         } catch (e) {
@@ -395,6 +330,50 @@ const exportCtProject = async (
             throw exporterError;
         }
     }
+
+    let buffer = template(await sources['ct.js'], {
+        projectmeta,
+        ctversion: process.versions.ctjs,
+        contentTypes: stringifyContent(project),
+
+        pixelatedrender: Boolean(settings.rendering.pixelatedrender),
+        highDensity: Boolean(settings.rendering.highDensity),
+        maxfps: Number(settings.rendering.maxFPS),
+        transparent: Boolean(settings.rendering.transparent),
+
+        startroom: startroom.name,
+        startwidth: startroom.width,
+        startheight: startroom.height,
+        viewMode: settings.rendering.viewMode,
+        autocloseDesktop: settings.export.autocloseDesktop,
+
+        atlases: (await texturesTask).atlases,
+        tiledImages: (await texturesTask).tiledImages,
+        sounds: getSounds(assets.sound),
+        assetTree: settings.export.bundleAssetTree &&
+            JSON.stringify(getAssetTree(project.assets, project)),
+
+        actions: actionsSetup,
+        rooms: rooms.libCode,
+        rootRoomOnCreate,
+        rootRoomOnStep,
+        rootRoomOnDraw,
+        rootRoomOnLeave,
+        behaviorsTemplates: behaviors.templates,
+        behaviorsRooms: behaviors.rooms,
+        templates: templates.libCode,
+        styles: stringifyStyles(assets.style),
+        tandemTemplates: stringifyTandems(assets.tandem),
+        fonts: fonts.js,
+        bitmapFonts: await bitmapFontsTask,
+
+        userScripts,
+        scriptAssets: stringifyScripts(assets.script),
+        startupScripts: getStartupScripts(assets.script),
+        catmods: await modulesTask
+    }, injections);
+
+
     /* passthrough copy of files in the `include` folder */
     if (await fs.pathExists(projdir + '/include/')) {
         await fs.copy(projdir + '/include/', writeDir);
@@ -404,6 +383,7 @@ const exportCtProject = async (
             await fs.copy(path.join(basePath, `./ct.libs/${lib}/includes/`), writeDir);
         }
     }));
+    await fs.copy(path.join(basePath, 'ct.release', 'pixi.js'), path.join(writeDir, 'pixi.js'));
 
     /* CSS styles for rendering settings and branding */
     let preloaderColor1 = project.settings.branding.accent,
@@ -417,7 +397,8 @@ const exportCtProject = async (
         hidemadewithctjs: project.settings.branding.hideLoadingLogo,
         preloaderforeground: preloaderColor1,
         preloaderbackground: preloaderColor2,
-        fonts: fonts.css
+        fonts: fonts.css,
+        accent: project.settings.branding.accent
     }, injections);
     if (!noMinify) {
         const csswring = require('csswring');
@@ -428,9 +409,7 @@ const exportCtProject = async (
     // JS minify
     if (production && currentProject.settings.export.codeModifier === 'minify') {
         buffer = await (await require('terser').minify(buffer, {
-            mangle: {
-                reserved: ['ct']
-            },
+            mangle: {},
             format: {
                 comments: '/^! Made with ct.js /'
             }
@@ -442,10 +421,12 @@ const exportCtProject = async (
             .obfuscate(buffer)
             .getObfuscatedCode();
     }
+    /*
     // Wrap in a self-calling function
     if (production && currentProject.settings.export.functionWrap) {
         buffer = `(function() {\n${buffer}\n})();`;
     }
+    */
 
     // Calculate hashes to prevent caching for changed files
     if (production) {
@@ -460,6 +441,7 @@ const exportCtProject = async (
     const html = substituteHtmlVars(
         await sources['index.html'],
         project,
+        desktop,
         injections, {
             cssBundle: cssBundleFilename,
             jsBundle: jsBundleFilename,
@@ -478,14 +460,9 @@ const exportCtProject = async (
                 })
         ),
         fs.writeFile(path.join(writeDir, cssBundleFilename), css),
-        fs.writeFile(path.join(writeDir, jsBundleFilename), buffer)
+        fs.writeFile(path.join(writeDir, jsBundleFilename), buffer),
+        Promise.all(soundCopyPromises)
     ]);
-
-    await Promise.all(project.sounds.map(async (sound: ISound) => {
-        const ext = sound.origname.slice(-4);
-        await fs.copy(path.join(projdir, '/snd/', sound.origname), path.join(writeDir, '/snd/', sound.uid + ext));
-    }));
-
     return path.join(writeDir, '/index.html');
 };
 
