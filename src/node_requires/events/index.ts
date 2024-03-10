@@ -1,5 +1,6 @@
 import {getLanguageJSON, localizeField} from '../i18n';
-import {getName, getById, getThumbnail} from './../resources';
+import {getName, getById, getThumbnail} from '../resources';
+import {fieldTypeToTsType} from '../resources/content';
 
 const categories: Record<string, IEventCategory> = {
     lifecycle: {
@@ -249,9 +250,37 @@ const getArgumentsTypeScript = (event: IEventDeclaration): string => {
     }
     return code;
 };
+export const getFieldsTypeScript = (asset: IScriptable | IScriptableBehaviors): string => {
+    let code = '';
+    if ('behaviors' in asset) {
+        for (const behaviorId of asset.behaviors) {
+            const behavior = getById('behavior', behaviorId);
+            if (behavior.specification.length) {
+                code += '&{';
+                for (const field of behavior.specification) {
+                    code += `${field.name || field.readableName}: ${fieldTypeToTsType[field.type]};`;
+                }
+                code += behavior.extendTypes.split('\n').join('');
+                code += '}';
+            }
+        }
+    }
+    if (asset.type === 'behavior' && (asset as IBehavior).specification.length) {
+        const behavior = asset as IBehavior;
+        code += '&{';
+        for (const field of behavior.specification) {
+            code += `${field.name || field.readableName}: ${fieldTypeToTsType[field.type]};`;
+        }
+        code += behavior.extendTypes.split('\n').join('');
+        code += '}';
+    } else if (asset.extendTypes) {
+        code += `&{${asset.extendTypes.split('\n').join('')}}`;
+    }
+    return code;
+};
 
 import {baseClassToTS} from '../resources/templates';
-const baseTypes = `import {BasicCopy, ${Object.values(baseClassToTS).join(', ')}} from 'src/ct.release/templates';`;
+const baseTypes = `import {BasicCopy} from 'src/ct.release/templates';import {${Object.values(baseClassToTS).join(', ')}} from 'src/ct.release/templateBaseClasses/index';`;
 
 const importEventsFromCatmod = (manifest: ICatmodManifest, catmodName: string): void => {
     if (manifest.events) {

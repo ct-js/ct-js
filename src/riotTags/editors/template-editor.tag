@@ -195,6 +195,11 @@ mixin templateProperties
     )
     .aSpacer
     extensions-editor(type="template" entity="{asset.extends}" wide="yep" compact="probably")
+    .aSpacer(if="{window.currentProject.language === 'typescript'}")
+    label.block(if="{window.currentProject.language === 'typescript'}")
+        b {vocFull.scriptables.typedefs}
+        hover-hint(text="{vocFull.scriptables.typedefsHint}")
+        textarea.code.wide(style="min-height: 15rem;" value="{asset.extendTypes}" onchange="{changeTypedefs}")
 
 mixin eventsList
     event-list-scriptable(
@@ -279,7 +284,7 @@ template-editor.aPanel.aView.flexrow
                     code-editor-scriptable(
                         event="{currentSheet}"
                         entitytype="template"
-                        baseclass="{baseClassToTS[asset.baseClass]}"
+                        asset="{asset}"
                     )
                 // .tabbed(show="{tab === 'blocks'}")
                 //     .aBlocksEditor(ref="blocks")
@@ -327,11 +332,9 @@ template-editor.aPanel.aView.flexrow
 
         const {baseClasses,
             baseClassToIcon,
-            baseClassToTS,
             getBaseClassFields,
             hasCapability} = require('./data/node_requires/resources/templates');
         this.baseClassToIcon = baseClassToIcon;
-        this.baseClassToTS = baseClassToTS;
         this.hasCapability = cp => hasCapability(this.asset.baseClass, cp);
         const fillBaseClassDefaults = () => {
             Object.assign(this.asset, getBaseClassFields(this.asset.baseClass));
@@ -397,6 +400,10 @@ template-editor.aPanel.aView.flexrow
                 this.asset.selectionColor = '#ffffff';
             }
         };
+        this.changeTypedefs = e => {
+            this.wire('asset.extendTypes')(e);
+            window.signals.trigger('typedefsChanged', this.asset.uid);
+        };
 
         this.needsTiledWarning = () => {
             if (this.asset.texture === -1 || !this.asset.texture) {
@@ -450,15 +457,21 @@ template-editor.aPanel.aView.flexrow
                     cleaned = true;
                 }
             }
+            if (this.asset.behaviors.find(b => b === deleted)) {
+                this.asset.behaviors = this.asset.behaviors.filter(b => b !== deleted);
+                cleaned = true;
+            }
             if (cleaned) {
                 this.update();
             }
         };
         window.signals.on('textureRemoved', checkRefs);
         window.signals.on('styleRemoved', checkRefs);
+        window.signals.on('behaviorRemoved', checkRefs);
         this.on('unmount', () => {
             window.signals.off('textureRemoved', checkRefs);
             window.signals.off('styleRemoved', checkRefs);
+            window.signals.off('behaviorRemoved', checkRefs);
         });
 
         this.minimizeProps = localStorage.minimizeTemplatesProps === 'yes';

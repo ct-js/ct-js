@@ -155,8 +155,8 @@ class Copy extends PIXI.Container {
     }
     get tint(): PIXI.ColorSource {
         return this.sprite?.tint ||
-            this.text?.tint ||
             this.nineSlicePlane?.tint ||
+            this.text?.tint ||
             this.tilingSprite?.tint ||
             this.#tint;
     }
@@ -224,7 +224,7 @@ class Copy extends PIXI.Container {
                 ...copy.bindings
             } :
             {};
-        this.align = copy.align;
+        this.align = structuredClone(copy.align);
         if (hasCapability(t.baseClass, 'animatedSprite')) {
             this.sprite = new PIXI.AnimatedSprite(getPixiTexture(copy.uid));
             this.sprite.autoUpdate = false;

@@ -1,6 +1,6 @@
 //
     Exposes this.reloadGame
-debugger-screen-embedded(class="{opts.class} {flexrow: verticalLayout, flexcol: !verticalLayout}")
+debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !verticalLayout}")
     webview.tall#thePreview(
         ref="gameView"
         partition="persist:trusted"

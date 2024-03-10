@@ -50,7 +50,8 @@ app-view.flexcol
                             use(xlink:href="#x")
     div.flexitem.relative(if="{global.currentProject}")
         main-menu(show="{tab === 'menu'}" ref="mainMenu")
-        debugger-screen-embedded(if="{tab === 'debug'}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
+        debugger-screen-multiwindow(if="{tab === 'debug' && !splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
+        debugger-screen-split(if="{tab === 'debug' && splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
         project-settings(show="{tab === 'project'}" data-hotkey-scope="project" ref="projectsSettings")
         patrons-screen(if="{tab === 'patrons'}" ref="patrons" data-hotkey-scope="patrons")
         asset-browser.pad.aView#theAssetBrowser(
@@ -79,7 +80,7 @@ app-view.flexcol
         )
     exporter-error(if="{exporterError}" error="{exporterError}" onclose="{closeExportError}")
     new-project-onboarding(if="{sessionStorage.showOnboarding && localStorage.showOnboarding !== 'off'}")
-    notepad-panel(ref="notepadPanel")
+    notepad-panel(ref="notepadPanel" show="{tab !== 'debug'}")
     asset-confirm(
         discard="{assetDiscard}"
         cancel="{assetCancel}"
@@ -159,7 +160,7 @@ app-view.flexcol
                 window.hotkeys.push(tab);
             } else {
                 // The current tab is an asset
-                if (['room', 'template', 'behavior'].includes(tab.type)) {
+                if (['room', 'template', 'behavior', 'script'].includes(tab.type)) {
                     window.orders.trigger('forceCodeEditorLayout');
                 }
                 window.hotkeys.push(tab.uid);
@@ -427,6 +428,14 @@ app-view.flexcol
                 } else {
                     // Open the debugger as usual
                     this.tab = 'debug';
+                    // Get debugger layout
+                    if (localStorage.debuggerMode === 'split') {
+                        this.splitDebugger = true;
+                    } else if (localStorage.debuggerMode === 'multiwindow') {
+                        this.splitDebugger = false;
+                    } else {
+                        this.splitDebugger = nw.Screen.screens.length === 1;
+                    }
                     this.debugParams = {
                         title: global.currentProject.settings.authoring.title,
                         link: `http://localhost:${fileServer.address().port}/`

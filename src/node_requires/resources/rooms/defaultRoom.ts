@@ -9,6 +9,7 @@ const room = {
     gridX: 64,
     gridY: 64,
     diagonalGrid: false,
+    disableGrid: false,
     simulate: true,
     width: 1280,
     height: 720,
@@ -34,6 +35,7 @@ const get = function (): IRoom {
         lastmod: Number(new Date()),
         events: [],
         behaviors: [],
+        extendTypes: '',
         uid
     });
     return newRoom;
