@@ -90,9 +90,9 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         let {code} = event;
         try { // Apply converters to the user's code first
             if (project.language === 'coffeescript') {
-                code = coffeeScript.compile(code, coffeeScriptOptions);
+                code = coffeeScript.compile((code as string), coffeeScriptOptions);
             } else if (project.language === 'typescript') {
-                if (code.trim()) {
+                if ((code as string).trim()) {
                     ({code} = typeScript(code, {
                         transforms: ['typescript']
                     }));
@@ -149,7 +149,11 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
             }
             resultingCode = resultingCode.replace(/\/\*%%ENTITY_TYPE%%\*\//g, `'${entity.type}'`);
             resultingCode = resultingCode.replace(/\/\*%%ENTITY_NAME%%\*\//g, `'${entity.name}'`);
-            resultingCode = resultingCode.replace(/\/\*%%USER_CODE%%\*\//g, code);
+            if (project.language !== 'catnip') {
+                resultingCode = resultingCode.replace(/\/\*%%USER_CODE%%\*\//g, code as string);
+            } else {
+                // TODO: Add catnip compiler
+            }
             domains[target] += resultingCode;
             domains[target] += '\n';
         }

@@ -5,7 +5,7 @@ interface IScriptableEvent {
         [key: string]: assetRef | string | number | boolean;
     };
     /** The user-written JS/CoffeeScript code */
-    code: string;
+    code: string | BlockScript;
     /** The codename of the current event, excluding the lib prefix, e.g. OnCreate */
     eventKey: string;
 }

@@ -8,22 +8,30 @@ const paramConstTypeMap: Partial<Record<ts.SyntaxKind, blockArgumentType>> = {
     [ts.SyntaxKind.BooleanKeyword]: 'boolean',
     [ts.SyntaxKind.NumberKeyword]: 'number',
     [ts.SyntaxKind.StringKeyword]: 'string',
-    [ts.SyntaxKind.Unknown]: 'any'
+    [ts.SyntaxKind.Unknown]: 'any',
+    [ts.SyntaxKind.VoidKeyword]: 'void'
 };
 
 const usefulMap = {
-    [ts.SyntaxKind.FunctionDeclaration]: 'command' as const,
-    [ts.SyntaxKind.PropertySignature]: 'computed' as const
+    [ts.SyntaxKind.FunctionDeclaration]: 'function' as const,
+    [ts.SyntaxKind.PropertySignature]: 'prop' as const
 };
 
-type usableDeclaration = {
-    kind: 'computed' | 'command';
+export type usableDeclaration = {
     name: string;
-    returnType?: string;
+    returnType?: blockArgumentType;
     description?: string;
     jsDoc?: ts.JSDoc[];
     node: ts.Node;
-}
+} & ({
+    kind: 'function';
+    args: {
+        type: blockArgumentType,
+        name: string
+    }[];
+} | {
+    kind: 'prop'
+});
 
 const simplifyJsDoc = (jsDoc: ts.JSDoc[] | void): string | void => {
     if (!jsDoc) {
@@ -58,10 +66,8 @@ const visit = (
                 const {name} = declaration;
                 onUseful({
                     name: `${topLevelPath}.${(name as any).escapedText}`,
-                    kind: 'computed',
-                    returnType: paramConstTypeMap[
-                        declaration.type.kind as keyof typeof paramConstTypeMap
-                    ] ?? (declaration.type as any).escapedText ?? 'any',
+                    kind: 'prop',
+                    returnType: paramConstTypeMap[declaration.type.kind] ?? 'any',
                     description: (first as any).jsDoc?.[0].comment,
                     jsDoc: (first as any).jsDoc,
                     node
@@ -69,6 +75,7 @@ const visit = (
             }
         }
     } break;
+    // ⚠️ Double case here
     case ts.SyntaxKind.PropertySignature:
     case ts.SyntaxKind.FunctionDeclaration: {
         const {name, type, jsDoc} = (node as (
@@ -93,8 +100,8 @@ const visit = (
         const useful: usableDeclaration = {
             name: `${topLevelPath}.${(name as any).escapedText}`,
             kind: usefulMap[node.kind],
-            returnType: type,
             args,
+            returnType: paramConstTypeMap[type.kind] ?? 'any',
             jsDoc,
             node
         };
@@ -105,11 +112,11 @@ const visit = (
         onUseful(useful);
     } break;
     default:
-        console.log('skipping', node.kind, ts.SyntaxKind[node.kind], node);
+        console.debug('skipping', node.kind, ts.SyntaxKind[node.kind], node);
     }
 };
 
-export const parseFile = async (filename: string) => {
+export const parseFile = async (filename: string): Promise<usableDeclaration[]> => {
     const txt = await fs.readFile(filename, 'utf-8');
     const program = ts.createProgram([filename], {}, {
         readFile: () => txt,
@@ -131,5 +138,7 @@ export const parseFile = async (filename: string) => {
     });
     // const checker = program.getTypeChecker();
     const [sourceFile] = program.getSourceFiles();
-    ts.forEachChild(sourceFile, node => visit(node, 'root', useful => console.log(useful)));
+    const results: usableDeclaration[] = [];
+    ts.forEachChild(sourceFile, node => visit(node, 'root', useful => results.push(useful)));
+    return results;
 };

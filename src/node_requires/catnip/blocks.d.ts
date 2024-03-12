@@ -1,4 +1,4 @@
-declare type blockArgumentType = 'boolean' | 'number' | 'string' | 'any';
+declare type blockArgumentType = 'boolean' | 'number' | 'string' | 'any' | 'void';
 
 declare interface IBlockPieceLabel {
     type: 'label';
@@ -9,8 +9,8 @@ declare interface IBlockPieceIcon {
     type: 'icon';
     icon: string;
 }
-declare interface IBlockPieceJsCode {
-    type: 'js';
+declare interface IBlockPieceCode {
+    type: 'code';
     key: string;
 }
 declare interface IBlockPieceArgument {
@@ -33,34 +33,34 @@ declare interface IBlockPieceBlocks {
     key: string;
 }
 
-declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceJsCode |
+declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
                           IBlockPieceArgument | IBlockPieceTextbox | IBlockPieceBlocks;
 
 // eslint-disable-next-line no-use-before-define
 type argumentValues = Record<string, IBlock[] | IBlock | string>;
 
+declare interface IBlockDeclaration {
+    pieces?: blockPiece[];
+    icon: string;
+    /** Searchable command name */
+    name: string;
+    i18nKey?: string;
+    lib: string;
+    /** A unique string corresponding to this block so it can be serialized and deserialized */
+    code: string;
+    jsTemplate: (args: Record<string, argumentValues>) => string;
+}
 /**
  * A block for an executable method that may have additional arguments
  * and cannot be nested inside other simiar commands.
  */
-declare interface IBlockCommandDeclaration {
+declare interface IBlockCommandDeclaration extends IBlockDeclaration {
     type: 'command';
-    pieces?: blockPiece[];
-    icon: string;
-    name: string;
-    i18nKey: string;
-    lib: string;
-    code: string;
-    jsTemplate: (args: Record<string, argumentValues>) => string;
 }
 /** A block for a variable, property, or an inline command that returns a value. */
-declare interface IBlockComputedDeclaration {
+declare interface IBlockComputedDeclaration extends IBlockDeclaration {
     type: 'computed';
-    pieces?: blockPiece[];
-    lib: string;
-    code: string;
     typeHint: blockArgumentType;
-    jsTemplate: (values: Record<string, argumentValues>) => string;
 }
 
 declare type blockDeclaration = IBlockCommandDeclaration | IBlockComputedDeclaration;
@@ -71,18 +71,12 @@ declare interface IBlock {
     code: string;
 }
 
-declare interface IBlockCanvas {
-    /* floatingBlocks: IBlock[] & {
-        x: number;
-        y: number;
-    }; */
-    coreBlocks: IBlock[];
-}
+type BlockScript = IBlock[];
 
 declare type blockRegistry = Record<string, blockDeclaration>;
 declare type blockMenu = {
     name: string;
     i18nKey?: string;
-    items: (blockMenu | blockDeclaration)[];
+    items: blockDeclaration[];
     opened: boolean;
 }
