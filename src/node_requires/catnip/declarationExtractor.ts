@@ -65,7 +65,8 @@ const visit = (
             for (const declaration of first.declarationList.declarations) {
                 const {name} = declaration;
                 onUseful({
-                    name: `${topLevelPath}.${(name as any).escapedText}`,
+                    // Remove the `root.` ⤵️
+                    name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
                     kind: 'prop',
                     returnType: paramConstTypeMap[declaration.type.kind] ?? 'any',
                     description: (first as any).jsDoc?.[0].comment,
@@ -98,7 +99,8 @@ const visit = (
             });
         }
         const useful: usableDeclaration = {
-            name: `${topLevelPath}.${(name as any).escapedText}`,
+            // Remove the `root.` ⤵️
+            name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
             kind: usefulMap[node.kind],
             args,
             returnType: paramConstTypeMap[type.kind] ?? 'any',
