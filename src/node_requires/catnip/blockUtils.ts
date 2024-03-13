@@ -11,6 +11,11 @@ export const niceBlockName = (name: string, lowercase?: boolean): string => {
     return name;
 };
 
+const sortHelper = {
+    command: -1,
+    computed: 1
+};
+
 export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core' | string, icon = 'grid-random'):
 (IBlockCommandDeclaration | IBlockComputedDeclaration)[] =>
     usefuls.map((useful): IBlockCommandDeclaration | IBlockComputedDeclaration => {
@@ -53,4 +58,4 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             draft.jsTemplate = args => `${useful.name}(${usefulArgs.map(arg => args[arg.name]).join(', ')})`;
         }
         return draft as IBlockComputedDeclaration;
-    });
+    }).sort((a, b) => sortHelper[a.type] - sortHelper[b.type]);
