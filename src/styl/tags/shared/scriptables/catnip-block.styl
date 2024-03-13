@@ -1,0 +1,29 @@
+catnip-block
+    display flex
+    background background
+    border-radius br
+    border 1px solid borderBright
+    cursor grab
+    line-height 1
+    &.command
+        padding 0.5rem 0.75rem
+        margin 0.5rem 0
+        gap 0.5rem
+    flex-flow row wrap
+    justify-content flex-start
+    align-items center
+    &.computed
+        gap 0.25rem
+        border-radius 100em
+        margin 0.5rem 0
+        padding 0.1rem 0.5rem
+        flex 0 0 auto
+        width max-content
+        order 2
+        svg
+            width 1rem
+            height @width
+    & > svg
+        color act
+    & & .&-aTextLabel
+        font-size 14px

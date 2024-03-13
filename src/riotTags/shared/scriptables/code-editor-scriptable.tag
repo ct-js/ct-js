@@ -10,7 +10,7 @@
         No arguments are passed as the [event] attribute is edited directly.
 
 code-editor-scriptable.relative.wide.tall.flexcol
-    catnip-editor(if="{window.currentProject.language === 'catnip'}")
+    catnip-editor(if="{window.currentProject.language === 'catnip'}" blocks="{opts.event.code}")
     .relative.tall.wide(ref="codebox" if="{window.currentProject.language !== 'catnip'}")
     .code-editor-scriptable-aProblemPanel.flexrow.nogrow(if="{problem}")
         .nogrow

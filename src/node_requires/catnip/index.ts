@@ -6,9 +6,14 @@ import {convertFromDtsToBlocks} from './blockUtils';
 import {parseFile} from './declarationExtractor';
 
 import logicBlocks from './stdLib/logic';
-
+import templatesBlocks from './stdLib/templates';
 
 const builtinBlockLibrary: blockMenu[] = [{
+    name: 'Templates',
+    items: templatesBlocks,
+    i18nKey: 'coreLibs.templates',
+    opened: true
+}, {
     name: 'Logic',
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
@@ -27,6 +32,7 @@ const removeBlockFromRegistry = (block: blockDeclaration): void => {
 };
 export const getDeclaration = (lib: string, code: string): blockDeclaration =>
     blocksRegistry.get(`${lib}@@${code}`);
+
 const loadBuiltinBlocks = (): void => {
     blocksLibrary.push(...builtinBlockLibrary);
     for (const category of builtinBlockLibrary) {
@@ -44,6 +50,7 @@ export const loadModdedBlocks = async (modName: string) => {
     try {
         fs.access(path, fs.constants.R_OK);
         const usefuls = await parseFile(path);
+        console.log(modName, usefuls.length, usefuls);
         const blocks = convertFromDtsToBlocks(usefuls, modName);
         const category: blockMenu = {
             name: modName,
@@ -53,6 +60,7 @@ export const loadModdedBlocks = async (modName: string) => {
         };
         blocks.forEach(addBlockToRegistry);
         loadedCategories.set(modName, category);
+        blocksLibrary.push(category);
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.debug(`[catnip] Skipping the catmod ${modName} as it doesn't have a types.d.ts file.`);
@@ -72,7 +80,7 @@ export const unloadModdedBlocks = (modName: string) => {
 /**
  * Resets the list of modded blocks and loads all the blocks from the enabled modules.
  */
-export const loadAllModdedBlocks = async (project: IProject) => {
+export const loadAllBlocks = async (project: IProject) => {
     blocksLibrary.length = 0;
     loadedCategories.clear();
     blocksRegistry.clear();
