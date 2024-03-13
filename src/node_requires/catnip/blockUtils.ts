@@ -16,6 +16,8 @@ const sortHelper = {
     computed: 1
 };
 
+const supportedTypes = ['string', 'number', 'boolean', 'wildcard'];
+
 export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core' | string, icon = 'grid-random'):
 (IBlockCommandDeclaration | IBlockComputedDeclaration)[] =>
     usefuls.map((useful): IBlockCommandDeclaration | IBlockComputedDeclaration => {
@@ -29,7 +31,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 pieces: useful.args.map(arg => ({
                     type: 'argument' as const,
                     key: arg.name,
-                    typeHint: arg.type
+                    typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard'
                 })),
                 jsTemplate: () => `${useful.name}();`
             };
@@ -39,7 +41,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             pieces.push(...useful.args.map(arg => ({
                 type: 'argument' as const,
                 key: arg.name,
-                typeHint: arg.type
+                typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard'
             })));
         }
         const draft = {

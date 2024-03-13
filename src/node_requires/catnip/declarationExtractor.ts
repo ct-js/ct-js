@@ -4,11 +4,11 @@ import fs from 'fs-extra';
 import path from 'path';
 
 const paramConstTypeMap: Partial<Record<ts.SyntaxKind, blockArgumentType>> = {
-    [ts.SyntaxKind.AnyKeyword]: 'any',
+    [ts.SyntaxKind.AnyKeyword]: 'wildcard',
     [ts.SyntaxKind.BooleanKeyword]: 'boolean',
     [ts.SyntaxKind.NumberKeyword]: 'number',
     [ts.SyntaxKind.StringKeyword]: 'string',
-    [ts.SyntaxKind.Unknown]: 'any',
+    [ts.SyntaxKind.Unknown]: 'wildcard',
     [ts.SyntaxKind.VoidKeyword]: 'void'
 };
 
@@ -68,7 +68,7 @@ const visit = (
                     // Remove the `root.` ⤵️
                     name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
                     kind: 'prop',
-                    returnType: paramConstTypeMap[declaration.type.kind] ?? 'any',
+                    returnType: paramConstTypeMap[declaration.type.kind] ?? 'wildcard',
                     description: (first as any).jsDoc?.[0].comment,
                     jsDoc: (first as any).jsDoc,
                     node
@@ -103,7 +103,7 @@ const visit = (
             name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
             kind: usefulMap[node.kind],
             args,
-            returnType: paramConstTypeMap[type.kind] ?? 'any',
+            returnType: paramConstTypeMap[type.kind] ?? 'wildcard',
             jsDoc,
             node
         };

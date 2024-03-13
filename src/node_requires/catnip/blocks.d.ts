@@ -1,4 +1,4 @@
-declare type blockArgumentType = 'boolean' | 'number' | 'string' | 'any' | 'void';
+declare type blockArgumentType = 'boolean' | 'number' | 'string' | 'wildcard' | 'void';
 
 declare interface IBlockPieceLabel {
     type: 'label';

@@ -1,5 +1,16 @@
+colors = {
+    wildcard: hue(act, 245)
+    string: hue(act, 321)
+    number: hue(act, 108)
+    boolean: hue(act, 25)
+}
+
 catnip-block
-    display flex
+    display block
+    & > *
+        vertical-align middle
+    & > * + *
+        margin-left 0.25rem
     background background
     border-radius br
     border 1px solid borderBright
@@ -12,20 +23,56 @@ catnip-block
         padding 0.5rem 0.75rem
         margin 0.5rem 0
         gap 0.5rem
-    flex-flow row wrap
-    justify-content flex-start
-    align-items center
-    &.computed
+    &.computed, .&-aConstantInput
         gap 0.25rem
-        border-radius 100em
+        border-radius 100em !important
         margin 0.5rem 0
-        padding 0.1rem 0.5rem
+        padding 0.1rem 0.25rem 0.1rem 0.5rem !important
         flex 0 0 auto
         width max-content
+        min-height 1.5rem
+        box-sizing border-box
         svg
             width 1rem
             height @width
+    for class, color in colors
+        &.computed.{class}, .&-aConstantInput.{class}
+            color color
+            border 1px solid color
+            background-color mix(background, color, 90%)
+            &:hover
+                border-color color
+            & > svg
+                color color
+            &::placeholder
+                color color
+                opacity 0.65
+    &.computed.userdefined, .&-aConstantInput.userdefined
+        background wildcard
+        border 1px solid wildcard
+        &:hover
+            border-color wildcard
+        color white
+        font-weight bold
+        & > svg
+            color white
+    & &.computed, & .&-aConstantInput
+        margin 0.1rem 0
     & > svg
         color act
     & & .&-aTextLabel
         font-size 14px
+
+    .&-Blocks
+        background borderPale
+        border-radius br
+        border 1px solid borderBright
+        padding 0.5rem
+        margin 0.5rem 0
+        & + *
+            margin-left 0
+    .&-aBlockPlaceholder
+        opacity 0.65
+
+.catnip-block-aConstantInput
+    max-width 4rem

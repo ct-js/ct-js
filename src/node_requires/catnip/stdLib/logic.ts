@@ -15,6 +15,12 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         type: 'blocks',
         key: 'body1'
     }, {
+        type: 'icon',
+        icon: 'alert-circle'
+    }, {
+        type: 'label',
+        name: 'else'
+    }, {
         type: 'blocks',
         key: 'body2'
     }]
