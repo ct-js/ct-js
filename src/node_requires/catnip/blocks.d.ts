@@ -29,7 +29,7 @@ declare interface IBlockPieceTextbox {
 declare interface IBlockPieceBlocks {
     type: 'blocks';
     // eslint-disable-next-line no-use-before-define
-    placeholder?: blockPiece[];
+    placeholder?: (IBlockPieceLabel | IBlockPieceIcon)[];
     key: string;
 }
 

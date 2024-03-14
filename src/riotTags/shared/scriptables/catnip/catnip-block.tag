@@ -1,11 +1,13 @@
 //-
     @attribute block (IBlock)
         The block from the block script that is rendered
+    @atribute [nodrag] (atomic)
+        Prohibits dragging this block
     @attribute [readonly] (atomic)
-        Prohibits dragging or editing this block and all its nested blocks
+        Prohibits editing this block and all its nested blocks
 
 catnip-block(
-    draggable="{!opts.readonly}"
+    draggable="{!opts.nodrag}"
     class="{declaration.type} {declaration.typeHint} {opts.class}"
     hide="{getHidden}"
 )
@@ -28,13 +30,12 @@ catnip-block(
             value="{getValue(piece.key)}"
         )
         .catnip-block-Blocks(if="{piece.type === 'blocks'}" ref="blocksDrop")
-            .catnip-block-aBlockPlaceholder(if="{!getValue(piece.key) || !getValue(piece.key).length}")
-                | Do nothing
-                |
-                |
-                svg.feather
-                    use(xlink:href="#thumbs-up")
-            catnip-block(each="{block in getValue(piece.key)}" readonly="{opts.readonly}")
+            catnip-block-list(
+                blocks="{getValue(piece.key)}"
+                showplaceholder="showplaceholder"
+                placeholder="{piece.placeholder}"
+                readonly="{opts.readonly}"
+            )
         catnip-block(
             if="{piece.type === 'argument' && getValue(piece.key) && (typeof getValue(piece.key)) === 'object'}"
             class="{piece.typeHint}"

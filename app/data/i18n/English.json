@@ -202,7 +202,11 @@
         "tipAuthor": "Tip the author for their hard work :D"
     },
     "catnip": {
-        "trashZoneHint": "Drop blocks here to quickly delete them"
+        "trashZoneHint": "Drop blocks here to quickly delete them",
+        "placeholders": {
+            "putBlocksHere": "Put your blocks here",
+            "doNothing": "Do nothing"
+        }
     },
     "colorPicker": {
         "current": "New",

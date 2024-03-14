@@ -67,12 +67,15 @@ catnip-block
         background borderPale
         border-radius br
         border 1px solid borderBright
-        padding 0.5rem
+        padding 0.5rem 0.5rem 0
         margin 0.5rem 0
         & + *
             margin-left 0
     .&-aBlockPlaceholder
         opacity 0.65
+        margin-bottom 0.5rem
+        & > * + *
+            margin-left 0.35rem
 
 .catnip-block-aConstantInput
     max-width 4rem

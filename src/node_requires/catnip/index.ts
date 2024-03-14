@@ -94,6 +94,10 @@ let transmissionSourceKey: string;
 let cloningMode = false;
 let transmissionType: blockDeclaration['type'];
 export const getTransmissionType = () => transmissionType;
+/** A block after which a (+) indicator will be placed */
+let suggestedTarget: IBlock;
+export const getSuggestedTarget = () => suggestedTarget;
+export const setSuggestedTarget = (target?: IBlock) => (suggestedTarget = target);
 
 export const startBlocksTrasmit = (
     blocks: IBlock[],
@@ -137,4 +141,5 @@ export const endBlocksTransmit = (
             transmissionSource.splice(transmissionSource.indexOf('MARKER'), 1);
         }
     }
+    suggestedTarget = void 0;
 };

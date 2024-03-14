@@ -1,0 +1,104 @@
+//-
+    @attribute blocks (BlockScript)
+    @attribute placeholder (Array<IBlockPieceLabel | IBlockPieceIcon>)
+    @attribute showplaceholder (atomic)
+    @attribute readonly (atomic)
+catnip-block-list(
+    ondragenter="{handlePreDrop}"
+    ondragover="{handlePreDrop}"
+    ondrop="{onDrop}"
+    onpointerup="{resetDropover}"
+)
+    .catnip-block-aBlockPlaceholder(if="{opts.showplaceholder && (!opts.blocks || !opts.blocks.length)}")
+        virtual(each="{piece in opts.placeholder}" if="{opts.placeholder}")
+            span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
+            svg.feather(if="{piece.type === 'icon'}")
+                use(xlink:href="#{piece.icon}")
+        svg.feather(if="{!opts.placeholder}")
+            use(xlink:href="#button")
+        span.catnip-block-aTextLabel(if="{!opts.placeholder}") {voc.placeholders.putBlocksHere}
+    virtual(each="{block, ind in opts.blocks}")
+        catnip-block(
+            block="{block}"
+            ondragstart="{parent.onDragStart}"
+            ondragend="{parent.onDragEnd}"
+        )
+        catnip-insert-mark(
+            ondragenter="{parent.handlePreDropInsertMark}"
+            ondragover="{parent.handlePreDropInsertMark}"
+            ondrop="{parent.onDropAfter}"
+            onclick="{parent.openSearchMenu}"
+            class="{dragover: getSuggestedTarget() === block}"
+        )
+    script.
+        this.namespace = 'catnip';
+        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+
+        const {
+            startBlocksTrasmit,
+            endBlocksTransmit,
+            getTransmissionType,
+            getSuggestedTarget,
+            setSuggestedTarget
+        } = require('./data/node_requires/catnip');
+
+        this.getSuggestedTarget = getSuggestedTarget;
+
+        this.onDragStart = e => {
+            this.update();
+            e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
+            startBlocksTrasmit([e.item.block], this.opts.blocks);
+            e.stopPropagation();
+            this.hoveredOver = null;
+        };
+        this.onDragEnd = e => {
+            setSuggestedTarget();
+        };
+
+        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/marker');
+        this.handlePreDrop = e => {
+            if (!isInvalidDrop(e)) {
+                e.preventDefault(); // Tells that we do want to accept the drop
+            }
+        };
+        this.handlePreDropInsertMark = e => {
+            this.handlePreDrop(e);
+            if (!isInvalidDrop(e)) {
+                setSuggestedTarget(e.item.block);
+            }
+        };
+        this.onDrop = e => {
+            if (isInvalidDrop(e)) {
+                return;
+            }
+            if (getTransmissionType() !== 'command') {
+                return;
+            }
+            this.hoveredOver = null;
+            e.preventDefault();
+            e.stopPropagation();
+            // Drop at the start of the script if the cursor was there
+            const bounds = this.root.getBoundingClientRect();
+            if (e.clientY < bounds.top + 20) {
+                endBlocksTransmit(this.opts.blocks, 0);
+            } else {
+                endBlocksTransmit(this.opts.blocks, this.opts.blocks.length);
+            }
+        };
+        this.onDropAfter = e => {
+            if (isInvalidDrop(e)) {
+                return;
+            }
+            if (getTransmissionType() !== 'command') {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            const {ind} = e.item;
+            console.log('Dropping in-between with index', ind)
+            endBlocksTransmit(this.opts.blocks, ind + 1);
+            this.hoveredOver = null;
+        };
+        this.resetDropover = () => {
+            this.hoveredOver = null;
+        };
