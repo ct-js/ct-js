@@ -37,7 +37,7 @@ declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
                           IBlockPieceArgument | IBlockPieceTextbox | IBlockPieceBlocks;
 
 // eslint-disable-next-line no-use-before-define
-type argumentValues = Record<string, IBlock[] | IBlock | string>;
+type argumentValues = Record<string, IBlock[] | IBlock | string | number | boolean>;
 
 declare interface IBlockDeclaration {
     pieces?: blockPiece[];

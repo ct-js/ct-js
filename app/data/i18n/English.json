@@ -201,6 +201,9 @@
         "visitAuthorsTwitter": "Visit author's Twitter page",
         "tipAuthor": "Tip the author for their hard work :D"
     },
+    "catnip": {
+        "trashZoneHint": "Drop blocks here to quickly delete them"
+    },
     "colorPicker": {
         "current": "New",
         "globalPalette": "Global Palette",

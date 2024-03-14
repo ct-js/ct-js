@@ -50,7 +50,6 @@ export const loadModdedBlocks = async (modName: string) => {
     try {
         fs.access(path, fs.constants.R_OK);
         const usefuls = await parseFile(path);
-        console.log(modName, usefuls.length, usefuls);
         const blocks = convertFromDtsToBlocks(usefuls, modName);
         const category: blockMenu = {
             name: modName,
@@ -86,4 +85,49 @@ export const loadAllBlocks = async (project: IProject) => {
     blocksRegistry.clear();
     loadBuiltinBlocks();
     await Promise.all(Object.keys(project.libs).map(loadModdedBlocks));
+};
+
+
+let transmittedBlocks: IBlock[] = [];
+let transmissionSource: IBlock[] | Record<string, IBlock> = [];
+let transmissionSourceKey: string;
+let cloningMode = false;
+let transmissionType: blockDeclaration['type'];
+export const getTransmissionType = () => transmissionType;
+
+export const startBlocksTrasmit = (
+    blocks: IBlock[],
+    source: typeof transmissionSource,
+    key?: string,
+    cloning?: boolean
+) => {
+    transmittedBlocks = blocks;
+    transmissionType = getDeclaration(blocks[0].lib, blocks[0].code).type;
+    transmissionSource = source;
+    transmissionSourceKey = key;
+    cloningMode = Boolean(cloning);
+    console.log('Starting a block transmission with values', blocks, source, key, cloning);
+};
+export const endBlocksTransmit = (
+    destination: typeof transmissionSource,
+    index: number | string
+) => {
+    console.log('Finishing a block transmission with values', destination, index);
+    if (!cloningMode) {
+        // Remove from the old object
+        if (Array.isArray(transmissionSource)) {
+            for (const block of transmittedBlocks) {
+                transmissionSource.splice(transmissionSource.indexOf(block), 1);
+            }
+        } else {
+            delete transmissionSource[transmissionSourceKey];
+        }
+    } else {
+        transmittedBlocks = structuredClone(transmittedBlocks);
+    }
+    if (Array.isArray(destination)) {
+        destination.splice(index as number, 0, ...transmittedBlocks);
+    } else {
+        [destination[index]] = transmittedBlocks;
+    }
 };

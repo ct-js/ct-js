@@ -1,0 +1,48 @@
+transDelayed =
+    transition 0.35s 0.1s ease all
+transshortDelayed =
+    transition 0.15s 0.1s ease all
+
+catnip-insert-mark
+    display block
+    height 0.5rem
+    {transDelayed}
+    &:hover
+        height 1.5rem
+    position relative
+    cursor pointer
+    .&-aLine, .&-anIcon
+        position absolute
+    .&-aLine
+        border-radius br
+        left 50%
+        right 50%
+        background act
+        top 50%
+        transform translate(0, -50%)
+        height 0.25rem
+        {transDelayed}
+        visibility hidden
+    &:hover .&-aLine, &.dragover .&-aLine
+        left 2.5rem
+        right 2.5rem
+        visibility visible
+    .&-anIcon
+        left 50%
+        top 50%
+        border-radius 100%
+        background background
+        border 1px solid borderBright
+        width 2rem
+        height @width
+        line-height @height
+        text-align center
+        svg
+            color act
+        transform translate(-50%, -50%) scale(0)
+        {transshortDelayed}
+        visibility hidden
+        {shadamb}
+    &:hover .&-anIcon, &.dragover .&-anIcon
+        transform translate(-50%, -50%) scale(1)
+        visibility visible
