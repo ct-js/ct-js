@@ -1,13 +1,11 @@
-transDelayed =
-    transition 0.35s 0.1s ease all
 transshortDelayed =
     transition 0.15s 0.1s ease all
 
 catnip-insert-mark
     display block
     height 0.5rem
-    {transDelayed}
-    &:hover
+    {transshortDelayed}
+    &:hover, &.dragover
         height 1.5rem
     position relative
     cursor pointer
@@ -21,7 +19,7 @@ catnip-insert-mark
         top 50%
         transform translate(0, -50%)
         height 0.25rem
-        {transDelayed}
+        {transshortDelayed}
         visibility hidden
     &:hover .&-aLine, &.dragover .&-aLine
         left 2.5rem

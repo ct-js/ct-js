@@ -14,10 +14,11 @@ catnip-editor.flexrow
                 ondragend="{parent.onDragEnd}"
             )
             catnip-insert-mark(
-                ondragenter="{parent.handlePreDrop}"
-                ondragover="{parent.handlePreDrop}"
+                ondragenter="{parent.handlePreDropInsertMark}"
+                ondragover="{parent.handlePreDropInsertMark}"
                 ondrop="{parent.onDropAfter}"
                 onclick="{parent.openSearchMenu}"
+                class="{dragover: parent.hoveredOver === block}"
             )
     .flexfix(ondragenter="{handlePreDrop}" ondragover="{handlePreDrop}")
         catnip-library.flexfix-body
@@ -30,11 +31,11 @@ catnip-editor.flexrow
         const {getDeclaration, startBlocksTrasmit, endBlocksTransmit, getTransmissionType} = require('./data/node_requires/catnip');
 
         this.onDragStart = e => {
-            e.item.block.dragging = true;
             this.update();
             e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
             startBlocksTrasmit([e.item.block], this.opts.blocks);
             e.stopPropagation();
+            this.hoveredOver = null;
         };
         this.onDragEnd = e => {
             e.item.block.dragging = false;
@@ -46,15 +47,22 @@ catnip-editor.flexrow
                 e.preventDefault(); // Tells that we do want to accept the drop
             }
         };
+        this.handlePreDropInsertMark = e => {
+            this.handlePreDrop(e);
+            if (!isInvalidDrop(e)) {
+                this.hoveredOver = e.item.block;
+            }
+        };
         this.onDrop = e => {
-            e.preventDefault();
             if (isInvalidDrop(e)) {
                 return;
             }
-            console.log(getTransmissionType());
             if (getTransmissionType() !== 'command') {
                 return;
             }
+            this.hoveredOver = null;
+            e.preventDefault();
+            e.stopPropagation();
             // Drop at the start of the script if the cursor was there
             const bounds = this.refs.canvas.getBoundingClientRect();
             if (e.clientY < bounds.top + 20) {
@@ -64,14 +72,16 @@ catnip-editor.flexrow
             }
         };
         this.onDropAfter = e => {
-            e.preventDefault();
             if (isInvalidDrop(e)) {
                 return;
             }
-            console.log(getTransmissionType());
             if (getTransmissionType() !== 'command') {
                 return;
             }
+            e.preventDefault();
+            e.stopPropagation();
             const {ind} = e.item;
+            console.log('Dropping in-between with index', ind)
             endBlocksTransmit(this.opts.blocks, ind + 1);
+            this.hoveredOver = null;
         };

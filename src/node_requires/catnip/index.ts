@@ -89,7 +89,7 @@ export const loadAllBlocks = async (project: IProject) => {
 
 
 let transmittedBlocks: IBlock[] = [];
-let transmissionSource: IBlock[] | Record<string, IBlock> = [];
+let transmissionSource: (IBlock | 'MARKER')[] | Record<string, IBlock> = [];
 let transmissionSourceKey: string;
 let cloningMode = false;
 let transmissionType: blockDeclaration['type'];
@@ -117,7 +117,9 @@ export const endBlocksTransmit = (
         // Remove from the old object
         if (Array.isArray(transmissionSource)) {
             for (const block of transmittedBlocks) {
-                transmissionSource.splice(transmissionSource.indexOf(block), 1);
+                // Remove the source blocks but put a marker in place of it
+                // to maintain positions while reordering blocks inside the same container.
+                transmissionSource.splice(transmissionSource.indexOf(block), 1, 'MARKER');
             }
         } else {
             delete transmissionSource[transmissionSourceKey];
@@ -129,5 +131,10 @@ export const endBlocksTransmit = (
         destination.splice(index as number, 0, ...transmittedBlocks);
     } else {
         [destination[index]] = transmittedBlocks;
+    }
+    if (!cloningMode && Array.isArray(transmissionSource)) {
+        while (transmissionSource.includes('MARKER')) {
+            transmissionSource.splice(transmissionSource.indexOf('MARKER'), 1);
+        }
     }
 };
