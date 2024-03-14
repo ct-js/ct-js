@@ -7,6 +7,7 @@ import {parseFile} from './declarationExtractor';
 
 import logicBlocks from './stdLib/logic';
 import templatesBlocks from './stdLib/templates';
+import miscBlocks from './stdLib/misc';
 
 const builtinBlockLibrary: blockMenu[] = [{
     name: 'Templates',
@@ -18,7 +19,13 @@ const builtinBlockLibrary: blockMenu[] = [{
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
     opened: true
+}, {
+    name: 'Miscellaneous',
+    items: miscBlocks,
+    i18nKey: 'coreLibs.misc',
+    opened: true
 }];
+
 /** An array of categories of blocks to be used in UI */
 export const blocksLibrary: blockMenu[] = [];
 /** A flat map of all the currently known blocks' declarations */

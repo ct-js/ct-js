@@ -49,6 +49,8 @@ declare interface IBlockDeclaration {
     /** A unique string corresponding to this block so it can be serialized and deserialized */
     code: string;
     jsTemplate: (args: Record<string, argumentValues>) => string;
+    /** A CSS class to assign to this block in HTML */
+    customClass?: string;
 }
 /**
  * A block for an executable method that may have additional arguments

@@ -8,7 +8,7 @@
 
 catnip-block(
     draggable="{!opts.nodrag}"
-    class="{declaration.type} {declaration.typeHint} {opts.class}"
+    class="{declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass}"
     hide="{getHidden}"
 )
     svg.feather(if="{declaration.icon}")

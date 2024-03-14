@@ -1,6 +1,6 @@
 catnip-library.flexfix
     virtual(each="{cat in categories}")
-        h2 {cat.name}
+        h3 {cat.name}
         catnip-block(
             each="{block in cat.items}"
             block="{({lib: block.lib, code: block.code, values: {}})}"

@@ -63,6 +63,11 @@ catnip-block
     & & .&-aTextLabel
         font-size 14px
 
+    textarea
+        width 100%
+        box-sizing border-box
+        margin 0.5rem 0
+
     .&-Blocks
         background borderPale
         border-radius br
@@ -76,6 +81,23 @@ catnip-block
         margin-bottom 0.5rem
         & > * + *
             margin-left 0.35rem
-
+    &.note
+        background mix(background, yellow, 90%)
+        border-color mix(borderBright, yellow, 80%)
+        {shad}
+        display flex
+        flex-flow row nowrap
+        .catnip-block-aTextLabel
+            display none
+        svg
+            flex 0 0 auto
+        textarea
+            flex 1 1 auto
+            border 0
+            margin 0
+            font-style italic
+            background transparent
+            transition unset
+            height 1.5rem
 .catnip-block-aConstantInput
     max-width 4rem
