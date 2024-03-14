@@ -7,6 +7,7 @@ import {parseFile} from './declarationExtractor';
 
 import logicBlocks from './stdLib/logic';
 import templatesBlocks from './stdLib/templates';
+import utilsBlocks from './stdLib/utils';
 import miscBlocks from './stdLib/misc';
 
 const builtinBlockLibrary: blockMenu[] = [{
@@ -18,6 +19,11 @@ const builtinBlockLibrary: blockMenu[] = [{
     name: 'Logic',
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
+    opened: true
+}, {
+    name: 'Utils',
+    items: utilsBlocks,
+    i18nKey: 'coreLibs.utils',
     opened: true
 }, {
     name: 'Miscellaneous',
@@ -101,6 +107,13 @@ let transmissionSourceKey: string;
 let cloningMode = false;
 let transmissionType: blockDeclaration['type'];
 export const getTransmissionType = () => transmissionType;
+export const getTransmissionReturnVal = () => {
+    const declaration = getDeclaration(
+        transmittedBlocks[0].lib,
+        transmittedBlocks[0].code
+    ) as IBlockComputedDeclaration;
+    return declaration.typeHint;
+};
 /** A block after which a (+) indicator will be placed */
 let suggestedTarget: IBlock;
 export const getSuggestedTarget = () => suggestedTarget;

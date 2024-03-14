@@ -210,7 +210,8 @@
         "coreLibs": {
             "templates": "Templates",
             "logic": "Logic",
-            "misc": "Miscellaneous"
+            "misc": "Miscellaneous",
+            "utils": "Utilities"
         }
     },
     "colorPicker": {

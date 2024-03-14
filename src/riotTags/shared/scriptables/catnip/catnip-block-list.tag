@@ -7,7 +7,6 @@ catnip-block-list(
     ondragenter="{handlePreDrop}"
     ondragover="{handlePreDrop}"
     ondrop="{onDrop}"
-    onpointerup="{resetDropover}"
 )
     .catnip-block-aBlockPlaceholder(if="{opts.showplaceholder && (!opts.blocks || !opts.blocks.length)}")
         virtual(each="{piece in opts.placeholder}" if="{opts.placeholder}")
@@ -95,10 +94,5 @@ catnip-block-list(
             e.preventDefault();
             e.stopPropagation();
             const {ind} = e.item;
-            console.log('Dropping in-between with index', ind)
             endBlocksTransmit(this.opts.blocks, ind + 1);
-            this.hoveredOver = null;
-        };
-        this.resetDropover = () => {
-            this.hoveredOver = null;
         };
