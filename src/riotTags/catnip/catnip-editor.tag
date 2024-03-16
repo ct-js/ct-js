@@ -1,10 +1,12 @@
 //-
     @attribute blocks (BlockScript)
 catnip-editor.flexrow
+    .pad.dim(if="{!opts.blocks}") {vocFull.scriptables.createEventHint}
     catnip-block-list.catnip-editor-scriptable-aCanvas(
         ref="canvas"
         blocks="{opts.blocks}"
         showplaceholder="showplaceholder"
+        if="{opts.blocks}"
     )
     .flexfix(ondragenter="{handlePreDrop}" ondragover="{handlePreDrop}")
         catnip-library.flexfix-body

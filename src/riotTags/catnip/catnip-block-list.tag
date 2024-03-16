@@ -9,6 +9,7 @@ catnip-block-list(
     ondrop="{onDrop}"
 )
     catnip-insert-mark(
+        if="{opts.blocks}"
         list="{opts.blocks}" pos="-1"
         ondrop="{parent.onDropTop}"
         ondragenter="{parent.handlePreDropInsertMark}"
