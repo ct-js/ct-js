@@ -45,10 +45,12 @@ declare interface IBlockDeclaration {
     /** Searchable command name */
     name: string;
     i18nKey?: string;
+    hideLabel?: boolean;
+    hideIcon?: boolean;
     lib: string;
     /** A unique string corresponding to this block so it can be serialized and deserialized */
     code: string;
-    jsTemplate: (args: Record<string, argumentValues>) => string;
+    jsTemplate: (args: Record<string, string>) => string;
     /** A CSS class to assign to this block in HTML */
     customClass?: string;
 }

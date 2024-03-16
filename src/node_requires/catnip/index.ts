@@ -7,6 +7,8 @@ import {parseFile} from './declarationExtractor';
 
 import logicBlocks from './stdLib/logic';
 import templatesBlocks from './stdLib/templates';
+import soundsBlocks from './stdLib/sounds';
+import mathBlocks from './stdLib/math';
 import utilsBlocks from './stdLib/utils';
 import miscBlocks from './stdLib/misc';
 
@@ -16,9 +18,19 @@ const builtinBlockLibrary: blockMenu[] = [{
     i18nKey: 'coreLibs.templates',
     opened: true
 }, {
+    name: 'Sounds',
+    items: soundsBlocks,
+    i18nKey: 'coreLibs.sounds',
+    opened: true
+}, {
     name: 'Logic',
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
+    opened: true
+}, {
+    name: 'Math',
+    items: mathBlocks,
+    i18nKey: 'coreLibs.math',
     opened: true
 }, {
     name: 'Utils',
@@ -43,8 +55,12 @@ const addBlockToRegistry = (block: blockDeclaration): void => {
 const removeBlockFromRegistry = (block: blockDeclaration): void => {
     blocksRegistry.set(`${block.lib}@@${block.code}`, block);
 };
-export const getDeclaration = (lib: string, code: string): blockDeclaration =>
-    blocksRegistry.get(`${lib}@@${code}`);
+export const getDeclaration = (lib: string, code: string): blockDeclaration => {
+    if (!blocksRegistry.has(`${lib}@@${code}`)) {
+        throw new Error(`[catnip] Could not find block declaration for ${lib}@@${code}. Do you have ${lib} catmod enabled?`);
+    }
+    return blocksRegistry.get(`${lib}@@${code}`);
+};
 
 const loadBuiltinBlocks = (): void => {
     blocksLibrary.push(...builtinBlockLibrary);

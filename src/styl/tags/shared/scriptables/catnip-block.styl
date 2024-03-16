@@ -7,6 +7,8 @@ colors = {
 
 catnip-block
     display block
+    &.computed
+        display inline-block
     & > *
         vertical-align middle
     & > * + *
@@ -92,6 +94,7 @@ catnip-block
             display none
         svg
             flex 0 0 auto
+            color warning
         textarea
             flex 1 1 auto
             border 0

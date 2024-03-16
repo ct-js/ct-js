@@ -211,7 +211,9 @@
             "templates": "Templates",
             "logic": "Logic",
             "misc": "Miscellaneous",
-            "utils": "Utilities"
+            "math": "Math",
+            "utils": "Utilities",
+            "sounds": "Sounds"
         }
     },
     "colorPicker": {

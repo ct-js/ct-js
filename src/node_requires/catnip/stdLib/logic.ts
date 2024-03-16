@@ -49,6 +49,66 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     lib: 'core.logic',
     i18nKey: 'break loop',
     pieces: []
+}, {
+    name: 'AND logic operator',
+    type: 'computed',
+    code: 'a AND b',
+    icon: 'bool',
+    lib: 'core.logic',
+    i18nKey: 'AND logic operator',
+    hideLabel: true,
+    typeHint: 'boolean',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'boolean'
+    }, {
+        type: 'label',
+        name: 'AND',
+        i18nKey: 'AND'
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'boolean'
+    }],
+    jsTemplate: (args) => `(${args.a} && ${args.b})`
+}, {
+    name: 'OR logic operator',
+    type: 'computed',
+    code: 'a OR b',
+    icon: 'bool',
+    lib: 'core.logic',
+    i18nKey: 'OR logic operator',
+    hideLabel: true,
+    typeHint: 'boolean',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'boolean'
+    }, {
+        type: 'label',
+        name: 'OR',
+        i18nKey: 'OR'
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'boolean'
+    }],
+    jsTemplate: (args) => `(${args.a} || ${args.b})`
+}, {
+    name: 'NOT logic operator',
+    type: 'computed',
+    code: 'NOT a',
+    icon: 'bool',
+    lib: 'core.logic',
+    i18nKey: 'NOT logic operator',
+    typeHint: 'boolean',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'boolean'
+    }],
+    jsTemplate: (args) => `!${args.a}`
 }];
 
 export default blocks;

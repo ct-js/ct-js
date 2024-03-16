@@ -11,9 +11,9 @@ catnip-block(
     class="{declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass}"
     hide="{getHidden}"
 )
-    svg.feather(if="{declaration.icon}")
+    svg.feather(if="{declaration.icon && !declaration.hideIcon}")
         use(xlink:href="#{declaration.icon}")
-    span.catnip-block-aTextLabel {declaration.name}
+    span.catnip-block-aTextLabel(if="{!declaration.hideLabel}") {declaration.name}
     virtual(each="{piece in declaration.pieces}")
         span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
         svg.feather(if="{piece.type === 'icon'}")
@@ -23,11 +23,13 @@ catnip-block(
             if="{piece.type === 'code'}"
             ref="codeEditor"
             value="{getValue(piece.key)}"
+            placeholder="{piece.key}"
         )
         textarea(
             readonly="{opts.readonly}"
             if="{piece.type === 'textbox'}"
             value="{getValue(piece.key)}"
+            placeholder="{piece.key}"
         )
         .catnip-block-Blocks(if="{piece.type === 'blocks'}" ref="blocksDrop")
             catnip-block-list(
@@ -41,12 +43,17 @@ catnip-block(
             class="{piece.typeHint}"
             block="{getValue(piece.key)}"
             readonly="{opts.readonly}"
+            ondragstart="{parent.onDragStart}"
+            ondragend="{parent.onDragEnd}"
         )
         // TODO: Write constant back
         input.catnip-block-aConstantInput(
-            type="text" value="{getValue(piece.key)}"
-            if="{piece.type === 'argument' && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
+            ondrop="{parent.onDrop}"
+            ondragenter="{parent.handlePreDrop}"
+            ondragstart="{parent.handlePreDrop}"
+            type="text" value="{parent.getValue(piece.key)}"
             placeholder="{piece.key}"
+            if="{piece.type === 'argument' && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint}"
             readonly="{opts.readonly}"
             ref="argumentsDrop"
@@ -55,8 +62,10 @@ catnip-block(
         const {
             getDeclaration,
             getTransmissionType,
+            getTransmissionReturnVal,
             startBlocksTrasmit,
-            endBlocksTransmit
+            endBlocksTransmit,
+            setSuggestedTarget
         } = require('./data/node_requires/catnip');
         this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
         this.getValue = key => {
@@ -69,3 +78,42 @@ catnip-block(
         this.dragging = false;
 
         this.getHidden = () => this.dragging;
+
+        this.onDragStart = e => {
+            this.update();
+            e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
+            const sourcePiece = e.item.piece;
+            startBlocksTrasmit([this.opts.block], this.opts.block.values, sourcePiece.key);
+            e.stopPropagation();
+            this.hoveredOver = null;
+        };
+        this.onDragEnd = e => {
+            setSuggestedTarget();
+        };
+
+        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/marker');
+        this.handlePreDrop = e => {
+            if (!isInvalidDrop(e)) {
+                e.preventDefault(); // Tells that we do want to accept the drop
+            }
+        };
+        this.onDrop = e => {
+            if (isInvalidDrop(e)) {
+                return;
+            }
+            // Disallow commands
+            if (getTransmissionType() !== 'computed') {
+                return;
+            }
+            // Disallow non-matching types
+            if (e.item.piece.typeHint !== 'wildcard' &&
+                getTransmissionReturnVal() !== 'wildcard' &&
+                e.item.piece.typeHint !== getTransmissionReturnVal()
+            ) {
+                return false;
+            }
+            this.hoveredOver = null;
+            e.preventDefault();
+            e.stopPropagation();
+            endBlocksTransmit(this.opts.block.values, e.item.piece.key);
+        };

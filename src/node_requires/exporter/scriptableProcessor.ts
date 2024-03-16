@@ -9,6 +9,7 @@ import {join} from 'path';
 import {embedStaticBehaviors} from './behaviors';
 const coffeeScript = require('coffeescript');
 const typeScript = require('sucrase').transform;
+import {compile} from '../catnip/compiler';
 
 export const coffeeScriptOptions = {
     sourceMap: false,
@@ -91,6 +92,8 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         try { // Apply converters to the user's code first
             if (project.language === 'coffeescript') {
                 code = coffeeScript.compile((code as string), coffeeScriptOptions);
+            } else if (project.language === 'catnip') {
+                code = compile(code as BlockScript);
             } else if (project.language === 'typescript') {
                 if ((code as string).trim()) {
                     ({code} = typeScript(code, {
@@ -149,11 +152,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
             }
             resultingCode = resultingCode.replace(/\/\*%%ENTITY_TYPE%%\*\//g, `'${entity.type}'`);
             resultingCode = resultingCode.replace(/\/\*%%ENTITY_NAME%%\*\//g, `'${entity.name}'`);
-            if (project.language !== 'catnip') {
-                resultingCode = resultingCode.replace(/\/\*%%USER_CODE%%\*\//g, code as string);
-            } else {
-                // TODO: Add catnip compiler
-            }
+            resultingCode = resultingCode.replace(/\/\*%%USER_CODE%%\*\//g, code as string);
             domains[target] += resultingCode;
             domains[target] += '\n';
         }
