@@ -158,7 +158,7 @@ event-list-scriptable.flexfix(class="{opts.class}")
             }
             const newEvent = {
                 eventKey: newEventPath[1],
-                code: '',
+                code: window.currentProject.language === 'catnip' ? [] : '',
                 arguments: {},
                 lib: newEventPath[0]
             };
