@@ -66,7 +66,7 @@
     "execa": "^5.1.1",
     "extract-zip": "^2.0.1",
     "fs-extra": "^10.1.0",
-    "fuse.js": "^3.6.1",
+    "fuse.js": "^7.0.0",
     "highlight.js": "^10.4.1",
     "html-minifier": "^3.5.21",
     "html2pug": "^4.0.0",

@@ -49,6 +49,30 @@ export const blocksLibrary: blockMenu[] = [];
 /** A flat map of all the currently known blocks' declarations */
 export const blocksRegistry: Map<string, blockDeclaration> = new Map();
 
+// Fuzzy search
+import {default as Fuse, IFuseOptions, FuseIndex} from 'node_modules/fuse.js';
+const fuseOptions: IFuseOptions<blockDeclaration> = {
+    keys: [{
+        name: 'name',
+        weight: 0.7
+    }, {
+        name: 'lib',
+        weight: 0.3
+    }],
+    findAllMatches: true,
+    threshold: 0.3
+};
+let fuseIndex: FuseIndex<blockDeclaration>,
+    fuseCollection: blockDeclaration[];
+const recreateFuseIndex = () => {
+    fuseCollection = [...blocksRegistry.values()];
+    fuseIndex = Fuse.createIndex(fuseOptions.keys, fuseCollection);
+};
+export const searchBlocks = (query: string): blockDeclaration[] => {
+    const fuse = new Fuse(fuseCollection, fuseOptions, fuseIndex);
+    return fuse.search(query).map(result => result.item);
+};
+
 const addBlockToRegistry = (block: blockDeclaration): void => {
     blocksRegistry.set(`${block.lib}@@${block.code}`, block);
 };
@@ -74,7 +98,7 @@ const loadBuiltinBlocks = (): void => {
  */
 const loadedCategories: Map<string, blockMenu> = new Map();
 
-export const loadModdedBlocks = async (modName: string) => {
+export const loadModdedBlocks = async (modName: string, noIndex: boolean) => {
     const path = join(getModulePathByName(modName), 'types.d.ts');
     try {
         fs.access(path, fs.constants.R_OK);
@@ -96,6 +120,9 @@ export const loadModdedBlocks = async (modName: string) => {
             console.error(err);
         }
     }
+    if (!noIndex) {
+        recreateFuseIndex();
+    }
 };
 
 export const unloadModdedBlocks = (modName: string) => {
@@ -104,6 +131,7 @@ export const unloadModdedBlocks = (modName: string) => {
         blocksLibrary.splice(blocksLibrary.indexOf(cat), 1);
         cat.items.forEach(removeBlockFromRegistry);
     }
+    recreateFuseIndex();
 };
 /**
  * Resets the list of modded blocks and loads all the blocks from the enabled modules.
@@ -113,7 +141,8 @@ export const loadAllBlocks = async (project: IProject) => {
     loadedCategories.clear();
     blocksRegistry.clear();
     loadBuiltinBlocks();
-    await Promise.all(Object.keys(project.libs).map(loadModdedBlocks));
+    await Promise.all(Object.keys(project.libs).map(lib => loadModdedBlocks(lib, true)));
+    recreateFuseIndex();
 };
 
 
