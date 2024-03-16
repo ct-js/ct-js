@@ -70,7 +70,7 @@ declare interface IBlockComputedDeclaration extends IBlockDeclaration {
 declare type blockDeclaration = IBlockCommandDeclaration | IBlockComputedDeclaration;
 
 declare interface IBlock {
-    values: Record<string, argumentValues>;
+    values: argumentValues;
     lib: string;
     code: string;
 }

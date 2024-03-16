@@ -98,7 +98,7 @@ const loadBuiltinBlocks = (): void => {
  */
 const loadedCategories: Map<string, blockMenu> = new Map();
 
-export const loadModdedBlocks = async (modName: string, noIndex: boolean) => {
+export const loadModdedBlocks = async (modName: string, noIndex?: boolean) => {
     const path = join(getModulePathByName(modName), 'types.d.ts');
     try {
         fs.access(path, fs.constants.R_OK);
@@ -175,13 +175,11 @@ export const startBlocksTrasmit = (
     transmissionSource = source;
     transmissionSourceKey = key;
     cloningMode = Boolean(cloning);
-    console.log('Starting a block transmission with values', blocks, source, key, cloning);
 };
 export const endBlocksTransmit = (
     destination: typeof transmissionSource,
     index: number | string
 ) => {
-    console.log('Finishing a block transmission with values', destination, index);
     if (!cloningMode) {
         // Remove from the old object
         if (Array.isArray(transmissionSource)) {
@@ -207,4 +205,24 @@ export const endBlocksTransmit = (
         }
     }
     suggestedTarget = void 0;
+};
+export const blockFromDeclaration = (declaration: blockDeclaration): IBlock => {
+    const block: IBlock = {
+        lib: declaration.lib,
+        code: declaration.code,
+        values: {}
+    };
+    for (const piece of declaration.pieces) {
+        if (piece.type === 'blocks') {
+            block.values[piece.key] = [] as IBlock[];
+        }
+    }
+    return block;
+};
+export const insertBlock = (
+    dest: BlockScript,
+    pos: number,
+    declaration: blockDeclaration
+): void => {
+    dest.splice(pos + 1, 0, blockFromDeclaration(declaration));
 };

@@ -1,4 +1,4 @@
-catnip-library.flexfix
+catnip-library.flexfix(class="{opts.class}")
     .aSearchWrap.flexfix-header
         input.wide(type="text" oninput="{search}" ref="search" onclick="{selectSearch}" value="{searchVal}")
         svg.feather
@@ -39,8 +39,8 @@ catnip-library.flexfix
             startBlocksTrasmit,
             getDeclaration,
             setSuggestedTarget,
-            blocksRegistry,
-            searchBlocks
+            searchBlocks,
+            blockFromDeclaration
         } = require('./data/node_requires/catnip');
         this.categories = blocksLibrary;
 
@@ -48,18 +48,8 @@ catnip-library.flexfix
             e.dataTransfer.dropEffect = 'move';
             e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
             const {block} = e.item;
-            const newBlock = {
-                lib: block.lib,
-                code: block.code,
-                values: {}
-            };
             const declaration = getDeclaration(block.lib, block.code);
-            for (const piece of declaration.pieces) {
-                if (piece.type === 'blocks') {
-                    newBlock.values[piece.key] = [];
-                }
-            }
-            startBlocksTrasmit([newBlock], this.opts.blocks, false, true);
+            startBlocksTrasmit([blockFromDeclaration(declaration)], this.opts.blocks, false, true);
         };
         this.resetTarget = () => {
             setSuggestedTarget();

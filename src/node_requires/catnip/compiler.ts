@@ -11,9 +11,9 @@ export const compile = (blocks: BlockScript): string => {
                 if (typeof associatedVal === 'object') {
                     // eslint-disable-next-line max-depth
                     if (Array.isArray(associatedVal)) {
-                        values[piece.key] = compile(associatedVal as BlockScript);
+                        values[piece.key] = compile(associatedVal);
                     } else {
-                        values[piece.key] = compile([associatedVal as unknown as IBlock]);
+                        values[piece.key] = compile([associatedVal]);
                     }
                 } else if (typeof associatedVal === 'string') {
                     values[piece.key] = `'${associatedVal}'`;

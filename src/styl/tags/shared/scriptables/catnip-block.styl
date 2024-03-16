@@ -39,7 +39,7 @@ catnip-block
             height @width
     for class, color in colors
         &.computed.{class}, .&-aConstantInput.{class}
-            color color
+            color mix(foreground, color, 50%)
             border 1px solid color
             background-color mix(background, color, 90%)
             &:hover
@@ -75,7 +75,7 @@ catnip-block
         background borderPale
         border-radius br
         border 1px solid borderBright
-        padding 0.5rem 0.5rem 0
+        padding 0 0.5rem
         margin 0.5rem 0
         & + *
             margin-left 0

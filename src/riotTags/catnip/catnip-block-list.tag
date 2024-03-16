@@ -8,6 +8,12 @@ catnip-block-list(
     ondragover="{handlePreDrop}"
     ondrop="{onDrop}"
 )
+    catnip-insert-mark(
+        list="{opts.blocks}" pos="-1"
+        ondrop="{parent.onDropTop}"
+        ondragenter="{parent.handlePreDropInsertMark}"
+        ondragover="{parent.handlePreDropInsertMark}"
+    )
     .catnip-block-aBlockPlaceholder(if="{opts.showplaceholder && (!opts.blocks || !opts.blocks.length)}")
         virtual(each="{piece in opts.placeholder}" if="{opts.placeholder}")
             span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
@@ -26,8 +32,8 @@ catnip-block-list(
             ondragenter="{parent.handlePreDropInsertMark}"
             ondragover="{parent.handlePreDropInsertMark}"
             ondrop="{parent.onDropAfter}"
-            onclick="{parent.openSearchMenu}"
-            class="{dragover: getSuggestedTarget() === block}"
+            list="{parent.opts.blocks}"
+            pos="{ind}"
         )
     script.
         this.namespace = 'catnip';
@@ -63,7 +69,7 @@ catnip-block-list(
         this.handlePreDropInsertMark = e => {
             this.handlePreDrop(e);
             if (!isInvalidDrop(e)) {
-                setSuggestedTarget(e.item.block);
+                setSuggestedTarget(e.item.block ?? this.opts.blocks);
             }
         };
         this.onDrop = e => {
@@ -95,4 +101,15 @@ catnip-block-list(
             e.stopPropagation();
             const {ind} = e.item;
             endBlocksTransmit(this.opts.blocks, ind + 1);
+        };
+        this.onDropTop = e => {
+            if (isInvalidDrop(e)) {
+                return;
+            }
+            if (getTransmissionType() !== 'command') {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            endBlocksTransmit(this.opts.blocks, 0);
         };
