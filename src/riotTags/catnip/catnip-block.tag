@@ -47,12 +47,12 @@ catnip-block(
             ondragstart="{parent.onDragStart}"
             ondragend="{parent.onDragEnd}"
         )
-        // TODO: Write constant back
         input.catnip-block-aConstantInput(
             ondrop="{parent.onDrop}"
             ondragenter="{parent.handlePreDrop}"
             ondragstart="{parent.handlePreDrop}"
             type="text" value="{parent.getValue(piece.key)}"
+            onchange="{parent.writeConstantVal}"
             placeholder="{piece.key}"
             if="{piece.type === 'argument' && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint}"
@@ -90,6 +90,19 @@ catnip-block(
         };
         this.onDragEnd = e => {
             setSuggestedTarget();
+        };
+
+        this.writeConstantVal = e => {
+            const {piece} = e.item;
+            let val = e.target.value;
+            if (piece.typeHint === 'number') {
+                val = Number(e.target.value) || 0;
+            } else if (piece.typeHint === 'boolean') {
+                val = val.trim() === 'true';
+            } else if (piece.typeHint === 'wildcard' && Number.isFinite(Number(e.target.value))) {
+                val = Number(e.target.value);
+            }
+            this.opts.block.values[piece.key] = val;
         };
 
         const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/marker');
