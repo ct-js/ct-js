@@ -52,12 +52,13 @@ catnip-block(
             ondragenter="{parent.handlePreDrop}"
             ondragstart="{parent.handlePreDrop}"
             type="text" value="{parent.getValue(piece.key)}"
-            onchange="{parent.writeConstantVal}"
+            oninput="{parent.writeConstantVal}"
             placeholder="{piece.key}"
             if="{piece.type === 'argument' && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint}"
             readonly="{opts.readonly}"
             ref="argumentsDrop"
+            style="width: {getValue(piece.key) ? Math.min((''+getValue(piece.key)).length + 1, 32) : 5}ch"
         )
     script.
         const {
