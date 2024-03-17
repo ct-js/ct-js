@@ -203,6 +203,14 @@
     },
     "catnip": {
         "trashZoneHint": "Drop blocks here to quickly delete them",
+        "properties": "Properties",
+        "propertiesHint": "Properties are stored in the copy or room and can be accessed later, including from other copies.",
+        "variables": "Variables",
+        "variablesHint": "Variables are temporary and exist only for this event's run. They're good for storing results of quick calculations.",
+        "createNewProperty": "New property",
+        "createNewVariable": "New variable",
+        "newPropertyPrompt": "Input the name for the new property:",
+        "newVariablePrompt": "Input the name for the new variable:",
         "placeholders": {
             "putBlocksHere": "Put your blocks here",
             "doNothing": "Do nothing"

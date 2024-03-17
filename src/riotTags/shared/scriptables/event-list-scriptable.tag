@@ -162,6 +162,9 @@ event-list-scriptable.flexfix(class="{opts.class}")
                 arguments: {},
                 lib: newEventPath[0]
             };
+            if (window.currentProject.language === 'catnip') {
+                newEvent.variables = [];
+            }
             this.opts.events.push(newEvent);
             this.currentEvent = newEvent;
             this.opts.onchanged(this.currentEvent);

@@ -3,14 +3,17 @@
         The asset type that is being added
     @attribute event (IScriptableEvent)
         The event to edit.
-    @attribute asset (string)
+    @attribute asset (IScriptable)
         The edited asset.
     @attribute [onchanged] (Riot function)
         The function is called whenever there was a change in the code.
         No arguments are passed as the [event] attribute is edited directly.
 
 code-editor-scriptable.relative.wide.tall.flexcol
-    catnip-editor(if="{window.currentProject.language === 'catnip'}" blocks="{opts.event.code}")
+    catnip-editor(
+        if="{window.currentProject.language === 'catnip'}"
+        event="{opts.event}" asset="{opts.asset}"
+    )
     .relative.tall.wide(ref="codebox" if="{window.currentProject.language !== 'catnip'}")
     .code-editor-scriptable-aProblemPanel.flexrow.nogrow(if="{problem}")
         .nogrow

@@ -37,6 +37,8 @@ catnip-block
         svg
             width 1rem
             height @width
+    &.computed
+        padding 0.1rem 0.5rem 0.1rem 0.5rem !important
     for class, color in colors
         &.computed.{class}, .&-aConstantInput.{class}
             color mix(foreground, color, 50%)
@@ -50,10 +52,10 @@ catnip-block
                 color color
                 opacity 0.65
     &.computed.userdefined, .&-aConstantInput.userdefined
-        background wildcard
-        border 1px solid wildcard
+        background colors.wildcard
+        border 1px solid colors.wildcard
         &:hover
-            border-color wildcard
+            border-color colors.wildcard
         color white
         font-weight bold
         & > svg

@@ -16,6 +16,7 @@ catnip-block(
     span.catnip-block-aTextLabel(if="{!declaration.hideLabel}") {declaration.name}
     virtual(each="{piece in declaration.pieces}")
         span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
+        span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}") {parent.opts.block.values.variableName}
         svg.feather(if="{piece.type === 'icon'}")
             use(xlink:href="#{piece.icon}")
         textarea.code(

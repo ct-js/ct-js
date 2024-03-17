@@ -11,6 +11,7 @@ import soundsBlocks from './stdLib/sounds';
 import mathBlocks from './stdLib/math';
 import utilsBlocks from './stdLib/utils';
 import miscBlocks from './stdLib/misc';
+import hiddenBlocks from './stdLib/hiddenBlocks';
 
 const builtinBlockLibrary: blockMenu[] = [{
     name: 'Templates',
@@ -91,6 +92,7 @@ const loadBuiltinBlocks = (): void => {
     for (const category of builtinBlockLibrary) {
         category.items.forEach(addBlockToRegistry);
     }
+    hiddenBlocks.forEach(addBlockToRegistry);
 };
 
 /**

@@ -1,15 +1,19 @@
 //-
-    @attribute blocks (BlockScript)
+    @attribute event (IScriptableEvent)
+    @attribute asset (IScriptable)
 catnip-editor.flexrow
-    .pad.dim(if="{!opts.blocks}") {vocFull.scriptables.createEventHint}
+    .pad.dim(if="{!opts.event}") {vocFull.scriptables.createEventHint}
     catnip-block-list.catnip-editor-scriptable-aCanvas(
         ref="canvas"
-        blocks="{opts.blocks}"
+        blocks="{opts.event.code}"
         showplaceholder="showplaceholder"
-        if="{opts.blocks}"
+        if="{opts.event.code}"
     )
     .flexfix(ondragenter="{handlePreDrop}" ondragover="{handlePreDrop}")
-        catnip-library.flexfix-body
+        catnip-library.flexfix-body(
+            props="{opts.asset.properties}"
+            variables="{opts.event.variables}"
+        )
         .flexfix-footer.catnip-editor-aTrashZone(
             title="{voc.trashZoneHint}"
             ondragenter="{handlePreDrop}"
