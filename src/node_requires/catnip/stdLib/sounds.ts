@@ -3,7 +3,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     type: 'command',
     code: 'sound play',
     icon: 'music',
-    jsTemplate: (values) => `sounds.play('${values.sound}')`,
+    jsTemplate: (values) => `sounds.play(${values.sound})`,
     lib: 'core.sounds',
     i18nKey: 'soundPlay',
     pieces: [{
@@ -18,7 +18,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     type: 'command',
     code: 'sound play 3d',
     icon: 'music',
-    jsTemplate: (values) => `sounds.playAt('${values.sound}', this)`,
+    jsTemplate: (values) => `sounds.playAt(${values.sound}, this)`,
     lib: 'core.misc',
     i18nKey: 'plainJs',
     pieces: [{
