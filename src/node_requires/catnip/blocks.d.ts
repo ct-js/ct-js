@@ -45,16 +45,27 @@ declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
 type argumentValues = Record<string, IBlock[] | IBlock | string | number | boolean>;
 
 declare interface IBlockDeclaration {
+    /** Elements of the block, including input fields */
     pieces?: blockPiece[];
+    /** Icon shown at the beginning of the block */
     icon: string;
-    /** Searchable command name */
+    /** Searchable command name. Also used as a label if i18nKey is not used or invalid. */
     name: string;
+    /**
+     * A key in the translation file inside the catnip namespace to use for the main label.
+     * Supports dot notation.
+     */
     i18nKey?: string;
     hideLabel?: boolean;
     hideIcon?: boolean;
+    /** The name of the parent library. Used for serialization. */
     lib: string;
     /** A unique string corresponding to this block so it can be serialized and deserialized */
     code: string;
+    /**
+     * The function that is used by blocks compiler to render the JS code of this block.
+     * `args` are the values of this block's input fields.
+     */
     jsTemplate: (args: Record<string, string>) => string;
     /** A CSS class to assign to this block in HTML */
     customClass?: string;

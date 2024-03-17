@@ -1,4 +1,101 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
+    name: 'set property variable value',
+    type: 'command',
+    code: 'set',
+    icon: 'edit',
+    jsTemplate: (vals) => `${vals.var} = ${vals.value};`,
+    lib: 'core.utils',
+    i18nKey: 'set',
+    pieces: [{
+        type: 'argument',
+        key: 'var',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'value',
+        i18nKey: 'value'
+    }, {
+        type: 'argument',
+        key: 'value',
+        typeHint: 'wildcard',
+        required: true
+    }]
+}, {
+    name: 'increase property variable',
+    type: 'command',
+    code: 'increase',
+    icon: 'plus-circle',
+    jsTemplate: (vals) => `${vals.var} += ${vals.val};`,
+    lib: 'core.utils',
+    i18nKey: 'increment',
+    pieces: [{
+        type: 'argument',
+        key: 'var',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'by',
+        i18nKey: 'by'
+    }, {
+        type: 'argument',
+        key: 'val',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'decrease property variable',
+    type: 'command',
+    code: 'decrease',
+    icon: 'minus-circle',
+    jsTemplate: (vals) => `${vals.var} -= ${vals.val};`,
+    lib: 'core.utils',
+    i18nKey: 'increment',
+    pieces: [{
+        type: 'argument',
+        key: 'var',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'by',
+        i18nKey: 'by'
+    }, {
+        type: 'argument',
+        key: 'val',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'increment property variable',
+    type: 'command',
+    code: 'increment',
+    icon: 'plus-circle',
+    jsTemplate: (vals) => `${vals.var}++;`,
+    lib: 'core.utils',
+    i18nKey: 'increment',
+    pieces: [{
+        type: 'argument',
+        key: 'var',
+        typeHint: 'wildcard',
+        required: true
+    }]
+}, {
+    name: 'decrement property variable',
+    type: 'command',
+    code: 'decrement',
+    icon: 'minus-circle',
+    jsTemplate: (vals) => `${vals.var}++;`,
+    lib: 'core.utils',
+    i18nKey: 'decrement',
+    pieces: [{
+        type: 'argument',
+        key: 'var',
+        typeHint: 'wildcard',
+        required: true
+    }]
+}, {
     name: 'write property to self',
     type: 'command',
     code: 'this write',

@@ -7,6 +7,15 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     lib: 'core.templates',
     i18nKey: 'move template',
     pieces: []
+}, {
+    name: 'kill remove copy',
+    type: 'command',
+    code: 'kill',
+    icon: 'template',
+    jsTemplate: () => 'this.kill = true;',
+    lib: 'core.templates',
+    i18nKey: 'kill',
+    pieces: []
 }];
 
 export default blocks;
