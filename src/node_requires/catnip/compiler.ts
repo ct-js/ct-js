@@ -9,17 +9,17 @@ export const compile = (blocks: BlockScript): string => {
             if (piece.type === 'argument') {
                 const associatedVal = block.values[piece.key];
                 if (typeof associatedVal === 'object') {
-                    // eslint-disable-next-line max-depth
-                    if (Array.isArray(associatedVal)) {
-                        values[piece.key] = compile(associatedVal);
-                    } else {
-                        values[piece.key] = compile([associatedVal]);
-                    }
+                    values[piece.key] = compile([associatedVal as IBlock]);
                 } else if (typeof associatedVal === 'string') {
                     values[piece.key] = `'${associatedVal}'`;
                 } else {
                     values[piece.key] = String(associatedVal);
                 }
+            } else if (piece.type === 'blocks') {
+                const associatedVal = block.values[piece.key];
+                values[piece.key] = compile(associatedVal as IBlock[] ?? []);
+            } else if (piece.type === 'propVar') {
+                values.variableName = block.values.variableName as string;
             }
         }
         result += declaration.jsTemplate(values);
