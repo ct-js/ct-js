@@ -1,5 +1,5 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'play a sound',
+    name: 'play sound',
     type: 'command',
     code: 'sound play',
     icon: 'music',
@@ -14,7 +14,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         assets: 'sound'
     }]
 }, {
-    name: 'sound 3d at current location',
+    name: 'play sound 3d at current location',
     type: 'command',
     code: 'sound play 3d',
     icon: 'music',
