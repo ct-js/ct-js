@@ -6,7 +6,7 @@ const makeOperator = (operator: string, type: blockArgumentType): IBlockComputed
     typeHint: type,
     hideIcon: true,
     hideLabel: true,
-    jsTemplate: (vals) => `${vals.a} ${operator} ${vals.b};`,
+    jsTemplate: (vals) => `(${vals.a} ${operator} ${vals.b})`,
     lib: 'core.math',
     pieces: [{
         type: 'argument',
