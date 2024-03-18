@@ -72,6 +72,9 @@ declare namespace place {
      * @param {IShapeBearer} c1 The first object to check collision with
      * @param {IShapeBearer} c2 The second object to check collision against
      *
+     * @catnipLabel are colliding
+     * @catnipIcon copy
+     *
      * @returns {boolean} `true` if there was a collision, `false` otherwise
      */
     function collide(c1: IShapeBearer, c2: IShapeBearer): boolean;
