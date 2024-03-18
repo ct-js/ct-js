@@ -52,7 +52,7 @@ catnip-block-list(
 
         this.onDragStart = e => {
             this.update();
-            e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
+            e.dataTransfer.setData('ctjsblocks/command', 'hello uwu');
             startBlocksTrasmit([e.item.block], this.opts.blocks);
             e.stopPropagation();
             this.hoveredOver = null;
@@ -61,7 +61,7 @@ catnip-block-list(
             setSuggestedTarget();
         };
 
-        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/marker');
+        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
                 e.preventDefault(); // Tells that we do want to accept the drop

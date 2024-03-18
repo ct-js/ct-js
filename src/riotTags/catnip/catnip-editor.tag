@@ -25,7 +25,9 @@ catnip-editor.flexrow
     script.
         this.namespace = 'catnip';
         this.mixin(require('./data/node_requires/riotMixins/voc').default);
-        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/marker');
+        const isInvalidDrop = e =>
+            !e.dataTransfer.types.includes('ctjsblocks/computed') &&
+            !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
                 e.preventDefault(); // Tells that we do want to accept the drop

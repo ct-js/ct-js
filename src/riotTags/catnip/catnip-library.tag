@@ -82,15 +82,15 @@ catnip-library.flexfix(class="{opts.class}")
         this.categories = blocksLibrary;
 
         this.onDragStart = e => {
-            e.dataTransfer.dropEffect = 'move';
-            e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
             const {block} = e.item;
             const declaration = getDeclaration(block.lib, block.code);
+            e.dataTransfer.dropEffect = 'move';
+            e.dataTransfer.setData(`ctjsblocks/${declaration.type}`, 'hello uwu');
             startBlocksTrasmit([blockFromDeclaration(declaration)], this.opts.blocks, false, true);
         };
         this.onVarDragStart = e => {
             e.dataTransfer.dropEffect = 'move';
-            e.dataTransfer.setData('ctjsblocks/marker', 'hello uwu');
+            e.dataTransfer.setData('ctjsblocks/computed', 'hello uwu');
             const code = e.item.prop ? 'property' : 'variable',
                   value = e.item.prop ?? e.item.variable;
             console.log(e, code, value);
