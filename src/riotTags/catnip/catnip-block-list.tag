@@ -29,6 +29,7 @@ catnip-block-list(
             ondragstart="{parent.onDragStart}"
             ondragend="{parent.onDragEnd}"
             readonly="{parent.opts.readonly}"
+            oncontextmenu="{parent.onContextMenu}"
         )
         catnip-insert-mark(
             if="{!opts.readonly}"
@@ -38,6 +39,7 @@ catnip-block-list(
             list="{parent.opts.blocks}"
             pos="{ind}"
         )
+    context-menu(if="{contextBlock}" menu="{contextMenu}" ref="menu")
     script.
         this.namespace = 'catnip';
         this.mixin(require('./data/node_requires/riotMixins/voc').default);
@@ -126,4 +128,26 @@ catnip-block-list(
             e.preventDefault();
             e.stopPropagation();
             endBlocksTransmit(this.opts.blocks, 0);
+        };
+
+        this.contextBlock = false;
+        this.onContextMenu = e => {
+            e.preventDefault();
+            e.stopPropagation();
+            const {block} = e.item;
+            this.contextBlock = block;
+            this.update();
+            this.refs.menu.popup(e.clientX, e.clientY);
+        };
+        this.contextMenu = {
+            opened: true,
+            items: [{
+                label: this.vocGlob.delete,
+                icon: 'trash',
+                click: () => {
+                    this.opts.blocks.splice(this.opts.blocks.indexOf(this.contextBlock), 1);
+                    this.contextBlock = false;
+                    this.update();
+                }
+            }]
         };

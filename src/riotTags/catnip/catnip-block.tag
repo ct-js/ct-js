@@ -47,6 +47,7 @@ catnip-block(
             readonly="{parent.opts.readonly}"
             ondragstart="{parent.onDragStart}"
             ondragend="{parent.onDragEnd}"
+            oncontextmenu="{parent.onContextMenu}"
         )
         input.catnip-block-aConstantInput(
             ondrop="{parent.onDrop}"
@@ -61,6 +62,7 @@ catnip-block(
             ref="argumentsDrop"
             style="width: {getValue(piece.key) ? Math.min((''+getValue(piece.key)).length + 1, 32) : 5}ch"
         )
+    context-menu(if="{contextPiece}" menu="{contextMenu}" ref="menu")
     script.
         const {
             getDeclaration,
@@ -71,6 +73,7 @@ catnip-block(
             setSuggestedTarget,
             emptyTexture
         } = require('./data/node_requires/catnip');
+        const {getByPath} = require('./data/node_requires/i18n');
         this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
         this.getValue = key => {
             return this.opts.block.values[key];
@@ -144,4 +147,27 @@ catnip-block(
             e.preventDefault();
             e.stopPropagation();
             endBlocksTransmit(this.opts.block.values, e.item.piece.key);
+        };
+
+
+        this.contextPiece = false;
+        this.onContextMenu = e => {
+            e.preventDefault();
+            e.stopPropagation();
+            const {piece} = e.item;
+            this.contextPiece = piece;
+            this.update();
+            this.refs.menu.popup(e.clientX, e.clientY);
+        };
+        this.contextMenu = {
+            opened: true,
+            items: [{
+                label: getByPath('common.delete'),
+                icon: 'trash',
+                click: () => {
+                    delete this.opts.block.values[this.contextPiece.key];
+                    this.contextPiece = false;
+                    this.update();
+                }
+            }]
         };
