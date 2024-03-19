@@ -21,10 +21,37 @@ const supportedTypes = ['string', 'number', 'boolean', 'wildcard'];
 export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core' | string, icon = 'grid-random'):
 (IBlockCommandDeclaration | IBlockComputedDeclaration)[] =>
     usefuls.map((useful): IBlockCommandDeclaration | IBlockComputedDeclaration => {
+        let documentation = useful.description,
+            name = niceBlockName(useful.name),
+            displayName = name;
+        if (useful.jsDoc) {
+            for (const jsDoc of useful.jsDoc) {
+                if (!jsDoc.tags) {
+                    continue;
+                }
+                documentation += '\n';
+                for (const node of jsDoc.tags) {
+                    if (node.tagName.escapedText === 'param') {
+                        documentation += `\n**${(node as any).name.escapedText}** ${node.comment}`;
+                    } else if (node.tagName.escapedText === 'returns' || node.tagName.escapedText === 'return') {
+                        documentation += `\n\n**Returns** ${node.comment}`;
+                    } else if (node.tagName.escapedText === 'catnipLabel') {
+                        displayName = node.comment.toString();
+                    } else if (node.tagName.escapedText === 'catnipName') {
+                        name = node.comment.toString();
+                    } else if (node.tagName.escapedText === 'catnipIcon') {
+                        icon = node.comment.toString();
+                    }
+                }
+            }
+        }
+        console.log(useful.description, useful.jsDoc);
         if (useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void')) {
             return {
                 type: 'command',
-                name: niceBlockName(useful.name),
+                name,
+                displayName,
+                documentation,
                 lib,
                 code: useful.name,
                 icon,
@@ -46,7 +73,9 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
         }
         const draft = {
             type: 'computed',
-            name: niceBlockName(useful.name, true),
+            name: name.toLowerCase(),
+            displayName: displayName.toLowerCase(),
+            documentation,
             lib,
             code: useful.name,
             icon,

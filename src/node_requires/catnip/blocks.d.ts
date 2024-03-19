@@ -45,6 +45,10 @@ declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
 type argumentValues = Record<string, IBlock[] | IBlock | string | number | boolean>;
 
 declare interface IBlockDeclaration {
+    /** The name of the parent library. Used for serialization. */
+    lib: string;
+    /** A unique string corresponding to this block so it can be serialized and deserialized */
+    code: string;
     /** Elements of the block, including input fields */
     pieces?: blockPiece[];
     /** Icon shown at the beginning of the block */
@@ -52,16 +56,31 @@ declare interface IBlockDeclaration {
     /** Searchable command name. Also used as a label if i18nKey is not used or invalid. */
     name: string;
     /**
+     * A string that is shown instead of the searchable name in a block.
+     * This name is not used for fuzzy search.
+     */
+    displayName?: string;
+    /**
+     * A key in the translation file inside the catnip namespace to use
+     * for the main label and search. Supports dot notation.
+     */
+    i18nKey?: string;
+    /**
      * A key in the translation file inside the catnip namespace to use for the main label.
      * Supports dot notation.
      */
-    i18nKey?: string;
+    displayI18nKey?: string;
+
+    /** A markdown-formatted documentation shown in a tooltip when hovering over the block. */
+    documentation?: string;
+    /**
+     * A key in the translation file inside the catnip namespace to use for the tooltip.
+     * Supports dot notation.
+     */
+    documentationI18nKey?: string;
+
     hideLabel?: boolean;
     hideIcon?: boolean;
-    /** The name of the parent library. Used for serialization. */
-    lib: string;
-    /** A unique string corresponding to this block so it can be serialized and deserialized */
-    code: string;
     /**
      * The function that is used by blocks compiler to render the JS code of this block.
      * `args` are the values of this block's input fields.

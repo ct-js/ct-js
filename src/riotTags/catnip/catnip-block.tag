@@ -10,10 +10,11 @@ catnip-block(
     draggable="{!opts.nodrag}"
     class="{declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass}"
     hide="{getHidden}"
+    title="{declaration.documentation}"
 )
     svg.feather(if="{declaration.icon && !declaration.hideIcon}")
         use(xlink:href="#{declaration.icon}")
-    span.catnip-block-aTextLabel(if="{!declaration.hideLabel}") {declaration.name}
+    span.catnip-block-aTextLabel(if="{!declaration.hideLabel}") {declaration.displayName || declaration.name}
     virtual(each="{piece in declaration.pieces}")
         span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
         span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}") {parent.opts.block.values.variableName}
