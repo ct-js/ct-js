@@ -51,16 +51,23 @@ catnip-library.flexfix(class="{opts.class}")
             svg.feather
                 use(href="#plus")
             span {voc.createNewVariable}
-        virtual(each="{cat in categories}")
-            h3 {cat.name}
+        .aSpacer
+        collapsible-section(
+            each="{cat in categories}"
+            heading="{cat.name}"
+            icon="{cat.icon || 'grid-random'}"
+            defaultstate="opened"
+            storestatekey="catniplib-{cat.name}"
+            preservedom="preservedom"
+        )
             catnip-block(
                 each="{block in cat.items}"
                 block="{({lib: block.lib, code: block.code, values: {}})}"
                 dragoutonly="dragoutonly"
                 readonly="readonly"
-                ondragstart="{parent.onDragStart}"
+                ondragstart="{parent.parent.onDragStart}"
                 draggable="draggable"
-                ondragend="{resetTarget}"
+                ondragend="{parent.resetTarget}"
             )
     .flexfix-body(if="{searchVal.trim() && searchResults.length}")
         catnip-block(

@@ -120,4 +120,5 @@ declare type blockMenu = {
     i18nKey?: string;
     items: blockDeclaration[];
     opened: boolean;
+    icon?: string;
 }

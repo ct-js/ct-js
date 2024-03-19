@@ -17,27 +17,32 @@ const builtinBlockLibrary: blockMenu[] = [{
     name: 'Templates',
     items: templatesBlocks,
     i18nKey: 'coreLibs.templates',
-    opened: true
+    opened: true,
+    icon: 'template'
 }, {
     name: 'Sounds',
     items: soundsBlocks,
     i18nKey: 'coreLibs.sounds',
-    opened: true
+    opened: true,
+    icon: 'music'
 }, {
     name: 'Logic',
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
-    opened: true
+    opened: true,
+    icon: 'help-circle'
 }, {
     name: 'Math',
     items: mathBlocks,
     i18nKey: 'coreLibs.math',
-    opened: true
+    opened: true,
+    icon: 'sort-numerically'
 }, {
     name: 'Utils',
     items: utilsBlocks,
     i18nKey: 'coreLibs.utils',
-    opened: true
+    opened: true,
+    icon: 'tool'
 }, {
     name: 'Miscellaneous',
     items: miscBlocks,
