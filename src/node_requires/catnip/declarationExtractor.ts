@@ -14,6 +14,7 @@ const paramConstTypeMap: Partial<Record<ts.SyntaxKind, blockArgumentType>> = {
 
 const usefulMap = {
     [ts.SyntaxKind.FunctionDeclaration]: 'function' as const,
+    [ts.SyntaxKind.MethodSignature]: 'function' as const,
     [ts.SyntaxKind.PropertySignature]: 'prop' as const
 };
 
@@ -52,7 +53,6 @@ const visit = (
 ) => {
     switch (node.kind) {
     case ts.SyntaxKind.ModuleDeclaration: {
-        console.log(node.kind, ts.SyntaxKind[node.kind], node);
         const moduleName = (node as ts.ModuleDeclaration).name.text;
         ts.forEachChild(node, child => visit(child, `${topLevelPath}.${moduleName}`, onUseful));
     } break;
@@ -68,16 +68,23 @@ const visit = (
                     // Remove the `root.` ⤵️
                     name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
                     kind: 'prop',
-                    returnType: paramConstTypeMap[declaration.type.kind] ?? 'wildcard',
+                    returnType: paramConstTypeMap[declaration?.type?.kind] ?? 'wildcard',
                     description: (first as any).jsDoc?.[0].comment,
                     jsDoc: (first as any).jsDoc,
                     node
                 });
+                if ((declaration?.type as any)?.members) {
+                    // eslint-disable-next-line max-depth
+                    for (const member of (declaration.type as any).members) {
+                        visit(member, `${topLevelPath}.${(name as any).escapedText}`, onUseful);
+                    }
+                }
             }
         }
     } break;
     // ⚠️ Double case here
     case ts.SyntaxKind.PropertySignature:
+    case ts.SyntaxKind.MethodSignature:
     case ts.SyntaxKind.FunctionDeclaration: {
         const {name, type, jsDoc} = (node as (
                 ts.PropertySignature |

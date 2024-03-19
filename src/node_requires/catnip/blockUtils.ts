@@ -45,7 +45,6 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 }
             }
         }
-        console.log(useful.description, useful.jsDoc);
         if (useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void')) {
             return {
                 type: 'command',
