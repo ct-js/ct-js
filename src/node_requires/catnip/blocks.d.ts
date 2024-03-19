@@ -84,8 +84,10 @@ declare interface IBlockDeclaration {
     /**
      * The function that is used by blocks compiler to render the JS code of this block.
      * `args` are the values of this block's input fields.
+     * `safeId` can be used as a unique for this block instance integer
+     * and create unique variable names.
      */
-    jsTemplate: (args: Record<string, string>) => string;
+    jsTemplate: (args: Record<string, string>, safeId) => string;
     /** A CSS class to assign to this block in HTML */
     customClass?: string;
 }

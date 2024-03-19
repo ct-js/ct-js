@@ -11,8 +11,6 @@ catnip-block
         display inline-block
     & > *
         vertical-align middle
-    & > * + *
-        margin-left 0.25rem
     background background
     border-radius br
     border 1px solid borderBright
@@ -116,5 +114,7 @@ catnip-block
             background transparent
             transition unset
             height 1.5rem
+    & > * + *, & > * + .computed, & > * + .&-aConstantInput
+        margin-left 0.25rem
 .catnip-block-aConstantInput
     box-sizing content-box

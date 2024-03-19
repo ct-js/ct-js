@@ -1,5 +1,9 @@
 import {getDeclaration} from '.';
 
+let safeId = -1;
+export const resetSafeId = () => {
+    safeId = -1;
+};
 export const compile = (blocks: BlockScript): string => {
     let result = '';
     for (const block of blocks) {
@@ -22,7 +26,11 @@ export const compile = (blocks: BlockScript): string => {
                 values.variableName = block.values.variableName as string;
             }
         }
-        result += declaration.jsTemplate(values);
+        safeId++;
+        result += declaration.jsTemplate(values, safeId);
+        if (blocks.length > 1) {
+            result += '\n';
+        }
     }
     return result;
 };

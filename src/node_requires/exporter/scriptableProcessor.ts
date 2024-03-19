@@ -9,7 +9,7 @@ import {join} from 'path';
 import {embedStaticBehaviors} from './behaviors';
 const coffeeScript = require('coffeescript');
 const typeScript = require('sucrase').transform;
-import {compile} from '../catnip/compiler';
+import {compile, resetSafeId} from '../catnip/compiler';
 
 export const coffeeScriptOptions = {
     sourceMap: false,
@@ -94,6 +94,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
                 code = coffeeScript.compile((code as string), coffeeScriptOptions);
             } else if (project.language === 'catnip') {
                 code = compile(code as BlockScript);
+                resetSafeId();
             } else if (project.language === 'typescript') {
                 if ((code as string).trim()) {
                     ({code} = typeScript(code, {

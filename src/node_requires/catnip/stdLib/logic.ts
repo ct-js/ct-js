@@ -43,6 +43,81 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'body'
     }]
 }, {
+    name: 'repeat times',
+    displayName: 'Repeat',
+    type: 'command',
+    code: 'repeat',
+    icon: 'rotate-cw',
+    jsTemplate: (args, safeId) => `for (let i${safeId} = 0; i${safeId} < ${args.N}; i${safeId}++) {\n    ${args.body}\n}`,
+    lib: 'core.logic',
+    i18nKey: 'repeat',
+    pieces: [{
+        type: 'argument',
+        key: 'N',
+        typeHint: 'number'
+    }, {
+        type: 'label',
+        name: 'times',
+        i18nKey: 'times'
+    }, {
+        type: 'blocks',
+        key: 'body'
+    }]
+}, {
+    name: 'repeat times tracking',
+    displayName: 'Repeat',
+    type: 'command',
+    code: 'repeat tracking',
+    icon: 'rotate-cw',
+    jsTemplate: (args) => `for (${args.variableName} = 0; ${args.variableName} < ${args.N}; ${args.variableName}++) {\n    ${args.body}\n}`,
+    lib: 'core.logic',
+    i18nKey: 'repeat',
+    pieces: [{
+        type: 'argument',
+        key: 'N',
+        typeHint: 'number'
+    }, {
+        type: 'label',
+        name: 'times',
+        i18nKey: 'times'
+    }, {
+        type: 'label',
+        name: 'with index variable',
+        i18nKey: 'with index variable'
+    }, {
+        type: 'argument',
+        key: 'variableName',
+        typeHint: 'wildcard'
+    }, {
+        type: 'blocks',
+        key: 'body'
+    }]
+}, {
+    name: 'for each of array',
+    displayName: 'For each',
+    type: 'command',
+    code: 'for each',
+    icon: 'rotate-cw',
+    jsTemplate: (args) => `for (${args.variableName} of ${args.array}) {\n    ${args.body}\n}`,
+    lib: 'core.logic',
+    i18nKey: 'repeat',
+    pieces: [{
+        type: 'argument',
+        key: 'variableName',
+        typeHint: 'wildcard'
+    }, {
+        type: 'label',
+        name: 'of array',
+        i18nKey: 'of array'
+    }, {
+        type: 'argument',
+        key: 'array',
+        typeHint: 'wildcard'
+    }, {
+        type: 'blocks',
+        key: 'body'
+    }]
+}, {
     name: 'break loop',
     type: 'command',
     code: 'break loop',
