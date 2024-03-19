@@ -100,4 +100,11 @@ catnip-insert-mark(onclick="{toggleMenu}" class="{dragover: shouldDragover(), me
             this.refs.search.blur();
             this.opened = false;
             this.parent.update();
+
+            setTimeout(() => {
+                // Dispatch a click event to the new insert-mark so user can input several blocks at once
+                const marks = [...this.parent.root.childNodes]
+                    .filter(node => node.tagName === 'CATNIP-INSERT-MARK')
+                marks[this.opts.pos + 2].click();
+            }, 50);
         };
