@@ -26,6 +26,20 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         type: 'propVar'
     }],
     customClass: 'userdefined'
+}, {
+    name: 'behavior property',
+    hideLabel: true,
+    type: 'computed',
+    typeHint: 'wildcard',
+    code: 'behavior property',
+    icon: 'behavior',
+    jsTemplate: (values) => `this['${values.variableName}']`,
+    lib: 'core.hidden',
+    i18nKey: 'note',
+    pieces: [{
+        type: 'propVar'
+    }],
+    customClass: 'userdefined'
 }];
 
 export default blocks;

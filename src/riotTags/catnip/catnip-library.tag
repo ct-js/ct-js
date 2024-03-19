@@ -1,6 +1,7 @@
 //-
     @attribute variables (string[])
     @attribute props (string[])
+    @attribute behaviorprops (string[])
 catnip-library.flexfix(class="{opts.class}")
     .aSearchWrap.flexfix-header
         input.wide(type="text" oninput="{search}" ref="search" onclick="{selectSearch}" value="{searchVal}")
@@ -19,7 +20,16 @@ catnip-library.flexfix(class="{opts.class}")
             draggable="draggable"
             ondragend="{resetTarget}"
         )
-        br(if="{opts.props.length}")
+        catnip-block(
+            each="{prop in opts.behaviorprops}"
+            block="{({lib: 'core.hidden', code: 'behavior property', values: {variableName: prop}})}"
+            dragoutonly="dragoutonly"
+            readonly="readonly"
+            ondragstart="{parent.onVarDragStart}"
+            draggable="draggable"
+            ondragend="{resetTarget}"
+        )
+        br(if="{opts.props.length || opts.behaviorprops.length}")
         button.inline(onclick="{promptNewProperty}")
             svg.feather
                 use(href="#plus")

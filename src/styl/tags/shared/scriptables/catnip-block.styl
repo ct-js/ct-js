@@ -53,13 +53,17 @@ catnip-block
                 opacity 0.65
     &.computed.userdefined, .&-aConstantInput.userdefined
         background colors.wildcard
-        border 1px solid colors.wildcard
+        border 1px solid (colors.wildcard)
         &:hover
-            border-color colors.wildcard
+            border-color (colors.wildcard)
         color white
         font-weight bold
         & > svg
             color white
+        if lightness(colors.wildcard) > 60%
+            color black
+            & > svg
+                color black
     & &.computed, & .&-aConstantInput
         margin 0.1rem 0
     & > svg.feather
@@ -79,6 +83,9 @@ catnip-block
         background borderPale
         border-radius br
         border 1px solid borderBright
+        if themeDark
+            background backgroundDeeper
+            border 1px solid borderPale
         padding 0rem 0.75rem
         margin 0.5rem 0
         & + *

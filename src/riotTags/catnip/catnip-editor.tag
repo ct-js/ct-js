@@ -7,13 +7,14 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
         ref="canvas"
         blocks="{opts.event.code}"
         showplaceholder="showplaceholder"
-        if="{opts.event.code}"
+        if="{opts.event}"
     )
-    .flexfix(ondragenter="{handlePreDrop}" ondragover="{handlePreDrop}")
+    .flexfix(ondragenter="{handlePreDrop}" ondragover="{handlePreDrop}" if="{opts.event}")
         catnip-library.flexfix-body(
             props="{opts.asset.properties}"
             variables="{opts.event.variables}"
             asset="{opts.asset}"
+            behaviorprops="{getBehaviorFields(opts.asset)}"
         )
         .flexfix-footer.catnip-editor-aTrashZone(
             title="{voc.trashZoneHint}"
@@ -36,7 +37,8 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
             }
         };
 
-        const {endBlocksTransmit} = require('./data/node_requires/catnip');
+        const {endBlocksTransmit,} = require('./data/node_requires/catnip');
+        this.getBehaviorFields = require('./data/node_requires/events').getBehaviorFields;
         this.nuke = e => {
             if (isInvalidDrop(e)) {
                 return;

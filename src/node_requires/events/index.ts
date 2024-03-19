@@ -279,6 +279,31 @@ export const getFieldsTypeScript = (asset: IScriptable | IScriptableBehaviors): 
     return code;
 };
 
+/**
+ * Returns an array of field names from this asset/behavior and all the linked behaviors.
+ * Mainly used for block code editor.
+ */
+export const getBehaviorFields = (asset: IScriptable | IScriptableBehaviors): string[] => {
+    const fields: string[] = [];
+    if ('behaviors' in asset) {
+        for (const behaviorId of asset.behaviors) {
+            const behavior = getById('behavior', behaviorId);
+            if (behavior.specification.length) {
+                for (const field of behavior.specification) {
+                    fields.push(field.name || field.readableName);
+                }
+            }
+        }
+    }
+    if (asset.type === 'behavior' && (asset as IBehavior).specification.length) {
+        const behavior = asset as IBehavior;
+        for (const field of behavior.specification) {
+            fields.push(field.name || field.readableName);
+        }
+    }
+    return fields;
+};
+
 import {baseClassToTS} from '../resources/templates';
 const baseTypes = `import {BasicCopy} from 'src/ct.release/templates';import {${Object.values(baseClassToTS).join(', ')}} from 'src/ct.release/templateBaseClasses/index';`;
 
