@@ -38,13 +38,13 @@ catnip-block(
                 blocks="{getValue(piece.key)}"
                 showplaceholder="showplaceholder"
                 placeholder="{piece.placeholder}"
-                readonly="{opts.readonly}"
+                readonly="{parent.opts.readonly}"
             )
         catnip-block(
             if="{piece.type === 'argument' && getValue(piece.key) && (typeof getValue(piece.key)) === 'object'}"
             class="{piece.typeHint}"
             block="{getValue(piece.key)}"
-            readonly="{opts.readonly}"
+            readonly="{parent.opts.readonly}"
             ondragstart="{parent.onDragStart}"
             ondragend="{parent.onDragEnd}"
         )
@@ -118,7 +118,8 @@ catnip-block(
             this.opts.block.values[piece.key] = val;
         };
 
-        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/computed');
+        const isInvalidDrop = e =>
+            this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/computed');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
                 e.preventDefault(); // Tells that we do want to accept the drop

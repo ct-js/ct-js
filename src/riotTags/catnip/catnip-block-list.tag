@@ -1,8 +1,8 @@
 //-
     @attribute blocks (BlockScript)
-    @attribute placeholder (Array<IBlockPieceLabel | IBlockPieceIcon>)
-    @attribute showplaceholder (atomic)
-    @attribute readonly (atomic)
+    @attribute [placeholder] (Array<IBlockPieceLabel | IBlockPieceIcon>)
+    @attribute [showplaceholder] (atomic)
+    @attribute [readonly] (atomic)
 catnip-block-list(
     ondragenter="{handlePreDrop}"
     ondragover="{handlePreDrop}"
@@ -28,8 +28,10 @@ catnip-block-list(
             block="{block}"
             ondragstart="{parent.onDragStart}"
             ondragend="{parent.onDragEnd}"
+            readonly="{parent.opts.readonly}"
         )
         catnip-insert-mark(
+            if="{!opts.readonly}"
             ondragenter="{parent.handlePreDropInsertMark}"
             ondragover="{parent.handlePreDropInsertMark}"
             ondrop="{parent.onDropAfter}"
@@ -71,7 +73,8 @@ catnip-block-list(
             setSuggestedTarget();
         };
 
-        const isInvalidDrop = e => !e.dataTransfer.types.includes('ctjsblocks/command');
+        const isInvalidDrop = e =>
+            this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
                 e.preventDefault(); // Tells that we do want to accept the drop
