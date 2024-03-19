@@ -45,7 +45,8 @@ catnip-block-list(
             endBlocksTransmit,
             getTransmissionType,
             getSuggestedTarget,
-            setSuggestedTarget
+            setSuggestedTarget,
+            emptyTexture
         } = require('./data/node_requires/catnip');
 
         this.getSuggestedTarget = getSuggestedTarget;
@@ -53,6 +54,15 @@ catnip-block-list(
         this.onDragStart = e => {
             this.update();
             e.dataTransfer.setData('ctjsblocks/command', 'hello uwu');
+            e.dataTransfer.setDragImage(emptyTexture, 0, 0);
+            const bounds = e.target.getBoundingClientRect();
+            window.signals.trigger(
+                'blockTransmissionStart',
+                e,
+                e.target.outerHTML,
+                bounds.left - e.clientX,
+                bounds.top - e.clientY
+            );
             startBlocksTrasmit([e.item.block], this.opts.blocks);
             e.stopPropagation();
             this.hoveredOver = null;

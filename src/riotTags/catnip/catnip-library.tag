@@ -77,7 +77,8 @@ catnip-library.flexfix(class="{opts.class}")
             getDeclaration,
             setSuggestedTarget,
             searchBlocks,
-            blockFromDeclaration
+            blockFromDeclaration,
+            emptyTexture
         } = require('./data/node_requires/catnip');
         this.categories = blocksLibrary;
 
@@ -86,11 +87,22 @@ catnip-library.flexfix(class="{opts.class}")
             const declaration = getDeclaration(block.lib, block.code);
             e.dataTransfer.dropEffect = 'move';
             e.dataTransfer.setData(`ctjsblocks/${declaration.type}`, 'hello uwu');
+            e.dataTransfer.setDragImage(emptyTexture, 0, 0);
             startBlocksTrasmit([blockFromDeclaration(declaration)], this.opts.blocks, false, true);
+            const bounds = e.target.getBoundingClientRect();
+            window.signals.trigger(
+                'blockTransmissionStart',
+                e,
+                e.target.outerHTML,
+                bounds.left - e.clientX,
+                bounds.top - e.clientY
+            );
         };
         this.onVarDragStart = e => {
             e.dataTransfer.dropEffect = 'move';
             e.dataTransfer.setData('ctjsblocks/computed', 'hello uwu');
+            e.dataTransfer.setDragImage(emptyTexture, 0, 0);
+            const bounds = e.target.getBoundingClientRect();
             const code = e.item.prop ? 'property' : 'variable',
                   value = e.item.prop ?? e.item.variable;
             console.log(e, code, value);
@@ -101,6 +113,13 @@ catnip-library.flexfix(class="{opts.class}")
                     variableName: value
                 }
             }], this.opts.blocks, false, true);
+            window.signals.trigger(
+                'blockTransmissionStart',
+                e,
+                e.target.outerHTML,
+                bounds.left - e.clientX,
+                bounds.top - e.clientY
+            );
         };
         this.resetTarget = () => {
             setSuggestedTarget();

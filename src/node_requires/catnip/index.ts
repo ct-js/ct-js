@@ -207,6 +207,7 @@ export const endBlocksTransmit = (
         }
     }
     suggestedTarget = void 0;
+    window.signals.trigger('blockTransmissionEnd');
 };
 export const blockFromDeclaration = (declaration: blockDeclaration): IBlock => {
     const block: IBlock = {
@@ -228,3 +229,5 @@ export const insertBlock = (
 ): void => {
     dest.splice(pos + 1, 0, blockFromDeclaration(declaration));
 };
+export const emptyTexture = document.createElement('canvas');
+emptyTexture.width = emptyTexture.height = 1;

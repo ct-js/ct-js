@@ -68,7 +68,8 @@ catnip-block(
             getTransmissionReturnVal,
             startBlocksTrasmit,
             endBlocksTransmit,
-            setSuggestedTarget
+            setSuggestedTarget,
+            emptyTexture
         } = require('./data/node_requires/catnip');
         this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
         this.getValue = key => {
@@ -85,8 +86,17 @@ catnip-block(
         this.onDragStart = e => {
             this.update();
             e.dataTransfer.setData('ctjsblocks/computed', 'hello uwu');
+            e.dataTransfer.setDragImage(emptyTexture, 0, 0);
             console.log(e.item);
             const sourcePiece = e.item.piece;
+            const bounds = e.target.getBoundingClientRect();
+            window.signals.trigger(
+                'blockTransmissionStart',
+                e,
+                e.target.outerHTML,
+                bounds.left - e.clientX,
+                bounds.top - e.clientY
+            );
             startBlocksTrasmit([this.opts.block.values[sourcePiece.key]], this.opts.block.values, sourcePiece.key);
             e.stopPropagation();
             this.hoveredOver = null;

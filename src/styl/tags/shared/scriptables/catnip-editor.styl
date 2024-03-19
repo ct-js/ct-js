@@ -21,6 +21,16 @@ catnip-editor
         border-bottom-right-radius br
         margin-bottom -0.5px // why?
         margin-right -1px
+    .&-aGhost
+        position fixed
+        pointer-events none
+        z-index 100
+        background transparent
+        display inline-block
+        opacity 0.85
+        & > *
+            margin 0 !important
+            {shadamb}
     catnip-library
         border-top-right-radius br
         border-bottom-right-radius br
