@@ -12,7 +12,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     customClass: 'note'
 }, {
-    name: 'execute plain js javascript code',
+    name: 'execute js javascript code',
+    displayName: 'Execute JavaScript',
     type: 'command',
     code: 'js',
     icon: 'code-alt',

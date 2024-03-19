@@ -25,7 +25,7 @@ const makeOperator = (operator: string, type: blockArgumentType): IBlockComputed
 });
 
 const numberOperators = ['+', '-', '*', '/', '%'],
-      boolOperators = ['===', '!==', '<', '<=', '>', '>='];
+      boolOperators = ['<', '<=', '>', '>='];
 
 const blocks: IBlockComputedDeclaration[] = [
     ...numberOperators.map((operator) => makeOperator(operator, 'number')),

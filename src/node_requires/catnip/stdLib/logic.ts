@@ -1,5 +1,6 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'if else branch',
+    displayName: 'If',
     type: 'command',
     code: 'if else branch',
     icon: 'help-circle',
@@ -26,6 +27,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }]
 }, {
     name: 'while loop cycle',
+    displayName: 'While',
     type: 'command',
     code: 'while loop cycle',
     icon: 'rotate-cw',
@@ -57,6 +59,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     lib: 'core.logic',
     i18nKey: 'AND logic operator',
     hideLabel: true,
+    hideIcon: true,
     typeHint: 'boolean',
     pieces: [{
         type: 'argument',
@@ -64,7 +67,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'boolean'
     }, {
         type: 'label',
-        name: 'AND',
+        name: 'and',
         i18nKey: 'AND'
     }, {
         type: 'argument',
@@ -80,6 +83,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     lib: 'core.logic',
     i18nKey: 'OR logic operator',
     hideLabel: true,
+    hideIcon: true,
     typeHint: 'boolean',
     pieces: [{
         type: 'argument',
@@ -87,7 +91,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'boolean'
     }, {
         type: 'label',
-        name: 'OR',
+        name: 'or',
         i18nKey: 'OR'
     }, {
         type: 'argument',
@@ -97,9 +101,11 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (args) => `(${args.a} || ${args.b})`
 }, {
     name: 'NOT logic operator',
+    displayName: 'not',
     type: 'computed',
     code: 'NOT a',
     icon: 'bool',
+    hideIcon: true,
     lib: 'core.logic',
     i18nKey: 'NOT logic operator',
     typeHint: 'boolean',
@@ -109,6 +115,54 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'boolean'
     }],
     jsTemplate: (args) => `!${args.a}`
+}, {
+    name: 'is',
+    code: 'is',
+    icon: 'help-circle',
+    type: 'computed',
+    typeHint: 'boolean',
+    hideIcon: true,
+    hideLabel: true,
+    jsTemplate: (vals) => `(${vals.a} === ${vals.b})`,
+    lib: 'core.logic',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'is'
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'wildcard',
+        required: true
+    }]
+}, {
+    name: 'is not',
+    code: 'is not',
+    icon: 'help-circle',
+    type: 'computed',
+    typeHint: 'boolean',
+    hideIcon: true,
+    hideLabel: true,
+    jsTemplate: (vals) => `(${vals.a} !== ${vals.b})`,
+    lib: 'core.logic',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'is not'
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'wildcard',
+        required: true
+    }]
 }];
 
 export default blocks;
