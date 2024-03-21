@@ -145,6 +145,7 @@ declare namespace place {
      * @param {number} x The x coordinate to check, as if `me` was placed there
      * @param {number} y The y coordinate to check, as if `me` was placed there
      * @param {String} [template] The name of the template to check against
+     * @catnipAsset template:template
      * @returns {Copy|false} The collided copy or `false`, if there was no collision.
      */
     function meet(me: Copy, x: number, y: number, template: string): Copy | false;
@@ -154,6 +155,7 @@ declare namespace place {
      *
      * @param {Copy} me The object to check collisions on
      * @param {String} [template] The name of the template to check agains
+     * @catnipAsset template:template
      * @returns {Copy|Array<Copy>} The collided copy or `false`, if there was no collision.
      */
     function meet(me: Copy, template: string): Copy | false;
@@ -208,6 +210,7 @@ declare namespace place {
      * @param {number} x The horizontal position of the starting point
      * @param {number} y The vertical position of the starting point
      * @param {string} template The name of the template against which copies
+     * @catnipAsset template:template
      * the distance will be measured
      */
     function nearest(x: number, y: number, template: string): Copy | false;
@@ -217,6 +220,7 @@ declare namespace place {
      * @param {number} x The horizontal position of the starting point
      * @param {number} y The vertical position of the starting point
      * @param {string} template The name of the template against which copies
+     * @catnipAsset template:template
      * the distance will be measured
      */
     function furthest(x: number, y: number, template: string): Copy | false;

@@ -24,6 +24,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
         let documentation = useful.description,
             name = niceBlockName(useful.name),
             displayName = name;
+        const piecesAssets: Record<string, resourceType | 'action'> = {};
         if (useful.jsDoc) {
             for (const jsDoc of useful.jsDoc) {
                 if (!jsDoc.tags) {
@@ -41,6 +42,11 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         name = node.comment.toString();
                     } else if (node.tagName.escapedText === 'catnipIcon') {
                         icon = node.comment.toString();
+                    } else if (node.tagName.escapedText === 'catnipAsset') {
+                        let [key, assetType] = node.comment.toString().split(':');
+                        key = key.trim();
+                        assetType = assetType.trim();
+                        piecesAssets[key] = assetType as resourceType | 'action';
                     }
                 }
             }
@@ -57,8 +63,9 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 pieces: useful.args.map(arg => ({
                     type: 'argument' as const,
                     key: arg.name,
-                    typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard'
-                })),
+                    typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
+                    assets: piecesAssets[arg.name]
+                }) as IBlockPieceArgument),
                 jsTemplate: () => `${useful.name}();`
             };
         }
@@ -67,8 +74,9 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             pieces.push(...useful.args.map(arg => ({
                 type: 'argument' as const,
                 key: arg.name,
-                typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard'
-            })));
+                typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
+                assets: piecesAssets[arg.name]
+            }) as IBlockPieceArgument));
         }
         const draft = {
             type: 'computed',

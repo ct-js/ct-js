@@ -56,13 +56,37 @@ catnip-block(
             type="text" value="{parent.getValue(piece.key)}"
             oninput="{parent.writeConstantVal}"
             placeholder="{piece.key}"
-            if="{piece.type === 'argument' && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
+            if="{piece.type === 'argument' && !piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint}"
-            readonly="{opts.readonly}"
-            ref="argumentsDrop"
+            readonly="{parent.opts.readonly}"
             style="width: {getValue(piece.key) ? Math.min((''+getValue(piece.key)).length + 1, 32) : 5}ch"
         )
+        span.catnip-block-aConstantInput(
+            ondrop="{parent.onDrop}"
+            ondragenter="{parent.handlePreDrop}"
+            ondragstart="{parent.handlePreDrop}"
+            if="{piece.type === 'argument' && piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
+            class="{piece.typeHint}"
+            onclick="{!parent.opts.readonly && promptAsset}"
+        )
+            svg.feather(if="{!getValue(piece.key)}")
+                use(xlink:href="#search")
+            span(if="{!getValue(piece.key)}") {voc('common.selectDialogue')}
+            svg.feather(if="{getValue(piece.key) && areThumbnailsIcons(piece.assets)}")
+                use(xlink:href="#{getThumbnail(piece.assets, getValue(piece.key))}")
+            img(
+                if="{getValue(piece.key) && !areThumbnailsIcons(piece.assets)}"
+                src="{getThumbnail(piece.assets, getValue(piece.key))}"
+                class="{soundthumbnail: piece.assets === 'sound'}"
+            )
+            span(if="{getValue(piece.key)}") {getName(piece.assets, getValue(piece.key))}
     context-menu(if="{contextPiece}" menu="{contextMenu}" ref="menu")
+    asset-selector(
+        if="{selectingAssetType}"
+        assettypes="{selectingAssetType}"
+        onselected="{selectAsset}"
+        oncancelled="{cancelAssetSelection}"
+    )
     script.
         const {
             getDeclaration,
@@ -73,7 +97,18 @@ catnip-block(
             setSuggestedTarget,
             emptyTexture
         } = require('./data/node_requires/catnip');
+        const {
+            getName,
+            getById,
+            areThumbnailsIcons,
+            getThumbnail
+        } = require('./data/node_requires/resources');
+        this.getName = (assetType, id) => getName(getById(assetType, id));
+        this.areThumbnailsIcons = areThumbnailsIcons;
+        this.getThumbnail = (assetType, id) => getThumbnail(getById(assetType, id), false, false);
         const {getByPath} = require('./data/node_requires/i18n');
+        this.voc = getByPath;
+
         this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
         this.getValue = key => {
             return this.opts.block.values[key];
@@ -170,4 +205,21 @@ catnip-block(
                     this.update();
                 }
             }]
+        };
+
+
+        this.selectingAssetType = this.selectingAssetPiece = false;
+        this.promptAsset = e => {
+            const {piece} = e.item;
+            this.selectingAssetType = piece.assets;
+            this.selectingAssetPiece = piece;
+        };
+        this.selectAsset = id => {
+            this.opts.block.values[this.selectingAssetPiece.key] = id;
+            this.selectingAssetType = this.selectingAssetPiece = false;
+            this.update();
+        };
+        this.cancelAssetSelection = () => {
+            this.selectingAssetType = this.selectingAssetPiece = false;
+            this.update();
         };
