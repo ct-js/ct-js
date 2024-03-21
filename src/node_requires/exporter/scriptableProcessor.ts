@@ -93,7 +93,12 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
             if (project.language === 'coffeescript') {
                 code = coffeeScript.compile((code as string), coffeeScriptOptions);
             } else if (project.language === 'catnip') {
-                code = compile(code as BlockScript);
+                code = compile(code as BlockScript, {
+                    resourceId: entity.uid,
+                    resourceName: entity.name,
+                    resourceType: entity.type,
+                    eventKey
+                });
                 resetSafeId();
             } else if (project.language === 'typescript') {
                 if ((code as string).trim()) {
@@ -105,6 +110,9 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
                 }
             }
         } catch (e) {
+            if (e instanceof ExporterError) {
+                throw e;
+            }
             const errorMessage = `${e.name || 'An error'} occured while compiling ${eventKey} (${lib}) event of ${entity.name} ${entity.type}`;
             const exporterError = new ExporterError(errorMessage, {
                 resourceId: entity.uid,

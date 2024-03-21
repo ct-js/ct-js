@@ -61,7 +61,7 @@ catnip-block(
             readonly="{parent.opts.readonly}"
             style="width: {getValue(piece.key) ? Math.min((''+getValue(piece.key)).length + 1, 32) : 5}ch"
         )
-        span.catnip-block-aConstantInput(
+        span.catnip-block-aConstantInput.menu(
             ondrop="{parent.onDrop}"
             ondragenter="{parent.handlePreDrop}"
             ondragstart="{parent.handlePreDrop}"

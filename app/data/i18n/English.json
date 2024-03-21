@@ -300,7 +300,8 @@
             "emptySound": "One of your sounds does not have any sound files attached. Import a sound file to it or remove this empty sound.",
             "emptyEmitter": "One of your particle systems is missing a texture in its emitter. You will need to either set a texture to it or remove the emitter.",
             "windowsFileLock": "This is a Windows-specific problem with a locked file. Make sure you've closed all external browsers that launched the game, then try exporting again. If it doesn't help, restart ct.js.",
-            "noTemplateTexture": "One of your templates is missing a texture. You need to set a texture to it."
+            "noTemplateTexture": "One of your templates is missing a texture. You need to set a texture to it.",
+            "blockArgumentMissing": "An argument in a catnip code is not set or was referring to a now removed asset. Go to the asset and set a value to the block mentioned above."
         },
         "stacktrace": "Call stack",
         "jumpToProblem": "Jump to the problem",
