@@ -1,4 +1,5 @@
 import {getDeclaration} from '.';
+import {getName, getById} from '../resources';
 
 let safeId = -1;
 export const resetSafeId = () => {
@@ -15,8 +16,14 @@ export const compile = (blocks: BlockScript): string => {
                 if (typeof associatedVal === 'object') {
                     values[piece.key] = compile([associatedVal as IBlock]);
                 } else if (typeof associatedVal === 'string') {
-                    values[piece.key] = `'${associatedVal}'`;
+                    // eslint-disable-next-line max-depth
+                    if (piece.assets) {
+                        values[piece.key] = `'${getName(getById(piece.assets, associatedVal))}'`;
+                    } else {
+                        values[piece.key] = `'${associatedVal}'`;
+                    }
                 } else {
+                    // null, undefined and boolean values
                     values[piece.key] = String(associatedVal);
                 }
             } else if (piece.type === 'blocks') {
