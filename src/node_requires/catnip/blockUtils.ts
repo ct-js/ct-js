@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import {usableDeclaration} from './declarationExtractor';
 
 const specials = /[_.]/g;
@@ -18,9 +19,19 @@ const sortHelper = {
 
 const supportedTypes = ['string', 'number', 'boolean', 'wildcard'];
 
+const getPieces = (
+    piecesAssets: Record<string, resourceType | 'action'>,
+    useful: usableDeclaration
+): IBlockPieceArgument[] => (useful.kind === 'function' ? useful.args : []).map(arg => ({
+    type: 'argument' as const,
+    key: arg.name,
+    typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
+    assets: piecesAssets[arg.name]
+}));
+
 export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core' | string, icon = 'grid-random'):
 (IBlockCommandDeclaration | IBlockComputedDeclaration)[] =>
-    usefuls.map((useful): IBlockCommandDeclaration | IBlockComputedDeclaration => {
+    (usefuls.map((useful): IBlockCommandDeclaration | IBlockComputedDeclaration | false => {
         let documentation = useful.description,
             name = niceBlockName(useful.name),
             displayName = name;
@@ -36,6 +47,8 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         documentation += `\n**${(node as any).name.escapedText}** ${node.comment}`;
                     } else if (node.tagName.escapedText === 'returns' || node.tagName.escapedText === 'return') {
                         documentation += `\n\n**Returns** ${node.comment}`;
+                    } else if (node.tagName.escapedText === 'catnipHide') {
+                        return false;
                     } else if (node.tagName.escapedText === 'catnipLabel') {
                         displayName = node.comment.toString();
                     } else if (node.tagName.escapedText === 'catnipName') {
@@ -51,49 +64,29 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 }
             }
         }
-        if (useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void')) {
-            return {
-                type: 'command',
-                name,
-                displayName,
-                documentation,
-                lib,
-                code: useful.name,
-                icon,
-                pieces: useful.args.map(arg => ({
-                    type: 'argument' as const,
-                    key: arg.name,
-                    typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
-                    assets: piecesAssets[arg.name]
-                }) as IBlockPieceArgument),
-                jsTemplate: () => `${useful.name}();`
-            };
-        }
-        const pieces: blockPiece[] = [];
-        if (useful.kind === 'function' && useful.args.length) {
-            pieces.push(...useful.args.map(arg => ({
-                type: 'argument' as const,
-                key: arg.name,
-                typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
-                assets: piecesAssets[arg.name]
-            }) as IBlockPieceArgument));
-        }
+        const isCommand = useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void');
         const draft = {
-            type: 'computed',
+            code: useful.name,
+            lib,
+            type: isCommand ? 'command' : 'computed',
+            typeHint: useful.returnType,
             name: name.toLowerCase(),
             displayName: displayName.toLowerCase(),
-            documentation,
-            lib,
-            code: useful.name,
             icon,
-            pieces,
-            typeHint: useful.returnType
+            documentation,
+            pieces: getPieces(piecesAssets, useful)
         } as Omit<IBlockComputedDeclaration, 'jsTemplate'> & Partial<Pick<IBlockComputedDeclaration, 'jsTemplate'>>;
         if (useful.kind === 'prop') {
             draft.jsTemplate = () => useful.name;
         } else {
-            const usefulArgs = useful.args;
-            draft.jsTemplate = args => `${useful.name}(${usefulArgs.map(arg => args[arg.name]).join(', ')})`;
+            const {name, args} = useful;
+            if (isCommand) {
+                draft.jsTemplate = values => `${name}(${args.map(arg => values[arg.name]).join(', ')});`;
+            } else {
+                draft.jsTemplate = values => `${name}(${args.map(arg => values[arg.name]).join(', ')})`;
+            }
         }
         return draft as IBlockComputedDeclaration;
-    }).sort((a, b) => sortHelper[a.type] - sortHelper[b.type]);
+    })
+    .filter(a => a) as (IBlockCommandDeclaration | IBlockComputedDeclaration)[])
+    .sort((a, b) => sortHelper[a.type] - sortHelper[b.type]);

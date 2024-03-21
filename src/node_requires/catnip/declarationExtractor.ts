@@ -91,8 +91,10 @@ const visit = (
                 ts.FunctionDeclaration
             ) & {jsDoc: ts.JSDoc[]});
         let args;
-        if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
-            args = (node as ts.FunctionDeclaration).parameters.map(param => {
+        if (node.kind === ts.SyntaxKind.FunctionDeclaration ||
+            node.kind === ts.SyntaxKind.MethodSignature
+        ) {
+            args = (node as ts.FunctionDeclaration | ts.MethodSignature).parameters.map(param => {
                 let tsType = (param.type as any)?.typeName?.escapedText ?? 'any';
                 if (ts.isToken(param.type)) {
                     tsType = paramConstTypeMap[

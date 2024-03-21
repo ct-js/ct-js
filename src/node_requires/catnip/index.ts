@@ -6,26 +6,13 @@ import {convertFromDtsToBlocks} from './blockUtils';
 import {parseFile} from './declarationExtractor';
 
 import logicBlocks from './stdLib/logic';
-import templatesBlocks from './stdLib/templates';
-import soundsBlocks from './stdLib/sounds';
 import mathBlocks from './stdLib/math';
 import utilsBlocks from './stdLib/utils';
 import miscBlocks from './stdLib/misc';
 import hiddenBlocks from './stdLib/hiddenBlocks';
+import {loadBlocks} from './stdLib/ctjsApi';
 
 const builtinBlockLibrary: blockMenu[] = [{
-    name: 'Templates',
-    items: templatesBlocks,
-    i18nKey: 'coreLibs.templates',
-    opened: true,
-    icon: 'template'
-}, {
-    name: 'Sounds',
-    items: soundsBlocks,
-    i18nKey: 'coreLibs.sounds',
-    opened: true,
-    icon: 'music'
-}, {
     name: 'Logic',
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
@@ -49,6 +36,9 @@ const builtinBlockLibrary: blockMenu[] = [{
     i18nKey: 'coreLibs.misc',
     opened: true
 }];
+loadBlocks().then(menus => {
+    builtinBlockLibrary.unshift(...menus);
+});
 
 /** An array of categories of blocks to be used in UI */
 export const blocksLibrary: blockMenu[] = [];
