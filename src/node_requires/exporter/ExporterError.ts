@@ -6,7 +6,7 @@ interface IErrorRichInfo {
     eventKey?: string,
     problematicCode?: string,
     clue: 'syntax' | 'eventConfiguration' | 'emptySound' | 'emptyEmitter' | 'noTemplateTexture' |
-          'windowsFileLock' | 'unknown' | 'blockArgumentMissing'
+          'windowsFileLock' | 'unknown' | 'blockArgumentMissing' | 'blockDeclarationMissing'
 }
 
 export class ExporterError<E extends Error | Error> extends Error {

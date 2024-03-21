@@ -15,7 +15,21 @@ export const compile = (blocks: BlockScript, failureMeta: {
 }): string => {
     let result = '';
     for (const block of blocks) {
-        const declaration = getDeclaration(block.lib, block.code);
+        let declaration;
+        try {
+            declaration = getDeclaration(block.lib, block.code);
+        } catch (err) {
+            throw new ExporterError(`Missing declaration for block "${block.code}" from library "${block.lib}"`, {
+                clue: 'blockDeclarationMissing',
+                eventKey: failureMeta.eventKey,
+                resourceId: failureMeta.resourceId,
+                resourceName: failureMeta.resourceName,
+                resourceType: failureMeta.resourceType
+            });
+        }
+        if (!declaration) {
+            continue;
+        }
         const values: Record<string, string> = {};
         for (const piece of declaration.pieces) {
             if (piece.type === 'argument') {

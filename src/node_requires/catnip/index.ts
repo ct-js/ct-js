@@ -83,7 +83,7 @@ const addBlockToRegistry = (block: blockDeclaration): void => {
     blocksRegistry.set(`${block.lib}@@${block.code}`, block);
 };
 const removeBlockFromRegistry = (block: blockDeclaration): void => {
-    blocksRegistry.set(`${block.lib}@@${block.code}`, block);
+    blocksRegistry.delete(`${block.lib}@@${block.code}`);
 };
 export const getDeclaration = (lib: string, code: string): blockDeclaration => {
     if (!blocksRegistry.has(`${lib}@@${code}`)) {

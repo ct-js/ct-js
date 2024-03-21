@@ -45,6 +45,7 @@ catnip-block-list(
         this.mixin(require('./data/node_requires/riotMixins/voc').default);
 
         const {
+            getDeclaration,
             startBlocksTrasmit,
             endBlocksTransmit,
             getTransmissionType,
@@ -57,6 +58,13 @@ catnip-block-list(
 
         this.onDragStart = e => {
             this.update();
+            try { // Prevent dragging broken blocks
+                getDeclaration(e.item.block.lib, e.item.block.code);
+            } catch (oO) {
+                e.stopPropagation();
+                e.preventDefault();
+                return;
+            }
             e.dataTransfer.setData('ctjsblocks/command', 'hello uwu');
             e.dataTransfer.setDragImage(emptyTexture, 0, 0);
             const bounds = e.target.getBoundingClientRect();

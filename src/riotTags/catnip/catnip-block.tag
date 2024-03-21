@@ -8,14 +8,18 @@
 
 catnip-block(
     draggable="{!opts.nodrag}"
-    class="{declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass}"
+    class="{error: !declaration} {declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass}"
     hide="{getHidden}"
     title="{declaration.documentation}"
 )
-    svg.feather(if="{declaration.icon && !declaration.hideIcon}")
+    svg.feather(if="{!declaration}")
+        use(xlink:href="#x")
+    span(if="{!declaration}") {voc('catnip.errorBlock')} "{opts.block.lib}" — {opts.block.code}. {voc('catnip.errorBlockDeleteHint')}
+
+    svg.feather(if="{declaration && declaration.icon && !declaration.hideIcon}")
         use(xlink:href="#{declaration.icon}")
-    span.catnip-block-aTextLabel(if="{!declaration.hideLabel}") {declaration.displayName || declaration.name}
-    virtual(each="{piece in declaration.pieces}")
+    span.catnip-block-aTextLabel(if="{declaration && !declaration.hideLabel}") {declaration.displayName || declaration.name}
+    virtual(each="{piece in declaration.pieces}" if="{declaration}")
         span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
         span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}") {parent.opts.block.values.variableName}
         svg.feather(if="{piece.type === 'icon'}")
@@ -109,7 +113,12 @@ catnip-block(
         const {getByPath} = require('./data/node_requires/i18n');
         this.voc = getByPath;
 
-        this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
+        try {
+            this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
+        } catch (e) {
+            console.error(e);
+            this.declaration = false;
+        }
         this.getValue = key => {
             return this.opts.block.values[key];
         };
@@ -123,10 +132,17 @@ catnip-block(
 
         this.onDragStart = e => {
             this.update();
+            const sourcePiece = e.item.piece;
+            try { // Prevent dragging broken blocks
+                const block = this.opts.block.values[sourcePiece.key];
+                getDeclaration(block.lib, block.code);
+            } catch (oO) {
+                e.stopPropagation();
+                e.preventDefault();
+                return;
+            }
             e.dataTransfer.setData('ctjsblocks/computed', 'hello uwu');
             e.dataTransfer.setDragImage(emptyTexture, 0, 0);
-            console.log(e.item);
-            const sourcePiece = e.item.piece;
             const bounds = e.target.getBoundingClientRect();
             window.signals.trigger(
                 'blockTransmissionStart',
