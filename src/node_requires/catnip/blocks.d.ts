@@ -52,8 +52,8 @@ declare interface IBlockDeclaration {
     lib: string;
     /** A unique string corresponding to this block so it can be serialized and deserialized */
     code: string;
-    /** Elements of the block, including input fields */
-    pieces?: blockPiece[];
+    /** Elements of the block, including input fields and decorations */
+    pieces: blockPiece[];
     /** Icon shown at the beginning of the block */
     icon: string;
     /** Searchable command name. Also used as a label if i18nKey is not used or invalid. */

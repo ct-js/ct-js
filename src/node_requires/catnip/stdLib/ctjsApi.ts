@@ -44,7 +44,6 @@ export const loadBlocks = async (): Promise<blockMenu[]> => {
     filterPatchMenu(menus, allBlocks, 'backgrounds.', 'image', 'Backgrounds');
     filterPatchMenu(menus, allBlocks, 'emitters.', 'sparkles', 'Emitter tandems');
     filterPatchMenu(menus, allBlocks, 'u.', 'tool', 'Utilities');
-    filterPatchMenu(menus, allBlocks, 'inputs.', 'airplay', 'Inputs');
     filterPatchMenu(menus, allBlocks, 'settings.', 'settings', 'Settings');
 
     return menus;

@@ -18,6 +18,7 @@ const behaviorsLib = {
      * (Static behaviors are marked with a frozen (❄️) sign in UI.)
      * @param target The room or template to which the behavior should be added.
      * @param behavior The name of the behavior to be added, as it was named in ct.IDE.
+     * @catnipAsset behavior:behavior
      */
     add(target: Room | BasicCopy, behavior: string): void {
         if (target.behaviors.includes(behavior)) {
@@ -38,6 +39,7 @@ const behaviorsLib = {
      * (Static behaviors are marked with a frozen (❄️) sign in UI.)
      * @param target The room or template from which the behavior should be removed.
      * @param behavior The name of the behavior to be removed, as it was named in ct.IDE.
+     * @catnipAsset behavior:behavior
      */
     remove(target: Room | BasicCopy, behavior: string): void {
         if (!target.behaviors.includes(behavior)) {
@@ -56,6 +58,7 @@ const behaviorsLib = {
      * Tells whether the specified object has a behavior applied to it.
      * @param target A room or a copy to test against.
      * @param behavior The behavior to look for.
+     * @catnipAsset behavior:behavior
      */
     has(target: Room | BasicCopy, behavior: string): boolean {
         return target.behaviors.includes(behavior);

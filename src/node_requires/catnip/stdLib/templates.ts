@@ -4,7 +4,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'kill',
     icon: 'template',
     jsTemplate: () => 'this.kill = true;',
-    lib: 'core.templates'
+    lib: 'core.templates',
+    pieces: []
 }];
 
 export default blocks;

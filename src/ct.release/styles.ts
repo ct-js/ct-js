@@ -17,6 +17,7 @@ const stylesLib = {
     /**
      * Returns a style of a given name. The actual behavior strongly depends on `copy` parameter.
      * @param name The name of the style to load
+     * @catnipAsset name:style
      * @param [copy] If not set, returns the source style object.
      * Editing it will affect all new style calls.
      * When set to `true`, will create a new object, which you can safely modify
