@@ -19,6 +19,14 @@ catnip-block
         flex 1 1 0
     .&-Blocks
         flex 1 1 100%
+    &.command > .&-aTextLabel
+        overflow hidden
+        line-height 1.15
+        text-overflow ellipsis
+        flex 0 1 auto
+        word-wrap nowrap
+        white-space nowrap
+        max-width calc(100% - 2rem)
     background background
     border-radius br
     border 1px solid borderBright
