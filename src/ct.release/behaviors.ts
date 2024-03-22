@@ -4,7 +4,13 @@ import {Room} from './rooms';
 import type {BasicCopy} from './templates';
 
 const behaviorsLib = {
+    /**
+     * @catnipIgnore
+     */
     templates: [/*!@behaviorsTemplates@*/][0] as Record<string, ExportedBehavior>,
+    /**
+     * @catnipIgnore
+     */
     rooms: [/*!@behaviorsRooms@*/][0] as Record<string, ExportedBehavior>,
     /**
      * Adds a behavior to the given room or template.
@@ -56,6 +62,9 @@ const behaviorsLib = {
     }
 };
 
+/**
+ * @catnipIgnore
+ */
 export const runBehaviors = (target: Room | BasicCopy, domain: 'rooms' | 'templates', kind: keyof ExportedBehaviorDynamic): void => {
     for (const bh of target.behaviors) {
         const fn = behaviorsLib[domain][bh];

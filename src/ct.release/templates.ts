@@ -128,11 +128,20 @@ interface IFocusableElement extends pixiMod.DisplayObject {
     focus(): void;
 }
 let focusedElement: IFocusableElement;
+/**
+ * @catnipIgnore
+ */
 export const getFocusedElement = () => focusedElement;
-export const blurFocusedElement = () => {
+/**
+ * @catnipIgnore
+ */
+export const blurFocusedElement = (): void => {
     focusedElement.blur();
 };
-export const setFocusedElement = (elt: IFocusableElement) => {
+/**
+ * @catnipIgnore
+ */
+export const setFocusedElement = (elt: IFocusableElement): void => {
     if (focusedElement && focusedElement !== elt) {
         blurFocusedElement();
     }
@@ -150,6 +159,9 @@ export const setFocusedElement = (elt: IFocusableElement) => {
 export type BasicCopy = Record<string, any> & pixiMod.DisplayObject & ICopy;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+/**
+ * @catnipIgnore
+ */
 export const CopyProto: Partial<BasicCopy> = {
     set tex(value: string) {
         if (this._tex === value) {
@@ -261,6 +273,7 @@ type Mutable<T> = {-readonly[P in keyof T]: T[P]};
  * @param {string} template The name of the template to copy
  * @param {PIXI.DisplayObject|Room} [container] A container to set as copy's parent
  * before its OnCreate event. Defaults to ct.room.
+ * @catnipIgnore
  */
 // eslint-disable-next-line max-lines-per-function, max-params
 const Copy = function (
@@ -371,6 +384,9 @@ const mix = (
     Copy.apply(target, [x, y, template, parent, exts]);
 };
 
+/**
+ * @catnipIgnore
+*/
 // eslint-disable-next-line complexity, max-lines-per-function
 export const makeCopy = (
     template: string,
@@ -401,11 +417,21 @@ const onCreateModifier = function () {
  * mainly for finding particular copies and creating new ones.
  */
 const templatesLib = {
+    /**
+     * @catnipIgnore
+     */
     CopyProto,
+    /**
+     * @catnipIgnore
+     */
     Background,
+    /**
+     * @catnipIgnore
+     */
     Tilemap,
     /**
      * An object that contains arrays of copies of all templates.
+     * @catnipIgnore
      */
     list: {
         BACKGROUND: [],
@@ -416,26 +442,29 @@ const templatesLib = {
     } & Record<string, BasicCopy[]>,
     /**
      * A map of all the templates of templates exported from ct.IDE.
+     * @catnipIgnore
      */
     templates: {} as Record<string, ExportedTemplate>,
     /**
      * Creates a new copy of a given template inside a specific room.
      * @param template The name of the template to use
+     * @catnipAsset template:template
      * @param [x] The x coordinate of a new copy. Defaults to 0.
      * @param [y] The y coordinate of a new copy. Defaults to 0.
      * @param [room] The room to which add the copy.
      * Defaults to the current room.
-     * @param [exts] An optional object which parameters will be applied
+     * @param [params] An optional object which parameters will be applied
      * to the copy prior to its OnCreate event.
      * @returns The created copy.
+     * @catnipSaveReturn
      */
     // eslint-disable-next-line max-len
-    copyIntoRoom(template: string, x = 0, y = 0, room: Room, exts: Record<string, unknown> = {}): BasicCopy {
+    copyIntoRoom(template: string, x = 0, y = 0, room: Room, params: Record<string, unknown> = {}): BasicCopy {
         // An advanced constructor. Returns a Copy
         if (!room || !(room instanceof Room)) {
             throw new Error(`Attempt to spawn a copy of template ${template} inside an invalid room. Room's value provided: ${room}`);
         }
-        const obj = makeCopy(template, x, y, room, exts);
+        const obj = makeCopy(template, x, y, room, params);
         room.addChild(obj as pixiMod.DisplayObject);
         stack.push(obj);
         return obj;
@@ -444,19 +473,22 @@ const templatesLib = {
      * Creates a new copy of a given template inside the current root room.
      * A shorthand for `templates.copyIntoRoom(template, x, y, ct.room, exts)`
      * @param template The name of the template to use
+     * @catnipAsset template:template
      * @param [x] The x coordinate of a new copy. Defaults to 0.
      * @param [y] The y coordinate of a new copy. Defaults to 0.
-     * @param [exts] An optional object which parameters will be applied
+     * @param [params] An optional object which parameters will be applied
      * to the copy prior to its OnCreate event.
      * @returns The created copy.
+     * @catnipSaveReturn
      */
-    copy(template: string, x = 0, y = 0, exts: Record<string, unknown> = {}): BasicCopy {
-        return templatesLib.copyIntoRoom(template, x, y, roomsLib.current, exts);
+    copy(template: string, x = 0, y = 0, params: Record<string, unknown> = {}): BasicCopy {
+        return templatesLib.copyIntoRoom(template, x, y, roomsLib.current, params);
     },
     /**
      * Applies a function to each copy in the current room
      * @param {Function} func The function to apply
      * @returns {void}
+     * @catnipIgnore
      */
     each(func: (this: BasicCopy, me: BasicCopy) => void): void {
         for (const copy of stack) {
@@ -470,6 +502,7 @@ const templatesLib = {
      * Applies a function to a given object (e.g. to a copy)
      * @param {Copy} obj The copy to perform function upon.
      * @param {Function} function The function to be applied.
+     * @catnipIgnore
      */
     withCopy<T>(obj: T, func: (this: T) => void): void {
         func.apply(obj, this);
@@ -477,7 +510,9 @@ const templatesLib = {
     /**
      * Applies a function to every copy of the given template name
      * @param {string} template The name of the template to perform function upon.
+     * @catnipAsset template:template
      * @param {Function} function The function to be applied.
+     * @catnipIgnore
      */
     withTemplate(
         template: string,
@@ -491,6 +526,7 @@ const templatesLib = {
      * Checks whether there are any copies of this template's name.
      * Will throw an error if you pass an invalid template name.
      * @param {string} template The name of a template to check.
+     * @catnipAsset template:template
      * @returns {boolean} Returns `true` if at least one copy exists in a room;
      * `false` otherwise.
      */
@@ -505,6 +541,7 @@ const templatesLib = {
      * Checks whether a given object is a ct.js copy.
      * @param {any} obj The object which needs to be checked.
      * @returns {boolean} Returns `true` if the passed object is a copy; `false` otherwise.
+     * @catnipIgnore
      */
     isCopy: ((obj: unknown): boolean => obj && obj[copyTypeSymbol]) as {
         (obj: BasicCopy): obj is BasicCopy;
@@ -513,6 +550,7 @@ const templatesLib = {
     /**
      * Checks whether a given object exists in game's world.
      * Intended to be applied to copies, but may be used with other PIXI entities.
+     * @catnipIgnore
      */
     valid: ((obj: unknown): boolean => {
         if (typeof obj !== 'object') {
@@ -531,19 +569,30 @@ const templatesLib = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (obj: unknown): false
     },
-
+    /**
+     * @catnipIgnore
+     */
     beforeStep(this: BasicCopy): void {
         /*!%beforestep%*/
     },
+    /**
+     * @catnipIgnore
+     */
     afterStep(this: BasicCopy): void {
         /*!%afterstep%*/
         if (this.behaviors.length) {
             runBehaviors(this, 'templates', 'thisOnStep');
         }
     },
+    /**
+     * @catnipIgnore
+     */
     beforeDraw(this: BasicCopy): void {
         /*!%beforedraw%*/
     },
+    /**
+     * @catnipIgnore
+     */
     afterDraw(this: BasicCopy): void {
         if (this.behaviors.length) {
             runBehaviors(this, 'templates', 'thisOnDraw');
@@ -560,6 +609,9 @@ const templatesLib = {
         }
         /*!%afterdraw%*/
     },
+    /**
+     * @catnipIgnore
+     */
     onDestroy(this: BasicCopy): void {
         /*!%ondestroy%*/
         if (this.behaviors.length) {

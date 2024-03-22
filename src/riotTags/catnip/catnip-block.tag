@@ -24,6 +24,7 @@ catnip-block(
         span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}") {parent.opts.block.values.variableName}
         svg.feather(if="{piece.type === 'icon'}")
             use(xlink:href="#{piece.icon}")
+        .catnip-block-aFiller(if="{piece.type === 'filler'}")
         textarea.code(
             readonly="{opts.readonly}"
             if="{piece.type === 'code'}"

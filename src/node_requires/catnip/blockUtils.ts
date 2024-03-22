@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import {usableDeclaration} from './declarationExtractor';
 
@@ -36,6 +37,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             name = niceBlockName(useful.name),
             displayName = name;
         const piecesAssets: Record<string, resourceType | 'action'> = {};
+        let returnSave = false;
         if (useful.jsDoc) {
             for (const jsDoc of useful.jsDoc) {
                 if (!jsDoc.tags) {
@@ -47,7 +49,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         documentation += `\n**${(node as any).name.escapedText}** ${node.comment}`;
                     } else if (node.tagName.escapedText === 'returns' || node.tagName.escapedText === 'return') {
                         documentation += `\n\n**Returns** ${node.comment}`;
-                    } else if (node.tagName.escapedText === 'catnipHide') {
+                    } else if (node.tagName.escapedText === 'catnipIgnore') {
                         return false;
                     } else if (node.tagName.escapedText === 'catnipLabel') {
                         displayName = node.comment.toString();
@@ -60,27 +62,52 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         key = key.trim();
                         assetType = assetType.trim();
                         piecesAssets[key] = assetType as resourceType | 'action';
+                    } else if (node.tagName.escapedText === 'catnipSaveReturn') {
+                        returnSave = true;
                     }
                 }
             }
         }
-        const isCommand = useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void');
+        let isCommand = useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void');
+        if (returnSave) {
+            isCommand = true;
+        }
         const draft = {
             code: useful.name,
             lib,
             type: isCommand ? 'command' : 'computed',
             typeHint: useful.returnType,
-            name: name.toLowerCase(),
-            displayName: displayName.toLowerCase(),
+            name: isCommand ? name : name.toLowerCase(),
+            displayName: isCommand ? displayName : displayName.toLowerCase(),
             icon,
             documentation,
             pieces: getPieces(piecesAssets, useful)
         } as Omit<IBlockComputedDeclaration, 'jsTemplate'> & Partial<Pick<IBlockComputedDeclaration, 'jsTemplate'>>;
+        if (returnSave) {
+            draft.pieces.push({
+                type: 'filler'
+            }, {
+                type: 'label',
+                name: 'store in',
+                i18nKey: 'store in'
+            }, {
+                type: 'argument',
+                key: 'returnValue',
+                typeHint: 'wildcard'
+            });
+        }
         if (useful.kind === 'prop') {
             draft.jsTemplate = () => useful.name;
         } else {
             const {name, args} = useful;
-            if (isCommand) {
+            if (returnSave) {
+                draft.jsTemplate = values => {
+                    if (values.returnValue) {
+                        return `${values.returnValue} = ${name}(${args.map(arg => values[arg.name]).join(', ')});`;
+                    }
+                    return `${name}(${args.map(arg => values[arg.name]).join(', ')});`;
+                };
+            } else if (isCommand) {
                 draft.jsTemplate = values => `${name}(${args.map(arg => values[arg.name]).join(', ')});`;
             } else {
                 draft.jsTemplate = values => `${name}(${args.map(arg => values[arg.name]).join(', ')})`;

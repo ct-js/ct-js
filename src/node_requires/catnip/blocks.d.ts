@@ -36,10 +36,13 @@ declare interface IBlockPieceBlocks {
 declare interface IBlockPropOrVariable {
     type: 'propVar';
 }
+declare interface IBlockFiller {
+    type: 'filler'
+}
 
 declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
                           IBlockPieceArgument | IBlockPieceTextbox | IBlockPieceBlocks |
-                          IBlockPropOrVariable;
+                          IBlockPropOrVariable | IBlockFiller;
 
 // eslint-disable-next-line no-use-before-define
 type argumentValues = Record<string, IBlock[] | IBlock | string | number | boolean>;

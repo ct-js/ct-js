@@ -1,10 +1,14 @@
 import {ExportedStyle} from './../node_requires/exporter/_exporterContracts';
 
 const stylesLib = {
+    /**
+     * @catnipIgnore
+     */
     types: {} as Record<string, ExportedStyle>,
     /**
      * Creates a new style with a given name.
      * Technically, it just writes `data` to `styles.types`
+     * @catnipIgnore
      */
     new(name: string, styleTemplate: ExportedStyle): ExportedStyle {
         stylesLib.types[name] = styleTemplate;

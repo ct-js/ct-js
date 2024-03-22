@@ -12,6 +12,7 @@ declare var PIXI: typeof pixiMod;
 /**
  * An utility function to throw errors by using them
  * as default values for mandatory arguments in public API.
+ * @catnipIgnore
  */
 export const required = function required(paramName: string, method: string): never {
     let str = 'The parameter ';
@@ -44,6 +45,7 @@ const uLib = {
      * ```
      *
      * @deprecated Use `u.time` instead.
+     * @catnipIgnore
      */
     delta: 1,
     /**
@@ -56,6 +58,7 @@ const uLib = {
      * both with slow-mo effects and game pause.
      *
      * @deprecated Use `u.timeUi` instead.
+     * @catnipIgnore
      */
     deltaUi: 1,
     /**
@@ -379,6 +382,9 @@ const uLib = {
             copy.hitArea = hitarea;
         }
     },
+    /**
+     * @catnipIgnore
+     */
     getHitArea(shape: TextureShape): pixiMod.Polygon | pixiMod.Circle | pixiMod.Rectangle | false {
         if (shape.type === 'circle') {
             return new PIXI.Circle(0, 0, shape.r);
@@ -522,6 +528,9 @@ const uLib = {
             });
         };
     },
+    /**
+     * @catnipIgnore
+     */
     required,
     /**
      * Takes a prefix and a number to make a string in format Prefix_XX,

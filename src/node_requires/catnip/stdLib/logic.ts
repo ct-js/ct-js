@@ -48,7 +48,12 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     type: 'command',
     code: 'repeat',
     icon: 'rotate-cw',
-    jsTemplate: (args, safeId) => `for (let i${safeId} = 0; i${safeId} < ${args.N}; i${safeId}++) {\n    ${args.body}\n}`,
+    jsTemplate: (args, safeId) => {
+        if (args.variableName) {
+            return `for (${args.variableName} = 0; ${args.variableName} < ${args.N}; ${args.variableName}++) {\n    ${args.body}\n}`;
+        }
+        return `for (i${safeId} = 0; i${safeId} < ${args.N}; i${safeId}++) {\n    ${args.body}\n}`;
+    },
     lib: 'core.logic',
     i18nKey: 'repeat',
     pieces: [{
@@ -60,30 +65,11 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         name: 'times',
         i18nKey: 'times'
     }, {
-        type: 'blocks',
-        key: 'body'
-    }]
-}, {
-    name: 'repeat times tracking',
-    displayName: 'Repeat',
-    type: 'command',
-    code: 'repeat tracking',
-    icon: 'rotate-cw',
-    jsTemplate: (args) => `for (${args.variableName} = 0; ${args.variableName} < ${args.N}; ${args.variableName}++) {\n    ${args.body}\n}`,
-    lib: 'core.logic',
-    i18nKey: 'repeat',
-    pieces: [{
-        type: 'argument',
-        key: 'N',
-        typeHint: 'number'
+        type: 'filler'
     }, {
         type: 'label',
-        name: 'times',
-        i18nKey: 'times'
-    }, {
-        type: 'label',
-        name: 'with index variable',
-        i18nKey: 'with index variable'
+        name: 'store index in',
+        i18nKey: 'store index in'
     }, {
         type: 'argument',
         key: 'variableName',
