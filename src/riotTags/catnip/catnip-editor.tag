@@ -33,6 +33,7 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
             !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 e.preventDefault(); // Tells that we do want to accept the drop
             }
         };
@@ -41,6 +42,7 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
         this.getBehaviorFields = require('./data/node_requires/events').getBehaviorFields;
         this.nuke = e => {
             if (isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 return;
             }
             // Put blocks in a newly-created array, which will then be garbage-collected.
@@ -55,6 +57,7 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
         const startGhost = (e, html, dx, dy) => {
             // check if we are in an opened editor
             if (!this.root.closest('[isactiveeditor]')) {
+                e.preventUpdate = true;
                 return;
             }
             this.blockGhost = html;
@@ -77,6 +80,7 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
         });
         this.repositionGhost = e => {
             if (!this.blockGhost || !this.refs.ghost) {
+                e.preventUpdate = true;
                 return;
             }
             this.refs.ghost.style.left = `${e.clientX + this.dx}px`;

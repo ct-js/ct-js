@@ -142,6 +142,7 @@ catnip-block(
             } catch (oO) {
                 e.stopPropagation();
                 e.preventDefault();
+                e.preventUpdate = true;
                 return;
             }
             e.dataTransfer.setData('ctjsblocks/computed', 'hello uwu');
@@ -179,15 +180,18 @@ catnip-block(
             this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/computed');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 e.preventDefault(); // Tells that we do want to accept the drop
             }
         };
         this.onDrop = e => {
             if (isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 return;
             }
             // Disallow commands
             if (getTransmissionType() !== 'computed') {
+                e.preventUpdate = true;
                 return;
             }
             // Disallow non-matching types
@@ -195,6 +199,7 @@ catnip-block(
                 getTransmissionReturnVal() !== 'wildcard' &&
                 e.item.piece.typeHint !== getTransmissionReturnVal()
             ) {
+                e.preventUpdate = true;
                 return false;
             }
             this.hoveredOver = null;

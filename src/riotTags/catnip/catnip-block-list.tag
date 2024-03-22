@@ -61,6 +61,7 @@ catnip-block-list(
             try { // Prevent dragging broken blocks
                 getDeclaration(e.item.block.lib, e.item.block.code);
             } catch (oO) {
+                e.preventUpdate = true;
                 e.stopPropagation();
                 e.preventDefault();
                 return;
@@ -87,6 +88,7 @@ catnip-block-list(
             this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
             if (!isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 e.preventDefault(); // Tells that we do want to accept the drop
             }
         };
@@ -98,9 +100,11 @@ catnip-block-list(
         };
         this.onDrop = e => {
             if (isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 return;
             }
             if (getTransmissionType() !== 'command') {
+                e.preventUpdate = true;
                 return;
             }
             this.hoveredOver = null;
@@ -116,9 +120,11 @@ catnip-block-list(
         };
         this.onDropAfter = e => {
             if (isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 return;
             }
             if (getTransmissionType() !== 'command') {
+                e.preventUpdate = true;
                 return;
             }
             e.preventDefault();
@@ -128,9 +134,11 @@ catnip-block-list(
         };
         this.onDropTop = e => {
             if (isInvalidDrop(e)) {
+                e.preventUpdate = true;
                 return;
             }
             if (getTransmissionType() !== 'command') {
+                e.preventUpdate = true;
                 return;
             }
             e.preventDefault();
