@@ -37,7 +37,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'label',
         name: 'by',
-        i18nKey: 'by'
+        i18nKey: 'changeBy'
     }, {
         type: 'argument',
         key: 'val',
@@ -60,7 +60,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'label',
         name: 'by',
-        i18nKey: 'by'
+        i18nKey: 'changeBy'
     }, {
         type: 'argument',
         key: 'val',

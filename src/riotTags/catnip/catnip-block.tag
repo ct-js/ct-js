@@ -14,13 +14,14 @@ catnip-block(
 )
     svg.feather(if="{!declaration}")
         use(xlink:href="#x")
-    span(if="{!declaration}") {voc('catnip.errorBlock')} "{opts.block.lib}" — {opts.block.code}. {voc('catnip.errorBlockDeleteHint')}
+    span(if="{!declaration}") {voc.errorBlock} "{opts.block.lib}" — {opts.block.code}. {voc.errorBlockDeleteHint}
 
     svg.feather(if="{declaration && declaration.icon && !declaration.hideIcon}")
         use(xlink:href="#{declaration.icon}")
-    span.catnip-block-aTextLabel(if="{declaration && !declaration.hideLabel}") {declaration.displayName || declaration.name}
+    span.catnip-block-aTextLabel(if="{declaration && !declaration.hideLabel}")
+        | {(voc.blockDisplayNames[declaration.displayI18nKey] || declaration.displayName) || (voc.blockNames[declaration.i18nKey] || declaration.name)}
     virtual(each="{piece in declaration.pieces}" if="{declaration}")
-        span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
+        span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {voc.labels[piece.i18nKey] || piece.name}
         span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}") {parent.opts.block.values.variableName}
         svg.feather(if="{piece.type === 'icon'}")
             use(xlink:href="#{piece.icon}")
@@ -76,7 +77,7 @@ catnip-block(
         )
             svg.feather(if="{!getValue(piece.key)}")
                 use(xlink:href="#search")
-            span(if="{!getValue(piece.key)}") {voc('common.selectDialogue')}
+            span(if="{!getValue(piece.key)}") {vocGlob.selectDialogue}
             svg.feather(if="{getValue(piece.key) && areThumbnailsIcons(piece.assets)}")
                 use(xlink:href="#{getThumbnail(piece.assets, getValue(piece.key))}")
             img(
@@ -93,6 +94,9 @@ catnip-block(
         oncancelled="{cancelAssetSelection}"
     )
     script.
+        this.namespace = 'catnip';
+        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+
         const {
             getDeclaration,
             getTransmissionType,
@@ -111,8 +115,6 @@ catnip-block(
         this.getName = (assetType, id) => getName(getById(assetType, id));
         this.areThumbnailsIcons = areThumbnailsIcons;
         this.getThumbnail = (assetType, id) => getThumbnail(getById(assetType, id), false, false);
-        const {getByPath} = require('./data/node_requires/i18n');
-        this.voc = getByPath;
 
         try {
             this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
@@ -217,7 +219,7 @@ catnip-block(
         this.contextMenu = {
             opened: true,
             items: [{
-                label: getByPath('common.delete'),
+                label: this.vocGlob.delete,
                 icon: 'trash',
                 click: () => {
                     delete this.opts.block.values[this.contextPiece.key];

@@ -8,6 +8,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         `if (${args.condition}) {\n    ${args.body1}\n} else {\n    ${args.body2}\n}`,
     lib: 'core.logic',
     i18nKey: 'if else branch',
+    displayI18nKey: 'if else branch',
     pieces: [{
         type: 'argument',
         key: 'condition',
@@ -20,7 +21,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         icon: 'alert-circle'
     }, {
         type: 'label',
-        name: 'else'
+        name: 'else',
+        i18nKey: 'else'
     }, {
         type: 'blocks',
         key: 'body2'
@@ -34,6 +36,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (args) => `while (${args.condition}) {\n    ${args.body}\n}`,
     lib: 'core.logic',
     i18nKey: 'while loop cycle',
+    displayI18nKey: 'while loop cycle',
     pieces: [{
         type: 'argument',
         key: 'condition',
@@ -56,6 +59,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     },
     lib: 'core.logic',
     i18nKey: 'repeat',
+    displayI18nKey: 'repeat',
     pieces: [{
         type: 'argument',
         key: 'N',
@@ -63,7 +67,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'label',
         name: 'times',
-        i18nKey: 'times'
+        i18nKey: 'timesCount'
     }, {
         type: 'filler'
     }, {
@@ -87,6 +91,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (args) => `for (${args.variableName} of ${args.array}) {\n    ${args.body}\n}`,
     lib: 'core.logic',
     i18nKey: 'for each',
+    displayI18nKey: 'for each',
     pieces: [{
         type: 'argument',
         key: 'variableName',
@@ -233,6 +238,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     hideIcon: true,
     lib: 'core.logic',
     i18nKey: 'NOT logic operator',
+    displayI18nKey: 'NOT logic operator',
     typeHint: 'boolean',
     pieces: [{
         type: 'argument',
@@ -258,7 +264,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }, {
         type: 'label',
-        name: 'is'
+        name: 'is',
+        i18nKey: 'is'
     }, {
         type: 'argument',
         key: 'b',
@@ -283,7 +290,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }, {
         type: 'label',
-        name: 'is not'
+        name: 'is not',
+        i18nKey: 'is not'
     }, {
         type: 'argument',
         key: 'b',
