@@ -204,6 +204,9 @@ catnip-block(
 
         this.contextPiece = false;
         this.onContextMenu = e => {
+            if (this.opts.readonly) {
+                return;
+            }
             e.preventDefault();
             e.stopPropagation();
             const {piece} = e.item;

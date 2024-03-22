@@ -19,7 +19,8 @@ catnip-library(class="{opts.class}").flexrow
                 readonly="readonly"
                 ondragstart="{parent.onVarDragStart}"
                 draggable="draggable"
-                ondragend="{resetTarget}"
+                ondragend="{parent.resetTarget}"
+                oncontextmenu="{parent.onContextMenu}"
             )
             catnip-block(
                 each="{prop in opts.behaviorprops}"
@@ -28,7 +29,7 @@ catnip-library(class="{opts.class}").flexrow
                 readonly="readonly"
                 ondragstart="{parent.onVarDragStart}"
                 draggable="draggable"
-                ondragend="{resetTarget}"
+                ondragend="{parent.resetTarget}"
             )
             br(if="{opts.props.length || opts.behaviorprops.length}")
             button.inline(onclick="{promptNewProperty}")
@@ -45,7 +46,8 @@ catnip-library(class="{opts.class}").flexrow
                 readonly="readonly"
                 ondragstart="{parent.onVarDragStart}"
                 draggable="draggable"
-                ondragend="{resetTarget}"
+                ondragend="{parent.resetTarget}"
+                oncontextmenu="{parent.onContextMenu}"
             )
             br(if="{opts.variables.length}")
             button.inline(onclick="{promptNewVariable}")
@@ -91,6 +93,7 @@ catnip-library(class="{opts.class}").flexrow
             svg.feather.a
                 use(href="#{cat.icon || 'grid-random'}")
             div  {cat.name}
+    context-menu(if="{contextVarName}" menu="{contextMenu}" ref="menu")
     script.
         this.namespace = 'catnip';
         this.mixin(require('./data/node_requires/riotMixins/voc').default);
@@ -220,4 +223,29 @@ catnip-library(class="{opts.class}").flexrow
                 this.opts.variables.push(val.trim());
                 this.update();
             })
+        };
+        this.contextVarName = false;
+        this.onContextMenu = e => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.contextVarName = e.item.prop || e.item.variable;
+            this.contextType = e.item.prop ? 'prop' : 'variable';
+            this.update();
+            this.refs.menu.popup(e.clientX, e.clientY);
+        };
+        this.contextMenu = {
+            opened: true,
+            items: [{
+                label: this.vocGlob.delete,
+                icon: 'trash',
+                click: () => {
+                    if (this.contextType === 'prop') {
+                        this.opts.props.splice(this.opts.props.indexOf(this.contextVarName), 1);
+                    } else {
+                        this.opts.variables.splice(this.opts.variables.indexOf(this.contextVarName), 1);
+                    }
+                    this.contextVarName = false;
+                    this.update();
+                }
+            }]
         };
