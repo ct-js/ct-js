@@ -1,8 +1,9 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'kill copy',
+    name: 'Kill copy',
     type: 'command',
     code: 'kill',
     icon: 'template',
+    i18nKey: 'kill copy',
     jsTemplate: () => 'this.kill = true;',
     lib: 'core.templates',
     pieces: []

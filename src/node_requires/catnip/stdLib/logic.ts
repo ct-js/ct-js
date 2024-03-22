@@ -1,5 +1,5 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'if else branch',
+    name: 'If else branch',
     displayName: 'If',
     type: 'command',
     code: 'if else branch',
@@ -26,7 +26,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'body2'
     }]
 }, {
-    name: 'while loop cycle',
+    name: 'While loop cycle',
     displayName: 'While',
     type: 'command',
     code: 'while loop cycle',
@@ -43,7 +43,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'body'
     }]
 }, {
-    name: 'repeat times',
+    name: 'Repeat N times',
     displayName: 'Repeat',
     type: 'command',
     code: 'repeat',
@@ -79,14 +79,14 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'body'
     }]
 }, {
-    name: 'for each of array',
+    name: 'For each element of array',
     displayName: 'For each',
     type: 'command',
     code: 'for each',
     icon: 'rotate-cw',
     jsTemplate: (args) => `for (${args.variableName} of ${args.array}) {\n    ${args.body}\n}`,
     lib: 'core.logic',
-    i18nKey: 'repeat',
+    i18nKey: 'for each',
     pieces: [{
         type: 'argument',
         key: 'variableName',
@@ -248,6 +248,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     typeHint: 'boolean',
     hideIcon: true,
     hideLabel: true,
+    i18nKey: 'is',
     jsTemplate: (vals) => `(${vals.a} === ${vals.b})`,
     lib: 'core.logic',
     pieces: [{
@@ -272,6 +273,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     typeHint: 'boolean',
     hideIcon: true,
     hideLabel: true,
+    i18nKey: 'is not',
     jsTemplate: (vals) => `(${vals.a} !== ${vals.b})`,
     lib: 'core.logic',
     pieces: [{

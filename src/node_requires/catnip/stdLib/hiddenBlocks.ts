@@ -1,5 +1,5 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'variable',
+    name: 'Variable',
     hideLabel: true,
     type: 'computed',
     typeHint: 'wildcard',
@@ -7,13 +7,13 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     icon: 'clock',
     jsTemplate: (values) => values.variableName,
     lib: 'core.hidden',
-    i18nKey: 'note',
+    i18nKey: 'variable',
     pieces: [{
         type: 'propVar'
     }],
     customClass: 'userdefined'
 }, {
-    name: 'property',
+    name: 'Property',
     hideLabel: true,
     type: 'computed',
     typeHint: 'wildcard',
@@ -21,13 +21,13 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     icon: 'archive',
     jsTemplate: (values) => `this['${values.variableName}']`,
     lib: 'core.hidden',
-    i18nKey: 'note',
+    i18nKey: 'property',
     pieces: [{
         type: 'propVar'
     }],
     customClass: 'userdefined'
 }, {
-    name: 'behavior property',
+    name: 'Behavior property',
     hideLabel: true,
     type: 'computed',
     typeHint: 'wildcard',
@@ -35,7 +35,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     icon: 'behavior',
     jsTemplate: (values) => `this['${values.variableName}']`,
     lib: 'core.hidden',
-    i18nKey: 'note',
+    i18nKey: 'behavior property',
     pieces: [{
         type: 'propVar'
     }],

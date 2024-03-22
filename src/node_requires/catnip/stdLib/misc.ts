@@ -1,5 +1,5 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'note',
+    name: 'Note',
     type: 'command',
     code: 'note',
     icon: 'message-circle',
@@ -12,7 +12,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     customClass: 'note'
 }, {
-    name: 'execute js javascript code',
+    name: 'Execute js javascript code',
     displayName: 'Execute JavaScript',
     type: 'command',
     code: 'js',

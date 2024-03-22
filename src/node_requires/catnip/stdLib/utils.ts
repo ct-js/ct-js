@@ -1,11 +1,11 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'set property variable value',
+    name: 'Set property variable value',
     type: 'command',
     code: 'set',
     icon: 'edit',
     jsTemplate: (vals) => `${vals.var} = ${vals.value};`,
     lib: 'core.utils',
-    i18nKey: 'set',
+    i18nKey: 'set property',
     pieces: [{
         type: 'argument',
         key: 'var',
@@ -22,7 +22,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'increase property variable',
+    name: 'Increase property variable',
     type: 'command',
     code: 'increase',
     icon: 'plus-circle',
@@ -45,7 +45,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'decrease property variable',
+    name: 'Decrease property variable',
     type: 'command',
     code: 'decrease',
     icon: 'minus-circle',
@@ -68,7 +68,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'increment property variable',
+    name: 'Increment property variable',
     type: 'command',
     code: 'increment',
     icon: 'plus-circle',
@@ -82,7 +82,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'decrement property variable',
+    name: 'Decrement property variable',
     type: 'command',
     code: 'decrement',
     icon: 'minus-circle',
@@ -96,7 +96,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'write property to self',
+    name: 'Write property to self',
     type: 'command',
     code: 'this write',
     icon: 'edit',
@@ -119,7 +119,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'write property to current room',
+    name: 'Write property to current room',
     type: 'command',
     code: 'current room write',
     icon: 'edit',
@@ -142,7 +142,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'write property to object',
+    name: 'Write property to object',
     type: 'command',
     code: 'object write',
     icon: 'edit',
@@ -224,24 +224,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (vals) => `${vals.object}[${vals.property}]`,
     typeHint: 'wildcard'
 }, {
-    name: 'with object',
-    type: 'command',
-    code: 'with object',
-    icon: 'crosshair',
-    i18nKey: 'with object',
-    jsTemplate: (vals) => `templates.with(${vals.object}, function() {${vals.blocks}});`,
-    lib: 'core.utils',
-    pieces: [{
-        type: 'argument',
-        key: 'object',
-        typeHint: 'wildcard',
-        required: true
-    }, {
-        type: 'blocks',
-        key: 'blocks'
-    }]
-}, {
     name: 'convert to string',
+    i18nKey: 'convert to string',
     type: 'computed',
     code: 'convert to string',
     icon: 'string',
@@ -256,10 +240,26 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     typeHint: 'string'
 }, {
     name: 'convert to number',
+    i18nKey: 'convert to number',
     type: 'computed',
     code: 'convert to number',
     icon: 'sort-numerically',
     jsTemplate: (values) => `Number(${values.val})`,
+    lib: 'core.utils',
+    pieces: [{
+        type: 'argument',
+        key: 'val',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    typeHint: 'number'
+}, {
+    name: 'convert to boolean',
+    i18nKey: 'convert to boolean',
+    type: 'computed',
+    code: 'convert to boolean',
+    icon: 'sort-numerically',
+    jsTemplate: (values) => `Boolean(${values.val})`,
     lib: 'core.utils',
     pieces: [{
         type: 'argument',

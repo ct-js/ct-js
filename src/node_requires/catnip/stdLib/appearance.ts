@@ -1,5 +1,5 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'change texture',
+    name: 'Change texture',
     type: 'command',
     code: 'set texture',
     icon: 'template',
@@ -14,7 +14,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change scale',
+    name: 'Change scale',
     type: 'command',
     code: 'set scale',
     icon: 'template',
@@ -28,7 +28,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change scale',
+    name: 'Change scale',
     type: 'command',
     code: 'set scale xy',
     icon: 'template',
@@ -47,7 +47,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change texture angle',
+    name: 'Change texture angle',
     type: 'command',
     code: 'set angle',
     icon: 'template',
@@ -61,7 +61,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change opacity',
+    name: 'Change opacity',
     type: 'command',
     code: 'set alpha',
     icon: 'template',

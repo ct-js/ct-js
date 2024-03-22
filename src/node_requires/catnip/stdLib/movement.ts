@@ -1,5 +1,5 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'move template',
+    name: 'Move template',
     type: 'command',
     code: 'move template',
     icon: 'move',
@@ -8,7 +8,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     i18nKey: 'move template',
     pieces: []
 }, {
-    name: 'change speed',
+    name: 'Change speed',
     type: 'command',
     code: 'set speed',
     icon: 'move',
@@ -22,7 +22,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change gravity',
+    name: 'Change gravity',
     type: 'command',
     code: 'set gravity',
     icon: 'move',
@@ -36,7 +36,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change gravity direction',
+    name: 'Change gravity direction',
     type: 'command',
     code: 'set gravityDir',
     icon: 'move',
@@ -50,7 +50,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change horizontal speed',
+    name: 'Change horizontal speed',
     type: 'command',
     code: 'set hspeed',
     icon: 'move',
@@ -64,7 +64,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change vertical speed',
+    name: 'Change vertical speed',
     type: 'command',
     code: 'set vspeed',
     icon: 'move',
@@ -78,7 +78,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'change direction',
+    name: 'Change direction',
     type: 'command',
     code: 'set direction',
     icon: 'move',
