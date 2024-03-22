@@ -95,8 +95,10 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             lib,
             type: isCommand ? 'command' : 'computed',
             typeHint: useful.returnType,
-            name: isCommand ? name : name.toLowerCase(),
-            displayName: isCommand ? displayName : displayName.toLowerCase(),
+            name: isCommand ? name.slice(0, 1).toUpperCase() + name.slice(1) : name.toLowerCase(),
+            displayName: isCommand ?
+                displayName.slice(0, 1).toUpperCase() + displayName.slice(1) :
+                displayName.toLowerCase(),
             icon,
             documentation,
             pieces: getPieces(piecesAssets, useful)
