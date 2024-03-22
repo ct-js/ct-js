@@ -17,42 +17,61 @@ import {loadBlocks} from './stdLib/ctjsApi';
 const builtinBlockLibrary: blockMenu[] = [{
     name: 'Movement',
     items: movementBlocks,
-    i18nKey: 'coreLibs.movement',
+    i18nKey: 'movement',
     opened: true,
     icon: 'move'
 }, {
     name: 'Appearance',
     items: appearanceBlocks,
-    i18nKey: 'coreLibs.appearance',
+    i18nKey: 'appearance',
     opened: true,
     icon: 'droplet'
 }, {
     name: 'Logic',
     items: logicBlocks,
-    i18nKey: 'coreLibs.logic',
+    i18nKey: 'logic',
     opened: true,
     icon: 'help-circle'
 }, {
     name: 'Math',
     items: mathBlocks,
-    i18nKey: 'coreLibs.math',
+    i18nKey: 'math',
     opened: true,
     icon: 'sort-numerically'
 }, {
     name: 'Utils',
     items: utilsBlocks,
-    i18nKey: 'coreLibs.utils',
+    i18nKey: 'utils',
     opened: true,
     icon: 'tool'
 }, {
     name: 'Miscellaneous',
     items: miscBlocks,
-    i18nKey: 'coreLibs.misc',
+    i18nKey: 'misc',
     opened: true
 }];
+let ctjsApiMenus: blockMenu[];
 loadBlocks().then(menus => {
+    ctjsApiMenus = menus;
     builtinBlockLibrary.splice(2, 0, ...menus);
 });
+
+export const getCtjsI18nKeys = (): void => {
+    const nameKeys: string[] = [],
+          displayNameKeys: string[] = [];
+    for (const menu of ctjsApiMenus) {
+        for (const item of menu.items) {
+            nameKeys.push(item.i18nKey);
+            if (item.displayI18nKey) {
+                displayNameKeys.push(item.displayI18nKey);
+            }
+        }
+    }
+    // eslint-disable-next-line no-console
+    console.log(nameKeys.join('\n'));
+    // eslint-disable-next-line no-console
+    console.log(displayNameKeys.join('\n'));
+};
 
 /** An array of categories of blocks to be used in UI */
 export const blocksLibrary: blockMenu[] = [];

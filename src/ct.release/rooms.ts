@@ -269,8 +269,12 @@ const roomsLib = {
     /**
      * All the existing room templates that can be used in the game.
      * It is usually prefilled by ct.IDE.
+     * @catnipIgnore
      */
     templates: {} as Record<string, ExportedRoom>,
+    /**
+     * @catnipIgnore
+     */
     Room,
     /** The current top-level room in the game. */
     current: null as Room,
@@ -360,6 +364,10 @@ const roomsLib = {
             console.error('[rooms] The room "' + roomName + '" does not exist!');
         }
     },
+    /**
+     * Whether a room switch is scheduled.
+     * @catnipIgnore
+     */
     switching: false,
     /**
      * Restarts the current room.

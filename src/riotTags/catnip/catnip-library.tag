@@ -59,7 +59,7 @@ catnip-library(class="{opts.class}").flexrow
                 h3(ref="categories")
                     svg.feather
                         use(href="#{cat.icon || 'grid-random'}")
-                    span {cat.name}
+                    span {voc.coreLibs[cat.i18nKey] || cat.name}
                 catnip-block(
                     each="{block in cat.items}"
                     block="{({lib: block.lib, code: block.code, values: {}})}"
@@ -92,7 +92,7 @@ catnip-library(class="{opts.class}").flexrow
         .catnip-library-aShortcut.button(each="{cat, ind in categories}" title="{cat.name}" onclick="{scrollToCat}")
             svg.feather.a
                 use(href="#{cat.icon || 'grid-random'}")
-            div  {cat.name}
+            div {voc.coreLibs[cat.i18nKey] || cat.name}
     context-menu(if="{contextVarName}" menu="{contextMenu}" ref="menu")
     script.
         this.namespace = 'catnip';

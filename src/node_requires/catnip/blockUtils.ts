@@ -53,7 +53,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
     (usefuls.map((useful): IBlockCommandDeclaration | IBlockComputedDeclaration | false => {
         let documentation = useful.description,
             name = niceBlockName(useful.name),
-            displayName = name;
+            displayName: string;
         const piecesAssets: Record<string, resourceType | 'action'> = {};
         let returnSave = false;
         if (useful.jsDoc) {
@@ -96,9 +96,9 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             type: isCommand ? 'command' : 'computed',
             typeHint: useful.returnType,
             name: isCommand ? name.slice(0, 1).toUpperCase() + name.slice(1) : name.toLowerCase(),
-            displayName: isCommand ?
+            displayName: displayName && (isCommand ?
                 displayName.slice(0, 1).toUpperCase() + displayName.slice(1) :
-                displayName.toLowerCase(),
+                displayName.toLowerCase()),
             icon,
             documentation,
             pieces: getPieces(piecesAssets, useful)

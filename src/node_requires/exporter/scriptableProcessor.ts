@@ -99,6 +99,9 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
                     resourceType: entity.type,
                     eventKey
                 });
+                if (event?.variables?.length) {
+                    code = `let ${event.variables.join(', ')};\n` + code;
+                }
                 resetSafeId();
             } else if (project.language === 'typescript') {
                 if ((code as string).trim()) {

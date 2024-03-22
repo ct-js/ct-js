@@ -12,12 +12,16 @@ const filterPatchMenu = (
     filtered.forEach(b => {
         b.icon = icon;
         b.name = b.name.replace(/^index\./, 'replaceValue');
+        b.i18nKey = `${name.toLowerCase()} ${b.name}`;
+        if (b.displayName) {
+            b.displayI18nKey = `${name.toLowerCase()} ${b.name}`;
+        }
     });
     const menu: blockMenu = {
         name,
         items: filtered,
         opened: false,
-        i18nKey: 'core',
+        i18nKey: name.toLowerCase(),
         icon
     };
     menus.push(menu);

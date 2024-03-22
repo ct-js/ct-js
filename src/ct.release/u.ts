@@ -97,6 +97,8 @@ const uLib = {
      *
      * If you plan on changing your game's target framerate,
      * you should use `u.timeUi` instead of `u.deltaUi`.
+     *
+     * @catnipIgnore
      */
     timeUI: 1 / 60, // ⚠️ keep this "duplicate": it is an alias with different capitalization
     /**
