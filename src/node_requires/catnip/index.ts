@@ -6,6 +6,8 @@ import {convertFromDtsToBlocks} from './blockUtils';
 import {parseFile} from './declarationExtractor';
 
 import logicBlocks from './stdLib/logic';
+import movementBlocks from './stdLib/movement';
+import appearanceBlocks from './stdLib/appearance';
 import mathBlocks from './stdLib/math';
 import utilsBlocks from './stdLib/utils';
 import miscBlocks from './stdLib/misc';
@@ -13,6 +15,18 @@ import hiddenBlocks from './stdLib/hiddenBlocks';
 import {loadBlocks} from './stdLib/ctjsApi';
 
 const builtinBlockLibrary: blockMenu[] = [{
+    name: 'Movement',
+    items: movementBlocks,
+    i18nKey: 'coreLibs.movement',
+    opened: true,
+    icon: 'move'
+}, {
+    name: 'Appearance',
+    items: appearanceBlocks,
+    i18nKey: 'coreLibs.appearance',
+    opened: true,
+    icon: 'droplet'
+}, {
     name: 'Logic',
     items: logicBlocks,
     i18nKey: 'coreLibs.logic',
@@ -37,7 +51,7 @@ const builtinBlockLibrary: blockMenu[] = [{
     opened: true
 }];
 loadBlocks().then(menus => {
-    builtinBlockLibrary.unshift(...menus);
+    builtinBlockLibrary.splice(2, 0, ...menus);
 });
 
 /** An array of categories of blocks to be used in UI */

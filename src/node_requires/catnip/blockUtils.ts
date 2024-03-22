@@ -18,17 +18,35 @@ const sortHelper = {
     computed: 1
 };
 
-const supportedTypes = ['string', 'number', 'boolean', 'wildcard'];
+const supportedTypes = ['string', 'number', 'boolean', 'wildcard', 'function'];
 
 const getPieces = (
     piecesAssets: Record<string, resourceType | 'action'>,
     useful: usableDeclaration
-): IBlockPieceArgument[] => (useful.kind === 'function' ? useful.args : []).map(arg => ({
-    type: 'argument' as const,
-    key: arg.name,
-    typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
-    assets: piecesAssets[arg.name]
-}));
+): (IBlockPieceArgument | IBlockPieceBlocks)[] => (useful.kind === 'function' ? useful.args : []).map(arg => {
+    if (arg.type === 'BLOCKS') {
+        return {
+            type: 'blocks',
+            key: arg.name
+        };
+    }
+    return {
+        type: 'argument' as const,
+        key: arg.name,
+        typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
+        assets: piecesAssets[arg.name]
+    };
+});
+
+const stringifyArg = (values: Record<string, string>) => (arg: {
+    type: blockArgumentType | 'BLOCKS';
+    name: string;
+}) => {
+    if (arg.type === 'BLOCKS') {
+        return `function () {\n    ${values[arg.name]}\n}`;
+    }
+    return values[arg.name];
+};
 
 export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core' | string, icon = 'grid-random'):
 (IBlockCommandDeclaration | IBlockComputedDeclaration)[] =>
@@ -92,7 +110,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 i18nKey: 'store in'
             }, {
                 type: 'argument',
-                key: 'returnValue',
+                key: 'return',
                 typeHint: 'wildcard'
             });
         }
@@ -102,15 +120,15 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             const {name, args} = useful;
             if (returnSave) {
                 draft.jsTemplate = values => {
-                    if (values.returnValue) {
-                        return `${values.returnValue} = ${name}(${args.map(arg => values[arg.name]).join(', ')});`;
+                    if (values.return) {
+                        return `${values.return} = ${name}(${args.map(stringifyArg(values)).join(', ')});`;
                     }
-                    return `${name}(${args.map(arg => values[arg.name]).join(', ')});`;
+                    return `${name}(${args.map(stringifyArg(values)).join(', ')});`;
                 };
             } else if (isCommand) {
-                draft.jsTemplate = values => `${name}(${args.map(arg => values[arg.name]).join(', ')});`;
+                draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')});`;
             } else {
-                draft.jsTemplate = values => `${name}(${args.map(arg => values[arg.name]).join(', ')})`;
+                draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')})`;
             }
         }
         return draft as IBlockComputedDeclaration;

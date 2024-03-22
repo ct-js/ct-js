@@ -1,0 +1,156 @@
+const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
+    name: 'move template',
+    type: 'command',
+    code: 'move template',
+    icon: 'move',
+    jsTemplate: () => 'this.move();',
+    lib: 'core.movement',
+    i18nKey: 'move template',
+    pieces: []
+}, {
+    name: 'change speed',
+    type: 'command',
+    code: 'set speed',
+    icon: 'move',
+    jsTemplate: (vals) => `this.speed = ${vals.speed};`,
+    lib: 'core.movement',
+    i18nKey: 'set speed',
+    pieces: [{
+        type: 'argument',
+        key: 'speed',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'change gravity',
+    type: 'command',
+    code: 'set gravity',
+    icon: 'move',
+    jsTemplate: (vals) => `this.gravity = ${vals.gravity};`,
+    lib: 'core.movement',
+    i18nKey: 'set gravity',
+    pieces: [{
+        type: 'argument',
+        key: 'gravity',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'change gravity direction',
+    type: 'command',
+    code: 'set gravityDir',
+    icon: 'move',
+    jsTemplate: (vals) => `this.gravityDir = ${vals.degreees};`,
+    lib: 'core.movement',
+    i18nKey: 'set gravityDir',
+    pieces: [{
+        type: 'argument',
+        key: 'degreees',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'change horizontal speed',
+    type: 'command',
+    code: 'set hspeed',
+    icon: 'move',
+    jsTemplate: (vals) => `this.hspeed = ${vals.speed};`,
+    lib: 'core.movement',
+    i18nKey: 'set hspeed',
+    pieces: [{
+        type: 'argument',
+        key: 'speed',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'change vertical speed',
+    type: 'command',
+    code: 'set vspeed',
+    icon: 'move',
+    jsTemplate: (vals) => `this.vspeed = ${vals.speed};`,
+    lib: 'core.movement',
+    i18nKey: 'set vspeed',
+    pieces: [{
+        type: 'argument',
+        key: 'speed',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'change direction',
+    type: 'command',
+    code: 'set direction',
+    icon: 'move',
+    jsTemplate: (vals) => `this.direction = ${vals.degrees};`,
+    lib: 'core.movement',
+    i18nKey: 'set direction',
+    pieces: [{
+        type: 'argument',
+        key: 'degrees',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'get speed',
+    type: 'computed',
+    code: 'get speed',
+    icon: 'move',
+    jsTemplate: () => 'this.speed',
+    lib: 'core.movement',
+    i18nKey: 'get speed',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get gravity',
+    type: 'computed',
+    code: 'get gravity',
+    icon: 'move',
+    jsTemplate: () => 'this.gravity',
+    lib: 'core.movement',
+    i18nKey: 'get gravity',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get gravity direction',
+    type: 'computed',
+    code: 'get gravityDir',
+    icon: 'move',
+    jsTemplate: () => 'this.gravityDir',
+    lib: 'core.movement',
+    i18nKey: 'get gravityDir',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get horizontal speed',
+    type: 'computed',
+    code: 'get hspeed',
+    icon: 'move',
+    jsTemplate: () => 'this.hspeed',
+    lib: 'core.movement',
+    i18nKey: 'get hspeed',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get vertical speed',
+    type: 'computed',
+    code: 'get vspeed',
+    icon: 'move',
+    jsTemplate: () => 'this.vspeed',
+    lib: 'core.movement',
+    i18nKey: 'get vspeed',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get direction',
+    type: 'computed',
+    code: 'get direction',
+    icon: 'move',
+    jsTemplate: () => 'this.direction',
+    lib: 'core.movement',
+    i18nKey: 'get direction',
+    pieces: [],
+    typeHint: 'number'
+}];
+
+export default blocks;

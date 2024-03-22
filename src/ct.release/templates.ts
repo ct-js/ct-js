@@ -487,8 +487,8 @@ const templatesLib = {
     /**
      * Applies a function to each copy in the current room
      * @param {Function} func The function to apply
+     * @catnipIcon crosshair
      * @returns {void}
-     * @catnipIgnore
      */
     each(func: (this: BasicCopy, me: BasicCopy) => void): void {
         for (const copy of stack) {
@@ -502,7 +502,7 @@ const templatesLib = {
      * Applies a function to a given object (e.g. to a copy)
      * @param {Copy} obj The copy to perform function upon.
      * @param {Function} function The function to be applied.
-     * @catnipIgnore
+     * @catnipIcon crosshair
      */
     withCopy<T>(obj: T, func: (this: T) => void): void {
         func.apply(obj, this);
@@ -512,7 +512,7 @@ const templatesLib = {
      * @param {string} template The name of the template to perform function upon.
      * @catnipAsset template:template
      * @param {Function} function The function to be applied.
-     * @catnipIgnore
+     * @catnipIcon crosshair
      */
     withTemplate(
         template: string,

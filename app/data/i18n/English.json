@@ -223,7 +223,9 @@
             "misc": "Miscellaneous",
             "math": "Math",
             "utils": "Utilities",
-            "sounds": "Sounds"
+            "sounds": "Sounds",
+            "movement": "Movement",
+            "appearance": "Appearance"
         }
     },
     "colorPicker": {

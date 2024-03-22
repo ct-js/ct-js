@@ -64,7 +64,7 @@ catnip-block(
             if="{piece.type === 'argument' && !piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint}"
             readonly="{parent.opts.readonly}"
-            style="width: {getValue(piece.key) ? Math.min((''+getValue(piece.key)).length + 1, 32) : 5}ch"
+            style="width: {getValue(piece.key) ? Math.min((''+getValue(piece.key)).length + 0.5, 32) : piece.key.length + 0.5}ch"
         )
         span.catnip-block-aConstantInput.menu(
             ondrop="{parent.onDrop}"

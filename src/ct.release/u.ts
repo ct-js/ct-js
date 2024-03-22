@@ -510,6 +510,7 @@ const uLib = {
      * on a function with a regular (err, result) => {...} callback.
      * @param {Function} f The function that needs to be promisified
      * @see https://javascript.info/promisify
+     * @catnipIgnore
      */
     promisify<T1, T2, T3 extends unknown[], E>(f: (
         ...args: [...T3, () => (err: E, result: T2) => T1]) => void) {
@@ -558,6 +559,9 @@ Object.assign(uLib, {// make aliases
     pointCircle: uLib.pcircle
 });
 
+/**
+ * @catnipIgnore
+ */
 export default uLib as typeof uLib & {
     getOs: typeof uLib.getOS,
     lengthDirX: typeof uLib.ldx,

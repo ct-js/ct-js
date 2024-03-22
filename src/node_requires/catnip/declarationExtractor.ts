@@ -3,13 +3,14 @@ import ts from 'typescript';
 import fs from 'fs-extra';
 import path from 'path';
 
-const paramConstTypeMap: Partial<Record<ts.SyntaxKind, blockArgumentType>> = {
+const paramConstTypeMap: Partial<Record<ts.SyntaxKind, blockArgumentType | 'BLOCKS'>> = {
     [ts.SyntaxKind.AnyKeyword]: 'wildcard',
     [ts.SyntaxKind.BooleanKeyword]: 'boolean',
     [ts.SyntaxKind.NumberKeyword]: 'number',
     [ts.SyntaxKind.StringKeyword]: 'string',
     [ts.SyntaxKind.Unknown]: 'wildcard',
-    [ts.SyntaxKind.VoidKeyword]: 'void'
+    [ts.SyntaxKind.VoidKeyword]: 'void',
+    [ts.SyntaxKind.FunctionType]: 'BLOCKS'
 };
 
 const usefulMap = {
@@ -27,7 +28,7 @@ export type usableDeclaration = {
 } & ({
     kind: 'function';
     args: {
-        type: blockArgumentType,
+        type: blockArgumentType | 'BLOCKS',
         name: string
     }[];
 } | {
@@ -68,7 +69,7 @@ const visit = (
                     // Remove the `root.` ⤵️
                     name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
                     kind: 'prop',
-                    returnType: paramConstTypeMap[declaration?.type?.kind] ?? 'wildcard',
+                    returnType: (paramConstTypeMap[declaration?.type?.kind] as blockArgumentType) ?? 'wildcard',
                     description: (first as any).jsDoc?.[0].comment,
                     jsDoc: (first as any).jsDoc,
                     node
@@ -96,7 +97,8 @@ const visit = (
         ) {
             args = (node as ts.FunctionDeclaration | ts.MethodSignature).parameters.map(param => {
                 let tsType = (param.type as any)?.typeName?.escapedText ?? 'any';
-                if (ts.isToken(param.type)) {
+                console.log((name as any).escapedText, tsType, param, param.type.kind, node);
+                if (ts.isToken(param.type) || param?.type?.kind === ts.SyntaxKind.FunctionType) {
                     tsType = paramConstTypeMap[
                         param.type.kind as keyof typeof paramConstTypeMap
                     ] ?? 'any';
@@ -112,7 +114,7 @@ const visit = (
             name: `${topLevelPath.slice(5)}.${(name as any).escapedText}`,
             kind: usefulMap[node.kind],
             args,
-            returnType: paramConstTypeMap[type.kind] ?? 'wildcard',
+            returnType: (paramConstTypeMap[type.kind] as blockArgumentType) ?? 'wildcard',
             jsDoc,
             node
         };

@@ -137,6 +137,38 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (args) => `(${args.a} && ${args.b})`
 }, {
+    name: 'AND AND logic operator',
+    type: 'computed',
+    code: 'a AND b AND c',
+    icon: 'bool',
+    lib: 'core.logic',
+    i18nKey: 'AND logic operator',
+    hideLabel: true,
+    hideIcon: true,
+    typeHint: 'boolean',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'boolean'
+    }, {
+        type: 'label',
+        name: 'and',
+        i18nKey: 'AND'
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'boolean'
+    }, {
+        type: 'label',
+        name: 'and',
+        i18nKey: 'AND'
+    }, {
+        type: 'argument',
+        key: 'c',
+        typeHint: 'boolean'
+    }],
+    jsTemplate: (args) => `(${args.a} && ${args.b} && ${args.c})`
+}, {
     name: 'OR logic operator',
     type: 'computed',
     code: 'a OR b',
@@ -160,6 +192,38 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'boolean'
     }],
     jsTemplate: (args) => `(${args.a} || ${args.b})`
+}, {
+    name: 'OR OR logic operator',
+    type: 'computed',
+    code: 'a OR b OR c',
+    icon: 'bool',
+    lib: 'core.logic',
+    i18nKey: 'OR logic operator',
+    hideLabel: true,
+    hideIcon: true,
+    typeHint: 'boolean',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'boolean'
+    }, {
+        type: 'label',
+        name: 'or',
+        i18nKey: 'OR'
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'boolean'
+    }, {
+        type: 'label',
+        name: 'or',
+        i18nKey: 'OR'
+    }, {
+        type: 'argument',
+        key: 'c',
+        typeHint: 'boolean'
+    }],
+    jsTemplate: (args) => `(${args.a} || ${args.b} || ${args.c})`
 }, {
     name: 'NOT logic operator',
     displayName: 'not',

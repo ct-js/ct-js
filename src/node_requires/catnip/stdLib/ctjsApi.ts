@@ -7,21 +7,24 @@ const filterPatchMenu = (
     filterPrefix: string,
     icon: string,
     name: string
-) => {
+): blockMenu => {
     const filtered = blocks.filter(block => block.code.startsWith(filterPrefix));
     filtered.forEach(b => {
         b.icon = icon;
         b.name = b.name.replace(/^index\./, 'replaceValue');
     });
-    menus.push({
+    const menu: blockMenu = {
         name,
         items: filtered,
         opened: false,
         i18nKey: 'core',
         icon
-    });
+    };
+    menus.push(menu);
+    return menu;
 };
 
+import templatesBlocks from './templates';
 export const loadBlocks = async (): Promise<blockMenu[]> => {
     let parsed = await parseFile('./data/typedefs/ct.d.ts');
     parsed = parsed.filter(d => !/pixi/i.test(d.name));
@@ -32,7 +35,8 @@ export const loadBlocks = async (): Promise<blockMenu[]> => {
     const allBlocks = convertFromDtsToBlocks(parsed, 'core');
 
     const menus: blockMenu[] = [];
-    filterPatchMenu(menus, allBlocks, 'templates.', 'template', 'Templates');
+    const templates = filterPatchMenu(menus, allBlocks, 'templates.', 'template', 'Templates');
+    templates.items.unshift(...templatesBlocks);
     filterPatchMenu(menus, allBlocks, 'rooms.', 'room', 'Rooms');
     filterPatchMenu(menus, allBlocks, 'behaviors.', 'behavior', 'Behaviors');
     filterPatchMenu(menus, allBlocks, 'sounds.', 'music', 'Sounds');
