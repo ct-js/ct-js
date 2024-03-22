@@ -2,88 +2,95 @@
     @attribute variables (string[])
     @attribute props (string[])
     @attribute behaviorprops (string[])
-catnip-library.flexfix(class="{opts.class}")
-    .aSearchWrap.flexfix-header
-        input.wide(type="text" oninput="{search}" ref="search" onclick="{selectSearch}" value="{searchVal}")
-        svg.feather
-            use(href="#search")
-    .flexfix-body(if="{!searchVal.trim()}")
-        h3
-            | {voc.properties}
-            hover-hint(text="{voc.propertiesHint}")
-        catnip-block(
-            each="{prop in opts.props}"
-            block="{({lib: 'core.hidden', code: 'property', values: {variableName: prop}})}"
-            dragoutonly="dragoutonly"
-            readonly="readonly"
-            ondragstart="{parent.onVarDragStart}"
-            draggable="draggable"
-            ondragend="{resetTarget}"
-        )
-        catnip-block(
-            each="{prop in opts.behaviorprops}"
-            block="{({lib: 'core.hidden', code: 'behavior property', values: {variableName: prop}})}"
-            dragoutonly="dragoutonly"
-            readonly="readonly"
-            ondragstart="{parent.onVarDragStart}"
-            draggable="draggable"
-            ondragend="{resetTarget}"
-        )
-        br(if="{opts.props.length || opts.behaviorprops.length}")
-        button.inline(onclick="{promptNewProperty}")
+catnip-library(class="{opts.class}").flexrow
+    .flexfix
+        .aSearchWrap.flexfix-header
+            input.wide(type="text" oninput="{search}" ref="search" onclick="{selectSearch}" value="{searchVal}")
             svg.feather
-                use(href="#plus")
-            span {voc.createNewProperty}
-        h3
-            | {voc.variables}
-            hover-hint(text="{voc.variablesHint}")
-        catnip-block(
-            each="{variable in opts.variables}"
-            block="{({lib: 'core.hidden', code: 'variable', values: {variableName: variable}})}"
-            dragoutonly="dragoutonly"
-            readonly="readonly"
-            ondragstart="{parent.onVarDragStart}"
-            draggable="draggable"
-            ondragend="{resetTarget}"
-        )
-        br(if="{opts.variables.length}")
-        button.inline(onclick="{promptNewVariable}")
-            svg.feather
-                use(href="#plus")
-            span {voc.createNewVariable}
-        .aSpacer
-        collapsible-section(
-            each="{cat in categories}"
-            heading="{cat.name}"
-            icon="{cat.icon || 'grid-random'}"
-            defaultstate="opened"
-            storestatekey="catniplib-{cat.name}"
-            preservedom="preservedom"
-        )
+                use(href="#search")
+        .flexfix-body(if="{!searchVal.trim()}" ref="mainpanel")
+            h3
+                | {voc.properties}
+                hover-hint(text="{voc.propertiesHint}")
             catnip-block(
-                each="{block in cat.items}"
+                each="{prop in opts.props}"
+                block="{({lib: 'core.hidden', code: 'property', values: {variableName: prop}})}"
+                dragoutonly="dragoutonly"
+                readonly="readonly"
+                ondragstart="{parent.onVarDragStart}"
+                draggable="draggable"
+                ondragend="{resetTarget}"
+            )
+            catnip-block(
+                each="{prop in opts.behaviorprops}"
+                block="{({lib: 'core.hidden', code: 'behavior property', values: {variableName: prop}})}"
+                dragoutonly="dragoutonly"
+                readonly="readonly"
+                ondragstart="{parent.onVarDragStart}"
+                draggable="draggable"
+                ondragend="{resetTarget}"
+            )
+            br(if="{opts.props.length || opts.behaviorprops.length}")
+            button.inline(onclick="{promptNewProperty}")
+                svg.feather
+                    use(href="#plus")
+                span {voc.createNewProperty}
+            h3
+                | {voc.variables}
+                hover-hint(text="{voc.variablesHint}")
+            catnip-block(
+                each="{variable in opts.variables}"
+                block="{({lib: 'core.hidden', code: 'variable', values: {variableName: variable}})}"
+                dragoutonly="dragoutonly"
+                readonly="readonly"
+                ondragstart="{parent.onVarDragStart}"
+                draggable="draggable"
+                ondragend="{resetTarget}"
+            )
+            br(if="{opts.variables.length}")
+            button.inline(onclick="{promptNewVariable}")
+                svg.feather
+                    use(href="#plus")
+                span {voc.createNewVariable}
+            .aSpacer
+            virtual(each="{cat in categories}")
+                h3(ref="categories")
+                    svg.feather
+                        use(href="#{cat.icon || 'grid-random'}")
+                    span {cat.name}
+                catnip-block(
+                    each="{block in cat.items}"
+                    block="{({lib: block.lib, code: block.code, values: {}})}"
+                    dragoutonly="dragoutonly"
+                    readonly="readonly"
+                    ondragstart="{parent.parent.onDragStart}"
+                    draggable="draggable"
+                    ondragend="{parent.resetTarget}"
+                )
+        .flexfix-body(if="{searchVal.trim() && searchResults.length}")
+            catnip-block(
+                each="{block in searchResults}"
                 block="{({lib: block.lib, code: block.code, values: {}})}"
                 dragoutonly="dragoutonly"
                 readonly="readonly"
-                ondragstart="{parent.parent.onDragStart}"
+                ondragstart="{parent.onDragStart}"
                 draggable="draggable"
-                ondragend="{parent.resetTarget}"
+                ondragend="{resetTarget}"
             )
-    .flexfix-body(if="{searchVal.trim() && searchResults.length}")
-        catnip-block(
-            each="{block in searchResults}"
-            block="{({lib: block.lib, code: block.code, values: {}})}"
-            dragoutonly="dragoutonly"
-            readonly="readonly"
-            ondragstart="{parent.onDragStart}"
-            draggable="draggable"
-            ondragend="{resetTarget}"
-        )
-    .flexfix-body.center(if="{searchVal.trim() && !searchResults.length}")
-        svg.anIllustration
-            use(xlink:href="data/img/weirdFoldersIllustration.svg#illustration")
-        br
-        span {vocGlob.nothingToShowFiller}
+        .flexfix-body.center(if="{searchVal.trim() && !searchResults.length}")
+            svg.anIllustration
+                use(xlink:href="data/img/weirdFoldersIllustration.svg#illustration")
+            br
+            span {vocGlob.nothingToShowFiller}
+    .catnip-library-CategoriesShortcuts.aButtonGroup.vertical
+        .catnip-library-aShortcut.button(title="{voc.properties}" onclick="{scrollToTop}")
+            svg.feather.a
+                use(href="#archive")
+            div  {voc.properties}
+        .catnip-library-aShortcut.button(each="{cat, ind in categories}" title="{cat.name}" onclick="{scrollToCat}")
+            svg.feather.a
+                use(href="#{cat.icon || 'grid-random'}")
+            div  {cat.name}
     script.
         this.namespace = 'catnip';
         this.mixin(require('./data/node_requires/riotMixins/voc').default);
@@ -140,6 +147,45 @@ catnip-library.flexfix(class="{opts.class}")
         };
         this.resetTarget = () => {
             setSuggestedTarget();
+        };
+
+        const ease = (x) => {
+            return 1 - Math.pow(1 - x, 5);
+        }
+        this.scrollToCat = e => {
+            const {ind} = e.item;
+            let a = 0,
+                timePrev = Number(new Date()),
+                startScroll = this.refs.mainpanel.scrollTop,
+                targetScroll = this.refs.categories[ind].offsetTop;
+            const scrollToCategory = () => {
+                a += (Number(new Date()) - timePrev) / 1000;
+                if (a > 1) {
+                    a = 1;
+                } else {
+                    window.requestAnimationFrame(scrollToCategory);
+                }
+                const b = ease(a);
+                this.refs.mainpanel.scrollTo(0, startScroll * (1 - b) + targetScroll * b);
+            };
+            scrollToCategory();
+        };
+        this.scrollToTop = e => {
+            let a = 0,
+                timePrev = Number(new Date()),
+                startScroll = this.refs.mainpanel.scrollTop,
+                targetScroll = 0;
+            const scrollToCategory = () => {
+                a += (Number(new Date()) - timePrev) / 1000;
+                if (a > 1) {
+                    a = 1;
+                } else {
+                    window.requestAnimationFrame(scrollToCategory);
+                }
+                const b = ease(a);
+                this.refs.mainpanel.scrollTo(0, startScroll * (1 - b) + targetScroll * b);
+            };
+            scrollToCategory();
         };
 
         this.searchVal = '';
