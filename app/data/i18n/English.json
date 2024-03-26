@@ -360,7 +360,9 @@
             "settings settings view mode": "view mode",
             "settings settings fullscreen": "fullscreen",
             "settings settings pixelart": "pixelart mode",
-            "settings settings prevent default": "prevent browser events"
+            "settings settings prevent default": "prevent browser events",
+            "set x": "Set x to",
+            "set y": "Set y to"
         },
         "blockDisplayNames": {
             "if else branch": "If",

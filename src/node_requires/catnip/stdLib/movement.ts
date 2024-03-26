@@ -92,6 +92,34 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
+    name: 'Change x',
+    type: 'command',
+    code: 'set x',
+    icon: 'move',
+    jsTemplate: (vals) => `this.x = ${vals.pixels};`,
+    lib: 'core.movement',
+    i18nKey: 'set x',
+    pieces: [{
+        type: 'argument',
+        key: 'pixels',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'Change y',
+    type: 'command',
+    code: 'set y',
+    icon: 'move',
+    jsTemplate: (vals) => `this.y = ${vals.pixels};`,
+    lib: 'core.movement',
+    i18nKey: 'set y',
+    pieces: [{
+        type: 'argument',
+        key: 'pixels',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
     name: 'get speed',
     type: 'computed',
     code: 'get speed',
@@ -149,6 +177,24 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: () => 'this.direction',
     lib: 'core.movement',
     i18nKey: 'get direction',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'x',
+    type: 'computed',
+    code: 'x',
+    icon: 'move',
+    jsTemplate: () => 'this.x',
+    lib: 'core.movement',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'y',
+    type: 'computed',
+    code: 'y',
+    icon: 'move',
+    jsTemplate: () => 'this.y',
+    lib: 'core.movement',
     pieces: [],
     typeHint: 'number'
 }];
