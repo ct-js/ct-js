@@ -23,9 +23,50 @@ const makeOperator = (operator: string, type: blockArgumentType): IBlockComputed
         required: true
     }]
 });
+const makeMathUnary = (operator: string): IBlockComputedDeclaration => ({
+    name: operator,
+    code: operator,
+    icon: 'sort-numerically',
+    type: 'computed',
+    typeHint: 'number',
+    hideIcon: true,
+    i18nKey: operator,
+    jsTemplate: (vals) => `Math.${operator}(${vals.a})`,
+    lib: 'core.math',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'number',
+        required: true
+    }]
+});
+const makeMathBinary = (operator: string): IBlockComputedDeclaration => ({
+    name: operator,
+    code: operator,
+    icon: 'sort-numerically',
+    type: 'computed',
+    typeHint: 'number',
+    hideIcon: true,
+    i18nKey: operator,
+    jsTemplate: (vals) => `Math.${operator}(${vals.a}, ${vals.b})`,
+    lib: 'core.math',
+    pieces: [{
+        type: 'argument',
+        key: 'a',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'argument',
+        key: 'b',
+        typeHint: 'number',
+        required: true
+    }]
+});
 
 const numberOperators = ['+', '-', '*', '/', '%'],
-      boolOperators = ['<', '<=', '>', '>='];
+      boolOperators = ['<', '<=', '>', '>='],
+      mathUnaryOperators = ['abs', 'sign', 'floor', 'ceil', 'round', 'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan'],
+      mathBinaryOperators = ['atan2', 'pow', 'log', 'min', 'max'];
 
 const blocks: (IBlockComputedDeclaration | IBlockCommandDeclaration)[] = [{
     name: 'Increase property variable',
@@ -107,6 +148,8 @@ const blocks: (IBlockComputedDeclaration | IBlockCommandDeclaration)[] = [{
 },
 ...numberOperators.map((operator) => makeOperator(operator, 'number')),
 ...boolOperators.map((operator) => makeOperator(operator, 'boolean')),
+...mathUnaryOperators.map((operator) => makeMathUnary(operator)),
+...mathBinaryOperators.map((operator) => makeMathBinary(operator)),
 {
     name: 'convert to number',
     i18nKey: 'convert to number',
