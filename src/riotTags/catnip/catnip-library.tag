@@ -8,7 +8,7 @@ catnip-library(class="{opts.class}").flexrow
             input.wide(type="text" oninput="{search}" ref="search" onclick="{selectSearch}" value="{searchVal}")
             svg.feather
                 use(href="#search")
-        .flexfix-body(if="{!searchVal.trim()}" ref="mainpanel")
+        .flexfix-body(show="{!searchVal.trim()}" ref="mainpanel")
             h3
                 | {voc.properties}
                 hover-hint(text="{voc.propertiesHint}")
