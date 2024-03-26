@@ -170,7 +170,7 @@ catnip-block-list(
                     this.update();
                 }
             }, {
-                type: 'divider'
+                type: 'separator'
             }, {
                 label: this.vocGlob.delete,
                 icon: 'trash',
