@@ -28,7 +28,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     icon: 'plus-circle',
     jsTemplate: (vals) => `${vals.var} += ${vals.val};`,
     lib: 'core.utils',
-    i18nKey: 'increment',
+    i18nKey: 'increase',
     pieces: [{
         type: 'argument',
         key: 'var',
@@ -51,7 +51,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     icon: 'minus-circle',
     jsTemplate: (vals) => `${vals.var} -= ${vals.val};`,
     lib: 'core.utils',
-    i18nKey: 'increment',
+    i18nKey: 'decrease',
     pieces: [{
         type: 'argument',
         key: 'var',

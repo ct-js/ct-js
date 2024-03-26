@@ -252,6 +252,8 @@
             "set property": "Set property",
             "increment": "Increment",
             "decrement": "Decrement",
+            "increase": "Increase",
+            "decrease": "Decrease",
             "this write": "Write",
             "current room write": "Write to the current room",
             "write property to object": "Write to object",
