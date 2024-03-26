@@ -140,15 +140,17 @@ export const loadModdedBlocks = async (modName: string, noIndex?: boolean) => {
         fs.access(path, fs.constants.R_OK);
         const usefuls = await parseFile(path);
         const blocks = convertFromDtsToBlocks(usefuls, modName);
-        const category: blockMenu = {
-            name: modName,
-            items: blocks,
-            opened: false,
-            i18nKey: modName
-        };
-        blocks.forEach(addBlockToRegistry);
-        loadedCategories.set(modName, category);
-        blocksLibrary.push(category);
+        if (blocks.length) {
+            const category: blockMenu = {
+                name: modName,
+                items: blocks,
+                opened: false,
+                i18nKey: modName
+            };
+            blocks.forEach(addBlockToRegistry);
+            loadedCategories.set(modName, category);
+            blocksLibrary.push(category);
+        }
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.debug(`[catnip] Skipping the catmod ${modName} as it doesn't have a types.d.ts file.`);
