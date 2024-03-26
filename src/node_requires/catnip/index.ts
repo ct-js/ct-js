@@ -10,8 +10,11 @@ import logicBlocks from './stdLib/logic';
 import movementBlocks from './stdLib/movement';
 import appearanceBlocks from './stdLib/appearance';
 import mathBlocks from './stdLib/math';
-import utilsBlocks from './stdLib/utils';
+import objectsBlocks from './stdLib/objects';
 import miscBlocks from './stdLib/misc';
+import consoleBlocks from './stdLib/console';
+import stringsBlocks from './stdLib/strings';
+import arraysBlocks from './stdLib/arrays';
 import hiddenBlocks from './stdLib/hiddenBlocks';
 import {loadBlocks} from './stdLib/ctjsApi';
 
@@ -40,15 +43,33 @@ const builtinBlockLibrary: blockMenu[] = [{
     opened: true,
     icon: 'sort-numerically'
 }, {
-    name: 'Utils',
-    items: utilsBlocks,
-    i18nKey: 'utils',
+    name: 'Strings',
+    items: stringsBlocks,
+    i18nKey: 'strings',
     opened: true,
-    icon: 'tool'
+    icon: 'string'
+}, {
+    name: 'Objects',
+    items: objectsBlocks,
+    i18nKey: 'objects',
+    opened: true,
+    icon: 'code-alt'
+}, {
+    name: 'Arrays',
+    items: arraysBlocks,
+    i18nKey: 'arrays',
+    opened: true,
+    icon: 'grid'
 }, {
     name: 'Miscellaneous',
     items: miscBlocks,
     i18nKey: 'misc',
+    opened: true
+}, {
+    name: 'Console',
+    icon: 'terminal',
+    items: consoleBlocks,
+    i18nKey: 'console',
     opened: true
 }];
 let ctjsApiMenus: blockMenu[];

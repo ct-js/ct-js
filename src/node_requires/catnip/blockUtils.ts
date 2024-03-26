@@ -55,7 +55,8 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             name = niceBlockName(useful.name),
             displayName: string;
         const piecesAssets: Record<string, resourceType | 'action'> = {};
-        let returnSave = false;
+        let returnSave = false,
+            listType: resourceType | false = false;
         if (useful.jsDoc) {
             for (const jsDoc of useful.jsDoc) {
                 if (!jsDoc.tags) {
@@ -80,6 +81,8 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         key = key.trim();
                         assetType = assetType.trim();
                         piecesAssets[key] = assetType as resourceType | 'action';
+                    } else if (node.tagName.escapedText === 'catnipList') {
+                        listType = node.comment.toString().trim() as resourceType;
                     } else if (node.tagName.escapedText === 'catnipSaveReturn') {
                         returnSave = true;
                     }
@@ -116,13 +119,25 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 typeHint: 'wildcard'
             });
         }
+        if (listType) {
+            draft.pieces.push({
+                type: 'argument',
+                key: 'list',
+                typeHint: 'wildcard',
+                assets: listType
+            });
+        }
         if (useful.kind === 'prop') {
-            draft.jsTemplate = () => useful.name;
+            if (listType) {
+                draft.jsTemplate = vals => `${useful.name}[${vals.list}]`;
+            } else {
+                draft.jsTemplate = () => useful.name;
+            }
         } else {
             const {name, args} = useful;
             if (returnSave) {
                 draft.jsTemplate = values => {
-                    if (values.return) {
+                    if (values.return && values.return !== 'undefined') {
                         return `${values.return} = ${name}(${args.map(stringifyArg(values)).join(', ')});`;
                     }
                     return `${name}(${args.map(stringifyArg(values)).join(', ')});`;

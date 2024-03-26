@@ -282,6 +282,7 @@ const roomsLib = {
      * An object that contains arrays of currently present rooms.
      * These include the current room (`rooms.current`), as well as any rooms
      * appended or prepended through `rooms.append` and `rooms.prepend`.
+     * @catnipList room
      */
     list: {} as Record<string, Room[]>,
     /**

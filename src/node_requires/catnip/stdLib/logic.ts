@@ -298,6 +298,21 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'wildcard',
         required: true
     }]
+}, {
+    name: 'convert to boolean',
+    i18nKey: 'convert to boolean',
+    type: 'computed',
+    code: 'convert to boolean',
+    icon: 'sort-numerically',
+    jsTemplate: (values) => `Boolean(${values.val})`,
+    lib: 'core.logic',
+    pieces: [{
+        type: 'argument',
+        key: 'val',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    typeHint: 'number'
 }];
 
 export default blocks;

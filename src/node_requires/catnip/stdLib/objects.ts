@@ -2,9 +2,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'Set property variable value',
     type: 'command',
     code: 'set',
-    icon: 'edit',
+    icon: 'code-alt',
     jsTemplate: (vals) => `${vals.var} = ${vals.value};`,
-    lib: 'core.utils',
+    lib: 'core.objects',
     i18nKey: 'set property',
     pieces: [{
         type: 'argument',
@@ -22,86 +22,12 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'Increase property variable',
-    type: 'command',
-    code: 'increase',
-    icon: 'plus-circle',
-    jsTemplate: (vals) => `${vals.var} += ${vals.val};`,
-    lib: 'core.utils',
-    i18nKey: 'increase',
-    pieces: [{
-        type: 'argument',
-        key: 'var',
-        typeHint: 'wildcard',
-        required: true
-    }, {
-        type: 'label',
-        name: 'by',
-        i18nKey: 'changeBy'
-    }, {
-        type: 'argument',
-        key: 'val',
-        typeHint: 'number',
-        required: true
-    }]
-}, {
-    name: 'Decrease property variable',
-    type: 'command',
-    code: 'decrease',
-    icon: 'minus-circle',
-    jsTemplate: (vals) => `${vals.var} -= ${vals.val};`,
-    lib: 'core.utils',
-    i18nKey: 'decrease',
-    pieces: [{
-        type: 'argument',
-        key: 'var',
-        typeHint: 'wildcard',
-        required: true
-    }, {
-        type: 'label',
-        name: 'by',
-        i18nKey: 'changeBy'
-    }, {
-        type: 'argument',
-        key: 'val',
-        typeHint: 'number',
-        required: true
-    }]
-}, {
-    name: 'Increment property variable',
-    type: 'command',
-    code: 'increment',
-    icon: 'plus-circle',
-    jsTemplate: (vals) => `${vals.var}++;`,
-    lib: 'core.utils',
-    i18nKey: 'increment',
-    pieces: [{
-        type: 'argument',
-        key: 'var',
-        typeHint: 'wildcard',
-        required: true
-    }]
-}, {
-    name: 'Decrement property variable',
-    type: 'command',
-    code: 'decrement',
-    icon: 'minus-circle',
-    jsTemplate: (vals) => `${vals.var}++;`,
-    lib: 'core.utils',
-    i18nKey: 'decrement',
-    pieces: [{
-        type: 'argument',
-        key: 'var',
-        typeHint: 'wildcard',
-        required: true
-    }]
-}, {
     name: 'Write property to self',
     type: 'command',
     code: 'this write',
-    icon: 'edit',
+    icon: 'code-alt',
     jsTemplate: (vals) => `this[${vals.property}] = ${vals.value};`,
-    lib: 'core.utils',
+    lib: 'core.objects',
     i18nKey: 'this write',
     pieces: [{
         type: 'argument',
@@ -122,9 +48,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'Write property to current room',
     type: 'command',
     code: 'current room write',
-    icon: 'edit',
+    icon: 'code-alt',
     jsTemplate: (vals) => `rooms.current[${vals.property}] = ${vals.value};`,
-    lib: 'core.utils',
+    lib: 'core.objects',
     i18nKey: 'current room write',
     pieces: [{
         type: 'argument',
@@ -145,9 +71,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'Write property to object',
     type: 'command',
     code: 'object write',
-    icon: 'edit',
+    icon: 'code-alt',
     jsTemplate: (vals) => `${vals.object}[${vals.property}] = ${vals.value};`,
-    lib: 'core.utils',
+    lib: 'core.objects',
     i18nKey: 'write property to object',
     pieces: [{
         type: 'argument',
@@ -176,9 +102,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
 }, {
     name: 'read property from self',
     type: 'computed',
-    lib: 'core.utils',
+    lib: 'core.objects',
     code: 'this read',
-    icon: 'edit',
+    icon: 'code-alt',
     i18nKey: 'this read',
     pieces: [{
         type: 'argument',
@@ -191,9 +117,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
 }, {
     name: 'read property from room',
     type: 'computed',
-    lib: 'core.utils',
+    lib: 'core.objects',
     code: 'room read',
-    icon: 'edit',
+    icon: 'code-alt',
     i18nKey: 'room read',
     pieces: [{
         type: 'argument',
@@ -206,9 +132,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
 }, {
     name: 'read property from object',
     type: 'computed',
-    lib: 'core.utils',
+    lib: 'core.objects',
     code: 'object read',
-    icon: 'edit',
+    icon: 'code-alt',
     i18nKey: 'object read',
     pieces: [{
         type: 'argument',
@@ -224,50 +150,34 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (vals) => `${vals.object}[${vals.property}]`,
     typeHint: 'wildcard'
 }, {
-    name: 'convert to string',
-    i18nKey: 'convert to string',
-    type: 'computed',
-    code: 'convert to string',
-    icon: 'string',
-    jsTemplate: (values) => `String(${values.val})`,
-    lib: 'core.utils',
+    name: 'delete property in object',
+    type: 'command',
+    lib: 'core.objects',
+    code: 'object delete',
+    icon: 'code-alt',
+    i18nKey: 'object delete',
     pieces: [{
         type: 'argument',
-        key: 'val',
+        key: 'object',
         typeHint: 'wildcard',
         required: true
+    }, {
+        type: 'argument',
+        key: 'property',
+        typeHint: 'string',
+        required: true
     }],
-    typeHint: 'string'
+    jsTemplate: (vals) => `delete ${vals.object}[${vals.property}];`
 }, {
-    name: 'convert to number',
-    i18nKey: 'convert to number',
+    name: 'new object',
     type: 'computed',
-    code: 'convert to number',
-    icon: 'sort-numerically',
-    jsTemplate: (values) => `Number(${values.val})`,
-    lib: 'core.utils',
-    pieces: [{
-        type: 'argument',
-        key: 'val',
-        typeHint: 'wildcard',
-        required: true
-    }],
-    typeHint: 'number'
-}, {
-    name: 'convert to boolean',
-    i18nKey: 'convert to boolean',
-    type: 'computed',
-    code: 'convert to boolean',
-    icon: 'sort-numerically',
-    jsTemplate: (values) => `Boolean(${values.val})`,
-    lib: 'core.utils',
-    pieces: [{
-        type: 'argument',
-        key: 'val',
-        typeHint: 'wildcard',
-        required: true
-    }],
-    typeHint: 'number'
+    code: 'new object',
+    icon: 'code-alt',
+    jsTemplate: () => '{}',
+    lib: 'core.objects',
+    i18nKey: 'new object',
+    pieces: [],
+    typeHint: 'wildcard'
 }];
 
 export default blocks;

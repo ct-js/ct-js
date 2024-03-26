@@ -104,6 +104,9 @@ const visit = (
                     tsType = paramConstTypeMap[
                         param.type.kind as keyof typeof paramConstTypeMap
                     ] ?? 'any';
+                    if (tsType === 'any') {
+                        console.warn('Unknown type', param.type.kind, param.type, 'in', name);
+                    }
                 }
                 return {
                     name: (param.name as any).escapedText,

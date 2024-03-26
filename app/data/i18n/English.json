@@ -222,7 +222,7 @@
             "logic": "Logic",
             "misc": "Miscellaneous",
             "math": "Math",
-            "utils": "Utilities",
+            "objects": "Objects",
             "sounds": "Sounds",
             "movement": "Movement",
             "appearance": "Appearance",
@@ -232,7 +232,10 @@
             "backgrounds": "Backgrounds",
             "emitter tandems": "Emitters",
             "utilities": "Utilities",
-            "settings": "Settings"
+            "settings": "Settings",
+            "strings": "Strings",
+            "arrays": "Arrays",
+            "console": "Console"
         },
         "blockNames": {
             "kill copy": "Destroy this copy",
@@ -260,6 +263,9 @@
             "this read": "Read",
             "room read": "Read from the current room",
             "object read": "Read from the object",
+            "object delete": "Delete property in an object",
+            "new array": "new array",
+            "new object": "new object",
             "convert to string": "to string",
             "convert to number": "to number",
             "convert to boolean": "to boolean",
@@ -278,6 +284,7 @@
             "OR logic operator": "OR logic operator",
             "is": "Is (equal to)",
             "is not": "Is not (not equal to)",
+            "concatenate strings": "Concatenate strings",
             "templates Templates copy into room": "Copy a template into room",
             "templates Templates copy": "Copy a template",
             "templates Templates each": "For each copy",
@@ -364,7 +371,10 @@
             "settings settings pixelart": "pixelart mode",
             "settings settings prevent default": "prevent browser events",
             "set x": "Set x to",
-            "set y": "Set y to"
+            "set y": "Set y to",
+            "console log": "Log to console",
+            "console warn": "Send a warning to the console",
+            "console error": "Send an error to the console"
         },
         "blockDisplayNames": {
             "if else branch": "If",

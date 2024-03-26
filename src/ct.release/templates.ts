@@ -431,7 +431,7 @@ const templatesLib = {
     Tilemap,
     /**
      * An object that contains arrays of copies of all templates.
-     * @catnipIgnore
+     * @catnipList template
      */
     list: {
         BACKGROUND: [],
