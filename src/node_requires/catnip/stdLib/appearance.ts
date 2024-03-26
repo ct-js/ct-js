@@ -1,8 +1,8 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'Change texture',
+    name: 'Set texture',
     type: 'command',
     code: 'set texture',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: (vals) => `this.tex = ${vals.texture};`,
     lib: 'core.appearance',
     i18nKey: 'set texture',
@@ -14,10 +14,10 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'Change scale',
+    name: 'Set scale',
     type: 'command',
     code: 'set scale',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: (vals) => `this.scale.x = this.scale.y = ${vals.scale};`,
     lib: 'core.appearance',
     i18nKey: 'set scale',
@@ -28,10 +28,10 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'Change scale',
+    name: 'Set scale',
     type: 'command',
     code: 'set scale xy',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: (vals) => `this.scale.set(${vals.x}, ${vals.y});`,
     lib: 'core.appearance',
     i18nKey: 'set scale xy',
@@ -47,10 +47,10 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'Change texture angle',
+    name: 'Set texture angle',
     type: 'command',
     code: 'set angle',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: (vals) => `this.angle = ${vals.degrees};`,
     lib: 'core.appearance',
     i18nKey: 'set angle',
@@ -61,10 +61,10 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
-    name: 'Change opacity',
+    name: 'Set opacity',
     type: 'command',
     code: 'set alpha',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: (vals) => `this.alpha = ${vals.value};`,
     lib: 'core.appearance',
     i18nKey: 'set alpha',
@@ -78,7 +78,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'get texture',
     type: 'computed',
     code: 'get texture',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: () => 'this.tex',
     lib: 'core.appearance',
     i18nKey: 'texture',
@@ -88,7 +88,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'get scale by x',
     type: 'computed',
     code: 'get scale x',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: () => 'this.scale.x',
     lib: 'core.appearance',
     i18nKey: 'scale x',
@@ -98,7 +98,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'get scale by y',
     type: 'computed',
     code: 'get scale y',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: () => 'this.scale.y',
     lib: 'core.appearance',
     i18nKey: 'scale y',
@@ -108,7 +108,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'get texture angle',
     type: 'computed',
     code: 'get angle',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: () => 'this.angle',
     lib: 'core.appearance',
     i18nKey: 'get angle',
@@ -118,7 +118,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     name: 'get opacity',
     type: 'computed',
     code: 'get alpha',
-    icon: 'template',
+    icon: 'droplet',
     jsTemplate: () => 'this.alpha',
     lib: 'core.appearance',
     i18nKey: 'get alpha',
