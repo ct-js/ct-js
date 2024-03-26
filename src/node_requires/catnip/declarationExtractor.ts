@@ -5,10 +5,13 @@ import path from 'path';
 
 const paramConstTypeMap: Partial<Record<ts.SyntaxKind, blockArgumentType | 'BLOCKS'>> = {
     [ts.SyntaxKind.AnyKeyword]: 'wildcard',
+    [ts.SyntaxKind.Unknown]: 'wildcard',
+    [ts.SyntaxKind.ObjectKeyword]: 'wildcard',
     [ts.SyntaxKind.BooleanKeyword]: 'boolean',
+    [ts.SyntaxKind.FalseKeyword]: 'boolean',
+    [ts.SyntaxKind.TrueKeyword]: 'boolean',
     [ts.SyntaxKind.NumberKeyword]: 'number',
     [ts.SyntaxKind.StringKeyword]: 'string',
-    [ts.SyntaxKind.Unknown]: 'wildcard',
     [ts.SyntaxKind.VoidKeyword]: 'void',
     [ts.SyntaxKind.FunctionType]: 'BLOCKS'
 };
@@ -83,7 +86,7 @@ const visit = (
             }
         }
     } break;
-    // ⚠️ Double case here
+    // ⚠️ Triple case here
     case ts.SyntaxKind.PropertySignature:
     case ts.SyntaxKind.MethodSignature:
     case ts.SyntaxKind.FunctionDeclaration: {
