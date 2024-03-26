@@ -4,6 +4,7 @@ import {join} from 'path';
 import {getModulePathByName} from '../resources/modules';
 import {convertFromDtsToBlocks} from './blockUtils';
 import {parseFile} from './declarationExtractor';
+import {getByPath} from '../i18n';
 
 import logicBlocks from './stdLib/logic';
 import movementBlocks from './stdLib/movement';
@@ -82,7 +83,7 @@ export const blocksRegistry: Map<string, blockDeclaration> = new Map();
 import {default as Fuse, IFuseOptions, FuseIndex} from 'node_modules/fuse.js';
 const fuseOptions: IFuseOptions<blockDeclaration> = {
     keys: [{
-        name: 'name',
+        name: 'bakedName',
         weight: 0.7
     }, {
         name: 'lib',
@@ -95,6 +96,11 @@ let fuseIndex: FuseIndex<blockDeclaration>,
     fuseCollection: blockDeclaration[];
 const recreateFuseIndex = () => {
     fuseCollection = [...blocksRegistry.values()];
+    fuseCollection.forEach(block => {
+        block.bakedName = block.i18nKey ?
+            (getByPath('catnip.blockNames.' + block.i18nKey) as string ?? block.name) :
+            block.name;
+    });
     fuseIndex = Fuse.createIndex(fuseOptions.keys, fuseCollection);
 };
 export const searchBlocks = (query: string): blockDeclaration[] => {

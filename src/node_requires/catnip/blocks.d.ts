@@ -58,6 +58,8 @@ declare interface IBlockDeclaration {
     icon: string;
     /** Searchable command name. Also used as a label if i18nKey is not used or invalid. */
     name: string;
+    /** Cached block name used for fuzzy search */
+    bakedName?: string;
     /**
      * A string that is shown instead of the searchable name in a block.
      * This name is not used for fuzzy search.

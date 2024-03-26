@@ -24,9 +24,10 @@ catnip-insert-mark(onclick="{toggleMenu}" class="{dragover: shouldDragover(), me
             use(href="#search")
     ul.aMenu.aPanel(class="{up: menuUp}" if="{opened && searchVal.trim() && searchResults.length}")
        li(each="{block in searchResults}" onpointerdown="{insertBlock}")
+            code.toright.inline.small.dim {block.lib}
             svg.feather
                 use(href="#{block.icon}")
-            span {block.name}
+            span {block.bakedName}
     script.
         const {
             searchBlocks,
