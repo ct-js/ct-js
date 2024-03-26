@@ -158,6 +158,20 @@ catnip-block-list(
         this.contextMenu = {
             opened: true,
             items: [{
+                label: this.vocGlob.duplicate,
+                icon: 'copy',
+                click: () => {
+                    this.opts.blocks.splice(
+                        this.opts.blocks.indexOf(this.contextBlock),
+                        0,
+                        structuredClone(this.contextBlock)
+                    );
+                    this.contextBlock = false;
+                    this.update();
+                }
+            }, {
+                type: 'divider'
+            }, {
                 label: this.vocGlob.delete,
                 icon: 'trash',
                 click: () => {
