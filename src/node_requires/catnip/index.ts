@@ -9,6 +9,7 @@ import {getByPath} from '../i18n';
 import logicBlocks from './stdLib/logic';
 import movementBlocks from './stdLib/movement';
 import appearanceBlocks from './stdLib/appearance';
+import cameraBlocks from './stdLib/camera';
 import mathBlocks from './stdLib/math';
 import objectsBlocks from './stdLib/objects';
 import miscBlocks from './stdLib/misc';
@@ -30,6 +31,12 @@ const builtinBlockLibrary: blockMenu[] = [{
     i18nKey: 'appearance',
     opened: true,
     icon: 'droplet'
+}, {
+    name: 'Camera',
+    items: cameraBlocks,
+    i18nKey: 'camera',
+    opened: true,
+    icon: 'camera'
 }, {
     name: 'Logic',
     items: logicBlocks,

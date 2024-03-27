@@ -79,7 +79,20 @@ catnip-block
             color black
             & > svg
                 color black
-    & &.computed, & .&-aConstantInput
+    &.computed.constant
+        for class, color in colors
+            &.{class}
+                border 1px solid color
+                background color
+        font-weight bold
+        color white
+        & > svg
+            color white
+        if lightness(colors.wildcard) > 60%
+            color black
+            & > svg
+                color black
+    & &.computed, & .&-aConstantInput, & &.constant
         margin 0
     & > svg.feather
         color act
