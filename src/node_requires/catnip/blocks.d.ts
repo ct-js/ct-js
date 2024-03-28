@@ -29,8 +29,11 @@ declare interface IBlockPieceTextbox {
 declare interface IBlockPieceBlocks {
     type: 'blocks';
     // eslint-disable-next-line no-use-before-define
-    placeholder?: (IBlockPieceLabel | IBlockPieceIcon)[];
+    placeholder?: 'do nothing';
     key: string;
+}
+declare interface IBlockPieceBreak {
+    type: 'break'
 }
 
 declare interface IBlockPropOrVariable {
@@ -39,10 +42,14 @@ declare interface IBlockPropOrVariable {
 declare interface IBlockFiller {
     type: 'filler'
 }
+declare interface IBlockAsyncMarker {
+    type: 'asyncMarker'
+}
 
 declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
                           IBlockPieceArgument | IBlockPieceTextbox | IBlockPieceBlocks |
-                          IBlockPropOrVariable | IBlockFiller;
+                          IBlockPropOrVariable | IBlockFiller | IBlockAsyncMarker |
+                          IBlockPieceBreak;
 
 // eslint-disable-next-line no-use-before-define
 type argumentValues = Record<string, IBlock[] | IBlock | string | number | boolean>;

@@ -25,7 +25,11 @@ catnip-block(
         span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}") {parent.opts.block.values.variableName}
         svg.feather(if="{piece.type === 'icon'}")
             use(xlink:href="#{piece.icon}")
+        span.catnip-block-anAsyncMarker(if="{piece.type === 'asyncMarker'}" title="{voc.asyncHint}")
+            svg.feather
+                use(xlink:href="#clock")
         .catnip-block-aFiller(if="{piece.type === 'filler'}")
+        .catnip-block-aBreak(if="{piece.type === 'break'}")
         textarea.code(
             readonly="{opts.readonly}"
             if="{piece.type === 'code'}"

@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import {usableDeclaration} from './declarationExtractor';
@@ -56,6 +57,8 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             displayName: string;
         const piecesAssets: Record<string, resourceType | 'action'> = {};
         let returnSave = false,
+            promise: false | 'both' | 'catch' | 'then' = false,
+            promiseSave: blockArgumentType | false = false,
             listType: resourceType | false = false;
         if (useful.jsDoc) {
             for (const jsDoc of useful.jsDoc) {
@@ -85,12 +88,23 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         listType = node.comment.toString().trim() as resourceType;
                     } else if (node.tagName.escapedText === 'catnipSaveReturn') {
                         returnSave = true;
+                    } else if (node.tagName.escapedText === 'catnipPromise') {
+                        const raw = node.comment?.toString().trim();
+                        if (raw === 'catch') {
+                            promise = 'catch';
+                        } else if (raw === 'then') {
+                            promise = 'then';
+                        } else {
+                            promise = 'both';
+                        }
+                    } else if (node.tagName.escapedText === 'catnipPromiseSave') {
+                        promiseSave = node.comment.toString().trim() as blockArgumentType || 'wildcard';
                     }
                 }
             }
         }
         let isCommand = useful.kind === 'function' && (!useful.returnType || useful.returnType === 'void');
-        if (returnSave) {
+        if (returnSave || promise) {
             isCommand = true;
         }
         const draft = {
@@ -106,7 +120,15 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             documentation,
             pieces: getPieces(piecesAssets, useful)
         } as Omit<IBlockComputedDeclaration, 'jsTemplate'> & Partial<Pick<IBlockComputedDeclaration, 'jsTemplate'>>;
-        if (returnSave) {
+        if (listType) {
+            draft.pieces.push({
+                type: 'argument',
+                key: 'list',
+                typeHint: 'wildcard',
+                assets: listType
+            });
+        }
+        if (returnSave || promiseSave) {
             draft.pieces.push({
                 type: 'filler'
             }, {
@@ -116,16 +138,53 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
             }, {
                 type: 'argument',
                 key: 'return',
-                typeHint: 'wildcard'
+                typeHint: promiseSave || 'wildcard'
+            });
+            if (promiseSave) {
+                draft.pieces.push({
+                    type: 'asyncMarker'
+                });
+            }
+        } else if (promise) {
+            draft.pieces.push({
+                type: 'filler'
+            }, {
+                type: 'asyncMarker'
             });
         }
-        if (listType) {
-            draft.pieces.push({
-                type: 'argument',
-                key: 'list',
-                typeHint: 'wildcard',
-                assets: listType
-            });
+        if (promise) {
+            if (promise === 'then' || promise === 'both') {
+                draft.pieces.push({
+                    type: 'break'
+                }, {
+                    type: 'icon',
+                    icon: 'redo'
+                }, {
+                    type: 'label',
+                    name: 'then',
+                    i18nKey: 'then'
+                }, {
+                    type: 'blocks',
+                    placeholder: 'do nothing',
+                    key: 'then'
+                });
+            }
+            if (promise === 'catch' || promise === 'both') {
+                draft.pieces.push({
+                    type: 'break'
+                }, {
+                    type: 'icon',
+                    icon: 'alert-octagon'
+                }, {
+                    type: 'label',
+                    name: 'catch',
+                    i18nKey: 'catch'
+                }, {
+                    type: 'blocks',
+                    placeholder: 'do nothing',
+                    key: 'catch'
+                });
+            }
         }
         if (useful.kind === 'prop') {
             if (listType) {
@@ -142,6 +201,41 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                     }
                     return `${name}(${args.map(stringifyArg(values)).join(', ')});`;
                 };
+            } else if (promise) {
+                if (promise === 'catch') {
+                    draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')})
+                    .catch(() => {
+                        ${values.catch}
+                    });`;
+                } else if (promise === 'then') {
+                    if (promiseSave) {
+                        draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')})
+                        .then(val => {
+                            ${values.return} = val;
+                            ${values.then}
+                        });`;
+                    } else {
+                        draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')})
+                        .then(() => {
+                            ${values.then}
+                        });`;
+                    }
+                } else if (promiseSave) { // promise === 'both'
+                    draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')})
+                    .then(val => {
+                        ${values.return} = val;
+                        ${values.then}
+                    }).catch(() => {
+                        ${values.catch}
+                    });`;
+                } else {
+                    draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')})
+                    .then(() => {
+                        ${values.then}
+                    }).catch(() => {
+                        ${values.catch}
+                    });`;
+                }
             } else if (isCommand) {
                 draft.jsTemplate = values => `${name}(${args.map(stringifyArg(values)).join(', ')});`;
             } else {

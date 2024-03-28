@@ -16,10 +16,9 @@ catnip-block-list(
         ondragover="{parent.handlePreDropInsertMark}"
     )
     .catnip-block-aBlockPlaceholder(if="{opts.showplaceholder && (!opts.blocks || !opts.blocks.length)}")
-        virtual(each="{piece in opts.placeholder}" if="{opts.placeholder}")
-            span.catnip-block-aTextLabel(if="{piece.type === 'label'}") {piece.name}
-            svg.feather(if="{piece.type === 'icon'}")
-                use(xlink:href="#{piece.icon}")
+        svg.feather(if="{opts.placeholder === 'do nothing'}")
+            use(xlink:href="#thumbs-up")
+        span.catnip-block-aTextLabel(if="{opts.placeholder === 'do nothing'}") {voc.placeholders.doNothing}
         svg.feather(if="{!opts.placeholder}")
             use(xlink:href="#button")
         span.catnip-block-aTextLabel(if="{!opts.placeholder}") {voc.placeholders.putBlocksHere}
