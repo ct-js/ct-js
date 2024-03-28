@@ -232,10 +232,6 @@ declare namespace place {
      * This function is especially useful for side-view games and any fast-moving copies,
      * as it allows precise movement without clipping or passing through surfaces.
      *
-     * @remarks
-     * You will usually need to premultiply `maxLength` with `u.delta`
-     * so that the speed is consistent under different FPS rates.
-     *
      * @param {Copy} me The copy that needs to be moved
      * @param {number} direction The direction in which to perform a movement
      * @param {number} maxLength The maximum distance a copy can traverse
@@ -245,6 +241,8 @@ declare namespace place {
      * @returns {Copy|boolean} If there was no collision and a copy reached its target,
      * returns `false`. If a copy met an obstacle as another copy, returns this copy.
      * If there was a tile, returns `true`.
+     *
+     * @catnipSaveReturn
      */
     function moveAlong(
         me: Copy, direction: number, maxLength: number, cgroup?: string, stepSize?: number
@@ -257,10 +255,6 @@ declare namespace place {
      * and set precision with `stepSize` (default is `1`, which means pixel-by-pixel movement).
      * This movement suits characters in top-down and side-view worlds.
      *
-     * @remarks
-     * You will usually need to premultiply `dx` and `dy` with `u.delta`
-     * so that the speed is consistent under different FPS rates.
-     *
      * @param {Copy} me The copy that needs to be moved
      * @param {number} dx Amount of pixels to move by X axis
      * @param {number} dy Amount of pixels to move by Y axis
@@ -269,6 +263,8 @@ declare namespace place {
      * @param {number} [stepSize=1] Precision of movement
      * @returns {false|ISeparateMovementResult} `false` if it reached its target,
      * an object with each axis specified otherwise.
+     *
+     * @catnipSaveReturn
      */
     function moveByAxes(me: Copy, dx: number, dy: number, cgroup?: string, stepSize?: number):
         false | ISeparateMovementResult;

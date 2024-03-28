@@ -78,19 +78,23 @@ catnip-block(
             if="{piece.type === 'argument' && piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint}"
             onclick="{!parent.opts.readonly && promptAsset}"
-        )
+    )
             svg.feather(if="{!getValue(piece.key)}")
                 use(xlink:href="#search")
             span(if="{!getValue(piece.key)}") {vocGlob.selectDialogue}
-            svg.feather(if="{getValue(piece.key) && areThumbnailsIcons(piece.assets)}")
+            svg.feather(if="{getValue(piece.key) && piece.assets === 'action'}")
+                use(xlink:href="#airplay")
+            svg.feather(if="{getValue(piece.key) && piece.assets !== 'action' && areThumbnailsIcons(piece.assets)}")
                 use(xlink:href="#{getThumbnail(piece.assets, getValue(piece.key))}")
             img(
-                if="{getValue(piece.key) && !areThumbnailsIcons(piece.assets)}"
+                if="{getValue(piece.key) && piece.assets !== 'action' && !areThumbnailsIcons(piece.assets)}"
                 src="{getThumbnail(piece.assets, getValue(piece.key))}"
                 class="{soundthumbnail: piece.assets === 'sound'}"
             )
-            span(if="{getValue(piece.key)}") {getName(piece.assets, getValue(piece.key))}
+            span(if="{getValue(piece.key) && piece.assets !== 'action'}") {getName(piece.assets, getValue(piece.key))}
+            span(if="{getValue(piece.key) && piece.assets === 'action'}") {getValue(piece.key)}
     context-menu(if="{contextPiece}" menu="{contextMenu}" ref="menu")
+    context-menu(if="{selectingAction}" menu="{actionsMenu}" ref="actionsmenu")
     asset-selector(
         if="{selectingAssetType}"
         assettypes="{selectingAssetType}"
@@ -242,8 +246,26 @@ catnip-block(
         this.selectingAssetType = this.selectingAssetPiece = false;
         this.promptAsset = e => {
             const {piece} = e.item;
-            this.selectingAssetType = piece.assets;
-            this.selectingAssetPiece = piece;
+            if (piece.assets === 'action') {
+                this.selectingAction = true;
+                this.actionsMenu = {
+                    opened: true,
+                    items: window.currentProject.actions.map(action => ({
+                        label: action.name,
+                        icon: 'airplay',
+                        click: () => {
+                            this.opts.block.values[piece.key] = action.name;
+                            this.update();
+                            this.selectingAction = false;
+                        }
+                    }))
+                };
+                this.update();
+                this.refs.actionsmenu.popup(e.clientX, e.clientY);
+            } else {
+                this.selectingAssetType = piece.assets;
+                this.selectingAssetPiece = piece;
+            }
         };
         this.selectAsset = id => {
             this.opts.block.values[this.selectingAssetPiece.key] = id;

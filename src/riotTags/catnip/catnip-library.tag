@@ -56,7 +56,7 @@ catnip-library(class="{opts.class}").flexrow
                 span {voc.createNewVariable}
             .aSpacer
             virtual(each="{cat in categories}")
-                h3(ref="categories")
+                h3(ref="categories" if="{!cat.hidden}")
                     svg.feather
                         use(href="#{cat.icon || 'grid-random'}")
                     span {voc.coreLibs[cat.i18nKey] || cat.name}
@@ -89,7 +89,11 @@ catnip-library(class="{opts.class}").flexrow
             svg.feather.a
                 use(href="#archive")
             div  {voc.properties}
-        .catnip-library-aShortcut.button(each="{cat, ind in categories}" title="{cat.name}" onclick="{scrollToCat}")
+        .catnip-library-aShortcut.button(
+            each="{cat, ind in categories}" if="{!cat.hidden}"
+            title="{cat.name}"
+            onclick="{scrollToCat}"
+        )
             svg.feather.a
                 use(href="#{cat.icon || 'grid-random'}")
             div {voc.coreLibs[cat.i18nKey] || cat.name}

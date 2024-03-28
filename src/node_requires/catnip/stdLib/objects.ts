@@ -1,27 +1,4 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'Set property variable value',
-    type: 'command',
-    code: 'set',
-    icon: 'code-alt',
-    jsTemplate: (vals) => `${vals.var} = ${vals.value};`,
-    lib: 'core.objects',
-    i18nKey: 'set property',
-    pieces: [{
-        type: 'argument',
-        key: 'var',
-        typeHint: 'wildcard',
-        required: true
-    }, {
-        type: 'label',
-        name: 'value',
-        i18nKey: 'value'
-    }, {
-        type: 'argument',
-        key: 'value',
-        typeHint: 'wildcard',
-        required: true
-    }]
-}, {
     name: 'Write property to self',
     type: 'command',
     code: 'this write',
@@ -173,6 +150,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     type: 'computed',
     code: 'new object',
     icon: 'code-alt',
+    customClass: 'constant',
     jsTemplate: () => '{}',
     lib: 'core.objects',
     i18nKey: 'new object',

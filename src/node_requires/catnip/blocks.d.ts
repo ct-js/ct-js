@@ -57,6 +57,8 @@ type argumentValues = Record<string, IBlock[] | IBlock | string | number | boole
 declare interface IBlockDeclaration {
     /** The name of the parent library. Used for serialization. */
     lib: string;
+    /** If set, the block will additionally appear in a category with this name */
+    category?: string;
     /** A unique string corresponding to this block so it can be serialized and deserialized */
     code: string;
     /** Elements of the block, including input fields and decorations */
@@ -133,4 +135,5 @@ declare type blockMenu = {
     items: blockDeclaration[];
     opened: boolean;
     icon?: string;
+    hidden?: boolean;
 }

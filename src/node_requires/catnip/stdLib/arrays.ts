@@ -7,7 +7,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     lib: 'core.arrays',
     i18nKey: 'new array',
     pieces: [],
-    typeHint: 'wildcard'
+    typeHint: 'wildcard',
+    customClass: 'constant'
 }, {
     name: 'get array element',
     i18nKey: 'array get',

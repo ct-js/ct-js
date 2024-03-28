@@ -6,9 +6,11 @@ import {convertFromDtsToBlocks} from './blockUtils';
 import {parseFile} from './declarationExtractor';
 import {getByPath} from '../i18n';
 
+import propsVarsBlocks from './stdLib/propsVars';
 import logicBlocks from './stdLib/logic';
 import movementBlocks from './stdLib/movement';
 import appearanceBlocks from './stdLib/appearance';
+import actionsBlocks from './stdLib/actions';
 import cameraBlocks from './stdLib/camera';
 import mathBlocks from './stdLib/math';
 import objectsBlocks from './stdLib/objects';
@@ -20,6 +22,13 @@ import hiddenBlocks from './stdLib/hiddenBlocks';
 import {loadBlocks} from './stdLib/ctjsApi';
 
 const builtinBlockLibrary: blockMenu[] = [{
+    name: 'Properties and variables',
+    items: propsVarsBlocks,
+    i18nKey: 'propsVars',
+    opened: true,
+    icon: 'archive',
+    hidden: true
+}, {
     name: 'Movement',
     items: movementBlocks,
     i18nKey: 'movement',
@@ -31,6 +40,12 @@ const builtinBlockLibrary: blockMenu[] = [{
     i18nKey: 'appearance',
     opened: true,
     icon: 'droplet'
+}, {
+    name: 'Actions',
+    items: actionsBlocks,
+    i18nKey: 'actions',
+    opened: true,
+    icon: 'airplay'
 }, {
     name: 'Camera',
     items: cameraBlocks,
@@ -82,7 +97,7 @@ const builtinBlockLibrary: blockMenu[] = [{
 let ctjsApiMenus: blockMenu[];
 loadBlocks().then(menus => {
     ctjsApiMenus = menus;
-    builtinBlockLibrary.splice(2, 0, ...menus);
+    builtinBlockLibrary.splice(4, 0, ...menus);
 });
 
 export const getCtjsI18nKeys = (): void => {
@@ -157,34 +172,94 @@ const loadBuiltinBlocks = (): void => {
     hiddenBlocks.forEach(addBlockToRegistry);
 };
 
+
+const isFunction = (value: unknown) => (value ?
+    (Object.prototype.toString.call(value) === '[object Function]' ||
+    typeof value === 'function' ||
+    value instanceof Function
+    ) :
+    false);
+const validateBlocks = (
+    blocks: (blockDeclaration | Record<string, unknown>)[],
+    blocksPath: string
+) => {
+    for (const block of blocks) {
+        if (typeof block !== 'object') {
+            throw new Error(`[catnip] ${blocksPath} has an element ${block} that is not an object.`);
+        }
+        const keys = Object.keys(block) as (keyof blockDeclaration)[];
+        for (const required of (['name', 'type', 'code', 'icon'] as (keyof blockDeclaration)[])) {
+            if (!keys.includes(required as keyof blockDeclaration)) {
+                throw new Error(`[catnip] ${blocksPath} has an element ${block} that does not have a required parameter ${required}.`);
+            }
+            if (typeof block[required] !== 'string') {
+                throw new Error(`[catnip] ${blocksPath} in element ${block} the parameter ${required} is not a string.`);
+            }
+        }
+        if (!('jsTemplate' in block)) {
+            throw new Error(`[catnip] ${blocksPath} has an element ${block} that does not have a required parameter jsTemplate.`);
+        }
+        if (!isFunction(block.jsTemplate)) {
+            throw new Error(`[catnip] ${blocksPath} in element ${block} the parameter jsTemplate is not a function.`);
+        }
+        if (!('pieces' in block)) {
+            throw new Error(`[catnip] ${blocksPath} has an element ${block} that does not have a required parameter pieces.`);
+        }
+        if (!Array.isArray(block.pieces)) {
+            throw new Error(`[catnip] ${blocksPath} in element ${block} the parameter pieces that is not an array.`);
+        }
+    }
+};
+
+
 /**
  * Used for cleanup during disabling catmods; maps module names to their category of blocks.
  */
 const loadedCategories: Map<string, blockMenu> = new Map();
-
 export const loadModdedBlocks = async (modName: string, noIndex?: boolean) => {
-    const path = join(getModulePathByName(modName), 'types.d.ts');
+    const dtsPath = join(getModulePathByName(modName), 'types.d.ts');
+    const blocksPath = join(getModulePathByName(modName), 'blocks.js');
+    const category: blockMenu = {
+        name: modName,
+        items: [],
+        opened: false,
+        i18nKey: modName
+    };
     try {
-        fs.access(path, fs.constants.R_OK);
-        const usefuls = await parseFile(path);
+        await fs.access(dtsPath, fs.constants.R_OK);
+        const usefuls = await parseFile(dtsPath);
         const blocks = convertFromDtsToBlocks(usefuls, modName);
-        if (blocks.length) {
-            const category: blockMenu = {
-                name: modName,
-                items: blocks,
-                opened: false,
-                i18nKey: modName
-            };
-            blocks.forEach(addBlockToRegistry);
-            loadedCategories.set(modName, category);
-            blocksLibrary.push(category);
+        category.items.push(...blocks);
+    } catch (oO) {
+        void oO;
+    }
+    try {
+        await fs.access(blocksPath, fs.constants.R_OK);
+        const blocks = require(blocksPath);
+        if (!Array.isArray(blocks)) {
+            throw new Error(`[catnip] ${blocksPath} is not a module that returns an array.`);
         }
+        category.items.push(...blocks);
+        validateBlocks(blocks, blocksPath);
     } catch (err) {
-        if (err.code === 'ENOENT') {
-            console.debug(`[catnip] Skipping the catmod ${modName} as it doesn't have a types.d.ts file.`);
-        } else {
-            console.error(err);
+        if (err.code !== 'ENOENT') {
+            throw err;
         }
+    }
+    if (category.items.length) {
+        category.items.forEach(block => {
+            if (block.category) {
+                const host = blocksLibrary.find(cat => cat.name === block.category);
+                if (host) {
+                    host.items.push(block);
+                }
+            }
+        });
+        category.items.forEach(addBlockToRegistry);
+        loadedCategories.set(modName, category);
+        blocksLibrary.push(category);
+    } else {
+        console.debug(`[catnip] Skipping the catmod ${modName} as it doesn't have valid blocks to add.`);
     }
     if (!noIndex) {
         recreateFuseIndex();
@@ -196,7 +271,16 @@ export const unloadModdedBlocks = (modName: string) => {
         const cat = loadedCategories.get(modName);
         blocksLibrary.splice(blocksLibrary.indexOf(cat), 1);
         cat.items.forEach(removeBlockFromRegistry);
+        cat.items.forEach(block => {
+            if (block.category) {
+                const host = blocksLibrary.find(cat => cat.name === block.category);
+                if (host && host.items.includes(block)) {
+                    host.items.splice(host.items.indexOf(block), 1);
+                }
+            }
+        });
     }
+    loadedCategories.delete(modName);
     recreateFuseIndex();
 };
 /**
@@ -204,6 +288,9 @@ export const unloadModdedBlocks = (modName: string) => {
  */
 export const loadAllBlocks = async (project: IProject) => {
     blocksLibrary.length = 0;
+    for (const [name] of loadedCategories) {
+        unloadModdedBlocks(name);
+    }
     loadedCategories.clear();
     blocksRegistry.clear();
     loadBuiltinBlocks();
@@ -295,3 +382,4 @@ export const insertBlock = (
 };
 export const emptyTexture = document.createElement('canvas');
 emptyTexture.width = emptyTexture.height = 1;
+

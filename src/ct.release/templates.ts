@@ -446,6 +446,21 @@ const templatesLib = {
      */
     templates: {} as Record<string, ExportedTemplate>,
     /**
+     * Creates a new copy of a given template inside the current root room.
+     * A shorthand for `templates.copyIntoRoom(template, x, y, ct.room, exts)`
+     * @param template The name of the template to use
+     * @catnipAsset template:template
+     * @param [x] The x coordinate of a new copy. Defaults to 0.
+     * @param [y] The y coordinate of a new copy. Defaults to 0.
+     * @param [params] An optional object which parameters will be applied
+     * to the copy prior to its OnCreate event.
+     * @returns The created copy.
+     * @catnipSaveReturn
+     */
+    copy(template: string, x = 0, y = 0, params: Record<string, unknown> = {}): BasicCopy {
+        return templatesLib.copyIntoRoom(template, x, y, roomsLib.current, params);
+    },
+    /**
      * Creates a new copy of a given template inside a specific room.
      * @param template The name of the template to use
      * @catnipAsset template:template
@@ -468,21 +483,6 @@ const templatesLib = {
         room.addChild(obj as pixiMod.DisplayObject);
         stack.push(obj);
         return obj;
-    },
-    /**
-     * Creates a new copy of a given template inside the current root room.
-     * A shorthand for `templates.copyIntoRoom(template, x, y, ct.room, exts)`
-     * @param template The name of the template to use
-     * @catnipAsset template:template
-     * @param [x] The x coordinate of a new copy. Defaults to 0.
-     * @param [y] The y coordinate of a new copy. Defaults to 0.
-     * @param [params] An optional object which parameters will be applied
-     * to the copy prior to its OnCreate event.
-     * @returns The created copy.
-     * @catnipSaveReturn
-     */
-    copy(template: string, x = 0, y = 0, params: Record<string, unknown> = {}): BasicCopy {
-        return templatesLib.copyIntoRoom(template, x, y, roomsLib.current, params);
     },
     /**
      * Applies a function to each copy in the current room

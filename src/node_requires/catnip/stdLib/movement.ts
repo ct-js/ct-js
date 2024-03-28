@@ -1,11 +1,11 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
-    name: 'Move template',
+    name: 'Move copy',
     type: 'command',
-    code: 'move template',
+    code: 'move copy',
     icon: 'move',
     jsTemplate: () => 'this.move();',
     lib: 'core.movement',
-    i18nKey: 'move template',
+    i18nKey: 'move copy',
     pieces: []
 }, {
     name: 'Change speed',
