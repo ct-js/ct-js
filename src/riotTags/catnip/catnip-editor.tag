@@ -15,6 +15,7 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
             variables="{opts.event.variables}"
             asset="{opts.asset}"
             behaviorprops="{getBehaviorFields(opts.asset)}"
+            eventvars="{getLocals(opts.event.eventKey, opts.event.lib)}"
         )
         .flexfix-footer.catnip-editor-aTrashZone(
             title="{voc.trashZoneHint}"
@@ -38,8 +39,10 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
             }
         };
 
-        const {endBlocksTransmit,} = require('./data/node_requires/catnip');
-        this.getBehaviorFields = require('./data/node_requires/events').getBehaviorFields;
+        const {endBlocksTransmit} = require('./data/node_requires/catnip');
+        const {getLocals, getBehaviorFields} = require('./data/node_requires/events');
+        this.getBehaviorFields = getBehaviorFields;
+        this.getLocals = getLocals;
         this.nuke = e => {
             if (isInvalidDrop(e)) {
                 e.preventUpdate = true;

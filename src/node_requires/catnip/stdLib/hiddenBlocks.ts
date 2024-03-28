@@ -40,6 +40,20 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         type: 'propVar'
     }],
     customClass: 'userdefined'
+}, {
+    name: 'Event variable',
+    hideLabel: true,
+    type: 'computed',
+    typeHint: 'wildcard',
+    code: 'event variable',
+    icon: 'bell',
+    jsTemplate: (values) => values.variableName,
+    lib: 'core.hidden',
+    i18nKey: 'event variable',
+    pieces: [{
+        type: 'propVar'
+    }],
+    customClass: 'userdefined'
 }];
 
 export default blocks;

@@ -2,6 +2,7 @@
     @attribute variables (string[])
     @attribute props (string[])
     @attribute behaviorprops (string[])
+    @attribute eventvars (string[])
 catnip-library(class="{opts.class}").flexrow
     .flexfix
         .aSearchWrap.flexfix-header
@@ -23,8 +24,8 @@ catnip-library(class="{opts.class}").flexrow
                 oncontextmenu="{parent.onContextMenu}"
             )
             catnip-block(
-                each="{prop in opts.behaviorprops}"
-                block="{({lib: 'core.hidden', code: 'behavior property', values: {variableName: prop}})}"
+                each="{bhprop in opts.behaviorprops}"
+                block="{({lib: 'core.hidden', code: 'behavior property', values: {variableName: bhprop}})}"
                 dragoutonly="dragoutonly"
                 readonly="readonly"
                 ondragstart="{parent.onVarDragStart}"
@@ -50,6 +51,16 @@ catnip-library(class="{opts.class}").flexrow
                 oncontextmenu="{parent.onContextMenu}"
             )
             br(if="{opts.variables.length}")
+            catnip-block(
+                each="{eventvar in opts.eventvars}"
+                block="{({lib: 'core.hidden', code: 'event variable', values: {variableName: eventvar}})}"
+                dragoutonly="dragoutonly"
+                readonly="readonly"
+                ondragstart="{parent.onVarDragStart}"
+                draggable="draggable"
+                ondragend="{parent.resetTarget}"
+            )
+            br(if="{opts.eventvars.length}")
             button.inline(onclick="{promptNewVariable}")
                 svg.feather
                     use(href="#plus")
@@ -134,8 +145,20 @@ catnip-library(class="{opts.class}").flexrow
             e.dataTransfer.setData('ctjsblocks/computed', 'hello uwu');
             e.dataTransfer.setDragImage(emptyTexture, 0, 0);
             const bounds = e.target.getBoundingClientRect();
-            const code = e.item.prop ? 'property' : 'variable',
-                  value = e.item.prop ?? e.item.variable;
+            let code, value;
+            if (e.item.prop) {
+                code = 'property';
+                value = e.item.prop;
+            } else if (e.item.bhprop) {
+                code = 'behavior property';
+                value = e.item.bhprop;
+            } else if (e.item.variable) {
+                code = 'variable';
+                value = e.item.variable;
+            } else if (e.item.eventvar) {
+                code = 'event variable';
+                value = e.item.eventvar;
+            }
             console.log(e, code, value);
             startBlocksTrasmit([{
                 lib: 'core.hidden',
@@ -160,6 +183,10 @@ catnip-library(class="{opts.class}").flexrow
             return 1 - Math.pow(1 - x, 5);
         }
         this.scrollToCat = e => {
+            if (this.searchVal.trim()) {
+                this.searchVal = '';
+                this.update();
+            }
             const {ind} = e.item;
             let a = 0,
                 timePrev = Number(new Date()),
@@ -178,6 +205,10 @@ catnip-library(class="{opts.class}").flexrow
             scrollToCategory();
         };
         this.scrollToTop = e => {
+            if (this.searchVal.trim()) {
+                this.searchVal = '';
+                this.update();
+            }
             let a = 0,
                 timePrev = Number(new Date()),
                 startScroll = this.refs.mainpanel.scrollTop,
