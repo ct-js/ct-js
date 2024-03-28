@@ -86,8 +86,9 @@ catnip-block-list(
         const isInvalidDrop = e =>
             this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
-            if (!isInvalidDrop(e)) {
+            if (isInvalidDrop(e)) {
                 e.preventUpdate = true;
+            } else {
                 e.preventDefault(); // Tells that we do want to accept the drop
             }
         };

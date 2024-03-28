@@ -79,8 +79,8 @@ catnip-editor.flexrow(onpointermove="{repositionGhost}" ondragover="{repositionG
             window.signals.off('blockTransmissionEnd', this.endGhost);
         });
         this.repositionGhost = e => {
+            e.preventUpdate = true;
             if (!this.blockGhost || !this.refs.ghost) {
-                e.preventUpdate = true;
                 return;
             }
             this.refs.ghost.style.left = `${e.clientX + this.dx}px`;
