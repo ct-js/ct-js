@@ -430,7 +430,9 @@
             "get maxY": "right boundary",
             "console log": "Log to console",
             "console warn": "Send a warning to the console",
-            "console error": "Send an error to the console"
+            "console error": "Send an error to the console",
+            "set depth": "Set depth to",
+            "get depth": "depth"
         },
         "blockDisplayNames": {
             "if else branch": "If",

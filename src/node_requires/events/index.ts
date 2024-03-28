@@ -250,6 +250,13 @@ const getArgumentsTypeScript = (event: IEventDeclaration): string => {
     }
     return code;
 };
+export const getLocals = (event: string, libName: string): string[] => {
+    const declaration = getEventByLib(event, libName);
+    if (!declaration.locals) {
+        return [];
+    }
+    return Object.keys(declaration.locals);
+};
 export const getFieldsTypeScript = (asset: IScriptable | IScriptableBehaviors): string => {
     let code = '';
     if ('behaviors' in asset) {
