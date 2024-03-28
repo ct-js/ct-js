@@ -75,6 +75,20 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
+    name: 'Set depth',
+    type: 'command',
+    code: 'set depth',
+    icon: 'droplet',
+    jsTemplate: (vals) => `this.zIndex = ${vals.value};`,
+    lib: 'core.appearance',
+    i18nKey: 'set depth',
+    pieces: [{
+        type: 'argument',
+        key: 'value',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
     name: 'get texture',
     type: 'computed',
     code: 'get texture',
@@ -122,6 +136,16 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: () => 'this.alpha',
     lib: 'core.appearance',
     i18nKey: 'get alpha',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get depth',
+    type: 'computed',
+    code: 'get depth',
+    icon: 'droplet',
+    jsTemplate: () => 'this.zIndex',
+    lib: 'core.appearance',
+    i18nKey: 'get depth',
     pieces: [],
     typeHint: 'number'
 }];
