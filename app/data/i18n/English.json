@@ -291,11 +291,21 @@
             "set scale": "Set scale to",
             "set scale xy": "Set scale to",
             "set angle": "Set texture rotation to",
+            "set skew": "Set skew to",
+            "skew x": "skew by x",
+            "skew y": "skew by y",
             "set alpha": "Set opacity to",
             "scale x": "scale by x",
             "scale y": "scale by y",
             "get angle": "texture rotation",
             "get alpha": "opacity",
+            "play animation": "Play animation",
+            "stop animation": "Stop animation",
+            "goto frame play": "Go to a frame and play the animation",
+            "goto frame stop": "Go to a frame and stop the animation",
+            "goto frame": "Go to a frame",
+            "get animation speed": "animation speed",
+            "set animation speed": "Set animation speed to",
             "this": "this",
             "concatenate strings": "Concatenate strings",
             "templates Templates copy into room": "Copy a template into room",
@@ -465,7 +475,9 @@
             "AND": "and",
             "OR": "or",
             "then": "Then",
-            "catch": "On error"
+            "catch": "On error",
+            "and play animation": "and play the animation",
+            "and stop animation": "and stop the animation"
         }
     },
     "colorPicker": {
