@@ -107,5 +107,5 @@ catnip-insert-mark(onclick="{toggleMenu}" class="{dragover: shouldDragover(), me
                 const marks = [...this.parent.root.childNodes]
                     .filter(node => node.tagName === 'CATNIP-INSERT-MARK')
                 marks[this.opts.pos + 2].click();
-            }, 50);
+            }, 0);
         };
