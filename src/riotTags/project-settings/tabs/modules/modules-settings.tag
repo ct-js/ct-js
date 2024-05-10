@@ -52,9 +52,9 @@ modules-settings.aPanel.aView
     module-viewer(if="{openedModule}" module="{openedModule}" onclose="{closeModule}")
     script.
         this.namespace = 'modules';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
 
-        const {moduleDir, loadModules, categoryToIconMap} = require('./data/node_requires/resources/modules');
+        const {moduleDir, loadModules, categoryToIconMap} = require('src/node_requires/resources/modules');
 
         this.categoriesCounter = {};
         this.filterCategories = Object.keys(categoryToIconMap).sort();

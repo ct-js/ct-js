@@ -33,8 +33,8 @@ export-desktop-panel.aDimmer
                     span(if="{!working}")   {voc.export}
     script.
         this.namespace = 'exportPanel';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
-        this.mixin(require('./data/node_requires/riotMixins/wire').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/wire').default);
         this.working = false;
         this.log = [];
 
@@ -42,12 +42,12 @@ export-desktop-panel.aDimmer
         this.projSettings = global.currentProject.settings;
         this.authoring = this.projSettings.authoring;
 
-        this.nodeEnabled = require('./data/node_requires/platformUtils').isNodeInstalled;
+        this.nodeEnabled = require('src/node_requires/platformUtils').isNodeInstalled;
         this.openNodeJsDownloads = () => {
             nw.Shell.openExternal('https://nodejs.org/en/download/');
         };
         this.on('update', () => {
-            this.nodeEnabled = require('./data/node_requires/platformUtils').isNodeInstalled;
+            this.nodeEnabled = require('src/node_requires/platformUtils').isNodeInstalled;
         });
 
         // eslint-disable-next-line max-lines-per-function
@@ -56,8 +56,8 @@ export-desktop-panel.aDimmer
             this.log = ['Exporting the web build…'];
             this.update();
 
-            const runCtExport = require('./data/node_requires/exporter').exportCtProject;
-            const {exportForDesktop} = require('./data/node_requires/exporter/desktopPackager');
+            const runCtExport = require('src/node_requires/exporter').exportCtProject;
+            const {exportForDesktop} = require('src/node_requires/exporter/desktopPackager');
             const {dirname} = require('path');
 
             try {

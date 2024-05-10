@@ -73,8 +73,8 @@ actions-settings
     script.
         global.currentProject.actions = global.currentProject.actions || [];
         this.namespace = 'settings.actions';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
-        this.mixin(require('./data/node_requires/riotMixins/wire').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/wire').default);
         this.addNewAction = () => {
             global.currentProject.actions.push({
                 name: 'NewAction',
@@ -107,7 +107,7 @@ actions-settings
         };
 
         const checkOrLoadModules = async (moduleNames) => {
-            const modules = require('./data/node_requires/resources/modules');
+            const modules = require('src/node_requires/resources/modules');
             const promises = [];
             for (const i of moduleNames) {
                 if (!modules.isModuleEnabled(i)) {
@@ -252,7 +252,7 @@ actions-settings
                 window.alertify.error(this.voc.importErrorNotCtJsPreset);
                 return;
             }
-            const modules = require('./data/node_requires/resources/modules');
+            const modules = require('src/node_requires/resources/modules');
             const notInstalled = await modules.checkModulesExistence(preset.inputModules);
             if (notInstalled instanceof Array) {
                 window.alertify.error(this.voc.importErrorMissingModules.replace('$1', notInstalled.join(', ')));

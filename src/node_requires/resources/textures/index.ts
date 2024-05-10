@@ -2,9 +2,9 @@ import {uidMap, getOfType, getById, createAsset, IAssetContextItem} from '..';
 import {TexturePreviewer} from '../preview/texture';
 import {convertToPng} from '../../utils/imageUtils';
 
-const fs = require('node_modules/fs-extra');
+const fs = require('fs-extra');
 import path from 'path';
-import * as PIXI from 'node_modules/pixi.js';
+import * as PIXI from 'pixi.js';
 
 /**
  * Accepts a texture ID or a texture's object itself;

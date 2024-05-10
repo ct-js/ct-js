@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import {SoundPreviewer} from '../preview/sound';
 import {promptName} from '../promptName';
 
-import {sound} from 'node_modules/@pixi/sound';
+import {sound} from '@pixi/sound';
 
 export const getThumbnail = SoundPreviewer.getClassic;
 export const areThumbnailsIcons = false;

@@ -77,7 +77,7 @@ color-picker
         /* global net */
         const brehautColor = net.brehaut.Color;
         this.namespace = 'colorPicker';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
 
         this.loadColor = color => {
             this.color = brehautColor(color);

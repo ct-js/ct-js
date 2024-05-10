@@ -40,7 +40,8 @@ interface IMigrationPlan {
 */
 const adapter = async (project: Partial<IProject>) => {
     var version = semverToArray(project.ctjsVersion || '0.2.0');
-
+    
+console.log(window.migrationProcess, window);
     const migrationToExecute = window.migrationProcess
     // Sort all the patches chronologically
     .sort((m1: IMigrationPlan, m2: IMigrationPlan) => {

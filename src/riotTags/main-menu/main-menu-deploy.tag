@@ -19,14 +19,14 @@ main-menu-deploy
     export-mobile-panel(show="{showMobileExporter}" onclose="{hideMobileExporter}")
     script.
         this.namespace = 'mainMenu.deploy';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
 
         this.exportForWeb = async () => {
             const fs = require('fs-extra'),
                   path = require('path');
-            const {getBuildDir, getExportDir} = require('./data/node_requires/platformUtils');
+            const {getBuildDir, getExportDir} = require('src/node_requires/platformUtils');
             const buildFolder = await getBuildDir();
-            const runCtExport = require('./data/node_requires/exporter').exportCtProject;
+            const runCtExport = require('src/node_requires/exporter').exportCtProject;
             const exportFile = path.join(
                 buildFolder,
                 `${global.currentProject.settings.authoring.title || 'ct.js game'}.zip`

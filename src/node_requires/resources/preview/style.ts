@@ -1,7 +1,7 @@
 import {outputCanvasToFile} from '../../utils/imageUtils';
 import {styleToTextStyle} from '../../styleUtils';
 
-import * as PIXI from 'node_modules/pixi.js';
+import * as PIXI from 'pixi.js';
 
 export class StylePreviewer {
     static get(style: IStyle, fileSys?: boolean | 'last'): string {

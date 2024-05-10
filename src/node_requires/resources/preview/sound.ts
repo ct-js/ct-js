@@ -1,5 +1,5 @@
-import {Sprite, Texture, Application} from 'node_modules/pixi.js';
-import {utils as pixiSoundUtils, Sound as pixiSoundSound} from 'node_modules/@pixi/sound';
+import {Sprite, Texture, Application} from 'pixi.js';
+import {utils as pixiSoundUtils, Sound as pixiSoundSound} from '@pixi/sound';
 import {join} from 'path';
 
 import {outputCanvasToFile} from '../../utils/imageUtils';

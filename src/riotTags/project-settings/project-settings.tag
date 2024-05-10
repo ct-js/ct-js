@@ -54,15 +54,15 @@ project-settings.aPanel.aView.pad.flexrow
         content-editor(if="{tab === 'contentEntriesEditor' && currentContentType}" contenttype="{currentContentType}")
     script.
         this.namespace = 'settings';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
-        this.mixin(require('./data/node_requires/riotMixins/wire').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/wire').default);
         this.currentProject = global.currentProject;
         this.currentProject.settings.fps = this.currentProject.settings.fps || 30;
 
         this.tab = 'main';
         this.openTab = tab => () => {
             if (this.tab === 'content') { // Update type definitions for content types when swutching away from the content tab
-                require('./data/node_requires/resources/content')
+                require('src/node_requires/resources/content')
                     .updateContentTypedefs(global.currentProject);
             }
             this.tab = tab;
@@ -70,7 +70,7 @@ project-settings.aPanel.aView.pad.flexrow
             this.currentContentType = null;
         };
 
-        const {loadModules, getIcon} = require('./data/node_requires/resources/modules');
+        const {loadModules, getIcon} = require('src/node_requires/resources/modules');
         this.getIcon = getIcon;
 
         this.modulesWithFields = [];
@@ -90,7 +90,7 @@ project-settings.aPanel.aView.pad.flexrow
             this.tab = 'contentEntriesEditor';
             this.currentContentType = contentType;
             this.update();
-            require('./data/node_requires/resources/content')
+            require('src/node_requires/resources/content')
                 .updateContentTypedefs(global.currentProject);
         };
         window.orders.on('openContentEntries', contentEditorListener);
@@ -114,6 +114,6 @@ project-settings.aPanel.aView.pad.flexrow
             this.currentModule = null;
             this.currentContentType = type;
             this.tab = 'contentEntriesEditor';
-            require('./data/node_requires/resources/content')
+            require('src/node_requires/resources/content')
                 .updateContentTypedefs(global.currentProject);
         };

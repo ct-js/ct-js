@@ -30,11 +30,11 @@ scripts-settings
     project-script-editor(if="{currentScript}" script="{currentScript}")
     script.
         this.namespace = 'settings.scripts';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.currentProject = global.currentProject;
         this.currentProject.scripts = this.currentProject.scripts || [];
 
-        const {dropScriptModel, addScriptModel} = require('./data/node_requires/resources/projects/scripts');
+        const {dropScriptModel, addScriptModel} = require('src/node_requires/resources/projects/scripts');
 
         this.addNewScript = () => {
             const oldScriptNames = this.currentProject.scripts.map(script => script.name);

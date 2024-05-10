@@ -147,7 +147,7 @@ const compileRiot = () =>
     gulp.src('./src/riotTags/**/*.tag')
     .pipe(riot(riotSettings))
     .pipe(concat('riotTags.js'))
-    .pipe(gulp.dest('./app/data/'));
+    .pipe(gulp.dest('./temp/'));
 
 const compileRiotPartial = path => {
     console.log(`Updating tag at ${path}…`);
@@ -161,15 +161,16 @@ const concatScripts = () =>
         {
             objectMode: true
         },
-        gulp.src('./src/js/3rdparty/riot.min.js'),
-        gulp.src(['./src/js/**', '!./src/js/3rdparty/riot.min.js'])
+        gulp.src('./src/js/exposeGlobalNodeModules.js'),
+        gulp.src('./temp/riotTags.js'),
+        gulp.src(['./src/js/**', '!./src/js/exposeGlobalNodeModules.js'])
     )
     .pipe(sourcemaps.init({
         largeFile: true
     }))
     .pipe(concat('bundle.js'))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./app/data/'))
+    .pipe(gulp.dest('./temp/'))
     .on('error', err => {
         notifier.notify({
             title: 'Scripts error',
@@ -182,27 +183,25 @@ const concatScripts = () =>
     })
     .on('change', fileChangeNotifier);
 
-const copyRequires = () =>
-    gulp.src([
-        './src/node_requires/**/*',
-        '!./src/node_requires/**/*.ts'
-    ])
-    .pipe(sourcemaps.init())
-    // ¯\_(ツ)_/¯
-    .pipe(sourcemaps.mapSources((sourcePath) => '../../src/' + sourcePath))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./app/data/node_requires'));
-
-const tsProject = gulpTs.createProject('tsconfig.json');
-
-const processRequiresTS = () =>
-    gulp.src('./src/node_requires/**/*.ts')
-    .pipe(sourcemaps.init())
-    .pipe(tsProject())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./app/data/node_requires'));
-
-const processRequires = gulp.series(copyRequires, processRequiresTS);
+const builtinModules = JSON.parse(fs.readFileSync('./builtinModules.json'));
+builtinModules.push(...builtinModules.map(m => `node:${m}`));
+const bundleIdeScripts = () => esbuild({
+    entryPoints: ['./temp/bundle.js'],
+    bundle: true,
+    minify: true,
+    legalComments: 'inline',
+    platform: 'browser',
+    format: 'iife',
+    outfile: './app/data/bundle.js',
+    external: [
+        ...builtinModules,
+        'original-fs',
+        'monaco-themes',
+        'monaco-editor',
+        'png2icons'
+    ],
+    sourcemap: true
+});
 
 export const bakeTypedefs = () =>
     gulp.src('./src/typedefs/default/**/*.ts')
@@ -254,19 +253,6 @@ export const buildCtJsLib = () => {
     ]).pipe(gulp.dest('./app/data/ct.release')));
     return Promise.all(processes);
 };
-export const buildCtIdeSoundLib = () => esbuild({
-    entryPoints: ['./src/ct.release/sounds.ts'],
-    outfile: './app/data/ct.shared/ctSound.js',
-    bundle: true,
-    platform: 'node',
-    format: 'cjs',
-    treeShaking: true,
-    external: [
-        'node_modules/pixi.js',
-        'node_modules/pixi-spine',
-        'node_modules/@pixi/sound'
-    ]
-});
 const watchCtJsLib = () => {
     gulp.watch([
         './src/ct.release/**/*',
@@ -277,11 +263,6 @@ const watchCtJsLib = () => {
         notifier.notify(makeErrorObj('Ct.js game library failure', err));
         console.error('[Ct.js game library error]', err);
     });
-
-    gulp.watch([
-        './src/ct.release/**/*',
-        '!./src/ct.release/changes.txt'
-    ], buildCtIdeSoundLib);
 };
 
 const copyInEditorDocs = () =>
@@ -305,7 +286,7 @@ const writeIconList = () => fs.readdir('./src/icons')
 const icons = gulp.series(makeIconAtlas, writeIconList);
 
 const watchScripts = () => {
-    gulp.watch('./src/js/**/*', gulp.series(compileScripts))
+    gulp.watch('./src/js/**/*', gulp.series(compileScripts, bundleIdeScripts))
     .on('error', err => {
         notifier.notify(makeErrorObj('General scripts error', err));
         console.error('[scripts error]', err);
@@ -337,7 +318,7 @@ const watchPug = () => {
     });
 };
 const watchRequires = () => {
-    gulp.watch('./src/node_requires/**/*', processRequires)
+    gulp.watch('./src/node_requires/**/*', bundleIdeScripts)
     .on('change', fileChangeNotifier)
     .on('error', err => {
         notifier.notify(makeErrorObj('Failure of node_requires', err));
@@ -447,11 +428,12 @@ export const fetchNeutralino = async () => {
 export const build = gulp.parallel([
     gulp.series(icons, compilePug),
     compileStylus,
-    compileScripts,
-    processRequires,
+    gulp.series(
+        compileScripts,
+        bundleIdeScripts
+    ),
     copyInEditorDocs,
     buildCtJsLib,
-    buildCtIdeSoundLib,
     bakeTypedefs,
     bakeCtTypedefs
 ]);

@@ -230,9 +230,9 @@ extensions-editor
         const fs = require('fs-extra'),
               path = require('path');
 
-        this.assetTypes = require('./data/node_requires/resources').assetTypes;
+        this.assetTypes = require('src/node_requires/resources').assetTypes;
 
-        this.mixin(require('./data/node_requires/riotMixins/wire').default);
+        this.mixin(require('src/node_requires/riotMixins/wire').default);
         this.wireAndNotify = (...args1) => (...args2) => {
             this.wire(...args1)(...args2);
             if (this.opts.onchanged) {
@@ -240,7 +240,7 @@ extensions-editor
             }
         };
         this.namespace = 'extensionsEditor';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
 
         this.fixBrokenArrays = () => {
             for (const field of this.extensions) {

@@ -40,8 +40,8 @@ main-settings
 
     script.
         this.namespace = 'settings';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
-        this.mixin(require('./data/node_requires/riotMixins/wire').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/wire').default);
         this.currentProject = global.currentProject;
         this.authoring = this.currentProject.settings.authoring;
 

@@ -124,7 +124,7 @@ app-view.flexcol
         const fs = require('fs-extra');
 
         this.namespace = 'appView';
-        this.mixin(require('./data/node_requires/riotMixins/voc').default);
+        this.mixin(require('src/node_requires/riotMixins/voc').default);
 
         this.tab = 'assets'; // A tab can be either a string ('project', 'assets', etc.) or an asset object
         this.openedAssets = [];
@@ -183,7 +183,7 @@ app-view.flexcol
             window.signals.off('assetRemoved', checkDeletedTabs);
         });
 
-        const resources = require('./data/node_requires/resources');
+        const resources = require('src/node_requires/resources');
         this.editorMap = resources.editorMap;
         this.getName = resources.getName;
         this.iconMap = resources.resourceToIconMap;
@@ -323,7 +323,7 @@ app-view.flexcol
         };
 
         this.saveProject = async () => {
-            const {saveProject} = require('./data/node_requires/resources/projects');
+            const {saveProject} = require('src/node_requires/resources/projects');
             try {
                 this.refreshDirty();
                 await this.applyAssets();
@@ -349,7 +349,7 @@ app-view.flexcol
         });
         this.saveRecoveryDebounce();
 
-        const {getExportDir} = require('./data/node_requires/platformUtils');
+        const {getExportDir} = require('src/node_requires/platformUtils');
         // Run a local server for ct.js games
         let fileServer;
         if (!this.debugServerStarted) {
@@ -422,7 +422,7 @@ app-view.flexcol
             document.body.style.cursor = 'progress';
             this.exportingProject = true;
             this.update();
-            const runCtExport = require('./data/node_requires/exporter').exportCtProject;
+            const runCtExport = require('src/node_requires/exporter').exportCtProject;
             this.exporterError = void 0;
             runCtExport(global.currentProject, global.projdir)
             .then(() => {
@@ -466,7 +466,7 @@ app-view.flexcol
             document.body.style.cursor = 'progress';
             this.exportingProject = true;
             this.exporterError = void 0;
-            const runCtExport = require('./data/node_requires/exporter').exportCtProject;
+            const runCtExport = require('src/node_requires/exporter').exportCtProject;
             runCtExport(global.currentProject, global.projdir)
             .then(() => {
                 nw.Shell.openExternal(`http://localhost:${fileServer.address().port}/`);

@@ -5,7 +5,7 @@ import {getBuildDir, isNodeInstalled} from '../platformUtils';
 import {getStartingRoom} from './rooms';
 import {getTextureOrig} from '../resources/textures';
 
-const {bundleApp} = require('node_modules/@neutralinojs/neu/src/modules/bundler.js');
+const {bundleApp} = require('@neutralinojs/neu/src/modules/bundler.js');
 
 const png2icons = require('png2icons');
 
@@ -127,7 +127,7 @@ export const exportForDesktop = async (
         const execa = require('execa');
         try {
             const {stdout} = await execa('node', [
-                './node_modules/resedit-cli/dist/cli.js',
+                './resedit-cli/dist/cli.js',
                 '--in',
                 winPath,
                 '--out',

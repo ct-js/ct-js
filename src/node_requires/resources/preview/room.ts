@@ -2,7 +2,7 @@
 import {getById} from '..';
 import {outputCanvasToFile} from '../../utils/imageUtils';
 
-import * as PIXI from 'node_modules/pixi.js';
+import * as PIXI from 'pixi.js';
 
 export class RoomPreviewer {
     static get(room: assetRef | IRoom, fileSys?: boolean | 'last'): string {
