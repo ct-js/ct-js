@@ -42,9 +42,9 @@ main-menu-project
         this.openIncludeFolder = () => {
             const fs = require('fs-extra'),
                   path = require('path');
-            fs.ensureDir(path.join(global.projdir, '/include'))
+            fs.ensureDir(path.join(window.projdir, '/include'))
             .then(() => {
-                nw.Shell.openItem(path.join(global.projdir, '/include'));
+                nw.Shell.openItem(path.join(window.projdir, '/include'));
             });
         };
 
@@ -62,8 +62,8 @@ main-menu-project
                 await this.saveProject();
                 await fs.remove(outName);
                 await fs.remove(inDir);
-                await fs.copy(global.projdir + '.ict', path.join(inDir, sessionStorage.projname));
-                await fs.copy(global.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
+                await fs.copy(window.projdir + '.ict', path.join(inDir, sessionStorage.projname));
+                await fs.copy(window.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
 
                 const archiver = require('archiver');
                 const archive = archiver('zip'),

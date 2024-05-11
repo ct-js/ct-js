@@ -48,7 +48,7 @@ rendering-settings
         this.namespace = 'settings.rendering';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.mixin(require('src/node_requires/riotMixins/wire').default);
-        this.currentProject = global.currentProject;
+        this.currentProject = window.currentProject;
         this.renderSettings = this.currentProject.settings.rendering;
 
         this.wireAndUpdatePixelated = path => e => {

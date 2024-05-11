@@ -1,5 +1,5 @@
 app-view.flexcol
-    nav.nogrow.flexrow(if="{global.currentProject}" ref="mainNav")
+    nav.nogrow.flexrow(if="{window.currentProject}" ref="mainNav")
         ul.aNav.tabs.nogrow
             li.limitwidth(onclick="{changeTab('menu')}" title="{voc.ctIDE}" class="{active: tab === 'menu'}" ref="mainMenuButton")
                 svg.feather.nmr
@@ -48,7 +48,7 @@ app-view.flexcol
                                 use(xlink:href="#x")
                         svg.feather.anActionableIcon(if="{!tabsDirty[ind]}" onclick="{closeAsset}")
                             use(xlink:href="#x")
-    div.flexitem.relative(if="{global.currentProject}")
+    div.flexitem.relative(if="{window.currentProject}")
         main-menu(show="{tab === 'menu'}" ref="mainMenu")
         debugger-screen-multiwindow(if="{tab === 'debug' && !splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
         debugger-screen-split(if="{tab === 'debug' && splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
@@ -89,7 +89,7 @@ app-view.flexcol
         asset="{confirmationAsset}"
         if="{showAssetConfirmation}"
     )
-    dnd-processor(if="{global.currentProject}" currentfolder="{refs.assets.currentFolder}")
+    dnd-processor(if="{window.currentProject}" currentfolder="{refs.assets.currentFolder}")
     .aDimmer.fixed.pad(if="{showPrelaunchSave}")
         button.aDimmer-aCloseButton(onclick="{cancelLaunch}")
             svg.feather
@@ -335,10 +335,10 @@ app-view.flexcol
             }
         };
         this.saveRecovery = () => {
-            if (global.currentProject) {
+            if (window.currentProject) {
                 const YAML = require('js-yaml');
-                const recoveryYAML = YAML.dump(global.currentProject);
-                fs.outputFile(global.projdir + '.ict.recovery', recoveryYAML);
+                const recoveryYAML = YAML.dump(window.currentProject);
+                fs.outputFile(window.projdir + '.ict.recovery', recoveryYAML);
             }
             this.saveRecoveryDebounce();
         };
@@ -424,7 +424,7 @@ app-view.flexcol
             this.update();
             const runCtExport = require('src/node_requires/exporter').exportCtProject;
             this.exporterError = void 0;
-            runCtExport(global.currentProject, global.projdir)
+            runCtExport(window.currentProject, window.projdir)
             .then(() => {
                 if (localStorage.disableBuiltInDebugger === 'yes') {
                     // Open in default browser
@@ -444,7 +444,7 @@ app-view.flexcol
                         this.splitDebugger = nw.Screen.screens.length === 1;
                     }
                     this.debugParams = {
-                        title: global.currentProject.settings.authoring.title,
+                        title: window.currentProject.settings.authoring.title,
                         link: `http://localhost:${fileServer.address().port}/`
                     };
                 }
@@ -467,7 +467,7 @@ app-view.flexcol
             this.exportingProject = true;
             this.exporterError = void 0;
             const runCtExport = require('src/node_requires/exporter').exportCtProject;
-            runCtExport(global.currentProject, global.projdir)
+            runCtExport(window.currentProject, window.projdir)
             .then(() => {
                 nw.Shell.openExternal(`http://localhost:${fileServer.address().port}/`);
             })

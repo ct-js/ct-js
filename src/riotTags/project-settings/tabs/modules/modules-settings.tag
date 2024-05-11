@@ -63,7 +63,7 @@ modules-settings.aPanel.aView
 
         this.resortEnabledModules = () => {
             this.enabledModules = this.allModules
-                .filter(module => module.name in global.currentProject.libs);
+                .filter(module => module.name in window.currentProject.libs);
         };
         this.refreshModules = () => {
             loadModules().then(modules => {

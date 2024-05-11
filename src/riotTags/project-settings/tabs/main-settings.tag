@@ -42,7 +42,7 @@ main-settings
         this.namespace = 'settings';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.mixin(require('src/node_requires/riotMixins/wire').default);
-        this.currentProject = global.currentProject;
+        this.currentProject = window.currentProject;
         this.authoring = this.currentProject.settings.authoring;
 
         this.changeTitle = e => {

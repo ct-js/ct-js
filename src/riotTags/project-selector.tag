@@ -335,14 +335,14 @@ project-selector
                 alertify.error(this.voc.unableToWriteToFolders + '\n' + e);
                 throw e;
             });
-            global.projdir = path.join(way, codename);
+            window.projdir = path.join(way, codename);
             sessionStorage.projname = codename + '.ict';
-            await fs.ensureDir(path.join(global.projdir, '/img'));
-            fs.ensureDir(path.join(global.projdir, '/snd'));
-            fs.ensureDir(path.join(global.projdir, '/include'));
+            await fs.ensureDir(path.join(window.projdir, '/img'));
+            fs.ensureDir(path.join(window.projdir, '/snd'));
+            fs.ensureDir(path.join(window.projdir, '/include'));
             fs.outputFile(path.join(way, '.gitignore'), gitignore);
             setTimeout(() => { // for some reason, it must be done through setTimeout; otherwise it fails
-                fs.copy('./data/img/notexture.png', path.join(global.projdir + '/img/splash.png'), e => {
+                fs.copy('./data/img/notexture.png', path.join(window.projdir + '/img/splash.png'), e => {
                     if (e) {
                         alertify.error(e);
                         console.error(e);
@@ -451,7 +451,7 @@ project-selector
             if (path.extname(proj).toLowerCase() === '.ict') {
                 openProject(proj);
                 sessionStorage.projname = path.basename(proj);
-                global.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
+                window.projdir = path.dirname(proj) + path.sep + path.basename(proj, '.ict');
             } else {
                 alertify.error(this.vocGlob.wrongFormat);
             }

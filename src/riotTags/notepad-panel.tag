@@ -113,9 +113,9 @@ notepad-panel#notepad.aPanel.dockright(class="{opened: opened}")
                 this.notepadglobal = window.setupCodeEditor(this.refs.notepadglobal, notepadProps);
 
                 this.notepadglobal.setValue(localStorage.notes);
-                this.notepadlocal.setValue(global.currentProject.notes || '');
+                this.notepadlocal.setValue(window.currentProject.notes || '');
                 this.notepadlocal.onDidChangeModelContent(() => {
-                    global.currentProject.notes = this.notepadlocal.getValue();
+                    window.currentProject.notes = this.notepadlocal.getValue();
                     glob.modified = true;
                 });
                 this.notepadglobal.onDidChangeModelContent(() => {

@@ -48,7 +48,7 @@ actions-input-selector
         this.refreshModules = () => {
             this.inputProviders = [];
             const promises = [];
-            for (const modName in global.currentProject.libs) {
+            for (const modName in window.currentProject.libs) {
                 const promise =
                     fs.readJSON(path.join(libsDir, modName, 'module.json'))
                     .then(catmod => {

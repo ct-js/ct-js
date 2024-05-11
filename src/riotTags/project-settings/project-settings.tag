@@ -50,20 +50,20 @@ project-settings.aPanel.aView.pad.flexrow
                 #{name + '-settings'}
         .pad(if="{tab === 'moduleSettings' && currentModule}")
             h1 {localizeField(currentModule.manifest.main, 'name')}
-            extensions-editor(customextends="{currentModule.manifest.fields}" entity="{global.currentProject.libs[currentModule.name]}")
+            extensions-editor(customextends="{currentModule.manifest.fields}" entity="{window.currentProject.libs[currentModule.name]}")
         content-editor(if="{tab === 'contentEntriesEditor' && currentContentType}" contenttype="{currentContentType}")
     script.
         this.namespace = 'settings';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.mixin(require('src/node_requires/riotMixins/wire').default);
-        this.currentProject = global.currentProject;
+        this.currentProject = window.currentProject;
         this.currentProject.settings.fps = this.currentProject.settings.fps || 30;
 
         this.tab = 'main';
         this.openTab = tab => () => {
             if (this.tab === 'content') { // Update type definitions for content types when swutching away from the content tab
                 require('src/node_requires/resources/content')
-                    .updateContentTypedefs(global.currentProject);
+                    .updateContentTypedefs(window.currentProject);
             }
             this.tab = tab;
             this.currentModule = null;
@@ -76,7 +76,7 @@ project-settings.aPanel.aView.pad.flexrow
         this.modulesWithFields = [];
         this.updateModulesWithFields = async () => {
             this.modulesWithFields = (await loadModules())
-                .filter(module => module.name in global.currentProject.libs)
+                .filter(module => module.name in window.currentProject.libs)
                 .filter(module => module.manifest.fields);
             this.update();
         };
@@ -91,7 +91,7 @@ project-settings.aPanel.aView.pad.flexrow
             this.currentContentType = contentType;
             this.update();
             require('src/node_requires/resources/content')
-                .updateContentTypedefs(global.currentProject);
+                .updateContentTypedefs(window.currentProject);
         };
         window.orders.on('openContentEntries', contentEditorListener);
         this.on('unmount', () => {
@@ -115,5 +115,5 @@ project-settings.aPanel.aView.pad.flexrow
             this.currentContentType = type;
             this.tab = 'contentEntriesEditor';
             require('src/node_requires/resources/content')
-                .updateContentTypedefs(global.currentProject);
+                .updateContentTypedefs(window.currentProject);
         };

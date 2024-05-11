@@ -124,7 +124,7 @@ export const exportForDesktop = async (
     });
     */
     if (isNodeInstalled) {
-        const execa = require('execa');
+        const {execa} = require('execa');
         try {
             const {stdout} = await execa('node', [
                 './resedit-cli/dist/cli.js',

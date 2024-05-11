@@ -261,7 +261,7 @@ extensions-editor
             this.extensions = [];
 
             const promises = [];
-            for (const lib in global.currentProject.libs) {
+            for (const lib in window.currentProject.libs) {
                 promises.push(fs.readJSON(path.join(libsDir, lib, 'module.json'))
                     .then(moduleJson => {
                         const key = this.opts.type + 'Extends';

@@ -20,9 +20,9 @@ export class SoundPreviewer {
             if (fileSys === 'last') {
                 return `snd${sound.uid}.png`;
             }
-            return join(global.projdir, 'prev', basename);
+            return join(window.projdir, 'prev', basename);
         }
-        return `file://${global.projdir.replace(/\\/g, '/')}/prev/${basename}?cache=${sound.lastmod}`;
+        return `file://${window.projdir.replace(/\\/g, '/')}/prev/${basename}?cache=${sound.lastmod}`;
     }
 
     static getClassic(sound: ISound, _x2: boolean, fileSys: boolean): string {

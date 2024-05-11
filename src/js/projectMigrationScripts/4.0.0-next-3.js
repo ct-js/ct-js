@@ -41,7 +41,7 @@ window.migrationProcess.push({
                 if (!sound.origname) {
                     continue;
                 }
-                const oldFile = global.projdir + '/snd/s' + sound.uid + path.extname(sound.origname);
+                const oldFile = window.projdir + '/snd/s' + sound.uid + path.extname(sound.origname);
                 const preload = sound.isMusic;
                 for (const oldKey of ['origname', 'ogg', 'mp3', 'wav', 'poolSize', 'isMusic']) {
                     delete sound[oldKey];

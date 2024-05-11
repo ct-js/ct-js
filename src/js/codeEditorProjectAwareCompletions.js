@@ -44,7 +44,7 @@
     };
 
     const createActionProposals = function createActionProposals(range) {
-        return global.currentProject.actions.map(action => ({
+        return window.currentProject.actions.map(action => ({
             label: action.name,
             kind: monaco.languages.CompletionItemKind.Property,
             insertText: action.name,

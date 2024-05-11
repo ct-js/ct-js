@@ -29,11 +29,11 @@ main-menu-deploy
             const runCtExport = require('src/node_requires/exporter').exportCtProject;
             const exportFile = path.join(
                 buildFolder,
-                `${global.currentProject.settings.authoring.title || 'ct.js game'}.zip`
+                `${window.currentProject.settings.authoring.title || 'ct.js game'}.zip`
             );
             const inDir = await getExportDir();
             await fs.remove(exportFile);
-            runCtExport(global.currentProject, global.projdir, true)
+            runCtExport(window.currentProject, window.projdir, true)
             .then(() => {
                 const archiver = require('archiver');
                 const archive = archiver('zip'),

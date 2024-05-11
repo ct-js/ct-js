@@ -1,7 +1,7 @@
 import {join} from 'path';
 import fs from 'fs-extra';
 
-const execa = require('execa');
+const {execa} = require('execa');
 
 import {getBuildDir} from '../platformUtils';
 import {getDOMImageFromTexture} from '../resources/textures';

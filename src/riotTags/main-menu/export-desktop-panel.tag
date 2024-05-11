@@ -3,9 +3,6 @@ export-desktop-panel.aDimmer
         .flexfix-header
             h2.nmt {voc.exportPanel}
         .flexfix-body
-            h3(if="{log.length}")
-                | {voc.log}
-                .rem.a(onclick="{copyLog}").toright {vocGlob.copy}
             .aSpacer(if="{!authoring.title}")
             .aPanel.pad.error(if="{!authoring.title}") {voc.projectTitleRequired}
             .aSpacer(if="{!authoring.description}")
@@ -18,6 +15,9 @@ export-desktop-panel.aDimmer
             .aSpacer(if="{!nodeEnabled && authoring.appId && authoring.title && !log.length}")
             .aPanel.pad.success(if="{nodeEnabled && authoring.appId && authoring.title && !log.length}") {voc.goodToGo}
             .aSpacer
+            h3(if="{log.length}")
+                | {voc.log}
+                .rem.a(onclick="{copyLog}").toright {vocGlob.copy}
             pre.selectable(if="{log.length}" ref="log")
                 div(each="{text in log}") {text.toString()}
         .flexfix-footer
@@ -38,8 +38,8 @@ export-desktop-panel.aDimmer
         this.working = false;
         this.log = [];
 
-        global.currentProject.settings.export = global.currentProject.settings.export || {};
-        this.projSettings = global.currentProject.settings;
+        window.currentProject.settings.export = window.currentProject.settings.export || {};
+        this.projSettings = window.currentProject.settings;
         this.authoring = this.projSettings.authoring;
 
         this.nodeEnabled = require('src/node_requires/platformUtils').isNodeInstalled;
@@ -61,10 +61,10 @@ export-desktop-panel.aDimmer
             const {dirname} = require('path');
 
             try {
-                const projectDir = global.projdir;
-                const exportedPath = await runCtExport(global.currentProject, projectDir, true, true);
+                const projectDir = window.projdir;
+                const exportedPath = await runCtExport(window.currentProject, projectDir, true, true);
                 const buildsPath = await exportForDesktop(
-                    global.currentProject,
+                    window.currentProject,
                     dirname(exportedPath),
                     logLine => {
                         this.log.push(logLine);

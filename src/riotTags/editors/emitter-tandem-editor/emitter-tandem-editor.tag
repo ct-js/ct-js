@@ -296,9 +296,9 @@ emitter-tandem-editor.aPanel.aView.flexrow(class="{opts.class}")
                 height: Math.round(box.height),
                 sharedTicker: false,
                 view: this.refs.canvas,
-                antialias: !global.currentProject.settings.rendering.pixelatedrender
+                antialias: !window.currentProject.settings.rendering.pixelatedrender
             });
-            if (global.currentProject.settings.rendering.pixelatedrender) {
+            if (window.currentProject.settings.rendering.pixelatedrender) {
                 PIXI.settings.ROUND_PIXELS = true;
                 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
             }

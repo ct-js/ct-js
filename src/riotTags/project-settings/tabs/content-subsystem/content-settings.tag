@@ -49,7 +49,7 @@ content-settings
             });
             window.signals.trigger('contentTypeCreated');
             require('src/node_requires/resources/content')
-                .updateContentTypedefs(global.currentProject);
+                .updateContentTypedefs(window.currentProject);
         };
 
         this.confirmDeletion = e => {

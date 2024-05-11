@@ -50,10 +50,9 @@
   "webkit": {
     "plugin": false
   },
-  "chromium-args": "--mixed-context --enable-features=nw2 --load-extensions --force-color-profile=srgb --disable-features=ColorCorrectRendering",
+  "chromium-args": "--enable-features=nw2 --load-extensions --force-color-profile=srgb --disable-features=ColorCorrectRendering",
   "dependencies": {
-    "monaco-editor": "^0.47.0",
-    "monaco-themes": "^0.4.4",
+    "@neutralinojs/neu": "^11.0.1",
     "png2icons": "^2.0.1"
   }
 }

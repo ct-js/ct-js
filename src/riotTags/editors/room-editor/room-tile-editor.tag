@@ -176,7 +176,7 @@ room-tile-editor.room-editor-Tiles.flexfix(class="{opts.class}")
                 img = this.currentTextureImg;
             c.width = img.width;
             c.height = img.height;
-            if (global.currentProject.settings.rendering.pixelatedrender) {
+            if (window.currentProject.settings.rendering.pixelatedrender) {
                 c.style.imageRendering = 'pixelated';
             } else {
                 c.style.imageRendering = 'unset';

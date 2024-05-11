@@ -183,12 +183,28 @@ const concatScripts = () =>
     })
     .on('change', fileChangeNotifier);
 
+// As seen at https://github.com/microsoft/monaco-editor/blob/b400f83fe3ac6a1780b7eed419dc4d83dbf32919/samples/browser-esm-esbuild/build.js
+const workerEntryPoints = [
+    'vs/language/json/json.worker.js',
+    'vs/language/css/css.worker.js',
+    'vs/language/html/html.worker.js',
+    'vs/language/typescript/ts.worker.js',
+    'vs/editor/editor.worker.js'
+];
+const bundleMonacoWorkers = () => esbuild({
+    entryPoints: workerEntryPoints.map((entry) => `node_modules/monaco-editor/esm/${entry}`),
+    bundle: true,
+    format: 'iife',
+    outbase: 'node_modules/monaco-editor/esm/',
+    outdir: './app/data/monaco-workers/'
+});
+
 const builtinModules = JSON.parse(fs.readFileSync('./builtinModules.json'));
 builtinModules.push(...builtinModules.map(m => `node:${m}`));
 const bundleIdeScripts = () => esbuild({
     entryPoints: ['./temp/bundle.js'],
     bundle: true,
-    minify: true,
+    minify: false,
     legalComments: 'inline',
     platform: 'browser',
     format: 'iife',
@@ -196,11 +212,13 @@ const bundleIdeScripts = () => esbuild({
     external: [
         ...builtinModules,
         'original-fs',
-        'monaco-themes',
-        'monaco-editor',
-        'png2icons'
+        'png2icons',
+        '@neutralinojs/neu'
     ],
-    sourcemap: true
+    sourcemap: true,
+    loader: {
+        '.ttf': 'file'
+    }
 });
 
 export const bakeTypedefs = () =>
@@ -426,6 +444,7 @@ export const fetchNeutralino = async () => {
 };
 
 export const build = gulp.parallel([
+    bundleMonacoWorkers,
     gulp.series(icons, compilePug),
     compileStylus,
     gulp.series(

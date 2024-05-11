@@ -502,4 +502,4 @@
 
         return codeEditor;
     };
-})(this);
+})();

@@ -94,7 +94,7 @@ export-mobile-panel.aDimmer
             }
         });
 
-        this.projSettings = global.currentProject.settings;
+        this.projSettings = window.currentProject.settings;
 
         const {exportCtProject} = require('src/node_requires/exporter');
         const {dirname} = require('path');
@@ -109,11 +109,11 @@ export-mobile-panel.aDimmer
                 this.update();
             };
             try {
-                const projectDir = global.projdir;
-                const exportedPath = await exportCtProject(global.currentProject, projectDir, true, false);
+                const projectDir = window.projdir;
+                const exportedPath = await exportCtProject(window.currentProject, projectDir, true, false);
                 const {exportMobile} = require('src/node_requires/exporter/mobilePackager');
                 const apkFolder = await exportMobile(
-                    global.currentProject,
+                    window.currentProject,
                     dirname(exportedPath),
                     onProgress
                 );

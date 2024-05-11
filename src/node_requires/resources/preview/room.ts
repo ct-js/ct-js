@@ -17,9 +17,9 @@ export class RoomPreviewer {
                 return `r${room.uid}.png`;
             }
             const path = require('path');
-            return path.join(global.projdir, 'prev', `r${room.uid}.png`);
+            return path.join(window.projdir, 'prev', `r${room.uid}.png`);
         }
-        return `file://${global.projdir.replace(/\\/g, '/')}/prev/r${
+        return `file://${window.projdir.replace(/\\/g, '/')}/prev/r${
             room.uid
         }.png?cache=${room.lastmod}`;
     }

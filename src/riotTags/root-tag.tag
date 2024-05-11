@@ -6,7 +6,7 @@ root-tag(class="{pride: localStorage.prideMode === 'on'}")
         this.projectOpened = false;
         window.id = Math.random();
         window.signals.on('resetAll', () => {
-            global.currentProject = false;
+            window.currentProject = false;
             require('src/node_requires/glob').modified = false;
             this.projectOpened = false;
             riot.update();

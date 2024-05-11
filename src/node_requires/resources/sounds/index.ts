@@ -67,7 +67,7 @@ export const createAsset = async (name?: string): Promise<ISound> => {
 };
 
 export const getVariantBasePath = (sound: ISound, variant: ISound['variants'][0]): string =>
-    `${global.projdir}/snd/s${sound.uid}_${variant.uid}`;
+    `${window.projdir}/snd/s${sound.uid}_${variant.uid}`;
 export const getVariantPath = (sound: ISound, variant: ISound['variants'][0]): string =>
     `${getVariantBasePath(sound, variant)}${path.extname(variant.source)}`;
 
