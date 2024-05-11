@@ -210,10 +210,18 @@ const bundleIdeScripts = () => esbuild({
     format: 'iife',
     outfile: './app/data/bundle.js',
     external: [
+        // use node.js built-in modules as is
         ...builtinModules,
+        // used by fs-extra? it is needed for electron only
+        // and it is not even installed but it breaks if substituted by esbuild
         'original-fs',
+        // just breaks when run in a separated context
         'png2icons',
-        '@neutralinojs/neu'
+        // Archiver.js breaks when run in a separated context (setImmediate not defined)
+        '@neutralinojs/neu',
+        // is used for checking if we run ct.js in a dev environment
+        // (never is installed into ct.js, gets require-d from a parent directory)
+        'gulp'
     ],
     sourcemap: true,
     loader: {
