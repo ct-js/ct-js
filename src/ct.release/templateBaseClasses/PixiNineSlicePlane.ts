@@ -35,6 +35,6 @@ export default class PixiPanel extends PIXI.NineSlicePlane {
             this.height = baseHeight * (exts.scaleY as number);
         }
         uLib.reshapeNinePatch(this as CopyPanel);
-        this.blendMode = t.blendMode || PIXI.BLEND_MODES.NORMAL;
+        this.blendMode = t.blendMode || 'normal';
     }
 }

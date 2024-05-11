@@ -15,7 +15,7 @@ import {BaseClass} from '../../node_requires/exporter/_exporterContracts';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Constructor<T> = Function & { prototype: T };
-export const baseClassToPixiClass: Record<BaseClass, Constructor<pixiMod.DisplayObject>> = {
+export const baseClassToPixiClass: Record<BaseClass, Constructor<pixiMod.Container>> = {
     AnimatedSprite: PixiAnimatedSprite,
     Button: PixiButton,
     Container: PixiContainer,

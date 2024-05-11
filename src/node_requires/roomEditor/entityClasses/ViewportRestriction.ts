@@ -8,8 +8,12 @@ export class ViewportRestriction extends ViewportFrame {
         super(editor);
         this.x = this.editor.ctRoom.restrictMinX || 0;
         this.y = this.editor.ctRoom.restrictMinY || 0;
-        this.icon
-        .lineStyle(2, getPixiSwatch('orange'), 1, 0.5);
+        this.icon.setStrokeStyle({
+            width: 2,
+            color: getPixiSwatch('orange'),
+            join: 'round',
+            cap: 'round'
+        });
         this.icon.drawRect(0, 10, 20, 14);
         this.icon.arc(10, 6, 6, Math.PI, Math.PI * 2);
         this.icon.moveTo(10, 14);

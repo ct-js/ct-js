@@ -59,7 +59,6 @@ export class SoundPreviewer {
                     const waveform = new Sprite(new Texture(base as any));
                     const app = new Application();
                     app.stage.addChild(waveform);
-                    waveform.updateTransform();
                     const canvas = await app.renderer.extract.canvas(waveform) as HTMLCanvasElement;
                     resolve(canvas);
                     app.destroy(false, {

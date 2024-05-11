@@ -207,8 +207,7 @@ export const getTemplateTextureOrig = (template: ITemplate | assetRef, fs: boole
     return getTextureOrig(template.texture || -1, fs);
 };
 
-export const getPixiTexture = (template: ITemplate | assetRef):
-PIXI.Texture<PIXI.ImageResource>[] => {
+export const getPixiTexture = (template: ITemplate | assetRef): PIXI.Texture[] => {
     if (typeof template === 'string') {
         template = getById('template', template);
     }

@@ -17,7 +17,7 @@ type RoomMergeResult = {
     backgrounds: Background[];
 };
 
-export class Room extends PIXI.Container<pixiMod.DisplayObject> {
+export class Room extends PIXI.Container<pixiMod.ContainerChild> {
     static roomId = 0;
     static getNewId(): number {
         this.roomId++;

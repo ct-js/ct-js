@@ -16,7 +16,7 @@ declare var PIXI: typeof pixiMod & {
  * Usually you won't create new instances of it, but if you need, you can substitute
  * ct.camera with a new one.
  *
- * @extends {PIXI.DisplayObject}
+ * @extends {PIXI.Container}
  * @class
  *
  * @property {number} x The real x-coordinate of the camera.
@@ -131,8 +131,8 @@ const restrictInRect = function restrictInRect(camera: Camera) {
         camera.targetY = Math.min(boundary, camera.targetY);
     }
 };
-export class Camera extends PIXI.DisplayObject {
-    follow: pixiMod.DisplayObject | BasicCopy | undefined | false;
+export class Camera extends PIXI.Container {
+    follow: pixiMod.Sprite | BasicCopy | undefined | false;
     followX: boolean;
     followY: boolean;
     targetX: number;
@@ -168,8 +168,15 @@ export class Camera extends PIXI.DisplayObject {
     constructor(x: number, y: number, w: number, h: number) {
         super();
         this.reset(x, y, w, h);
-        this.getBounds = this.getBoundingBox;
     }
+    getBounds = (
+        skipUpdate?: boolean | undefined,
+        bounds?: pixiMod.Bounds | undefined
+    ): pixiMod.Bounds => {
+        void skipUpdate;
+        void bounds;
+        return this.getBoundingBox();
+    };
     reset(x: number, y: number, w: number, h: number): void {
         this.followX = this.followY = true;
         this.follow = void 0;
@@ -205,23 +212,8 @@ export class Camera extends PIXI.DisplayObject {
         this.#height = value;
     }
 
-    get scale(): pixiMod.ObservablePoint {
-        return this.transform.scale;
-    }
-    set scale(value: number | pixiMod.Point) {
-        if (typeof value === 'number') {
-            this.transform.scale.x = this.transform.scale.y = value;
-        } else {
-            this.transform.scale.copyFrom(value);
-        }
-    }
-
     // Dummying unneeded methods that need implementation in non-abstract classes of DisplayObject
     render(): void {
-        void this;
-    }
-    // Can't have children as it is not a container
-    removeChild(): void {
         void this;
     }
     // Same story
@@ -458,17 +450,15 @@ export class Camera extends PIXI.DisplayObject {
      * Useful for rotated viewports when something needs to be reliably covered by a rectangle.
      * @returns {PIXI.Rectangle} The bounding box of the camera.
      */
-    getBoundingBox(): pixiMod.Rectangle {
+    getBoundingBox(): pixiMod.Bounds {
         const bb = new PIXI.Bounds();
         const tl = this.getTopLeftCorner(),
               tr = this.getTopRightCorner(),
               bl = this.getBottomLeftCorner(),
               br = this.getBottomRightCorner();
-        bb.addPoint(new PIXI.Point(tl.x, tl.y));
-        bb.addPoint(new PIXI.Point(tr.x, tr.y));
-        bb.addPoint(new PIXI.Point(bl.x, bl.y));
-        bb.addPoint(new PIXI.Point(br.x, br.y));
-        return bb.getRectangle();
+        bb.addFrame(tl.x, tl.y, br.x, br.y);
+        bb.addFrame(tr.x, tr.y, bl.x, bl.y);
+        return bb;
     }
 
     /**
@@ -478,7 +468,7 @@ export class Camera extends PIXI.DisplayObject {
      * @param {PIXI.DisplayObject} copy An object to check for.
      * @returns {boolean} `true` if an object is visible, `false` otherwise.
      */
-    contains(copy: pixiMod.DisplayObject): boolean {
+    contains(copy: pixiMod.Container): boolean {
         // `true` skips transforms recalculations, boosting performance
         const bounds = copy.getBounds(true);
         return bounds.right > 0 &&
@@ -525,7 +515,7 @@ export class Camera extends PIXI.DisplayObject {
               sy = 1 / (isNaN(this.scale.y) ? 1 : this.scale.y);
         for (const item of pixiApp.stage.children) {
             if (!('isUi' in item &&
-                (item as pixiMod.DisplayObject & {isUi: boolean}).isUi) &&
+                (item as pixiMod.Container & {isUi: boolean}).isUi) &&
                 item.pivot
             ) {
                 item.x = -this.width / 2;

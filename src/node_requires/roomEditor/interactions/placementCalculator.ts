@@ -16,8 +16,8 @@ import * as PIXI from 'pixi.js';
 
 type PlacementData = {
     mode: 'free' | 'straight';
-    startPos: PIXI.IPoint;
-    prevPos: PIXI.IPoint;
+    startPos: PIXI.Point;
+    prevPos: PIXI.Point;
     prevLength: number;
     stepX: number;
     stepY: number;
@@ -38,16 +38,16 @@ type ISimplePoint = {
 
 // eslint-disable-next-line max-lines-per-function
 export const calcPlacement = (
-    newPos: PIXI.IPoint,
+    newPos: PIXI.Point,
     affixedData: PlacementData,
-    placeImmediately: (position: PIXI.IPoint) => void
+    placeImmediately: (position: PIXI.Point) => void
 ): ghostPoints => {
     const from = affixedData.diagonalGrid ? fromDiagonal : fromRectangular;
     const to = affixedData.diagonalGrid ? toDiagonal : toRectangular;
     // Correct placement position based on step size.
     const newPosOnGrid = to(newPos, affixedData.gridX, affixedData.gridY),
           startPosOnGrid = to(affixedData.startPos, affixedData.gridX, affixedData.gridY);
-    let newPosWSkips: ISimplePoint | PIXI.IPoint = from({
+    let newPosWSkips: ISimplePoint | PIXI.Point = from({
         x: newPosOnGrid.x - ((startPosOnGrid.x - newPosOnGrid.x) % affixedData.stepX),
         y: newPosOnGrid.y - ((startPosOnGrid.y - newPosOnGrid.y) % affixedData.stepY)
     }, affixedData.gridX, affixedData.gridY);

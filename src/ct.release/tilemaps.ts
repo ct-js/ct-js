@@ -1,7 +1,7 @@
 import res from './res';
 import uLib from './u';
 import templatesLib from './templates';
-import {settings as settingsLib} from '.';
+// import {settings as settingsLib} from '.';
 import roomsLib from 'rooms';
 
 import type * as pixiMod from 'pixi.js';
@@ -19,7 +19,6 @@ export class Tile extends PIXI.Sprite {
 class TileChunk extends PIXI.Container {
     chunkX: number;
     chunkY: number;
-    cacheAsBitmap: boolean; // pixi.js' Container is a jerk
 }
 
 /**
@@ -155,10 +154,12 @@ export class Tilemap extends PIXI.Container {
                 continue;
             }
             this.addChild(this.cells[i]);
+            /*
             if (settingsLib.pixelart) {
                 this.cells[i].cacheAsBitmapResolution = 1;
             }
             this.cells[i].cacheAsBitmap = true;
+            */
         }
 
         this.cached = true;
@@ -206,7 +207,7 @@ export class Tilemap extends PIXI.Container {
 
         for (let i = 0, l = this.cells.length; i < l; i++) {
             this.addChild(this.cells[i]);
-            this.cells[i].cacheAsBitmap = true;
+            // this.cells[i].cacheAsBitmap = true;
         }
 
         this.cached = true;

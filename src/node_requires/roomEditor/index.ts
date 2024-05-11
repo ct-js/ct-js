@@ -32,10 +32,10 @@ class Cursor {
     y: number;
     snapTarget: SnapTarget;
     getLocalPosition(
-        displayObject: PIXI.DisplayObject,
-        point: PIXI.IPointData,
-        globalPos?: PIXI.IPointData
-    ): PIXI.IPointData {
+        displayObject: PIXI.Container,
+        point: PIXI.PointData,
+        globalPos?: PIXI.PointData
+    ): PIXI.PointData {
         return displayObject.worldTransform.applyInverse(globalPos || this, point);
     }
     update(e: PIXI.FederatedPointerEvent) {
@@ -300,8 +300,7 @@ class RoomEditor extends PIXI.Application {
 
     deserialize(room: IRoom): void {
         this.simulate = room.simulate ?? true;
-        (this.renderer as PIXI.Renderer).background.color =
-            PIXI.utils.string2hex(room.backgroundColor ?? '#000000');
+        (this.renderer as PIXI.Renderer).background.color = new PIXI.Color(room.backgroundColor ?? '#000000');
         // Add primary viewport
         this.primaryViewport = new Viewport(room, true, this);
         this.restrictViewport = new ViewportRestriction(this);
@@ -446,14 +445,14 @@ class RoomEditor extends PIXI.Application {
      * @returns {void}
      */
     realignCamera(): void {
-        this.room.transform.setFromMatrix(this.camera.worldTransform
+        this.room.localTransform.copyFrom(this.camera.worldTransform
             .clone()
             .invert()
             .translate(
                 this.view.width / devicePixelRatio / 2,
                 this.view.height / devicePixelRatio / 2
             ));
-        this.overlays.transform = this.room.transform;
+        this.overlays.localTransform = this.room.localTransform;
         this.redrawGrid();
         this.redrawViewports();
     }
@@ -722,7 +721,7 @@ class RoomEditor extends PIXI.Application {
         if (!this.mouseoverHint.visible) {
             return;
         }
-        const {pointer} = this.renderer.plugins.interaction;
+        const {pointer} = this.renderer.events;
         this.mouseoverHint.x = pointer.global.x + 8;
         this.mouseoverHint.y = pointer.global.y;
     }

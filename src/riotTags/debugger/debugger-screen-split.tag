@@ -3,8 +3,7 @@
 debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !verticalLayout}")
     webview.tall#thePreview(
         ref="gameView"
-        partition="persist:trusted"
-        allownw nwfaketop
+        nwfaketop
     )
     .aResizer(ref="gutter" onmousedown="{gutterMouseDown}" class="{vertical: verticalLayout, horizontal: !verticalLayout}")
     .flexfix(
@@ -13,7 +12,6 @@ debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !ve
         webview.tall.flexfix-body(
             ref="devtoolsView"
             src="empty.html"
-            partition="persist:trusted"
             style="overflow: hidden;"
             allownw
         )

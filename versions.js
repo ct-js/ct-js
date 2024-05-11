@@ -14,7 +14,6 @@ const makeTab = () => console.error(`╭─${'─'.repeat(versionMessage.length)
 
 const packagesToCheck = {
     pixi: 'pixi.js',
-    pixiLegacy: 'pixi.js-legacy',
     pixiParticles: '@pixi/particle-emitter'
 };
 const packageVersions = {};
@@ -26,13 +25,8 @@ for (const packageKey in packagesToCheck) {
     }
 }
 
-if (packageVersions.pixi !== packageVersions.pixiLegacy) {
-    makeTab();
-    throw new Error(`pixi.js-legacy and pixi.js packages in the app folder are not equal. This must be fixed. Current values are "${packageVersions.pixiLegacy}" for pixi.js-legacy and "${packageVersions.pixi}" for pixi.js.`);
-}
-
 module.exports = {
-    nwjs: '0.72.0',
+    nwjs: '0.87.0',
     nwjsArm: '0.67.1',
     ...packageVersions
 };

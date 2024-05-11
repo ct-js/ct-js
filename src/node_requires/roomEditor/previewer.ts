@@ -66,9 +66,8 @@ export class RoomEditorPreview extends PIXI.Application {
         // Solid-fill background as set in room settings
         if (!room.isUi) {
             const background = new PIXI.Graphics();
-            background.beginFill(PIXI.utils.string2hex(room.backgroundColor || '#000000'));
-            background.drawRect(0, 0, room.width, room.height);
-            background.endFill();
+            background.rect(0, 0, room.width, room.height);
+            background.fill(room.backgroundColor || '#000000');
             this.stage.addChild(background);
         }
 

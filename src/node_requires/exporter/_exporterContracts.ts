@@ -211,15 +211,17 @@ export type ExportedStyle = {
     lineHeight: number;
     wordWrap?: boolean;
     wordWrapWidth?: number;
-    fill?: string | string[];
+    fill?: number | number[];
     fillGradientType?: 0 | 1;
     stroke?: string;
     strokeThickness?: number;
-    dropShadow?: boolean;
-    dropShadowColor?: string;
-    dropShadowBlur?: number;
-    dropShadowAngle?: number;
-    dropShadowDistance?: number;
+    dropShadow?: {
+        alpha: number;
+        angle: number;
+        distance: number;
+        blur: number;
+        color: number;
+    };
 }
 
 export type ExportedSound = Omit<ISound, 'uid' | 'group' | 'lastmod' | 'type' | 'distortion' | 'eq' | 'pitch' | 'reverb' | 'volume'> &

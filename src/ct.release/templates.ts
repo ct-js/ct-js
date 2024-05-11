@@ -122,7 +122,7 @@ export interface ICopy {
     getRoom: (this: BasicCopy) => Room;
 }
 
-interface IFocusableElement extends pixiMod.DisplayObject {
+interface IFocusableElement extends pixiMod.Container {
     readonly isFocused: boolean;
     blur(): void;
     focus(): void;
@@ -156,7 +156,7 @@ export const setFocusedElement = (elt: IFocusableElement): void => {
  * of a template here, so you may need to add `as Copy...` to further narrow down
  * the class.
  */
-export type BasicCopy = Record<string, any> & pixiMod.DisplayObject & ICopy;
+export type BasicCopy = Record<string, any> & pixiMod.Container & ICopy;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
@@ -268,10 +268,10 @@ export const CopyProto: Partial<BasicCopy> = {
 type Mutable<T> = {-readonly[P in keyof T]: T[P]};
 // eslint-disable-next-line complexity, max-lines-per-function
 /**
- * A factory function that when applied to a PIXI.DisplayObject instance,
+ * A factory function that when applied to a PIXI.Container instance,
  * augments it with ct.js Copy functionality.
  * @param {string} template The name of the template to copy
- * @param {PIXI.DisplayObject|Room} [container] A container to set as copy's parent
+ * @param {PIXI.Container|Room} [container] A container to set as copy's parent
  * before its OnCreate event. Defaults to ct.room.
  * @catnipIgnore
  */
@@ -362,7 +362,7 @@ const Copy = function (
     return this;
 };
 const mix = (
-    target: pixiMod.DisplayObject,
+    target: pixiMod.Container,
     x: number,
     y: number,
     template: ExportedTemplate,
@@ -485,7 +485,7 @@ const templatesLib = {
             throw new Error(`Attempt to spawn a copy of template ${template} inside an invalid room. Room's value provided: ${room}`);
         }
         const obj = makeCopy(template, x, y, room, params);
-        room.addChild(obj as pixiMod.DisplayObject);
+        room.addChild(obj as pixiMod.Container);
         stack.push(obj);
         return obj;
     },
@@ -564,13 +564,13 @@ const templatesLib = {
         if (copyTypeSymbol in obj) {
             return !(obj as BasicCopy).kill;
         }
-        if (obj instanceof PIXI.DisplayObject) {
+        if (obj instanceof PIXI.Container) {
             return Boolean(obj.position);
         }
         return false;
     }) as {
         (obj: BasicCopy): obj is BasicCopy;
-        (obj: pixiMod.DisplayObject): obj is pixiMod.DisplayObject;
+        (obj: pixiMod.Container): obj is pixiMod.Container;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (obj: unknown): false
     },

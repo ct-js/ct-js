@@ -1,4 +1,5 @@
 import {ExportedStyle} from './exporter/_exporterContracts';
+import {Color} from 'node_modules/pixi.js';
 
 export const styleToTextStyle = (s: IStyle): ExportedStyle => {
     const o = {
@@ -16,9 +17,12 @@ export const styleToTextStyle = (s: IStyle): ExportedStyle => {
     }
     if (s.fill) {
         if (Number(s.fill.type) === 0) {
-            o.fill = s.fill.color || '#FFFFFF';
+            o.fill = s.fill.color ? new Color(s.fill.color).toNumber() : 0xFFFFFF;
         } else if (Number(s.fill.type) === 1) {
-            o.fill = [s.fill.color1 || '#FFFFFF', s.fill.color2 || '#FFFFFF'];
+            o.fill = [
+                s.fill.color1 ? new Color(s.fill.color1).toNumber() : 0xFFFFFF,
+                s.fill.color2 ? new Color(s.fill.color1).toNumber() : 0xFFFFFF
+            ];
             if (Number(s.fill.gradtype) === 1) {
                 o.fillGradientType = 0;
             } else if (Number(s.fill.gradtype) === 2) {
@@ -31,11 +35,13 @@ export const styleToTextStyle = (s: IStyle): ExportedStyle => {
         o.stroke = s.stroke.color;
     }
     if (s.shadow) {
-        o.dropShadow = true;
-        o.dropShadowBlur = s.shadow.blur;
-        o.dropShadowColor = s.shadow.color;
-        o.dropShadowAngle = Math.atan2(s.shadow.y, s.shadow.x);
-        o.dropShadowDistance = Math.hypot(s.shadow.x, s.shadow.y);
+        o.dropShadow = {
+            blur: s.shadow.blur,
+            color: new Color(s.shadow.color).toNumber(),
+            angle: Math.atan2(s.shadow.y, s.shadow.x),
+            distance: Math.hypot(s.shadow.x, s.shadow.y),
+            alpha: new Color(s.shadow.color).alpha
+        };
     }
     return o;
 };

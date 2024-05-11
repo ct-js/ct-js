@@ -59,7 +59,7 @@ if ('NL_OS' in window) {
 /**
  * a pool of `kill`-ed copies for delaying frequent garbage collection
  */
-export const deadPool: pixiMod.DisplayObject[] = [];
+export const deadPool: pixiMod.Container[] = [];
 export const copyTypeSymbol = Symbol('I am a ct.js copy');
 /**
  * A set of copies that must be destroyed
@@ -87,9 +87,9 @@ export const settings = {
     set highDensity(value: boolean) {
         currentHighDPIMode = value;
         if (currentHighDPIMode) {
-            PIXI.settings.RESOLUTION = window.devicePixelRatio;
+            pixiApp.renderer.resolution = window.devicePixelRatio;
         } else {
-            PIXI.settings.RESOLUTION = 1;
+            pixiApp.renderer.resolution = 1;
         }
         if (roomsM.current) {
             updateViewport();
@@ -154,38 +154,37 @@ export const stack: (BasicCopy | Background)[] = [];
 /** The PIXI.Application that runs ct.js game */
 export let pixiApp: pixiMod.Application;
 {
-    const pixiAppSettings: Partial<pixiMod.IApplicationOptions> = {
+    const pixiAppSettings: Partial<pixiMod.ApplicationOptions> = {
         width: [/*!@startwidth@*/][0] as number,
         height: [/*!@startheight@*/][0] as number,
         antialias: ![/*!@pixelatedrender@*/][0],
-        powerPreference: 'high-performance' as WebGLPowerPreference,
+        powerPreference: 'high-performance' as GPUPowerPreference,
         autoDensity: false,
         sharedTicker: false,
-        backgroundAlpha: [/*@transparent@*/][0] ? 0 : 1
+        backgroundAlpha: [/*@transparent@*/][0] ? 0 : 1,
+        resolution: 1,
+        roundPixels: [/*!@pixelatedrender@*/][0],
+        preference: 'webgpu'
     };
-    PIXI.settings.RESOLUTION = 1;
+    if ([/*!@pixelatedrender@*/][0]) {
+        PIXI.TextureStyle.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
+    }
     try {
-        pixiApp = new PIXI.Application(pixiAppSettings);
+        pixiApp = new PIXI.Application();
+        (async () => {
+            await pixiApp.init(pixiAppSettings);
+            settings.targetFps = [/*!@maxfps@*/][0] || 60;
+            // eslint-disable-next-line prefer-destructuring
+            (document.getElementById('ct') as HTMLDivElement).appendChild(pixiApp.view as HTMLCanvasElement);
+        })();
     } catch (e) {
         console.error(e);
-        // eslint-disable-next-line no-console
-        console.warn('[ct.js] Something bad has just happened. This is usually due to hardware problems. I\'ll try to fix them now, but if the game still doesn\'t run, try including a legacy renderer in the project\'s settings.');
-        PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES || 16, 16);
-        pixiApp = new PIXI.Application(pixiAppSettings);
     }
-    // eslint-disable-next-line prefer-destructuring
-    PIXI.settings.ROUND_PIXELS = [/*!@pixelatedrender@*/][0];
-    if (!pixiApp.renderer.options.antialias) {
-        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-    }
-    settings.targetFps = [/*!@maxfps@*/][0] || 60;
-    // eslint-disable-next-line prefer-destructuring
-    (document.getElementById('ct') as HTMLDivElement).appendChild(pixiApp.view as HTMLCanvasElement);
 }
 
 let loading: Promise<void>;
 {
-    const killRecursive = (copy: (BasicCopy & pixiMod.DisplayObject) | Background) => {
+    const killRecursive = (copy: (BasicCopy & pixiMod.Container) | Background) => {
         copy.kill = true;
         if (templatesM.isCopy(copy) && (copy as BasicCopy).onDestroy) {
             templatesM.onDestroy.apply(copy);
@@ -194,7 +193,7 @@ let loading: Promise<void>;
         if (copy.children) {
             for (const child of copy.children) {
                 if (templatesM.isCopy(child)) {
-                    killRecursive(child as (BasicCopy & pixiMod.DisplayObject)); // bruh
+                    killRecursive(child as (BasicCopy & pixiMod.Container)); // bruh
                 }
             }
         }
@@ -256,7 +255,7 @@ let loading: Promise<void>;
             if (copy.kill && !copy._destroyed) {
                 // This will also allow a parent to eject children
                 // to a new container before they are destroyed as well
-                killRecursive(copy as (BasicCopy & pixiMod.DisplayObject));
+                killRecursive(copy as (BasicCopy & pixiMod.Container));
                 copy.destroy({
                     children: true
                 });
@@ -339,8 +338,14 @@ let loading: Promise<void>;
         timer,
         u,
         meta,
-        settings,
-        pixiApp
+        settings
+    });
+    Object.defineProperties(window, {
+        pixiApp: {
+            get() {
+                return pixiApp;
+            }
+        }
     });
     loading.then(() => {
         /*!%start%*/

@@ -8,7 +8,7 @@ import type * as pixiMod from 'pixi.js';
 declare var PIXI: typeof pixiMod;
 
 export default class PixiButton extends PIXI.Container {
-    panel: pixiMod.NineSlicePlane;
+    panel: pixiMod.NineSliceSprite;
     textLabel: pixiMod.Text;
     normalTexture: pixiMod.Texture;
     hoverTexture: pixiMod.Texture;
@@ -41,10 +41,10 @@ export default class PixiButton extends PIXI.Container {
     /**
      * The color of the button's texture.
      */
-    get tint(): pixiMod.ColorSource {
+    get tint(): number {
         return this.panel.tint;
     }
-    set tint(val: pixiMod.ColorSource) {
+    set tint(val: number) {
         this.panel.tint = val;
     }
 
@@ -63,20 +63,23 @@ export default class PixiButton extends PIXI.Container {
         this.disabledTexture = t.disabledTexture ?
             resLib.getTexture(t.disabledTexture, 0) :
             this.normalTexture;
-        this.panel = new PIXI.NineSlicePlane(
-            this.normalTexture,
-            t.nineSliceSettings?.left ?? 16,
-            t.nineSliceSettings?.top ?? 16,
-            t.nineSliceSettings?.right ?? 16,
-            t.nineSliceSettings?.bottom ?? 16
-        );
+        this.panel = new PIXI.NineSliceSprite({
+            texture: this.normalTexture,
+            leftWidth: t.nineSliceSettings?.left ?? 16,
+            topHeight: t.nineSliceSettings?.top ?? 16,
+            rightWidth: t.nineSliceSettings?.right ?? 16,
+            bottomHeight: t.nineSliceSettings?.bottom ?? 16
+        });
         const style = t.textStyle === -1 ?
-            PIXI.TextStyle.defaultStyle :
-            stylesLib.get(t.textStyle, true) as Partial<pixiMod.ITextStyle>;
+            PIXI.TextStyle.defaultTextStyle :
+            stylesLib.get(t.textStyle, true);
         if (exts.customSize) {
             style.fontSize = Number(exts.customSize);
         }
-        this.textLabel = new PIXI.Text((exts.customText as string) || t.defaultText || '', style);
+        this.textLabel = new PIXI.Text({
+            text: (exts.customText as string) || t.defaultText || '',
+            style: style as Partial<pixiMod.TextStyle>
+        });
         this.textLabel.anchor.set(0.5);
         this.addChild(this.panel, this.textLabel);
 

@@ -20,7 +20,12 @@ class Viewport extends ViewportFrame {
         this.x = this.view.x ?? 0;
         this.y = this.view.y ?? 0;
         this.icon
-        .lineStyle(2, getPixiSwatch('orange'), 1, 0.5)
+        .setStrokeStyle({
+            width: 2,
+            color: getPixiSwatch('orange'),
+            join: 'round',
+            cap: 'round'
+        })
         .moveTo(0, 0)
         .lineTo(17, 10)
         .lineTo(0, 20)

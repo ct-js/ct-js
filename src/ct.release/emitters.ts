@@ -11,7 +11,7 @@ declare var PIXI: typeof pixiMod & {
 
 // TODO: remove this band-aid when https://github.com/pixijs/pixijs/issues/9495 closes
 /// ⚠️⚠️⚠️ BAND-AID FOR https://github.com/pixijs/particle-emitter/issues/209
-PIXI.particles.Particle.prototype.isInteractive = () => false;
+// PIXI.particles.Particle.prototype.isInteractive = () => false;
 
 // TODO: remove when resolved
 /// ⚠️⚠️⚠️ BAND-AID FOR https://github.com/pixijs/particle-emitter/issues/209
@@ -127,8 +127,8 @@ interface ITandemSettings {
  */
 class EmitterTandem extends PIXI.Container {
     /** A copy to follow */
-    follow?: BasicCopy | pixiMod.DisplayObject | null | undefined;
-    appendant?: BasicCopy | pixiMod.DisplayObject;
+    follow?: BasicCopy | pixiMod.Container | null | undefined;
+    appendant?: BasicCopy | pixiMod.Container;
     /** If set to true, the tandem will stop updating its emitters */
     frozen = false;
     stopped = false;
@@ -435,7 +435,7 @@ const emittersLib = {
      * @catnipSaveReturn
      */
     append(
-        parent: BasicCopy | pixiMod.DisplayObject,
+        parent: BasicCopy | pixiMod.Container,
         name: string,
         settings?: ITandemSettings
     ): EmitterTandem {
@@ -470,7 +470,7 @@ const emittersLib = {
      * @catnipSaveReturn
      */
     follow(
-        parent: BasicCopy | pixiMod.DisplayObject,
+        parent: BasicCopy | pixiMod.Container,
         name: string,
         settings?: ITandemSettings
     ): EmitterTandem {

@@ -156,7 +156,7 @@ const mod = {
         if (!currentSwatches) {
             updateSwatches();
         }
-        return PIXI.utils.rgb2hex(currentSwatches[color].split(', ').map(i => parseInt(i.replace(/[^0-9]/g, ''), 10) / 255));
+        return new PIXI.Color(currentSwatches[color]).toNumber();
     },
     getSwatch(color: string): string {
         if (!currentSwatches) {

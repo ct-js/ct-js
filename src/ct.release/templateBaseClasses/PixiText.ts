@@ -26,7 +26,7 @@ export default class PixiText extends PIXI.Text {
         }
         super(
             (exts.customText as string) || t.defaultText || '',
-            style as unknown as Partial<pixiMod.ITextStyle>
+            style as unknown as Partial<pixiMod.TextStyle>
         );
         if (exts.customAnchor) {
             const anchor = exts.customAnchor as {

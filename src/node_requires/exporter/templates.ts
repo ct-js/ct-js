@@ -124,7 +124,7 @@ const stringifyTemplates = function (
 templates.templates["${template.name}"] = {
     name: ${JSON.stringify(template.name)},
     depth: ${template.depth},
-    blendMode: PIXI.BLEND_MODES.${template.blendMode?.toUpperCase() ?? 'NORMAL'},
+    blendMode: '${template.blendMode?.toUpperCase() ?? 'NORMAL'}',
     visible: ${Boolean(template.visible ?? true)},
     baseClass: "${template.baseClass}",
     ${baseClassInfo}

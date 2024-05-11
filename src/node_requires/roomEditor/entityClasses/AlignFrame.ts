@@ -6,7 +6,12 @@ export class AlignFrame extends ViewportFrame {
     constructor(editor: RoomEditor) {
         super(editor);
         this.icon
-        .lineStyle(2, getPixiSwatch('act'), 1, 0.5)
+        .setStrokeStyle({
+            width: 2,
+            color: getPixiSwatch('act'),
+            join: 'round',
+            cap: 'round'
+        })
         .moveTo(7, 0)
         .lineTo(7, 18)
         .moveTo(17, 0)
@@ -14,7 +19,8 @@ export class AlignFrame extends ViewportFrame {
         .moveTo(3, 5)
         .lineTo(21, 5)
         .moveTo(3, 15)
-        .lineTo(21, 15);
+        .lineTo(21, 15)
+        .stroke();
         this.redrawFrame();
     }
 
