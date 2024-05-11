@@ -133,8 +133,8 @@ const compilePug = () =>
         pretty: false
     }))
     .on('error', err => {
-        notifier.notify(makeErrorObj('Pug failure', err));
         console.error('[pug error]', err);
+        notifier.notify(makeErrorObj('Pug failure', err));
     })
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./app/'));
@@ -161,6 +161,7 @@ const concatScripts = () =>
         {
             objectMode: true
         },
+        // PIXI.js is used as window.PIXI
         gulp.src('./src/js/exposeGlobalNodeModules.js'),
         gulp.src('./temp/riotTags.js'),
         gulp.src(['./src/js/**', '!./src/js/exposeGlobalNodeModules.js'])
@@ -172,6 +173,7 @@ const concatScripts = () =>
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./temp/'))
     .on('error', err => {
+        console.error('[scripts error]', err);
         notifier.notify({
             title: 'Scripts error',
             message: err.toString(),
@@ -179,11 +181,10 @@ const concatScripts = () =>
             sound: true,
             wait: true
         });
-        console.error('[scripts error]', err);
     })
     .on('change', fileChangeNotifier);
 
-// As seen at https://github.com/microsoft/monaco-editor/blob/b400f83fe3ac6a1780b7eed419dc4d83dbf32919/samples/browser-esm-esbuild/build.js
+
 const workerEntryPoints = [
     'vs/language/json/json.worker.js',
     'vs/language/css/css.worker.js',
@@ -191,6 +192,12 @@ const workerEntryPoints = [
     'vs/language/typescript/ts.worker.js',
     'vs/editor/editor.worker.js'
 ];
+/**
+ * Bundles language workers and the editor's worker for monaco-editor.
+ * It is needed to be packaged this way to actually work with worker threads.
+ * The workers are then linked in src/js/3rdParty/mountMonaco.js
+ * @see https://github.com/microsoft/monaco-editor/blob/b400f83fe3ac6a1780b7eed419dc4d83dbf32919/samples/browser-esm-esbuild/build.js
+ */
 const bundleMonacoWorkers = () => esbuild({
     entryPoints: workerEntryPoints.map((entry) => `node_modules/monaco-editor/esm/${entry}`),
     bundle: true,
@@ -199,8 +206,13 @@ const bundleMonacoWorkers = () => esbuild({
     outdir: './app/data/monaco-workers/'
 });
 
+
 const builtinModules = JSON.parse(fs.readFileSync('./builtinModules.json'));
 builtinModules.push(...builtinModules.map(m => `node:${m}`));
+/**
+ * Bundles all the JS scripts into a single bundle.js file.
+ * This file is then loaded with a regular <script> in ct.IDE.
+ */
 const bundleIdeScripts = () => esbuild({
     entryPoints: ['./temp/bundle.js'],
     bundle: true,
@@ -229,6 +241,7 @@ const bundleIdeScripts = () => esbuild({
     }
 });
 
+// Ct.js client library typedefs to be consumed by ct.IDE's code editors.
 export const bakeTypedefs = () =>
     gulp.src('./src/typedefs/default/**/*.ts')
     .pipe(concat('global.d.ts'))
@@ -286,8 +299,8 @@ const watchCtJsLib = () => {
     ], buildCtJsLib)
     .on('change', fileChangeNotifier)
     .on('error', err => {
-        notifier.notify(makeErrorObj('Ct.js game library failure', err));
         console.error('[Ct.js game library error]', err);
+        notifier.notify(makeErrorObj('Ct.js game library failure', err));
     });
 };
 
@@ -314,24 +327,24 @@ const icons = gulp.series(makeIconAtlas, writeIconList);
 const watchScripts = () => {
     gulp.watch('./src/js/**/*', gulp.series(compileScripts, bundleIdeScripts))
     .on('error', err => {
-        notifier.notify(makeErrorObj('General scripts error', err));
         console.error('[scripts error]', err);
+        notifier.notify(makeErrorObj('General scripts error', err));
     })
     .on('change', fileChangeNotifier);
 };
 const watchRiot = () => {
     const watcher = gulp.watch('./src/riotTags/**/*.tag', compileRiot);
     watcher.on('error', err => {
-        notifier.notify(makeErrorObj('Riot failure', err));
         console.error('[pug error]', err);
+        notifier.notify(makeErrorObj('Riot failure', err));
     });
     watcher.on('change', compileRiotPartial);
 };
 const watchStylus = () => {
     gulp.watch('./src/styl/**/*', compileStylus)
     .on('error', err => {
-        notifier.notify(makeErrorObj('Stylus failure', err));
         console.error('[styl error]', err);
+        notifier.notify(makeErrorObj('Stylus failure', err));
     })
     .on('change', fileChangeNotifier);
 };
@@ -339,8 +352,8 @@ const watchPug = () => {
     gulp.watch('./src/pug/**/*.pug', compilePug)
     .on('change', fileChangeNotifier)
     .on('error', err => {
-        notifier.notify(makeErrorObj('Pug failure', err));
         console.error('[pug error]', err);
+        notifier.notify(makeErrorObj('Pug failure', err));
     });
 };
 const watchRequires = () => {
