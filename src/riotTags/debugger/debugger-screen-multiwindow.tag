@@ -3,6 +3,7 @@
 debugger-screen-multiwindow.flexcol(class="{opts.class}")
     webview.tall#thePreview(
         ref="gameView"
+        partition="persist:trusted"
         nwfaketop
     )
     .aDebuggerToolbar(class="horizontal {tight: window.innerWidth < 1000}")

@@ -3,6 +3,7 @@
 debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !verticalLayout}")
     webview.tall#thePreview(
         ref="gameView"
+        partition="persist:trusted"
         nwfaketop
     )
     .aResizer(ref="gutter" onmousedown="{gutterMouseDown}" class="{vertical: verticalLayout, horizontal: !verticalLayout}")
