@@ -151,38 +151,9 @@ export const settings = {
 
 export const stack: (BasicCopy | Background)[] = [];
 
+
 /** The PIXI.Application that runs ct.js game */
 export let pixiApp: pixiMod.Application;
-{
-    const pixiAppSettings: Partial<pixiMod.ApplicationOptions> = {
-        width: [/*!@startwidth@*/][0] as number,
-        height: [/*!@startheight@*/][0] as number,
-        antialias: ![/*!@pixelatedrender@*/][0],
-        powerPreference: 'high-performance' as GPUPowerPreference,
-        autoDensity: false,
-        sharedTicker: false,
-        backgroundAlpha: [/*@transparent@*/][0] ? 0 : 1,
-        resolution: 1,
-        roundPixels: [/*!@pixelatedrender@*/][0],
-        preference: 'webgpu'
-    };
-    if ([/*!@pixelatedrender@*/][0]) {
-        PIXI.TextureStyle.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
-    }
-    try {
-        pixiApp = new PIXI.Application();
-        (async () => {
-            await pixiApp.init(pixiAppSettings);
-            settings.targetFps = [/*!@maxfps@*/][0] || 60;
-            // eslint-disable-next-line prefer-destructuring
-            (document.getElementById('ct') as HTMLDivElement).appendChild(pixiApp.view as HTMLCanvasElement);
-        })();
-    } catch (e) {
-        console.error(e);
-    }
-}
-
-let loading: Promise<void>;
 {
     const killRecursive = (copy: (BasicCopy & pixiMod.Container) | Background) => {
         copy.kill = true;
@@ -288,13 +259,36 @@ let loading: Promise<void>;
             roomsM.forceSwitch();
         }
     };
-    loading = resM.loadGame();
-    loading.then(() => {
-        setTimeout(() => {
+    try {
+        const pixiAppSettings: Partial<pixiMod.ApplicationOptions> = {
+            width: [/*!@startwidth@*/][0] as number,
+            height: [/*!@startheight@*/][0] as number,
+            antialias: ![/*!@pixelatedrender@*/][0],
+            powerPreference: 'high-performance' as GPUPowerPreference,
+            autoDensity: false,
+            sharedTicker: false,
+            backgroundAlpha: [/*@transparent@*/][0] ? 0 : 1,
+            resolution: 1,
+            roundPixels: [/*!@pixelatedrender@*/][0],
+            preference: 'webgpu'
+        };
+        if ([/*!@pixelatedrender@*/][0]) {
+            PIXI.TextureStyle.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        }
+        pixiApp = new PIXI.Application();
+        const loading = resM.loadGame();
+        const setupPixi = pixiApp.init(pixiAppSettings);
+        Promise.all([loading, setupPixi]).then(() => {
+            settings.targetFps = [/*!@maxfps@*/][0] || 60;
+            // eslint-disable-next-line prefer-destructuring
+            (document.getElementById('ct') as HTMLDivElement).appendChild(pixiApp.view as HTMLCanvasElement);
+            /*!%start%*/
             pixiApp.ticker.add(loop);
             roomsM.forceSwitch(roomsM.starting);
-        }, 0);
-    });
+        });
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -346,9 +340,6 @@ let loading: Promise<void>;
                 return pixiApp;
             }
         }
-    });
-    loading.then(() => {
-        /*!%start%*/
     });
 
     /*!@actions@*/
