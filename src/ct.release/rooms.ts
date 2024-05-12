@@ -255,19 +255,14 @@ export class Room extends PIXI.Container<pixiMod.ContainerChild> {
                     uLib.hexToPixi(this.template.backgroundColor);
             }
             /*!%beforeroomoncreate%*/
-            for (let i = 0, li = template.bgs.length; i < li; i++) {
+            for (const bgTemplate of template.bgs) {
                 // Need to put additional properties like parallax here,
                 // so we don't use ct.backgrounds.add
-                const bg = new Background(
-                    template.bgs[i].texture,
-                    0,
-                    template.bgs[i].depth,
-                    template.bgs[i].exts
-                );
+                const bg = new Background(bgTemplate.texture, 0, bgTemplate.depth, bgTemplate.exts);
                 this.addChild(bg);
             }
-            for (let i = 0, li = template.tiles.length; i < li; i++) {
-                const tl = new Tilemap(template.tiles[i]);
+            for (const tiles of template.tiles) {
+                const tl = new Tilemap(tiles);
                 this.tileLayers.push(tl);
                 this.addChild(tl);
             }
