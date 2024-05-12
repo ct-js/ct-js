@@ -44,7 +44,7 @@ const pixiTextureFromCtTexture = (texture: ITexture): Promise<PIXI.Texture> => {
     return PIXI.Assets.load<PIXI.Texture>(path);
 };
 
-let unknownTexture = PIXI.Texture.from('data/img/unknown.png');
+let unknownTexture: PIXI.Texture;
 const pixiTextureCache: Record<string, {
     lastmod: number;
     texture: PIXI.Texture[]
@@ -98,9 +98,9 @@ const texturesFromCtTexture = async (
     }
     return frames;
 };
-const resetPixiTextureCache = (): void => {
+const resetPixiTextureCache = async (): Promise<void> => {
     PIXI.Assets.cache.reset();
-    unknownTexture = PIXI.Texture.from('data/img/unknown.png');
+    unknownTexture = await PIXI.Assets.load('data/img/unknown.png');
 };
 const populatePixiTextureCache = async (): Promise<void> => {
     clearPixiTextureCache();

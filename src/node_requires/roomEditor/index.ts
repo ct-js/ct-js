@@ -47,12 +47,10 @@ class Cursor {
     }
 }
 
-const roomEditorDefaults = {
+const roomEditorDefaults: Partial<PIXI.ApplicationOptions> = {
     width: 10,
     height: 10,
     autoDensity: true,
-    transparent: false,
-    sharedLoader: true,
     sharedTicker: false,
     resolution: devicePixelRatio,
     antialias: true,
@@ -145,12 +143,8 @@ class RoomEditor extends PIXI.Application {
      * @param {RiotTag} editor a tag instance of a `room-editor`
      */
     // eslint-disable-next-line max-lines-per-function
-    constructor(opts: unknown, editor: IRoomEditorRiotTag, pixelart: boolean) {
-        super(Object.assign({}, roomEditorDefaults, opts, {
-            resizeTo: editor.root,
-            roundPixels: pixelart
-        }));
-        this.ticker.maxFPS = 60;
+    constructor(readonly editor: IRoomEditorRiotTag) {
+        super();
         this.observable = riot.observable();
 
         const room = editor.asset;
@@ -159,15 +153,15 @@ class RoomEditor extends PIXI.Application {
 
         this.clicktrap.alpha = 0;
         this.stage.addChild(this.clicktrap);
-        this.resizeClicktrap();
         this.room.sortableChildren = true;
+        this.room.enableRenderGroup();
+        this.overlays.enableRenderGroup();
 
-        this.camera.x = room.width / 2;
-        this.camera.y = room.height / 2;
+        this.camera.x = Math.round(room.width / 2);
+        this.camera.y = Math.round(room.height / 2);
         this.stage.addChild(this.camera);
 
         this.stage.addChild(this.room);
-        this.redrawGrid();
         this.overlays.addChild(this.grid);
         this.stage.addChild(this.overlays);
         this.compoundGhost.alpha = 0.5;
@@ -187,6 +181,40 @@ class RoomEditor extends PIXI.Application {
         this.mouseoverHint.visible = false;
         this.mouseoverHint.anchor.set(0, 1);
         this.stage.addChild(this.mouseoverHint);
+
+        this.stage.eventMode = 'static';
+        this.interactions = interactions;
+        for (const event of pixiListeners) {
+            this.stage.on(event, (e: PIXI.FederatedEvent) => {
+                this.listen(e, event);
+            });
+        }
+        for (const event of customListeners) {
+            this.observable.on(event, (e: ((eventData: KeyboardEvent | unknown) => void)) => {
+                this.listen(e, event);
+            });
+        }
+
+        // Riot's observable objects lose function's context, so pass an anonymous function instead
+        this.updateTexturesHandle = (textureId: string) => this.updateTextures(textureId);
+        this.updateCopiesHandle = (templateId: string) => this.updateCopies(templateId);
+        this.cleanupTemplatesHandle = (templateId: string) => this.cleanupTemplates(templateId);
+        window.signals.on('pixiTextureChanged', this.updateTexturesHandle);
+        window.signals.on('templateChanged', this.updateCopiesHandle);
+        window.signals.on('styleChanged', this.updateCopiesHandle);
+        window.signals.on('templatesChanged', this.updateCopiesHandle);
+        window.signals.on('templateRemoved', this.cleanupTemplatesHandle);
+    }
+    async init(options?: Partial<PIXI.ApplicationOptions> | undefined): Promise<void> {
+        await super.init(options);
+
+        // These values are available only after initializing the renderer,
+        // or use such values (like in case of this.simulate)
+        this.ticker.maxFPS = 60;
+        this.resizeClicktrap();
+        this.redrawGrid();
+        this.simulate = this.ctRoom.simulate ?? true;
+        (this.renderer as PIXI.Renderer).background.color = new PIXI.Color(this.ctRoom.backgroundColor ?? '#000000');
 
         this.ticker.add(() => {
             this.resizeClicktrap();
@@ -211,34 +239,11 @@ class RoomEditor extends PIXI.Application {
                     this.snapTarget.visible = false;
                 }
                 if (!this.riotEditor.controlMode && (this.view.style!.cursor as string).includes('Erase')) {
-                    this.view.style!.cursor = 'default';
+                    this.canvas.style!.cursor = 'default';
                     this.snapTarget.visible = true;
                 }
             }
         });
-
-        this.stage.eventMode = 'static';
-        this.interactions = interactions;
-        for (const event of pixiListeners) {
-            this.stage.on(event, (e: PIXI.FederatedEvent) => {
-                this.listen(e, event);
-            });
-        }
-        for (const event of customListeners) {
-            this.observable.on(event, (e: ((eventData: KeyboardEvent | unknown) => void)) => {
-                this.listen(e, event);
-            });
-        }
-
-        // Riot's observable objects lose function's context, so pass an anonymous function instead
-        this.updateTexturesHandle = (textureId: string) => this.updateTextures(textureId);
-        this.updateCopiesHandle = (templateId: string) => this.updateCopies(templateId);
-        this.cleanupTemplatesHandle = (templateId: string) => this.cleanupTemplates(templateId);
-        window.signals.on('pixiTextureChanged', this.updateTexturesHandle);
-        window.signals.on('templateChanged', this.updateCopiesHandle);
-        window.signals.on('styleChanged', this.updateCopiesHandle);
-        window.signals.on('templatesChanged', this.updateCopiesHandle);
-        window.signals.on('templateRemoved', this.cleanupTemplatesHandle);
     }
     destroy(removeView: boolean, stageOptions: {
         children?: boolean;
@@ -299,8 +304,6 @@ class RoomEditor extends PIXI.Application {
     }
 
     deserialize(room: IRoom): void {
-        this.simulate = room.simulate ?? true;
-        (this.renderer as PIXI.Renderer).background.color = new PIXI.Color(room.backgroundColor ?? '#000000');
         // Add primary viewport
         this.primaryViewport = new Viewport(room, true, this);
         this.restrictViewport = new ViewportRestriction(this);
@@ -387,7 +390,6 @@ class RoomEditor extends PIXI.Application {
         if (w / this.camera.scale.x < 8 || h / this.camera.scale.y < 8) {
             return;
         }
-        this.grid.lineStyle(this.camera.scale.x, getPixiSwatch('act'), 0.3);
         // Camera boundaries with extra tiles around the border
         const cw = this.screen.width * this.camera.scale.x + w * 2,
               ch = this.screen.height * this.camera.scale.y + h * 2,
@@ -430,6 +432,11 @@ class RoomEditor extends PIXI.Application {
                 this.grid.lineTo(cx + cw, y);
             }
         }
+        this.grid.stroke({
+            width: this.camera.scale.x,
+            color: getPixiSwatch('act'),
+            alpha: 0.3
+        });
     }
     redrawViewports(): void {
         for (const viewport of this.viewports) {
@@ -445,14 +452,15 @@ class RoomEditor extends PIXI.Application {
      * @returns {void}
      */
     realignCamera(): void {
-        this.room.localTransform.copyFrom(this.camera.worldTransform
-            .clone()
-            .invert()
-            .translate(
-                this.view.width / devicePixelRatio / 2,
-                this.view.height / devicePixelRatio / 2
-            ));
-        this.overlays.localTransform = this.room.localTransform;
+        const inverseMatrix = this.camera.worldTransform
+        .clone()
+        .invert()
+        .translate(
+            this.canvas.width / devicePixelRatio / 2,
+            this.canvas.height / devicePixelRatio / 2
+        );
+        this.room.setFromMatrix(inverseMatrix);
+        this.overlays.setFromMatrix(inverseMatrix);
         this.redrawGrid();
         this.redrawViewports();
     }
@@ -679,21 +687,19 @@ class RoomEditor extends PIXI.Application {
                   tr = rotateRad(w * (1 - px), -h * py, entity.rotation),
                   bl = rotateRad(-w * px, h * (1 - py), entity.rotation),
                   br = rotateRad(w * (1 - px), h * (1 - py), entity.rotation);
-            // this.selectionOverlay.lineStyle(3, getPixiSwatch('act'));
-            this.selectionOverlay.lineStyle(1, getPixiSwatch('background'));
-            this.selectionOverlay.beginFill(getPixiSwatch('act'), 0.15);
-            this.selectionOverlay.moveTo(x + tl[0] / sx, y + tl[1] / sy);
-            this.selectionOverlay.lineTo(x + tr[0] / sx, y + tr[1] / sy);
-            this.selectionOverlay.lineTo(x + br[0] / sx, y + br[1] / sy);
-            this.selectionOverlay.lineTo(x + bl[0] / sx, y + bl[1] / sy);
-            this.selectionOverlay.lineTo(x + tl[0] / sx, y + tl[1] / sy);
-            this.selectionOverlay.endFill();
-            // this.selectionOverlay.lineStyle(1, getPixiSwatch('background'));
-            // this.selectionOverlay.moveTo(x + tl[0] / sx, y + tl[1] / sy);
-            // this.selectionOverlay.lineTo(x + tr[0] / sx, y + tr[1] / sy);
-            // this.selectionOverlay.lineTo(x + br[0] / sx, y + br[1] / sy);
-            // this.selectionOverlay.lineTo(x + bl[0] / sx, y + bl[1] / sy);
-            // this.selectionOverlay.lineTo(x + tl[0] / sx, y + tl[1] / sy);
+            this.selectionOverlay.moveTo(x + tl[0] / sx, y + tl[1] / sy)
+            .lineTo(x + tr[0] / sx, y + tr[1] / sy)
+            .lineTo(x + br[0] / sx, y + br[1] / sy)
+            .lineTo(x + bl[0] / sx, y + bl[1] / sy)
+            .lineTo(x + tl[0] / sx, y + tl[1] / sy);
+            this.selectionOverlay.stroke({
+                width: 1,
+                color: getPixiSwatch('background')
+            });
+            this.selectionOverlay.fill({
+                color: getPixiSwatch('act'),
+                alpha: 0.15
+            });
         }
     }
     /** Cleans the graphic overlay used to highlight selected copies. */
@@ -982,6 +988,7 @@ class RoomEditor extends PIXI.Application {
         })
         .on('each', () => {
             this.riotEditor.refs.zoomLabel.innerHTML = `${Math.round(this.getZoom())}%`;
+            this.camera.updateLocalTransform();
         });
     }
     getZoom(): number {
@@ -1029,12 +1036,20 @@ class RoomEditor extends PIXI.Application {
     }
 }
 
-const setup = (canvas: HTMLCanvasElement, editorTag: IRoomEditorRiotTag): RoomEditor => {
+const setup = async (
+    canvas: HTMLCanvasElement,
+    editorTag: IRoomEditorRiotTag
+): Promise<RoomEditor> => {
     resetTileLayerCounter();
     const pixelart = Boolean(currentProject.settings.rendering.pixelatedrender);
-    editorTag.pixiEditor = new RoomEditor({
-        view: canvas
-    }, editorTag, pixelart);
+    const roomEditor = new RoomEditor(editorTag);
+    await roomEditor.init(Object.assign({}, roomEditorDefaults, {
+        view: canvas,
+        resizeTo: editorTag.root,
+        roundPixels: pixelart
+    }));
+    // eslint-disable-next-line require-atomic-updates
+    editorTag.pixiEditor = roomEditor;
     return editorTag.pixiEditor;
 };
 

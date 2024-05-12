@@ -26,13 +26,15 @@ export class SnapTarget extends PIXI.Container {
         unknownTextures = getPixiTexture(-1, void 0, true);
         this.editor = editor;
         this.ghost = new PIXI.AnimatedSprite(unknownTextures);
-        this.ghostText = new PIXI.Text('');
+        this.ghostText = new PIXI.Text({
+            text: ''
+        });
         this.ghost.visible = this.ghostText.visible = false;
         this.ghost.alpha = this.ghostText.alpha = 0.5;
         [this.ghost.anchor.x, this.ghost.anchor.y] = [0.5, 0.5];
         this.addChild(this.ghost, this.ghostText, this.ghostCompound);
-        this.circle.beginFill(getPixiSwatch('act'));
-        this.circle.drawCircle(0, 0, 4);
+        this.circle.circle(0, 0, 4);
+        this.circle.fill(getPixiSwatch('act'));
         this.addChild(this.circle);
     }
     getPatchString(): string {
