@@ -24,6 +24,11 @@ export interface ICopy {
     align?: ExportedRoom['objects'][0]['align'];
     /** The collision shape of a copy */
     shape: TextureShape;
+    /**
+     * The first container of this copy. You may want to use this in Creation event
+     * as you can't read this.parent there (it is undefined until the copy is fully created).
+     */
+    readonly initialParent: pixiMod.Container;
     /** The horizontal location of a copy in the previous frame */
     xprev: number;
     /** The vertical location of a copy in the previous frame */
@@ -288,8 +293,8 @@ const Copy = function (
     this[copyTypeSymbol] = true;
     if (template) {
         this.baseClass = template.baseClass;
-        // Early linking so that `this.parent` is available in OnCreate events
-        this.parent = container;
+        // Early linking so that a`this.parent` is available in OnCreate events
+        (this.initialParent as pixiMod.Container) = container;
         if (template.baseClass === 'AnimatedSprite' || template.baseClass === 'NineSlicePlane') {
             this._tex = template.texture || -1;
         }
@@ -485,7 +490,7 @@ const templatesLib = {
             throw new Error(`Attempt to spawn a copy of template ${template} inside an invalid room. Room's value provided: ${room}`);
         }
         const obj = makeCopy(template, x, y, room, params);
-        room.addChild(obj as pixiMod.Container);
+        room.addChild(obj);
         stack.push(obj);
         return obj;
     },
