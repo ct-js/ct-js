@@ -11,8 +11,8 @@ export default class PixiAnimateSprite extends PIXI.AnimatedSprite {
         }
         const textures: CtjsAnimation | pixiMod.Texture[] = res.getTexture(t.texture!);
         super(textures);
-        this.anchor.x = t.anchorX ?? textures![0].defaultAnchor!.x ?? 0;
-        this.anchor.y = t.anchorY ?? textures![0].defaultAnchor!.y ?? 0;
+        this.anchor.x = t.anchorX ?? textures![0].defaultAnchor?.x ?? 0;
+        this.anchor.y = t.anchorY ?? textures![0].defaultAnchor?.y ?? 0;
         this.scale.set(
             (exts.scaleX as number) ?? 1,
             (exts.scaleY as number) ?? 1
