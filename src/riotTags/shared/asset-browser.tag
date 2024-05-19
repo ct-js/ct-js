@@ -166,7 +166,7 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
                             svg.feather(class="{asset.colorClass || 'act'}")
                                 use(xlink:href="#{asset.icon}")
                     .aCard-Properties
-                        span {parent.getName(asset)}
+                        span {asset.name}
                         span.secondary(if="{asset.type !== 'folder' && (parent.assetTypes.length > 1 || parent.assetTypes[0] === 'all')}")
                             svg.feather
                                 use(xlink:href="#{iconMap[asset.type]}")
@@ -198,7 +198,6 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
         this.getThumbnail = resources.getThumbnail;
         this.usesIcons = resources.areThumbnailsIcons;
         this.iconMap = resources.resourceToIconMap;
-        this.getName = resources.getName;
         this.getIcons = resources.getIcons;
 
         /**

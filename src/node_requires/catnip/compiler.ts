@@ -2,7 +2,7 @@
 /* eslint-disable max-depth */
 import {getDeclaration} from '.';
 import {ExporterError} from '../exporter/ExporterError';
-import {getName, getById} from '../resources';
+import {getById} from '../resources';
 
 const jsConstants = ['true', 'false', 'null', 'undefined', 'Infinity', '-Infinity', 'NaN'];
 const stringifyConstWildcard = (value: string): string => {
@@ -31,7 +31,7 @@ const writeArgumentlike = (
         valuesOut[piece.key] = compile([valueIn as IBlock], failureMeta);
     } else if (piece.assets && piece.assets !== 'action') {
         try {
-            valuesOut[piece.key] = `'${getName(getById(piece.assets, valueIn as string))}'`;
+            valuesOut[piece.key] = `'${getById(piece.assets, valueIn as string).name}'`;
         } catch (oO) {
             if (piece.required) {
                 throw new ExporterError(`Required asset in field ${piece.key} of block "${declaration.name}" not found: ${valueIn}`, {

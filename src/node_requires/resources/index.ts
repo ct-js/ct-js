@@ -53,11 +53,6 @@ interface IResourceAPI {
      * an asset in an asset browser.
      */
     getIcons?: (asset: IAsset) => string[];
-    /**
-     * An optional method for retrieving the name of an asset.
-     * If not set, the asset's `name` property is used.
-     */
-    getName?: (asset: string | IAsset) => string;
     createAsset: (payload?: unknown) =>
         Promise<IAsset> | IAsset;
     /**
@@ -198,9 +193,7 @@ export const exists = (
 
 export const isNameOccupied = (type: resourceType, name: string): boolean => {
     for (const [, asset] of uidMap) {
-        if (asset.type === type &&
-            ((asset as IAsset & {name: string}).name ?? (asset as IFont).typefaceName) === name
-        ) {
+        if (asset.type === type && asset.name === name) {
             return true;
         }
     }
@@ -491,14 +484,7 @@ export const getThumbnail = (asset: IAsset | IAssetFolder, x2?: boolean, fs?: bo
 };
 export const getIcons = (asset: IAsset): string[] =>
     typeToApiMap[asset.type].getIcons?.(asset) ?? [];
-export const getName = (asset: IAsset | IAssetFolder): string => {
-    if (asset.type === 'folder') {
-        return asset.name;
-    }
-    return typeToApiMap[asset.type].getName ?
-        typeToApiMap[asset.type].getName!(asset) :
-        (asset as IAsset & {name: string}).name;
-};
+
 export const getContextActions = (
     asset: IAsset,
     callback?: (asset: IAsset) => unknown
