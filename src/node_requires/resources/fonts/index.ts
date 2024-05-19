@@ -1,5 +1,8 @@
 import {FontPreviewer} from '../preview/font';
 import {getOfType} from '..';
+import fs from 'fs-extra';
+import path from 'path';
+import generateGUID from './../../generateGUID';
 
 /**
  * @param {object|string} typeface The font object in ct.js project, or its UID.
@@ -14,14 +17,7 @@ const getPathToTtf = function getPathToTtf(typeface: ITypeface, fs?: boolean): s
     return `file://${window.projdir.replace(/\\/g, '/')}/fonts/f${typeface.uid}.ttf`;
 };
 
-const importTtfToFont = async function importTtfToFont(src: string): Promise<IFont> {
-    const fs = require('fs-extra'),
-          path = require('path');
-    if (path.extname(src).toLowerCase() !== '.ttf') {
-        throw new Error(`[resources/fonts] Rejecting a file as it does not have a .ttf extension: ${src}`);
-    }
-    const generateGUID = require('./../../generateGUID');
-    const uidFont = generateGUID();
+const addTypeface = async (font: IFont, src: string): Promise<ITypeface> => {
     const uidTypeface = generateGUID();
     await fs.copy(src, path.join(window.projdir, '/fonts/f' + uidTypeface + '.ttf'));
     const typeface: ITypeface = {
@@ -29,10 +25,22 @@ const importTtfToFont = async function importTtfToFont(src: string): Promise<IFo
         italic: false,
         uid: uidTypeface
     };
+    font.typefaces.push(typeface);
+    if (font.typefaces.length === 1) {
+        await FontPreviewer.save(font);
+    }
+    return typeface;
+};
+
+const importTtfToFont = async function importTtfToFont(src: string): Promise<IFont> {
+    if (path.extname(src).toLowerCase() !== '.ttf') {
+        throw new Error(`[resources/fonts] Rejecting a file as it does not have a .ttf extension: ${src}`);
+    }
+    const uidFont = generateGUID();
     const obj: IFont = {
         name: path.basename(src, '.ttf'),
         type: 'font',
-        typefaces: [typeface],
+        typefaces: [],
         lastmod: Number(new Date()),
         bitmapFont: false,
         bitmapFontSize: 16,
@@ -41,6 +49,7 @@ const importTtfToFont = async function importTtfToFont(src: string): Promise<IFo
         customCharset: '',
         uid: uidFont
     };
+    await addTypeface(obj, src);
     await FontPreviewer.save(obj);
     window.signals.trigger('fontCreated');
     return obj;
