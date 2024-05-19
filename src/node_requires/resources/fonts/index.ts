@@ -21,12 +21,13 @@ const importTtfToFont = async function importTtfToFont(src: string): Promise<IFo
         throw new Error(`[resources/fonts] Rejecting a file as it does not have a .ttf extension: ${src}`);
     }
     const generateGUID = require('./../../generateGUID');
-    const uid = generateGUID();
-    await fs.copy(src, path.join(window.projdir, '/fonts/f' + uid + '.ttf'));
+    const uidFont = generateGUID();
+    const uidTypeface = generateGUID();
+    await fs.copy(src, path.join(window.projdir, '/fonts/f' + uidTypeface + '.ttf'));
     const typeface: ITypeface = {
         weight: '400' as const,
         italic: false,
-        uid: `f${uid}.ttf`
+        uid: uidTypeface
     };
     const obj: IFont = {
         name: path.basename(src, '.ttf'),
@@ -38,7 +39,7 @@ const importTtfToFont = async function importTtfToFont(src: string): Promise<IFo
         bitmapFontLineHeight: 18,
         charsets: ['allInFont' as builtinCharsets],
         customCharset: '',
-        uid
+        uid: uidFont
     };
     await FontPreviewer.save(obj);
     window.signals.trigger('fontCreated');
