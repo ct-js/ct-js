@@ -27,13 +27,14 @@ export class FontPreviewer {
     }
 
     static async create(font: IFont): Promise<HTMLCanvasElement> {
+        const [firstTypeface] = font.typefaces;
         const template = {
-            weight: font.weight,
-            style: font.italic ? 'italic' : 'normal'
+            weight: firstTypeface.weight,
+            style: firstTypeface.italic ? 'italic' : 'normal'
         };
         const face = new FontFace(
-            'CTPROJFONT' + font.typefaceName,
-            `url('${getPathToTtf(font)}')`,
+            'CTPROJFONT' + font.name,
+            `url('${getPathToTtf(firstTypeface)}')`,
             template
         );
 
@@ -46,7 +47,7 @@ export class FontPreviewer {
         const cx = canvas.getContext('2d')!;
         canvas.width = canvas.height = 128;
         cx.clearRect(0, 0, 128, 128);
-        cx.font = `${font.italic ? 'italic ' : ''}${font.weight} ${Math.floor(96 * 0.75)}px "${loaded.family}"`;
+        cx.font = `${firstTypeface.italic ? 'italic ' : ''}${firstTypeface.weight} ${Math.floor(96 * 0.75)}px "${loaded.family}"`;
         cx.fillStyle = '#000';
         cx.fillText('Aa', 12 + 96 * 0.05, 12 + 96 * 0.75);
 
