@@ -1,14 +1,14 @@
-const fs = require('fs-extra');
+import fs from 'fs-extra';
 
-import {getPathToTtf} from '../resources/fonts';
+import {getPathToTtf} from '../resources/typefaces';
 
-export const stringifyFont = (font: IFont, typeface: ITypeface): string => `
+export const stringifyFont = (typeface: ITypeface, font: IFont): string => `
 @font-face {
-    font-family: '${font.name}';
-    src: url('fonts/${typeface.uid}.woff') format('woff'),
-         url('fonts/${typeface.uid}.ttf') format('truetype');
-    font-weight: ${typeface.weight};
-    font-style: ${typeface.italic ? 'italic' : 'normal'};
+    font-family: '${typeface.name}';
+    src: url('fonts/${font.uid}.woff') format('woff'),
+         url('fonts/${font.uid}.ttf') format('truetype');
+    font-weight: ${font.weight};
+    font-style: ${font.italic ? 'italic' : 'normal'};
 }`;
 
 type fontsBundleResult = {
@@ -16,7 +16,7 @@ type fontsBundleResult = {
     js: string;
 };
 export const bundleFonts = async function (
-    input: IFont[],
+    input: ITypeface[],
     projdir: string,
     writeDir: string
 ): Promise<fontsBundleResult> {
@@ -28,22 +28,22 @@ export const bundleFonts = async function (
         await fs.ensureDir(writeDir + '/fonts');
         const ttf2woff = require('ttf2woff');
         const promises: Promise<string>[] = [];
-        for (const font of input) {
-            promises.push(...font.typefaces.map(async typeface => {
-                const fontData = await fs.readFile(getPathToTtf(typeface, true));
+        for (const typeface of input) {
+            promises.push(...typeface.fonts.map(async font => {
+                const fontData = await fs.readFile(getPathToTtf(font, true));
                 var ttf = new Uint8Array(fontData);
                 let woff;
                 try {
                     woff = Buffer.from(ttf2woff(ttf).buffer);
                 } catch (e) {
-                    window.alertify.error(`Whoah! A buggy ttf file in the font ${font.name} ${typeface.weight} ${typeface.italic ? 'italic' : 'normal'}. You should either fix it or find a new one.`);
+                    window.alertify.error(`Whoah! A buggy ttf file in the typeface ${typeface.name} ${font.weight} ${font.italic ? 'italic' : 'normal'}. You should either fix it or find a new one.`);
                     throw e;
                 }
                 await Promise.all([
-                    writePromises.push(fs.copy(getPathToTtf(typeface, true), writeDir + '/fonts/' + typeface.uid + '.ttf')),
+                    writePromises.push(fs.copy(getPathToTtf(font, true), writeDir + '/fonts/' + typeface.uid + '.ttf')),
                     writePromises.push(fs.writeFile(writeDir + '/fonts/' + typeface.uid + '.woff', woff))
                 ]);
-                return stringifyFont(font, typeface);
+                return stringifyFont(typeface, font);
             }));
         }
         css += (await Promise.all(promises)).join('\n\n');
@@ -81,14 +81,14 @@ const charCodeToXMLChar = (code: number): string => {
 
 export const generateXML = function generateXML(
     fontData: any,
-    ctFont: IFont,
-    typeface: ITypeface
+    ctTypeface: ITypeface,
+    font: IFont
 ): string {
     let XMLTemplate = `<font>
-    <info face="${ctFont.name}" size="${ctFont.bitmapFontSize}" bold="${typeface.weight}" italic="${typeface.italic ? '1' : '0'}" charset="" unicode="0" stretchH="100" smooth="1" aa="1" padding="0,0,0,0" spacing="1,1"/>
-    <common lineHeight="${ctFont.bitmapFontLineHeight}" base="${ctFont.bitmapFontSize}" scaleW="${fontData.canvas.width}" scaleH="${fontData.canvas.height}" pages="1" packed="0"/>
+    <info face="${ctTypeface.name}" size="${ctTypeface.bitmapFontSize}" bold="${font.weight}" italic="${font.italic ? '1' : '0'}" charset="" unicode="0" stretchH="100" smooth="1" aa="1" padding="0,0,0,0" spacing="1,1"/>
+    <common lineHeight="${ctTypeface.bitmapFontLineHeight}" base="${ctTypeface.bitmapFontSize}" scaleW="${fontData.canvas.width}" scaleH="${fontData.canvas.height}" pages="1" packed="0"/>
     <pages>
-        <page id="0" file="${typeface.uid}.png"/>
+        <page id="0" file="${font.uid}.png"/>
     </pages>
     <chars count="${Object.keys(fontData.map).length}">`;
 
@@ -105,19 +105,19 @@ export const generateXML = function generateXML(
     return XMLTemplate;
 };
 
+const generator = require('../resources/typefaces/bitmapFontGenerator');
 /**
  * @returns {Promise<string[]>} A promise that resolves into an array of file paths to fonts' XML.
  */
 export const bakeBitmapFonts = async (
-    input: IFont[],
+    input: ITypeface[],
     projdir: string,
     writeDir: string
 ): Promise<string[]> => {
-    const generator = require('./../resources/fonts/bitmapFontGenerator');
     const path = require('path');
-    const bitmappableFonts = input.filter(font => font.bitmapFont);
-    const fontsMetadataUnflattened = await Promise.all(bitmappableFonts.map((font) => {
-        const fCharsets = font.charsets || ['basicLatin'];
+    const bitmappableTypefaces = input.filter(typeface => typeface.bitmapFont);
+    const fontsMetadataUnflattened = await Promise.all(bitmappableTypefaces.map((typeface) => {
+        const fCharsets = typeface.charsets || ['basicLatin'];
         let letterList;
         if (fCharsets.length === 1 && fCharsets[0] === 'allInFont') {
             letterList = false;
@@ -128,28 +128,28 @@ export const bakeBitmapFonts = async (
             ) => acc + (charSets[charset] || ''), '');
         }
         if (fCharsets.indexOf('custom') !== -1) {
-            letterList += font.customCharset!;
+            letterList += typeface.customCharset!;
         }
         const settings = {
             fill: '#ffffff',
             // stroke: '#000000',l
             list: letterList,
-            height: font.bitmapFontSize,
+            height: typeface.bitmapFontSize,
             margin: 2
         };
-        return Promise.all(font.typefaces.map(async (typeface: ITypeface) => {
+        return Promise.all(typeface.fonts.map(async font => {
             const xmlPath = `${font.uid}.xml`,
                   pngPath = `${font.uid}.png`;
-            const fontPath = getPathToTtf(typeface, true);
-            const drawData = await generator(fontPath, path.join(writeDir, `${typeface.uid}.png`), settings);
-            const xml = generateXML(drawData, font, typeface);
+            const fontPath = getPathToTtf(font, true);
+            const drawData = await generator(fontPath, path.join(writeDir, `${font.uid}.png`), settings);
+            const xml = generateXML(drawData, typeface, font);
             await fs.writeFile(path.join(writeDir, `${font.uid}.xml`), xml, 'utf8');
             return {
                 xmlPath,
                 pngPath,
-                typefaceName: font.name,
-                weight: typeface.weight,
-                italic: typeface.italic
+                typefaceName: typeface.name,
+                weight: font.weight,
+                italic: font.italic
             };
         }));
     }));

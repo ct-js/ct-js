@@ -1,6 +1,6 @@
 import * as behaviors from './behaviors';
 import * as emitterTandems from './emitterTandems';
-import * as fonts from './fonts';
+import * as typefaces from './typefaces';
 import * as modules from './modules';
 import * as projects from './projects';
 import * as rooms from './rooms';
@@ -64,7 +64,7 @@ interface IResourceAPI {
     assetContextMenuItems?: IAssetContextItem[];
 }
 const typeToApiMap: Record<resourceType, IResourceAPI> = {
-    font: fonts,
+    typeface: typefaces,
     room: rooms,
     sound: sounds,
     style: styles,
@@ -79,7 +79,7 @@ export const assetTypes = Object.keys(typeToApiMap) as resourceType[];
 
 type typeToTsTypeMap = {
     [T in resourceType]:
-        T extends 'font' ? IFont :
+        T extends 'typeface' ? ITypeface :
         T extends 'room' ? IRoom :
         T extends 'sound' ? ISound :
         T extends 'style' ? IStyle :
@@ -512,7 +512,7 @@ export const getContextActions = (
 export const resourceToIconMap: Record<resourceType, string> = {
     texture: 'texture',
     tandem: 'sparkles',
-    font: 'font',
+    typeface: 'font',
     sound: 'headphones',
     room: 'room',
     template: 'template',
@@ -522,7 +522,7 @@ export const resourceToIconMap: Record<resourceType, string> = {
     behavior: 'behavior'
 };
 export const editorMap: Record<resourceType, string> = {
-    font: 'font-editor',
+    typeface: 'typeface-editor',
     room: 'room-editor',
     // skeleton: 'skeletal-animation',
     sound: 'sound-editor',
@@ -538,7 +538,7 @@ export {
     textures,
     emitterTandems,
     emitterTandems as tandems,
-    fonts,
+    typefaces,
     modules,
     projects,
     sounds,

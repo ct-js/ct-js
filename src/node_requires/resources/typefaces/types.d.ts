@@ -1,14 +1,14 @@
 type builtinCharsets = 'allInFont' | 'punctuation' | 'basicLatin' | 'latinExtended' | 'cyrillic' | 'greekCoptic' | 'custom';
 
-interface ITypeface {
+interface IFont {
     weight: fontWeight;
     italic: boolean;
     uid: string;
 }
 
-interface IFont extends IAsset {
-    type: 'font';
-    typefaces: ITypeface[];
+interface ITypeface extends IAsset {
+    type: 'typeface';
+    fonts: IFont[];
     bitmapFont: boolean;
     bitmapFontSize: number;
     bitmapFontLineHeight: number;

@@ -1,46 +1,46 @@
-import {FontPreviewer} from '../preview/font';
+import {TypefacePreviewer} from '../preview/typeface';
 import {getOfType} from '..';
 import fs from 'fs-extra';
 import path from 'path';
-import generateGUID from './../../generateGUID';
+import generateGUID from '../../generateGUID';
 
 /**
- * @param {object|string} typeface The font object in ct.js project, or its UID.
- * @param {boolean} fs If set to `true`, returns a clean path in a file system.
+ * @param font The font object in ct.js project.
+ * @param fs If set to `true`, returns a clean path in a file system.
  * Otherwise, returns an URL.
  */
-const getPathToTtf = function getPathToTtf(typeface: ITypeface, fs?: boolean): string {
+const getPathToTtf = function getPathToTtf(font: IFont, fs?: boolean): string {
     const path = require('path');
     if (fs) {
-        return path.join(window.projdir, 'fonts', typeface.uid);
+        return path.join(window.projdir, 'fonts', font.uid);
     }
-    return `file://${window.projdir.replace(/\\/g, '/')}/fonts/f${typeface.uid}.ttf`;
+    return `file://${window.projdir.replace(/\\/g, '/')}/fonts/f${font.uid}.ttf`;
 };
 
-const addTypeface = async (font: IFont, src: string): Promise<ITypeface> => {
+export const addFont = async (typeface: ITypeface, src: string): Promise<IFont> => {
     const uidTypeface = generateGUID();
     await fs.copy(src, path.join(window.projdir, '/fonts/f' + uidTypeface + '.ttf'));
-    const typeface: ITypeface = {
+    const font: IFont = {
         weight: '400' as const,
         italic: false,
         uid: uidTypeface
     };
-    font.typefaces.push(typeface);
-    if (font.typefaces.length === 1) {
-        await FontPreviewer.save(font);
+    typeface.fonts.push(font);
+    if (typeface.fonts.length === 1) {
+        await TypefacePreviewer.save(typeface);
     }
-    return typeface;
+    return font;
 };
 
-const importTtfToFont = async function importTtfToFont(src: string): Promise<IFont> {
+const importTtfToFont = async function importTtfToFont(src: string): Promise<ITypeface> {
     if (path.extname(src).toLowerCase() !== '.ttf') {
         throw new Error(`[resources/fonts] Rejecting a file as it does not have a .ttf extension: ${src}`);
     }
     const uidFont = generateGUID();
-    const obj: IFont = {
+    const obj: ITypeface = {
         name: path.basename(src, '.ttf'),
-        type: 'font',
-        typefaces: [],
+        type: 'typeface',
+        fonts: [],
         lastmod: Number(new Date()),
         bitmapFont: false,
         bitmapFontSize: 16,
@@ -49,17 +49,17 @@ const importTtfToFont = async function importTtfToFont(src: string): Promise<IFo
         customCharset: '',
         uid: uidFont
     };
-    await addTypeface(obj, src);
-    await FontPreviewer.save(obj);
+    await addFont(obj, src);
+    await TypefacePreviewer.save(obj);
     window.signals.trigger('fontCreated');
     return obj;
 };
 
-const getThumbnail = FontPreviewer.getClassic;
+const getThumbnail = TypefacePreviewer.getClassic;
 
 export const areThumbnailsIcons = false;
 
-export const createAsset = async (payload?: {src: string}): Promise<IFont> => {
+export const createAsset = async (payload?: {src: string}): Promise<ITypeface> => {
     if (payload && payload.src) {
         return importTtfToFont(payload.src);
     }
@@ -78,25 +78,25 @@ interface IExternalFont extends FontFace {
 }
 
 const refreshFonts = (): void => {
-    const fonts = getOfType('font');
+    const typefaces = getOfType('typeface');
     for (const font of document.fonts as Iterable<IExternalFont>) {
         if (font.external) {
             document.fonts.delete(font);
         }
     }
-    for (const font of fonts) {
-        for (const typeface of font.typefaces) {
+    for (const typeface of typefaces) {
+        for (const font of typeface.fonts) {
             const template = {
-                weight: typeface.weight,
-                style: typeface.italic ? 'italic' : 'normal'
+                weight: font.weight,
+                style: font.italic ? 'italic' : 'normal'
             };
-            const source = getPathToTtf(typeface),
+            const source = getPathToTtf(font),
                   cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
-            const face = new FontFace('CTPROJFONT' + font.name, `url(file://${cleanedSource})`, template) as IExternalFont;
+            const face = new FontFace('CTPROJFONT' + typeface.name, `url(file://${cleanedSource})`, template) as IExternalFont;
             face.load()
             .then((loaded: IExternalFont) => {
                 loaded.external = true;
-                loaded.ctId = face.ctId = typeface.uid;
+                loaded.ctId = face.ctId = font.uid;
                 document.fonts.add(loaded);
             });
         }
