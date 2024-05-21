@@ -227,10 +227,11 @@ style-editor.aPanel.aView(class="{opts.class}")
             this.update();
         };
         const {getById} = require('src/node_requires/resources');
+        const {getFontDomName} = require('src/node_requires/resources/typefaces');
         this.applyFont = fontId => {
             this.selectingFont = false;
             const font = getById('font', fontId);
-            this.asset.font.family = `"CTPROJFONT${font.typefaceName}", "${font.typefaceName}", sans-serif`;
+            this.asset.font.family = `"${font.typefaceName}", sans-serif`;
             this.asset.font.weight = font.weight;
             this.asset.font.italic = font.italic;
             this.update();

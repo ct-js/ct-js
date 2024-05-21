@@ -15,7 +15,8 @@ window.migrationProcess.push({
                     item.fonts = [{
                         weight: item.weight,
                         italic: item.italic,
-                        uid: item.uid
+                        uid: item.uid,
+                        origname: item.origname
                     }];
                     item.name = item.typefaceName;
                     delete item.typefaceName;

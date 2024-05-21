@@ -52,12 +52,13 @@ typeface-editor.aPanel.aView(class="{opts.class}")
                 label.checkbox
                     input(type="checkbox" checked="{font.italic}" onchange="{wire('asset.fonts.'+ind+'.italic')}")
                     b {voc.italic}
+                .dim.small {font.origname}
                 .aSpacer
                 button.inline.small(onclick="{deleteFont}")
                     svg.feather
                         use(xlink:href="#trash")
                     span {vocGlob.delete}
-            p.aFontSample(style="font-family: 'CTPROJFONT{asset.name}'; font-weight: {font.weight}; font-style: {font.italic? 'italic' : 'normal'}")
+            p.aFontSample(style="font-family: '{getFontDomName(font)}';")
                 | A quick blue cat jumps over the lazy frog. 0123456789!?
         button.success(onclick="{importFont}")
             svg.feather
@@ -86,6 +87,7 @@ typeface-editor.aPanel.aView(class="{opts.class}")
         };
 
         const typefacesAPI = require('src/node_requires/resources/typefaces');
+        this.getFontDomName = typefacesAPI.getFontDomName;
 
         this.oldTypefaceName = this.asset.name;
         this.saveAsset = () => {
@@ -96,8 +98,8 @@ typeface-editor.aPanel.aView(class="{opts.class}")
             this.saveAsset();
             this.opts.ondone(this.asset);
         };
-        this.on('update', () => {
-            typefacesAPI.refreshFonts();
+        typefacesAPI.refreshFonts().then(() => {
+            this.update();
         });
 
         this.deleteFont = e => {
@@ -115,5 +117,6 @@ typeface-editor.aPanel.aView(class="{opts.class}")
                 return;
             }
             await Promise.all(reply.map(filepath => typefacesAPI.addFont(this.asset, filepath)));
+            await typefacesAPI.refreshFonts();
             this.update();
         };

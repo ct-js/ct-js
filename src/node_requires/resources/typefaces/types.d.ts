@@ -4,6 +4,7 @@ interface IFont {
     weight: fontWeight;
     italic: boolean;
     uid: string;
+    origname: string;
 }
 
 interface ITypeface extends IAsset {
