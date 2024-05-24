@@ -1,5 +1,6 @@
 declare interface IStyle extends IAsset {
     type: 'style';
+    typeface: assetRef;
     font: {
         family: string;
         size: number;

@@ -1,5 +1,5 @@
 import {TypefacePreviewer} from '../preview/typeface';
-import {getOfType} from '..';
+import {getOfType, getById} from '..';
 import fs from 'fs-extra';
 import path from 'path';
 import generateGUID from '../../generateGUID';
@@ -138,4 +138,17 @@ export const createAsset = async (payload?: {src: string}): Promise<ITypeface> =
     }
     await refreshFonts();
     return typeface;
+};
+
+/**
+ * Properly removes a typeface from any styles
+ */
+export const removeAsset = (typeface: string | ITypeface): void => {
+    const asset = typeof typeface === 'string' ? getById('typeface', typeface) : typeface;
+    const styles = getOfType('style');
+    for (const style of styles) {
+        if (style.typeface === asset.uid) {
+            style.typeface = -1;
+        }
+    }
 };

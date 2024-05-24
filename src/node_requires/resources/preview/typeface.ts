@@ -46,10 +46,15 @@ export class TypefacePreviewer {
         const canvas = document.createElement('canvas');
         const cx = canvas.getContext('2d')!;
         canvas.width = canvas.height = 128;
-        cx.clearRect(0, 0, 128, 128);
-        cx.font = `${firstFont.italic ? 'italic ' : ''}${firstFont.weight} ${Math.floor(96 * 0.75)}px "${loaded.family}"`;
+        cx.clearRect(0, 0, canvas.width, canvas.height);
         cx.fillStyle = '#000';
-        cx.fillText('Aa', 12 + 96 * 0.05, 12 + 96 * 0.75);
+        cx.rect(0, 0, canvas.width, canvas.height);
+        cx.fill();
+        cx.font = `${firstFont.italic ? 'italic ' : ''}${firstFont.weight} ${Math.floor(96 * 0.75)}px "${loaded.family}"`;
+        cx.textAlign = 'center';
+        cx.textBaseline = 'middle';
+        cx.fillStyle = '#fff';
+        cx.fillText('Gg', canvas.width / 2, canvas.height / 2);
 
         return canvas;
     }

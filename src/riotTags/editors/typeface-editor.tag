@@ -37,7 +37,7 @@ typeface-editor.aPanel.aView(class="{opts.class}")
                         )
                     .clear
         .flexfix-footer
-            button.wide(onclick="{fontSave}")
+            button.wide(onclick="{applyChanges}")
                 svg.feather
                     use(xlink:href="#check")
                 span {vocGlob.apply}
@@ -87,15 +87,17 @@ typeface-editor.aPanel.aView(class="{opts.class}")
         };
 
         const typefacesAPI = require('src/node_requires/resources/typefaces');
+        const previews = require('src/node_requires/resources/preview/typeface').TypefacePreviewer;
         this.getFontDomName = typefacesAPI.getFontDomName;
 
         this.oldTypefaceName = this.asset.name;
-        this.saveAsset = () => {
+        this.saveAsset = async () => {
             this.writeChanges();
             typefacesAPI.refreshFonts();
+            await previews.save(this.asset);
         };
-        this.fontSave = () => {
-            this.saveAsset();
+        this.applyChanges = async () => {
+            await this.saveAsset();
             this.opts.ondone(this.asset);
         };
         typefacesAPI.refreshFonts().then(() => {
