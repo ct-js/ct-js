@@ -40,8 +40,8 @@ export const bundleFonts = async function (
                     throw e;
                 }
                 await Promise.all([
-                    writePromises.push(fs.copy(getPathToTtf(font, true), writeDir + '/fonts/' + typeface.uid + '.ttf')),
-                    writePromises.push(fs.writeFile(writeDir + '/fonts/' + typeface.uid + '.woff', woff))
+                    writePromises.push(fs.copy(getPathToTtf(font, true), writeDir + '/fonts/' + font.uid + '.ttf')),
+                    writePromises.push(fs.writeFile(writeDir + '/fonts/' + font.uid + '.woff', woff))
                 ]);
                 return stringifyFont(typeface, font);
             }));
