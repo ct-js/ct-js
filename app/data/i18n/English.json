@@ -291,6 +291,7 @@
             "new object": "Create a new object",
             "new empty object": "new empy object",
             "convert to string": "to string",
+            "const string": "String (a constant value)",
             "convert to number": "to number",
             "convert to boolean": "to boolean",
             "note": "Note",
@@ -300,6 +301,7 @@
             "property": "Property",
             "behavior property": "Behavior's property",
             "if else branch": "If-else branch",
+            "if branch": "If branch",
             "while loop cycle": "While loop",
             "repeat": "Repeat N times",
             "for each": "For each element of array",
@@ -334,6 +336,7 @@
             "set animation speed": "Set animation speed to",
             "this": "this",
             "concatenate strings": "Concatenate strings",
+            "concatenate strings triple": "Concatenate strings (triple)",
             "templates Templates copy into room": "Copy a template into room",
             "templates Templates copy": "Copy a template",
             "templates Templates each": "For each copy",
@@ -382,6 +385,10 @@
             "emitter tandems Emitters fire": "Fire an emitter at location",
             "emitter tandems Emitters append": "Append an emitter",
             "emitter tandems Emitters follow": "Create an emitter and follow",
+            "emitter tandems Emitters stop": "Stop and destroy the emitter",
+            "emitter tandems Emitters pause": "Pause the emitter",
+            "emitter tandems Emitters resume": "Resume the emitter",
+            "emitter tandems Emitters clear": "Clear the emitter's particles",
             "utilities U reshape nine patch": "Reshape a nine-slice panel",
             "utilities u time": "time",
             "utilities u time ui": "ui time",
@@ -530,7 +537,8 @@
             "save to storage": "Save to storage in key",
             "delete from storage": "Delete from storage the key",
             "load from storage": "load from storage from key",
-            "is key in storage": "is key in storage"
+            "is key in storage": "is key in storage",
+            "owning room": "copy's owning room"
         },
         "blockDisplayNames": {
             "write": "Write",
@@ -610,7 +618,8 @@
             "soundSingleInstance": "Stop other sound instances"
         },
         "blockDocumentation": {
-            "serialize object": "This block serializes an object into a string that can be later safely saved or transferred. This method does not support dates, functions, and structures that form cyclic references. Objects serialized with this block should be deserialized with the \"Deserialize object\" block."
+            "serialize object": "This block serializes an object into a string that can be later safely saved or transferred. This method does not support dates, functions, and structures that form cyclic references. Objects serialized with this block should be deserialized with the \"Deserialize object\" block.",
+            "constant string": "You can use this block to force creating a string: for example, when you want to write a number in a string or convert \\n to a linebreak when putting this value into wildcard slots."
         }
     },
     "colorPicker": {
