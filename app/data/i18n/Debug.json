@@ -972,7 +972,6 @@
         "strokeColor": "styleView.strokeColor",
         "strokeWeight": "styleView.strokeWeight",
         "testText": "styleView.testText",
-        "fontFamily": "styleView.fontFamily",
         "fontSize": "styleView.fontSize"
     },
     "textureView": {

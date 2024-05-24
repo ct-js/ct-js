@@ -238,8 +238,8 @@ style-editor.aPanel.aView(class="{opts.class}")
                 // reset to the first font / default settings otherwise
                 if (!this.linkedTypeface.fonts.some(f =>
                     f.weight === this.asset.font.weight &&
-                    f.italic === this.asset.font.italic
-                )) {
+                    f.italic === this.asset.font.italic)
+                ) {
                     if (this.linkedTypeface.fonts.length) {
                         this.asset.font.weight = this.linkedTypeface.fonts[0].weight;
                         this.asset.font.italic = this.linkedTypeface.fonts[0].italic;

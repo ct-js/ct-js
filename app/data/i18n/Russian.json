@@ -1410,7 +1410,7 @@
         "strokeColor": "Цвет обводки",
         "strokeWeight": "Толщина обводки:",
         "testText": "Тест Test 0123 +",
-        "fontFamily": "Семейство шрифтов:",
+        "fallbackFontFamily": "Резервное семейство шрифтов:",
         "fontSize": "Размер шрифта:"
     },
     "textureView": {
