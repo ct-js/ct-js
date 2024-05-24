@@ -1741,6 +1741,7 @@
         "animationFPS": "Animation FPS:",
         "playAnimationOnStart": "Play animation on start",
         "loopAnimation": "Loop animation",
+        "errorBitmapNotConfigured": "The typeface you linked is not configured to export a bitmap font. Go to this asset, configure it, and apply the changes.",
         "blendModes": {
             "normal": "Normal",
             "add": "Add (burn)",

@@ -54,6 +54,7 @@ export const baseClasses: TemplateBaseClass[] = [
 export const baseClassToIcon: Record<TemplateBaseClass, string> = {
     AnimatedSprite: 'template',
     Text: 'font',
+    BitmapText: 'bitmap-font',
     NineSlicePlane: 'ninepatch',
     Container: 'maximize',
     Button: 'button',
@@ -64,6 +65,7 @@ export const baseClassToIcon: Record<TemplateBaseClass, string> = {
 export const baseClassToTS: Record<TemplateBaseClass, string> = {
     AnimatedSprite: 'CopyAnimatedSprite',
     Text: 'CopyText',
+    BitmapText: 'CopyBitmapText',
     NineSlicePlane: 'CopyPanel',
     Container: 'CopyContainer',
     Button: 'CopyButton',
@@ -82,7 +84,7 @@ export const baseClassToTS: Record<TemplateBaseClass, string> = {
 // textured — uses a ct.js texture as its main asset.
 export type BaseClassCapability = 'text' | 'ninePatch' | 'container' | 'tilingSprite' | 'animatedSprite' |
                                   'repeater' | 'embeddedText' | 'scroller' | 'visualStates' | 'textInput' |
-                                  'blendModes' | 'textured';
+                                  'blendModes' | 'textured' | 'bitmapText';
 /**
  * Defines which base classes have which abstract features.
  * This gets read by exporter, room and template editors to add relevant controls
@@ -97,6 +99,7 @@ export const baseClassCapabilities: Record<TemplateBaseClass, BaseClassCapabilit
     RepeatingTexture: ['blendModes', 'textured', 'tilingSprite', 'scroller'],
     SpritedCounter: ['blendModes', 'textured', 'tilingSprite', 'repeater'],
     Text: ['blendModes', 'text'],
+    BitmapText: ['blendModes', 'text', 'bitmapText'],
     TextBox: ['blendModes', 'textured', 'container', 'embeddedText', 'ninePatch', 'visualStates', 'textInput']
 };
 export const hasCapability = (

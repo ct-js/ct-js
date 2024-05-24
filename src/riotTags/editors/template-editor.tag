@@ -225,13 +225,29 @@ template-editor.aPanel.aView.flexrow
                     ref="texturePicker"
                 )
                 asset-input.wide(
-                    if="{hasCapability('text') && !hasCapability('textured')}"
+                    if="{hasCapability('text') && !hasCapability('textured') && !hasCapability('bitmapText')}"
                     assettypes="style"
                     assetid="{asset.textStyle || -1}"
                     large="large"
                     allowclear="allowclear"
                     onchanged="{applyStyle}"
                 )
+                asset-input.wide(
+                    if="{hasCapability('bitmapText')}"
+                    assettypes="typeface"
+                    assetid="{asset.typeface || -1}"
+                    large="large"
+                    allowclear="allowclear"
+                    onchanged="{applyTypeface}"
+                    ref="typefacePicker"
+                )
+                // Check if a Bitmap Text base class refers to a typeface that is configured to export bitmap fonts
+                error-notice(
+                    if="{hasCapability('bitmapText') && needsBitmapFontWarning()}"
+                    target="{refs.typefacePicker}"
+                )
+                    | {parent.voc.errorBitmapNotConfigured}
+                // Check if a tiling texture is used for Counters / Repeating textures
                 error-notice(
                     if="{['SpritedCounter', 'RepeatingTexture'].includes(asset.baseClass) && needsTiledWarning()}"
                     target="{refs.texturePicker}"
@@ -390,6 +406,9 @@ template-editor.aPanel.aView.flexrow
             }
             this.update();
         };
+        this.applyTypeface = id => {
+            this.asset.typeface = id;
+        };
         this.applyCounterFiller = id => {
             this.asset.repeaterSettings.emptyTexture = id;
         };
@@ -421,6 +440,11 @@ template-editor.aPanel.aView.flexrow
             const tex = resources.getById('texture', this.asset.texture);
             tex.ignoreTiledUse = true;
             this.update();
+        };
+
+        this.needsBitmapFontWarning = () => {
+            const typeface = resources.getById('typeface', this.asset.typeface);
+            return !typeface.bitmapFont;
         };
 
         this.saveAsset = () => {
