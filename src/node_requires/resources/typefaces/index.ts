@@ -15,8 +15,8 @@ const weightGuessMap: Record<fontWeight, string[]> = {
     400: ['regular'],
     500: ['medium', 'book'],
     600: ['semibold', 'semi-bold'],
-    700: ['bold'],
     800: ['extrabold', 'extra bold', 'extra-bold', 'bolder'],
+    700: ['bold'],
     900: ['black']
 };
 const guessWeight = (filename: string): fontWeight => {
