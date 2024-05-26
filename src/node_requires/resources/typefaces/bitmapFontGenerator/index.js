@@ -131,12 +131,10 @@ export const generateBitmapFont = async function generateBitmapFont(fontSrc, out
     // Check if the created canvas size is valid
     const maxSize = options.pixelPerfect ? 4096 : 8192;
     if (canvasSize.width > maxSize || canvasSize.height > maxSize) {
-        callback(`The resulting canvas for the font ${options.fontOrigname} in typeface ${options.typefaceName} is too big. (More than ${maxSize} by ${maxSize} pixels.) Try reducing the list of characters this typeface requires or decrease the size of the bitmap font.`);
-        return false;
+        throw new Error(`The resulting canvas for the font ${options.fontOrigname} in typeface ${options.typefaceName} is too big. (More than ${maxSize} by ${maxSize} pixels.) Try reducing the list of characters this typeface requires or decrease the size of the bitmap font.`);
     }
     if (canvasSize.width === -1 || canvasSize.height === -1) {
-        callback(`Couldn't form layout for the font ${options.fontOrigname} in typeface ${options.typefaceName}. Either the font is buggy as heck or it doesn't have the characters you've listed in typeface's settings.`);
-        return false;
+        throw new Error(`Couldn't form layout for the font ${options.fontOrigname} in typeface ${options.typefaceName}. Either the font is buggy as heck or it doesn't have the characters you've listed in typeface's settings.`);
     }
     if (options.pixelPerfect) {
         // We need to firstly draw an upscaled canvas, then scale it back,
@@ -160,7 +158,7 @@ export const generateBitmapFont = async function generateBitmapFont(fontSrc, out
         // eslint-disable-next-line no-console
         console.warn('Cannot find ' + lostChars.join(',') + ' from the given font. ' +
             'Generated image does not include these characters. ' +
-            'Try Using other font or characters.');
+            'Try using other font or characters.');
     }
     let downscaleCanvas;
     if (options.pixelPerfect) {
