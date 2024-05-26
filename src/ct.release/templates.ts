@@ -332,7 +332,14 @@ const Copy = function (
         this.zIndex = template.depth;
         Object.assign(this, template.extends);
         if (exts) {
+            // Some base classes, like BitmapText, can preset tint during construction,
+            // So we need to multiply it with the set tint to preserve the effect.
+            let {tint} = this;
+            if (exts.tint !== void 0) {
+                tint = (new PIXI.Color(this.tint)).multiply(exts.tint as number);
+            }
             Object.assign(this, exts);
+            this.tint = tint;
         }
         if ('texture' in template && !this.shape) {
             this.shape = resLib.getTextureShape(template.texture || -1);
@@ -349,7 +356,14 @@ const Copy = function (
         templatesLib.templates[template.name].onCreate.apply(this);
         onCreateModifier.apply(this);
     } else if (exts) {
+        // Some base classes, like BitmapText, can preset tint during construction,
+        // So we need to multiply it with the set tint to preserve the effect.
+        let {tint} = this;
+        if (exts.tint !== void 0) {
+            tint = (new PIXI.Color(this.tint)).multiply(exts.tint as number);
+        }
         Object.assign(this, exts);
+        this.tint = tint;
         this.onBeforeCreateModifier.apply(this);
         onCreateModifier.apply(this);
     }
@@ -372,12 +386,12 @@ const mix = (
 ) => {
     const proto = CopyProto;
     const properties = Object.getOwnPropertyNames(proto);
-    for (const y in properties) {
-        if (properties[y] !== 'constructor') {
+    for (const i in properties) {
+        if (properties[i] !== 'constructor') {
             Object.defineProperty(
                 target,
-                properties[y],
-                Object.getOwnPropertyDescriptor(proto, properties[y])!
+                properties[i],
+                Object.getOwnPropertyDescriptor(proto, properties[i])!
             );
         }
     }

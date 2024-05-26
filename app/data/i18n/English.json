@@ -1745,6 +1745,7 @@
         "animationFPS": "Animation FPS:",
         "playAnimationOnStart": "Play animation on start",
         "loopAnimation": "Loop animation",
+        "useBitmapText": "Use bitmap fonts",
         "errorBitmapNotConfigured": "The style you selected is not linked to a typeface that uses a bitmap font. Go to the style, link it to a typeface, and make sure that this typeface is configured to export a bitmap, and apply the changes.",
         "blendModes": {
             "normal": "Normal",

@@ -77,15 +77,16 @@ export const baseClassToTS: Record<TemplateBaseClass, string> = {
 
 // First line — implements methods and fields supported by the corresponding pixi.js classes.
 // repeater — has a `count` field.
-// embeddedText — has a centered text label, but is not a PIXI.Text itself.
+// embeddedText — has a centered text label (PIXI.Text / PIXI.BitmapText),
+//                 but is not a PIXI.Text / PIXI.BitmapText itself.
 // scroller — has properties to scroll tiled sprites.
 // visualStates — has additional textures for hovered, pressed, and disabled states
 // textInput — has options to change text input type.
 // blendModes — supports pixi.js blend modes. Everything but PIXI.Container does that.
 // textured — uses a ct.js texture as its main asset.
-export type BaseClassCapability = 'text' | 'ninePatch' | 'container' | 'tilingSprite' | 'animatedSprite' |
+export type BaseClassCapability = 'text' | 'bitmapText' | 'ninePatch' | 'container' | 'tilingSprite' | 'animatedSprite' |
                                   'repeater' | 'embeddedText' | 'scroller' | 'visualStates' | 'textInput' |
-                                  'blendModes' | 'textured' | 'bitmapText';
+                                  'blendModes' | 'textured';
 /**
  * Defines which base classes have which abstract features.
  * This gets read by exporter, room and template editors to add relevant controls

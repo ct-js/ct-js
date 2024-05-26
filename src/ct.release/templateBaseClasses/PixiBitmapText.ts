@@ -31,11 +31,11 @@ export default class PixiBitmapText extends PIXI.BitmapText {
             (exts.customText as string) || t.defaultText || '',
             {
                 ...style,
-                fontName: style.fontFamily.split(',')[0].trim()
+                fontName: style.fontFamily.split(',')[0].trim(),
+                tint: new PIXI.Color(style.fill as string)
             }
         );
-        console.log(style.fill);
-        this.tint = new PIXI.Color(style.fill as string).toNumber();
+        this.tint = new PIXI.Color(style.fill as string);
         if (exts.customAnchor) {
             const anchor = exts.customAnchor as {
                 x?: number,

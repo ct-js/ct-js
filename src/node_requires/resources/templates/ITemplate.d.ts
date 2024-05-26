@@ -9,7 +9,7 @@ interface ITemplate extends IScriptableBehaviors {
     pressedTexture?: assetRef,
     disabledTexture?: assetRef,
     textStyle?: assetRef,
-    typeface?: assetRef,
+    useBitmapText?: boolean;
     defaultText?: string,
     fieldType?: 'text' | 'number' | 'email' | 'password',
     selectionColor?: string;
