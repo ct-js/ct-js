@@ -77,6 +77,7 @@ export const importTtfToFont = async function importTtfToFont(src: string): Prom
         bitmapFont: false,
         bitmapFontSize: 16,
         bitmapFontLineHeight: 18,
+        bitmapPrecision: false,
         charsets: ['allInFont' as builtinCharsets],
         customCharset: '',
         uid: uidFont

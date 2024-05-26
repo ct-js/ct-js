@@ -3843,7 +3843,7 @@ assets:
             italic: false
             uid: mG551jw6zW6mzt
             origname: TinyUnicode
-        lastmod: 1716644997970
+        lastmod: 1716736392370
         bitmapFont: true
         bitmapFontSize: 16
         bitmapFontLineHeight: 18
@@ -3852,6 +3852,7 @@ assets:
           - punctuation
         customCharset: ''
         uid: hHCNfDgh4gBdCr
+        bitmapPrecision: true
       - type: style
         name: BlueLabel
         uid: LdqNC8mzNn3z4b
@@ -3864,14 +3865,14 @@ assets:
           weight: '400'
           wrap: false
           wrapPosition: 640
-          lineHeight: 18
+          lineHeight: 18.08
         fill:
           type: 0
           color: '#86C0E7'
           color1: '#cccccc'
           color2: '#ffffff'
           gradtype: 1
-        lastmod: 1716658993537
+        lastmod: 1716731164538
       - type: template
         baseClass: BitmapText
         name: BlueLabel

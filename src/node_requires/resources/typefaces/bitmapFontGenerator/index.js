@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const util = require('./util');
-const opentype = require('opentype.js');
+const opentype = require('@konghayao/opentype.js');
 
 const draw = function draw(ctx, glyphList, descend, options) {
     var dict = {};
@@ -24,7 +24,8 @@ const draw = function draw(ctx, glyphList, descend, options) {
             if (drawWidth === void 0) {
                 drawWidth = g.width;
             }
-            if (drawX + drawWidth > ctx.canvas.width) {
+            // Account that the final canvas will be downscaled by x0.5
+            if (drawX + drawWidth > ctx.canvas.width / 2) {
                 drawX = 1;
                 drawY += drawHeight + options.margin * 2;
             }
@@ -52,8 +53,8 @@ const draw = function draw(ctx, glyphList, descend, options) {
     };
 };
 
-// eslint-disable-next-line max-lines-per-function
-const generateBitmapFont = async function generateBitmapFont(fontSrc, outputPath, options, callback) {
+// eslint-disable-next-line max-lines-per-function, complexity
+export const generateBitmapFont = async function generateBitmapFont(fontSrc, outputPath, options, callback) {
     const fs = require('fs-extra');
     const buffer = await fs.readFile(fontSrc);
     const font = opentype.parse(buffer.buffer);
@@ -125,26 +126,34 @@ const generateBitmapFont = async function generateBitmapFont(fontSrc, outputPath
         );
     }
 
+    var drawResult, canvas, ctx;
+    canvas = document.createElement('canvas');
     // Check if the created canvas size is valid
-    if (canvasSize.width > 8192 || canvasSize.height > 8192) {
-        callback('list is too long');
+    const maxSize = options.pixelPerfect ? 4096 : 8192;
+    if (canvasSize.width > maxSize || canvasSize.height > maxSize) {
+        callback(`The resulting canvas for the font ${options.fontOrigname} in typeface ${options.typefaceName} is too big. (More than ${maxSize} by ${maxSize} pixels.) Try reducing the list of characters this typeface requires or decrease the size of the bitmap font.`);
         return false;
     }
     if (canvasSize.width === -1 || canvasSize.height === -1) {
-        callback('char size is too small');
+        callback(`Couldn't form layout for the font ${options.fontOrigname} in typeface ${options.typefaceName}. Either the font is buggy as heck or it doesn't have the characters you've listed in typeface's settings.`);
         return false;
     }
-
-    var canvas = document.createElement('canvas');
-    canvas.width = canvasSize.width;
-    canvas.height = canvasSize.height;
-    var ctx = canvas.getContext('2d');
-
-    /* if (options.noAntiAlias)
-        ctx.antialias = "none";*/
-
-    // drawing
-    var drawResult = draw(ctx, glyphList, descend, options);
+    if (options.pixelPerfect) {
+        // We need to firstly draw an upscaled canvas, then scale it back,
+        // because otherwise pixel fonts will miss some of their pieces due to rounding errors
+        canvas.width = canvasSize.width * 2;
+        canvas.height = canvasSize.height * 2;
+        ctx = canvas.getContext('2d');
+        ctx.save();
+        ctx.scale(2, 2);
+        drawResult = draw(ctx, glyphList, descend, options);
+        ctx.restore();
+    } else {
+        canvas.width = canvasSize.width;
+        canvas.height = canvasSize.height;
+        ctx = canvas.getContext('2d');
+        drawResult = draw(ctx, glyphList, descend, options);
+    }
 
     // Notify about characters that could not be drawn
     if (lostChars.length > 0) {
@@ -153,15 +162,22 @@ const generateBitmapFont = async function generateBitmapFont(fontSrc, outputPath
             'Generated image does not include these characters. ' +
             'Try Using other font or characters.');
     }
-    await util.outputBitmapFont(outputPath, canvas, callback);
-
+    let downscaleCanvas;
+    if (options.pixelPerfect) {
+        downscaleCanvas = document.createElement('canvas');
+        downscaleCanvas.width = canvas.width / 2;
+        downscaleCanvas.height = canvas.height / 2;
+        const downscalex = downscaleCanvas.getContext('2d');
+        downscalex.drawImage(canvas, 0, 0, canvas.width / 2, canvas.height / 2);
+        await util.outputBitmapFont(outputPath, downscaleCanvas, callback);
+    } else {
+        await util.outputBitmapFont(outputPath, canvas, callback);
+    }
     return {
         map: drawResult.map,
         missingGlyph: drawResult.missingGlyph,
         width: options.width,
         height: adjustedHeight,
-        canvas
+        canvas: options.pixelPerfect ? downscaleCanvas : canvas
     };
 };
-
-module.exports = generateBitmapFont;

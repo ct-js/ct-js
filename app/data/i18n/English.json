@@ -1609,7 +1609,9 @@
         },
         "customCharsetHint": "Type all the letters you want to include, both in upper and lower case.",
         "fontWeight": "Font weight:",
-        "typefaceName": "Typeface name:"
+        "typefaceName": "Typeface name:",
+        "pixelPerfect": "Pixel-perfect precision",
+        "pixelPerfectTooltip": "This should be turned on for pixelart fonts. Enabling this will improve drawing precision of 1-pixel-wide lines, but will reduce the max texture size for each font's characters to be 4k by 4k. (Which is still a lot for pixel fonts.) Besides that, remember that room and style editors will use a different method of drawing fonts anyways and pixel fonts will appear blurry in them — this is normal."
     },
     "licensePanel": {
         "ctjsLicense": "Ct.js License (MIT)",
