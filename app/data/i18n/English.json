@@ -100,6 +100,7 @@
         "tileLayer": "tile layer",
         "ctSite": "ct.js homepage",
         "openAssetGallery": "Gallery",
+        "createStyleFromIt": "Create a style from it",
         "alignModes": {
             "left": "Left",
             "right": "Right",
@@ -1512,7 +1513,8 @@
         "strokeWeight": "Line weight:",
         "testText": "Test text 0123 +",
         "fallbackFontFamily": "Fallback font family:",
-        "fontSize": "Font size:"
+        "fontSize": "Font size:",
+        "notSupportedForBitmap": "Note that these settings are not supported for bitmap fonts"
     },
     "textureView": {
         "slicing": "Slicing",
@@ -1741,7 +1743,7 @@
         "animationFPS": "Animation FPS:",
         "playAnimationOnStart": "Play animation on start",
         "loopAnimation": "Loop animation",
-        "errorBitmapNotConfigured": "The typeface you linked is not configured to export a bitmap font. Go to this asset, configure it, and apply the changes.",
+        "errorBitmapNotConfigured": "The style you selected is not linked to a typeface that uses a bitmap font. Go to the style, link it to a typeface, and make sure that this typeface is configured to export a bitmap, and apply the changes.",
         "blendModes": {
             "normal": "Normal",
             "add": "Add (burn)",
@@ -1760,6 +1762,7 @@
         "baseClass": {
             "AnimatedSprite": "Animated sprite",
             "Text": "Text",
+            "BitmapText": "Bitmap text",
             "NineSlicePlane": "Panel",
             "Container": "Container",
             "Button": "Button",

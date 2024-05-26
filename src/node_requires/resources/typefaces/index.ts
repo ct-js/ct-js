@@ -1,5 +1,5 @@
 import {TypefacePreviewer} from '../preview/typeface';
-import {getOfType, getById} from '..';
+import {getOfType, getById, IAssetContextItem, createAsset as createAssetResources} from '..';
 import fs from 'fs-extra';
 import path from 'path';
 import generateGUID from '../../generateGUID';
@@ -152,3 +152,23 @@ export const removeAsset = (typeface: string | ITypeface): void => {
         }
     }
 };
+
+
+export const assetContextMenuItems: IAssetContextItem[] = [{
+    vocPath: 'common.createStyleFromIt',
+    icon: 'droplet',
+    action: async (
+        asset: ITypeface,
+        collection: folderEntries,
+        folder: IAssetFolder
+    ): Promise<void> => {
+        const style = await createAssetResources('style', folder);
+        if (style) {
+            style.typeface = asset.uid;
+            if (asset.bitmapFont) {
+                style.font.size = asset.bitmapFontSize;
+                style.font.lineHeight = asset.bitmapFontLineHeight;
+            }
+        }
+    }
+}];

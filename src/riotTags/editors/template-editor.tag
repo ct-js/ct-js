@@ -225,21 +225,12 @@ template-editor.aPanel.aView.flexrow
                     ref="texturePicker"
                 )
                 asset-input.wide(
-                    if="{hasCapability('text') && !hasCapability('textured') && !hasCapability('bitmapText')}"
+                    if="{hasCapability('text') && !hasCapability('textured')}"
                     assettypes="style"
                     assetid="{asset.textStyle || -1}"
                     large="large"
                     allowclear="allowclear"
                     onchanged="{applyStyle}"
-                )
-                asset-input.wide(
-                    if="{hasCapability('bitmapText')}"
-                    assettypes="typeface"
-                    assetid="{asset.typeface || -1}"
-                    large="large"
-                    allowclear="allowclear"
-                    onchanged="{applyTypeface}"
-                    ref="typefacePicker"
                 )
                 // Check if a Bitmap Text base class refers to a typeface that is configured to export bitmap fonts
                 error-notice(
@@ -443,7 +434,11 @@ template-editor.aPanel.aView.flexrow
         };
 
         this.needsBitmapFontWarning = () => {
-            const typeface = resources.getById('typeface', this.asset.typeface);
+            const style = resources.getById('style', this.asset.style);
+            if (!style.typeface) {
+                return true;
+            }
+            const typeface = resources.getById('typeface', style.typeface);
             return !typeface.bitmapFont;
         };
 

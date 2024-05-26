@@ -47,6 +47,7 @@ export const baseClasses: TemplateBaseClass[] = [
     'RepeatingTexture',
     'NineSlicePlane',
     'Text',
+    'BitmapText',
     'Button',
     'TextBox',
     'Container'
@@ -181,7 +182,7 @@ export const getTemplatePreview = function getTemplatePreview(
     if (template === -1) {
         return TexturePreviewer.get(-1, fs);
     }
-    if (template.baseClass === 'Text') {
+    if (template.baseClass === 'Text' || template.baseClass === 'BitmapText') {
         if (template.textStyle !== -1 && template.textStyle) {
             return StylePreviewer.get(getById('style', template.textStyle), fs);
         }

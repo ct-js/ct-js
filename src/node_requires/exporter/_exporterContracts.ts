@@ -148,7 +148,7 @@ export type ExportedTemplate = {
     loopAnimation: boolean;
     texture?: string;
 } | {
-    baseClass: 'Text';
+    baseClass: 'Text' | 'BitmapText';
     textStyle: string | -1;
     defaultText: string;
 } | {
