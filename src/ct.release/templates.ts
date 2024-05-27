@@ -266,6 +266,20 @@ export const CopyProto: Partial<BasicCopy> = {
     }
 };
 type Mutable<T> = {-readonly[P in keyof T]: T[P]};
+
+const assignExtends = (target: BasicCopy, exts: Record<string, unknown>) => {
+    // Some base classes, like BitmapText, can preset tint during construction,
+    // So we need to multiply it with the set tint to preserve the effect.
+    let {tint} = target;
+    if (exts.tint || exts.tint === 0) {
+        tint = (new PIXI.Color(target.tint))
+            .multiply(exts.tint as number)
+            .toNumber();
+    }
+    Object.assign(target, exts);
+    target.tint = tint;
+};
+
 // eslint-disable-next-line complexity, max-lines-per-function
 /**
  * A factory function that when applied to a PIXI.DisplayObject instance,
@@ -275,7 +289,7 @@ type Mutable<T> = {-readonly[P in keyof T]: T[P]};
  * before its OnCreate event. Defaults to ct.room.
  * @catnipIgnore
  */
-// eslint-disable-next-line max-lines-per-function, max-params
+// eslint-disable-next-line max-lines-per-function, max-params, complexity
 const Copy = function (
     this: BasicCopy,
     x: number,
@@ -332,14 +346,7 @@ const Copy = function (
         this.zIndex = template.depth;
         Object.assign(this, template.extends);
         if (exts) {
-            // Some base classes, like BitmapText, can preset tint during construction,
-            // So we need to multiply it with the set tint to preserve the effect.
-            let {tint} = this;
-            if (exts.tint !== void 0) {
-                tint = (new PIXI.Color(this.tint)).multiply(exts.tint as number);
-            }
-            Object.assign(this, exts);
-            this.tint = tint;
+            assignExtends(this, exts);
         }
         if ('texture' in template && !this.shape) {
             this.shape = resLib.getTextureShape(template.texture || -1);
@@ -358,12 +365,7 @@ const Copy = function (
     } else if (exts) {
         // Some base classes, like BitmapText, can preset tint during construction,
         // So we need to multiply it with the set tint to preserve the effect.
-        let {tint} = this;
-        if (exts.tint !== void 0) {
-            tint = (new PIXI.Color(this.tint)).multiply(exts.tint as number);
-        }
-        Object.assign(this, exts);
-        this.tint = tint;
+        assignExtends(this, exts);
         this.onBeforeCreateModifier.apply(this);
         onCreateModifier.apply(this);
     }

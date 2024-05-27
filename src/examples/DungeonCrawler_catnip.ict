@@ -3733,6 +3733,19 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+          - x: 7
+            'y': 9
+            opacity: 1
+            tint: '#000000'
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: WJWkw8C45gQBMN
+            exts: {}
+            customProperties: {}
+            bindings:
+              count: rooms.current.lives
           - x: 8
             'y': 8
             opacity: 1
@@ -3758,7 +3771,7 @@ assets:
         gridX: 8
         gridY: 8
         backgroundColor: '#000337'
-        lastmod: 1712480527512
+        lastmod: 1716832028122
         events:
           - lib: core
             arguments: {}
