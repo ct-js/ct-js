@@ -71,7 +71,7 @@ export default class PixiButton extends PIXI.Container {
             bottomHeight: t.nineSliceSettings?.bottom ?? 16
         });
         const style = t.textStyle === -1 ?
-            PIXI.TextStyle.defaultStyle :
+            PIXI.TextStyle.defaultTextStyle :
             stylesLib.get(t.textStyle, true);
         if (exts.customSize) {
             style.fontSize = Number(exts.customSize);
@@ -79,8 +79,7 @@ export default class PixiButton extends PIXI.Container {
         if (t.useBitmapText) {
             this.textLabel = new PIXI.BitmapText((exts.customText as string) || t.defaultText || '', {
                 ...style,
-                fontSize: Number(style.fontSize),
-                fontName: (style.fontFamily as string).split(',')[0].trim()
+                fontSize: Number(style.fontSize)
             });
             this.textLabel.tint = new PIXI.Color(style.fill as string);
         } else {
