@@ -5,7 +5,7 @@ import {unloadAllEvents, loadAllModulesEvents} from '../../events';
 import {loadAllBlocks} from '../../catnip';
 import {buildAssetMap} from '..';
 import {preparePreviews} from '../preview';
-import {refreshFonts} from '../fonts';
+import {refreshFonts} from '../typefaces';
 import {updateContentTypedefs} from '../content';
 
 import {getLanguageJSON} from '../../i18n';
@@ -352,7 +352,7 @@ const getExamplesDir = function (): string {
             return path.join(process.cwd(), 'examples');
         }
         // return path.join((nw.App as any).startPath, 'examples');
-        return path.join(path.dirname(process.execPath), 'examples');
+        return path.join(path.dirname(process.execPath), 'package.nw', 'examples');
     }
 };
 
@@ -369,7 +369,7 @@ const getTemplatesDir = function (): string {
             return path.join(process.cwd(), 'templates');
         }
         // return path.join((nw.App as any).startPath, "templates");
-        return path.join(path.dirname(process.execPath), 'templates');
+        return path.join(path.dirname(process.execPath), 'package.nw', 'templates');
     }
 };
 

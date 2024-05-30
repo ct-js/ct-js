@@ -1,6 +1,6 @@
 {
   "name": "ctjsbuildenvironment",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "",
   "directories": {
     "doc": "docs"
@@ -26,7 +26,7 @@
     "@pixi/particle-emitter": "5.0.8",
     "@pixi/sound": "^5.2.2",
     "@trapezedev/project": "^7.0.10",
-    "archiver": "^3.1.1",
+    "adm-zip": "^0.5.12",
     "coffeescript": "^2.7.0",
     "csswring": "7.0.0",
     "dragonbones-tools": "^0.1.2",
@@ -35,7 +35,7 @@
     "fs-extra": "^10.1.0",
     "fuse.js": "^7.0.0",
     "highlight.js": "^10.4.1",
-    "html-minifier": "^3.5.21",
+    "html-minifier-terser": "^7.2.0",
     "html2pug": "^4.0.0",
     "is-expression": "^4.0.0",
     "javascript-obfuscator": "^4.0.2",
@@ -47,24 +47,27 @@
     "monaco-themes": "^0.4.4",
     "nanoid": "^3.1.31",
     "on-change": "^4.0.2",
-    "opentype.js": "^1.3.3",
+    "opentype.js": "^1.3.4",
     "pixi-ease": "^3.0.7",
     "pixi.js": "8.1.1",
     "pixi.js-legacy": "7.3.2",
     "qreator": "^9.1.0",
-    "resedit-cli": "^2.0.0",
+    "resedit": "^2.0.2",
     "riot": "3.6.1",
     "serve-handler": "^6.1.5",
     "sucrase": "^3.25.0",
     "terser": "^5.14.2",
-    "ttf2woff": "^2.0.2"
+    "ttf2woff": "^2.0.2",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@ct.js/gulp-typescript": "^6.0.0",
+    "@types/adm-zip": "^0.5.5",
     "@types/css-font-loading-module": "0.0.7",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^14.11.8",
     "@types/nw.js": "^0.13.10",
+    "@types/opentype.js": "^1.3.8",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "esbuild": "0.21.1",
@@ -83,17 +86,15 @@
     "jsdoc-x": "^4.1.0",
     "minimist": "^1.2.6",
     "node-notifier": "^10.0.1",
-    "nw-builder": "3.8.3-beta.1",
-    "nw-builder-arm": "https://github.com/markmehere/nw-builder-arm#v3.8.3",
-    "pug": "^3.0.2",
+    "nw-builder": "4.7.4",
+    "pug": "^3.0.3",
     "readysteady": "^1.1.4",
     "resedit-cli": "^2.0.0",
     "streamqueue": "^1.1.2",
     "stylelint": "^14.9.1",
     "stylelint-stylus": "^0.16.1",
     "stylus": "^0.58.1",
-    "tsd-jsdoc": "^2.5.0",
-    "typescript": "^5.3.3"
+    "tsd-jsdoc": "^2.5.0"
   },
   "main": "gulpfile.js"
 }

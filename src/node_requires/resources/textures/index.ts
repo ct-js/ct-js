@@ -2,7 +2,7 @@ import {uidMap, getOfType, getById, createAsset, IAssetContextItem} from '..';
 import {TexturePreviewer} from '../preview/texture';
 import {convertToPng} from '../../utils/imageUtils';
 
-const fs = require('fs-extra');
+import fs from 'fs-extra';
 import path from 'path';
 import * as PIXI from 'pixi.js';
 
@@ -514,7 +514,7 @@ Promise<ITexture> => {
     }
     const inputPath = await window.showOpenDialog({
         filter: '.png,.jpg,.jpeg,.bmp,.tiff,.webp'
-    });
+    }) as string;
     if (!inputPath) {
         // eslint-disable-next-line no-throw-literal
         throw 'cancelled';

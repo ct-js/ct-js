@@ -2,7 +2,11 @@
 /* eslint-disable max-depth */
 import {getDeclaration} from '.';
 import {ExporterError} from '../exporter/ExporterError';
-import {getName, getById} from '../resources';
+import {getById} from '../resources';
+
+// Unwraps manually input \n, \t, \r values into whitespace.
+const unescapeRegex = /\\\\([ntr])/g;
+const unescapeWhitespace = (input: string) => input.replace(unescapeRegex, '\\$1');
 
 const jsConstants = ['true', 'false', 'null', 'undefined', 'Infinity', '-Infinity', 'NaN'];
 const stringifyConstWildcard = (value: string): string => {
@@ -13,6 +17,14 @@ const stringifyConstWildcard = (value: string): string => {
     }
     return JSON.stringify(value);
 };
+
+/**
+ * Gets the value of the given piece (an option or an attribute piece)
+ * and writes its value into valuesOut.
+ *
+ * failureMeta must be prefilled so the compiler can show the event
+ * in which a compilation error occurred.
+ */
 const writeArgumentlike = (
     piece: IBlockPieceArgument | IBlockOptions['options'][0],
     valuesIn: argumentValues,
@@ -31,7 +43,7 @@ const writeArgumentlike = (
         valuesOut[piece.key] = compile([valueIn as IBlock], failureMeta);
     } else if (piece.assets && piece.assets !== 'action') {
         try {
-            valuesOut[piece.key] = `'${getName(getById(piece.assets, valueIn as string))}'`;
+            valuesOut[piece.key] = `'${getById(piece.assets, valueIn as string).name}'`;
         } catch (oO) {
             if (piece.required) {
                 throw new ExporterError(`Required asset in field ${piece.key} of block "${declaration.name}" not found: ${valueIn}`, {
@@ -51,9 +63,9 @@ const writeArgumentlike = (
         } else if (piece.typeHint === 'color') {
             valuesOut[piece.key] = `0x${valueIn.slice(1)}`;
         } else {
-            valuesOut[piece.key] = JSON.stringify(valueIn);
+            valuesOut[piece.key] = unescapeWhitespace(JSON.stringify(valueIn));
         }
-    } else if (valuesOut[piece.key] === void 0 && piece.defaultConstant) {
+    } else if (valueIn === void 0 && piece.defaultConstant) {
         if (typeof piece.defaultConstant === 'number' ||
             typeof piece.defaultConstant !== 'string' ||
             piece.defaultConstant === 'this') {

@@ -3,13 +3,14 @@
 
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 /* eslint-disable spaced-comment */
+/// <reference path="../resources/commonTypes.d.ts" />
+/// <reference path="../resources/IAsset.d.ts" />
+/// <reference path="../resources/projects/IProject.d.ts" />
 /// <reference path="../resources/textures/ITexture.d.ts" />
 /// <reference path="../resources/templates/ITemplate.d.ts" />
 /// <reference path="../resources/emitterTandems/types.d.ts" />
 /// <reference path="../resources/rooms/IRoom.d.ts" />
 /// <reference path="../resources/sounds/types.d.ts" />
-/// <reference path="../resources/projects/IProject.d.ts" />
-/// <reference path="../resources/commonTypes.d.ts" />
 
 import * as PIXI from 'pixi.js';
 
@@ -147,7 +148,7 @@ export type ExportedTemplate = {
     loopAnimation: boolean;
     texture?: string;
 } | {
-    baseClass: 'Text';
+    baseClass: 'Text' | 'BitmapText';
     textStyle: string | -1;
     defaultText: string;
 } | {
@@ -165,6 +166,7 @@ export type ExportedTemplate = {
     disabledTexture?: string;
     textStyle: string | -1;
     defaultText: string;
+    useBitmapText: boolean;
 } | {
     baseClass: 'RepeatingTexture';
     scrollX: number;
@@ -187,6 +189,7 @@ export type ExportedTemplate = {
     defaultText: string;
     fieldType: ITemplate['fieldType'];
     maxTextLength: number;
+    useBitmapText: boolean;
 } | {
     baseClass: 'ScrollBox';
     nineSliceSettings: ITemplate['nineSliceSettings'];
@@ -231,7 +234,9 @@ export type ExportedBehaviorDynamic = {
     thisOnStep?: () => void,
     thisOnCreate?: () => void,
     thisOnDraw?: () => void,
-    thisOnDestroy?: () => void
+    thisOnDestroy?: () => void,
+    thisOnAdded?: () => void,
+    thisOnRemoved?: () => void
 };
 export type ExportedBehavior = 'static' | ExportedBehaviorDynamic;
 

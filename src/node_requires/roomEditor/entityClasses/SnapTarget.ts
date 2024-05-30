@@ -25,6 +25,7 @@ export class SnapTarget extends PIXI.Container {
         super();
         unknownTextures = getPixiTexture(-1, void 0, true);
         this.editor = editor;
+        this.eventMode = 'none';
         this.ghost = new PIXI.AnimatedSprite(unknownTextures);
         this.ghostText = new PIXI.Text({
             text: ''
@@ -127,7 +128,7 @@ export class SnapTarget extends PIXI.Container {
             (getByPath('roomView.emptyTextFiller') as string);
         if (template.textStyle && template.textStyle !== -1) {
             const style = getById('style', template.textStyle);
-            this.ghostText.style = styleToTextStyle(style) as unknown as Partial<PIXI.TextStyle>;
+            this.ghostText.style = styleToTextStyle(style, true);
         } else {
             this.ghostText.style = PIXI.TextStyle.defaultTextStyle;
         }

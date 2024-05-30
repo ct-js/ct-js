@@ -1,5 +1,5 @@
 import {getLanguageJSON, localizeField} from '../i18n';
-import {getName, getById, getThumbnail} from '../resources';
+import {assetTypes, getById, getThumbnail} from '../resources';
 import {fieldTypeToTsType} from '../resources/content';
 
 const categories: Record<string, IEventCategory> = {
@@ -124,9 +124,9 @@ const localizeParametrized = (eventFullCode: string, scriptedEvent: IScriptableE
     }
     for (const argName in event.arguments) {
         let value = scriptedEvent.arguments[argName];
-        if (['template', 'room', 'sound', 'tandem', 'font', 'style', 'texture'].indexOf(event.arguments[argName].type) !== -1) {
+        if (assetTypes.indexOf(event.arguments[argName].type as resourceType) !== -1) {
             if (typeof value === 'string') {
-                value = getName(getById(null, value));
+                value = getById(null, value).name;
             } else {
                 value = '(Unset)';
             }
@@ -179,7 +179,8 @@ const canUseBaseClass = (event: IEventDeclaration, baseClass: TemplateBaseClass)
 const bakeCategories = function bakeCategories(
     entity: EventApplicableEntities,
     callback: (affixedData: IEventDeclaration) => void,
-    baseClass?: TemplateBaseClass
+    baseClass?: TemplateBaseClass,
+    isBehavior?: boolean
 ): EventMenu {
     const menu = {
         items: [] as IEventMenuSubmenu[]
@@ -203,7 +204,7 @@ const bakeCategories = function bakeCategories(
     for (const eventKey in events) {
         const event = events[eventKey];
         // Filter out events for other entities
-        if (!event.applicable.includes(entity)) {
+        if (!event.applicable.includes(entity) && !(isBehavior && event.applicable.includes('behavior'))) {
             continue;
         }
         // Filter out events that require a specific base class
@@ -237,7 +238,7 @@ const bakeCategories = function bakeCategories(
     return menu;
 };
 
-const getEventByLib = (event: string, libName: string): IEventDeclaration =>
+const getEventByLib = (event: string, libName: string): IEventDeclaration | undefined =>
     events[`${libName}_${event}`];
 
 const getArgumentsTypeScript = (event: IEventDeclaration): string => {
@@ -251,7 +252,7 @@ const getArgumentsTypeScript = (event: IEventDeclaration): string => {
     return code;
 };
 export const getLocals = (event: string, libName: string): string[] => {
-    const declaration = getEventByLib(event, libName);
+    const declaration = getEventByLib(event, libName)!;
     if (!declaration.locals) {
         return [];
     }

@@ -297,7 +297,7 @@ const uLib = {
     /**
      * Returns a shape object based on the dimensions of the given sprite.
      */
-    getRectShape(sprite: pixiMod.Sprite | pixiMod.Text): TextureShape {
+    getRectShape(sprite: pixiMod.Sprite | pixiMod.BitmapText | pixiMod.Text): TextureShape {
         return {
             type: 'rect',
             left: sprite.width * sprite.anchor.x,

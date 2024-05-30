@@ -9,7 +9,7 @@ declare var PIXI: typeof pixiMod;
 
 export default class PixiButton extends PIXI.Container {
     panel: pixiMod.NineSliceSprite;
-    textLabel: pixiMod.Text;
+    textLabel: pixiMod.Text | pixiMod.BitmapText;
     normalTexture: pixiMod.Texture;
     hoverTexture: pixiMod.Texture;
     pressedTexture: pixiMod.Texture;
@@ -71,15 +71,21 @@ export default class PixiButton extends PIXI.Container {
             bottomHeight: t.nineSliceSettings?.bottom ?? 16
         });
         const style = t.textStyle === -1 ?
-            PIXI.TextStyle.defaultTextStyle :
+            PIXI.TextStyle.defaultStyle :
             stylesLib.get(t.textStyle, true);
         if (exts.customSize) {
             style.fontSize = Number(exts.customSize);
         }
-        this.textLabel = new PIXI.Text({
-            text: (exts.customText as string) || t.defaultText || '',
-            style: style as Partial<pixiMod.TextStyle>
-        });
+        if (t.useBitmapText) {
+            this.textLabel = new PIXI.BitmapText((exts.customText as string) || t.defaultText || '', {
+                ...style,
+                fontSize: Number(style.fontSize),
+                fontName: (style.fontFamily as string).split(',')[0].trim()
+            });
+            this.textLabel.tint = new PIXI.Color(style.fill as string);
+        } else {
+            this.textLabel = new PIXI.Text((exts.customText as string) || t.defaultText || '', style);
+        }
         this.textLabel.anchor.set(0.5);
         this.addChild(this.panel, this.textLabel);
 

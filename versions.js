@@ -26,7 +26,6 @@ for (const packageKey in packagesToCheck) {
 }
 
 module.exports = {
-    nwjs: '0.87.0',
-    nwjsArm: '0.67.1',
+    nwjs: '0.72.0',
     ...packageVersions
 };

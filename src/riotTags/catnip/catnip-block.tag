@@ -10,7 +10,7 @@ catnip-block(
     draggable="{!opts.nodrag}"
     class="{error: !declaration} {declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass} {selected: isSelected()}"
     hide="{getHidden}"
-    title="{declaration.documentation}"
+    title="{voc.blockDocumentation[declaration.documentationI18nKey] || localizeField(declaration, 'documentation')}"
 )
     svg.feather(if="{!declaration}")
         use(xlink:href="#x")
@@ -238,8 +238,8 @@ catnip-block(
 
         const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setSuggestedTarget, emptyTexture, copy, canPaste, paste, isSelected} = require('src/node_requires/catnip');
         this.isSelected = () => isSelected(this.opts.block);
-        const {getName, getById, areThumbnailsIcons, getThumbnail} = require('src/node_requires/resources');
-        this.getName = (assetType, id) => getName(getById(assetType, id));
+        const {getById, areThumbnailsIcons, getThumbnail} = require('src/node_requires/resources');
+        this.getName = (assetType, id) => getById(assetType, id).name;
         this.areThumbnailsIcons = areThumbnailsIcons;
         this.getThumbnail = (assetType, id) => getThumbnail(getById(assetType, id), false, false);
         this.localizeField = require('src/node_requires/i18n').localizeField;
@@ -447,7 +447,20 @@ catnip-block(
             this.updateTextareas();
         });
 
-
+        const deleteMenuItem = {
+            label: this.vocGlob.delete,
+            icon: 'trash',
+            click: () => {
+                if (this.contextOption) {
+                    this.opts.block.customOptions[this.contextOption] = void 0;
+                    this.contextOption = false;
+                } else {
+                    delete this.opts.block.values[this.contextPiece.key];
+                    this.contextPiece = false;
+                }
+                this.update();
+            }
+        };
         const defaultMenuItems = [{
             label: this.vocGlob.copy,
             icon: 'copy',
@@ -486,27 +499,24 @@ catnip-block(
             }
         }, {
             type: 'separator'
-        }, {
-            label: this.vocGlob.delete,
-            icon: 'trash',
-            click: () => {
-                if (this.contextOption) {
-                    this.opts.block.customOptions[this.contextOption] = void 0;
-                    this.contextOption = false;
-                } else {
-                    delete this.opts.block.values[this.contextPiece.key];
-                    this.contextPiece = false;
-                }
-                this.update();
-            }
-        }];
+        }, deleteMenuItem];
         this.contextMenu = {
             opened: true,
             items: defaultMenuItems
         };
         this.contextPiece = this.contextOption = false;
         this.onContextMenu = e => {
-            if (this.opts.readonly || e.target.closest('.aModal') || e.target.closest('.aDimmer')) {
+            // Room events are displayed in a modal
+            // and we need to differ them from other modals
+            const roomEvents = Boolean(e.target.closest('room-events-editor'));
+            if (roomEvents) {
+                // Get the closest .aModal and go two elements higher
+                // as room-events-editor has .aModal as its direct child.
+                if (e.target.closest('.aModal').parentElement.parentElement.closest('room-events-editor')) {
+                    e.preventUpdate = true;
+                    return;
+                }
+            } else if (e.target.closest('.aModal')) {
                 e.preventUpdate = true;
                 return;
             }
@@ -522,21 +532,28 @@ catnip-block(
                 ({key} = piece);
                 this.contextPiece = piece;
             }
-            const mutators = getMenuMutators(this.opts.block[piece ? 'values' : 'customOptions'][key], affixedData => {
-                mutate(this.opts.block, key, affixedData.mutator, !piece);
-                this.contextOption = this.contextPiece = false;
-                this.update();
-            });
-            if (mutators) {
-                this.contextMenu.items = [
-                    ...mutators,
-                    {
-                        type: 'separator'
-                    },
-                    ...defaultMenuItems
-                ];
-            } else {
-                this.contextMenu.items = defaultMenuItems;
+            const block = this.opts.block[piece ? 'values' : 'customOptions'][key];
+            try {
+                getDeclaration(block.lib, block.code);
+                const mutators = getMenuMutators(block, affixedData => {
+                    mutate(this.opts.block, key, affixedData.mutator, !piece);
+                    this.contextOption = this.contextPiece = false;
+                    this.update();
+                });
+                if (mutators) {
+                    this.contextMenu.items = [
+                        ...mutators,
+                        {
+                            type: 'separator'
+                        },
+                        ...defaultMenuItems
+                    ];
+                } else {
+                    this.contextMenu.items = defaultMenuItems;
+                }
+            } catch (e) {
+                console.warn('Showing only a "Delete" option in the context menu as an error was faced while getting mutators.', e);
+                this.contextMenu.items = [deleteMenuItem];
             }
             this.update();
             this.refs.menu.popup(e.clientX, e.clientY);

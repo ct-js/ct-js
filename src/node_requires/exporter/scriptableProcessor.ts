@@ -1,13 +1,13 @@
 type ScriptableCode = Record<EventCodeTargets, string>;
 
 import {ExporterError, highlightProblem} from './ExporterError';
-const {getEventByLib} = require('../events');
+import {getEventByLib} from '../events';
 import {readFile} from 'fs-extra';
-import {getName, getById} from '../resources';
+import {getById} from '../resources';
 import {getModulePathByName, loadModuleByName} from './../resources/modules';
 import {join} from 'path';
 import {embedStaticBehaviors} from './behaviors';
-const coffeeScript = require('coffeescript');
+const compileCoffee = require('coffeescript').CoffeeScript.compile;
 const typeScript = require('sucrase').transform;
 import {compile, resetSafeId} from '../catnip/compiler';
 
@@ -78,6 +78,8 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         thisOnCreate: '',
         thisOnDraw: '',
         thisOnDestroy: '',
+        thisOnAdded: '',
+        thisOnRemoved: '',
         rootRoomOnCreate: '',
         rootRoomOnStep: '',
         rootRoomOnDraw: '',
@@ -91,7 +93,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         let {code} = event;
         try { // Apply converters to the user's code first
             if (project.language === 'coffeescript') {
-                code = coffeeScript.compile((code as string), coffeeScriptOptions);
+                code = compileCoffee((code as string), coffeeScriptOptions);
             } else if (project.language === 'catnip') {
                 code = compile(code as BlockScript, {
                     resourceId: entity.uid,
@@ -128,7 +130,16 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
             throw exporterError;
         }
         const eventArgs = event.arguments;
-        const eventSpec = getEventByLib(eventKey, lib) as IEventDeclaration;
+        const eventSpec = getEventByLib(eventKey, lib);
+        if (!eventSpec) {
+            const exporterError = new ExporterError(`Could not find an event ${eventKey} from library ${lib}. Did you disable its catmod?`, {
+                resourceId: entity.uid,
+                resourceName: entity.name,
+                resourceType: entity.type,
+                clue: 'eventMissing'
+            });
+            throw exporterError;
+        }
         const requiredArgs = eventSpec.arguments || {};
         for (const target of eventSpec.codeTargets) {
             let resultingCode: string;
@@ -156,7 +167,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
                 const exp = new RegExp(`/\\*%%${argCode}%%\\*/`, 'g');
                 const argType = eventSpec.arguments![argCode].type;
                 if (['template', 'room', 'sound', 'tandem', 'font', 'style', 'texture'].indexOf(argType) !== -1) {
-                    const value = getName(getById(argType, String(eventArgs[argCode])));
+                    const value = getById(argType, String(eventArgs[argCode])).name;
                     resultingCode = resultingCode.replace(exp, `'${value.replace(/'/g, '\\\'')}'`);
                 } else if (typeof eventArgs[argCode] === 'string') {
                     // Wrap the value into singular quotes, escape existing quotes

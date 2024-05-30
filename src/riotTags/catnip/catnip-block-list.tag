@@ -187,7 +187,24 @@ catnip-block-list(
             items: defaultItems
         };
         this.onContextMenu = e => {
-            if (this.opts.readonly || e.target.closest('.aModal') || e.target.closest('.aDimmer')) {
+            if (this.opts.readonly) {
+                e.preventUpdate = true;
+                return;
+            }
+            // Prevent context modals popping up when right-clicking inside modal windows
+            // like asset or color inputs.
+
+            // Room events are displayed in a modal
+            // and we need to differ them from other modals
+            const roomEvents = Boolean(e.target.closest('room-events-editor'));
+            if (roomEvents) {
+                // Get the closest .aModal and go two elements higher
+                // as room-events-editor has .aModal as its direct child.
+                if (e.target.closest('.aModal').parentElement.parentElement.closest('room-events-editor')) {
+                    e.preventUpdate = true;
+                    return;
+                }
+            } else if (e.target.closest('.aModal')) {
                 e.preventUpdate = true;
                 return;
             }
@@ -200,25 +217,31 @@ catnip-block-list(
                 const blocks = Array.isArray(this.refs.blocks) ? this.refs.blocks : [this.refs.blocks];
                 setSelection(block, blocks[ind]);
             }
-            const mutators = getMenuMutators(block, affixedData => {
-                mutate(
-                    this.opts.blocks,
-                    this.opts.blocks.indexOf(this.contextBlock),
-                    affixedData.mutator
-                );
-                this.contextBlock = false;
-                this.update();
-            });
-            if (mutators) {
-                this.contextMenu.items = [
-                    ...mutators,
-                    {
-                        type: 'separator'
-                    },
-                    ...defaultItems
-                ];
-            } else {
+            try {
+                getDeclaration(block.lib, block.code);
+                const mutators = getMenuMutators(block, affixedData => {
+                    mutate(
+                        this.opts.blocks,
+                        this.opts.blocks.indexOf(this.contextBlock),
+                        affixedData.mutator
+                    );
+                    this.contextBlock = false;
+                    this.update();
+                });
+                if (mutators) {
+                    this.contextMenu.items = [
+                        ...mutators,
+                        {
+                            type: 'separator'
+                        },
+                        ...defaultItems
+                    ];
+                } else {
+                    this.contextMenu.items = defaultItems;
+                }
+            } catch (e) {
                 this.contextMenu.items = defaultItems;
+                console.warn(e);
             }
             this.update();
             this.refs.menu.popup(e.clientX, e.clientY);
