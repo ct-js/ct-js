@@ -77,13 +77,10 @@ export default class PixiButton extends PIXI.Container {
             style.fontSize = Number(exts.customSize);
         }
         if (t.useBitmapText) {
-            this.textLabel = new PIXI.BitmapText((exts.customText as string) || t.defaultText || '', {
-                ...style,
-                fontSize: Number(style.fontSize)
-            });
+            this.textLabel = new PIXI.BitmapText((exts.customText as string) || t.defaultText || '', style as any);
             this.textLabel.tint = new PIXI.Color(style.fill as string);
         } else {
-            this.textLabel = new PIXI.Text((exts.customText as string) || t.defaultText || '', style);
+            this.textLabel = new PIXI.Text((exts.customText as string) || t.defaultText || '', style as any);
         }
         this.textLabel.anchor.set(0.5);
         this.addChild(this.panel, this.textLabel);

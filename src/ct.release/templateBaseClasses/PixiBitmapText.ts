@@ -29,9 +29,12 @@ export default class PixiBitmapText extends PIXI.BitmapText {
         }
         super(
             (exts.customText as string) || t.defaultText || '',
-            style
+            style as any
         );
-        this.tint = new PIXI.Color(style.fill);
+        this.tint = new PIXI.Color((Array.isArray(style.fill) ?
+            style.fill[0] :
+            style.fill
+        ) as number);
         if (exts.customAnchor) {
             const anchor = exts.customAnchor as {
                 x?: number,

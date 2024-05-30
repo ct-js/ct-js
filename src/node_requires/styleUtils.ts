@@ -22,7 +22,7 @@ export const styleToTextStyle = (s: IStyle, forIde?: boolean): ExportedStyle => 
             if (font) {
                 o.fontFamily = getFontDomName(font);
             }
-        } else if (o.fontFamily.trim()) {
+        } else if ((o.fontFamily as string).trim()) {
             o.fontFamily = typeface.name + ', ' + o.fontFamily;
         } else {
             o.fontFamily = typeface.name;
@@ -48,8 +48,10 @@ export const styleToTextStyle = (s: IStyle, forIde?: boolean): ExportedStyle => 
         }
     }
     if (s.stroke) {
-        o.strokeThickness = s.stroke.weight;
-        o.stroke = s.stroke.color;
+        o.stroke = {
+            color: s.stroke.color,
+            width: s.stroke.weight
+        };
     }
     if (s.shadow) {
         o.dropShadow = {
