@@ -121,13 +121,13 @@ export const assetContextMenuItems: IAssetContextItem[] = [{
     vocPath: 'assetViewer.exportBehavior'
 }];
 
-import {validateExtends} from '../content';
+import {fixExtends} from '../content';
 export const validateBehaviorExtends = (asset: ITemplate | IRoom): void => {
     for (const behaviorId of asset.behaviors) {
         const behavior = getById('behavior', behaviorId);
         if (!behavior.specification.length) {
             continue;
         }
-        validateExtends(behavior.specification, asset.extends);
+        fixExtends(behavior.specification, asset.extends);
     }
 };

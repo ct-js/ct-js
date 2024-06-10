@@ -22,6 +22,7 @@ import {bundleFonts, bakeBitmapFonts} from './fonts';
 import {getAssetTree} from './assetTree';
 import {bakeFavicons} from './icons';
 import {getUnwrappedExtends, getCleanKey} from './utils';
+import {compileEnums} from './enums';
 import {revHash} from './../utils/revHash';
 import {substituteHtmlVars} from './html';
 import {stringifyScripts, getStartupScripts} from './scripts';
@@ -365,6 +366,7 @@ const exportCtProject = async (
         behaviorsTemplates: behaviors.templates,
         behaviorsRooms: behaviors.rooms,
         templates: templates.libCode,
+        enums: compileEnums(),
         styles: stringifyStyles(assets.style),
         tandemTemplates: stringifyTandems(assets.tandem),
         fonts: typefaces.js,
