@@ -26,98 +26,8 @@
             alwaysStrict: true
         });
 
-        /** Custom hover provider that removes @catnip tags from documentation  */
-        const displayPartsToString = function (displayParts) {
-            if (displayParts) {
-                return displayParts.map((displayPart) => displayPart.text).join('');
-            }
-            return '';
-        };
-
-        const tagToString = function (tag) {
-            let tagLabel = `*@${tag.name}*`;
-            if (tag.name === 'param' && tag.text) {
-                const [paramName, ...rest] = tag.text;
-                tagLabel += `\`${paramName.text}\``;
-                if (rest.length > 0) {
-                    tagLabel += ` — ${rest.map((r) => r.text).join(' ')}`;
-                }
-            } else if (Array.isArray(tag.text)) {
-                tagLabel += ` — ${tag.text.map((r) => r.text).join(' ')}`;
-            } else if (tag.text) {
-                tagLabel += ` — ${tag.text}`;
-            }
-            return tagLabel;
-        };
-        class HoverProvider {
-            constructor(worker) {
-                this._worker = worker;
-            }
-            // eslint-disable-next-line class-methods-use-this
-            _textSpanToRange(model, span) {
-                const p1 = model.getPositionAt(span.start);
-                const p2 = model.getPositionAt(span.start + span.length);
-                const {lineNumber: startLineNumber, column: startColumn} = p1;
-                const {lineNumber: endLineNumber, column: endColumn} = p2;
-                return {
-                    startLineNumber, startColumn, endLineNumber, endColumn
-                };
-            }
-            async provideHover(model, position) {
-                const resource = model.uri;
-                const offset = model.getOffsetAt(position);
-                const worker = await this._worker(resource);
-                if (model.isDisposed()) {
-                    return;
-                }
-                const info = await worker.getQuickInfoAtPosition(resource.toString(), offset);
-                if (!info || model.isDisposed()) {
-                    return;
-                }
-                const documentation = displayPartsToString(info.documentation);
-                const tags = info.tags ?
-                    info.tags
-                        .filter(tag => !tag.name.startsWith('@catnip`'))
-                        .map((tag) => tagToString(tag))
-                        .join('  \n\n') :
-                    '';
-                const contents = displayPartsToString(info.displayParts);
-                // eslint-disable-next-line consistent-return
-                return {
-                    range: this._textSpanToRange(model, info.textSpan),
-                    contents: [
-                        {
-                            value: '```typescript\n' + contents + '\n```\n'
-                        },
-                        {
-                            value: documentation + (tags ? '\n\n' + tags : '')
-                        }
-                    ]
-                };
-            }
-        }
-
+        // Disable the built-in hover provider
         const ts = monaco.languages.typescript;
-        ts.typescriptDefaults.setModeConfiguration({
-            hovers: false,
-            codeActions: true,
-            completionItems: true,
-            definitions: true,
-            diagnostics: true,
-            documentHighlights: true,
-            // eslint-disable-next-line id-length
-            documentRangeFormattingEdits: true,
-            documentSymbols: true,
-            inlayHints: true,
-            onTypeFormattingEdits: true,
-            references: true,
-            rename: true,
-            signatureHelp: true
-        });
-        ts.getTypeScriptWorker()
-        .then(client => {
-            monaco.languages.registerHoverProvider('typescript', new HoverProvider(client));
-        });
         const globalsPromise = fs.readFile(path.join(__dirname, './data/typedefs/global.d.ts'), {
             encoding: 'utf-8'
         });
@@ -196,7 +106,7 @@
      * @returns {void}
      */
     var extendHotkeys = (editor) => {
-        const zoomInCombo = monaco.KeyMod.CtrlCmd | monaco.KeyCode.US_EQUAL;
+        const zoomInCombo = monaco.KeyMod.CtrlCmd | monaco.KeyCode.Equal;
         editor.addCommand(zoomInCombo, function monacoZoomIn() {
             var num = Number(localStorage.fontSize);
             if (num < 48) {
@@ -206,7 +116,7 @@
             }
             return false;
         });
-        const zoomOutCombo = monaco.KeyMod.CtrlCmd | monaco.KeyCode.US_MINUS;
+        const zoomOutCombo = monaco.KeyMod.CtrlCmd | monaco.KeyCode.Minus;
         editor.addCommand(zoomOutCombo, function monacoZoomOut() {
             var num = Number(localStorage.fontSize);
             if (num > 6) {
@@ -215,6 +125,31 @@
                 window.signals.trigger('codeFontUpdated');
             }
             return false;
+        });
+
+        // Make certain hotkeys bubble up to ct.IDE instead of being consumed by monaco-editor.
+        editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+            const event = new KeyboardEvent('keydown', {
+                key: 'S',
+                code: 'KeyS',
+                ctrlKey: true
+            });
+            document.body.dispatchEvent(event);
+        });
+        editor.addCommand(monaco.KeyCode.F5, () => {
+            const event = new KeyboardEvent('keydown', {
+                key: 'F5',
+                code: 'F5'
+            });
+            document.body.dispatchEvent(event);
+        });
+        editor.addCommand(monaco.KeyCode.F5 | monaco.KeyMod.Alt, () => {
+            const event = new KeyboardEvent('keydown', {
+                key: 'F5',
+                code: 'F5',
+                altKey: true
+            });
+            document.body.dispatchEvent(event);
         });
     };
 
@@ -377,10 +312,12 @@
         }]);
     };
 
+    // When any of the code editor settings are changed,
+    // find all monaco instances and update their display settings
     window.signals.on('codeFontUpdated', () => {
-        const editorWrappers = document.querySelectorAll('.aCodeEditor');
-        for (const editorWrap of editorWrappers) {
-            editorWrap.codeEditor.updateOptions({
+        const editors = document.querySelectorAll('.monaco-editor');
+        for (const editor of editors) {
+            editor.parentElement.codeEditor.updateOptions({
                 fontLigatures: localStorage.codeLigatures !== 'off',
                 lineHeight: (localStorage.codeDense === 'off' ? 1.75 : 1.5) * Number(localStorage.fontSize),
                 fontSize: Number(localStorage.fontSize)

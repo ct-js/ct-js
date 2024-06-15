@@ -240,8 +240,8 @@ extensions-editor
         const fs = require('fs-extra'),
               path = require('path');
 
-        const resourcesAPI = require('src/node_requires/resources');
-        const {fixExtends} = require('src/node_requires/resources/content');
+        this.assetTypes = require('src/node_requires/resources').assetTypes;
+        const {validateExtends} = require('src/node_requires/resources/content');
         this.assetTypes = resourcesAPI.assetTypes;
         this.getEnumValues = (id) => {
             const values = resourcesAPI.getById('enum', id).values;
@@ -262,7 +262,7 @@ extensions-editor
         this.refreshExtends = () => {
             if (this.opts.customextends) {
                 this.extensions = this.opts.customextends;
-                fixExtends(this.extensions, this.opts.entity);
+                validateExtends(this.extensions, this.opts.entity);
                 return;
             }
 
@@ -270,6 +270,7 @@ extensions-editor
 
             const promises = [];
             for (const lib in window.currentProject.libs) {
+                // TODO: move this logic into node_requires/resources/modules
                 promises.push(fs.readJSON(path.join(libsDir, lib, 'module.json'))
                     .then(moduleJson => {
                         const key = this.opts.type + 'Extends';
@@ -279,7 +280,7 @@ extensions-editor
                     }));
             }
             Promise.all(promises).then(() => {
-                fixExtends(this.extensions, this.opts.entity);
+                validateExtends(this.extensions, this.opts.entity);
                 this.update();
             });
         };
@@ -295,7 +296,7 @@ extensions-editor
                 this.extensions = this.opts.customextends;
             }
             if (this.opts.entity !== cachedEntity) {
-                this.fixBrokenArrays();
+                validateExtends(this.extensions, this.opts.entity);
                 cachedEntity = this.opts.entity;
             }
         });

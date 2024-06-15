@@ -27,6 +27,20 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     customClass: 'userdefined'
 }, {
+    name: 'Global variable',
+    hideLabel: true,
+    type: 'computed',
+    typeHint: 'wildcard',
+    code: 'global variable',
+    icon: 'circle',
+    jsTemplate: (values) => values.variableName,
+    lib: 'core.hidden',
+    i18nKey: 'property',
+    pieces: [{
+        type: 'propVar'
+    }],
+    customClass: 'userdefined'
+}, {
     name: 'Behavior property',
     hideLabel: true,
     type: 'computed',
@@ -65,6 +79,19 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     icon: 'code-alt',
     jsTemplate: () => 'options',
     pieces: []
+}, {
+    name: 'Content type entries',
+    hideLabel: true,
+    type: 'computed',
+    typeHint: 'wildcard',
+    lib: 'core.hidden',
+    code: 'content type',
+    i18nKey: 'content type entries',
+    icon: 'table-sidebar',
+    pieces: [{
+        type: 'propVar'
+    }],
+    jsTemplate: (values) => `content['${values.variableName}']`
 }];
 
 export default blocks;

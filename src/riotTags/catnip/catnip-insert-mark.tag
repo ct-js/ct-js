@@ -7,6 +7,8 @@
     @attribute pos (number)
         The position at which this mark is put in the list
 catnip-insert-mark(onclick="{toggleMenu}" class="{dragover: shouldDragover(), menuopen: opened}")
+    // Expands on hover to expand drop area
+    .catnip-insert-mark-aFlytrap
     .catnip-insert-mark-aLine(if="{!opened}")
     .catnip-insert-mark-anIcon(if="{!opened}")
         svg.feather
@@ -68,7 +70,7 @@ catnip-insert-mark(onclick="{toggleMenu}" class="{dragover: shouldDragover(), me
 
         this.shouldDragover = () =>
             getSuggestedTarget() && (
-                getSuggestedTarget() === this.opts.list ||
+                (getSuggestedTarget() === this.opts.list && this.opts.pos === '-1') ||
                 getSuggestedTarget() === this.opts.list[this.opts.pos]);
 
         this.searchVal = '';

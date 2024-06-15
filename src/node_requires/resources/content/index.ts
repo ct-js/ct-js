@@ -165,38 +165,54 @@ export const schemaToExtensions = (schema: IFieldSchema[]): IExtensionField[] =>
 
 
 // Checks whether the passed value is a valid reference to an asset or a -1 (empty reference).
-const validateRef = (val: unknown): boolean => {
+const validateRef = (val: unknown, assetType: resourceType): boolean => {
     if (val === -1) {
         return true;
     }
     if (typeof val !== 'string') {
         return false;
     }
-    return exists(null, val);
+    return exists(assetType, val);
 };
+
+type directlyValidated = Exclude<IFieldSchema['type'] | IExtensionField['type'], 'h1' | 'h2' | 'h3' | 'h4' | 'array' | 'group' | 'table'>;
+
 // For each field type, map it to a tuple of a validation function and a default value getter.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validationTypeMap: Record<IFieldSchema['type'], [(val: unknown) => boolean, () => any]> = {
-    code: [val => typeof val === 'string', () => ''],
-    color: [val => typeof val === 'string' && val.startsWith('#'), () => '#ffffff'],
-    text: [val => typeof val === 'string', () => ''],
-    textfield: [val => typeof val === 'string', () => ''],
+const validationTypeMap: Record<directlyValidated, [
+    (val: unknown, field?: IExtensionField) => boolean,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (field?: IExtensionField) => any]
+> = {
+    code: [val => typeof val === 'string', field => field?.default ?? ''],
+    color: [val => typeof val === 'string' && val.startsWith('#'), field => field?.default ?? '#ffffff'],
+    text: [val => typeof val === 'string', field => field?.default ?? ''],
+    textfield: [val => typeof val === 'string', field => field?.default ?? ''],
     point2D: [val => Array.isArray(val) && val.length === 2 && val.every(elt => typeof elt === 'number'), () => [0, 0]],
-    number: [val => typeof val === 'number', () => 0],
-    sliderAndNumber: [val => typeof val === 'number', () => 0],
-    checkbox: [val => typeof val === 'boolean', () => false],
-    icon: [val => typeof val === 'string', () => 'circle'],
-    behavior: [validateRef, () => -1],
-    typeface: [validateRef, () => -1],
-    room: [validateRef, () => -1],
-    script: [validateRef, () => -1],
-    sound: [validateRef, () => -1],
-    style: [validateRef, () => -1],
-    tandem: [validateRef, () => -1],
-    template: [validateRef, () => -1],
-    texture: [validateRef, () => -1],
-    enum: [validateRef, () => -1]
+    number: [val => typeof val === 'number', field => field?.default ?? 0],
+    slider: [val => typeof val === 'number', field => field?.default ?? 0],
+    sliderAndNumber: [val => typeof val === 'number', field => field?.default ?? 0],
+    checkbox: [val => typeof val === 'boolean', field => field?.default ?? false],
+    icon: [val => typeof val === 'string', field => field?.default ?? 'circle'],
+    radio: [
+        (val, field) => field?.options?.some?.(o => o.value === val) ?? (typeof val === 'string'),
+        (field) => field?.default ?? field?.options?.[0].value
+    ],
+    select: [
+        (val, field) => field?.options?.some?.(o => o.value === val) ?? (typeof val === 'string'),
+        (field) => field?.default ?? field?.options?.[0].value
+    ],
+    behavior: [val => validateRef(val, 'behavior'), () => -1],
+    typeface: [val => validateRef(val, 'typeface'), () => -1],
+    room: [val => validateRef(val, 'room'), () => -1],
+    script: [val => validateRef(val, 'script'), () => -1],
+    sound: [val => validateRef(val, 'sound'), () => -1],
+    style: [val => validateRef(val, 'style'), () => -1],
+    tandem: [val => validateRef(val, 'tandem'), () => -1],
+    template: [val => validateRef(val, 'template'), () => -1],
+    texture: [val => validateRef(val, 'texture'), () => -1],
+    enum: [val => validateRef(val, 'enum'), () => -1]
 };
+
 const enumValidatorTuple: [
     (val: unknown, enumAsset: IEnum) => boolean,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -205,31 +221,22 @@ const enumValidatorTuple: [
     (v, enumAsset) => enumAsset.values.includes(v as string),
     enumAsset => enumAsset.values[0]
 ];
-const extendsValidationTypeMap: Record<
-    Exclude<IExtensionField['type'], 'h1' | 'h2' | 'h3' | 'h4'>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [(val: unknown) => boolean, () => any]
-> = {
-    ...validationTypeMap,
-    slider: [val => typeof val === 'number', () => 0],
-    radio: [val => typeof val === 'string', () => ''],
-    group: [val => typeof val === 'object', () => ({})],
-    table: [val => Array.isArray(val), () => []],
-    select: [val => typeof val === 'string', () => ''],
-    array: [val => Array.isArray(val), () => []]
-};
-
 /**
  * Checks whether the target object has its values suiting the types of schema's fields
  * and resets values to default ones if they are invalid.
  */
-export const fixContentFields = (schema: IFieldSchema[], target: Record<string, unknown>): void => {
+export const validateContentEntries = (
+    schema: IFieldSchema[],
+    target: Record<string, unknown>
+): void => {
     for (const field of schema) {
         let val = target[field.name];
         const ftype = field.type;
 
         // Get the validation function and the default value getter for this field type.
-        let validator, defaultValue, enumAsset: IEnum | undefined;
+        let validator: (val: unknown, field?: IExtensionField) => boolean,
+            defaultValue: (field?: IExtensionField) => any;
+        let enumAsset: IEnum | undefined;
         if (ftype.startsWith('enum@')) {
             // Enumerations have a special type identifier that contains
             // the id of the used enumeration.
@@ -247,18 +254,45 @@ export const fixContentFields = (schema: IFieldSchema[], target: Record<string, 
             }
             const elts = val as unknown[];
             target[field.name] = elts
-                .map(v => (validator(v, enumAsset!) ? v : defaultValue(enumAsset!)));
-        } else if (!validator(val, enumAsset!)) {
-            target[field.name] = defaultValue(enumAsset!);
+                .map(v => (validator(v) ? v : defaultValue()));
+        } else if (!validator(val)) {
+            target[field.name] = defaultValue();
         }
     }
 };
-
-export const fixExtensionFields = (schema: IExtensionField[], target: Record<string, unknown>): void => {
-    for (const field of schema) {
-        const {key} = field;
-        if (field.type === 'array') {
-            target[key] = target[key]
+/**
+ * Checks whether the target object has its values suiting the types of extension's fields
+ * and resets values to default ones if they are invalid.
+ */
+export const validateExtends = (
+    extensions: IExtensionField[],
+    target: Record<string, unknown>
+) => {
+    for (const extension of extensions) {
+        if (!extension.key) {
+            continue;
+        }
+        if (extension.type === 'array') {
+            target[extension.key] = target[extension.key] || [];
+            const [validator, defaultValue] = validationTypeMap[(extension.arrayType ?? 'text') as directlyValidated];
+            target[extension.key] = (target[extension.key] as unknown[])
+                .map(elt => (validator(elt, extension) ? elt : defaultValue(extension)));
+        } else if (extension.type === 'group' && extension.items) {
+            if (typeof target[extension.key] !== 'object' || Array.isArray(target[extension.key])) {
+                target[extension.key] = {};
+            }
+            validateExtends(extension.items, target[extension.key] as Record<string, unknown>);
+        } else if (extension.type === 'table' && extension.fields) {
+            target[extension.key] = target[extension.key] || [];
+            for (const row of target[extension.key] as Record<string, unknown>[]) {
+                validateExtends(extension.fields, row);
+            }
+        } else {
+            const [validator, defaultValue] =
+                validationTypeMap[extension.type as directlyValidated];
+            target[extension.key] = validator(target[extension.key], extension) ?
+                target[extension.key] :
+                defaultValue(extension);
         }
     }
 };
