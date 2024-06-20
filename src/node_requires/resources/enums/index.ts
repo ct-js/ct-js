@@ -4,7 +4,9 @@ import {IDisposable, languages} from 'monaco-editor';
 import {promptName} from '../promptName';
 
 export const getTypescriptEnumName = (enumType: IEnum): string => enumType.name.replace(/\s/g, '_');
-export const getTypescriptForEnum = (enumType: IEnum): string => `enum ${getTypescriptEnumName(enumType)} {\n${enumType.values.map(v => `    ${v},`)}\n};`;
+export const getTypescriptForEnum = (enumType: IEnum): string => `enum ${getTypescriptEnumName(enumType)} {
+${enumType.values.map((v, ind) => `    ${v} = ${ind},`)}
+};`;
 
 export const getAllEnumsTypescript = (): string => getOfType('enum')
     .map(getTypescriptForEnum)

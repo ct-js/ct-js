@@ -240,11 +240,11 @@ extensions-editor
         const fs = require('fs-extra'),
               path = require('path');
 
-        this.assetTypes = require('src/node_requires/resources').assetTypes;
+        const {assetTypes, getById} = require('src/node_requires/resources');
+        this.assetTypes = assetTypes;
         const {validateExtends} = require('src/node_requires/resources/content');
-        this.assetTypes = resourcesAPI.assetTypes;
         this.getEnumValues = (id) => {
-            const values = resourcesAPI.getById('enum', id).values;
+            const values = getById('enum', id).values;
             return values;
         };
 
