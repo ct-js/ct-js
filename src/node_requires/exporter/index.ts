@@ -367,7 +367,7 @@ const exportCtProject = async (
         behaviorsTemplates: behaviors.templates,
         behaviorsRooms: behaviors.rooms,
         templates: templates.libCode,
-        enums: compileEnums(),
+        enums: compileEnums(production),
         styles: stringifyStyles(assets.style),
         tandemTemplates: stringifyTandems(assets.tandem),
         fonts: typefaces.js,
@@ -376,7 +376,10 @@ const exportCtProject = async (
         userScripts,
         scriptAssets: stringifyScripts(assets.script),
         startupScripts: getStartupScripts(assets.script),
-        catmods: await modulesTask
+        catmods: await modulesTask,
+
+        production,
+        debug: !production
     }, injections);
 
 
