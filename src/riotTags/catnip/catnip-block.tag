@@ -359,7 +359,7 @@ catnip-block(
             this.opts.block.values[piece.key] = val;
         };
         this.writeEnumValue = e => {
-           this.opts.block.values.enumValue = e.target.value;
+            this.opts.block.values.enumValue = e.target.value;
         };
         // Clicking on empty boolean fields automatically puts a constant boolean
         this.tryAddBoolean = e => {
@@ -576,6 +576,7 @@ catnip-block(
                     this.contextMenu.items = defaultMenuItems;
                 }
             } catch (e) {
+                // eslint-disable-next-line no-console
                 console.warn('Showing only a "Delete" option in the context menu as an error was faced while getting mutators.', e);
                 this.contextMenu.items = [deleteMenuItem];
             }

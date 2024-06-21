@@ -244,7 +244,7 @@ extensions-editor
         this.assetTypes = assetTypes;
         const {validateExtends} = require('src/node_requires/resources/content');
         this.getEnumValues = (id) => {
-            const values = getById('enum', id).values;
+            const {values} = getById('enum', id);
             return values;
         };
 

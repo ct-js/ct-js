@@ -304,7 +304,7 @@ catnip-library(class="{opts.class}").flexrow
                 values.variableName = value;
             } else {
                 values.enumId = value;
-                values.enumValue = getById('enum', value).values[0];
+                [values.enumValue] = getById('enum', value).values;
             }
             startBlocksTransmit([{
                 lib: 'core.hidden',
