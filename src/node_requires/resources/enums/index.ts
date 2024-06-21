@@ -5,7 +5,7 @@ import {promptName} from '../promptName';
 
 export const getTypescriptEnumName = (enumType: IEnum): string => enumType.name.replace(/\s/g, '_');
 export const getTypescriptForEnum = (enumType: IEnum): string => `enum ${getTypescriptEnumName(enumType)} {
-${enumType.values.map((v, ind) => `    ${v} = ${ind},`)}
+${enumType.values.map((v, ind) => `    ${v} = ${ind},`).join('\n')}
 };`;
 
 export const getAllEnumsTypescript = (): string => getOfType('enum')
