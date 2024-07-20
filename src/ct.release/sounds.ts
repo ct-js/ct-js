@@ -115,9 +115,9 @@ const withSound = <T>(name: string, fn: (sound: Sound, assetName: string) => T):
         let lastVal: T;
         for (const variant of soundMap[name].variants) {
             const assetName = `${pixiSoundPrefix}${variant.uid}`;
-	    if (assetName in pixiSoundInstances) {
-		lastVal = fn(pixiSoundInstances[assetName], assetName);
-	    } // ignore sound variants not yet loaded
+            if (assetName in pixiSoundInstances) {
+                lastVal = fn(pixiSoundInstances[assetName], assetName);
+            } // ignore sound variants not yet loaded
         }
         return lastVal!;
     }
@@ -370,7 +370,9 @@ export const soundsLib = {
         } else if (name in soundMap) {
             for (const variant of soundMap[name].variants) {
                 const instanceKey = `${pixiSoundPrefix}${variant.uid}`;
-                if (instanceKey in pixiSoundInstances && pixiSoundInstances[instanceKey].isPlaying) {
+                if (instanceKey in pixiSoundInstances &&
+                    pixiSoundInstances[instanceKey].isPlaying
+                ) {
                     return true;
                 }
             }
