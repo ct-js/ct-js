@@ -1,4 +1,10 @@
 template-editor, [data-is="template-editor"], behavior-editor, [data-is="behavior-editor"]
+    &.demonstrationmode
+        position fixed
+        left 0
+        right 0
+        bottom 0
+        top 0
     .aNav
         border-bottom-left-radius 0
         border-bottom-right-radius 0
@@ -46,6 +52,11 @@ template-editor, behavior-editor
             flex 0 0 19rem
     .&-aCodeEditor
         flex 1 1 auto
+        &.demonstrationmode
+            catnip-editor > catnip-block-list
+                font-size 150%
+            catnip-block-list > catnip-block-list
+                font-size 100%
     .&-aSlidingEventListIcon
         position absolute
         left 0.87rem
@@ -94,6 +105,8 @@ template-editor, behavior-editor
         border-top-left-radius 0
         border-bottom-right-radius 0
         margin 0
+        & + .template-editor-aPresentationButton
+            right 1.75rem !important
 
 .template-editor-Properties, .behavior-editor-Properties, room-properties
     .anInsetPanel

@@ -119,17 +119,15 @@ event-list-scriptable.flexfix(class="{opts.class}")
         this.allEvents = eventsAPI.events;
         this.getEventByLib = eventsAPI.getEventByLib;
 
-        const getFullKey = scriptableEvt => `${scriptableEvt.lib}_${scriptableEvt.eventKey}`;
-
         this.isValid = scriptableEvt =>
             this.getEventByLib(scriptableEvt.eventKey, scriptableEvt.lib);
         this.localizeName = scriptableEvt => {
             if (this.getIsParametrized(scriptableEvt)) {
-                return eventsAPI.localizeParametrized(getFullKey(scriptableEvt), scriptableEvt);
+                return eventsAPI.localizeParametrized(eventsAPI.getFullKey(scriptableEvt), scriptableEvt);
             }
-            return eventsAPI.localizeProp(getFullKey(scriptableEvt), 'name');
+            return eventsAPI.localizeProp(eventsAPI.getFullKey(scriptableEvt), 'name');
         };
-        this.getIcon = scriptableEvt => eventsAPI.tryGetIcon(getFullKey(scriptableEvt), scriptableEvt);
+        this.getIcon = scriptableEvt => eventsAPI.tryGetIcon(eventsAPI.getFullKey(scriptableEvt), scriptableEvt);
         this.isStatic = scriptableEvt => !eventsAPI
             .canBeDynamicBehavior(eventsAPI.getEventByLib(scriptableEvt.eventKey, scriptableEvt.lib));
         this.isRestricted = scriptableEvt => !eventsAPI
@@ -159,7 +157,7 @@ event-list-scriptable.flexfix(class="{opts.class}")
             scriptableEvt.lib
         ).locals;
         this.getLocalDescription = (varName, scriptableEvt) => eventsAPI.localizeLocalVarDesc(
-            getFullKey(scriptableEvt),
+            eventsAPI.getFullKey(scriptableEvt),
             varName
         );
 

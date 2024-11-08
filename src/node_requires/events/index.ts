@@ -239,6 +239,8 @@ const bakeCategories = function bakeCategories(
     return menu;
 };
 
+export const getFullKey = (scriptableEvt: IScriptableEvent) => `${scriptableEvt.lib}_${scriptableEvt.eventKey}`;
+
 const getEventByLib = (event: string, libName: string): IEventDeclaration | undefined =>
     events[`${libName}_${event}`];
 
