@@ -52,6 +52,8 @@
             "textures": ""
         },
         "selectDialogue": "Выбрать…",
+        "selectDialogueTexture": "Выбрать текстуру…",
+        "selectDialogueStyle": "Выбрать стиль…",
         "search": "Поиск:",
         "close": "Закрыть",
         "edit": "Изменить",
