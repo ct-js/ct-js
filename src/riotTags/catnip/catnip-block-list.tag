@@ -18,11 +18,12 @@ catnip-block-list(
         if="{opts.blocks}"
         list="{opts.blocks}" pos="-1"
         ondrop="{onDropTop}"
-        oncontextmenu="{onContextMenuInstertMark}"
+        oncontextmenu="{onContextMenuInsertMark}"
         ondragenter="{handlePreDropInsertMark}"
         ondragover="{handlePreDropInsertMark}"
         ondragleave="{clearInsertMark}"
         ondragend="{clearInsertMark}"
+        ref="insertmarks"
     )
     .catnip-block-aBlockPlaceholder(if="{opts.showplaceholder && (!opts.blocks || !opts.blocks.length)}")
         svg.feather(if="{opts.placeholder === 'doNothing'}")
@@ -50,9 +51,10 @@ catnip-block-list(
             ondragleave="{parent.clearInsertMark}"
             ondragend="{parent.clearInsertMark}"
             ondrop="{parent.onDropAfter}"
-            oncontextmenu="{parent.onContextMenuInstertMark}"
+            oncontextmenu="{parent.onContextMenuInsertMark}"
             list="{parent.opts.blocks}"
             pos="{ind}"
+            ref="insertmarks"
         )
     context-menu(if="{contextBlock}" menu="{contextMenu}" ref="menu")
     context-menu(if="{showPasteMenu}" menu="{pasteContextMenu}" ref="pastemenu")
@@ -60,10 +62,9 @@ catnip-block-list(
         this.namespace = 'catnip';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
 
-        const {getDeclaration, getMenuMutators, mutate, startBlocksTransmit, endBlocksTransmit, getTransmissionType, getSuggestedTarget, setSuggestedTarget, emptyTexture, copySelected, canPaste, paste, setSelection, toggleSelection, getSelectionHTML, isSelected, removeSelectedBlocks} = require('src/node_requires/catnip');
-        const {isDev} = require('src/node_requires/platformUtils');
+        const {getDeclaration, getMenuMutators, mutate, startBlocksTransmit, endBlocksTransmit, getTransmissionType, setInsertTarget, emptyTexture, copySelected, canPaste, paste, setSelection, toggleSelection, getSelectionHTML, isSelected, removeSelectedBlocks} = require('src/lib/catnip');
+        const {isDev} = require('src/lib/platformUtils');
 
-        this.getSuggestedTarget = getSuggestedTarget;
 
         this.onDragStart = e => {
             this.update();
@@ -89,27 +90,32 @@ catnip-block-list(
             e.stopPropagation();
             this.hoveredOver = null;
         };
-        this.onDragEnd = () => {
-            setSuggestedTarget();
+        this.onDragEnd = e => {
+            e.preventUpdate = true;
+            setInsertTarget();
         };
 
         const isInvalidDrop = e =>
             this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/command');
         this.handlePreDrop = e => {
-            if (isInvalidDrop(e)) {
-                e.preventUpdate = true;
-            } else {
-                e.preventDefault(); // Tells that we do want to accept the drop
+            e.preventUpdate = true;
+            if (!isInvalidDrop(e)) {
+                // Tells that we do want to accept the drop
+                // Allows the ondrop event
+                e.preventDefault();
             }
         };
         this.handlePreDropInsertMark = e => {
+            e.preventUpdate = true;
             this.handlePreDrop(e);
             if (!isInvalidDrop(e)) {
-                setSuggestedTarget(e.item.block ?? this.opts.blocks);
+                const mark = e.currentTarget;
+                setInsertTarget(mark);
             }
         };
-        this.clearInsertMark = () => {
-            setSuggestedTarget();
+        this.clearInsertMark = e => {
+            e.preventUpdate = true;
+            setInsertTarget();
         };
         this.onDrop = e => {
             if (isInvalidDrop(e)) {
@@ -284,7 +290,7 @@ catnip-block-list(
                 }
             }]
         };
-        this.onContextMenuInstertMark = e => {
+        this.onContextMenuInsertMark = e => {
             if (!canPaste('script')) {
                 e.preventUpdate = true;
                 return;
