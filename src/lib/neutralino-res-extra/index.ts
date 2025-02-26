@@ -1,63 +1,29 @@
-import {normalize, basename, dirname} from 'path';
 import neutralino from '@neutralinojs/lib';
 
 const Neutralino = window.Neutralino ?? neutralino;
 const res = Neutralino.resources;
 
-type FolderEntry = {
-    name: string;
-    fullPath: string;
-    parent: string;
-    isDirectory: boolean;
-}
-const analyzedFiles: FolderEntry[] = [];
-let analyzePromise: Promise<FolderEntry[]> | null = null;
+let resourcesPromise: Promise<string[]>;
 
-const analyzeResources = async () => {
-    analyzedFiles.length = 0;
-    const filepaths = await res.getFiles();
-    for (const file of filepaths) {
-        const entry = {
-            name: basename(file),
-            fullPath: file,
-            parent: dirname(file),
-            isDirectory: filepaths.some(f => f.startsWith(`${file}/`))
-        };
-        analyzedFiles.push(entry);
+export const pathExists = (filePath: string): Promise<boolean> => {
+    if (!resourcesPromise) {
+        resourcesPromise = res.getFiles();
     }
-    return analyzedFiles;
-};
-const getAnalyzedFiles = () => {
-    if (analyzePromise) {
-        return analyzePromise;
-    }
-    const promise = analyzeResources();
-    analyzePromise = promise;
-    return promise;
+    return resourcesPromise.then(files => files.includes(filePath));
 };
 
-export const pathExists = async (filePath: string): Promise<boolean> => {
-    if (!analyzedFiles.length) {
-        await getAnalyzedFiles();
+export const getFolderEntries = async (path: string): Promise<string[]> => {
+    if (path.endsWith('/')) {
+        path = path.slice(0, -1); // Remove trailing slash if present
     }
-    return analyzedFiles.some(entry => entry.fullPath === filePath);
+    const searchPattern = new RegExp(`^${path}/[^/]+$`, 'i');
+    if (!resourcesPromise) {
+        resourcesPromise = res.getFiles();
+    }
+    return (await resourcesPromise).filter(entry => searchPattern.test(entry));
 };
-
-export const getFolderEntries = async (path: string): Promise<FolderEntry[]> => {
-    let folderPath = normalize(path);
-    if (folderPath.endsWith('/')) {
-        folderPath = folderPath.slice(0, -1);
-    }
-    if (!analyzedFiles.length) {
-        await getAnalyzedFiles();
-    }
-    return analyzedFiles.filter(entry => entry.parent === folderPath);
-};
-export const readdir = getFolderEntries;
-
 
 export default {
-    readdir,
     getFolderEntries,
     pathExists
 };

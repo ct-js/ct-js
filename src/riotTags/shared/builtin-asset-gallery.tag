@@ -136,8 +136,10 @@ builtin-asset-gallery.aPanel.aView.pad
         this.currentSetEntries = [];
         this.state = 'gallery';
 
+        window.res = res;
+
         res.getFolderEntries(path.join('/app', root))
-        .then(entries => entries.filter(entry => entry.isDirectory).map(entry => entry.name))
+        .then(entries => entries.map(entry => path.basename(entry)))
         .then(dirs => dirs.map(dir => Promise.all([
             res.pathExists(path.join('/app', root, dir, 'Splash.png')),
             path.join(root, dir, 'Splash.png'),
@@ -158,16 +160,16 @@ builtin-asset-gallery.aPanel.aView.pad
         });
 
         const imageTester = /\.(jpe?g|png|gif|bmp|webp)$/;
-        const soundTester = /\.(wav|ogg|mp3)$/;
+        const soundTester = /\.(wav|ogg|mp3|flac)$/;
         const {getCleanTextureName} = require('src/lib/resources/textures');
+        const ignoredFiles = ['license', 'license.md', 'license.txt', 'readme', 'readme.md', 'readme.txt', 'meta.json'];
         this.openSet = set => async () => {
             this.currentSet = set;
             this.currentSetEntries = [];
             this.state = 'loading';
             const entries = (await res.getFolderEntries(path.join('/app', root, set.name)))
-            .filter(entry => !entry.isDirectory)
-            .map(entry => entry.name)
-            .filter(entry => !['Splash.png', 'license.txt', 'meta.json'].includes(entry))
+            .map(entry => path.basename(entry))
+            .filter(entry => !ignoredFiles.includes(entry.toLowerCase()))
             for (const entry of entries) {
                 const fetchPath = path.join(root, set.name, entry);
                 let type;
