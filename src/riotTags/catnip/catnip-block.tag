@@ -107,8 +107,10 @@ catnip-block(
                     )
                     input.catnip-block-aConstantInput(
                         ondrop="{parent.onDrop}"
-                        ondragenter="{parent.handlePreDrop}"
-                        ondragstart="{parent.handlePreDrop}"
+                        ondragenter="{parent.handleDragEnter}"
+                        ondragleave="{parent.removeDropover}"
+                        ondragend="{parent.removeDropover}"
+                        ondragover="{parent.handleDragOver}"
                         onclick="{parent.tryAddBoolean}"
                         oncontextmenu="{parent.onConstContextMenu}"
                         type="text" value="{parent.getValue(option.key)}"
@@ -122,8 +124,10 @@ catnip-block(
                     )
                     span.catnip-block-aConstantInput.menu(
                         ondrop="{parent.onDrop}"
-                        ondragenter="{parent.handlePreDrop}"
-                        ondragstart="{parent.handlePreDrop}"
+                        ondragenter="{parent.handleDragEnter}"
+                        ondragleave="{parent.removeDropover}"
+                        ondragend="{parent.removeDropover}"
+                        ondragover="{parent.handleDragOver}"
                         if="{option.assets && (!getValue(option.key) || (typeof getValue(option.key)) !== 'object')}"
                         class="{option.typeHint} {invalid: parent.isInvalid(option)}"
                         title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
@@ -170,8 +174,10 @@ catnip-block(
                     )
                     input.catnip-block-aConstantInput.wildcard(
                         ondrop="{parent.onOptionDrop}"
-                        ondragenter="{parent.handlePreDrop}"
-                        ondragstart="{parent.handlePreDrop}"
+                        ondragenter="{parent.handleDragEnter}"
+                        ondragleave="{parent.removeDropover}"
+                        ondragend="{parent.removeDropover}"
+                        ondragover="{parent.handleDragOver}"
                         type="text" value="{value}"
                         onchange="{parent.writeOption}"
                         oncontextmenu="{parent.onConstContextMenu}"
@@ -200,8 +206,10 @@ catnip-block(
         )
         input.catnip-block-aConstantInput(
             ondrop="{parent.onDrop}"
-            ondragenter="{parent.handlePreDrop}"
-            ondragstart="{parent.handlePreDrop}"
+            ondragenter="{parent.handleDragEnter}"
+            ondragleave="{parent.removeDropover}"
+            ondragend="{parent.removeDropover}"
+            ondragover="{parent.handleDragOver}"
             type="text" value="{parent.getValue(piece.key)}"
             oninput="{parent.writeConstantVal}"
             onclick="{tryColorPicker}"
@@ -220,8 +228,10 @@ catnip-block(
         )
         span.catnip-block-aConstantInput.menu(
             ondrop="{parent.onDrop}"
-            ondragenter="{parent.handlePreDrop}"
-            ondragstart="{parent.handlePreDrop}"
+            ondragenter="{parent.handleDragEnter}"
+            ondragleave="{parent.removeDropover}"
+            ondragend="{parent.removeDropover}"
+            ondragover="{parent.handleDragOver}"
             if="{piece.type === 'argument' && piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint} {invalid: parent.getIsInvalid(piece)}"
             title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
@@ -261,7 +271,7 @@ catnip-block(
         this.namespace = 'catnip';
         this.mixin(require('src/lib/riotMixins/voc').default);
 
-        const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setSuggestedTarget, emptyTexture, copy, canPaste, paste, isSelected} = require('src/lib/catnip');
+        const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setInsertTarget, emptyTexture, copy, canPaste, paste, isSelected, getDropoverTarget, setDropoverTarget} = require('src/lib/catnip');
         this.isSelected = () => isSelected(this.opts.block);
         const {getById, areThumbnailsIcons, getThumbnail} = require('src/lib/resources');
         this.getName = (assetType, id) => getById(assetType, id).name;
@@ -355,7 +365,7 @@ catnip-block(
             this.hoveredOver = null;
         };
         this.onDragEnd = () => {
-            setSuggestedTarget();
+            setInsertTarget();
         };
 
         this.writeConstantVal = e => {
@@ -428,15 +438,33 @@ catnip-block(
             delete opts[key];
         };
 
+        // dragenter/dragleave are used for cosmetic highlights
+        this.handleDragEnter = e => {
+            e.preventUpdate = true;
+            setDropoverTarget();
+            if (!isInvalidDrop(e)) {
+                setDropoverTarget(e.target);
+            }
+        };
+        this.removeDropover = e => {
+            e.preventUpdate = true;
+            setDropoverTarget();
+        };
+
+        // dragover can signal that we accept the drop
         const isInvalidDrop = e =>
             this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/computed');
-        this.handlePreDrop = e => {
+        this.handleDragOver = e => {
             if (!isInvalidDrop(e)) {
-                e.preventUpdate = true;
-                e.preventDefault(); // Tells that we do want to accept the drop
+                // Tells that we do want to accept the drop to the browser
+                // Enables the drop event
+                e.preventDefault();
+            } else {
+                return;
             }
         };
         this.onDrop = e => {
+            setDropoverTarget();
             if (isInvalidDrop(e)) {
                 e.preventUpdate = true;
                 return;
@@ -782,7 +810,7 @@ catnip-block(
         };
         // Do not delete the property when moving a block out, recreate the property
         this.onOptionDragEnd = e => {
-            setSuggestedTarget();
+            setInsertTarget();
             this.opts.block.customOptions[e.item.key] = '';
         };
 

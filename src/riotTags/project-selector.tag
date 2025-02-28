@@ -109,36 +109,12 @@ project-selector
                         svg.feather
                             use(xlink:href="#sparkles")
                         span {vocGlob.create}
-            .flexfix-body.pad(show="{tab === 'examples'}")
-                .flexrow
-                    h2.nmt {voc.examples}
-                    label.file.nm.nogrow
-                        button.inline.nml.nmr(onclick="{openProjectFind}")
-                            svg.feather
-                                use(xlink:href="#folder")
-                            span {voc.browse}
-                .clear
+            .flexfix-body.pad(show="{tab === 'examples' || tab === 'templates'}")
+                h2.nmt {tab === 'examples' && voc.examples || voc.templates}
+                p.nmt(if="{tab === 'templates'}") {voc.templatesInfo}
                 ul.Cards.largeicons.nmb
                     li.aCard(
-                        each="{project in exampleProjects}"
-                        onclick="{cloneProject}"
-                        title="{project.name}"
-                    )
-                        .aCard-aThumbnail
-                            img(src="{project.image}")
-                        .aCard-Properties
-                            span {project.name}
-                        .aCard-Actions
-                            button.tiny(onclick="{cloneProject}" title="{voc.cloneProject}")
-                                svg.feather
-                                    use(xlink:href="#copy")
-            .flexfix-body.pad(show="{tab === 'templates'}")
-                h2.nmt {voc.templates}
-                p.nmt {voc.templatesInfo}
-                .clear
-                ul.Cards.largeicons.nmb
-                    li.aCard(
-                        each="{project in templateProjects}"
+                        each="{project in (tab === 'examples' ? exampleProjects : templateProjects)}"
                         onclick="{cloneProject}"
                         title="{project.name}"
                     )
@@ -294,13 +270,13 @@ project-selector
         // Loads examples and templates
         const loadBundledProjects = async (dir, array) => {
             let folders;
-            folders = (await res.getFolderEntries('/app/' + dir)).filter(i => i.isDirectory);
+            folders = (await res.getFolderEntries('/app/' + dir)).filter(i => i.endsWith('.ict'));
             array.length = 0;
             array.push(...folders.map((entry, ind) => ({
-                path: entry.fullPath + '.ict',
-                name: entry.name,
-                basename: entry.name,
-                image: entry.fullPath.replace(/^\/app/, '') + '/img/splash.png'
+                path: entry,
+                name: path.basename(entry, '.ict'),
+                basename: path.basename(entry),
+                image: entry.slice(0, -4).replace(/^\/app/, '') + '/img/splash.png'
             })));
             this.update();
         };
@@ -373,7 +349,6 @@ project-selector
          * Prompts user to clone a project into a different folder/under a different name.
          */
         this.cloneProject = e => {
-            alertify.log(this.voc.cloningProject);
             e.stopPropagation();
             (async () => {
                 const {path, basename} = e.item.project;
@@ -391,9 +366,11 @@ project-selector
                     newIctLocation += '.ict';
                 }
                 const newIctFolder = newIctLocation.slice(0, -4);
-                await res.extractFile(path, newIctLocation);
-                await res.extractFolder(path.slice(0, -4), newIctFolder);
+                await Neutralino.resources.extractFile(path, newIctLocation);
+                await Neutralino.resources.extractDirectory(path.slice(0, -4), newIctFolder);
+                console.log('Cloned a project!');
                 openProject(newIctLocation);
+                console.log('Opened a project!');
             })();
         };
         /**

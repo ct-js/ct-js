@@ -415,11 +415,38 @@ export const getTransmissionReturnVal = () => {
     ) as IBlockComputedDeclaration;
     return declaration.typeHint;
 };
-/** A block after which a (+) indicator will be placed */
-let suggestedTarget: IBlock | IBlock[] | undefined;
-export const getSuggestedTarget = () => suggestedTarget;
-export const setSuggestedTarget = (target?: IBlock | IBlock[] | undefined) =>
-    (suggestedTarget = target);
+
+/**
+ * A catnip-insert-mark tag that is currently being dragged over,
+ * needed for dropover CSS feedback.
+ */
+let dropoverInsertMark: HTMLElement | undefined;
+export const getInsertTarget = () => dropoverInsertMark;
+export const setInsertTarget = (target?: typeof dropoverInsertMark) => {
+    if (dropoverInsertMark) {
+        dropoverInsertMark.classList.remove('dragover');
+    }
+    dropoverInsertMark = target;
+    if (target) {
+        target.classList.add('dragover');
+    }
+};
+
+/**
+ * A Catnip argument/option that is currently being dragged over,
+ * needed for dropover CSS feedback.
+ */
+let dropoverInput: HTMLElement | undefined;
+export const getDropoverTarget = () => dropoverInput;
+export const setDropoverTarget = (target?: typeof dropoverInput) => {
+    if (dropoverInput) {
+        dropoverInput.classList.remove('dropover');
+    }
+    dropoverInput = target;
+    if (target) {
+        target.classList.add('dropover');
+    }
+};
 
 export const startBlocksTransmit = (
     blocks: IBlock[],
@@ -461,7 +488,7 @@ export const endBlocksTransmit = (
             transmissionSource.splice(transmissionSource.indexOf('MARKER'), 1);
         }
     }
-    suggestedTarget = void 0;
+    dropoverInsertMark = void 0;
     window.signals.trigger('blockTransmissionEnd');
 };
 export const blockFromDeclaration = (declaration: blockDeclaration): IBlock => {

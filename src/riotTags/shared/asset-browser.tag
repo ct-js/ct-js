@@ -169,7 +169,7 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
                             svg.feather(if="{asset.type === 'behavior'}")
                                 use(xlink:href="#{iconMap[asset.behaviorType]}")
                             span(if="{!parent.opts.compact}")   {capitalize(vocGlob.assetTypes[asset.type][0])}
-                        .asset-browser-Icons(if="{asset.type !== 'folder'}")
+                        .aCard-Icons(if="{asset.type !== 'folder'}")
                             svg.feather(each="{icon in parent.getIcons(asset)}" class="feather-{icon}")
                                 use(xlink:href="#{icon}")
                         span.date(if="{asset.lastmod && !parent.opts.compact}") {niceTime(asset.lastmod)}
