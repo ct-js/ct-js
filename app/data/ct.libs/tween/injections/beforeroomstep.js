@@ -9,6 +9,9 @@
             });
             tween.tweens.splice(i, 1);
             continue;
+        } else if (twoon.timer.rejected) {
+            tween.tweens.splice(i, 1);
+            continue;
         }
         let a = twoon.timer.time * 1000 / twoon.duration;
         if (a > 1) {
