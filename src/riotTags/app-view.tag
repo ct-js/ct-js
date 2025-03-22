@@ -393,7 +393,7 @@ app-view.flexcol
             if (this.currentProject) {
                 const YAML = require('js-yaml');
                 const recoveryYAML = YAML.dump(this.currentProject);
-                fs.outputFile(getIctPath + '.recovery', recoveryYAML);
+                fs.outputFile(getIctPath() + '.recovery', recoveryYAML);
             }
             this.saveRecoveryDebounce();
         };
