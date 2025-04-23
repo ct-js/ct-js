@@ -2,8 +2,10 @@
     "main": {
         "name": "Pointer",
         "name_Ru": "Указатель",
+        "name_Pl": "Wskaźnik",
         "tagline": "A uniform API for any type of pointer devices, be it touchscreens, pen tablets, or mouse.",
         "tagline_Ru": "Единый API для всех видов указателей — мышек, тач-экранов, графических планшетов и т.д.",
+        "tagline_Pl": "Ujednolicone API dla wszystkich typów wskaźników — myszy, ekranów dotykowych, tabletów graficznych itp.",
         "version": "1.0.1",
         "icon": "ui",
         "authors": [{
@@ -17,10 +19,12 @@
     "fields": [{
         "name": "Start with locking mode",
         "name_Ru": "Запустить в режиме захвата",
+        "name_Pl": "Uruchom w trybie przechwytywania",
         "key": "startlocked",
         "id": "startlocked",
         "help": "Will lock the first click inside the game. Read about locking mode in sidebar's docs.",
         "help_Ru": "Заблокирует курсор при первом клике внутри игры. Узнай больше о работе в режиме захвата в документации к модулю в боковой панели.",
+        "help_Pl": "Zablokuje kursor po pierwszym kliknięciu wewnątrz gry. Więcej o trybie przechwytywania znajdziesz w dokumentacji w panelu bocznym.",
         "default": false,
         "type": "checkbox"
     }],
