@@ -2,8 +2,10 @@
     "main": {
         "name": "Virtual Keys",
         "name_Ru": "Виртуальные клавиши",
+        "name_Pl": "Wirtualne przyciski",
         "tagline": "Create on-screen buttons and joysticks and listen to them in Actions system.",
         "tagline_Ru": "Создай экранные кнопки и джойстики и слушай за их событиями в системе Действий.",
+        "tagline_Pl": "Twórz przyciski i joysticki na ekranie oraz reaguj na ich zdarzenia w systemie Akcji.",
         "version": "3.0.0",
         "authors": [{
             "name": "Cosmo Myzrail Gorynych",
