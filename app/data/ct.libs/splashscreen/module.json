@@ -2,8 +2,10 @@
     "main": {
         "name": "Splash screen",
         "name_Ru": "Вступительный экран-обложка",
+        "name_Pl": "Ekran powitalny (Splash)",
         "tagline": "Create splash screens at project settings.",
         "tagline_Ru": "Создай вступительное интро с помощью настроек проекта.",
+        "tagline_Pl": "Twórz ekrany startowe w ustawieniach projektu.",
         "icon": "monitor",
         "version": "0.0.0",
         "authors": [{
@@ -18,15 +20,18 @@
     "fields": [{
         "name": "Slide duration, ms",
         "name_Ru": "Длительность слайда, в мс",
+        "name_Pl": "Czas trwania slajdu (ms)",
         "key": "slideDuration",
         "default": 4000,
         "type": "number",
         "help": "Includes transitions, so it should be at least twice as much as \"Transition duration\" value.",
         "help_Ru": "Включает длительность переходов, поэтому должно быть минимум в 2 раза длиннее, чем \"Длительность перехода\".",
+        "help_Pl": "Uwzględnia przejścia, więc powinien być co najmniej dwa razy dłuższy niż wartość \"Czas trwania przejścia\".",
         "min": 0
     }, {
         "name": "Transition duration, ms",
         "name_Ru": "Длительность перехода, мс",
+        "name_Pl": "Czas trwania przejścia (ms)",
         "key": "transitionDuration",
         "default": 1000,
         "type": "number",
@@ -34,60 +39,71 @@
     }, {
         "name": "Background color",
         "name_Ru": "Цвет фона",
+        "name_Pl": "Kolor tła",
         "key": "backgroundColor",
         "default": "#000000",
         "type": "color"
     }, {
         "name": "Transition color",
         "name_Ru": "Цвет перехода",
+        "name_Pl": "Kolor przejścia",
         "key": "transitionColor",
         "default": "#000000",
         "type": "color"
     }, {
         "name": "Skip slides on mouse click / touch / key press / gamepad input. (Requires at least one of the modules that provide inputs for these.)",
         "name_Ru": "Пропускать слайд по нажатию клавиш. (Требует как минимум один модуль ввода для отлова таких событий.)",
+        "name_Pl": "Pomijanie slajdów przy kliknięciu myszą / dotyku / naciśnięciu klawisza / użyciu pada (wymaga przynajmniej jednego modułu wejściowego dla tych interakcji).",
         "key": "skippable",
         "default": true,
         "type": "checkbox"
     }, {
         "name": "Slides",
         "name_Ru": "Слайды",
+        "name_Pl": "Slajdy",
         "key": "slides",
         "default": [],
         "type": "table",
         "fields": [{
             "name": "Logo texture",
             "name_Ru": "Текстура",
+            "name_Pl": "Tekstura logo",
             "key": "texture@@texture",
             "default": -1,
             "type": "texture"
         }, {
             "name": "Effect",
             "name_Ru": "Эффект",
+            "name_Pl": "Efekt",
             "key": "effect",
             "type": "select",
             "default": "none",
             "options": [{
                 "value": "none",
                 "name": "None",
-                "name_Ru": "Нет"
+                "name_Ru": "Нет",
+                "name_Pl": "Brak"
             }, {
                 "value": "zoomIn",
                 "name": "Zoom in",
-                "name_Ru": "Расширять"
+                "name_Ru": "Расширять",
+                "name_Pl": "Powiększ"
             }, {
                 "value": "zoomOut",
                 "name": "Zoom out",
-                "name_Ru": "Сжимать"
+                "name_Ru": "Сжимать",
+                "name_Pl": "Pomniejsz"
             }]
         }, {
             "name": "Fill",
             "name_Ru": "Заполнить",
+            "name_Pl": "Wypełnij",
             "key": "fill",
             "type": "checkbox",
             "default": false,
             "help": "If enabled, the logo will occupy the whole screen stretching proportionally; otherwise, it will be twice as small and placed at the center of the screen.",
-            "help_Ru": "Когда включено, текстура заполнит весь экран, сохраняя пропорции; в противном случае текстура будет в два раза меньше и будет размещена по центру."
+            "help_Ru": "Когда включено, текстура заполнит весь экран, сохраняя пропорции; в противном случае текстура будет в два раза меньше и будет размещена по центру.",
+            "help_Pl": "Jeśli włączone, logo wypełni cały ekran, zachowując proporcje; w przeciwnym razie będzie dwukrotnie mniejsze i wyśrodkowane."
         }]
     }]
 }
