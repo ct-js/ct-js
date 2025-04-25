@@ -110,7 +110,7 @@
         }, {
             "name": "Fix pivot",
             "name_Ru": "Исправить ось вращения",
-            "name_Pl": "Napraw oś obrotu"
+            "name_Pl": "Napraw oś obrotu",
             "type": "point2D",
             "key": "matterFixPivot",
             "help": "Shifts the texture. Helps with polygonal shapes where the module cannot align center of mass and texture automatically.",
@@ -144,7 +144,7 @@
                 "name_Pl": "Przypnij",
                 "help": "Keeps position but allows rotation",
                 "help_Ru": "Сохраняет расположение, но допускает вращение",
-                "help_Pl": "Zachowuje pozycję, ale pozwala na obrót.",
+                "help_Pl": "Zachowuje pozycję, ale pozwala na obrót."
             }, {
                 "value": "rope",
                 "name": "Rope",
@@ -152,7 +152,7 @@
                 "name_Pl": "Lina",
                 "help": "Creates a rope with a defined length",
                 "help_Ru": "Создаёт верёвку определённой длины",
-                "help_Pl": "Tworzy linę o określonej długości.",
+                "help_Pl": "Tworzy linę o określonej długości."
             }],
             "default": "none",
             "key": "matterConstraint"
@@ -284,7 +284,7 @@
                     "type": "number",
                     "description": "Approximate transferred impact",
                     "description_Ru": "Примерный импульс",
-                    "description_Pl": "Przybliżony impuls",
+                    "description_Pl": "Przybliżony impuls"
                 }
             }
         },
@@ -337,7 +337,7 @@
                     "type": "Copy | PIXI.Sprite",
                     "description": "What is touching your copy. Can be a tile (PIXI.Sprite)",
                     "description_Ru": "То, что касается копии. Может быть плиткой тайлсета (PIXI.Sprite)",
-                    "description_Pl": "To, co dotyka twojej kopii. Może to być tafla (PIXI.Sprite)",
+                    "description_Pl": "To, co dotyka twojej kopii. Może to być tafla (PIXI.Sprite)"
                 }
             }
         },
