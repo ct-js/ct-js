@@ -443,8 +443,9 @@ export const deleteFolder = (
     folder: IAssetFolder,
     unwrapTo: IAssetFolder | null | false
 ): Promise<void> => {
+    const entriesToRemove = [...folder.entries];
     if (unwrapTo || unwrapTo === null) {
-        for (const entry of folder.entries) {
+        for (const entry of entriesToRemove) {
             if (entry.type === 'folder') {
                 moveFolder(entry, unwrapTo as IAssetFolder | null);
             } else {
@@ -453,7 +454,7 @@ export const deleteFolder = (
         }
         return deleteFolder(folder, false);
     }
-    return Promise.all(folder.entries.map((entry) => {
+    return Promise.all(entriesToRemove.map((entry) => {
         if (entry.type === 'folder') {
             return deleteFolder(entry, false);
         }
