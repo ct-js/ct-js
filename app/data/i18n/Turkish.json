@@ -28,6 +28,14 @@
         "exit": "Çık",
         "reallyExitConfirm": "Çıkmak istediğinden emin misin? Kaydedilmeyen değişikliklerin tümü yok olacak!",
         "filter": "Filtre:",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "loading": "Yükleniyor…",
         "name": "İsim:",
         "nameTaken": "Bu isim zaten alınmış",

@@ -37,6 +37,14 @@
         "zoomOut": "common.zoomOut",
         "clear": "common.clear",
         "filter": "common.filter",
+        "filters": {
+            "everything": "common.filters.everything",
+            "rooms": "common.filters.rooms",
+            "scripts": "common.filters.scripts",
+            "sounds": "common.filters.sounds",
+            "templates": "common.filters.templates",
+            "textures": "common.filters.textures"
+        },
         "selectDialogue": "common.selectDialogue",
         "search": "common.search",
         "close": "common.close",

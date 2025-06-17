@@ -111,6 +111,8 @@ input[type="reset"],
     &.square
         padding 0.7em
         line-height 1
+    &.micro
+        font-size: 0.5em;
     &.tiny
         padding 0.35rem
         line-height 1em
@@ -217,6 +219,13 @@ input[type="reset"],
             color error
         &:after
             background error
+
+.twoLevelGroup
+    display inline-flex
+    flex-direction column
+    margin-top -0.25rem
+    row-gap: 2px
+    vertical-align: top
 
 .aButtonGroup
     display inline-flex

@@ -38,6 +38,14 @@
         "selectDialogue": "Seleccionar...",
         "select": "Seleccionar",
         "filter": "",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "search": "",
         "close": "",
         "couldNotLoadFromClipboard": "",
