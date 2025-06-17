@@ -125,7 +125,7 @@ mixin templateProperties
                 if="{parent.asset.selectionColor}"
                 onchange="{parent.wire('asset.selectionColor', true)}"
                 color="{parent.asset.selectionColor}"
-                hidealpha="hidealpha"
+                hidealpha="true"
             )
 
         // Scroll speed for repeating textures

@@ -81,6 +81,9 @@ color-picker
 
         this.loadColor = color => {
             this.color = brehautColor(color);
+            if (this.color.alpha < 1 && this.opts.hidealpha) {
+                this.color = this.color.setAlpha(1);
+            }
             this.color = this.color.setValue(this.color.getValue());
             this.oldColor = brehautColor(color);
         };
