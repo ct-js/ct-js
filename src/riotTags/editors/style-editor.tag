@@ -213,7 +213,7 @@ style-editor.aPanel.aView(class="{opts.class}")
 
             // Create some text labels for the preview
             const labelShort = this.vocFull.styleView.testText,
-                  labelMultiline = 'A quick blue cat\njumps over the lazy fox\nand brown dog.',
+                  labelMultiline = 'A quick blue cat\njumps over the lazy fox\nand slow dog.',
                   labelLong = '"(€)-{&@}#$%*" said the Alien; so I txt\'d back "/..\\". "WHAT?!?" replied the Alien.',
                   labelThumbnail = 'Aa';
             this.pixiStyle = new PIXI.TextStyle();
