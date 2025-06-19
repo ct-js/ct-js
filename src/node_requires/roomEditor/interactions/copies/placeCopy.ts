@@ -37,7 +37,7 @@ const createCopy = (
         y: 1
     },
     uid: template.uid,
-    opacity: 1,
+    opacity: (template.extends.alpha as number) || 1,
     rotation: 0,
     tint: 0xffffff
 }, editor, ghost);
