@@ -207,8 +207,7 @@ style-editor.aPanel.aView(class="{opts.class}")
             this.pixiApp = new PIXI.Application({
                 width,
                 height,
-                backgroundAlpha: 0,
-                resolution: window.devicePixelRatio
+                backgroundAlpha: 0
             });
             this.refs.canvasSlot.appendChild(this.pixiApp.view);
 
