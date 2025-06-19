@@ -1004,6 +1004,7 @@
         "fill": "Doldur",
         "font": "Font",
         "italic": "İtalik",
+        "padding": "Doldurma:",
         "lineHeight": "Çizgi yüksekliği:",
         "shadow": "Gölge",
         "stroke": "Hat",

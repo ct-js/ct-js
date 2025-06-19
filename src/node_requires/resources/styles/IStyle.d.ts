@@ -9,6 +9,7 @@ declare interface IStyle extends IAsset {
                 '400' | '500' | '600' | '700' | '800' | '900';
         halign: 'left' | 'center' | 'right'
         lineHeight?: number;
+        padding?: number;
         wrap: boolean;
         wrapPosition: number;
     };

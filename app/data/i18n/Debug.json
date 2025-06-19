@@ -1011,6 +1011,7 @@
         "fill": "styleView.fill",
         "font": "styleView.font",
         "italic": "styleView.italic",
+        "padding": "styleView.padding",
         "lineHeight": "styleView.lineHeight",
         "shadow": "styleView.shadow",
         "stroke": "styleView.stroke",

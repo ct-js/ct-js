@@ -943,6 +943,7 @@
         "fill": "Vul",
         "font": "Lettertype",
         "italic": "Cursief",
+        "padding": "Opvulling:",
         "lineHeight": "Linehoogte:",
         "shadow": "Schaduw",
         "stroke": "Omlijning",

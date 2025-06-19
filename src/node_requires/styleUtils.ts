@@ -10,7 +10,8 @@ export const styleToTextStyle = (s: IStyle, forIde?: boolean): ExportedStyle => 
         fontWeight: s.font.weight,
         align: s.font.halign,
         lineJoin: 'round',
-        lineHeight: s.font.lineHeight || s.font.size * 1.35
+        lineHeight: s.font.lineHeight || s.font.size * 1.35,
+        padding: s.font.padding || 0
     } as ExportedStyle;
     if (s.typeface !== -1) {
         const typeface = getById('typeface', s.typeface);

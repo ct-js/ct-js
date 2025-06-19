@@ -1558,6 +1558,7 @@
         "fill": "Fill",
         "font": "Font",
         "italic": "Italic",
+        "padding": "Padding:",
         "lineHeight": "Line height:",
         "shadow": "Shadow",
         "stroke": "Stroke",

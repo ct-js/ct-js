@@ -770,6 +770,7 @@
         "fill": "Llenar",
         "font": "Fuente",
         "italic": "Italica",
+        "padding": "Padding:",
         "lineHeight": "Altura de la línea:",
         "shadow": "Sombra",
         "stroke": "Trazo",

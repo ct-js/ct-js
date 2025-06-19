@@ -164,6 +164,19 @@ const mod = {
         }
         return currentSwatches[color];
     },
+    getSwatchHex(color: string): string {
+        if (!currentSwatches) {
+            updateSwatches();
+        }
+        return brehautColor(currentSwatches[color]).toCSSHex();
+    },
+    insufficientContrast(inputColor: string, current: string, alternate?: string): boolean {
+        const ca = brehautColor(inputColor);
+        const cb = brehautColor(current);
+        const cc = alternate ? brehautColor(alternate) : '';
+        return Math.abs(cb.getLuminance() - ca.getLuminance()) < 0.3 &&
+            (!cc || Math.abs(cc.getLuminance() - ca.getLuminance()) > 0.3);
+    },
     updateSwatches
 };
 

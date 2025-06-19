@@ -773,6 +773,7 @@
         "fill": "Remplir",
         "font": "Police",
         "italic": "Italique",
+        "padding": "Remplissage :",
         "lineHeight": "Hauteur de ligne :",
         "shadow": "Ombre",
         "stroke": "Barré",
