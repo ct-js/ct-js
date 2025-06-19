@@ -243,7 +243,7 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
             rooms: 'room',
             sounds: 'sound',
             templates: 'template',
-            scripts: ['behavior', 'script']
+            scripts: ['behavior', 'script', 'enum']
         };
 
         const resources = require('src/node_requires/resources');
