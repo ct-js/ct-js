@@ -9,7 +9,7 @@ mixin rangeNumberInput(wirePath, min = 0, max = 64, step = 1)
         input(
             type="range" value=`{${wirePath}}` min=min max=max step=step
             data-wired-force-minmax="yes"
-            onchange=`{wire('${wirePath}')}`
+            onchange=`{wireAndSwap('${wirePath}')}`
             oninput=`{wire('${wirePath}')}`
         )
         .aSpacer.nogrow
@@ -44,29 +44,28 @@ style-editor.aPanel.aView(class="{opts.class}")
                             input#fontfamily.wide(type="text" value="{asset.font.family || 'sans-serif'}" onchange="{wire('asset.font.family')}")
                     fieldset
                         .flexrow
-                            label
+                            label.halfpane
                                 b {voc.fontSize}
                                 br
                                 input.wide(type="number" value="{asset.font.size || '12'}" onchange="{wireFontSize}" oninput="{wireFontSize}" step="1")
                             .aSpacer.nogrow.noshrink
-                            label
+                            label.halfpane
                                 b {voc.lineHeight}
                                 br
-                                input.wide(type="number" step="1" min="0" value="{asset.font.lineHeight || 0}" oninput="{wire('asset.font.lineHeight')}")
+                                input.wide(type="number" step="any" min="0" value="{asset.font.lineHeight || 0}" oninput="{wire('asset.font.lineHeight')}")
                     fieldset
                         .flexrow
-                            label
+                            label.halfpane
+                                b {voc.padding}
+                                br
+                                input.wide(type="number" step="1" min="0" value="{asset.font.padding || 0}" onchange="{wire('asset.font.padding')}")
+                            .aSpacer.nogrow.noshrink
+                            label.halfpane
                                 b {voc.fontWeight}
                                 br
                                 select.wide(value="{asset.font.weight}" onchange="{wire('asset.font.weight')}")
                                     each val in [100, 200, 300, 400, 500, 600, 700, 800, 900]
                                         option(value=val disabled=`{!checkWeightAvailable('${val}')}`)= val
-                            .aSpacer.nogrow.noshrink
-                            div
-                                br
-                                label.checkbox
-                                    input(type="checkbox" checked="{asset.font.italic}" onchange="{wire('asset.font.italic')}")
-                                    b {voc.italic}
                     fieldset
                         b {voc.alignment}
                         .align.buttonselect
@@ -81,11 +80,14 @@ style-editor.aPanel.aView(class="{opts.class}")
                                     use(xlink:href="#align-right")
                     fieldset
                         label.checkbox
+                            input(type="checkbox" checked="{asset.font.italic}" onchange="{wire('asset.font.italic')}")
+                            b {voc.italic}
+                        label.checkbox
                             input(type="checkbox" checked="{asset.font.wrap}" onchange="{wire('asset.font.wrap')}")
                             b {voc.textWrap}
                         label(if="{asset.font.wrap}").block.nmt
                             b {voc.textWrapWidth}
-                            input.wide(type="number" step="8" min="1" value="{asset.font.wrapPosition || 100}" oninput="{wire('asset.font.wrapPosition')}")
+                            input.wide(type="number" step="2" min="0" value="{asset.font.wrapPosition || 100}" oninput="{wire('asset.font.wrapPosition')}")
 
             #stylefill.tabbed(show="{tab === 'stylefill'}")
                 label.checkbox
@@ -104,7 +106,7 @@ style-editor.aPanel.aView(class="{opts.class}")
                         .solidfill(if="{asset.fill.type == 0}")
                             b {voc.fillColor}
                             br
-                            color-input(onchange="{wire('asset.fill.color', true)}" color="{asset.fill.color}")
+                            color-input(onchange="{wireAndSwap('asset.fill.color')}" color="{asset.fill.color}")
                         .gradientfill(if="{asset.fill.type == 1}")
                             +notSupportedThingy
                             .fifty.npl.npt
@@ -128,7 +130,7 @@ style-editor.aPanel.aView(class="{opts.class}")
                 #stylestrokeinner(if="{asset.stroke}")
                     fieldset
                         b {voc.strokeColor}
-                        color-input(onchange="{wire('asset.stroke.color', true)}" color="{asset.stroke.color}")
+                        color-input(onchange="{wireAndSwap('asset.stroke.color')}" color="{asset.stroke.color}")
                     fieldset
                         b {voc.strokeWeight}
                         br
@@ -160,7 +162,7 @@ style-editor.aPanel.aView(class="{opts.class}")
                 svg.feather
                     use(xlink:href="#check")
                 span {vocGlob.apply}
-    .style-editor-aPreview.tall(ref="canvasSlot" style="background-color: {previewColor};")
+    .style-editor-aPreview.tall(ref="canvasSlot" style="background-color: {previewColor}; {this.altPreviewColor ? 'transition: background-color 0.2s' : ''}")
         button.inline.forcebackground.style-editor-aChangeBgButton(onclick="{changePreviewBg}")
             svg.feather
                 use(xlink:href="#droplet")
@@ -183,6 +185,8 @@ style-editor.aPanel.aView(class="{opts.class}")
         this.mixin(require('src/node_requires/riotMixins/discardio').default);
 
         const PIXI = require('pixi.js');
+        const {extend} = require('src/node_requires/objectUtils');
+        const {styleToTextStyle} = require('src/node_requires/styleUtils');
 
         const {getById} = require('src/node_requires/resources');
         // Cache the linked typeface so we can easily fetch valid weights later
@@ -203,33 +207,38 @@ style-editor.aPanel.aView(class="{opts.class}")
             this.pixiApp = new PIXI.Application({
                 width,
                 height,
-                backgroundAlpha: 0,
-                resolution: window.devicePixelRatio
+                backgroundAlpha: 0
             });
             this.refs.canvasSlot.appendChild(this.pixiApp.view);
 
             // Create some text labels for the preview
             const labelShort = this.vocFull.styleView.testText,
-                  labelMultiline = this.vocFull.styleView.testText.repeat(2) + '\n' + this.vocFull.styleView.testText.repeat(3) + '\n' + this.vocFull.styleView.testText,
-                  labelLong = 'A quick blue cat jumps over the lazy frog. 0123456789 '.repeat(3),
+                  labelMultiline = 'A quick blue cat\njumps over the lazy fox\nand slow dog.',
+                  labelLong = '"(€)-{&@}#$%*" said the Alien; so I txt\'d back "/..\\". "WHAT?!?" replied the Alien.',
                   labelThumbnail = 'Aa';
             this.pixiStyle = new PIXI.TextStyle();
+            extend(this.pixiStyle, styleToTextStyle(this.asset, true));
             this.labelShort = new PIXI.Text(labelShort, this.pixiStyle);
             this.labelMultiline = new PIXI.Text(labelMultiline, this.pixiStyle);
             this.labelLong = new PIXI.Text(labelLong, this.pixiStyle);
             this.labelThumbnail = new PIXI.Text(labelThumbnail, this.pixiStyle);
             this.labels = [this.labelShort, this.labelLong, this.labelMultiline];
+            this.labelShort.y = 20;
+            this.labelMultiline.y = 40 + (this.pixiStyle.fontSize || 12);
+            this.labelLong.y = 60 + (this.pixiStyle.fontSize || 12) + Math.max(
+                (this.pixiStyle.fontSize || 12) + (this.pixiStyle.lineHeight || 1) * 2,
+                (this.pixiStyle.lineHeight || 0) * 3
+            );
             for (const label of this.labels) {
-                label.resolution = window.devicePixelRatio;
-                label.anchor.x = 0.5;
-                label.anchor.y = 0.5;
+                label.anchor.x = 0;
+                label.anchor.y = 0;
                 this.pixiApp.stage.addChild(label);
-                label.x = width / 2;
+                label.x = Math.max(30, this.pixiStyle.padding);
             }
-            this.labelShort.y = 60;
-            this.labelMultiline.y = 60 * 3;
-            this.labelLong.y = 60 * 6;
             this.updateStylePreview();
+            if (this.checkForSwap()) {
+                this.update();
+            }
         });
         this.on('unmount', () => {
             this.pixiApp.destroy(false, {
@@ -242,9 +251,6 @@ style-editor.aPanel.aView(class="{opts.class}")
         const resizeCanvas = () => {
             const bounds = this.refs.canvasSlot.getBoundingClientRect();
             this.pixiApp.renderer.resize(Math.floor(bounds.width), Math.floor(bounds.height));
-            for (const label of this.labels) {
-                label.x = bounds.width / 2;
-            }
         };
         const tabSwitchHandler = tab => {
             if (tab?.uid === this.asset.uid) {
@@ -304,6 +310,12 @@ style-editor.aPanel.aView(class="{opts.class}")
             this.asset.font.lineHeight = Math.round(oldLineHeight * k * 100) / 100;
         };
 
+        this.wireAndSwap = which => e => {
+            this.wire(which)(e);
+            this.checkForSwap();
+            this.update();
+        };
+
         this.styleSetAlign = align => () => {
             this.asset.font.halign = align;
         };
@@ -336,16 +348,22 @@ style-editor.aPanel.aView(class="{opts.class}")
                 };
             }
         };
+        
         // Render a preview image in the editor
-        const {extend} = require('src/node_requires/objectUtils');
-        const {styleToTextStyle} = require('src/node_requires/styleUtils');
         this.updateStylePreview = () => {
             this.pixiStyle.reset();
             extend(this.pixiStyle, styleToTextStyle(this.asset, true));
+            this.labelShort.y = 20;
+            this.labelMultiline.y = 40 + (this.pixiStyle.fontSize || 12);
+            this.labelLong.y = 60 + (this.pixiStyle.fontSize || 12) + Math.max(
+                (this.pixiStyle.fontSize || 12) + (this.pixiStyle.lineHeight || 1) * 2,
+                (this.pixiStyle.lineHeight || 0) * 3
+            );
             for (const label of this.labels) {
                 // this forces to redraw the pixi label
                 // eslint-disable-next-line no-self-assign
                 label.text = label.text;
+                label.x = Math.max(30, this.pixiStyle.padding);
             }
             this.pixiApp.render();
         };
@@ -361,8 +379,30 @@ style-editor.aPanel.aView(class="{opts.class}")
         };
 
         // Get the color for thhe preview window and let a user change it
-        const {getSwatch} = require('src/node_requires/themes');
+        const {getSwatch, insufficientContrast} = require('src/node_requires/themes');
         this.previewColor = getSwatch('backgroundDeeper');
+        this.altPreviewColor = getSwatch('accent1');
+        this.checkForSwap = () => {
+            if (!this.altPreviewColor) {
+                return false;
+            }
+            if (this.pixiStyle.strokeThickness >= 1 && typeof this.pixiStyle.stroke === 'string') {
+                if (insufficientContrast(this.pixiStyle.stroke, this.previewColor, this.altPreviewColor)) {
+                    const saved = this.previewColor;
+                    this.previewColor = this.altPreviewColor;
+                    this.altPreviewColor = saved;
+                    return true;
+                }
+            } else if (typeof this.pixiStyle.fill === 'string') {
+                if (insufficientContrast(this.pixiStyle.fill, this.previewColor, this.altPreviewColor)) {
+                    const saved = this.previewColor;
+                    this.previewColor = this.altPreviewColor;
+                    this.altPreviewColor = saved;
+                    return true;
+                }
+            }
+            return false;
+        };
         this.changePreviewBg = () => {
             this.changingPreviewBg = !this.changingPreviewBg;
             if (this.changingPreviewBg) {
@@ -371,6 +411,7 @@ style-editor.aPanel.aView(class="{opts.class}")
         };
         this.updatePreviewColor = (color, evtype) => {
             this.previewColor = color;
+            this.altPreviewColor = null;
             if (evtype === 'onapply') {
                 this.changingPreviewBg = false;
             }

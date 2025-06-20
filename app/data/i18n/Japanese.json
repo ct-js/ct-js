@@ -1560,6 +1560,7 @@
     "fill": "塗りつぶし",
     "font": "フォント",
     "italic": "イタリック",
+    "padding": "パディング:",
     "lineHeight": "線の高さ:",
     "shadow": "影",
     "stroke": "ストローク",

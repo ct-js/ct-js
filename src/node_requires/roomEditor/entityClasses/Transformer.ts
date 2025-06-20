@@ -120,8 +120,8 @@ export class Transformer extends PIXI.Container {
 
         let rect: PIXI.Rectangle | undefined;
         for (const elt of this.editor.currentSelection) {
-            const w = elt.width,
-                  h = elt.height,
+            const w = elt.width - 2 * ((elt as Copy).text?.style?.padding || 0),
+                  h = elt.height - 2 * ((elt as Copy).text?.style?.padding || 0),
                   anchor = getAnchor(elt),
                   // IDK why this works
                   px = Math.sign(elt.scale.x) === -1 ? 1 - anchor.x : anchor.x,

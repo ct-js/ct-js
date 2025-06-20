@@ -3,6 +3,7 @@ import {StylePreviewer} from '../preview/style';
 import {promptName} from '../promptName';
 import {IAssetContextItem, addAsset, getOfType, createAsset as createProjAsset} from '..';
 import {getBaseClassFields} from '../templates';
+import {getSwatchHex} from 'src/node_requires/themes';
 
 export const createAsset = async (): Promise<IStyle> => {
     const name = await promptName('style', 'New Style');
@@ -28,7 +29,7 @@ export const createAsset = async (): Promise<IStyle> => {
         },
         fill: {
             type: 0,
-            color: '#ffffff',
+            color: getSwatchHex('accent1'),
             color1: '#cccccc',
             color2: '#ffffff',
             gradtype: 1

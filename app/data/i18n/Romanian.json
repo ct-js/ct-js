@@ -770,6 +770,7 @@
         "fill": "Umplere",
         "font": "Font",
         "italic": "Italic",
+        "padding": "",
         "lineHeight": "Înălțimea liniei:",
         "shadow": "Umbră",
         "stroke": "Contur",

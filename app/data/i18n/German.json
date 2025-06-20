@@ -770,6 +770,7 @@
         "fill": "Füllen",
         "font": "Schrift",
         "italic": "Kursiv",
+        "padding": "",
         "lineHeight": "Zeilenhöhe:",
         "shadow": "Schatten",
         "stroke": "Kontur",

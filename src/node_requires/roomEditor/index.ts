@@ -731,8 +731,8 @@ class RoomEditor extends PIXI.Application {
         overlay.clear();
         overlay.visible = true;
         for (const entity of entities) {
-            const w = entity.width,
-                  h = entity.height,
+            const w = entity.width - 2 * ((entity as Copy).text?.style?.padding || 0),
+                  h = entity.height - 2 * ((entity as Copy).text?.style?.padding || 0),
                   anchor = getAnchor(entity),
                   // IDK why this works
                   px = Math.sign(entity.scale.x) === -1 ? 1 - anchor.x : anchor.x,
