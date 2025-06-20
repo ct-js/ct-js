@@ -1,4 +1,3 @@
-import uLib from './u';
 import backgrounds, {Background} from './backgrounds';
 import templatesLib, {BasicCopy, killRecursive} from './templates';
 import {Tilemap} from './tilemaps';
@@ -252,7 +251,7 @@ export class Room extends PIXI.Container<pixiMod.DisplayObject> {
             if (isRoot) {
                 roomsLib.current = this;
                 (pixiApp.renderer as pixiMod.Renderer).background.color =
-                    uLib.hexToPixi(this.template.backgroundColor);
+                    this.template.backgroundColor;
             }
             /*!%beforeroomoncreate%*/
             for (let i = 0, li = template.bgs.length; i < li; i++) {

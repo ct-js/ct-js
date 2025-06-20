@@ -252,7 +252,7 @@ catnip-block(
     )
     .aDimmer(if="{colorValue}" draggable="true" ondragstart="{preventDrag}")
         color-picker(
-            hidealpha="hidealpha"
+            hidealpha="true"
             onapply="{applyColorValue}"
             oncancel="{closeColorPicker}"
             color="{opts.block.values[colorValue]}"

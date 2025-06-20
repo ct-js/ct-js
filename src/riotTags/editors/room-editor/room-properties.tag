@@ -123,7 +123,7 @@ room-properties.npt(class="{opts.class}")
         color-input.wide(
             onchange="{changeBgColor}"
             color="{opts.room.backgroundColor || '#000000'}"
-            hidealpha="hidealpha"
+            hidealpha="{currentProject.settings.rendering.transparent ? '' : 'true'}"
         )
     extensions-editor(
         entity="{opts.room.extends}"

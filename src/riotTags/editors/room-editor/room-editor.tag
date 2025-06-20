@@ -184,7 +184,6 @@ room-editor.aPanel.aView(data-hotkey-scope="{asset.uid}")
     context-menu(menu="{visibilityMenu}" ref="visibilityMenu" if="{pixiEditor}")
     context-menu(menu="{entitiesMenu}" ref="entitiesMenu" if="{pixiEditor}")
     script.
-        const PIXI = require('pixi.js');
         this.namespace = 'roomView';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.mixin(require('src/node_requires/riotMixins/discardio').default);
@@ -441,7 +440,7 @@ room-editor.aPanel.aView(data-hotkey-scope="{asset.uid}")
 
         this.changeBgColor = (e, color) => {
             this.room.backgroundColor = color;
-            this.pixiEditor.renderer.backgroundColor = PIXI.utils.string2hex(color);
+            this.pixiEditor.renderer.backgroundColor = color;
         };
 
         this.changeSimulated = () => {
