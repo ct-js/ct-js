@@ -41,6 +41,14 @@
         "close": "关闭",
         "couldNotLoadFromClipboard": "无法从剪贴板加载数据",
         "filter": "过滤:",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "pastedFromClipboard": "从剪贴板粘贴",
         "edit": "编辑",
         "nothingToShowFiller": "这里没有什么可以展示的",

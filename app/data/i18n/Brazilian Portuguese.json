@@ -31,6 +31,14 @@
         "exit": "Sair",
         "edit": "Editar",
         "filter": "Filtro:",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "loading": "Carregando…",
         "name": "Nome:",
         "next": "Próximo",

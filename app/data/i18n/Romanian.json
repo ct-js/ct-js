@@ -37,6 +37,14 @@
         "select": "",
         "clear": "",
         "filter": "",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "selectDialogue": "",
         "search": "",
         "close": "",

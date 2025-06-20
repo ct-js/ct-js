@@ -39,6 +39,14 @@
         "zoomIn": "Приблизити",
         "zoomOut": "Віддалити",
         "filter": "Відфільтрувати:",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "selectDialogue": "Вибрати…",
         "search": "Пошук:",
         "close": "Закрити",

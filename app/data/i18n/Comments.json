@@ -37,6 +37,14 @@
         "zoomOut": "",
         "clear": "",
         "filter": "A verb",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "selectDialogue": "A verb",
         "search": "Shown next to a search field",
         "close": "",

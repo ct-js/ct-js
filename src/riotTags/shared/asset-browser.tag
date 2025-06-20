@@ -106,6 +106,51 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
             button.inline.square(if="{!opts.forcelayout}" onclick="{switchLayout}")
                 svg.feather
                     use(xlink:href="#{layoutToIconMap[currentLayout]}")
+            .twoLevelGroup(if="{assetTypes[0] === 'all' && !opts.customfilter}")
+                .aButtonGroup.nml
+                    button.inline.square.micro(
+                        onclick="{switchFilter('ui')}"
+                        class="{selected: filters.includes('ui') && !searchResults}"
+                        title="{vocGlob.filters.textures}"
+                    )
+                        svg.sfeather
+                            use(xlink:href="#texture")
+                    button.inline.square.micro(
+                        onclick="{switchFilter('sounds')}"
+                        class="{selected: filters.includes('sounds') && !searchResults}"
+                        title="{vocGlob.filters.sounds}"
+                    )
+                        svg.sfeather
+                            use(xlink:href="#headphones")
+                    button.inline.square.micro(
+                        onclick="{switchFilter('templates')}"
+                        class="{selected: filters.includes('templates') && !searchResults}"
+                        title="{vocGlob.filters.templates}"
+                    )
+                        svg.sfeather
+                            use(xlink:href="#template")
+                .aButtonGroup.nml
+                    button.inline.square.micro(
+                        onclick="{switchFilter('rooms')}"
+                        class="{selected: filters.includes('rooms') && !searchResults}"
+                        title="{vocGlob.filters.rooms}"
+                    )
+                        svg.sfeather
+                            use(xlink:href="#room")
+                    button.inline.square.micro(
+                        onclick="{switchFilter('scripts')}"
+                        class="{selected: filters.includes('scripts') && !searchResults}"
+                        title="{vocGlob.filters.scripts}"
+                    )
+                        svg.sfeather
+                            use(xlink:href="#code-alt")
+                    button.inline.square.micro(
+                        onclick="{switchFilter('all')}"
+                        class="{selected: filters.includes('all') && !searchResults}"
+                        title="{vocGlob.filters.everything}"
+                    )
+                        svg.sfeather
+                            use(xlink:href="#grid-random")
             button.inline.square.nogrow.nmr(onclick="{addNewFolder}")
                 svg.feather
                     use(xlink:href="#folder-plus")
@@ -192,6 +237,14 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
         this.mixin(require('src/node_requires/riotMixins/niceTime').default);
         this.sort = 'type';
         this.sortReverse = false;
+        this.filters = ['all'];
+        this.allowedTypesByFilter = {
+            ui: ['style', 'texture', 'tandem', 'font'],
+            rooms: 'room',
+            sounds: 'sound',
+            templates: 'template',
+            scripts: ['behavior', 'script', 'enum']
+        };
 
         const resources = require('src/node_requires/resources');
         this.assetTypes = this.opts.assettypes ? this.opts.assettypes.split(',') : ['all'];
@@ -345,6 +398,13 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
             if (this.opts.customfilter) {
                 this.entries = this.entries
                     .filter(entry => entry.type === 'folder' || this.opts.customfilter(entry));
+            } else {
+                this.entries = this.entries
+                    .filter(entry =>
+                        entry.type === 'folder' ||
+                        this.filters[0] === 'all' ||
+                        this.filters.find(key =>
+                            this.allowedTypesByFilter[key].includes(entry.type)));
             }
             if (this.sort === 'name') {
                 if (this.opts.names) {
@@ -380,6 +440,22 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
             if (this.sortReverse) {
                 this.entries.reverse();
             }
+        };
+        this.switchFilter = which => () => {
+            document.activeElement.blur();
+            if (which === 'all') {
+                this.filters = ['all'];
+            } else if (this.filters[0] === 'all') {
+                this.filters = [which];
+            } else if (this.filters.includes(which)) {
+                this.filters.splice(this.filters.indexOf(which), 1);
+            } else {
+                this.filters.push(which);
+            }
+            if (this.filters.length === 5 || !this.filters.length) {
+                this.filters = ['all'];
+            }
+            this.updateList();
         };
         this.switchSort = sort => () => {
             if (this.sort === sort) {

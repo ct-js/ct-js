@@ -37,6 +37,14 @@
         "zoomOut": "Uitzoomen",
         "clear": "Wissen",
         "filter": "Filter:",
+        "filters": {
+            "everything": "",
+            "rooms": "",
+            "scripts": "",
+            "sounds": "",
+            "templates": "",
+            "textures": ""
+        },
         "selectDialogue": "Selecteren...",
         "search": "Zoeken:",
         "close": "Sluiten",

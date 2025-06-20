@@ -64,6 +64,14 @@
         "zoomOut": "Zoom arrière",
         "clear": "Nettoyer",
         "filter": "Filtrer :",
+        "filters": {
+            "everything": "Tous les assets",
+            "rooms": "Salles",
+            "scripts": "Scripts et comportements",
+            "sounds": "Sons",
+            "templates": "Modèles",
+            "textures": "Textures, UI et FX"
+        },
         "selectDialogue": "Sélectionner…",
         "search": "Rechercher :",
         "close": "Fermer",

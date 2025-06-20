@@ -440,7 +440,7 @@ const launchApp = () => nwBuilder({
     mode: 'run',
     ...nwBuilderOptions,
     arch: process.arch,
-    platform: process.platform === 'win32' ? 'win' : process.platform
+    platform: process.platform === 'win32' ? 'win' : (process.platform === 'darwin' ? 'osx' : process.platform)
 })
 .catch(error => {
     showErrorBox();

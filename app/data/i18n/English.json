@@ -38,6 +38,14 @@
         "exit": "Exit",
         "experimentalFeature": "This is an experimental feature.",
         "filter": "Filter:",
+        "filters": {
+            "everything": "Everything",
+            "rooms": "Rooms",
+            "scripts": "Scripts and behaviors",
+            "sounds": "Sounds",
+            "templates": "Templates",
+            "textures": "Textures, UI and FX"
+        },
         "goBack": "Go back",
         "loading": "Loading…",
         "name": "Name:",
