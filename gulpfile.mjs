@@ -63,7 +63,7 @@ let platforms = [
     ['linux', 'ia32', 'linux32'],
     ['linux', 'x64', 'linux64'],
     ['osx', 'x64', 'osx64'],
-    // ['osx', 'arm64', 'osxarm'],
+    ['osx', 'arm64', 'osxarm'],
     ['win', 'ia32', 'win32'],
     ['win', 'x64', 'win64']
 ];
@@ -71,12 +71,12 @@ if (process.platform === 'win32') {
     platforms = platforms.filter(p => p[0] !== 'osx');
     log.warn('⚠️  Building packages for MacOS is not supported on Windows. This platform will be skipped.');
 }
-const nwBuilderOptions = {
-    version: nwVersion,
+const nwBuilderOptions = (tag) => ({
+    version: tag === 'osx-arm64' ? '0.100.1' : nwVersion,
     flavor: 'sdk',
     srcDir: './app/',
     glob: false
-};
+});
 
 const argv = minimist(process.argv.slice(2));
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -435,12 +435,13 @@ export const lintTS = () => {
 
 export const lint = gulp.series(lintJS, lintTS, lintTags, lintStylus, lintI18n);
 
+const platform = process.platform === 'win32' ? 'win' : (process.platform === 'darwin' ? 'osx' : process.platform);
 
 const launchApp = () => nwBuilder({
     mode: 'run',
-    ...nwBuilderOptions,
+    ...nwBuilderOptions(`${platform}-${process.arch}`),
     arch: process.arch,
-    platform: process.platform === 'win32' ? 'win' : (process.platform === 'darwin' ? 'osx' : process.platform)
+    platform
 })
 .catch(error => {
     showErrorBox();
@@ -498,7 +499,7 @@ export const bakePackages = async () => {
         const [platform, arch, itchChannel] = pf;
         log.info(`'bakePackages': Building for ${platform}-${arch}…`);
         return nwBuilder({
-            ...nwBuilderOptions,
+            ...nwBuilderOptions(`${platform}-${arch}`),
             mode: 'build',
             platform,
             arch,

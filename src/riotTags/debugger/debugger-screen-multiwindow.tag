@@ -4,7 +4,8 @@ debugger-screen-multiwindow.flexcol(class="{opts.class}")
     webview.tall#thePreview(
         ref="gameView"
         partition="persist:trusted"
-        allownw nwfaketop
+        allownw="{allownw}"
+        nwfaketop
     )
     .aDebuggerToolbar(class="horizontal {tight: window.innerWidth < 1000}")
         .debugger-toolbar-aButton(onclick="{togglePause}" title="{gamePaused? voc.resume : voc.pause}")
@@ -39,6 +40,7 @@ debugger-screen-multiwindow.flexcol(class="{opts.class}")
     script.
         this.namespace = 'debuggerToolbar';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
+        this.allownw = !(process.arch === 'arm64' && process.platform === 'darwin')
 
         this.showNetworkingModal = false;
 

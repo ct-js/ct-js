@@ -4,7 +4,8 @@ debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !ve
     webview.tall#thePreview(
         ref="gameView"
         partition="persist:trusted"
-        allownw nwfaketop
+        allownw="{this.allownw}"
+        nwfaketop
     )
     .aResizer(ref="gutter" onmousedown="{gutterMouseDown}" class="{vertical: verticalLayout, horizontal: !verticalLayout}")
     .flexfix(
@@ -15,7 +16,7 @@ debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !ve
             src="empty.html"
             partition="persist:trusted"
             style="overflow: hidden;"
-            allownw
+            allownw="{this.allownw}"
         )
         //allownw nwfaketop
         .flexfix-footer.aDebuggerToolbar.noshrink(
@@ -62,6 +63,7 @@ debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !ve
     script.
         this.namespace = 'debuggerToolbar';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
+        this.allownw = !(process.arch === 'arm64' && process.platform === 'darwin')
 
         this.showNetworkingModal = false;
 
