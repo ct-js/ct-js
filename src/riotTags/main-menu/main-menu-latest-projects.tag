@@ -1,12 +1,14 @@
 main-menu-latest-projects
     h1 {voc.recentProjects}
-    ul.aMenu
+    ul.aMenu.recents
         li(each="{project in latestProjects}" title="{project}" onclick="{() => loadLatestProject(project)}")
-            span {project}
+            b {this.basename(project)}
+            br
+            small {project}
     script.
         this.namespace = 'mainMenu.latestProjects';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
-
+        this.basename = (path) => path.match(/[/\\]([^/.]+)(\.[A-Za-z0-9]+)?$/)[1];
         this.refreshLatestProjects = function refreshLatestProjects() {
             if (('lastProjects' in localStorage) &&
                 (localStorage.lastProjects !== '')) {
