@@ -72,7 +72,8 @@ if (process.platform === 'win32') {
     log.warn('⚠️  Building packages for MacOS is not supported on Windows. This platform will be skipped.');
 }
 const nwBuilderOptions = (tag) => ({
-    version: tag === 'osx-arm64' ? '0.100.1' : nwVersion,
+    version: tag === 'osx-arm64' ? '0.101.2' : nwVersion,
+    manifestUrl: 'https://nwjs.io/versions.json',
     flavor: 'sdk',
     srcDir: './app/',
     glob: false
