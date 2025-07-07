@@ -43,7 +43,6 @@ export interface CtfIAsset {
 
 export interface CtfIProject {
     ctjsVersion: string;
-    naming: 'semantic' | 'external' | undefined;
     scripts: CtfIProjectScript[];
     assets: CtfIAsset[];
 }

@@ -1,8 +1,10 @@
 import ctFiles from './ct-files/index';
+import { CtfType } from './ct-files/utils/project_types';
 
-async function renameAsset(asset: IAsset, newName: string) {
+/* eslint-disable no-await-in-loop */
+const renameAsset = async (asset: IAsset, newName: string) => {
     switch (asset.type) {
-        case 'texture':
+        case CtfType.texture: {
             const texture = asset as ITexture;
             const newFileName = ctFiles.safeName(newName, texture.origname);
             try {
@@ -17,8 +19,9 @@ async function renameAsset(asset: IAsset, newName: string) {
             catch (err) {
                 console.error(err);
             }
-            break;
-        case 'typeface':
+            return true;
+        }
+        case CtfType.typeface: {
             const typeface = asset as ITypeface;
             let ti = 0;
             for (let font of typeface.fonts) {
@@ -37,8 +40,9 @@ async function renameAsset(asset: IAsset, newName: string) {
                 }
                 ti++;
             }
-            break;
-        case 'sound':
+            return true;
+        }
+        case CtfType.sound: {
             const sound = asset as ISound;
             let vi = 0;
             for (let variant of sound.variants) {
@@ -57,7 +61,10 @@ async function renameAsset(asset: IAsset, newName: string) {
                 }
                 vi++;
             }
-            break;
+            return true;
+        }
+        default:
+            return false;
     }
 }
 

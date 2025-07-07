@@ -1,6 +1,6 @@
 import ctFiles from "./ct-files/index";
 
-export async function discardAsset(projdir: string, asset: IAsset) {
+export const discardAsset = (projdir: string, asset: IAsset) => {
     switch (asset.type) {
         case 'texture':
             return ctFiles.move(
@@ -27,6 +27,7 @@ export async function discardAsset(projdir: string, asset: IAsset) {
                 projdir + '/.uid_db',
                 asset.uid
             )));
+        default:
+            return Promise.resolve(false);
     }
-    return Promise.resolve(false);
 }

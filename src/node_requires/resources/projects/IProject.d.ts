@@ -37,7 +37,6 @@ declare interface IContentType {
 
 declare interface IProject {
     ctjsVersion: string;
-    naming: 'semantic' | 'external' | undefined; 
     notes: string;
     language: 'typescript' | 'coffeescript' | 'catnip';
     libs: Record<string, Record<string, unknown>>;

@@ -11,20 +11,24 @@ const upath = require("path");
  * @param name the name of the file
  * @param ext the extension of the file (optional)
  */
-export function safeName(name: string, ext?: string, additive?: string | number) {
+export const safeName = (
+    name: string,
+    ext?: string,
+    additive?: string | number
+) => {
     const newExt = { 'coffeescript': 'coffee', 'typescript': 'ts' }[(ext || '').toLowerCase()] || ext;
     const additivePlus1 = typeof additive === 'number' ? additive + 1 : additive;
     const hyphen = typeof additive === 'number' ? '_' : '-';
     if (newExt && newExt.indexOf(".") === -1) {
-        return name.replace(/[^a-zA-Z0-9\-]+/g, "_").toLowerCase().replace(/_+$/, "")
+        return name.replace(/[^a-zA-Z0-9-]+/g, "_").toLowerCase().replace(/_+$/, "")
             + (additive ? hyphen + additivePlus1 : '') + "." + newExt.toLowerCase();
     }
     else if (newExt && newExt.indexOf(".") > -1) {
-        return name.replace(/[^a-zA-Z0-9\-]+/g, "_").toLowerCase().replace(/_+$/, "")
+        return name.replace(/[^a-zA-Z0-9-]+/g, "_").toLowerCase().replace(/_+$/, "")
             + (additive ? hyphen + additivePlus1 : '') + "." + newExt.substring(newExt.lastIndexOf(".") + 1).toLowerCase();
     }
     else {
-        return name.replace(/[^a-zA-Z0-9\-]+/g, "_").toLowerCase().replace(/_+$/, "")
+        return name.replace(/[^a-zA-Z0-9-]+/g, "_").toLowerCase().replace(/_+$/, "")
             + (additive ? hyphen + additivePlus1 : '');
     }
 }
@@ -41,7 +45,11 @@ export function safeName(name: string, ext?: string, additive?: string | number)
  * @param name the name of the file
  * @param ext the extension of the file (optional)
  */
-export function safeNameExt(name: string, ext?: string, additive?: string | number) {
+export const safeNameExt = (
+    name: string,
+    ext?: string,
+    additive?: string | number
+) => {
     if (name.indexOf('.') > -1 && !ext) {
         const base = name.substring(0, name.lastIndexOf("."));
         const pext = name.substring(name.lastIndexOf(".") + 1);
@@ -69,17 +77,13 @@ export function safeNameExt(name: string, ext?: string, additive?: string | numb
  * @param uid_db the path to the uid_db file
  * @param uid the uid of the file being moved
  */
-export async function move(src: string, dest: string, uid_db: string, uid: string) {
+/* eslint-disable camelcase */
+export const move = async (src: string, dest: string, uid_db: string, uid: string) => {
     if (src === dest) return; /* easiest move ever */
-    try {
-        const db_txt = await fs.pathExists(uid_db).then((result: boolean) => result ? fs.readFile(uid_db!, "utf8") : '');
-        const db: Record<string, string> = (YAML.load(db_txt) || {}) as any;
-        db[uid] = upath.basename(dest);
-        const db_yaml = YAML.dump(db);
-        await fs.outputFile(uid_db, db_yaml, "utf8");
-        await fs.move(src, dest);
-    }
-    catch (err) {
-        throw err;
-    }
+    const db_txt = await fs.pathExists(uid_db).then((result: boolean) => result ? fs.readFile(uid_db!, "utf8") : '');
+    const db: Record<string, string> = (YAML.load(db_txt) || {}) as any;
+    db[uid] = upath.basename(dest);
+    const db_yaml = YAML.dump(db);
+    await fs.outputFile(uid_db, db_yaml, "utf8");
+    await fs.move(src, dest);
 }

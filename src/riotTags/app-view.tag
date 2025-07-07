@@ -587,7 +587,7 @@ app-view.flexcol
             const imageBuffer = new Buffer(imageBase64, 'base64');
 
             const {createAsset} = require('src/node_requires/resources');
-            
+
             const renamer = require('src/node_requires/renamer');
             const reply = await renamer(
                 'New Texture',

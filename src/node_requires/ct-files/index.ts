@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { available_name, available_name_suffix, is_available_name } from "./available";
 import { preflight } from "./preflight";
 import { move, safeName } from "./move";

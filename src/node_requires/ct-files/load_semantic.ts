@@ -3,7 +3,10 @@ import { LoadOptions } from "js-yaml";
 const fs = require("fs-extra");
 const YAML = require("js-yaml");
 
-function prepareProjectSemantic(obj: any, db: Record<string, string>, lastuid: string = ''): any {
+/* eslint-disable camelcase */
+const prepareProjectSemantic = (
+    obj: any, db: Record<string, string>, lastuid: string = ''
+): any => {
     if (!obj || typeof obj !== "object") return obj;
 
     lastuid = lastuid || obj.uid;
@@ -25,7 +28,8 @@ function prepareProjectSemantic(obj: any, db: Record<string, string>, lastuid: s
         }
         else if (!obj.uid || (key !== 'origname')) {
             const value = obj[key];
-            newObj[key] = typeof value === "object" ? prepareProjectSemantic(value, db, lastuid) : value;
+            newObj[key] = typeof value === "object" ? 
+                prepareProjectSemantic(value, db, lastuid) : value;
         }
     }
 
@@ -42,7 +46,10 @@ function prepareProjectSemantic(obj: any, db: Record<string, string>, lastuid: s
  * @param opts options for YAML load (typically not used)
  * @returns a promise containing the project object
  */
-export async function load_semantic(path: string, uid_db: string, opts?: LoadOptions) {
+/* eslint-disable no-undefined */
+export const load_semantic = async (
+    path: string, uid_db: string, opts?: LoadOptions
+) => {
     const project = await fs.readFile(path, "utf8");
     if (project.indexOf('{') === 0) {
         return JSON.parse(project);

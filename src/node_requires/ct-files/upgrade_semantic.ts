@@ -1,9 +1,101 @@
+/* eslint-disable camelcase,max-depth,no-await-in-loop,require-atomic-updates */
 import { make_path, PathType } from "./make_path";
 import { safeName } from "./move";
-import { CtfIProject, CtfType } from "./utils/project_types";
+import { CtfIAsset, CtfIProject, CtfType } from "./utils/project_types";
 
 const YAML = require("js-yaml");
 const fs = require("fs-extra");
+
+interface UsedNameRecords {
+    [CtfType.sound]: Record<string, boolean>,
+    [CtfType.typeface]: Record<string, boolean>,
+    [CtfType.texture]: Record<string, boolean>
+}
+
+const upgrade_sound = async (
+    asset: CtfIAsset,
+    usedNames: UsedNameRecords,
+    db: Record<string, string>
+) => {
+    let basename: string | undefined;
+
+    for (let i = 0; i < 100 && (!basename || usedNames.sound[basename]); i++) {
+        basename = safeName(asset.name, '', i);
+        if (!usedNames.sound[basename]) {
+            if (i > 0) asset.name = asset.name + ' ' + (i + 1);
+            let vi = 0;
+            for (let variant of (asset.variants || [])) {
+                const newOrigName = safeName(asset.name, variant.source, vi > 0 ? variant.uid.substring(0, 5) : '');
+                const [ext] = variant.source.match(/\.[A-Za-z0-9]+$/) || [''];
+                const src = make_path(projdir, PathType.Sound, 's' + asset.uid + '_' + variant.uid + ext);
+                const dest = make_path(projdir, PathType.Sound, newOrigName);
+                try {
+                    if (src !== dest) await fs.move(src, dest);
+                    variant.origname = newOrigName;
+                    db[variant.uid] = variant.origname;
+                }
+                catch (e) { console.error(e); }
+                vi++;
+            }
+        }
+    }
+    if (basename) usedNames.sound[basename] = true;
+}
+
+const upgrade_typeface = async (
+    asset: CtfIAsset,
+    usedNames: UsedNameRecords,
+    db: Record<string, string>
+) => {
+    let basename: string | undefined;
+
+    for (let i = 0; i < 100 && (!basename || usedNames.typeface[basename]); i++) {
+        basename = safeName(asset.name, '', i);
+        if (!usedNames.typeface[basename]) {
+            if (i > 0) asset.name = asset.name + ' ' + (i + 1);
+            let vi = 0;
+            for (let font of (asset.fonts || [])) {
+                const newOrigName = safeName(asset.name, 'ttf',  vi > 0 ? font.uid.substring(0, 5) : '');
+                const src = make_path(projdir, PathType.Font, 'f' + font.uid + '.ttf');
+                const dest = make_path(projdir, PathType.Font, newOrigName);
+                try {
+                    if (src !== dest) await fs.move(src, dest);
+                    font.origname = newOrigName;
+                    db[font.uid] = font.origname;
+                }
+                catch (e) { console.error(e); }
+                vi++;
+            }
+        }
+    }
+    if (basename) usedNames.typeface[basename] = true;
+}
+
+const upgrade_textures = async (
+    asset: CtfIAsset,
+    usedNames: UsedNameRecords,
+    db: Record<string, string>
+) => {
+    let basename: string | undefined;
+
+    for (let i = 0; i < 100 && (!basename || usedNames.texture[basename]); i++) {
+        basename = safeName(asset.name, '', i);
+        if (!usedNames.texture[basename]) {
+            const oldOrigName = asset.origname;
+            if (i > 0) asset.name = asset.name + ' ' + (i + 1);
+            const newOrigName = safeName(asset.name, asset.origname);
+            const src = make_path(projdir, PathType.Texture, oldOrigName || 'untitled');
+            const dest = make_path(projdir, PathType.Texture, newOrigName);
+            try {
+                if (src !== dest) await fs.move(src, dest);
+                asset.origname = newOrigName;
+                db[asset.uid] = asset.origname;
+            }
+            catch (e) { console.error(e); }
+        }
+    }
+    if (basename) usedNames.texture[basename] = true;
+}
 
 /**
  * Upgrades the project to semantic file naming, this is a level down from external file naming.
@@ -28,87 +120,32 @@ const fs = require("fs-extra");
  * @param uid_db the uid_db - this is usually called ".uid_db" or ".uid_db.yaml" (former preferred)
  * @returns
  */
-
-export async function upgrade_semantic(project: CtfIProject, projdir: string, uid_db: string) {
+export const upgrade_semantic = async (
+    project: CtfIProject, projdir: string, uid_db: string
+) => {
     if (!project.assets) throw Error(`upgrade_semantic project format is unexpected (version is ${project.ctjsVersion} must be >= 5.2.0)`);
-    if (project.naming === 'semantic') return false;
 
-    const usedNames = {
-        [CtfType.sound]: {} as Record<string, boolean>,
-        [CtfType.typeface]: {} as Record<string, boolean>,
-        [CtfType.texture]: {} as Record<string, boolean>
+    const usedNames: UsedNameRecords = {
+        [CtfType.sound]: {},
+        [CtfType.typeface]: {},
+        [CtfType.texture]: {}
     };
 
     const db_txt = await fs.pathExists(uid_db).then((result: boolean) => result ? fs.readFile(uid_db!, "utf8") : '');
     const db: Record<string, string> = (YAML.load(db_txt) || {}) as any;
 
-    let basename: string | undefined;
     for (let asset of project.assets) {
-        basename = undefined;
         switch (asset.type) {
             case CtfType.sound:
-                for (let i = 0; i < 100 && (!basename || usedNames.sound[basename]); i++) {
-                    basename = safeName(asset.name, '', i);
-                    if (!usedNames.sound[basename]) {
-                        if (i > 0) asset.name = asset.name + ' ' + (i + 1);
-                        let vi = 0;
-                        for (let variant of (asset.variants || [])) {
-                            const newOrigName = safeName(asset.name, variant.source, vi > 0 ? variant.uid.substring(0, 5) : '');
-                            const ext = (variant.source.match(/\.[A-Za-z0-9]+$/) || [''])[0];
-                            const src = make_path(projdir, PathType.Sound, 's' + asset.uid + '_' + variant.uid + ext);
-                            const dest = make_path(projdir, PathType.Sound, newOrigName);
-                            try {
-                                if (src !== dest) await fs.move(src, dest);
-                                variant.origname = newOrigName;
-                                db[variant.uid] = variant.origname;
-                            }
-                            catch (e) { console.error(e); }
-                            vi++;
-                        }
-                    }
-                }
-                if (basename) usedNames.sound[basename] = true;
+                await upgrade_sound(asset, usedNames, db);
                 break;
             case CtfType.typeface:
-                for (let i = 0; i < 100 && (!basename || usedNames.typeface[basename]); i++) {
-                    basename = safeName(asset.name, '', i);
-                    if (!usedNames.typeface[basename]) {
-                        if (i > 0) asset.name = asset.name + ' ' + (i + 1);
-                        let vi = 0;
-                        for (let font of (asset.fonts || [])) {
-                            const newOrigName = safeName(asset.name, 'ttf',  vi > 0 ? font.uid.substring(0, 5) : '');
-                            const src = make_path(projdir, PathType.Font, 'f' + font.uid + '.ttf');
-                            const dest = make_path(projdir, PathType.Font, newOrigName);
-                            try {
-                                if (src !== dest) await fs.move(src, dest);
-                                font.origname = newOrigName;
-                                db[font.uid] = font.origname;
-                            }
-                            catch (e) { console.error(e); }
-                            vi++;
-                        }
-                    }
-                }
-                if (basename) usedNames.typeface[basename] = true;
+                await upgrade_typeface(asset, usedNames, db);
                 break;
             case CtfType.texture:
-                for (let i = 0; i < 100 && (!basename || usedNames.texture[basename]); i++) {
-                    basename = safeName(asset.name, '', i);
-                    if (!usedNames.texture[basename]) {
-                        const oldOrigName = asset.origname;
-                        if (i > 0) asset.name = asset.name + ' ' + (i + 1);
-                        const newOrigName = safeName(asset.name, asset.origname);
-                        const src = make_path(projdir, PathType.Texture, oldOrigName || 'untitled');
-                        const dest = make_path(projdir, PathType.Texture, newOrigName);
-                        try {
-                            if (src !== dest) await fs.move(src, dest);
-                            asset.origname = newOrigName;
-                            db[asset.uid] = asset.origname;
-                        }
-                        catch (e) { console.error(e); }
-                    }
-                }
-                if (basename) usedNames.texture[basename] = true;
+                await upgrade_textures(asset, usedNames, db);
+                break;
+            default:
                 break;
         }
     }

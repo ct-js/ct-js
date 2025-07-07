@@ -229,9 +229,8 @@ export const saveProject = async (): Promise<void> => {
 * @returns {void}
 */
 const readProjectFile = async (proj: string) => {
-    const textProjData = await fs.readFile(proj, 'utf8');
     let projectData;
-  // Before v1.3, projects were stored in JSON format
+    // Before v1.3, projects were stored in JSON format
     try {
         try {
             projectData = await ctFiles.load_semantic(proj, projdir + '/.uid_db');

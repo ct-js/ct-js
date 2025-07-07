@@ -18,7 +18,10 @@ export enum PathType {
  * @param origname the file name of the asset (ct.js calls this origname)
  * @returns a relative path to the asset
  */
-export function make_path(projdir: string, type: PathType | string, origname: string) {
+/* eslint-disable camelcase */
+export const make_path = (
+    projdir: string, type: PathType | string, origname: string
+) => {
     if (typeof origname === 'undefined') throw Error('make_path requires an origname');
     if (type === "room") type = PathType.Room;
     if (type === "template") type = PathType.Template;
@@ -33,7 +36,7 @@ export function make_path(projdir: string, type: PathType | string, origname: st
  * @param origname the file name of the asset (ct.js calls this origname)
  * @returns a relative path to the asset
  */
-export function filename(name: string, language: string) {
+export const filename = (name: string, language: string) => {
     const ext = {
         typescript: "ts",
         ts: "ts",

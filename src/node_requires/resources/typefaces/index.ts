@@ -48,7 +48,7 @@ export const getPathToTtf = function getPathToTtf(font: IFont, fs?: boolean): st
 
 export const addFont = async (typeface: ITypeface, src: string): Promise<IFont> => {
     const uidTypeface = generateGUID();
-    const basename = typeface.fonts.length ? 
+    const basename = typeface.fonts.length ?
         ctFiles.safeName(typeface.name, src, uidTypeface.substring(0, 6)) :
         ctFiles.safeName(typeface.name, src);
     const basenameForGuessing = src.match(/([^/\\]+)$/)?.[1] || src;
@@ -103,7 +103,7 @@ export const getFontDomName = (font: IFont): string => `CTPROJFONT-${font.uid}`;
 
 const fontsMap = new Map<string, FontFace>();
 export const refreshFonts = async (override?: ITypeface): Promise<void> => {
-    const typefaces = override ? [ override ] : getOfType('typeface');
+    const typefaces = override ? [override] : getOfType('typeface');
     const loadPromises = [];
     for (const typeface of typefaces) {
         for (const font of typeface.fonts) {
@@ -113,7 +113,7 @@ export const refreshFonts = async (override?: ITypeface): Promise<void> => {
                     style: 'normal'
                 };
                 const source = getPathToTtf(font),
-                    cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
+                      cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
                 const face = new FontFace(getFontDomName(font), `url(${cleanedSource})`, template);
                 loadPromises.push(face.load()
                     .then(loaded => {
