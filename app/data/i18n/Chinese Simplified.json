@@ -411,6 +411,7 @@
             "newScriptComment": "使用脚本定义常用函数并导入小型库",
             "moveUp": "向上移动",
             "moveDown": "向下移动",
+            "rename": "重命名",
             "scriptsHint": "这里创建的脚本将被注入到游戏的根目录中, 因此将始终在游戏开始时运行. 只支持 JavaScript 和 TypeScript. 这里定义的变量和类型在项目中的任何地方都可用."
         },
         "export": {

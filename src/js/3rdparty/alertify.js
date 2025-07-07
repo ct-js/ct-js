@@ -267,9 +267,11 @@
                         btnOK.addEventListener('click', function (ev) {
                             if (item.onOkay && typeof item.onOkay === 'function') {
                                 if (input) {
-                                    item.onOkay(input.value, ev);
+                                    var cancelOkay = item.onOkay(input.value, ev);
+                                    if (cancelOkay === false) return;
                                 } else {
-                                    item.onOkay(ev);
+                                    var cancelOkay = item.onOkay(ev);
+                                    if (cancelOkay === false) return;
                                 }
                             }
 
@@ -401,6 +403,9 @@
         const {soundbox} = require('src/node_requires/3rdparty/soundbox');
         return {
             _$$alertify: _alertify,
+            internal() {
+                return _alertify;
+            },
             parent(elem) {
                 _alertify.parent = elem;
             },

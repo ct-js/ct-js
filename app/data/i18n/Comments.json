@@ -603,6 +603,7 @@
             "deleteScript": "",
             "moveDown": "",
             "moveUp": "",
+            "rename": "",
             "newScriptComment": "",
             "scriptsHint": ""
         },

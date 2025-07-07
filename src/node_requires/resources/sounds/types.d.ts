@@ -1,5 +1,6 @@
 type soundVariant = {
     uid: string,
+    origname?: string,
     source: string
 };
 

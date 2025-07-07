@@ -350,7 +350,11 @@ texture-editor(onclick="{tryClose}")
                     +exportSettings()
                     .aSpacer
                 +textureSource()
-            +previewPanel()
+            .flexfix-footer
+                button.wide(onclick="{triggerSave}" title="Shift+Control+S" data-hotkey="Control+S")
+                    svg.feather
+                        use(xlink:href="#check")
+                    span {this.vocGlob.apply}
         +atlas()
         .column.column2.borderleft.tall.flexfix.nogrow.noshrink
             .flexfix-body
@@ -358,11 +362,7 @@ texture-editor(onclick="{tryClose}")
                     +axisSettings()
                 +collisionSettings()
                 +viewSettings()
-            .flexfix-footer
-                button.wide(onclick="{triggerSave}" title="Shift+Control+S" data-hotkey="Control+S")
-                    svg.feather
-                        use(xlink:href="#check")
-                    span {this.vocGlob.apply}
+            +previewPanel()
     color-picker(
         ref="previewBackgroundColor" if="{changingPreviewBg}"
         hidealpha="true"

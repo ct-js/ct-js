@@ -5,7 +5,9 @@ scripts-settings.flexrow
     top 0
     bottom 0
     & > aside
-        width 15rem
+        width 20rem
+        @media (max-width 1280px)
+            width 18rem
         box-sizing border-box
         flex 0 0 auto
         border-right 1px solid borderBright
@@ -32,6 +34,8 @@ scripts-settings.flexrow
                     color act
                     &.red
                         color red
+                    &.green
+                        color green
             .crop
                 flex 1 1 auto
             .scripts-settings-ScriptActions

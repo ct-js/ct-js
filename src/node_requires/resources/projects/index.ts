@@ -12,6 +12,7 @@ import {updateEnumsTs} from '../enums';
 import {getLanguageJSON} from '../../i18n';
 
 import * as path from 'path';
+import ctFiles from '../../../node_requires/ct-files/index';
 import fs from 'fs-extra';
 
 // @see https://semver.org/
@@ -164,7 +165,8 @@ const loadProject = async (projectData: IProject): Promise<void> => {
             window.riot.update();
         }, 0);
     } catch (err) {
-        window.alertify.alert(getLanguageJSON().intro.loadingProjectError + err);
+        console.error(err);
+        window.alertify.alert(getLanguageJSON().intro.loadingProjectError + (err.message || err));
     }
 };
 
@@ -231,19 +233,14 @@ const readProjectFile = async (proj: string) => {
     let projectData;
   // Before v1.3, projects were stored in JSON format
     try {
-        if (textProjData.indexOf('{') === 0) { // First, make a silly check for JSON files
-            projectData = JSON.parse(textProjData);
-        } else {
-            try {
-                const YAML = require('js-yaml');
-                projectData = YAML.load(textProjData);
-            } catch (e) {
-              // whoopsie, wrong window
-              // eslint-disable-next-line no-console
-                console.warn(`Tried to load a file ${proj} as a YAML, but got an error (see below). Falling back to JSON.`);
-                console.error(e);
-                projectData = JSON.parse(textProjData);
-            }
+        try {
+            projectData = await ctFiles.load_semantic(proj, projdir + '/.uid_db');
+        } catch (e) {
+            // whoopsie, wrong window
+            // eslint-disable-next-line no-console
+            console.warn(`Tried to load a file ${proj} as a YAML, but got an error (see below). Falling back to JSON.`);
+            console.error(e);
+            throw e;
         }
     } catch (e) {
         window.alertify.error(e);

@@ -46,7 +46,7 @@ const discardio = (riotTag: IRiotTag) => {
     const renamer = (payload: [string, string]) => {
         const [uid, name] = payload;
         if (riotTag.asset!.uid === uid) {
-            (riotTag.asset as IAsset & {name: string}).name = name;
+            (riotTag.asset as IAsset).name = name;
         }
     };
     riotTag.on('mount', () => {

@@ -3,6 +3,7 @@ import {getOfType, getById, IAssetContextItem, createAsset as createAssetResourc
 import fs from 'fs-extra';
 import path from 'path';
 import generateGUID from '../../generateGUID';
+import ctFiles from '../../ct-files/index';
 
 const guessItalic = (filename: string) => {
     const testname = filename.toLowerCase();
@@ -38,24 +39,30 @@ const guessWeight = (filename: string): fontWeight => {
  */
 export const getPathToTtf = function getPathToTtf(font: IFont, fs?: boolean): string {
     const path = require('path');
+    const backwardsOrigName = font.origname.match(/\.[a-z]+$/) ? font.origname : `f${font.uid}.ttf`;
     if (fs) {
-        return path.join(window.projdir, 'fonts', `f${font.uid}.ttf`);
+        return path.join(window.projdir, 'fonts', backwardsOrigName);
     }
-    return `file://${window.projdir.replace(/\\/g, '/')}/fonts/f${font.uid}.ttf`;
+    return `file://${window.projdir.replace(/\\/g, '/')}/fonts/${backwardsOrigName}`;
 };
 
 export const addFont = async (typeface: ITypeface, src: string): Promise<IFont> => {
     const uidTypeface = generateGUID();
-    const basename = path.basename(src, path.extname(src));
-    const weight = guessWeight(basename);
-    const italic = guessItalic(basename);
+    const basename = typeface.fonts.length ? 
+        ctFiles.safeName(typeface.name, src, uidTypeface.substring(0, 6)) :
+        ctFiles.safeName(typeface.name, src);
+    const basenameForGuessing = src.match(/([^/\\]+)$/)?.[1] || src;
+    const weight = guessWeight(basenameForGuessing);
+    const italic = guessItalic(basenameForGuessing);
     const font: IFont = {
         weight,
         italic,
         uid: uidTypeface,
+        source: src,
         origname: basename
     };
     const targetPath = getPathToTtf(font, true);
+    await ctFiles.preflight(targetPath, uidTypeface, projdir + '/.uid_db');
     await fs.copy(src, targetPath);
     typeface.fonts.push(font);
     if (typeface.fonts.length === 1) {
@@ -95,26 +102,25 @@ export const areThumbnailsIcons = false;
 export const getFontDomName = (font: IFont): string => `CTPROJFONT-${font.uid}`;
 
 const fontsMap = new Map<string, FontFace>();
-export const refreshFonts = async (): Promise<void> => {
-    const typefaces = getOfType('typeface');
+export const refreshFonts = async (override?: ITypeface): Promise<void> => {
+    const typefaces = override ? [ override ] : getOfType('typeface');
     const loadPromises = [];
     for (const typeface of typefaces) {
         for (const font of typeface.fonts) {
-            if (fontsMap.has(font.uid)) {
-                continue;
+            if (!fontsMap.has(font.uid)) {   
+                const template = {
+                    weight: '400',
+                    style: 'normal'
+                };
+                const source = getPathToTtf(font),
+                    cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
+                const face = new FontFace(getFontDomName(font), `url(${cleanedSource})`, template);
+                loadPromises.push(face.load()
+                    .then(loaded => {
+                        fontsMap.set(font.uid, loaded);
+                        document.fonts.add(loaded);
+                    }));
             }
-            const template = {
-                weight: '400',
-                style: 'normal'
-            };
-            const source = getPathToTtf(font),
-                  cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
-            const face = new FontFace(getFontDomName(font), `url(${cleanedSource})`, template);
-            loadPromises.push(face.load()
-            .then(loaded => {
-                fontsMap.set(font.uid, loaded);
-                document.fonts.add(loaded);
-            }));
         }
     }
     if (loadPromises.length) {

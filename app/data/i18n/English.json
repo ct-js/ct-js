@@ -1009,6 +1009,7 @@
             "deleteScript": "Delete the script",
             "moveDown": "Move down",
             "moveUp": "Move up",
+            "rename": "Rename",
             "newScriptComment": "Use scripts to define frequent functions and import small libraries",
             "scriptsHint": "Scripts created here will be injected in the root of your game and thus will always run at the start of the game. Only JavaScript and TypeScript are supported. Variables and types defined here will be available everywhere in your project."
         },
