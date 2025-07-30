@@ -354,6 +354,7 @@
         language: 'plain_text',
         fixedOverflowWidgets: true,
         colorDecorators: true,
+        minimap: { enabled: false },
 
         scrollbar: {
             verticalHasArrows: true,

@@ -591,11 +591,17 @@ asset-browser.flexfix(class="{opts.namespace} {opts.class} {compact: opts.compac
             if: () => this.contextMenuAsset.name,
             label: this.vocGlob.rename,
             click: async () => {
-                const reply = await alertify
-                    .defaultValue(this.contextMenuAsset.name)
-                    .prompt(this.vocGlob.newName);
-                if (reply.inputValue && reply.inputValue.trim() !== '' && reply.buttonClicked !== 'cancel') {
+                const renamer = require('src/node_requires/renamer');
+                const reply = await renamer(
+                    this.contextMenuAsset.name,
+                    this.contextMenuAsset.type,
+                    this.contextMenuAsset.uid,
+                    this.vocGlob
+                );
+                if (reply.inputValue && reply.inputValue.trim() !== this.contextMenuAsset.name && reply.buttonClicked !== 'cancel') {
                     this.contextMenuAsset.name = reply.inputValue.trim();
+                    const renameAsset = require('src/node_requires/renameAsset');
+                    renameAsset(this.contextMenuAsset, reply.inputValue.trim());
                     window.orders.trigger('renameAsset', [this.contextMenuAsset.uid, this.contextMenuAsset.name]);
                     window.signals.trigger('assetChanged', this.contextMenuAsset);
                     window.signals.trigger(`${this.contextMenuAsset.type}Changed`, this.contextMenuAsset);

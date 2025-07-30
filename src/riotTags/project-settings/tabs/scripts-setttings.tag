@@ -10,6 +10,9 @@ scripts-settings.flexrow(class="{opts.class}")
                     .anActionableIcon(onclick="{moveDown}" if="{index !== window.currentProject.scripts.length - 1}" title="{voc.moveDown}").nml
                         svg.feather
                             use(xlink:href="#arrow-down")
+                    .anActionableIcon(onclick="{renameScript}" title="{voc.rename}").nml
+                        svg.feather.green
+                            use(xlink:href="#edit-2")
                     .anActionableIcon(onclick="{deleteScript}" title="{voc.deleteScript}")
                         svg.feather.red
                             use(xlink:href="#delete")
@@ -24,6 +27,12 @@ scripts-settings.flexrow(class="{opts.class}")
         this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.currentProject = window.currentProject;
         this.currentProject.scripts = this.currentProject.scripts || [];
+        const generateGUID = require('src/node_requires/generateGUID');
+        this.currentProject.scripts.forEach(script => {
+            if (!script.uid) {
+                script.uid = generateGUID();
+            }
+        });
 
         const {dropScriptModel, addScriptModel} = require('src/node_requires/resources/projects/scripts');
 
@@ -35,6 +44,7 @@ scripts-settings.flexrow(class="{opts.class}")
             }
             const script = {
                 name: newName,
+                uid: generateGUID(),
                 code: `/* ${this.voc.newScriptComment} */`
             };
             addScriptModel(script);
@@ -90,4 +100,20 @@ scripts-settings.flexrow(class="{opts.class}")
             bottom.splice(1, 0, clickedScript);
             const out = [...top, ...bottom];
             this.currentProject.scripts = out;
+        };
+
+        this.renameScript = async e => {
+            e.stopPropagation();
+            const clickedScript = e.item.script;
+            const renamer = require('src/node_requires/renamer');
+            const reply = await renamer(
+                e.item.script.name,
+                'script',
+                e.item.script.uid,
+                this.vocGlob
+            );
+            if (reply.inputValue && reply.buttonClicked !== 'cancel') {
+                clickedScript.name = reply.inputValue.trim();
+                this.update();
+            }
         };

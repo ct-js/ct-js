@@ -13,6 +13,7 @@ import * as enums from './enums';
 
 import getUid from '../generateGUID';
 import {getLanguageJSON, getByPath} from '../i18n';
+import {discardAsset} from '../discardAsset';
 
 /**
  * The interface that describe additional asset actions callable through a context menu.
@@ -428,6 +429,8 @@ export const deleteAsset = async (asset: IAsset): Promise<void> => {
     uidMap.delete(asset.uid);
     folderMap.delete(asset);
     collectionMap.delete(asset);
+    // Move the asset to deleted
+    discardAsset(projdir, asset);
     // Notify the UI about asset removal
     window.signals.trigger('assetRemoved', asset.uid);
     window.signals.trigger(`${asset.type}Removed`, asset.uid);

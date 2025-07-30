@@ -587,11 +587,22 @@ app-view.flexcol
             const imageBuffer = new Buffer(imageBase64, 'base64');
 
             const {createAsset} = require('src/node_requires/resources');
-            await createAsset('texture', this.refs.assets.currentFolder, {
-                src: imageBuffer
-            });
 
-            alertify.success(this.vocGlob.pastedFromClipboard);
+            const renamer = require('src/node_requires/renamer');
+            const reply = await renamer(
+                'New Texture',
+                'texture',
+                '',
+                this.vocGlob,
+                true
+            );
+            if (reply.inputValue && reply.buttonClicked !== 'cancel') {
+                await createAsset('texture', this.refs.assets.currentFolder, {
+                    name: reply.inputValue.trim(),
+                    src: imageBuffer
+                });
+                alertify.success(this.vocGlob.pastedFromClipboard);
+            }
             this.refs.assets.update();
         };
         window.hotkeys.on('Control+v', this.tryPasteAssets);

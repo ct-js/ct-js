@@ -1,8 +1,5 @@
 project-script-editor
     .flexfix.tall
-        div.flexfix-header
-            b {voc.name}
-            input(type="text" value="{script.name}" onchange="{updateScriptName}")
         .flexfix-body
             .aCodeEditor(ref="editor")
     script.
@@ -44,7 +41,3 @@ project-script-editor
             // Manually destroy the editor to free up the memory
             this.editor.dispose();
         });
-
-        this.updateScriptName = e => {
-            this.script.name = e.target.value.trim();
-        };

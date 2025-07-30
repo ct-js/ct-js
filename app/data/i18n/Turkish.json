@@ -470,6 +470,7 @@
             "deleteScript": "Scripti sil",
             "moveDown": "Aşağı in",
             "moveUp": "Yukarı çık",
+            "rename": "Yeniden adlandır",
             "newScriptComment": "Küçük libraryleri içe aktarmak ve sık fonksiyonları tanımlamak için scriptleri kullan",
             "scriptsHint": "Burada oluşturulan scriptler oyununun köküne eklenecek ve böylece oyun her başladığında çalışacak. Sadece JavaScript ve TypeScript desteklenir. Burada belirlenin türler ve değişkenler projenin her yerinde kullanılabilir olacak."
         },

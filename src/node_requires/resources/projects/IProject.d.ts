@@ -20,6 +20,8 @@ declare interface ICtAction {
 
 declare interface IProjectScript {
     name: string;
+    uid: string;
+    origname?: string;
     code: string;
 }
 

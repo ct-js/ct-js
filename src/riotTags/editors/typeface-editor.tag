@@ -2,11 +2,6 @@ typeface-editor.aPanel.aView(class="{opts.class}")
     .aPanel.pad.left.tall.flexfix
         .flexfix-body
             fieldset
-                label.block
-                    b {voc.typefaceName}
-                    br
-                    input.wide(type="text" onchange="{wire('asset.name')}" value="{asset.name}")
-            fieldset
                 label.checkbox
                     input(type="checkbox" checked="{asset.bitmapFont}" onchange="{wire('asset.bitmapFont')}")
                     b {voc.generateBitmapFont}
@@ -56,7 +51,7 @@ typeface-editor.aPanel.aView(class="{opts.class}")
                 label.checkbox
                     input(type="checkbox" checked="{font.italic}" onchange="{wire('asset.fonts.'+ind+'.italic')}")
                     b {voc.italic}
-                .dim.small {font.origname}
+                .dim.small {font.source.match(sourceRegex)[1]}
                 .aSpacer
                 button.inline.small(onclick="{deleteFont}")
                     svg.feather
@@ -70,6 +65,7 @@ typeface-editor.aPanel.aView(class="{opts.class}")
             span {voc.addFont}
     script.
         this.namespace = 'fontView';
+        this.sourceRegex = /[\\/]([^\\/]+)$/;
         this.mixin(require('src/node_requires/riotMixins/voc').default);
         this.mixin(require('src/node_requires/riotMixins/wire').default);
         this.mixin(require('src/node_requires/riotMixins/discardio').default);
@@ -123,6 +119,6 @@ typeface-editor.aPanel.aView(class="{opts.class}")
                 return;
             }
             await Promise.all(reply.map(filepath => typefacesAPI.addFont(this.asset, filepath)));
-            await typefacesAPI.refreshFonts();
+            await typefacesAPI.refreshFonts(this.asset);
             this.update();
         };

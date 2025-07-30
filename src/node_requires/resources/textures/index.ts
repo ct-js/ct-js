@@ -1,11 +1,11 @@
 import {uidMap, getOfType, getById, createAsset, IAssetContextItem} from '..';
 import {TexturePreviewer} from '../preview/texture';
 import {convertToPng} from '../../utils/imageUtils';
-import {promptName} from '../promptName';
 
 import fs from 'fs-extra';
 import path from 'path';
 import * as PIXI from 'pixi.js';
+import ctFiles from '../../ct-files/index';
 
 /**
  * Accepts a texture ID or a texture's object itself;
@@ -254,7 +254,17 @@ const importImageToTexture = async (opts: {
           path = require('path'),
           generateGUID = require('./../../generateGUID');
     const id = generateGUID();
-    const dest = path.join(window.projdir, 'img', `i${id}.png`);
+    let texName: string;
+    if (opts.name) {
+        texName = opts.name;
+    } else {
+        texName = path.basename(opts.src)
+            .replace(/\.(jpg|gif|png|jpeg)/gi, '')
+            .replace(/\s/g, '_');
+    }
+    const baseName = texName + ctFiles.available_name_suffix(currentProject, texName, 'texture');
+    const dest = path.join(window.projdir, 'img', `${ctFiles.safeName(baseName)}.png`);
+    await ctFiles.preflight(dest, id, projdir + '/.uid_db');
     if (opts.src instanceof Buffer) {
         await fs.writeFile(dest, opts.src);
     } else {
@@ -277,30 +287,6 @@ const importImageToTexture = async (opts: {
         };
         image.src = 'file://' + dest + '?' + Math.random();
     });
-    let texName: string;
-    if (opts.name) {
-        texName = opts.name;
-    } else if (opts.src instanceof Buffer) {
-        const name = await promptName('texture', 'NewTexture');
-        if (name) {
-            texName = name;
-        } else {
-            texName = 'NewTexture_' + id.slice(-4);
-        }
-    } else {
-        texName = path.basename(opts.src)
-            .replace(/\.(jpg|gif|png|jpeg)/gi, '')
-            .replace(/\s/g, '_');
-    }
-    // Avoid name duplicates
-    const baseName = texName;
-    const textures = getOfType('texture');
-    let texPostfix = 2;
-    // eslint-disable-next-line no-loop-func
-    while (textures.some(t => t.name === texName)) {
-        texName = `${baseName}_${texPostfix}`;
-        texPostfix++;
-    }
     const obj: ITexture = {
         lastmod: Number(new Date()),
         type: 'texture',

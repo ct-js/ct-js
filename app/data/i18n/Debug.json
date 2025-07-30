@@ -603,6 +603,7 @@
             "deleteScript": "settings.scripts.deleteScript",
             "moveDown": "settings.scripts.moveDown",
             "moveUp": "settings.scripts.moveUp",
+            "rename": "extensionsEditor.rename",
             "newScriptComment": "settings.scripts.newScriptComment",
             "scriptsHint": "settings.scripts.scriptsHint"
         },
