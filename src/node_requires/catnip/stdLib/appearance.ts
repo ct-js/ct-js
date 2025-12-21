@@ -94,6 +94,46 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }]
 }, {
+    name: 'Set anchor',
+    type: 'command',
+    code: 'set anchor',
+    icon: 'droplet',
+    jsTemplate: (vals) => `this.anchor.set(${vals.x}, ${vals.y});`,
+    lib: 'core.appearance',
+    i18nKey: 'set anchor',
+    documentationI18nKey: 'set anchor',
+    pieces: [{
+        type: 'argument',
+        key: 'x',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'argument',
+        key: 'y',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
+    name: 'Set pivot',
+    type: 'command',
+    code: 'set pivot',
+    icon: 'droplet',
+    jsTemplate: (vals) => `this.pivot.set(${vals.x}, ${vals.y});`,
+    lib: 'core.appearance',
+    i18nKey: 'set pivot',
+    documentationI18nKey: 'set pivot',
+    pieces: [{
+        type: 'argument',
+        key: 'x',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'argument',
+        key: 'y',
+        typeHint: 'number',
+        required: true
+    }]
+}, {
     name: 'Set texture angle',
     type: 'command',
     code: 'set angle',
@@ -331,6 +371,46 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: () => 'this.skew.y',
     lib: 'core.appearance',
     i18nKey: 'skew y',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get anchor by x',
+    type: 'computed',
+    code: 'get anchor x',
+    icon: 'droplet',
+    jsTemplate: () => 'this.anchor.x',
+    lib: 'core.appearance',
+    i18nKey: 'anchor x',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get anchor by y',
+    type: 'computed',
+    code: 'get anchor y',
+    icon: 'droplet',
+    jsTemplate: () => 'this.anchor.y',
+    lib: 'core.appearance',
+    i18nKey: 'anchor y',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get pivot by x',
+    type: 'computed',
+    code: 'get pivot x',
+    icon: 'droplet',
+    jsTemplate: () => 'this.pivot.x',
+    lib: 'core.appearance',
+    i18nKey: 'pivot x',
+    pieces: [],
+    typeHint: 'number'
+}, {
+    name: 'get pivot by y',
+    type: 'computed',
+    code: 'get pivot y',
+    icon: 'droplet',
+    jsTemplate: () => 'this.pivot.y',
+    lib: 'core.appearance',
+    i18nKey: 'pivot y',
     pieces: [],
     typeHint: 'number'
 }, {
