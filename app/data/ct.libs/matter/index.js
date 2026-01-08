@@ -1,4 +1,59 @@
+const physicsConfig = {
+    physicLoop: undefined,
+    runnerTickRate: undefined, // Можно задать значение по умолчанию, например, 60
+    runnerTickRateLog: false,
+    runnerTickRateLogInterval: null,
+    physicsTickInterval: 1000 / 60,
+    runnerUpdateInterval: null,
+    runnerPause: false,
+    lastPhysicsUpdateTime: performance.now(),
+    matterTickPerSecond: 0,
+    renderCountPerSecond: 0,
+    alphaInterpRender: 0,
+    isInterpolation: false,
+    InterpolateType: undefined,
+
+    // Метод для интерполяции углов
+    interpolateAngle: function(a0, a1, alpha) {
+        let delta = a1 - a0;
+        if (delta > Math.PI) {
+            delta -= 2 * Math.PI;
+        } else if (delta < -Math.PI) {
+            delta += 2 * Math.PI;
+        }
+        return a0 + delta * alpha;
+    }
+};
+
+
 window.matter = {
+    killCompound(compound){
+        // Помечяем копии для удаления
+        compound.arrCopies.forEach(copy => copy.kill = true)
+        // Удаляем состовной обьект из физ мира
+        Matter.World.remove(rooms.current.matterWorld, compound);
+
+    },
+    createCompound(arrCopies){
+        let parts = arrCopies.map(body => body.matterBody)
+        // Объединяем их в один составной объект
+        const compound = Matter.Body.create({
+            parts: parts
+        });
+        for(let i = 0; i < arrCopies.length; i++){
+            // Пометим копии что они составные, оставив ссылку на родителя.
+            arrCopies[i].compound = compound;
+            // Удаляем исходные тела
+            Matter.World.remove(rooms.current.matterWorld, arrCopies[i].matterBody);
+            // Обновляем ссылки на matterBody у копий
+            arrCopies[i].matterBody = compound.parts[i+1]; // i = 0 это сам compound
+        }
+        // Добавляем составной обьект в мир
+        Matter.Composite.add(rooms.current.matterWorld, compound);
+        // Возвращаем составной обьект
+        compound.arrCopies = arrCopies;
+        return compound;
+    },
     on(event, callback) {
         Matter.Events.on(rooms.current.matterEngine, event, callback);
     },
