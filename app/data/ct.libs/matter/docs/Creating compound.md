@@ -1,10 +1,10 @@
-# Creating compound body
+# Creating a compound body
 
 ## `matter.createCompound(arrCopies)`
 
-Creates a composite body from array copies, return compound.
+Creates a composite body from array of copies, returns the compound body.
 Make sure you have correctly positioned all of the parts before creating the composite object.
-Since a composite object is not a copy, you will have to work with it, as with a body matter.
+A composite object is not a copy but a matter.js body.
 ```js
 // parts
 var blue = templates.copy('Blue');
@@ -12,7 +12,7 @@ var green = templates.copy('Green', 64, 0);
 var pink = templates.copy('Pink', 32, 64);
 // create compound
 this.compound = matter.createCompound([blue, green, pink])
-// 
+// manipulate the compound body
 Matter.Body.setPosition(this.compound, { x: 300, y: 100 });
 ```
 

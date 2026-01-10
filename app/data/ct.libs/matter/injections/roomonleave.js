@@ -1,5 +1,5 @@
 
-// Подчищаем за собой
+// Cleanup on room leave
 if(physicsConfig.runnerUpdateInterval) clearInterval(physicsConfig.runnerUpdateInterval);
 if(physicsConfig.runnerTickRateLogInterval) clearInterval(physicsConfig.runnerTickRateLogInterval);
 
