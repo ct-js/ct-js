@@ -342,352 +342,354 @@ export class Room extends PIXI.Container<pixiMod.DisplayObject> {
     [key: string]: any;
 }
 Room.roomId = 0;
-
-let nextRoom: string | undefined;
-const roomsLib = {
-    /**
-     * All the existing room templates that can be used in the game.
-     * It is usually prefilled by ct.IDE.
-     * @catnipIgnore
-     */
-    templates: {} as Record<string, ExportedRoom>,
-    /**
-     * @catnipIgnore
-     */
-    Room,
-    /** The current top-level room in the game. */
-    current: null as (Room | null),
-    /**
-     * An object that contains arrays of currently present rooms.
-     * These include the current room (`rooms.current`), as well as any rooms
-     * appended or prepended through `rooms.append` and `rooms.prepend`.
-     * @catnipList room
-     */
-    list: {} as Record<string, Room[]>,
-    /**
-     * Creates and adds a background to the current room, at the given depth.
-     * @param {string} texture The name of the texture to use
-     * @catnipAsset texture:texture
-     * @param {number} depth The depth of the new background
-     * @returns {Background} The created background
-     * @catnipSaveReturn
-     */
-    addBg(texture: string, depth: number): Background {
-        if (!roomsLib.current) {
-            throw new Error('[rooms.addBg] You cannot add a background before a room is created');
-        }
-        const bg = new Background(texture, 0, depth);
-        roomsLib.current.addChild(bg);
-        return bg;
-    },
-    /**
-     * Clears the current stage, removing all rooms with copies, tile layers, backgrounds,
-     * and other potential entities.
-     * @returns {void}
-     */
-    clear(): void {
-        pixiApp.stage.children.length = 0;
-        stack.length = 0;
-        for (const i in templatesLib.list) {
-            templatesLib.list[i] = [];
-        }
-        for (const i in backgrounds.list) {
-            backgrounds.list[i] = [];
-        }
-        roomsLib.list = {};
-        for (const name in roomsLib.templates) {
-            roomsLib.list[name] = [];
-        }
-    },
-    /**
-     * This method safely removes a previously appended/prepended room from the stage.
-     * It will trigger "On Leave" for a room and "On Destroy" event
-     * for all the copies of the removed room.
-     * The room will also have `this.kill` set to `true` in its event, if it comes in handy.
-     * This method cannot remove `rooms.current`, the main room.
-     * @param {Room} room The `room` argument must be a reference
-     * to the previously created room.
-     * @returns {void}
-     */
-    remove(room: Room): void {
-        if (!(room instanceof Room)) {
-            if (typeof room === 'string') {
-                console.error('[rooms.remove] To remove a room, you should provide a reference to it (to an object), not its name. Provided value:', room);
-                throw new Error('[rooms.remove] Invalid argument type');
+const roomsLib = (() => {
+    let nextRoom: string | undefined;
+    const roomsLib = {
+        /**
+         * All the existing room templates that can be used in the game.
+         * It is usually prefilled by ct.IDE.
+         * @catnipIgnore
+         */
+        templates: {} as Record<string, ExportedRoom>,
+        /**
+         * @catnipIgnore
+         */
+        Room,
+        /** The current top-level room in the game. */
+        current: null as (Room | null),
+        /**
+         * An object that contains arrays of currently present rooms.
+         * These include the current room (`rooms.current`), as well as any rooms
+         * appended or prepended through `rooms.append` and `rooms.prepend`.
+         * @catnipList room
+         */
+        list: {} as Record<string, Room[]>,
+        /**
+         * Creates and adds a background to the current room, at the given depth.
+         * @param {string} texture The name of the texture to use
+         * @catnipAsset texture:texture
+         * @param {number} depth The depth of the new background
+         * @returns {Background} The created background
+         * @catnipSaveReturn
+         */
+        addBg(texture: string, depth: number): Background {
+            if (!roomsLib.current) {
+                throw new Error('[rooms.addBg] You cannot add a background before a room is created');
             }
-            throw new Error('[rooms] An attempt to remove a room that is not actually a room! Provided value:' + room);
-        }
-        const ind = roomsLib.list[room.name].indexOf(room);
-        if (ind !== -1) {
-            roomsLib.list[room.name].splice(ind, 1);
-        } else {
-            // eslint-disable-next-line no-console
-            console.warn('[rooms] Removing a room that was not found in rooms.list. This is strange…');
-        }
-        room.kill = true;
-        pixiApp.stage.removeChild(room);
-        for (const copy of room.children) {
-            if (copyTypeSymbol in copy) {
-                killRecursive(copy as BasicCopy);
+            const bg = new Background(texture, 0, depth);
+            roomsLib.current.addChild(bg);
+            return bg;
+        },
+        /**
+         * Clears the current stage, removing all rooms with copies, tile layers, backgrounds,
+         * and other potential entities.
+         * @returns {void}
+         */
+        clear(): void {
+            pixiApp.stage.children.length = 0;
+            stack.length = 0;
+            for (const i in templatesLib.list) {
+                templatesLib.list[i] = [];
             }
-        }
-        room.onLeave();
-        roomsLib.onLeave.apply(room);
-    },
-    /**
-     * Switches to the given room. Note that this transition happens at the end
-     * of the frame, so the name of a new room may be overridden.
-     * @catnipAsset roomName:room
-     */
-    'switch'(roomName: string): void {
-        if (roomsLib.templates[roomName]) {
-            nextRoom = roomName;
-            roomsLib.switching = true;
-        } else {
-            console.error('[rooms] The room "' + roomName + '" does not exist!');
-        }
-    },
-    /**
-     * Whether a room switch is scheduled.
-     * @catnipIgnore
-     */
-    switching: false,
-    /**
-     * Restarts the current room.
-     * @returns {void}
-     */
-    restart(): void {
-        if (!roomsLib.current) {
-            throw new Error('[rooms.restart] Cannot restart a room before it is created');
-        }
-        roomsLib.switch(roomsLib.current.name);
-    },
-    /**
-     * Creates a new room and adds it to the stage, separating its draw stack
-     * from existing ones.
-     * This room is added to `ct.stage` after all the other rooms.
-     * @param {string} roomName The name of the room to be appended
-     * @param {object} [params] Any additional parameters applied to the new room.
-     * Useful for passing settings and data to new widgets and prefabs.
-     * @returns {Room} A newly created room
-     * @catnipIgnore Defined in catnip/stdLib/rooms.ts
-     */
-    append(roomName: string, params?: Record<string, unknown>): Room {
-        if (!(roomName in roomsLib.templates)) {
-            throw new Error(`[rooms.append] append failed: the room ${roomName} does not exist!`);
-        }
-        const room = new Room(roomsLib.templates[roomName], false);
-        if (params) {
-            Object.assign(room, params);
-        }
-        pixiApp.stage.addChild(room);
-        room.onCreate.apply(room);
-        roomsLib.onCreate.apply(room);
-        roomsLib.list[roomName].push(room);
-        return room;
-    },
-    /**
-     * Creates a new room and adds it to the stage, separating its draw stack
-     * from existing ones.
-     * This room is added to `ct.stage` before all the other rooms.
-     * @param {string} roomName The name of the room to be prepended
-     * @param {object} [params] Any additional parameters applied to the new room.
-     * Useful for passing settings and data to new widgets and prefabs.
-     * @returns {Room} A newly created room
-     * @catnipIgnore Defined in catnip/stdLib/rooms.ts
-     */
-    prepend(roomName: string, params?: Record<string, unknown>): Room {
-        if (!(roomName in roomsLib.templates)) {
-            throw new Error(`[rooms] prepend failed: the room ${roomName} does not exist!`);
-        }
-        const room = new Room(roomsLib.templates[roomName], false);
-        if (params) {
-            Object.assign(room, params);
-        }
-        pixiApp.stage.addChildAt(room, 0);
-        room.onCreate.apply(room);
-        roomsLib.onCreate.apply(room);
-        roomsLib.list[roomName].push(room);
-        return room;
-    },
-    /**
-     * Merges a given room into the current one. Skips room's OnCreate event.
-     *
-     * @param roomName The name of the room that needs to be merged
-     * @catnipAsset roomName:room
-     * @returns Arrays of created copies, backgrounds, tile layers,
-     * added to the current room (`rooms.current`). Note: it does not get updated,
-     * so beware of memory leaks if you keep a reference to this array for a long time!
-     * @catnipSaveReturn
-     */
-    merge(roomName: string): RoomMergeResult | false {
-        if (!roomsLib.current) {
-            throw new Error('[rooms.merge] Cannot merge in a room before the main one is created');
-        }
-        if (!(roomName in roomsLib.templates)) {
-            console.error(`[rooms] merge failed: the room ${roomName} does not exist!`);
-            return false;
-        }
-        const generated: RoomMergeResult = {
-            copies: [],
-            tileLayers: [],
-            backgrounds: []
-        };
-        const template = roomsLib.templates[roomName];
-        const target = roomsLib.current;
-        for (const t of template.bgs) {
-            const bg = new Background(t.texture, 0, t.depth, t.exts);
-            target.backgrounds.push(bg);
-            target.addChild(bg);
-            generated.backgrounds.push(bg);
-        }
-        for (const t of template.tiles) {
-            const tl = new Tilemap(t);
-            target.tileLayers.push(tl);
-            target.addChild(tl);
-            generated.tileLayers.push(tl);
-        }
-        for (const t of template.objects) {
-            const c = templatesLib.copyIntoRoom(t.template, t.x, t.y, target, {
-                tx: t.scale.x || 1,
-                ty: t.scale.y || 1,
-                tr: t.rotation || 0,
-                scaleX: t.scale?.x,
-                scaleY: t.scale?.y,
-                rotation: t.rotation,
-                alpha: t.opacity,
-                ...t.customProperties
-            });
-            generated.copies.push(c);
-        }
-        return generated;
-    },
-    /**
-     * @catnipIgnore
-     */
-    forceSwitch(roomName?: string): void {
-        if (nextRoom) {
-            roomName = nextRoom;
-        }
-        if (roomsLib.current) {
-            roomsLib.rootRoomOnLeave.apply(roomsLib.current);
-            roomsLib.current.onLeave();
-            roomsLib.onLeave.apply(roomsLib.current);
-            roomsLib.current = null;
-        }
-        roomsLib.clear();
-        for (const copy of forceDestroy) {
-            copy.destroy();
-        }
-        forceDestroy.clear();
-        deadPool.length = 0;
-        var template = roomsLib.templates[roomName as string];
-        mainCamera.reset(
-            template.width / 2,
-            template.height / 2,
-            template.width,
-            template.height
-        );
-        if (template.cameraConstraints) {
-            mainCamera.minX = template.cameraConstraints.x1;
-            mainCamera.maxX = template.cameraConstraints.x2;
-            mainCamera.minY = template.cameraConstraints.y1;
-            mainCamera.maxY = template.cameraConstraints.y2;
-        }
-        roomsLib.current = new Room(template, true);
-        pixiApp.stage.addChild(roomsLib.current);
-        updateViewport();
-        roomsLib.rootRoomOnCreate.apply(roomsLib.current);
-        roomsLib.current.onCreate();
-        roomsLib.onCreate.apply(roomsLib.current);
-        roomsLib.list[roomName as string].push(roomsLib.current);
-        /*!%switch%*/
-        mainCamera.manageStage();
-        roomsLib.switching = false;
-        nextRoom = void 0;
-    },
-    /**
-     * @catnipIgnore
-     */
-    onCreate(this: Room): void {
-        /*!%roomoncreate%*/
-        if (this.behaviors.length) {
-            runBehaviors(this, 'rooms', 'thisOnCreate');
-        }
-    },
-    /**
-     * @catnipIgnore
-     */
-    onLeave(this: Room): void {
-        /*!%roomonleave%*/
-        if (this.behaviors.length) {
-            runBehaviors(this, 'rooms', 'thisOnDestroy');
-        }
-    },
-    /**
-     * @catnipIgnore
-     */
-    beforeStep(this: Room): void {
-        /*!%beforeroomstep%*/
-    },
-    /**
-     * @catnipIgnore
-     */
-    afterStep(this: Room): void {
-        /*!%afterroomstep%*/
-        if (this.behaviors.length) {
-            runBehaviors(this, 'rooms', 'thisOnStep');
-        }
-        for (const c of this.tickerSet) {
-            c.tick();
-        }
-    },
-    /**
-     * @catnipIgnore
-     */
-    beforeDraw(this: Room): void {
-        /*!%beforeroomdraw%*/
-    },
-    /**
-     * @catnipIgnore
-     */
-    afterDraw(this: Room): void {
-        /*!%afterroomdraw%*/
-        if (this.behaviors.length) {
-            runBehaviors(this, 'rooms', 'thisOnDraw');
-        }
-        for (const fn of this.bindings) {
-            fn();
-        }
-    },
-    /**
-     * @catnipIgnore
-     */
-    rootRoomOnCreate(this: Room): void {
-        /*!@rootRoomOnCreate@*/
-    },
-    /**
-     * @catnipIgnore
-     */
-    rootRoomOnStep(this: Room): void {
-        /*!@rootRoomOnStep@*/
-    },
-    /**
-     * @catnipIgnore
-     */
-    rootRoomOnDraw(this: Room): void {
-        /*!@rootRoomOnDraw@*/
-    },
-    /**
-     * @catnipIgnore
-     */
-    rootRoomOnLeave(this: Room): void {
-        /*!@rootRoomOnLeave@*/
-    },
-    /**
-     * The name of the starting room, as it was set in ct.IDE.
-     * @type {string}
-     */
-    starting: '/*!@startroom@*/'
-};
+            for (const i in backgrounds.list) {
+                backgrounds.list[i] = [];
+            }
+            roomsLib.list = {};
+            for (const name in roomsLib.templates) {
+                roomsLib.list[name] = [];
+            }
+        },
+        /**
+         * This method safely removes a previously appended/prepended room from the stage.
+         * It will trigger "On Leave" for a room and "On Destroy" event
+         * for all the copies of the removed room.
+         * The room will also have `this.kill` set to `true` in its event, if it comes in handy.
+         * This method cannot remove `rooms.current`, the main room.
+         * @param {Room} room The `room` argument must be a reference
+         * to the previously created room.
+         * @returns {void}
+         */
+        remove(room: Room): void {
+            if (!(room instanceof Room)) {
+                if (typeof room === 'string') {
+                    console.error('[rooms.remove] To remove a room, you should provide a reference to it (to an object), not its name. Provided value:', room);
+                    throw new Error('[rooms.remove] Invalid argument type');
+                }
+                throw new Error('[rooms] An attempt to remove a room that is not actually a room! Provided value:' + room);
+            }
+            const ind = roomsLib.list[room.name].indexOf(room);
+            if (ind !== -1) {
+                roomsLib.list[room.name].splice(ind, 1);
+            } else {
+                // eslint-disable-next-line no-console
+                console.warn('[rooms] Removing a room that was not found in rooms.list. This is strange…');
+            }
+            room.kill = true;
+            pixiApp.stage.removeChild(room);
+            for (const copy of room.children) {
+                if (copyTypeSymbol in copy) {
+                    killRecursive(copy as BasicCopy);
+                }
+            }
+            room.onLeave();
+            roomsLib.onLeave.apply(room);
+        },
+        /**
+         * Switches to the given room. Note that this transition happens at the end
+         * of the frame, so the name of a new room may be overridden.
+         * @catnipAsset roomName:room
+         */
+        'switch'(roomName: string): void {
+            if (roomsLib.templates[roomName]) {
+                nextRoom = roomName;
+                roomsLib.switching = true;
+            } else {
+                console.error('[rooms] The room "' + roomName + '" does not exist!');
+            }
+        },
+        /**
+         * Whether a room switch is scheduled.
+         * @catnipIgnore
+         */
+        switching: false,
+        /**
+         * Restarts the current room.
+         * @returns {void}
+         */
+        restart(): void {
+            if (!roomsLib.current) {
+                throw new Error('[rooms.restart] Cannot restart a room before it is created');
+            }
+            roomsLib.switch(roomsLib.current.name);
+        },
+        /**
+         * Creates a new room and adds it to the stage, separating its draw stack
+         * from existing ones.
+         * This room is added to `ct.stage` after all the other rooms.
+         * @param {string} roomName The name of the room to be appended
+         * @param {object} [params] Any additional parameters applied to the new room.
+         * Useful for passing settings and data to new widgets and prefabs.
+         * @returns {Room} A newly created room
+         * @catnipIgnore Defined in catnip/stdLib/rooms.ts
+         */
+        append(roomName: string, params?: Record<string, unknown>): Room {
+            if (!(roomName in roomsLib.templates)) {
+                throw new Error(`[rooms.append] append failed: the room ${roomName} does not exist!`);
+            }
+            const room = new Room(roomsLib.templates[roomName], false);
+            if (params) {
+                Object.assign(room, params);
+            }
+            pixiApp.stage.addChild(room);
+            room.onCreate.apply(room);
+            roomsLib.onCreate.apply(room);
+            roomsLib.list[roomName].push(room);
+            return room;
+        },
+        /**
+         * Creates a new room and adds it to the stage, separating its draw stack
+         * from existing ones.
+         * This room is added to `ct.stage` before all the other rooms.
+         * @param {string} roomName The name of the room to be prepended
+         * @param {object} [params] Any additional parameters applied to the new room.
+         * Useful for passing settings and data to new widgets and prefabs.
+         * @returns {Room} A newly created room
+         * @catnipIgnore Defined in catnip/stdLib/rooms.ts
+         */
+        prepend(roomName: string, params?: Record<string, unknown>): Room {
+            if (!(roomName in roomsLib.templates)) {
+                throw new Error(`[rooms] prepend failed: the room ${roomName} does not exist!`);
+            }
+            const room = new Room(roomsLib.templates[roomName], false);
+            if (params) {
+                Object.assign(room, params);
+            }
+            pixiApp.stage.addChildAt(room, 0);
+            room.onCreate.apply(room);
+            roomsLib.onCreate.apply(room);
+            roomsLib.list[roomName].push(room);
+            return room;
+        },
+        /**
+         * Merges a given room into the current one. Skips room's OnCreate event.
+         *
+         * @param roomName The name of the room that needs to be merged
+         * @catnipAsset roomName:room
+         * @returns Arrays of created copies, backgrounds, tile layers,
+         * added to the current room (`rooms.current`). Note: it does not get updated,
+         * so beware of memory leaks if you keep a reference to this array for a long time!
+         * @catnipSaveReturn
+         */
+        merge(roomName: string): RoomMergeResult | false {
+            if (!roomsLib.current) {
+                throw new Error('[rooms.merge] Cannot merge in a room before the main one is created');
+            }
+            if (!(roomName in roomsLib.templates)) {
+                console.error(`[rooms] merge failed: the room ${roomName} does not exist!`);
+                return false;
+            }
+            const generated: RoomMergeResult = {
+                copies: [],
+                tileLayers: [],
+                backgrounds: []
+            };
+            const template = roomsLib.templates[roomName];
+            const target = roomsLib.current;
+            for (const t of template.bgs) {
+                const bg = new Background(t.texture, 0, t.depth, t.exts);
+                target.backgrounds.push(bg);
+                target.addChild(bg);
+                generated.backgrounds.push(bg);
+            }
+            for (const t of template.tiles) {
+                const tl = new Tilemap(t);
+                target.tileLayers.push(tl);
+                target.addChild(tl);
+                generated.tileLayers.push(tl);
+            }
+            for (const t of template.objects) {
+                const c = templatesLib.copyIntoRoom(t.template, t.x, t.y, target, {
+                    tx: t.scale.x || 1,
+                    ty: t.scale.y || 1,
+                    tr: t.rotation || 0,
+                    scaleX: t.scale?.x,
+                    scaleY: t.scale?.y,
+                    rotation: t.rotation,
+                    alpha: t.opacity,
+                    ...t.customProperties
+                });
+                generated.copies.push(c);
+            }
+            return generated;
+        },
+        /**
+         * @catnipIgnore
+         */
+        forceSwitch(roomName?: string): void {
+            if (nextRoom) {
+                roomName = nextRoom;
+            }
+            if (roomsLib.current) {
+                roomsLib.rootRoomOnLeave.apply(roomsLib.current);
+                roomsLib.current.onLeave();
+                roomsLib.onLeave.apply(roomsLib.current);
+                roomsLib.current = null;
+            }
+            roomsLib.clear();
+            for (const copy of forceDestroy) {
+                copy.destroy();
+            }
+            forceDestroy.clear();
+            deadPool.length = 0;
+            var template = roomsLib.templates[roomName as string];
+            mainCamera.reset(
+                template.width / 2,
+                template.height / 2,
+                template.width,
+                template.height
+            );
+            if (template.cameraConstraints) {
+                mainCamera.minX = template.cameraConstraints.x1;
+                mainCamera.maxX = template.cameraConstraints.x2;
+                mainCamera.minY = template.cameraConstraints.y1;
+                mainCamera.maxY = template.cameraConstraints.y2;
+            }
+            roomsLib.current = new Room(template, true);
+            pixiApp.stage.addChild(roomsLib.current);
+            updateViewport();
+            roomsLib.rootRoomOnCreate.apply(roomsLib.current);
+            roomsLib.current.onCreate();
+            roomsLib.onCreate.apply(roomsLib.current);
+            roomsLib.list[roomName as string].push(roomsLib.current);
+            /*!%switch%*/
+            mainCamera.manageStage();
+            roomsLib.switching = false;
+            nextRoom = void 0;
+        },
+        /**
+         * @catnipIgnore
+         */
+        onCreate(this: Room): void {
+            /*!%roomoncreate%*/
+            if (this.behaviors.length) {
+                runBehaviors(this, 'rooms', 'thisOnCreate');
+            }
+        },
+        /**
+         * @catnipIgnore
+         */
+        onLeave(this: Room): void {
+            /*!%roomonleave%*/
+            if (this.behaviors.length) {
+                runBehaviors(this, 'rooms', 'thisOnDestroy');
+            }
+        },
+        /**
+         * @catnipIgnore
+         */
+        beforeStep(this: Room): void {
+            /*!%beforeroomstep%*/
+        },
+        /**
+         * @catnipIgnore
+         */
+        afterStep(this: Room): void {
+            /*!%afterroomstep%*/
+            if (this.behaviors.length) {
+                runBehaviors(this, 'rooms', 'thisOnStep');
+            }
+            for (const c of this.tickerSet) {
+                c.tick();
+            }
+        },
+        /**
+         * @catnipIgnore
+         */
+        beforeDraw(this: Room): void {
+            /*!%beforeroomdraw%*/
+        },
+        /**
+         * @catnipIgnore
+         */
+        afterDraw(this: Room): void {
+            /*!%afterroomdraw%*/
+            if (this.behaviors.length) {
+                runBehaviors(this, 'rooms', 'thisOnDraw');
+            }
+            for (const fn of this.bindings) {
+                fn();
+            }
+        },
+        /**
+         * @catnipIgnore
+         */
+        rootRoomOnCreate(this: Room): void {
+            /*!@rootRoomOnCreate@*/
+        },
+        /**
+         * @catnipIgnore
+         */
+        rootRoomOnStep(this: Room): void {
+            /*!@rootRoomOnStep@*/
+        },
+        /**
+         * @catnipIgnore
+         */
+        rootRoomOnDraw(this: Room): void {
+            /*!@rootRoomOnDraw@*/
+        },
+        /**
+         * @catnipIgnore
+         */
+        rootRoomOnLeave(this: Room): void {
+            /*!@rootRoomOnLeave@*/
+        },
+        /**
+         * The name of the starting room, as it was set in ct.IDE.
+         * @type {string}
+         */
+        starting: '/*!@startroom@*/'
+    };
+    return roomsLib;
+})();
 export default roomsLib;
