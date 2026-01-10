@@ -192,10 +192,19 @@ class Copy extends PIXI.Container {
             customProperties: deepCopy ?
                 JSON.parse(JSON.stringify(this.copyCustomProps)) :
                 this.copyCustomProps,
+            customText: this.customTextSettings?.customText,
+            customSize: this.customTextSettings?.fontSize,
+            customWordWrap: this.customTextSettings?.wordWrapWidth,
             bindings: {
                 ...this.bindings
             }
         };
+        if (this.customTextSettings?.anchor) {
+            copy.customAnchor = {
+                x: this.customTextSettings?.anchor.x,
+                y: this.customTextSettings?.anchor.y
+            };
+        }
         if (this.align) {
             copy.align = this.align;
         }
