@@ -404,6 +404,17 @@ const reimportTexture = async (
         tex.width = tex.imgWidth;
         tex.height = tex.imgHeight;
     }
+    // Make sure the slicing grid does not exceed the new image size
+    if ((tex.width + tex.marginx) * tex.grid[0] - tex.marginx + tex.offx > tex.imgWidth) {
+        tex.marginx = 0;
+        tex.offx = 0;
+        tex.width = Math.floor(tex.imgWidth / tex.grid[0]);
+    }
+    if ((tex.height + tex.marginy) * tex.grid[1] - tex.marginy + tex.offy > tex.imgHeight) {
+        tex.marginy = 0;
+        tex.offy = 0;
+        tex.height = Math.floor(tex.imgHeight / tex.grid[1]);
+    }
     tex.origname = path.basename(dest);
     if (typeof source === 'string') {
         tex.source = source;
