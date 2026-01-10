@@ -1,7 +1,3 @@
-# ⚠️ Note: this repository had recently its history cleaned up from junk and rewritten. You will need to re-fork/re-clone this repository.
-
-Old repository version can be accessed [here](https://github.com/ct-js/ct-js-old).
-
 ![](https://raw.githubusercontent.com/ct-js/ct-js/develop/branding/GithubHeader.png)
 
 [![](https://img.shields.io/badge/license-MIT-informational?style=flat-square)](https://github.com/ct-js/ct-js/blob/develop/LICENSE) [![GitHub tag (latest by date)](https://img.shields.io/github/tag-date/ct-js/ct-js?label=version&style=flat-square)](https://github.com/ct-js/ct-js/releases) [![Gitlab CI master branch](https://img.shields.io/gitlab/pipeline-status/CoMiGo/ct-js?branch=master&label=ct.js%20builds&style=flat-square)](https://gitlab.com/CoMiGo/ct-js/-/commits/master) [![Gitlab CI develop branch](https://img.shields.io/gitlab/pipeline-status/CoMiGo/ct-js?branch=develop&label=nightly%20builds&style=flat-square)](https://gitlab.com/CoMiGo/ct-js/-/commits/develop)
@@ -106,6 +102,8 @@ gulp
 Use `gulp dev` instead of just `gulp` to run a dev service with live reloading without opening ct.js in its default manner. In either case, you can stop this service in the usual manner for your terminal, e.g. `Ctrl+C`. If you are encountering unexplained issues, especially when switching to a new branch, run `gulp -f devSetup.gulpfile.js` again.
 
 VSCode can use [this extension](https://marketplace.visualstudio.com/items?itemName=ruakr.vsc-nwjs) to run ct.js with an attached debugger. Before running the debugger, to allow live reloading, run `gulp dev`.
+
+**Bun users will have to install packages through npm** as currently the deduping mechanism of Bun resolves deep dependencies incorrectly with incompatible versions of packages. (`isPlainObject is not a function` comes exactly from that.)
 
 ## Linting
 
