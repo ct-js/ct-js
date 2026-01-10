@@ -337,8 +337,8 @@ const Copy = function (
         Object.assign(this, {
             template: template.name,
             zIndex: template.depth,
-            onStep: template.onStep,
-            onDraw: template.onDraw,
+            onStep: template.onStep.bind(this),
+            onDraw: template.onDraw.bind(this),
             onBeforeCreateModifier: CopyProto.onBeforeCreateModifier,
             onCreate: template.onCreate,
             onDestroy: template.onDestroy
