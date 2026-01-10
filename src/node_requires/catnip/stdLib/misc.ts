@@ -138,7 +138,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         type: 'argument',
         key: 'return',
         typeHint: 'wildcard',
-        required: true
+        required: false
     }, {
         type: 'options',
         allowCustom: true,
@@ -146,7 +146,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (values, id, custom) => {
         const options = getOptions({}, [], custom);
-        if (values.return) {
+        if (values.return && values.return !== 'undefined') {
             return `${values.return} = ${values.func}(${options ? optionsToStringObj(options) : ''});`;
         }
         return `${values.func}(${options ? optionsToStringObj(options) : ''});`;
