@@ -37,7 +37,7 @@ export const getUnwrappedExtends = (exts: Record<string, unknown>): Record<strin
         if (unwrappable.includes(postfix as resourceType)) {
             try {
                 const asset = getById(postfix!, String(exts[i]));
-                out.key = asset.name;
+                out[key] = asset.name;
             } catch (e) {
                 alertify.error(`Could not resolve UID ${exts[i]} for field ${key} as a ${postfix}. Returning -1.`);
                 console.error(e);
