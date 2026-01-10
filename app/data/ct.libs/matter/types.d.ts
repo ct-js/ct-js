@@ -3903,6 +3903,14 @@ declare namespace Matter {
 type MatterEventCallback = (event: Matter.IEventCollision<Matter.Engine>) => void;
 
 declare namespace matter {
+    /**
+     * Creates a composite body from an array of copies, returns the compound body.
+     */
+    function createCompound(arrCopies: Array): Body;
+    /**
+     * Destroy a compound body and mark all its copies to be killed.
+     */
+    function killCompound(compound: Body): void;
     function on(event: string, callback: MatterEventCallback): void;
     function off(event: string, callback: MatterEventCallback): void;
     /**

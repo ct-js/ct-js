@@ -4,9 +4,9 @@
         "name_Ru": "Matter.js — библиотека физики",
         "tagline": "Add realtime 2D physics engine to your project.",
         "tagline_Ru": "Добавляет движок 2D физики в твой проект.",
-        "version": "1.1.0",
+        "version": "0.20.0",
         "authors": [{
-            "name": "Cosmo Myzrail Gorynych",
+            "name": "Cosmo Myzrail update ReturnWorld",
             "mail": "admin@nersta.ru"
         }],
         "categories": [
@@ -15,13 +15,88 @@
     },
 
     "fields": [{
-        "name": "Use static delta time",
-        "name_Ru": "Использовать статичную длину кадра",
+        "name": "Method for calculating physics",
+        "name_Ru": "Метод для расчета физики",
+        "type": "radio",
+        "help": "A separate cycle will provide the greatest stability, the rest are needed for compatibility with older projects.",
+        "help_Ru": "отдельный цикл даст наибольшую стабильность, остальные нужны для совместимости старых проектов.",
+        "default": "3",
+        "key": "physicLoop",
+        "id": "physicLoop",
+        "options": [{
+            "value": "1",
+            "name": "FrameTime",
+            "name_Ru": "Зависит от времени между кадрами",
+            "help": "delta = u.time * 1000; u.time = time elapsed since the previous frame",
+            "help_Ru": "delta = u.time * 1000; u.time = время, прошедшее с предыдущего кадра"
+        }, {
+            "value": "2",
+            "name": "TargetFps",
+            "name_Ru": "Зависит от фпс",
+            "help": "delta = 1000/targetFps",
+            "help_Ru": "1000/фпс"
+        }, {
+            "value": "3",
+            "name": "Runner",
+            "name_Ru": "Runner - отдельный цикл для физики",
+            "help": "Creates a separate loop for physics",
+            "help_Ru": "Создает отдельный цикл для физики"
+        }]
+    },
+    {
+        "name": "runner tickrate",
+        "name_Ru": "runner тикрейт",
+        "type": "number",
+        "help": "The tick rate determines how often physics calculations are performed. The higher the tick rate, the more accurate and smooth the physics will be.The lower the tick rate, the faster and more performant your game will be. The default and recommended value is 60. Use values ​​that are multiples of your FPS. For example, for games with a 240 FPS cap, it's best to use values ​​such as 240, 120, 60.",
+        "help_Ru": "Тикрейт определяет как часто будет происходить расчёт физики. Чем выше тикрейт тем более точно и плавно будет работать физика. Чем ниже тикрейт тем быстрее и производительнее будет ваша игра. Стандартное и рекомендуемое значение 60. Используйте значения кратные вашему фпс, например для проектов с ограничением фпс в 240 лучше всего использовать такие значения как 240, 120, 60.",
+        "default": 60,
+        "key": "runnerTickRate"
+    }, {
+        "name": "Enable console log",
+        "name_Ru": "Включить console log",
         "type": "checkbox",
-        "default": true,
-        "help": "Uses a constant frame time instead of u.delta to make world updates more deterministic and stable. Disabling this option may result in an unstable, jiggly physics behavior.",
-        "help_Ru": "Использует константу вместо u.delta, чтобы сделать симуляцию более стабильную и предсказуемую. Отключение этой опции может привести к нестабильному, дёрганому поведению физических тел.",
-        "key": "matterUseStaticDeltaTime"
+        "default": false,
+        "key": "runnerTickRateLog"
+    }, {
+        "name": "Interpolation render",
+        "name_Ru": "Интерполяция рендера",
+        "type": "checkbox",
+        "default": false,
+        "key": "isInterpolation"
+    }, {
+        "name": "Interpolation only works in Runner mode.",
+        "name_Ru": "Интерполяция работает только в режиме Runner.",
+        "type": "h3",
+        "if": "isInterpolation"
+    }, {
+        "name": "Interpolate type",
+        "name_Ru": "Тип интерполяции",
+        "help": "Interpolation makes the movement of objects smoother, if your FPS is higher than the engine's tickrate.",
+        "help_Ru": "Интерполяция делает движение обьектов более плавными, если ваш FPS больше чем тикрейт движка.",
+        "type": "radio",
+        "key": "interpolateType",
+        "id": "interpolateType",
+        "default": "1",
+        "if": "isInterpolation",
+        "options": [{
+            "value": "1",
+            "name": "Extrapolation Velocity",
+            "name_Ru": "Экстраполяция Скорости",
+            "help": "Calculates an intermediate value when rendering, taking into account the speed.",
+            "help_Ru": "Расчитывает промежуточное значение при рендеринге, учитывает скорость."
+        }, {
+            "value": "2",
+            "name": "Extrapolation Velocity + Acceleration",
+            "name_Ru": "Экстраполяция Скорости + Ускорения",
+            "help": "Calculates an intermediate value when rendering, taking into account speed + acceleration.",
+            "help_Ru": "Расчитывает промежуточное значение при рендеринге, учитывая скорость + ускорение."
+        }, {
+            "value": "3",
+            "name": "Linier",
+            "name_Ru": "Линейная",
+            "help": "Calculates the intermediate value when rendering linearly, that is, using equal segments",
+            "help_Ru": "Расчитывает промежуточное значение при рендеринге линейно, то есть используя равные отрезки"
+        }]
     }],
 
     "templateExtends": [{
