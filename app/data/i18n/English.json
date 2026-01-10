@@ -349,6 +349,12 @@
             "set skew": "Set skew to",
             "skew x": "skew by x",
             "skew y": "skew by y",
+            "set anchor": "Set anchor to",
+            "anchor x": "anchor by x",
+            "anchor y": "anchor by y",
+            "set pivot": "Set pivot to",
+            "pivot x": "pivot by x",
+            "pivot y": "pivot by y",
             "set alpha": "Set opacity to",
             "set visible": "Set visibility to",
             "scale x": "scale by x",
@@ -672,7 +678,9 @@
         },
         "blockDocumentation": {
             "serialize object": "This block serializes an object into a string that can be later safely saved or transferred. This method does not support dates, functions, and structures that form cyclic references. Objects serialized with this block should be deserialized with the \"Deserialize object\" block.",
-            "constant string": "You can use this block to force creating a string: for example, when you want to write a number in a string or convert \\n to a linebreak when putting this value into wildcard slots."
+            "constant string": "You can use this block to force creating a string: for example, when you want to write a number in a string or convert \\n to a linebreak when putting this value into wildcard slots.",
+            "set anchor": "Sets the anchor point using normalized coordinates (0.0 to 1.0). The anchor determines where the copy rotates and scales from. Common values: (0, 0) = top-left, (0.5, 0.5) = center, (1, 1) = bottom-right. Works on textured copies like Animated Sprites.",
+            "set pivot": "Sets the pivot point using pixel coordinates. Like anchor, but uses absolute pixels instead of percentages. Advanced usage — use anchor for most cases."
         }
     },
     "colorPicker": {
