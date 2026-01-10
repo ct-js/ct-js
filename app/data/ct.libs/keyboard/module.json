@@ -4,7 +4,9 @@
         "tagline": "Add keyboard events to the Actions system.",
         "icon": "airplay",
         "name_Ru": "Клавиатура",
+        "name_Pl": "Klawiatura",
         "tagline_Ru": "Добавляет события клавиатуры в систему Действий.",
+        "tagline_Pl": "Dodaje zdarzenia klawiatury do systemu Akcji.",
         "version": "4.0.0",
         "authors": [{
             "name": "Cosmo Myzrail Gorynych",
