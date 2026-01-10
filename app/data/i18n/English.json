@@ -556,6 +556,7 @@
             "set disabled": "Set disabled state",
             "get text": "get text",
             "get disabled": "get disabled",
+            "throw": "Throw an error",
             "define function": "Define a function",
             "return": "Return the result",
             "execute function": "Run a function",

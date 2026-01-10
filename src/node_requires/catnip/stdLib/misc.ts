@@ -66,6 +66,20 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (values) => String(values.code)
 }, {
+    name: 'throw',
+    type: 'command',
+    code: 'throw',
+    icon: 'alert-triangle',
+    lib: 'core.misc',
+    i18nKey: 'throw',
+    pieces: [{
+        type: 'argument',
+        typeHint: 'string',
+        key: 'message',
+        required: true
+    }],
+    jsTemplate: (values) => `throw new Error(${values.message});`
+}, {
     code: 'define function',
     type: 'command',
     name: 'Define a function',
