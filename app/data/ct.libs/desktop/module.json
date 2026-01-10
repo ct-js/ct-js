@@ -1,7 +1,11 @@
 {
     "main": {
         "name": "Desktop features",
+        "name_Ru": "Функции рабочего стола",
+        "name_Pl": "Funkcje desktopowe",
         "tagline": "A module that provides useful desktop-specific features, such as manipulating the window, toggling the debugger/devtools, and more!",
+        "tagline_Ru": "Модуль с полезными функциями для ПК-версий: управление окном, включение отладчика и другое!",
+        "tagline_Pl": "Moduł oferujący funkcje specyficzne dla wersji desktopowych, jak manipulacja oknem, włączanie debuggera i inne!",
         "version": "0.3.0",
         "icon": "monitor",
         "authors": [{
@@ -19,8 +23,10 @@
         "appClose": {
             "name": "Closing an app",
             "name_Ru": "Закрытие приложения",
+            "name_Pl": "Zamykanie aplikacji",
             "hint": "Fires when a user clicks on the [x] button of the game's window. You need to disable automatic game exit in your project's Export Settings to actually be able to catch this event. Ct.js desktop builds only.",
             "hint_Ru": "Срабатывает, когда пользователь закрывает окно игры с помощью кнопки [x]. Чтобы отловить это событие, у тебя должно быть выключен автоматический выход из игры в настройках экспорта твоего проекта. Работает только для ct.js билдов для ПК.",
+            "hint_Pl": "Uruchamia się, gdy użytkownik kliknie przycisk [x] w oknie gry. Aby przechwycić to zdarzenie, należy wyłączyć automatyczne zamykanie gry w ustawieniach eksportu. Dotyczy tylko wersji desktopowych ct.js.",
             "icon": "x",
             "applicable": ["room"],
             "category": "app",
