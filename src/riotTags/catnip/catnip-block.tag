@@ -271,7 +271,7 @@ catnip-block(
         this.namespace = 'catnip';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
 
-        const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setInsertTarget, emptyTexture, copy, canPaste, paste, isSelected, getDropoverTarget, setDropoverTarget} = require('src/lib/catnip');
+        const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setInsertTarget, emptyTexture, copy, canPaste, paste, isSelected, getDropoverTarget, setDropoverTarget} = require('src/node_requires/catnip');
         this.isSelected = () => isSelected(this.opts.block);
         const {getById, areThumbnailsIcons, getThumbnail} = require('src/node_requires/resources');
         this.getName = (assetType, id) => getById(assetType, id).name;

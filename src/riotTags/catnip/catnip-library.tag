@@ -258,8 +258,8 @@ catnip-library(class="{opts.class}").flexrow
             });
         });
 
-        const {getOfType, getById} = require('src/lib/resources');
-        const {blocksLibrary, startBlocksTransmit, getDeclaration, setInsertTarget, searchBlocks, blockFromDeclaration, emptyTexture} = require('src/lib/catnip');
+        const {getOfType, getById} = require('src/node_requires/resources');
+        const {blocksLibrary, startBlocksTransmit, getDeclaration, setInsertTarget, searchBlocks, blockFromDeclaration, emptyTexture} = require('src/node_requires/catnip');
         this.categories = blocksLibrary;
 
         this.enums = getOfType('enum');

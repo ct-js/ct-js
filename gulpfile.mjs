@@ -31,7 +31,6 @@ import execute from './node_requires/execute.js';
 import i18n from './node_requires/i18n/index.js';
 
 import nwBuilder from 'nw-builder';
-import resedit from 'resedit-cli';
 
 import {$} from 'execa';
 
@@ -579,6 +578,7 @@ if (process.env.SIGN_PASSWORD) {
     exePatch.password = process.env.SIGN_PASSWORD.replace(/_/g, '');
 }
 export const patchWindowsExecutables = async () => {
+    const resedit = await import('resedit-cli');
     if (!(await fs.pathExists(exePatch.p12))) {
         log.warn('⚠️  \'patchWindowsExecutables\': Cannot find PFX certificate. Continuing without signing.');
         delete exePatch.p12;

@@ -62,8 +62,8 @@ catnip-block-list(
         this.namespace = 'catnip';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
 
-        const {getDeclaration, getMenuMutators, mutate, startBlocksTransmit, endBlocksTransmit, getTransmissionType, setInsertTarget, emptyTexture, copySelected, canPaste, paste, setSelection, toggleSelection, getSelectionHTML, isSelected, removeSelectedBlocks} = require('src/lib/catnip');
-        const {isDev} = require('src/lib/platformUtils');
+        const {getDeclaration, getMenuMutators, mutate, startBlocksTransmit, endBlocksTransmit, getTransmissionType, setInsertTarget, emptyTexture, copySelected, canPaste, paste, setSelection, toggleSelection, getSelectionHTML, isSelected, removeSelectedBlocks} = require('src/node_requires/catnip');
+        const {isDev} = require('src/node_requires/platformUtils');
 
 
         this.onDragStart = e => {

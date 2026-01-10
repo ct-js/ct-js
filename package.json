@@ -6,9 +6,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "gulp",
-    "lint": "gulp lint",
-    "lint:fix": "gulp lint --fix",
+    "start": "gulp -f gulpfile.mjs",
+    "dev": "gulp -f gulpfile.mjs",
+    "lint": "gulp -f gulpfile.mjs lint",
+    "lint:fix": "gulp -f gulpfile.mjs lint --fix",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "ctJSDocJson": "jsdoc -X -r ./app/data/ct.release > ./app/data/ctLibJSDocAst.json"

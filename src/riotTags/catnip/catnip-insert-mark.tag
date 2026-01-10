@@ -32,7 +32,7 @@ catnip-insert-mark(onclick="{toggleMenu}" class="{menuopen: opened}")
                 use(href="#{block.icon}")
             span {block.bakedName}
     script.
-        const {searchBlocks, insertBlock, getInsertTarget} = require('src/lib/catnip');
+        const {searchBlocks, insertBlock, getInsertTarget} = require('src/node_requires/catnip');
         this.getInsertTarget = getInsertTarget;
 
         this.opened = false;
