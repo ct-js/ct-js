@@ -253,6 +253,7 @@
         "duplicateBlock": "Duplicate this block",
         "requiredField": "This field is required and is missing a value.",
         "unnamedGroup": "Unnamed group",
+        "toggleBlockDisable": "Enable/disable the selected blocks",
         "placeholders": {
             "putBlocksHere": "Put your blocks here",
             "doNothing": "Do nothing"

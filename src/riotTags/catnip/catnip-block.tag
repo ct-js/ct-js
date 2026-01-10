@@ -12,7 +12,7 @@
 
 catnip-block(
     draggable="{!opts.nodrag}"
-    class="{error: !declaration} {declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass} {selected: isSelected()}"
+    class="{error: !declaration} {declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass} {disabled: opts.block.disabled} {selected: isSelected()}"
     hide="{getHidden}"
     title="{voc.blockDocumentation[declaration.documentationI18nKey] || localizeField(declaration, 'documentation')}"
 )

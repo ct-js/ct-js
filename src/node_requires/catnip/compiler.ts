@@ -91,6 +91,9 @@ export const compile = (blocks: BlockScript, failureMeta: {
 }, debugMode: boolean): string => {
     let result = '';
     for (const block of blocks) {
+        if (block.disabled) {
+            continue;
+        }
         let declaration;
         try {
             declaration = getDeclaration(block.lib, block.code);

@@ -175,6 +175,7 @@ declare interface IBlock {
     groupName?: string;
     lib: string;
     code: string;
+    disabled?: boolean;
 }
 
 type BlockScript = IBlock[];

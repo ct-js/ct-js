@@ -62,7 +62,7 @@ catnip-block-list(
         this.namespace = 'catnip';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
 
-        const {getDeclaration, getMenuMutators, mutate, startBlocksTransmit, endBlocksTransmit, getTransmissionType, setInsertTarget, emptyTexture, copySelected, canPaste, paste, setSelection, toggleSelection, getSelectionHTML, isSelected, removeSelectedBlocks} = require('src/node_requires/catnip');
+        const {getDeclaration, getMenuMutators, mutate, startBlocksTransmit, endBlocksTransmit, getTransmissionType, setInsertTarget, emptyTexture, copySelected, toggleSelectedDisable, canPaste, paste, setSelection, toggleSelection, getSelectionHTML, isSelected, removeSelectedBlocks} = require('src/node_requires/catnip');
         const {isDev} = require('src/node_requires/platformUtils');
 
 
@@ -193,6 +193,14 @@ catnip-block-list(
             click: () => {
                 getSelectionHTML();
                 this.contextBlock = false;
+            }
+        }, {
+            type: 'separator'
+        }, {
+            label: this.voc.toggleBlockDisable,
+            icon: 'eye-off',
+            click: () => {
+                toggleSelectedDisable();
             }
         }, {
             type: 'separator'

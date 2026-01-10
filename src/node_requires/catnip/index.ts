@@ -771,6 +771,17 @@ export const clearSelection = (): void => {
 export const copySelected = () => {
     clipboard = structuredClone(getTopBlocks([...multipleSelection.keys()]));
 };
+export const toggleSelectedDisable = () => {
+    const blocks = getTopBlocks([...multipleSelection.keys()]);
+    if (!blocks.length) {
+        return;
+    }
+    const newStatus = !blocks[0].disabled;
+    for (const block of blocks) {
+        block.disabled = newStatus;
+    }
+    clearSelection();
+};
 export const getSelectionHTML = (): void => {
     const html = [];
     const dummy = document.createElement('catnip-block');
