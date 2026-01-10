@@ -18,7 +18,77 @@ const hideErrors = function (this: HTMLButtonElement) {
     mute = true;
 };
 
+const parseErrorStack = (error) => {
+    const stackLines = error.stack.split('\n');
+    const [, firstStackLine] = stackLines; // First line after error message
+    // Parse line and column numbers (format varies by browser and whether it was an anonymous call)
+    const match = firstStackLine.match(/\((.*):(\d+):(\d+)\)/) ?? firstStackLine.match(/at (.*):(\d+):(\d+)/);
+    if (match) {
+        const [, file, line, column] = match;
+        return {
+            file,
+            line: parseInt(line, 10),
+            column: parseInt(column, 10)
+        };
+    }
+    return null;
+};
+const stackInfoCache = new Map<string, string[]>();
+const findCommentMarker = async (error: Error, marker = '🐱👉') => {
+    const stackInfo = parseErrorStack(error);
+    if (!stackInfo) {
+        return null;
+    }
+
+    try {
+        // Fetch the source file
+        let lines: string[];
+        if (stackInfoCache.has(stackInfo.file)) {
+            lines = stackInfoCache.get(stackInfo.file)!;
+        } else {
+            const response = await fetch(stackInfo.file);
+            const sourceCode = await response.text();
+            lines = sourceCode.split('\n');
+        }
+
+        // Search for marker around the error line
+        const searchRange = 300; // lines before to search
+        const start = Math.max(0, stackInfo.line - searchRange - 1);
+        const end = Math.min(lines.length, stackInfo.line - 1);
+
+        for (let i = start; i < end; i++) {
+            if (lines[i].length > 300) {
+                continue; // Skip very long lines
+            }
+            if (lines[i].includes(marker)) {
+                return {
+                    line: i + 1,
+                    comment: lines[i]
+                        .trim()
+                        .slice(2, -2)
+                        .trim()
+                };
+            }
+        }
+    } catch (fetchError) {
+        void fetchError; // Ignore fetch errors
+    }
+
+    return null;
+};
+
+const betterErrorContext = (error: Error) => {
+    findCommentMarker(error).then(markerInfo => {
+        if (markerInfo) {
+            console.error(`🔮 The source of the ${error.name} is most likely ${markerInfo.comment}`);
+        }
+    });
+};
+
 const onError = function (this: Document, ev: ErrorEvent) {
+    if (ev.error) {
+        betterErrorContext(ev.error);
+    }
     if (mute) {
         return;
     }

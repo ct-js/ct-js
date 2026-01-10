@@ -118,7 +118,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
             if (e instanceof ExporterError) {
                 throw e;
             }
-            const errorMessage = `${e.name || 'An error'} occured while compiling ${eventKey} (${lib}) event of ${entity.name} ${entity.type}`;
+            const errorMessage = `${e.name || 'An error'} occurred while compiling ${eventKey} (${lib}) event of ${entity.name} ${entity.type}`;
             const exporterError = new ExporterError(errorMessage, {
                 resourceId: entity.uid,
                 resourceName: entity.name,
@@ -144,7 +144,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         for (const target of eventSpec.codeTargets) {
             let resultingCode: string;
             // Add a preamble to each event for easier debugging by users
-            resultingCode = `/* ${entity.type} ${entity.name} — ${event.lib}_${event.eventKey} (${eventSpec.name} event) */\n`;
+            resultingCode = `/* 🐱👉 ${entity.type} ${entity.name} — ${eventSpec.name} event (${event.lib}_${event.eventKey}) */\n`;
             if (lib === 'core') {
                 if (!eventSpec.inlineCodeTemplates) {
                     throw new Error(`Found a misconfuguration in event ${event.lib}_${event.eventKey} (no inlineCodeTemplate for ${target}). This is a ct.js bug.`);

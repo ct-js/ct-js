@@ -319,11 +319,13 @@ const exportCtProject = async (
     let userScripts = '';
     for (const script of project.scripts) {
         try {
-            userScripts += typeScript(script.code, {
+            // Add a preamble to each script for easier debugging by users
+            const preamble = `\n/* 🐱👉 Project script ${script.name} */\n`;
+            userScripts += preamble + typeScript(script.code, {
                 transforms: ['typescript']
             }).code + ';\n';
         } catch (e) {
-            const errorMessage = `${e.name || 'An error'} occured while compiling a custom script ${script.name}`;
+            const errorMessage = `${e.name || 'An error'} occurred while compiling a custom script ${script.name}`;
             const exporterError = new ExporterError(errorMessage, {
                 problematicCode: highlightProblem(script.code, e.location || e.loc),
                 clue: 'syntax'

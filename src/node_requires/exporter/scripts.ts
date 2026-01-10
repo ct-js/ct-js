@@ -28,9 +28,11 @@ export const stringifyScripts = (scripts: IScript[]): string =>
                 break;
             default: throw new Error(`Unsupported script language: ${script.language}`);
             }
-            return acc + `'${script.name}': function (options) {${code}},`;
+            // Add a preamble to each script for easier debugging by users
+            const preamble = `/* 🐱👉 Script asset ${script.name} */\n`;
+            return acc + `'${script.name}': function (options) {\n${preamble}\n${code}},`;
         } catch (e) {
-            const errorMessage = `${e.name || 'An error'} occured while compiling script ${script.name}`;
+            const errorMessage = `${e.name || 'An error'} occurred while compiling script ${script.name}`;
             if (e instanceof ExporterError) {
                 // Passthrough already formatted errors, mainly coming from Catnip
                 throw e;
