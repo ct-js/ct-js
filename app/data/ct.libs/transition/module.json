@@ -3,6 +3,7 @@
         "name": "ct.transition",
         "tagline": "Add nice and smooth transitions between levels, or whenever you need them.",
         "tagline_Ru": "Добавь красивые плавные переходы между уровнями, или вызови их когда угодно.",
+        "tagline_Pl": "Dodaj ładne i płynne przejścia między poziomami albo wszędzie tam, gdzie ich potrzebujesz.",
         "version": "1.0.0",
         "icon": "monitor",
         "authors": [{
