@@ -20,7 +20,7 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
                         .aSpacer.nogrow
                         button.square.inline.alignmiddle.nogrow.large(onclick="{playVariant(variant)}" title="{vocGlob.play}")
                             svg.feather
-                                use(xlink:href="#{(currentSoundPlaying && currentVariant === variant) ? 'pause' : 'play'}")
+                                use(xlink:href="#{(currentSoundPlaying && currentVariant && currentVariant.uid === variant.uid) ? 'pause' : 'play'}")
                         // button.square.inline.alignmiddle.nogrow(title="{vocGlob.reimport}")
                         //     svg.feather
                         //         use(xlink:href="#refresh-ccw")
@@ -185,6 +185,14 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
 
         this.getPreview = (variant, long) => SoundPreviewer.get(this.asset, false, variant.uid, long);
 
+        this.stopCurrentSound = () => {
+            if (this.currentSoundPlaying) {
+                this.currentSoundPlaying.stop();
+                this.currentSoundPlaying = null;
+                this.currentVariant = null;
+            }
+        };
+
         // TODO: #466
         // remove the old variant from pixi.sound first
         /*
@@ -193,6 +201,9 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
         */
 
         this.deleteVariant = variant => () => {
+            if (this.currentVariant && this.currentVariant.uid === variant.uid) {
+                this.stopCurrentSound();
+            }
             const newVariants = this.asset.variants.filter(el => el.uid !== variant.uid);
             this.asset.variants = newVariants;
         };
@@ -210,19 +221,18 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
             this.update();
         };
         this.playVariant = (variant, testing) => () => {
-            // Stop any previous sound
+            // Clicked on the same variant that was played: toggle stop playback.
+            if (this.currentVariant && this.currentVariant.uid === variant.uid) {
+                this.stopCurrentSound();
+                return;
+            }
+
+            // Stop any previous sound before playing new one
             if (this.currentSoundPlaying) {
-                this.currentSoundPlaying.stop();
-                this.currentSoundPlaying = null;
+                this.stopCurrentSound();
                 if (testing) {
-                    this.currentVariant = null;
                     return;
                 }
-            }
-            // Clicked on the save variant that was played: just stop playback.
-            if (this.currentVariant === variant) {
-                this.currentVariant = null;
-                return;
             }
             this.currentVariant = variant;
             this.currentSoundPlaying = (testing ? playVariant : playWithoutEffects)(this.asset, variant, {
@@ -268,9 +278,7 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
 
         this.saveAsset = () => {
             this.writeChanges();
-            if (this.currentSoundPlaying) {
-                this.currentSoundPlaying.stop();
-            }
+            this.stopCurrentSound();
             return true;
         };
         this.saveAndClose = () => {
