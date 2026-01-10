@@ -88,7 +88,8 @@ const getBindings = (copy: IRoomCopy): string | false => {
 // eslint-disable-next-line max-lines-per-function
 const stringifyRooms = (
     assets: {room: IRoom[], template: ITemplate[]},
-    proj: IProject
+    proj: IProject,
+    debugMode: boolean
 ): IScriptablesFragment => {
     let roomsCode = '';
     let rootRoomOnCreate = '';
@@ -96,7 +97,7 @@ const stringifyRooms = (
     let rootRoomOnDraw = '';
     let rootRoomOnLeave = '';
 
-    const rooms = assets.room.map(r => embedStaticBehaviors(r, proj));
+    const rooms = assets.room.map(r => embedStaticBehaviors(r, proj, debugMode));
 
     for (const r of rooms) {
         const bindings: Record<number, string> = {};
@@ -170,7 +171,7 @@ const stringifyRooms = (
         }
 
         const constraints = getConstraints(r);
-        const scriptableCode = getBaseScripts(r, proj);
+        const scriptableCode = getBaseScripts(r, proj, debugMode);
 
         roomsCode += `
 rooms.templates['${r.name}'] = {

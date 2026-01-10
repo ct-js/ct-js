@@ -72,7 +72,11 @@ const getFromCache = (event: IScriptableEvent, target: string): string => {
 };
 
 // eslint-disable-next-line max-lines-per-function, complexity
-const getBaseScripts = function (entity: IScriptable, project: IProject): ScriptableCode {
+const getBaseScripts = function (
+    entity: IScriptable,
+    project: IProject,
+    debugMode: boolean
+): ScriptableCode {
     const domains = {
         thisOnStep: '',
         thisOnCreate: '',
@@ -86,7 +90,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
         rootRoomOnLeave: ''
     };
     if (entity.type !== 'behavior') {
-        entity = embedStaticBehaviors(entity as IScriptableBehaviors, project);
+        entity = embedStaticBehaviors(entity as IScriptableBehaviors, project, debugMode);
     }
     for (const event of entity.events) {
         const {lib, eventKey} = event;
@@ -100,7 +104,7 @@ const getBaseScripts = function (entity: IScriptable, project: IProject): Script
                     resourceName: entity.name,
                     resourceType: entity.type,
                     eventKey
-                });
+                }, debugMode);
                 if (event?.variables?.length) {
                     code = `let ${event.variables.join(', ')};\n` + code;
                 }

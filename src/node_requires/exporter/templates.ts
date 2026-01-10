@@ -104,7 +104,8 @@ const getBaseClassInfo = (blankTextures: IBlankTexture[], template: ITemplate) =
 
 const stringifyTemplates = function (
     assets: {texture: ITexture[], template: ITemplate[]},
-    proj: IProject
+    proj: IProject,
+    debugMode: boolean
 ): IScriptablesFragment {
     let templates = '';
     let rootRoomOnCreate = '';
@@ -121,9 +122,9 @@ const stringifyTemplates = function (
             width: tex.width,
             shape: getTextureShape(tex)
         }));
-    const templatesEmbedded = assets.template.map(t => embedStaticBehaviors(t, proj));
+    const templatesEmbedded = assets.template.map(t => embedStaticBehaviors(t, proj, debugMode));
     for (const template of templatesEmbedded) {
-        const scripts = getBaseScripts(template, proj);
+        const scripts = getBaseScripts(template, proj, debugMode);
         const baseClassInfo = getBaseClassInfo(blankTextures, template);
         templates += `
 templates.templates["${template.name}"] = {

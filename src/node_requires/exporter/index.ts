@@ -298,9 +298,9 @@ const exportCtProject = async (
     // Process all the scriptables to get combined code for the root rooms
     await cacheHandle;
     const typefaces = await bundleFonts(assets.typeface, projdir, writeDir);
-    const rooms = stringifyRooms(assets, project);
-    const templates = stringifyTemplates(assets, project);
-    const behaviors = stringifyBehaviors(assets.behavior, project);
+    const rooms = stringifyRooms(assets, project, !production);
+    const templates = stringifyTemplates(assets, project, !production);
+    const behaviors = stringifyBehaviors(assets.behavior, project, !production);
     const rootRoomOnCreate = rooms.rootRoomOnCreate + '\n' + templates.rootRoomOnCreate;
     const rootRoomOnStep = rooms.rootRoomOnStep + '\n' + templates.rootRoomOnStep;
     const rootRoomOnDraw = rooms.rootRoomOnDraw + '\n' + templates.rootRoomOnDraw;
@@ -376,7 +376,7 @@ const exportCtProject = async (
         bitmapFonts: await bitmapFontsTask,
 
         userScripts,
-        scriptAssets: stringifyScripts(assets.script),
+        scriptAssets: stringifyScripts(assets.script, !production),
         startupScripts: getStartupScripts(assets.script),
         catmods: await modulesTask,
 

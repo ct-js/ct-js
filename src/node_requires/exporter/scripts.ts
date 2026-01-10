@@ -5,7 +5,7 @@ import {compile as compileCatnip} from '../catnip/compiler';
 const compileCoffee = require('coffeescript').CoffeeScript.compile;
 const typeScript = require('sucrase').transform;
 
-export const stringifyScripts = (scripts: IScript[]): string =>
+export const stringifyScripts = (scripts: IScript[], debugMode: boolean): string =>
     scripts.reduce((acc, script) => {
         let code;
         try { // Apply converters to the user's code first
@@ -24,7 +24,7 @@ export const stringifyScripts = (scripts: IScript[]): string =>
                     resourceName: script.name,
                     resourceType: script.type,
                     eventKey: 'onRun'
-                });
+                }, debugMode);
                 break;
             default: throw new Error(`Unsupported script language: ${script.language}`);
             }

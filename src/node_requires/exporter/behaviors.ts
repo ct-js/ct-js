@@ -8,7 +8,8 @@ import {getUnwrappedBySpec} from './utils';
  */
 export const embedStaticBehaviors = <T extends IScriptableBehaviors>(
     asset: T,
-    project: IProject
+    project: IProject,
+    debugMode: boolean
 ): T => {
     if (!asset.behaviors.length) {
         return asset;
@@ -16,7 +17,7 @@ export const embedStaticBehaviors = <T extends IScriptableBehaviors>(
     const behaviors = asset.behaviors // get only static behaviors
         .map(bh => getById('behavior', bh))
         .filter(bh => {
-            const scripts = getBaseScripts(bh, project);
+            const scripts = getBaseScripts(bh, project, debugMode);
             return (Object.keys(scripts) as EventCodeTargets[])
                 .some(key => key.startsWith('rootRoom') && scripts[key]);
         });
@@ -35,9 +36,13 @@ type behaviorsExport = {
     templates: string,
     rooms: string
 };
-export const stringifyBehaviors = (behaviors: IBehavior[], project: IProject): behaviorsExport => {
+export const stringifyBehaviors = (
+    behaviors: IBehavior[],
+    project: IProject,
+    debugMode: boolean
+): behaviorsExport => {
     const stitcher = (bhs: IBehavior[]) => '{' + bhs.map(behavior => {
-        const scripts = getBaseScripts(behavior, project);
+        const scripts = getBaseScripts(behavior, project, debugMode);
         const isStatic = (Object.keys(scripts) as EventCodeTargets[])
             .some(key => key.startsWith('rootRoom') && scripts[key]);
         if (isStatic) {

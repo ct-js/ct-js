@@ -34,7 +34,7 @@ const parseErrorStack = (error) => {
     return null;
 };
 const stackInfoCache = new Map<string, string[]>();
-const findCommentMarker = async (error: Error, marker = '🐱👉') => {
+const findCommentMarker = async (error: Error, marker = '🐱👉', searchRange = 300) => {
     const stackInfo = parseErrorStack(error);
     if (!stackInfo) {
         return null;
@@ -52,7 +52,6 @@ const findCommentMarker = async (error: Error, marker = '🐱👉') => {
         }
 
         // Search for marker around the error line
-        const searchRange = 300; // lines before to search
         const start = Math.max(0, stackInfo.line - searchRange - 1);
         const end = Math.min(lines.length, stackInfo.line - 1);
 
@@ -81,6 +80,11 @@ const betterErrorContext = (error: Error) => {
     findCommentMarker(error).then(markerInfo => {
         if (markerInfo) {
             console.error(`🔮 The source of the ${error.name} is most likely ${markerInfo.comment}`);
+        }
+    });
+    findCommentMarker(error, '🐱🎋', 10).then(markerInfo => {
+        if (markerInfo) {
+            console.error(`🔮 The source block is most likely ${markerInfo.comment}`);
         }
     });
 };

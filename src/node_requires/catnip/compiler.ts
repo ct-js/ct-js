@@ -40,7 +40,7 @@ const writeArgumentlike = (
     const valueIn = valuesIn[piece.key];
     if (typeof valueIn === 'object') {
         // eslint-disable-next-line no-use-before-define
-        valuesOut[piece.key] = compile([valueIn as IBlock], failureMeta);
+        valuesOut[piece.key] = compile([valueIn as IBlock], failureMeta, false);
     } else if (piece.assets && piece.assets !== 'action') {
         try {
             valuesOut[piece.key] = `'${getById(piece.assets, valueIn as string).name}'`;
@@ -88,7 +88,7 @@ export const compile = (blocks: BlockScript, failureMeta: {
     resourceId: assetRef,
     resourceName: string,
     resourceType: resourceType
-}): string => {
+}, debugMode: boolean): string => {
     let result = '';
     for (const block of blocks) {
         let declaration;
@@ -124,7 +124,8 @@ export const compile = (blocks: BlockScript, failureMeta: {
                 break;
             case 'blocks': {
                 const associatedVal = block.values[piece.key];
-                values[piece.key] = compile(associatedVal as IBlock[] ?? [], failureMeta);
+                values[piece.key] =
+                    compile(associatedVal as IBlock[] ?? [], failureMeta, debugMode);
                 if (values[piece.key] === 'undefined') {
                     values[piece.key] = '';
                 }
@@ -145,9 +146,12 @@ export const compile = (blocks: BlockScript, failureMeta: {
                 if (typeof value === 'string') {
                     customOptions[key] = stringifyConstWildcard(value);
                 } else {
-                    customOptions[key] = compile([value], failureMeta);
+                    customOptions[key] = compile([value], failureMeta, debugMode);
                 }
             }
+        }
+        if (debugMode && declaration) {
+            result += `\n/* 🐱🎋 ${declaration.bakedName} (${declaration.code}) */\n`;
         }
         result += declaration.jsTemplate(values, safeId, customOptions);
         if (blocks.length > 1) {
