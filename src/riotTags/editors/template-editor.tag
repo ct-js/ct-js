@@ -100,8 +100,7 @@ mixin templateProperties
         fieldset(if="{parent.hasCapability('text') || parent.hasCapability('embeddedText') || parent.hasCapability('textInput')}")
             label.block(if="{parent.hasCapability('text') || parent.hasCapability('embeddedText')}")
                 b {parent.voc.defaultText}
-                input.wide(
-                    type="text"
+                textarea.wide(
                     value="{parent.asset.defaultText}"
                     onchange="{parent.wire('asset.defaultText')}"
                 )
