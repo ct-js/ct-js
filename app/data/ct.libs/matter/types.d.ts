@@ -3904,11 +3904,11 @@ type MatterEventCallback = (event: Matter.IEventCollision<Matter.Engine>) => voi
 
 declare namespace matter {
     /**
-     * Creates a composite body from array copies, return compound.
+     * Creates a composite body from an array of copies, returns the compound body.
      */
     function createCompound(arrCopies: Array): Body;
     /**
-     * Destroy compound and marks all its copies to kill.
+     * Destroy a compound body and mark all its copies to be killed.
      */
     function killCompound(compound: Body): void;
     function on(event: string, callback: MatterEventCallback): void;
