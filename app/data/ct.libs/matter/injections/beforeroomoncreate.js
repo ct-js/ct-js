@@ -3,10 +3,10 @@ if (this === rooms.current) {
     rooms.current.matterEngine = Matter.Engine.create();
     rooms.current.matterWorld = rooms.current.matterEngine.world;
     rooms.current.matterGravity = rooms.current.matterGravity || [0, 9.8];
-    // OLD, в новой доке гравитация задается через Engine хотя оба способа работают
+    // Gravity 
     [
-        rooms.current.matterWorld.gravity.x,
-        rooms.current.matterWorld.gravity.y
+        rooms.current.matterEngine.gravity.x,
+        rooms.current.matterEngine.gravity.y
     ] = rooms.current.matterGravity;
 
     // Listeners/Rules for collision events
