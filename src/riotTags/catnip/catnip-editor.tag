@@ -3,7 +3,7 @@
     @attribute [event] (IScriptableEvent)
         Required for assets other than scripts. The currently edited event.
     @attribute [scriptmode] (atomic)
-        Disables some features of the editor that make sense for script asset type.
+        Enables some features of the editor that make sense for script asset type only.
     @attribute onrename (riot function)
         A function that is called when a user renames a property or a variable in Catnip blocks.
         The function is provided with an object of this structure:
