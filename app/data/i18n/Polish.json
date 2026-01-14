@@ -62,6 +62,8 @@
         "required": "Wymagane",
         "save": "Zapisz",
         "selectDialogue": "Wybierz…",
+		"selectDialogueTexture": "Wybierz teksture…",
+        "selectDialogueStyle": "Wybierz styl…",
         "select": "Wybierz",
         "search": "Szukaj: ",
         "settings": "Ustawienia",
@@ -251,7 +253,8 @@
         "duplicateBlock": "Duplikuj blok",
         "requiredField": "To pole jest wymagane i brakuje w nim wartości.",
         "unnamedGroup": "Nieokreślona grupa",
-        "placeholders": {
+        "toggleBlockDisable": "Włącz/wyłącz zaznaczone bloki",
+		"placeholders": {
             "putBlocksHere": "Tutaj umieść bloki",
             "doNothing": "Nic nie rób"
         },
@@ -278,7 +281,8 @@
             "timers": "Stopery"
         },
         "blockNames": {
-            "kill copy": "Usuń tę kopię",
+            "kill this copy": "Usuń tę kopię",
+			"kill copy": "Usuń kopię",
             "move copy": "Rusz tę kopię",
             "set speed": "Ustaw szybkość",
             "set gravity": "Ustaw grawitację",
@@ -346,7 +350,13 @@
             "set skew": "Ustaw nachylenie",
             "skew x": "nachylenie x",
             "skew y": "nachylenie y",
-            "set alpha": "Ustaw przezroczystość",
+            "set anchor": "Ustaw punkt zaczepienia",
+            "anchor x": "zaczep w osi x",
+            "anchor y": "zaczep w osi y",
+            "set pivot": "Ustaw punkt obrotu",
+            "pivot x": "obrót w osi x",
+            "pivot y": "obrót w osi y",
+			"set alpha": "Ustaw przezroczystość",
             "set visible": "Ustaw widoczność",
             "scale x": "skaluj x",
             "scale y": "skaluj y",
@@ -362,8 +372,8 @@
             "get animation speed": "szybkość animacji",
             "set animation speed": "Ustaw szybkość animacji",
             "this": "Ten obiekt",
-            "concatenate strings": "Łącz ciągi",
-            "concatenate strings triple": "Łącz trzy ciągi",
+            "concatenate strings": "Łącz ciągi (+)",
+            "concatenate strings triple": "Łącz trzy ciągi (+)",
             "action value": "wartość akcji",
             "is action pressed": "akcja wciśnięta",
             "is action down": "akcja przytrzymana",
@@ -547,7 +557,8 @@
             "set disabled": "Ustaw stan wyłączony",
             "get text": "pobierz tekst",
             "get disabled": "pobierz stan wyłączenia",
-            "define function": "Zdefiniuj funkcję",
+            "throw": "Wyrzuć błąd",
+			"define function": "Zdefiniuj funkcję",
             "return": "Zwróć wynik",
             "execute function": "Uruchom funkcję",
             "get function option": "pobierz opcję",
@@ -670,7 +681,10 @@
         "blockDocumentation": {
             "serialize object": " Ten blok serializuje obiekt do postaci ciągu znaków, który można bezpiecznie zapisać lub przesłać. Metoda ta nie obsługuje dat, funkcji ani struktur zawierających cykliczne odniesienia. Obiekty serializowane za pomocą tego bloku powinny być deserializowane przy użyciu bloku \"deserializacja obiektu\".",
             "constant string": "Możesz użyć tego bloku do wymuszenia konwersji wartości na ciąg znaków, np. gdy chcesz zapisać liczbę jako tekst lub zamienić \\n na nową linię przy umieszczaniu tej wartości w zmiennych zastępczych."
-        }
+            "set anchor": "Ustawia punkt zaczepienia przy użyciu znormalizowanych współrzędnych (od 0.0 do 1.0). Punkt zaczepienia określa, względem którego miejsca kopia jest obracana i skalowana. Typowe wartości: (0, 0) = lewy górny róg, (0.5, 0.5) = środek, (1, 1) = prawy dolny róg. Działa na kopiach z teksturą, np. Animowanych Sprite'ach.",
+            "set pivot": "Ustawia punkt obrotu przy użyciu współrzędnych pikselowych. Działa podobnie do punktu zaczepienia, ale zamiast procentów używa wartości bezwzględnych w pikselach. Opcja zaawansowana - w większości przypadków zaleca się użycie punktu zaczepienia."
+        } 
+
     },
     "colorPicker": {
         "current": "Nowy",
