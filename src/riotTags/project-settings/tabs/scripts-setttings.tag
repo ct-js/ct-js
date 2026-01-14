@@ -44,12 +44,26 @@ scripts-settings.flexrow(class="{opts.class}")
         this.selectScript = e => {
             this.currentScript = e.item.script;
         };
-        this.deleteScript = e => {
-            const {script} = e.item,
-                  ind = this.currentProject.scripts.indexOf(script);
+        this.deleteScript = async e => {
+            e.stopPropagation();
+            const {script} = e.item;
+            const reply = await alertify
+                .okBtn(this.vocGlob.delete)
+                .cancelBtn(this.vocGlob.cancel)
+                .confirm(this.vocGlob.confirmDelete.replace('{0}', script.name));
+            alertify
+                .okBtn(this.vocGlob.ok)
+                .cancelBtn(this.vocGlob.cancel);
+            if (reply.buttonClicked !== 'ok') {
+                return;
+            }
+            const ind = this.currentProject.scripts.indexOf(script);
             this.currentProject.scripts.splice(ind, 1);
             dropScriptModel(script);
-            e.stopPropagation();
+            if (this.currentScript === script) {
+                this.currentScript = null;
+            }
+            this.update();
         };
 
         this.moveUp = e => {

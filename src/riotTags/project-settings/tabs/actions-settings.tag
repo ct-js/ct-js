@@ -81,9 +81,21 @@ actions-settings
                 methods: []
             });
         };
-        this.deleteAction = e => {
-            const ind = window.currentProject.actions.indexOf(e.item.action);
+        this.deleteAction = async e => {
+            const {action} = e.item;
+            const reply = await alertify
+                .okBtn(this.vocGlob.delete)
+                .cancelBtn(this.vocGlob.cancel)
+                .confirm(this.vocGlob.confirmDelete.replace('{0}', action.name));
+            alertify
+                .okBtn(this.vocGlob.ok)
+                .cancelBtn(this.vocGlob.cancel);
+            if (reply.buttonClicked !== 'ok') {
+                return;
+            }
+            const ind = window.currentProject.actions.indexOf(action);
             window.currentProject.actions.splice(ind, 1);
+            this.update();
         };
         this.addMethod = e => {
             this.addingMethod = true;
@@ -92,9 +104,21 @@ actions-settings
                 this.refs.methodSelector.refs.searchField.focus();
             }, 0);
         };
-        this.deleteMethod = action => e => {
-            const ind = action.methods.indexOf(e.item.method);
+        this.deleteMethod = action => async e => {
+            const {method} = e.item;
+            const reply = await alertify
+                .okBtn(this.vocGlob.delete)
+                .cancelBtn(this.vocGlob.cancel)
+                .confirm(this.vocGlob.confirmDelete.replace('{0}', method.code));
+            alertify
+                .okBtn(this.vocGlob.ok)
+                .cancelBtn(this.vocGlob.cancel);
+            if (reply.buttonClicked !== 'ok') {
+                return;
+            }
+            const ind = action.methods.indexOf(method);
             action.methods.splice(ind, 1);
+            this.update();
         };
         this.checkActionNameAndSave = e => {
             this.nameTaken = void 0;
