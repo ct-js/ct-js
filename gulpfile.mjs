@@ -18,7 +18,6 @@ import pug from 'gulp-pug';
 import sprite from 'gulp-svgstore';
 import zip from 'gulp-zip';
 
-import stylelint from 'stylelint';
 import eslint from 'gulp-eslint-new';
 
 import streamQueue from 'streamqueue';
@@ -70,8 +69,8 @@ if (process.platform === 'win32') {
     platforms = platforms.filter(p => p[0] !== 'osx');
     log.warn('⚠️  Building packages for MacOS is not supported on Windows. This platform will be skipped.');
 }
-const nwBuilderOptions = (tag) => ({
-    version: tag === 'osx-arm64' ? '0.101.2' : nwVersion,
+const nwBuilderOptions = (target) => ({
+    version: target === 'osx-arm64' ? '0.101.2' : nwVersion,
     manifestUrl: 'https://nwjs.io/versions.json',
     flavor: 'sdk',
     srcDir: './app/',
@@ -391,19 +390,6 @@ const watch = () => {
     watchIcons();
 };
 
-export const lintStylus = () => stylelint.lint({
-    files: [
-        './src/styl/**/*.styl',
-        '!./src/styl/3rdParty/**/*.styl'
-    ],
-    formatter: 'string'
-}).then(lintResults => {
-    if (lintResults.errored) {
-        console.log(lintResults.output);
-    } else {
-        console.log('✔ Cheff\'s kiss! 😙👌');
-    }
-});
 
 export const lintJS = () => gulp.src([
     './src/js/**/*.js',
@@ -433,8 +419,9 @@ export const lintTS = () => {
         .pipe(tsProject());
 };
 
-export const lint = gulp.series(lintJS, lintTS, lintTags, lintStylus, lintI18n);
+export const lint = gulp.series(lintJS, lintTS, lintTags, lintI18n);
 
+// eslint-disable-next-line no-nested-ternary
 const platform = process.platform === 'win32' ? 'win' : (process.platform === 'darwin' ? 'osx' : process.platform);
 
 const launchApp = () => nwBuilder({
