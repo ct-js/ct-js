@@ -81,9 +81,21 @@ actions-settings
                 methods: []
             });
         };
-        this.deleteAction = e => {
-            const ind = window.currentProject.actions.indexOf(e.item.action);
+        this.deleteAction = async e => {
+            const {action} = e.item;
+            const reply = await alertify
+                .okBtn(this.vocGlob.delete)
+                .cancelBtn(this.vocGlob.cancel)
+                .confirm(this.vocGlob.confirmDelete.replace('{0}', action.name));
+            alertify
+                .okBtn(this.vocGlob.ok)
+                .cancelBtn(this.vocGlob.cancel);
+            if (reply.buttonClicked !== 'ok') {
+                return;
+            }
+            const ind = window.currentProject.actions.indexOf(action);
             window.currentProject.actions.splice(ind, 1);
+            this.update();
         };
         this.addMethod = e => {
             this.addingMethod = true;
