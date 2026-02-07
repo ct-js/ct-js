@@ -625,7 +625,12 @@ export const patchWindowsExecutables = async () => {
 };
 
 export let zipPackages;
-if (process.platform === 'win32') {
+if (nightly) {
+    zipPackages = () => {
+        console.log('ℹ️ Skipping package zipping and GH releases publishing for a nightly release');
+        return Promise.resolve();
+    };
+} else if (process.platform === 'win32') {
     const zipsForAllPlatforms = platforms.map(platform => () =>
         gulp.src(`./build/ctjs - v${pack.version}/${platform[2]}/**`)
         .pipe(zip(`ct.js v${pack.version} for ${platform[2]}.zip`))
