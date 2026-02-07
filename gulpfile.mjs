@@ -25,15 +25,82 @@ import replaceExt from 'gulp-ext-replace';
 import notifier from 'node-notifier';
 import fs from 'fs-extra';
 
+import {$} from 'execa';
 import spawnise from './node_requires/spawnise/index.js';
 import execute from './node_requires/execute.js';
 import i18n from './node_requires/i18n/index.js';
 
 import nwBuilder from 'nw-builder';
 
-import {$} from 'execa';
+const argv = minimist(process.argv.slice(2));
+const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
+var channelPostfix = argv.channel || false,
+    fixEnabled = argv.fix || false,
+    nightly = argv.nightly || false,
+    buildNumber = argv.buildNum || false;
+var verbose = argv.verbose || false;
+
+if (nightly) {
+    channelPostfix = 'nightly';
+}
+
+const pack = fs.readJsonSync('./app/package.json');
+const nwVersion = versions.nwjs;
+
+const osxRc = {
+    name: 'ctjs',
+    icon: nightly ? 'buildAssets/nightly.icns' : 'buildAssets/icon.icns',
+    // eslint-disable-next-line id-length
+    LSApplicationCategoryType: 'public.app-category.developer-tools',
+    CFBundleIdentifier: 'rocks.ctjs',
+    CFBundleName: 'ct.js',
+    CFBundleDisplayName: 'ct.js',
+    CFBundleVersion: pack.version.split('-')[0] + '.0',
+    // eslint-disable-next-line id-length
+    CFBundleShortVersionString: pack.version.split('-')[0],
+    NSHumanReadableCopyright: 'Copyright (c) 2017-2026 CoMiGo Games. Licensed under a permissive MIT license.',
+    // eslint-disable-next-line id-length
+    NSLocalNetworkUsageDescription: 'ct.js IDE needs to access the local network to allow previewing and testing your games on other devices in the same network, and needs access to global network to fetch development news and patrons list.'
+};
+const linuxRc = {
+    name: 'ctjs',
+    icon: nightly ? 'buildAssets/nightly.png' : 'buildAssets/icon.png',
+    genericName: 'ct.js',
+    comment: 'IDE of ct.js game engine',
+    exec: 'ctjs',
+    categories: ['Development', 'IDE']
+};
+const winRc = {
+    name: 'ctjs',
+    productName: 'ct.js',
+    icon: nightly ? 'buildAssets/nightly.ico' : 'buildAssets/icon.ico',
+    version: pack.version.split('-')[0] + '.0',
+    fileVersion: pack.version.split('-')[0] + '.0',
+    company: 'CoMiGo Games and contributors',
+    fileDescription: 'Ct.js game engine',
+    originalFilename: 'ctjs.exe',
+    internalName: 'ctjs'
+};
 /**
+ * Array of tuples with platform — arch — itch.io channel name — RS objects in each element.
+ * Note how win32 platform is written as just 'win' (that's how nw.js binaries are released).
+ */
+let platforms = [
+    ['linux', 'ia32', 'linux32', linuxRc],
+    ['linux', 'x64', 'linux64', linuxRc],
+    ['osx', 'x64', 'osx64', osxRc],
+    ['osx', 'arm64', 'osxarm', osxRc],
+    ['win', 'ia32', 'win32', winRc],
+    ['win', 'x64', 'win64', winRc]
+];
+if (process.platform === 'win32') {
+    platforms = platforms.filter(p => p[0] !== 'osx');
+    log.warn('⚠️  Building packages for MacOS is not supported on Windows. This platform will be skipped.');
+}
+
+
+/*
  * To download NW.js binaries from a different place (for example, from live builds),
  * do the following:
  *
@@ -52,23 +119,7 @@ import {$} from 'execa';
  *
  * Also note that you may need to clear the `ct-js/cache` folder.
  */
-const nwVersion = versions.nwjs;
-/**
- * Array of tuples with platform — arch — itch.io channel name in each element.
- * Note how win32 platform is written as just 'win' (that's how nw.js binaries are released).
- */
-let platforms = [
-    ['linux', 'ia32', 'linux32'],
-    ['linux', 'x64', 'linux64'],
-    ['osx', 'x64', 'osx64'],
-    ['osx', 'arm64', 'osxarm'],
-    ['win', 'ia32', 'win32'],
-    ['win', 'x64', 'win64']
-];
-if (process.platform === 'win32') {
-    platforms = platforms.filter(p => p[0] !== 'osx');
-    log.warn('⚠️  Building packages for MacOS is not supported on Windows. This platform will be skipped.');
-}
+
 const nwBuilderOptions = (target) => ({
     version: target === 'osx-arm64' ? '0.101.2' : nwVersion,
     manifestUrl: 'https://nwjs.io/versions.json',
@@ -76,21 +127,6 @@ const nwBuilderOptions = (target) => ({
     srcDir: './app/',
     glob: false
 });
-
-const argv = minimist(process.argv.slice(2));
-const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-
-const pack = fs.readJsonSync('./app/package.json');
-
-var channelPostfix = argv.channel || false,
-    fixEnabled = argv.fix || false,
-    nightly = argv.nightly || false,
-    buildNumber = argv.buildNum || false;
-var verbose = argv.verbose || false;
-
-if (nightly) {
-    channelPostfix = 'nightly';
-}
 
 let errorBoxShown = false;
 const showErrorBox = function () {
@@ -483,7 +519,7 @@ export const bakePackages = async () => {
     }
     await fs.remove(path.join('./build', `ctjs - v${pack.version}`));
     const builder = pf => {
-        const [platform, arch, itchChannel] = pf;
+        const [platform, arch, itchChannel, app] = pf;
         log.info(`'bakePackages': Building for ${platform}-${arch}…`);
         return nwBuilder({
             ...nwBuilderOptions(`${platform}-${arch}`),
@@ -491,7 +527,8 @@ export const bakePackages = async () => {
             platform,
             arch,
             outDir: `./build/ctjs - v${pack.version}/${itchChannel}`,
-            zip: false
+            zip: false,
+            app
         });
     };
     /*
@@ -551,13 +588,6 @@ export const dumpPfx = () => {
     );
 };
 const exePatch = {
-    icon: [`IDR_MAINFRAME,./buildAssets/${nightly ? 'nightly' : 'icon'}.ico`],
-    'product-name': 'ct.js',
-    'product-version': pack.version.split('-')[0] + '.0',
-    'file-description': 'Ct.js game engine',
-    'file-version': pack.version.split('-')[0] + '.0',
-    'company-name': 'CoMiGo Games',
-    'original-filename': 'ctjs.exe',
     sign: true,
     p12: './CoMiGoGames.pfx'
 };
@@ -565,7 +595,7 @@ if (process.env.SIGN_PASSWORD) {
     exePatch.password = process.env.SIGN_PASSWORD.replace(/_/g, '');
 }
 export const patchWindowsExecutables = async () => {
-    const resedit = await import('resedit-cli');
+    const resedit = (await import('resedit-cli')).default;
     if (!(await fs.pathExists(exePatch.p12))) {
         log.warn('⚠️  \'patchWindowsExecutables\': Cannot find PFX certificate. Continuing without signing.');
         delete exePatch.p12;
@@ -574,6 +604,9 @@ export const patchWindowsExecutables = async () => {
         log.warn('⚠️  \'patchWindowsExecutables\': Cannot find PFX password in the SIGN_PASSWORD environment variable. Continuing without signing.');
         delete exePatch.p12;
         exePatch.sign = false;
+    }
+    if (!exePatch.sign) {
+        return;
     }
     if (platforms.some(p => p[0] === 'win' && p[1] === 'x64')) {
         await resedit({

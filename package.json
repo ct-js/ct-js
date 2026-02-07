@@ -6,6 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "setup": "gulp -f devSetup.gulpfile.js",
     "start": "gulp -f gulpfile.mjs",
     "dev": "gulp -f gulpfile.mjs",
     "lint": "gulp -f gulpfile.mjs lint",

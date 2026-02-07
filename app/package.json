@@ -1,6 +1,7 @@
 {
   "main": "index.html",
   "name": "ctjs",
+  "product_string": "ct.js",
   "description": "ct.js — a free 2D game engine",
   "version": "5.2.1",
   "homepage": "https://ctjs.rocks/",
