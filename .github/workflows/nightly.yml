@@ -12,7 +12,7 @@ jobs:
     - name: Install intermediate dependencies
       run: npm install
     - name: Initialize the development environment
-      run: gulp -f devSetup.gulpfile.mjs
+      run: gulp -f devSetup.gulpfile.js
     - name: Build and publish the app
       run: gulp deploy --nightly --buildNum=$GITHUB_SHA
       env:
