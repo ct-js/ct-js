@@ -681,7 +681,7 @@ export const packages = gulp.series([
 ]);
 
 const installButler = async () => {
-    await $`curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default`;
+    await $`curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default`;
     await $`unzip butler.zip`;
     await $`chmod +x ./butler`;
     await $`rm butler.zip`;
