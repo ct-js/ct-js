@@ -680,7 +680,7 @@
         },
         "blockDocumentation": {
             "serialize object": " Ten blok serializuje obiekt do postaci ciągu znaków, który można bezpiecznie zapisać lub przesłać. Metoda ta nie obsługuje dat, funkcji ani struktur zawierających cykliczne odniesienia. Obiekty serializowane za pomocą tego bloku powinny być deserializowane przy użyciu bloku \"deserializacja obiektu\".",
-            "constant string": "Możesz użyć tego bloku do wymuszenia konwersji wartości na ciąg znaków, np. gdy chcesz zapisać liczbę jako tekst lub zamienić \\n na nową linię przy umieszczaniu tej wartości w zmiennych zastępczych."
+            "constant string": "Możesz użyć tego bloku do wymuszenia konwersji wartości na ciąg znaków, np. gdy chcesz zapisać liczbę jako tekst lub zamienić \\n na nową linię przy umieszczaniu tej wartości w zmiennych zastępczych.",
             "set anchor": "Ustawia punkt zaczepienia przy użyciu znormalizowanych współrzędnych (od 0.0 do 1.0). Punkt zaczepienia określa, względem którego miejsca kopia jest obracana i skalowana. Typowe wartości: (0, 0) = lewy górny róg, (0.5, 0.5) = środek, (1, 1) = prawy dolny róg. Działa na kopiach z teksturą, np. Animowanych Sprite'ach.",
             "set pivot": "Ustawia punkt obrotu przy użyciu współrzędnych pikselowych. Działa podobnie do punktu zaczepienia, ale zamiast procentów używa wartości bezwzględnych w pikselach. Opcja zaawansowana - w większości przypadków zaleca się użycie punktu zaczepienia."
         } 
