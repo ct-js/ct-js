@@ -680,6 +680,17 @@ export const packages = gulp.series([
     patchWindowsExecutables
 ]);
 
+const installButler = async () => {
+    await $`curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default`;
+    await $`unzip butler.zip`;
+    await $`chmod +x ./butler`;
+    await $`rm butler.zip`;
+    await $({
+        stderr: 'pipe',
+        stdout: 'pipe'
+    })`./butler -v`; // Make sure butler works
+};
+
 /* eslint-disable no-await-in-loop */
 export const deployItchOnly = async () => {
     log.info(`'deployItchOnly': Deploying to channel ${channelPostfix}…`);
@@ -721,7 +732,8 @@ export const sendGithubDraft = async () => {
     console.log(draftData);
 };
 
-export const deploy = gulp.series([packages, deployItchOnly, zipPackages, sendGithubDraft]);
+export const deployItch = gulp.series([installButler, deployItchOnly]);
+export const deploy = gulp.series([packages, deployItch, zipPackages, sendGithubDraft]);
 
 const launchDevMode = done => {
     watch();
