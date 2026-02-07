@@ -59,7 +59,7 @@ const osxRc = {
     CFBundleVersion: pack.version.split('-')[0] + '.0',
     // eslint-disable-next-line id-length
     CFBundleShortVersionString: pack.version.split('-')[0],
-    NSHumanReadableCopyright: 'Copyright (c) 2017-2026 CoMiGo Games. Licensed under a permissive MIT license.',
+    NSHumanReadableCopyright: 'Copyright (c) 2017-2026 CoMiGo Games and contributors. Licensed under a permissive MIT license.',
     // eslint-disable-next-line id-length
     NSLocalNetworkUsageDescription: 'ct.js IDE needs to access the local network to allow previewing and testing your games on other devices in the same network, and needs access to global network to fetch development news and patrons list.'
 };
@@ -699,7 +699,7 @@ export const deployItchOnly = async () => {
             await spawnise.spawn('./butler', [
                 'push',
                 `./build/ctjs - v${pack.version}/${platform[2]}`,
-                `comigo/ct-nightly:${platform[2]}${channelPostfix ? '-' + channelPostfix : ''}`,
+                `ctjs/ct-nightly:${platform[2]}${channelPostfix ? '-' + channelPostfix : ''}`,
                 '--userversion',
                 buildNumber
             ]);
@@ -707,7 +707,7 @@ export const deployItchOnly = async () => {
             await spawnise.spawn('./butler', [
                 'push',
                 `./build/ctjs - v${pack.version}/${platform[2]}`,
-                `comigo/ct:${platform[2]}${channelPostfix ? '-' + channelPostfix : ''}`,
+                `ctjs/ct:${platform[2]}${channelPostfix ? '-' + channelPostfix : ''}`,
                 '--userversion',
                 pack.version
             ]);
