@@ -1,6 +1,6 @@
 import {join} from 'path';
 import {tmpdir} from 'os';
-import {readJson, readFile, outputJSON, outputFile, copy, mkdtemp, remove, ensureDir} from 'fs-extra';
+import {readJson, readFile, outputJSON, outputFile, copy, mkdtemp, remove, ensureDir, chmod} from 'fs-extra';
 import {getBuildDir} from '../../platformUtils';
 import {getStartingRoom} from '../rooms';
 import {getTextureOrig} from '../../resources/textures';
@@ -12,6 +12,84 @@ import * as resedit from 'resedit';
 import * as peLibrary from 'pe-library';
 
 const forbidden = /['"\\[\]():*?.]/g;
+
+/**
+ * Generates an Info.plist file content for macOS app bundles.
+ */
+const getInfoPlist = (
+    appName: string,
+    appId: string,
+    version: string
+): string => `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>${appName}</string>
+    <key>CFBundleDisplayName</key>
+    <string>${appName}</string>
+    <key>CFBundleIdentifier</key>
+    <string>${appId}</string>
+    <key>CFBundleVersion</key>
+    <string>${version}</string>
+    <key>CFBundleShortVersionString</key>
+    <string>${version}</string>
+    <key>CFBundleIconFile</key>
+    <string>icon.icns</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleExecutable</key>
+    <string>${appName}</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.games</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>13.0.0</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+</dict>
+</plist>`;
+
+/**
+ * Creates a proper macOS .app bundle from a Neutralino binary.
+ */
+const makeMacAppBundle = async (opts: {
+    appName: string;
+    appId: string;
+    version: string;
+    appBundlePath: string;
+    binaryPath: string;
+    resourcesNeuPath: string;
+    icnsPath: string;
+}): Promise<void> => {
+    const contentsPath = join(opts.appBundlePath, 'Contents');
+    const macOsPath = join(contentsPath, 'MacOS');
+    const resourcesPath = join(contentsPath, 'Resources');
+
+    // Create directory structure
+    await Promise.all([
+        ensureDir(macOsPath),
+        ensureDir(resourcesPath)
+    ]);
+
+    // Copy files to their locations
+    await Promise.all([
+        // Copy Neutralino executable to MacOS folder
+        copy(opts.binaryPath, join(macOsPath, opts.appName)),
+        // Copy resources.neu alongside the executable
+        copy(opts.resourcesNeuPath, join(macOsPath, 'resources.neu')),
+        // Copy icon to Resources folder
+        copy(opts.icnsPath, join(resourcesPath, 'icon.icns'))
+    ]);
+
+    // Make the executable runnable (rwxr-xr-x)
+    await chmod(join(macOsPath, opts.appName), '755');
+
+    // Create Info.plist
+    await outputFile(
+        join(contentsPath, 'Info.plist'),
+        getInfoPlist(opts.appName, opts.appId, opts.version)
+    );
+};
 
 const makeIcons = async (project: IProject, folder: string) => {
     const iconPath = getTextureOrig(project.settings.branding.icon || -1, true),
@@ -149,14 +227,44 @@ export const exportForDesktop = async (
     const outputPath = join(buildDir, config.cli.binaryName);
     const sortPromises: Promise<void>[] = [];
     const neu = join(tempDir, 'dist', config.cli.binaryName, 'resources.neu');
+    const icnsPath = join(tempDir, 'icon.icns');
+    const appId = project.settings.authoring.appId || `rocks.ctjs.${config.cli.binaryName}`;
+
     for (const platform in platformMap) {
         const filenameSuffix = platformMap[platform as keyof typeof platformMap];
-        const sourceBinary = join(tempDir, 'dist', config.cli.binaryName, `${config.cli.binaryName}-${filenameSuffix}`),
-              targetBinary = join(outputPath, `${config.cli.binaryName}-${platform}`, `${config.cli.binaryName}${platform === 'win-x64' ? '.exe' : ''}`),
-              targetNeu = join(outputPath, `${config.cli.binaryName}-${platform}`, 'resources.neu');
+        const sourceBinary = join(tempDir, 'dist', config.cli.binaryName, `${config.cli.binaryName}-${filenameSuffix}`);
 
-        sortPromises.push(copy(sourceBinary, targetBinary));
-        sortPromises.push(copy(neu, targetNeu));
+        if (platform.startsWith('mac-')) {
+            // Create proper macOS .app bundle
+            const appBundlePath = join(
+                outputPath,
+                `${config.cli.binaryName}-${platform}`,
+                `${config.cli.binaryName}.app`
+            );
+            sortPromises.push(makeMacAppBundle({
+                appName: config.cli.binaryName,
+                appId,
+                version: config.version,
+                appBundlePath,
+                binaryPath: sourceBinary,
+                resourcesNeuPath: neu,
+                icnsPath
+            }));
+        } else {
+            // Windows and Linux: flat file structure
+            const targetBinary = join(
+                outputPath,
+                `${config.cli.binaryName}-${platform}`,
+                `${config.cli.binaryName}${platform === 'win-x64' ? '.exe' : ''}`
+            );
+            const targetNeu = join(
+                outputPath,
+                `${config.cli.binaryName}-${platform}`,
+                'resources.neu'
+            );
+            sortPromises.push(copy(sourceBinary, targetBinary));
+            sortPromises.push(copy(neu, targetNeu));
+        }
     }
     sortPromises.push(copy(
         './data/ct.release/desktopPack/windowsNetFix.ps1',
