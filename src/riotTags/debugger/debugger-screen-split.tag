@@ -63,7 +63,7 @@ debugger-screen-split(class="{opts.class} {flexrow: verticalLayout, flexcol: !ve
     script.
         this.namespace = 'debuggerToolbar';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
-        this.allownw = !(process.arch === 'arm64' && process.platform === 'darwin')
+        this.allownw = !(process.arch === 'arm64' && process.platform === 'darwin');
 
         this.showNetworkingModal = false;
 

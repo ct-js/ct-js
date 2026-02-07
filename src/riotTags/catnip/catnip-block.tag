@@ -271,7 +271,7 @@ catnip-block(
         this.namespace = 'catnip';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
 
-        const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setInsertTarget, emptyTexture, copy, canPaste, paste, isSelected, getDropoverTarget, setDropoverTarget} = require('src/node_requires/catnip');
+        const {getDeclaration, getMenuMutators, mutate, getTransmissionType, getTransmissionReturnVal, startBlocksTransmit, endBlocksTransmit, setInsertTarget, emptyTexture, copy, canPaste, paste, isSelected, setDropoverTarget} = require('src/node_requires/catnip');
         this.isSelected = () => isSelected(this.opts.block);
         const {getById, areThumbnailsIcons, getThumbnail} = require('src/node_requires/resources');
         this.getName = (assetType, id) => getById(assetType, id).name;
@@ -438,6 +438,9 @@ catnip-block(
             delete opts[key];
         };
 
+        const isInvalidDrop = e =>
+            this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/computed');
+
         // dragenter/dragleave are used for cosmetic highlights
         this.handleDragEnter = e => {
             e.preventUpdate = true;
@@ -452,15 +455,11 @@ catnip-block(
         };
 
         // dragover can signal that we accept the drop
-        const isInvalidDrop = e =>
-            this.opts.readonly || !e.dataTransfer.types.includes('ctjsblocks/computed');
         this.handleDragOver = e => {
             if (!isInvalidDrop(e)) {
                 // Tells that we do want to accept the drop to the browser
                 // Enables the drop event
                 e.preventDefault();
-            } else {
-                return;
             }
         };
         this.onDrop = e => {
