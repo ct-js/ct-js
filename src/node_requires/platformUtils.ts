@@ -10,7 +10,9 @@ let isNodeInstalled = false;
 let isDev = false;
 try {
     require('gulp');
-    isDev = true;
+    if (!process.cwd().includes('package.nw')) {
+        isDev = true;
+    }
 } catch (e) {
     void e;
 }
@@ -36,6 +38,36 @@ let exportDir: string,
     buildDirPromise: Promise<string>,
     projectsDir: string,
     projectsDirPromise: Promise<string>;
+
+/**
+ * Gets a path to a directory that is bundled with the application.
+ * @param devDir Directory to retrieve relative to the root of the repository.
+ *               This will be used during development sessions.
+ * @param productionDir Directory relative to package.nw directory on most systems
+ *                      and to the app dir on macOS.
+ * @param createHref Whether to create a file:// URL or a path.
+ * @returns The resolved directory path or URL.
+ */
+const getBundledDir = (devDir: string, productionDir: string, createHref?: boolean) => {
+    const path = require('path');
+    if (isDev) {
+        if (createHref) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return ('file://' + path.posix.normalize(path.join((nw.App as any).startPath, devDir)));
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return path.join((nw.App as any).startPath, devDir);
+    } else if (createHref) {
+        if (isMac) {
+            return 'file://' + path.posix.normalize(path.join(process.cwd(), productionDir));
+        }
+        return ('file://' + path.posix.normalize(path.join(path.dirname(process.execPath), 'package.nw', productionDir)));
+    }
+    if (isMac) {
+        return path.join(process.cwd(), productionDir);
+    }
+    return path.join(path.dirname(process.execPath), 'package.nw', productionDir);
+};
 
 const mod = {
     isWin,
@@ -144,28 +176,16 @@ const mod = {
         return false;
     },
     getGalleryDir(createHref?: boolean): string {
-        const path = require('path');
-        try {
-            // Okay, we are in a dev mode
-            require('gulp');
-            if (createHref) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return ('file://' + path.posix.normalize(path.join((nw.App as any).startPath, 'bundledAssets')));
-            }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            return path.join((nw.App as any).startPath, 'bundledAssets');
-        } catch {
-            if (createHref) {
-                if (isMac) {
-                    return 'file://' + path.posix.normalize(path.join(process.cwd(), 'bundledAssets'));
-                }
-                return ('file://' + path.posix.normalize(path.join(path.dirname(process.execPath), 'package.nw', 'bundledAssets')));
-            }
-            if (isMac) {
-                return path.join(process.cwd(), 'bundledAssets');
-            }
-            return path.join(path.dirname(process.execPath), 'package.nw', 'bundledAssets');
-        }
+        return getBundledDir('bundledAssets', 'bundledAssets', createHref);
+    },
+    getExamplesDir(createHref?: boolean): string {
+        return getBundledDir('src/examples', 'examples', createHref);
+    },
+    getTemplatesDir(createHref?: boolean): string {
+        return getBundledDir('src/projectTemplates', 'templates', createHref);
+    },
+    getCatmodsDir(createHref?: boolean): string {
+        return getBundledDir('app/data/ct.libs', 'data/ct.libs', createHref);
     },
     getProjectsDir(): Promise<string> {
         if (projectsDir) {

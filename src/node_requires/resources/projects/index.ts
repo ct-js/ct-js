@@ -8,6 +8,10 @@ import {preparePreviews} from '../preview';
 import {refreshFonts} from '../typefaces';
 import {updateContentTypedefs} from '../content';
 import {updateEnumsTs} from '../enums';
+export {
+    getExamplesDir,
+    getTemplatesDir
+} from '../../platformUtils';
 
 import {getLanguageJSON} from '../../i18n';
 
@@ -353,40 +357,6 @@ const getDefaultProjectDir = function (): Promise<string> {
     return getProjectsDir();
 };
 
-const getExamplesDir = function (): string {
-    const path = require('path');
-    try {
-        require('gulp');
-        // Most likely, we are in a dev environment
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return path.join((nw.App as any).startPath, 'src/examples');
-    } catch (e) {
-        const {isMac} = require('./../../platformUtils');
-        if (isMac) {
-            return path.join(process.cwd(), 'examples');
-        }
-        // return path.join((nw.App as any).startPath, 'examples');
-        return path.join(path.dirname(process.execPath), 'package.nw', 'examples');
-    }
-};
-
-const getTemplatesDir = function (): string {
-    const path = require('path');
-    try {
-        require('gulp');
-        // Most likely, we are in a dev environment
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return path.join((nw.App as any).startPath, 'src/projectTemplates');
-    } catch (e) {
-        const {isMac} = require('./../../platformUtils');
-        if (isMac) {
-            return path.join(process.cwd(), 'templates');
-        }
-        // return path.join((nw.App as any).startPath, "templates");
-        return path.join(path.dirname(process.execPath), 'package.nw', 'templates');
-    }
-};
-
 /**
  * Returns a path that does not end with `.ict`
  * @param  {string} projPath
@@ -430,7 +400,5 @@ export {
     getDefaultProjectDir,
     getProjectThumbnail,
     getProjectIct,
-    getProjectDir,
-    getExamplesDir,
-    getTemplatesDir
+    getProjectDir
 };

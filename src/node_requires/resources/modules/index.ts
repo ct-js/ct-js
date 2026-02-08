@@ -1,8 +1,10 @@
-const path = require('path');
-const moduleDir = './data/ct.libs';
-const getModulePathByName = (moduleName: string): string => path.join(moduleDir, moduleName);
+import {getCatmodsDir} from 'src/node_requires/platformUtils';
 import {importEventsFromModule, unloadEventsFromModule} from '../../events';
 import {loadModdedBlocks, unloadModdedBlocks} from '../../catnip';
+
+import path from 'path';
+const moduleDir = getCatmodsDir();
+const getModulePathByName = (moduleName: string): string => path.join(moduleDir, moduleName);
 
 /* async */
 const loadModule = (moduleDir: string): Promise<ICatmodManifest> => {
@@ -15,8 +17,7 @@ const loadModuleByName = (moduleName: string): Promise<ICatmodManifest> =>
     loadModule(getModulePathByName(moduleName));
 
 const loadModules = async (): Promise<ICatmod[]> => {
-    const fs = require('fs-extra'),
-          path = require('path');
+    const fs = require('fs-extra');
 
     // Reads the modules directory
     const files = await fs.readdir(moduleDir);
