@@ -103,7 +103,7 @@ module.exports = [{
         return `this.moveSmart(undefined, ${values.precision || 1});`;
     }
 }, {
-    name: 'Add collding group',
+    name: 'Add colliding group',
     type: 'command',
     code: 'add default colliding group',
     icon: 'move',
@@ -120,7 +120,7 @@ module.exports = [{
         return `this.defaultCollidingCGroups.add(${values.cgroup});`;
     }
 }, {
-    name: 'Remove collding group',
+    name: 'Remove colliding group',
     type: 'command',
     code: 'remove default colliding group',
     icon: 'move',
@@ -137,7 +137,7 @@ module.exports = [{
         return `this.defaultCollidingCGroups.delete(${values.cgroup});`;
     }
 }, {
-    name: 'Clear collding groups',
+    name: 'Clear colliding groups',
     type: 'command',
     code: 'clear default colliding groups',
     icon: 'move',
