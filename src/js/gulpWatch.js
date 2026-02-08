@@ -8,13 +8,7 @@
         const reload = () => {
             if (!reloading) {
                 reloading = true;
-                if (nw.App.fullArgv.find(arg => arg.indexOf('--remote-debugging-port') !== -1)) {
-                    // Seems that we have an external debugger attached. Reload.
-                    nw.Window.get().reload();
-                } else {
-                    // Quit and let gulp handle the reload.
-                    nw.App.quit();
-                }
+                nw.Window.get().reload();
             }
         };
         gulp.watch(['./index.html', './data/bundle.js'], reload);
