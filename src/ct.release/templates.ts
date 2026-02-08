@@ -97,8 +97,12 @@ export interface ICopy {
     _hspeed: number;
     _vspeed: number;
     [copyTypeSymbol]: true;
+    onBeforeStep: () => void;
     onStep: () => void;
+    onAfterStep: () => void;
+    onBeforeDraw: () => void;
     onDraw: () => void;
+    onAfterDraw: () => void;
     onBeforeCreateModifier: () => void;
     onCreate: () => void;
     onDestroy: () => void;
@@ -334,15 +338,20 @@ const Copy = function (
     this.timer1 = this.timer2 = this.timer3 = this.timer4 = this.timer5 = this.timer6 = 0;
     this.uid = ++uid;
     if (template) {
-        Object.assign(this, {
+        const templateMixin: Partial<ICopy & pixiMod.DisplayObject> = {
             template: template.name,
             zIndex: template.depth,
+            onBeforeStep: templatesLib.beforeStep.bind(this),
             onStep: template.onStep.bind(this),
+            onAfterStep: templatesLib.afterStep.bind(this),
+            onBeforeDraw: templatesLib.beforeDraw.bind(this),
             onDraw: template.onDraw.bind(this),
-            onBeforeCreateModifier: CopyProto.onBeforeCreateModifier,
+            onAfterDraw: templatesLib.afterDraw.bind(this),
+            onBeforeCreateModifier: CopyProto.onBeforeCreateModifier!,
             onCreate: template.onCreate,
             onDestroy: template.onDestroy
-        });
+        };
+        Object.assign(this, templateMixin);
         this.zIndex = template.depth;
         Object.assign(this, template.extends);
         if (exts) {

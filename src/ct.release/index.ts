@@ -217,12 +217,12 @@ let loading: Promise<void>;
         /*!%beforeframe%*/
         roomsM.rootRoomOnStep.apply(roomsM.current);
         // Run OnStep events for copies
-        for (let i = 0, li = stack.length; i < li; i++) {
+        for (const item of stack) {
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            templatesM.isCopy(stack[i]) && templatesM.beforeStep.apply(stack[i]);
-            stack[i].onStep();
+            templatesM.isCopy(item) && (item as BasicCopy).onBeforeStep();
+            item.onStep();
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            templatesM.isCopy(stack[i]) && templatesM.afterStep.apply(stack[i]);
+            templatesM.isCopy(item) && (item as BasicCopy).onAfterStep();
         }
         // Run OnStep events for rooms.
         // There may be a number of rooms stacked on top of each other.
@@ -250,15 +250,15 @@ let loading: Promise<void>;
 
         manageCamera();
 
-        // Run OnDraw events for copies
-        for (let i = 0, li = stack.length; i < li; i++) {
+        // Run OnDraw events for copies and backgrounds
+        for (const item of stack) {
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            templatesM.isCopy(stack[i]) && templatesM.beforeDraw.apply(stack[i]);
-            stack[i].onDraw();
+            templatesM.isCopy(item) && (item as BasicCopy).onBeforeDraw();
+            item.onDraw();
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            templatesM.isCopy(stack[i]) && templatesM.afterDraw.apply(stack[i]);
-            stack[i].xprev = stack[i].x;
-            stack[i].yprev = stack[i].y;
+            templatesM.isCopy(item) && (item as BasicCopy).onAfterDraw();
+            item.xprev = item.x;
+            item.yprev = item.y;
         }
 
         for (const item of pixiApp.stage.children) {
