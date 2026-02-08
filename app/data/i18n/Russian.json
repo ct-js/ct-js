@@ -388,6 +388,8 @@
             "settings settings fullscreen": "полноэкранный",
             "settings settings pixelart": "пиксельарт",
             "settings settings prevent default": "запретить события браузера",
+            "settings settings is debug": "тестируется",
+            "settings settings is production": "в продакшене",
             "set x": "Задать x",
             "set y": "Задать y",
             "get x": "x",

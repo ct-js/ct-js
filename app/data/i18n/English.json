@@ -469,6 +469,8 @@
             "settings settings fullscreen": "fullscreen",
             "settings settings pixelart": "pixelart mode",
             "settings settings prevent default": "prevent browser events",
+            "settings settings is debug": "in debug mode",
+            "settings settings is production": "in production mode",
             "set x": "Set x to",
             "set y": "Set y to",
             "get x": "x",
