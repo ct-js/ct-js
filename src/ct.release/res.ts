@@ -7,6 +7,7 @@ import {pixiSoundPrefix, exportedSounds, soundMap, pixiSoundInstances} from './s
 type AssetType = 'template' | 'room' | 'sound' | 'style' | 'texture' | 'tandem' | 'font' | 'behavior' | 'script';
 
 import * as pixiMod from 'pixi.js';
+import {settings} from './index';
 declare var PIXI: typeof pixiMod & {
     sound: typeof pixiSound
 };
@@ -232,10 +233,25 @@ const resLib = {
         };
 
         /* eslint-disable prefer-destructuring */
-        const atlases: string[] = [/*!@atlases@*/][0];
-        const tiledImages: ExportedTiledTexture[] = [/*!@tiledImages@*/][0];
-        const bitmapFonts: string[] = [/*!@bitmapFonts@*/][0];
+        let atlases: string[] = [/*!@atlases@*/][0];
+        let bitmapFonts: string[] = [/*!@bitmapFonts@*/][0];
+        const tiledImages: Record<string, ExportedTiledTexture> = [/*!@tiledImages@*/][0];
         /* eslint-enable prefer-destructuring */
+
+        // Workaround for NW.js randomly caching files coming from filesystem
+        // Fixes https://github.com/ct-js/ct-js/issues/94
+        if (settings.isDebug) {
+            atlases = atlases.map(atlas => atlas + '?q=' + Date.now());
+            bitmapFonts = bitmapFonts.map(font => font + '?q=' + Date.now());
+            for (const name in tiledImages) {
+                tiledImages[name].source += '?q=' + Date.now();
+            }
+            for (const sound of exportedSounds) {
+                for (const variant of sound.variants) {
+                    variant.source += '?q=' + Date.now();
+                }
+            }
+        }
 
         const totalAssets = atlases.length;
         let assetsLoaded = 0;

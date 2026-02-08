@@ -380,7 +380,7 @@ const exportCtProject = async (
         startupScripts: getStartupScripts(assets.script),
         catmods: await modulesTask,
 
-        production,
+        production: Boolean(production),
         debug: !production
     }, injections);
 

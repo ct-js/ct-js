@@ -144,6 +144,21 @@ export const settings = {
         return [/*!@pixelatedrender@*/][0];
     },
     /**
+     * Returns whether the game is currently in debugging mode.
+     * Debug mode is usually enabled when the game is run from ct.js IDE.
+     */
+    get isDebug(): boolean {
+        return [/*!@debug@*/][0];
+    },
+    /**
+     * Returns whether the game is currently in production mode.
+     * Production mode is usually enabled when the game is packaged or run from ct.js IDE
+     * with forced production mode turned on.
+     */
+    get isProduction(): boolean {
+        return [/*!@production@*/][0];
+    },
+    /**
      * Sets whether ct.js should prevent default behavior of pointer and keyboard events.
      * This is usually needed to prevent accidental zooming in page or scrolling.
      */
