@@ -1327,7 +1327,7 @@
     },
     "assetViewer": {
         "root": "Корень",
-        "toggleFolderTree": "Переключить дерево папок",
+        "toggleFolderTree": "Переключить отображение дерева папок на других вкладках",
         "addNewFolder": "Новая папка",
         "newFolderName": "Новая папка",
         "unwrapFolder": "Вывернуть папку",

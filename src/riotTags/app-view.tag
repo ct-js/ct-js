@@ -21,7 +21,7 @@ app-view.flexcol
                 svg.feather
                     use(xlink:href="#sliders")
                 span {voc.project}
-            li.nogrow.noshrink(onclick="{changeTab('assets')}" class="{active: tab === 'assets'}" data-hotkey="Control+2" title="Control+2" ref="projectTab")
+            li.nogrow.noshrink(onclick="{changeTab('assets')}" class="{active: tab === 'assets'}" data-hotkey="Control+2" title="Control+2" ref="assetsTab")
                 svg.feather
                     use(xlink:href="#folder")
                 span {voc.assets}
@@ -49,37 +49,52 @@ app-view.flexcol
                         svg.feather.anActionableIcon(if="{!tabsDirty[ind]}" onclick="{closeAsset}")
                             use(xlink:href="#x")
             search-and-recents.nogrow
-    div.flexitem.relative(if="{window.currentProject}")
-        main-menu(show="{tab === 'menu'}" ref="mainMenu")
-        debugger-screen-multiwindow(if="{tab === 'debug' && !splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
-        debugger-screen-split(if="{tab === 'debug' && splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
-        project-settings(show="{tab === 'project'}" data-hotkey-scope="project" ref="projectsSettings")
-        patrons-screen(if="{tab === 'patrons'}" ref="patrons" data-hotkey-scope="patrons")
-        asset-browser.pad.aView#theAssetBrowser(
-            show="{tab === 'assets'}"
-            ref="assets"
-            data-hotkey-scope="assets"
-            namespace="projectBrowser"
-            click="{rerouteOpenAsset2}"
-        )
-            yield(to="filterArea")
-                // Riot sorcery: `this` points to the asset-browser, not app-view
-                create-asset-menu(
-                    inline="yup" square="ye"
-                    collection="{currentCollection}"
-                    folder="{currentFolder}"
-                    onimported="{parent.rerouteOpenAsset}"
+    div.flexrow.app-view-anIdeWrap
+        div.app-view-aSideviewBrowser.flexfix(if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}")
+            .flexfix-header
+                asset-tree-pin-toggle.toright
+                h3.nm {voc.assets}
+            .flexfix-body
+                asset-folder-tree(
+                    ref="assetFolderTree"
+                    layoutchanged="{onAssetTreeLayoutChanged}"
+                    path="{[]}" /* this is intentional (top-most folder level) */
+                    showassets="{true}"
+                    assetclick="{rerouteOpenAsset2}"
+                    folderclick="{navigateToFolder}"
+                    drop="{onAsideFolderDrop}"
                 )
-        // Asset editors
-        .aView(
-            each="{asset in openedAssets}"
-            data-is="{editorMap[asset.type]}"
-            show="{asset === tab}"
-            asset="{asset}"
-            ondone="{closeAssetRequest}"
-            ref="openedEditors"
-            isactiveeditor="{asset === tab}"
-        )
+        div.flexitem.relative(if="{window.currentProject}")
+            main-menu(show="{tab === 'menu'}" ref="mainMenu")
+            debugger-screen-multiwindow(if="{tab === 'debug' && !splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
+            debugger-screen-split(if="{tab === 'debug' && splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
+            project-settings(show="{tab === 'project'}" data-hotkey-scope="project" ref="projectsSettings")
+            patrons-screen(if="{tab === 'patrons'}" ref="patrons" data-hotkey-scope="patrons")
+            asset-browser.pad.aView#theAssetBrowser(
+                show="{tab === 'assets'}"
+                ref="assets"
+                data-hotkey-scope="assets"
+                namespace="projectBrowser"
+                click="{rerouteOpenAsset2}"
+            )
+                yield(to="filterArea")
+                    // Riot sorcery: `this` points to the asset-browser, not app-view
+                    create-asset-menu(
+                        inline="yup" square="ye"
+                        collection="{currentCollection}"
+                        folder="{currentFolder}"
+                        onimported="{parent.rerouteOpenAsset}"
+                    )
+            // Asset editors
+            .aView(
+                each="{asset in openedAssets}"
+                data-is="{editorMap[asset.type]}"
+                show="{asset === tab}"
+                asset="{asset}"
+                ondone="{closeAssetRequest}"
+                ref="openedEditors"
+                isactiveeditor="{asset === tab}"
+            )
     exporter-error(if="{exporterError}" error="{exporterError}" onclose="{closeExportError}")
     new-project-onboarding(if="{sessionStorage.showOnboarding && localStorage.showOnboarding !== 'off'}")
     notepad-panel(ref="notepadPanel" show="{tab !== 'debug'}")
@@ -245,6 +260,12 @@ app-view.flexcol
             this.openAsset(asset)();
             this.update();
         };
+        this.navigateToFolder = path => () => {
+            this.changeTab('assets')();
+            this.update();
+            this.refs.assets.goTo(path);
+            this.refs.assets.update();
+        };
         const assetOpenOrder = asset => {
             if (typeof asset === 'string') {
                 if (asset.split('/').length === 2) {
@@ -340,6 +361,18 @@ app-view.flexcol
             this.showAssetConfirmation = false;
             this.confirmationAsset = void 0;
             this.update();
+        };
+
+        window.signals.on('assetBrowserPinChanged', () => {
+            this.update();
+        });
+        this.on('unmount', () => {
+            window.signals.off('assetBrowserPinChanged');
+        });
+        this.onAssetTreeLayoutChanged = () => {
+            this.refs.assetFolderTree.update();
+            this.refs.assets?.updateList();
+            this.refs.assets?.update();
         };
 
         // Remember assets opened before closing the editor and load them on project load.

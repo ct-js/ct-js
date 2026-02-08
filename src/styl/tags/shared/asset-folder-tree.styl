@@ -7,14 +7,29 @@ asset-folder-tree
         &.hidden
             opacity 0
             cursor default
-    .&-aFolder
+    .&-aFolder, .&-anAsset
         {transshort}
         cursor pointer
         border-radius br
         padding 0 0.5rem
         &:hover
             background borderPale
-        svg
+        svg, img
             width 1.25rem
             height @width
-            vertical-align -3px
+            vertical-align -4px
+    .&-aSubtree
+        position relative
+        &::before
+            content ''
+            position absolute
+            top -0.25rem
+            bottom 0.5rem
+            left -0.5em
+            border-left 2px solid borderPale
+        &:hover::before
+            border-left 2px solid borderBright
+        &.root::before
+            content unset
+    .&-anAsset
+        margin-left 1.5em

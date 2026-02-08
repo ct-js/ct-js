@@ -196,7 +196,7 @@
     },
     "assetViewer": {
         "root": "Root",
-        "toggleFolderTree": "Toggle folder tree visibility",
+        "toggleFolderTree": "Toggle folder tree visibility on other tabs",
         "addNewFolder": "New Folder",
         "newFolderName": "New folder",
         "unwrapFolder": "Unwrap the folder",

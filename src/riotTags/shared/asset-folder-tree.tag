@@ -8,9 +8,13 @@
 
     @attribute path (IAssetFolder[])
         Currently opened folders, from the root to the current directory.
-    @attribute click ((path: IAssetFolder[]) => (event: MouseEvent) => void;)
+    @attribute folderclick ((path: IAssetFolder[]) => (event: MouseEvent) => void;)
         A two-fold callback that triggers when any of the folders have been clicked.
         The callback will be passed with the full folder path to the target as its only argument
+        in the first function and the DOM event in the second one.
+    @attribute assetclick ((asset: IAsset) => (event: MouseEvent) => void;)
+        A two-fold callback that triggers when an asset is clicked.
+        The callback will be passed with the selected asset as its only argument
         in the first function and the DOM event in the second one.
     @attribute drop ((folder: IAssetFolder | null) => (event: DragEvent) => void;)
         A two-fold callback that triggers when a user drops anything on the folders
@@ -20,13 +24,15 @@
     @attribute [layoutchanged] (riot function)
         A callback with no arguments that is called whenever folders were moved
         by this tag.
+    @attribute [showassets] (boolean)
+        Whether to show assets in the folder tree.
 
 asset-folder-tree
     .flexrow
         svg.feather.nogrow.noshrink.anActionableIcon.asset-folder-tree-aToggler(
             onclick="{toggle}"
             if="{opts.path.length > 0}"
-            class="{opened: opened, hidden: !hasFolders()}"
+            class="{opened: opened, hidden: !hasFolders() && !opts.showassets}"
         )
             use(xlink:href="#chevron-right")
         .noshrink
@@ -40,22 +46,46 @@ asset-folder-tree
                 svg.feather(class="{opts.path.length && opts.path[opts.path.length - 1].colorClass}")
                     use(xlink:href="#folder")
                 span  {(opts.path.length > 0) ? opts.path[opts.path.length - 1].name : voc.root}
-            .asset-folder-tree-aSubtree(if="{opened}")
+            .asset-folder-tree-aSubtree(if="{opened}" class="{root: opts.path.length === 0}")
                 asset-folder-tree(
                     each="{entry in entries}"
                     if="{entry.type === 'folder'}"
                     path="{parent.opts.path.concat([entry])}"
-                    click="{parent.opts.click}"
+                    folderclick="{parent.opts.folderclick}"
                     drop="{parent.opts.drop}"
+                    layoutchanged="{parent.opts.layoutchanged}"
+                    assetclick="{parent.opts.assetclick}"
+                    showassets="{parent.opts.showassets}"
                 )
+                .asset-folder-tree-anAsset(
+                    each="{entry in entries}"
+                    if="{opts.showassets && entry.type !== 'folder'}"
+                    onclick="{onAssetClick}"
+                    ondragstart="{onAssetDrag}"
+                    draggable="true"
+                )
+                    img(
+                        if="{!parent.usesIcons(entry)}"
+                        src="{parent.getThumbnail(entry, currentLayout === 'largeCards', false)}"
+                        class="{soundthumbnail: entry.type === 'sound' && entry.variants.length}"
+                    )
+                    svg.feather.group-icon.act(if="{parent.usesIcons(entry)}")
+                        use(xlink:href="#{parent.getThumbnail(entry)}")
+                    span  {entry.name}
+                    |
+                    |
+                    span.dim {vocGlob.assetTypes[entry.type][0]}
     script.
         this.namespace = 'assetViewer';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
 
         const resources = require('src/node_requires/resources');
+        this.getThumbnail = resources.getThumbnail;
+        this.usesIcons = resources.areThumbnailsIcons;
 
         let prevPath = this.opts.path;
         const updateEntries = () => {
+            // Empty path means we're at the root level — show all the assets
             this.entries = this.opts.path.length ?
                 this.opts.path[this.opts.path.length - 1].entries :
                 window.currentProject.assets;
@@ -79,13 +109,31 @@ asset-folder-tree
         this.updateParent = () => this.parent.update();
 
         this.onOpenFolder = e => {
-            this.opts.click(this.opts.path)(e);
+            if (!this.opts.folderclick) {
+                return;
+            }
+            this.opts.folderclick(this.opts.path)(e);
+        };
+        this.onAssetClick = e => {
+            if (!this.opts.assetclick) {
+                return;
+            }
+            this.opts.assetclick(e.item.entry)(e);
         };
         this.onFolderDrag = e => {
             const folder = this.opts.path[this.opts.path.length - 1];
             const transferData = {
                 type: 'assetFolderDrag',
                 folder: folder.uid
+            };
+            e.dataTransfer.setData('text/plain', JSON.stringify(transferData));
+            e.dataTransfer.dropEffect = 'move';
+        };
+        this.onAssetDrag = e => {
+            const asset = e.item.entry;
+            const transferData = {
+                type: 'assetDrag',
+                asset: asset.uid
             };
             e.dataTransfer.setData('text/plain', JSON.stringify(transferData));
             e.dataTransfer.dropEffect = 'move';
@@ -107,6 +155,19 @@ asset-folder-tree
                 const {moveFolder, getFolderById} = resources;
                 try {
                     moveFolder(getFolderById(uid), targetFolder);
+                    if (this.opts.layoutchanged) {
+                        this.opts.layoutchanged();
+                    }
+                } catch (err) {
+                    window.alertify.error(err.message);
+                }
+                return true;
+            }
+            if (transferData && transferData.type === 'assetDrag') {
+                const uid = transferData.asset;
+                const {moveAsset, getById} = resources;
+                try {
+                    moveAsset(getById(null, uid), targetFolder);
                     if (this.opts.layoutchanged) {
                         this.opts.layoutchanged();
                     }
