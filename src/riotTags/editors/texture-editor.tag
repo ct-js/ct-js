@@ -445,10 +445,14 @@ texture-editor(onclick="{tryClose}")
             }
             if (img) {
                 // Calculate frame width for the user if it exceeds image size
-                if (asset.grid[0] * (asset.width + asset.marginx) - asset.marginx > img.width - asset.offx) {
+                if (asset.grid[0] * (asset.width + asset.marginx) - asset.marginx >
+                    img.width - asset.offx
+                ) {
                     asset.width = Math.floor((img.width - asset.offx) / asset.grid[0] - asset.marginx);
                 }
-                if (asset.grid[1] * (asset.height + asset.marginy) - asset.marginy > img.height - asset.offy) {
+                if (asset.grid[1] * (asset.height + asset.marginy) - asset.marginy >
+                    img.height - asset.offy
+                ) {
                     asset.height = Math.floor((img.height - asset.offy) / asset.grid[1] - asset.marginy);
                 }
             }
@@ -928,7 +932,9 @@ texture-editor(onclick="{tryClose}")
         this.refreshTextureCanvas = () => {
             const {asset} = this;
             const tc = textureCanvas;
-            if (!tc.img) return;
+            if (!tc.img) {
+                return;
+            }
             tc.width = tc.img.width;
             tc.height = tc.img.height;
             const minSide = Math.min(asset.width, asset.height);
