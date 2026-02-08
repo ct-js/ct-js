@@ -588,6 +588,13 @@ export const dumpPfx = () => {
     );
 };
 const exePatch = {
+    icon: [`IDR_MAINFRAME,./buildAssets/${nightly ? 'nightly' : 'icon'}.ico`],
+    'product-name': 'ct.js',
+    'product-version': pack.version.split('-')[0] + '.0',
+    'file-description': 'Ct.js game engine',
+    'file-version': pack.version.split('-')[0] + '.0',
+    'company-name': 'CoMiGo Games',
+    'original-filename': 'ctjs.exe',
     sign: true,
     p12: './CoMiGoGames.pfx'
 };
@@ -604,9 +611,6 @@ export const patchWindowsExecutables = async () => {
         log.warn('⚠️  \'patchWindowsExecutables\': Cannot find PFX password in the SIGN_PASSWORD environment variable. Continuing without signing.');
         delete exePatch.p12;
         exePatch.sign = false;
-    }
-    if (!exePatch.sign) {
-        return;
     }
     if (platforms.some(p => p[0] === 'win' && p[1] === 'x64')) {
         await resedit({
