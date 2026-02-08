@@ -61,8 +61,8 @@ interface IPoint {
     y: number;
 }
 interface ISeparateMovementResult {
-    x: boolean | Copy;
-    y: boolean | Copy;
+    x: false | Copy;
+    y: false | Copy;
 }
 
 declare namespace place {
@@ -431,4 +431,50 @@ declare namespace place {
      * @catnipName_Ru Включить столкновения у слоя тайлов
      */
     function enableTilemapCollisions(tilemap: Tilemap, cgroup?: string): void;
+}
+
+declare module "src/ct.release/templates" {
+    export interface ICopy {
+        /**
+         * The name of a collision group the copy is in.
+         */
+        cgroup: string;
+
+        /**
+         * The collision group name or a collection of collision group names the copy
+         * should collide with on `moveBullet` and `moveSmart` if no `cgroup` parameter
+         * is passed.
+         *
+         * If empty, the copy stops at all bodies.
+         */
+        defaultCollidingCGroups: Set<string>;
+
+        /**
+         * Performs a movement step, reading such parameters as `gravity`, `speed`,
+         * `direction`, just like `move`, but accepts an additional parameter
+         * `cgroup`, which can be a collision group name or a collection of
+         * collision group names the copy should collide with.
+         *
+         * If `cgroup` parameter is not provided, the copy will collide with
+         * groups defined in `defaultCollidingCGroups`.
+         *
+         * On collision, the copy comes to a full stop.
+         * To make the copy slide on collision, see `moveSmart`.
+         */
+        moveBullet: (this: BasicCopy, cgroup?: string | string[] | Set<string>, precision?: number) => Copy | false;
+
+        /**
+         * Performs a movement step, reading such parameters as `gravity`, `speed`,
+         * `direction`, just like `move`, but accepts an additional parameter
+         * `cgroup`, which can be a collision group name or a collection of
+         * collision group names the copy should collide with.
+         *
+         * If `cgroup` parameter is not provided, the copy will collide with
+         * groups defined in `defaultCollidingCGroups`.
+         *
+         * On collision, the copy slides along the body (copy/tile) it collided with.
+         * To make the copy come to a full stop on collision, see `moveBullet`.
+         */
+        moveSmart: (this: BasicCopy, cgroup?: string | string[] | Set<string>, precision?: number) => ISeparateMovementResult | false;
+    }
 }

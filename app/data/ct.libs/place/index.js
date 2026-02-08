@@ -173,7 +173,28 @@ const place = (function ctPlace() {
 
     // Premade filter predicates to avoid function creation and memory bloat during the game loop.
     const templateNameFilter = (target, other, template) => other.template === template;
-    const cgroupFilter = (target, other, cgroup) => !cgroup || cgroup === other.cgroup;
+    const cgroupFilter = (target, other, cgroup) => cgroup === other.cgroup;
+    const cgroupSetFilter = (target, other, cgroup) => cgroup.has(other.cgroup);
+    const allFilter = (target, other, cgroup) => true;
+
+    const getCGroupCollisionFilterPredicate = (target, cgroup) => {
+        if (!cgroup) {
+            if (target.defaultCollidingCGroups.size > 0) {
+                return { predicateFilter: cgroupSetFilter, predicateValue: target.defaultCollidingCGroups };
+            }
+            return { predicateFilter: allFilter, predicateValue: cgroup };
+        }
+
+        if (typeof cgroup === 'string') {
+            return { predicateFilter: cgroupFilter, predicateValue: cgroup };
+        }
+
+        if (Array.isArray(cgroup)) {
+            cgroup = new Set(cgroup);
+        }
+
+        return { predicateFilter: cgroupSetFilter, predicateValue: cgroup };
+    };
 
     // Core collision-checking method that accepts various filtering predicates
     // and a variable partitioning grid.
@@ -403,11 +424,12 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
+            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
             const copies = genericCollisionQuery(
                 target, x, y,
                 place.grid,
                 false,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
             // Was any suitable copy found? Return it immediately and skip the query for tiles.
             if (copies) {
@@ -418,7 +440,7 @@ const place = (function ctPlace() {
                 target, x, y,
                 place.tileGrid,
                 false,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
         },
         occupiedMultiple(target, x, y, cgroup) {
@@ -428,17 +450,18 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
+            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
             const copies = genericCollisionQuery(
                 target, x, y,
                 place.grid,
                 true,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
             const tiles = genericCollisionQuery(
                 target, x, y,
                 place.tileGrid,
                 true,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
             return copies.concat(tiles);
         },
@@ -480,11 +503,12 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
+            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.grid,
                 false,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
         },
         copiesMultiple(target, x, y, cgroup) {
@@ -494,11 +518,12 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
+            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.grid,
                 true,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
         },
         tiles(target, x, y, cgroup) {
@@ -508,11 +533,12 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
+            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.tileGrid,
                 false,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
         },
         tilesMultiple(target, x, y, cgroup) {
@@ -522,11 +548,12 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
+            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.tileGrid,
                 true,
-                cgroupFilter, cgroup
+                predicateFilter, predicateValue
             );
         },
         lastdist: null,
@@ -993,6 +1020,11 @@ const place = (function ctPlace() {
             return this.moveContinuousByAxes(cgroup, precision);
         }
     });
+    Object.defineProperty(templates.CopyProto, 'editor:defaultCollidingCGroups', {
+        set: function(collisionGroups) {
+            this.defaultCollidingCGroups = new Set(collisionGroups);
+        }
+    })
     Object.defineProperty(templates.Tilemap.prototype, 'enableCollisions', {
         value: function (cgroup) {
             place.enableTilemapCollisions(this, cgroup);

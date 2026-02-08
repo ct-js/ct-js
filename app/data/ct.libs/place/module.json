@@ -80,6 +80,13 @@
         "collect": true,
         "collectScope": "place::cgroup",
         "key": "cgroup"
+    }, {
+        "name": "Default colliding groups",
+        "name_Pl": "Domyślne grupy kolidujące",
+        "type": "array",
+        "arrayType": "text",
+        "collect": true,
+        "key": "editor:defaultCollidingCGroups"
     }],
     "tileLayerExtends": [{
         "name": "Collision group",
@@ -166,7 +173,6 @@
                     "description_Br": "O que colide com a sua copy. PIXI.Sprite é um tile do ct.js",
                     "description_Pl": "Obiekt kolidujący z kopią. PIXI.Sprite to tafla tilesetu"
                 }
-                
             }
         }
     }
