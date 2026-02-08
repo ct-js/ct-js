@@ -1,492 +1,534 @@
 {
-    "main": {
-        "name": "Matter.js physics library",
-        "name_Ru": "Matter.js — библиотека физики",
-		"name_Pl": "Biblioteka fizyki Matter.js",
-        "tagline": "Add realtime 2D physics engine to your project.",
-        "tagline_Ru": "Добавляет движок 2D физики в твой проект.",
-		"tagline_Pl": "Dodaj silnik fizyki 2D w czasie rzeczywistym do swojego projektu.",
-        "version": "0.20.0",
-        "authors": [{
-            "name": "Cosmo Myzrail update ReturnWorld",
-            "mail": "admin@nersta.ru"
-        }],
-        "categories": [
-            "motionPlanning"
-        ]
-    },
+  "main": {
+    "name": "Matter.js physics library",
+    "name_Ru": "Matter.js — библиотека физики",
+    "name_Pl": "Biblioteka fizyki Matter.js",
+    "tagline": "Add realtime 2D physics engine to your project.",
+    "tagline_Ru": "Добавляет движок 2D физики в твой проект.",
+    "tagline_Pl": "Dodaj silnik fizyki 2D w czasie rzeczywistym do swojego projektu.",
+    "version": "0.20.0",
+    "authors": [
+      {
+        "name": "Cosmo Myzrail update ReturnWorld",
+        "mail": "admin@nersta.ru"
+      }
+    ],
+    "categories": ["motionPlanning"]
+  },
 
-    "fields": [{
-        "name": "Method for calculating physics",
-        "name_Ru": "Метод для расчета физики",
-		"name_Pl": "Metoda obliczania fizyki",
-        "type": "radio",
-        "help": "A separate cycle will provide the greatest stability, the rest are needed for compatibility with older projects.",
-        "help_Ru": "отдельный цикл даст наибольшую стабильность, остальные нужны для совместимости старых проектов.",
-		"help_Pl": "Osobny cykl zapewni największą stabilność; pozostałe są potrzebne dla zapewnienia kompatybilności ze starszymi projektami.",
-        "default": "3",
-        "key": "physicLoop",
-        "id": "physicLoop",
-        "options": [{
-            "value": "1",
-            "name": "FrameTime",
-            "name_Ru": "Зависит от времени между кадрами",
-			"name_Pl": "Zależy od czasu między klatkami",
-            "help": "delta = u.time * 1000; u.time = time elapsed since the previous frame",
-            "help_Ru": "delta = u.time * 1000; u.time = время, прошедшее с предыдущего кадра",
-			"help_Pl": "delta = u.time * 1000; u.time = czas, który upłynął od poprzedniej klatki"
-        }, {
-            "value": "2",
-            "name": "TargetFps",
-            "name_Ru": "Зависит от фпс",
-			"name_Pl": "Zależy od FPS",
-            "help": "delta = 1000/targetFps",
-            "help_Ru": "1000/фпс",
-			"help_Pl": "1000/fps"
-        }, {
-            "value": "3",
-            "name": "Runner",
-            "name_Ru": "Runner - отдельный цикл для физики",
-			"name_Pl": "Runner - osobny cykl dla fizyki",
-            "help": "Creates a separate loop for physics",
-            "help_Ru": "Создает отдельный цикл для физики",
-			"help_Pl": "Tworzy osobną pętlę dla fizyki"
-        }]
+  "fields": [
+    {
+      "name": "Method for calculating physics",
+      "name_Ru": "Метод для расчета физики",
+      "name_Pl": "Metoda obliczania fizyki",
+      "type": "radio",
+      "help": "A separate cycle will provide the greatest stability, the rest are needed for compatibility with older projects.",
+      "help_Ru": "отдельный цикл даст наибольшую стабильность, остальные нужны для совместимости старых проектов.",
+      "help_Pl": "Osobny cykl zapewni największą stabilność; pozostałe są potrzebne dla zapewnienia kompatybilności ze starszymi projektami.",
+      "default": "3",
+      "key": "physicLoop",
+      "id": "physicLoop",
+      "options": [
+        {
+          "value": "1",
+          "name": "FrameTime",
+          "name_Ru": "Зависит от времени между кадрами",
+          "name_Pl": "Zależy od czasu między klatkami",
+          "help": "delta = u.time * 1000; u.time = time elapsed since the previous frame",
+          "help_Ru": "delta = u.time * 1000; u.time = время, прошедшее с предыдущего кадра",
+          "help_Pl": "delta = u.time * 1000; u.time = czas, który upłynął od poprzedniej klatki"
+        },
+        {
+          "value": "2",
+          "name": "TargetFps",
+          "name_Ru": "Зависит от фпс",
+          "name_Pl": "Zależy od FPS",
+          "help": "delta = 1000/targetFps",
+          "help_Ru": "1000/фпс",
+          "help_Pl": "1000/fps"
+        },
+        {
+          "value": "3",
+          "name": "Runner",
+          "name_Ru": "Runner - отдельный цикл для физики",
+          "name_Pl": "Runner - osobny cykl dla fizyki",
+          "help": "Creates a separate loop for physics",
+          "help_Ru": "Создает отдельный цикл для физики",
+          "help_Pl": "Tworzy osobną pętlę dla fizyki"
+        }
+      ]
     },
     {
-        "name": "runner tickrate",
-        "name_Ru": "runner тикрейт",
-		"name_Pl": "runner taktowanie",
-        "type": "number",
-        "help": "The tick rate determines how often physics calculations are performed. The higher the tick rate, the more accurate and smooth the physics will be.The lower the tick rate, the faster and more performant your game will be. The default and recommended value is 60. Use values ​​that are multiples of your FPS. For example, for games with a 240 FPS cap, it's best to use values ​​such as 240, 120, 60.",
-        "help_Ru": "Тикрейт определяет как часто будет происходить расчёт физики. Чем выше тикрейт тем более точно и плавно будет работать физика. Чем ниже тикрейт тем быстрее и производительнее будет ваша игра. Стандартное и рекомендуемое значение 60. Используйте значения кратные вашему фпс, например для проектов с ограничением фпс в 240 лучше всего использовать такие значения как 240, 120, 60.",
-		"help_Pl": "Częstotliwość taktowania określa częstotliwość wykonywania obliczeń fizycznych. Im wyższa częstotliwość taktowania, tym dokładniejsza i płynniejsza będzie fizyka. Im niższa częstotliwość taktowania, tym szybsza i wydajniejsza będzie gra. Standardowa i zalecana wartość to 60. Używaj wartości będących wielokrotnościami liczby klatek na sekundę (FPS). Na przykład w grach z limitem 240 klatek na sekundę (FPS) najlepiej używać wartości takich jak 240, 120 i 60.",
-        "default": 60,
-        "key": "runnerTickRate"
-    }, {
-        "name": "Enable console log",
-        "name_Ru": "Включить console log",
-		"name_Pl": "Włącz dziennik konsoli",
-        "type": "checkbox",
-        "default": false,
-        "key": "runnerTickRateLog"
-    }, {
-        "name": "Interpolation render",
-        "name_Ru": "Интерполяция рендера",
-		"name_Pl": "Interpolacja renderowania",
-        "type": "checkbox",
-        "default": false,
-        "key": "isInterpolation"
-    }, {
-        "name": "Interpolation only works in Runner mode.",
-        "name_Ru": "Интерполяция работает только в режиме Runner.",
-        "name_Pl": "Interpolacja działa tylko w trybie Runner.",
-		"type": "h3",
-        "if": "isInterpolation"
-    }, {
-        "name": "Interpolate type",
-        "name_Ru": "Тип интерполяции",
-		"name_Pl": "Typ interpolacji",
-        "help": "Interpolation makes the movement of objects smoother, if your FPS is higher than the engine's tickrate.",
-        "help_Ru": "Интерполяция делает движение обьектов более плавными, если ваш FPS больше чем тикрейт движка.",
-		"help_Pl": "Interpolacja sprawia, że ​​obiekty poruszają się płynniej, jeśli liczba klatek na sekundę (FPS) jest wyższa niż częstotliwość odświeżania silnika."
-        "type": "radio",
-        "key": "interpolateType",
-        "id": "interpolateType",
-        "default": "1",
-        "if": "isInterpolation",
-        "options": [{
-            "value": "1",
-            "name": "Extrapolation Velocity",
-            "name_Ru": "Экстраполяция Скорости",
-			"name_Pl": "Ekstrapolacja prędkości",
-            "help": "Calculates an intermediate value when rendering, taking into account the speed.",
-            "help_Ru": "Расчитывает промежуточное значение при рендеринге, учитывает скорость.",
-			"help_Pl": "Oblicza wartość pośrednią podczas renderowania, biorąc pod uwagę prędkość."
-        }, {
-            "value": "2",
-            "name": "Extrapolation Velocity + Acceleration",
-            "name_Ru": "Экстраполяция Скорости + Ускорения",
-			"name_Pl": "Ekstrapolacja prędkości + przyspieszenia",
-            "help": "Calculates an intermediate value when rendering, taking into account speed + acceleration.",
-            "help_Ru": "Расчитывает промежуточное значение при рендеринге, учитывая скорость + ускорение.",
-			"help_Pl": "Oblicza wartość pośrednią podczas renderowania, biorąc pod uwagę prędkość i przyspieszenie."
-        }, {
-            "value": "3",
-            "name": "Linier",
-            "name_Ru": "Линейная",
-			"name_Pl": "Liniowy",
-            "help": "Calculates the intermediate value when rendering linearly, that is, using equal segments",
-            "help_Ru": "Расчитывает промежуточное значение при рендеринге линейно, то есть используя равные отрезки",
-			"help_Pl": "Oblicza wartość pośrednią podczas renderowania liniowego, czyli używając równych segmentów."
-        }]
-    }],
-
-    "templateExtends": [{
-        "type": "group",
-        "name": "Physics",
-        "name_Ru": "Физика",
-		"name_Pl": "Fizyka",
-        "openedByDefault": false,
-        "lsKey": "physics.general",
-        "items": [{
-            "name": "Enable",
-            "name_Ru": "Включить",
-			"name_Pl": "Włącz",
-            "type": "checkbox",
-            "default": false,
-            "key": "matterEnable"
-        }, {
-            "name": "Is static",
-            "name_Ru": "Сделать неподвижной",
-			"name_Pl": "Statyczne",
-            "type": "checkbox",
-            "key": "matterStatic",
-            "default": false,
-            "if": "matterEnable"
-        }, {
-            "name": "Is a sensor",
-            "name_Ru": "Сделать сенсором",
-			"name_Pl": "Sensor",
-            "type": "checkbox",
-            "key": "matterSensor",
-            "if": "matterEnable",
-            "default": false,
-            "help": "When turned on, the copy won't prevent others' movement but will be able to trigger collisions",
-            "help_Ru": "Копия не будет препятствовать передвижению других копий, но будет вызывать события столкновения",
-            "help_Pl": "Po włączeniu kopia nie blokuje ruchu innych, ale może wywoływać kolizje"
-        }, {
-            "name": "Density",
-            "name_Ru": "Плотность",
-			"name_Pl": "Gęstość",
-            "type": "number",
-            "key": "matterDensity",
-            "help": "How each pixel of this object contributes to its mass. The larger and more dense an object, the more heavy it is.",
-            "help_Ru": "Показывает, как каждый пиксель копии влияет на её массу. Чем выше, тем тяжелее получается копия.",
-			"help_Pl": "Określa, jak masa każdego piksela wpływa na całkowitą masę obiektu. Im większa i gęstsza kopia, tym cięższa.",
-            "default": 0.001,
-            "if": "matterEnable"
-        }, {
-            "name": "Bounciness",
-            "name_Ru": "Упругость",
-			"name_Pl": "Sprężystość",
-            "type": "number",
-            "key": "matterRestitution",
-            "default": 0.1,
-            "min": 0,
-            "max": 1,
-            "step": 0.1,
-            "if": "matterEnable"
-        }, {
-            "name": "Friction",
-            "name_Ru": "Трение",
-			"name_Pl": "Tarcie",
-            "type": "number",
-            "key": "matterFriction",
-            "default": 1,
-            "if": "matterEnable"
-        }, {
-            "name": "Static friction",
-            "name_Ru": "Статичное трение",
-			"name_Pl": "Tarcie statyczne",
-            "type": "number",
-            "key": "matterFrictionStatic",
-            "default": 0.1,
-            "if": "matterEnable"
-        }, {
-            "name": "Air friction",
-            "name_Ru": "Трение воздуха",
-			"name_Pl": "Tarcie powietrza",
-            "type": "number",
-            "key": "matterFrictionAir",
-            "default": 0.01,
-            "if": "matterEnable"
-        }, {
-            "name": "Fix pivot",
-            "name_Ru": "Исправить ось вращения",
-			"name_Pl": "Napraw oś obrotu",
-            "type": "point2D",
-            "key": "matterFixPivot",
-            "help": "Shifts the texture. Helps with polygonal shapes where the module cannot align center of mass and texture automatically.",
-            "help_Ru": "Смещает текстуру. Помогает с многоугольниками, которым не получается расчитать центр масс автоматически.",
-			"help_Pl": "Przesuwa teksturę. Pomocne dla wielokątów, których środek masy nie może być automatycznie wyrównany z teksturą.",
-            "step": 1,
-            "default": [0, 0],
-            "if": "matterEnable"
-        }]
-    }, {
-        "type": "group",
-        "name": "Physics constraints",
-        "name_Ru": "Ограничители (физика)",
-		"name_Pl": "Ograniczenia fizyczne",
-        "openedByDefault": false,
-        "lsKey": "physics.constraints",
-        "items": [{
-            "name": "Type",
-            "name_Ru": "Тип",
-			"name_Pl": "Typ",
-            "type": "radio",
-            "options": [{
-                "value": "none",
-                "name": "None",
-                "name_Ru": "Нет ограничения",
-                "name_Pl": "Brak"
-            }, {
-                "value": "pinpoint",
-                "name": "Pin in place",
-                "name_Ru": "Пригвоздить",
-				"name_Pl": "Przypnij",
-                "help": "Keeps position but allows rotation",
-                "help_Ru": "Сохраняет расположение, но допускает вращение",
-                "help_Pl": "Zachowuje pozycję, ale pozwala na obrót"
-            }, {
-                "value": "rope",
-                "name": "Rope",
-                "name_Ru": "Верёвка",
-				"name_Pl": "Lina",
-                "help": "Creates a rope with a defined length",
-                "help_Ru": "Создаёт верёвку определённой длины",
-				"help_Pl": "Tworzy linę o określonej długości"
-            }],
-            "default": "none",
-            "key": "matterConstraint"
-        }, {
-            "name": "Rope length",
-            "name_Ru": "Длина верёвки",
-			"name_Pl": "Długość liny",
-            "type": "number",
-            "default": 64,
-            "key": "matterRopeLength"
-        }, {
-            "name": "Rope stiffness",
-            "name_Ru": "Жёсткость верёвки",
-			"name_Pl": "Sztywność liny",
-            "type": "number",
-            "default": 0.05,
-            "key": "matterRopeStiffness"
-        }, {
-            "name": "Rope damping",
-            "name_Ru": "Упругость верёвки",
-			"name_Pl": "Tłumienie liny",
-            "type": "number",
-            "default": 0.05,
-            "key": "matterRopeDamping"
-        }]
-    }],
-    "roomExtends": [{
-        "name": "Gravity",
-        "name_Ru": "Гравитация",
-		"name_Pl": "Grawitacja",
-        "type": "point2D",
-        "key": "matterGravity",
-        "step": 0.1,
-        "default": [0, 9.8]
-    }],
-    "tileLayerExtends": [{
-        "name": "Convert to static bodies",
-        "name_Ru": "Сконвертировать в статичные тела",
-		"name_Pl": "Zamień na ciała statyczne",
-        "type": "checkbox",
-        "key": "matterMakeStatic"
-    }, {
-        "name": "Bounciness",
-        "name_Ru": "Упругость",
-		"name_Pl": "Sprężystość",
-        "type": "number",
-        "key": "matterRestitution",
-        "default": 0.1,
-        "min": 0,
-        "max": 1,
-        "step": 0.1,
-        "if": "matterMakeStatic"
-    }, {
-        "name": "Friction",
-        "name_Ru": "Трение",
-		"name_Pl": "Tarcie",
-        "type": "number",
-        "key": "matterFriction",
-        "default": 1,
-        "if": "matterMakeStatic"
-    }],
-    "eventCategories": {
-        "physics": {
-            "name": "Physics",
-            "name_Ru": "Физика",
-			"name_Pl": "Fizyka",
-            "icon": "physics"
-        }
+      "name": "runner tickrate",
+      "name_Ru": "runner тикрейт",
+      "name_Pl": "runner taktowanie",
+      "type": "number",
+      "help": "The tick rate determines how often physics calculations are performed. The higher the tick rate, the more accurate and smooth the physics will be.The lower the tick rate, the faster and more performant your game will be. The default and recommended value is 60. Use values ​​that are multiples of your FPS. For example, for games with a 240 FPS cap, it's best to use values ​​such as 240, 120, 60.",
+      "help_Ru": "Тикрейт определяет как часто будет происходить расчёт физики. Чем выше тикрейт тем более точно и плавно будет работать физика. Чем ниже тикрейт тем быстрее и производительнее будет ваша игра. Стандартное и рекомендуемое значение 60. Используйте значения кратные вашему фпс, например для проектов с ограничением фпс в 240 лучше всего использовать такие значения как 240, 120, 60.",
+      "help_Pl": "Częstotliwość taktowania określa częstotliwość wykonywania obliczeń fizycznych. Im wyższa częstotliwość taktowania, tym dokładniejsza i płynniejsza będzie fizyka. Im niższa częstotliwość taktowania, tym szybsza i wydajniejsza będzie gra. Standardowa i zalecana wartość to 60. Używaj wartości będących wielokrotnościami liczby klatek na sekundę (FPS). Na przykład w grach z limitem 240 klatek na sekundę (FPS) najlepiej używać wartości takich jak 240, 120 i 60.",
+      "default": 60,
+      "key": "runnerTickRate"
     },
-    "events": {
-        "matterImpactTemplate": {
-            "name": "Contact with a template",
-            "name_Ru": "Контакт с шаблоном",
-			"name_Pl": "Kontakt z szablonem",
-            "hint": "Fires when two bodies come into contact. Can't be used in dynamic behaviors.",
-            "hint_Ru": "Срабатывает, когда два тела входят в контакт. Событие нельзя использовать в динамичных поведениях.",
-			"hint_Pl": "Wywoływane, gdy dwa ciała się stykają. Nie działa w dynamicznych zachowaniach.",
-            "parameterizedName": "Contacts %%template%% template",
-            "parameterizedName_Ru": "Контакт с шаблоном %%template%%",
-			"parameterizedName_Pl": "Kontakt z szablonem %%template%%",
-            "icon": "physics",
-            "useAssetThumbnail": true,
-            "applicable": ["template"],
-            "category": "physics",
-            "arguments": {
-                "template": {
-                    "name": "Template",
-                    "name_Ru": "Шаблон",
-					"name_Pl": "Szablon",
-                    "type": "template"
-                }
-            },
-            "repeatable": true,
-            "codeTargets": ["rootRoomOnCreate"],
-            "locals": {
-                "other": {
-                    "type": "Copy",
-                    "description": "What contacts with your copy",
-                    "description_Ru": "То, что коснулось копии",
-                    "description_Pl": "To, co dotknęło twojej kopii"
-                },
-                "impact": {
-                    "type": "number",
-                    "description": "Approximate transferred impact",
-                    "description_Ru": "Примерный импульс",
-                    "description_Pl": "Przybliżony impuls"
-                }
-            }
+    {
+      "name": "Enable console log",
+      "name_Ru": "Включить console log",
+      "name_Pl": "Włącz dziennik konsoli",
+      "type": "checkbox",
+      "default": false,
+      "key": "runnerTickRateLog"
+    },
+    {
+      "name": "Interpolation render",
+      "name_Ru": "Интерполяция рендера",
+      "name_Pl": "Interpolacja renderowania",
+      "type": "checkbox",
+      "default": false,
+      "key": "isInterpolation"
+    },
+    {
+      "name": "Interpolation only works in Runner mode.",
+      "name_Ru": "Интерполяция работает только в режиме Runner.",
+      "name_Pl": "Interpolacja działa tylko w trybie Runner.",
+      "type": "h3",
+      "if": "isInterpolation"
+    },
+    {
+      "name": "Interpolate type",
+      "name_Ru": "Тип интерполяции",
+      "name_Pl": "Typ interpolacji",
+      "help": "Interpolation makes the movement of objects smoother, if your FPS is higher than the engine's tickrate.",
+      "help_Ru": "Интерполяция делает движение обьектов более плавными, если ваш FPS больше чем тикрейт движка.",
+      "help_Pl": "Interpolacja sprawia, że ​​obiekty poruszają się płynniej, jeśli liczba klatek na sekundę (FPS) jest wyższa niż częstotliwość odświeżania silnika.",
+      "type": "radio",
+      "key": "interpolateType",
+      "id": "interpolateType",
+      "default": "1",
+      "if": "isInterpolation",
+      "options": [
+        {
+          "value": "1",
+          "name": "Extrapolation Velocity",
+          "name_Ru": "Экстраполяция Скорости",
+          "name_Pl": "Ekstrapolacja prędkości",
+          "help": "Calculates an intermediate value when rendering, taking into account the speed.",
+          "help_Ru": "Расчитывает промежуточное значение при рендеринге, учитывает скорость.",
+          "help_Pl": "Oblicza wartość pośrednią podczas renderowania, biorąc pod uwagę prędkość."
         },
-        "matterImpactAny": {
-            "name": "Contact with anything",
-            "name_Ru": "Контакт с чем-либо",
-			"name_Pl": "Kontakt z czymkolwiek",
-            "hint": "Fires when two bodies come into contact. Can't be used in dynamic behaviors.",
-            "hint_Ru": "Срабатывает, когда два тела входят в контакт. Событие нельзя использовать в динамичных поведениях.",
-			"hint_Pl": "Wywoływane, gdy dwa ciała się stykają. Nie działa w dynamicznych zachowaniach.",
-            "icon": "physics",
-            "applicable": ["template"],
-            "category": "physics",
-            "codeTargets": ["rootRoomOnCreate"],
-            "locals": {
-                "other": {
-                    "type": "Copy | PIXI.Sprite",
-                    "description": "What touches with your copy. Can be a tile (PIXI.Sprite)",
-                    "description_Ru": "То, что коснулось копии. Может быть плиткой тайлсета (PIXI.Sprite)",
-					"description_Pl": "To, co dotknęło twojej kopii. Może to być tafla (PIXI.Sprite)"
-                },
-                "impact": {
-                    "type": "number",
-                    "description": "Approximate transferred impact",
-                    "description_Ru": "Примерный импульс",
-					"description_Pl": "Przybliżony impuls"
-                }
-            }
+        {
+          "value": "2",
+          "name": "Extrapolation Velocity + Acceleration",
+          "name_Ru": "Экстраполяция Скорости + Ускорения",
+          "name_Pl": "Ekstrapolacja prędkości + przyspieszenia",
+          "help": "Calculates an intermediate value when rendering, taking into account speed + acceleration.",
+          "help_Ru": "Расчитывает промежуточное значение при рендеринге, учитывая скорость + ускорение.",
+          "help_Pl": "Oblicza wartość pośrednią podczas renderowania, biorąc pod uwagę prędkość i przyspieszenie."
         },
-        "matterActiveTemplate": {
-            "name": "Collision with a template",
-            "name_Ru": "Столкновение с шаблоном",
-			"name_Pl": "Kolizja z szablonem",
-            "hint": "Fires every frame during a collision. Useful for sensors.",
-            "hint_Ru": "Срабатывает каждый кадр во время столкновения. Полезно для сенсоров.",
-			"hint_Pl": "Wywoływane co klatkę podczas kolizji. Przydatne dla sensorów.",
-            "parameterizedName": "Collides %%template%% template",
-            "parameterizedName_Ru": "Столкновение с шаблоном %%template%%",
-			"parameterizedName_Pl": "Kolizja z szablonem %%template%%",
-            "icon": "physics",
-            "useAssetThumbnail": true,
-            "applicable": ["template"],
-            "category": "physics",
-            "arguments": {
-                "template": {
-                    "name": "Template",
-                    "name_Ru": "Шаблон",
-					"name_Pl": "Szablon",
-                    "type": "template"
-                }
-            },
-            "repeatable": true,
-            "codeTargets": ["rootRoomOnCreate"],
-            "locals": {
-                "other": {
-                    "type": "Copy",
-                    "description": "What collides with your copy",
-                    "description_Ru": "То, что касается копии",
-					"description_Pl": "To, co koliduje z twoją kopią"
-                }
-            }
-        },
-        "matterActiveAny": {
-            "name": "Collision with anything",
-            "name_Ru": "Столкновение с чем-либо",
-			"name_Pl": "Kolizja z czymkolwiek",
-            "hint": "Fires every frame during a collision. Useful for sensors. Can't be used in dynamic behaviors.",
-            "hint_Ru": "Срабатывает каждый кадр во время столкновения. Полезно для сенсоров. Событие нельзя использовать в динамичных поведениях.",
-			"hint_Pl": "Wywoływane co klatkę podczas kolizji. Przydatne dla sensorów. Nie działa w dynamicznych zachowaniach.",
-            "icon": "physics",
-            "applicable": ["template"],
-            "category": "physics",
-            "codeTargets": ["rootRoomOnCreate"],
-            "locals": {
-                "other": {
-                    "type": "Copy | PIXI.Sprite",
-                    "description": "What is touching your copy. Can be a tile (PIXI.Sprite)",
-                    "description_Ru": "То, что касается копии. Может быть плиткой тайлсета (PIXI.Sprite)",
-					"description_Pl": "To, co dotyka twojej kopii. Może to być tafla (PIXI.Sprite)",
-                }
-            }
-        },
-        "matterLeaveTemplate": {
-            "name": "Collision end with a template",
-            "name_Ru": "Конец столкновения с шаблоном",
-			"name_Pl": "Koniec kolizji z szablonem",
-            "hint": "Fires when bodies stop colliding with each other, or when something leaves a sensor. Can't be used in dynamic behaviors.",
-            "hint_Ru": "Срабатывает тогда, когда тела заканчивают касаться друг друга, или когда что-то покидает сенсор. Событие нельзя использовать в динамичных поведениях.",
-			"hint_Pl": "Wywoływane, gdy ciała przestają się stykać lub coś opuszcza sensor. Nie działa w dynamicznych zachowaniach.",
-            "parameterizedName": "Collision end with %%template%% template",
-            "parameterizedName_Ru": "Конец столкновения с шаблоном %%template%%",
-			"parameterizedName_Pl": "Koniec kolizji z szablonem %%template%%",
-            "icon": "physics",
-            "useAssetThumbnail": true,
-            "applicable": ["template"],
-            "category": "physics",
-            "arguments": {
-                "template": {
-                    "name": "Template",
-                    "name_Ru": "Шаблон",
-					"name_Pl": "Szablon",
-                    "type": "template"
-                }
-            },
-            "repeatable": true,
-            "codeTargets": ["rootRoomOnCreate"],
-            "locals": {
-                "other": {
-                    "type": "Copy",
-                    "description": "What collided with your copy",
-                    "description_Ru": "То, что касалось копии",
-					"description_Pl": "To, co dotykało twojej kopii"
-                }
-            }
-        },
-        "matterLeaveAny": {
-            "name": "Collision end with anything",
-            "name_Ru": "Конец столкновения с чем-либо",
-			"name_Pl": "Koniec kolizji z czymkolwiek",
-            "hint": "Fires when bodies stop colliding with each other, or when something leaves a sensor. Can't be used in dynamic behaviors.",
-            "hint_Ru": "Срабатывает тогда, когда тела заканчивают касаться друг друга, или когда что-то покидает сенсор. Событие нельзя использовать в динамичных поведениях.",
-			"hint_Pl": "Wywoływane, gdy ciała przestają się stykać lub coś opuszcza sensor. Nie działa w dynamicznych zachowaniach.",
-            "icon": "physics",
-            "applicable": ["template"],
-            "category": "physics",
-            "codeTargets": ["rootRoomOnCreate"],
-            "locals": {
-                "other": {
-                    "type": "Copy | PIXI.Sprite",
-                    "description": "What touched your copy. Can be a tile (PIXI.Sprite)",
-                    "description_Ru": "То, что касалось копии. Может быть плиткой тайлсета (PIXI.Sprite)",
-					"description_Pl": "To, co dotykało twojej kopii. Może to być tafla (PIXI.Sprite)"
-                }
-            }
+        {
+          "value": "3",
+          "name": "Linier",
+          "name_Ru": "Линейная",
+          "name_Pl": "Liniowy",
+          "help": "Calculates the intermediate value when rendering linearly, that is, using equal segments",
+          "help_Ru": "Расчитывает промежуточное значение при рендеринге линейно, то есть используя равные отрезки",
+          "help_Pl": "Oblicza wartość pośrednią podczas renderowania liniowego, czyli używając równych segmentów."
         }
+      ]
     }
+  ],
+
+  "templateExtends": [
+    {
+      "type": "group",
+      "name": "Physics",
+      "name_Ru": "Физика",
+      "name_Pl": "Fizyka",
+      "openedByDefault": false,
+      "lsKey": "physics.general",
+      "items": [
+        {
+          "name": "Enable",
+          "name_Ru": "Включить",
+          "name_Pl": "Włącz",
+          "type": "checkbox",
+          "default": false,
+          "key": "matterEnable"
+        },
+        {
+          "name": "Is static",
+          "name_Ru": "Сделать неподвижной",
+          "name_Pl": "Statyczne",
+          "type": "checkbox",
+          "key": "matterStatic",
+          "default": false,
+          "if": "matterEnable"
+        },
+        {
+          "name": "Is a sensor",
+          "name_Ru": "Сделать сенсором",
+          "name_Pl": "Sensor",
+          "type": "checkbox",
+          "key": "matterSensor",
+          "if": "matterEnable",
+          "default": false,
+          "help": "When turned on, the copy won't prevent others' movement but will be able to trigger collisions",
+          "help_Ru": "Копия не будет препятствовать передвижению других копий, но будет вызывать события столкновения",
+          "help_Pl": "Po włączeniu kopia nie blokuje ruchu innych, ale może wywoływać kolizje"
+        },
+        {
+          "name": "Density",
+          "name_Ru": "Плотность",
+          "name_Pl": "Gęstość",
+          "type": "number",
+          "key": "matterDensity",
+          "help": "How each pixel of this object contributes to its mass. The larger and more dense an object, the more heavy it is.",
+          "help_Ru": "Показывает, как каждый пиксель копии влияет на её массу. Чем выше, тем тяжелее получается копия.",
+          "help_Pl": "Określa, jak masa każdego piksela wpływa na całkowitą masę obiektu. Im większa i gęstsza kopia, tym cięższa.",
+          "default": 0.001,
+          "if": "matterEnable"
+        },
+        {
+          "name": "Bounciness",
+          "name_Ru": "Упругость",
+          "name_Pl": "Sprężystość",
+          "type": "number",
+          "key": "matterRestitution",
+          "default": 0.1,
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "if": "matterEnable"
+        },
+        {
+          "name": "Friction",
+          "name_Ru": "Трение",
+          "name_Pl": "Tarcie",
+          "type": "number",
+          "key": "matterFriction",
+          "default": 1,
+          "if": "matterEnable"
+        },
+        {
+          "name": "Static friction",
+          "name_Ru": "Статичное трение",
+          "name_Pl": "Tarcie statyczne",
+          "type": "number",
+          "key": "matterFrictionStatic",
+          "default": 0.1,
+          "if": "matterEnable"
+        },
+        {
+          "name": "Air friction",
+          "name_Ru": "Трение воздуха",
+          "name_Pl": "Tarcie powietrza",
+          "type": "number",
+          "key": "matterFrictionAir",
+          "default": 0.01,
+          "if": "matterEnable"
+        },
+        {
+          "name": "Fix pivot",
+          "name_Ru": "Исправить ось вращения",
+          "name_Pl": "Napraw oś obrotu",
+          "type": "point2D",
+          "key": "matterFixPivot",
+          "help": "Shifts the texture. Helps with polygonal shapes where the module cannot align center of mass and texture automatically.",
+          "help_Ru": "Смещает текстуру. Помогает с многоугольниками, которым не получается расчитать центр масс автоматически.",
+          "help_Pl": "Przesuwa teksturę. Pomocne dla wielokątów, których środek masy nie może być automatycznie wyrównany z teksturą.",
+          "step": 1,
+          "default": [0, 0],
+          "if": "matterEnable"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "Physics constraints",
+      "name_Ru": "Ограничители (физика)",
+      "name_Pl": "Ograniczenia fizyczne",
+      "openedByDefault": false,
+      "lsKey": "physics.constraints",
+      "items": [
+        {
+          "name": "Type",
+          "name_Ru": "Тип",
+          "name_Pl": "Typ",
+          "type": "radio",
+          "options": [
+            {
+              "value": "none",
+              "name": "None",
+              "name_Ru": "Нет ограничения",
+              "name_Pl": "Brak"
+            },
+            {
+              "value": "pinpoint",
+              "name": "Pin in place",
+              "name_Ru": "Пригвоздить",
+              "name_Pl": "Przypnij",
+              "help": "Keeps position but allows rotation",
+              "help_Ru": "Сохраняет расположение, но допускает вращение",
+              "help_Pl": "Zachowuje pozycję, ale pozwala na obrót"
+            },
+            {
+              "value": "rope",
+              "name": "Rope",
+              "name_Ru": "Верёвка",
+              "name_Pl": "Lina",
+              "help": "Creates a rope with a defined length",
+              "help_Ru": "Создаёт верёвку определённой длины",
+              "help_Pl": "Tworzy linę o określonej długości"
+            }
+          ],
+          "default": "none",
+          "key": "matterConstraint"
+        },
+        {
+          "name": "Rope length",
+          "name_Ru": "Длина верёвки",
+          "name_Pl": "Długość liny",
+          "type": "number",
+          "default": 64,
+          "key": "matterRopeLength"
+        },
+        {
+          "name": "Rope stiffness",
+          "name_Ru": "Жёсткость верёвки",
+          "name_Pl": "Sztywność liny",
+          "type": "number",
+          "default": 0.05,
+          "key": "matterRopeStiffness"
+        },
+        {
+          "name": "Rope damping",
+          "name_Ru": "Упругость верёвки",
+          "name_Pl": "Tłumienie liny",
+          "type": "number",
+          "default": 0.05,
+          "key": "matterRopeDamping"
+        }
+      ]
+    }
+  ],
+  "roomExtends": [
+    {
+      "name": "Gravity",
+      "name_Ru": "Гравитация",
+      "name_Pl": "Grawitacja",
+      "type": "point2D",
+      "key": "matterGravity",
+      "step": 0.1,
+      "default": [0, 9.8]
+    }
+  ],
+  "tileLayerExtends": [
+    {
+      "name": "Convert to static bodies",
+      "name_Ru": "Сконвертировать в статичные тела",
+      "name_Pl": "Zamień na ciała statyczne",
+      "type": "checkbox",
+      "key": "matterMakeStatic"
+    },
+    {
+      "name": "Bounciness",
+      "name_Ru": "Упругость",
+      "name_Pl": "Sprężystość",
+      "type": "number",
+      "key": "matterRestitution",
+      "default": 0.1,
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "if": "matterMakeStatic"
+    },
+    {
+      "name": "Friction",
+      "name_Ru": "Трение",
+      "name_Pl": "Tarcie",
+      "type": "number",
+      "key": "matterFriction",
+      "default": 1,
+      "if": "matterMakeStatic"
+    }
+  ],
+  "eventCategories": {
+    "physics": {
+      "name": "Physics",
+      "name_Ru": "Физика",
+      "name_Pl": "Fizyka",
+      "icon": "physics"
+    }
+  },
+  "events": {
+    "matterImpactTemplate": {
+      "name": "Contact with a template",
+      "name_Ru": "Контакт с шаблоном",
+      "name_Pl": "Kontakt z szablonem",
+      "hint": "Fires when two bodies come into contact. Can't be used in dynamic behaviors.",
+      "hint_Ru": "Срабатывает, когда два тела входят в контакт. Событие нельзя использовать в динамичных поведениях.",
+      "hint_Pl": "Wywoływane, gdy dwa ciała się stykają. Nie działa w dynamicznych zachowaniach.",
+      "parameterizedName": "Contacts %%template%% template",
+      "parameterizedName_Ru": "Контакт с шаблоном %%template%%",
+      "parameterizedName_Pl": "Kontakt z szablonem %%template%%",
+      "icon": "physics",
+      "useAssetThumbnail": true,
+      "applicable": ["template"],
+      "category": "physics",
+      "arguments": {
+        "template": {
+          "name": "Template",
+          "name_Ru": "Шаблон",
+          "name_Pl": "Szablon",
+          "type": "template"
+        }
+      },
+      "repeatable": true,
+      "codeTargets": ["rootRoomOnCreate"],
+      "locals": {
+        "other": {
+          "type": "Copy",
+          "description": "What contacts with your copy",
+          "description_Ru": "То, что коснулось копии",
+          "description_Pl": "To, co dotknęło twojej kopii"
+        },
+        "impact": {
+          "type": "number",
+          "description": "Approximate transferred impact",
+          "description_Ru": "Примерный импульс",
+          "description_Pl": "Przybliżony impuls"
+        }
+      }
+    },
+    "matterImpactAny": {
+      "name": "Contact with anything",
+      "name_Ru": "Контакт с чем-либо",
+      "name_Pl": "Kontakt z czymkolwiek",
+      "hint": "Fires when two bodies come into contact. Can't be used in dynamic behaviors.",
+      "hint_Ru": "Срабатывает, когда два тела входят в контакт. Событие нельзя использовать в динамичных поведениях.",
+      "hint_Pl": "Wywoływane, gdy dwa ciała się stykają. Nie działa w dynamicznych zachowaniach.",
+      "icon": "physics",
+      "applicable": ["template"],
+      "category": "physics",
+      "codeTargets": ["rootRoomOnCreate"],
+      "locals": {
+        "other": {
+          "type": "Copy | PIXI.Sprite",
+          "description": "What touches with your copy. Can be a tile (PIXI.Sprite)",
+          "description_Ru": "То, что коснулось копии. Может быть плиткой тайлсета (PIXI.Sprite)",
+          "description_Pl": "To, co dotknęło twojej kopii. Może to być tafla (PIXI.Sprite)"
+        },
+        "impact": {
+          "type": "number",
+          "description": "Approximate transferred impact",
+          "description_Ru": "Примерный импульс",
+          "description_Pl": "Przybliżony impuls"
+        }
+      }
+    },
+    "matterActiveTemplate": {
+      "name": "Collision with a template",
+      "name_Ru": "Столкновение с шаблоном",
+      "name_Pl": "Kolizja z szablonem",
+      "hint": "Fires every frame during a collision. Useful for sensors.",
+      "hint_Ru": "Срабатывает каждый кадр во время столкновения. Полезно для сенсоров.",
+      "hint_Pl": "Wywoływane co klatkę podczas kolizji. Przydatne dla sensorów.",
+      "parameterizedName": "Collides %%template%% template",
+      "parameterizedName_Ru": "Столкновение с шаблоном %%template%%",
+      "parameterizedName_Pl": "Kolizja z szablonem %%template%%",
+      "icon": "physics",
+      "useAssetThumbnail": true,
+      "applicable": ["template"],
+      "category": "physics",
+      "arguments": {
+        "template": {
+          "name": "Template",
+          "name_Ru": "Шаблон",
+          "name_Pl": "Szablon",
+          "type": "template"
+        }
+      },
+      "repeatable": true,
+      "codeTargets": ["rootRoomOnCreate"],
+      "locals": {
+        "other": {
+          "type": "Copy",
+          "description": "What collides with your copy",
+          "description_Ru": "То, что касается копии",
+          "description_Pl": "To, co koliduje z twoją kopią"
+        }
+      }
+    },
+    "matterActiveAny": {
+      "name": "Collision with anything",
+      "name_Ru": "Столкновение с чем-либо",
+      "name_Pl": "Kolizja z czymkolwiek",
+      "hint": "Fires every frame during a collision. Useful for sensors. Can't be used in dynamic behaviors.",
+      "hint_Ru": "Срабатывает каждый кадр во время столкновения. Полезно для сенсоров. Событие нельзя использовать в динамичных поведениях.",
+      "hint_Pl": "Wywoływane co klatkę podczas kolizji. Przydatne dla sensorów. Nie działa w dynamicznych zachowaniach.",
+      "icon": "physics",
+      "applicable": ["template"],
+      "category": "physics",
+      "codeTargets": ["rootRoomOnCreate"],
+      "locals": {
+        "other": {
+          "type": "Copy | PIXI.Sprite",
+          "description": "What is touching your copy. Can be a tile (PIXI.Sprite)",
+          "description_Ru": "То, что касается копии. Может быть плиткой тайлсета (PIXI.Sprite)",
+          "description_Pl": "To, co dotyka twojej kopii. Może to być tafla (PIXI.Sprite)"
+        }
+      }
+    },
+    "matterLeaveTemplate": {
+      "name": "Collision end with a template",
+      "name_Ru": "Конец столкновения с шаблоном",
+      "name_Pl": "Koniec kolizji z szablonem",
+      "hint": "Fires when bodies stop colliding with each other, or when something leaves a sensor. Can't be used in dynamic behaviors.",
+      "hint_Ru": "Срабатывает тогда, когда тела заканчивают касаться друг друга, или когда что-то покидает сенсор. Событие нельзя использовать в динамичных поведениях.",
+      "hint_Pl": "Wywoływane, gdy ciała przestają się stykać lub coś opuszcza sensor. Nie działa w dynamicznych zachowaniach.",
+      "parameterizedName": "Collision end with %%template%% template",
+      "parameterizedName_Ru": "Конец столкновения с шаблоном %%template%%",
+      "parameterizedName_Pl": "Koniec kolizji z szablonem %%template%%",
+      "icon": "physics",
+      "useAssetThumbnail": true,
+      "applicable": ["template"],
+      "category": "physics",
+      "arguments": {
+        "template": {
+          "name": "Template",
+          "name_Ru": "Шаблон",
+          "name_Pl": "Szablon",
+          "type": "template"
+        }
+      },
+      "repeatable": true,
+      "codeTargets": ["rootRoomOnCreate"],
+      "locals": {
+        "other": {
+          "type": "Copy",
+          "description": "What collided with your copy",
+          "description_Ru": "То, что касалось копии",
+          "description_Pl": "To, co dotykało twojej kopii"
+        }
+      }
+    },
+    "matterLeaveAny": {
+      "name": "Collision end with anything",
+      "name_Ru": "Конец столкновения с чем-либо",
+      "name_Pl": "Koniec kolizji z czymkolwiek",
+      "hint": "Fires when bodies stop colliding with each other, or when something leaves a sensor. Can't be used in dynamic behaviors.",
+      "hint_Ru": "Срабатывает тогда, когда тела заканчивают касаться друг друга, или когда что-то покидает сенсор. Событие нельзя использовать в динамичных поведениях.",
+      "hint_Pl": "Wywoływane, gdy ciała przestają się stykać lub coś opuszcza sensor. Nie działa w dynamicznych zachowaniach.",
+      "icon": "physics",
+      "applicable": ["template"],
+      "category": "physics",
+      "codeTargets": ["rootRoomOnCreate"],
+      "locals": {
+        "other": {
+          "type": "Copy | PIXI.Sprite",
+          "description": "What touched your copy. Can be a tile (PIXI.Sprite)",
+          "description_Ru": "То, что касалось копии. Может быть плиткой тайлсета (PIXI.Sprite)",
+          "description_Pl": "To, co dotykało twojej kopii. Może to być tafla (PIXI.Sprite)"
+        }
+      }
+    }
+  }
 }
