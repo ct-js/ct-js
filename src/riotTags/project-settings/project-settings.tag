@@ -45,12 +45,12 @@ project-settings.aPanel.aView.pad.flexrow
                 span {contentType.readableName || contentType.name || voc.content.missingTypeName}
     // The .tall class clips its content (overflow: auto), but scripts tab needs to cover space otherwise used for padding of .aPanel class.
     // Disable .tall class for the scripts tab to allow it to be absolutely positioned on the whole panel.
-    main.aPanel.relative(class="{tall: tab !== 'scripts'}")
+    main.aPanel.relative.tall
         each name in tabs
-            div(if=`{tab === '${name}'}` class="{tall: tab !== 'scripts', relative: tab !== 'scripts'}")
+            div(if=`{tab === '${name}'}`)
                 // This outputs a templated tag name. Magic!
                 #{name + '-settings'}
-        .pad(if="{tab === 'moduleSettings' && currentModule}")
+        div(if="{tab === 'moduleSettings' && currentModule}")
             h1 {localizeField(currentModule.manifest.main, 'name')}
             extensions-editor(customextends="{currentModule.manifest.fields}" entity="{window.currentProject.libs[currentModule.name]}")
         content-editor(if="{tab === 'contentEntriesEditor' && currentContentType}" contenttype="{currentContentType}")
