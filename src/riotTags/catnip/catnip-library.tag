@@ -87,22 +87,21 @@ mixin propsVars
         | {voc.globalVariables}
         hover-hint(text="{voc.globalVariablesHint}")
     catnip-block(
-        each="{globalvar in (currentProject.globalVars ?? [])}"
-        block="{({lib: 'core.hidden', code: 'global variable', values: {variableName: globalvar}})}"
+        each="{globalvar in currentProject.globalVars}"
+        block="{({lib: 'core.hidden', code: 'global variable ' + globalvar.type, values: {variableName: globalvar.name}})}"
         dragoutonly="dragoutonly"
         readonly="readonly"
         ondragstart="{parent.onVarDragStart}"
         draggable="draggable"
         ondragend="{parent.resetTarget}"
-        oncontextmenu="{parent.onContextMenu}"
-        data-blockcode="global variable"
-        data-blockvalue="{globalvar}"
+        data-blockcode="{'global variable ' + globalvar.type}"
+        data-blockvalue="{globalvar.name}"
     )
     br(if="{currentProject.globalVars.length}")
-    button.inline(onclick="{promptNewGlobalVariable}")
+    button.inline(onclick="{openGlobalVarsManager}")
         svg.feather
-            use(href="#plus")
-        span {voc.createNewGlobalVariable}
+            use(href="#variable")
+        span {voc.manageGlobalVariables}
     br
     br
     // Blocks pulled from stdLib
@@ -158,9 +157,19 @@ mixin propsVars
         A function that is called when a user renames a property or a variable.
         The function is provided with an object of this structure:
         {
-            type: 'prop' | 'variable',
+            type: 'prop' | 'variable' | 'global variable',
             from: string, // old name of the property/variable
             to: string // new name of the prop/var
+        }
+        The called function must apply the following changes to all the relevant blocks in an asset.
+    @attribute onretype (riot function)
+        A function that is called when a user changes a type of a global variable.
+        The function is provided with an object of this structure:
+        {
+            type: 'global variable',
+            varName: string, // variable name
+            from: string, // old type of the property/variable
+            to: string // new type of the prop/var
         }
         The called function must apply the following changes to all the relevant blocks in an asset.
 catnip-library(class="{opts.class}").flexrow
@@ -245,6 +254,15 @@ catnip-library(class="{opts.class}").flexrow
                 use(href="#{cat.icon || 'grid-random'}")
             div {voc.coreLibs[cat.i18nKey] || cat.name}
     context-menu(if="{contextVarName}" menu="{contextMenu}" ref="menu")
+    modal-window(
+        ref="globalVarsManager"
+        modalclassname="catnip-library-aVariableManager"
+        title="{vocFull.settings.variables.heading}"
+        nocancel="true"
+        oklabel="{vocGlob.apply}"
+        okicon="check"
+    )
+        variables-settings(noheading="true")
     script.
         this.namespace = 'catnip';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
@@ -418,23 +436,10 @@ catnip-library(class="{opts.class}").flexrow
                 this.update();
             });
         };
-        this.promptNewGlobalVariable = () => {
-            window.alertify.prompt(this.voc.newGlobalVariablePrompt)
-            .then(e => {
-                let val = e.inputValue;
-                if (!val || !val.trim()) {
-                    return;
-                }
-                val = val.trim();
-                if (!variableNamePattern.exec(val)) {
-                    window.alertify.error(this.voc.invalidVarNameError);
-                    return;
-                }
-                window.currentProject.globalVars ??= [];
-                window.currentProject.globalVars.push(val);
-                this.update();
-            });
+        this.openGlobalVarsManager = () => {
+            this.refs.globalVarsManager.open();
         };
+
         this.contextVarName = false;
         this.onContextMenu = e => {
             e.preventDefault();
@@ -459,28 +464,14 @@ catnip-library(class="{opts.class}").flexrow
                             return;
                         }
                         val = val.trim();
-                        if (this.contextType !== 'global variable') {
-                            const editedArray = this.contextType === 'property' ? this.opts.props : this.opts.variables;
-                            const ind = editedArray.indexOf(this.contextVarName);
-                            editedArray.splice(ind, 1, val);
-                            this.opts.onrename({
-                                type: this.contextType,
-                                from: this.contextVarName,
-                                to: val
-                            });
-                        } else {
-                            // Global variables need to be patched across all the project;
-                            // this is done by a listener in src/node_requires/catnip/index
-                            window.alertify.log(this.voc.renamingAcrossProject);
-                            window.orders.trigger('catnipGlobalVarRename', {
-                                type: 'global variable',
-                                from: this.contextVarName,
-                                to: val
-                            });
-                            const ind = window.currentProject.globalVars.indexOf(this.contextVarName);
-                            window.currentProject.globalVars.splice(ind, 1, val);
-                            this.update();
-                        }
+                        const editedArray = this.contextType === 'property' ? this.opts.props : this.opts.variables;
+                        const ind = editedArray.indexOf(this.contextVarName);
+                        editedArray.splice(ind, 1, val);
+                        this.opts.onrename({
+                            type: this.contextType,
+                            from: this.contextVarName,
+                            to: val
+                        });
                     });
                 }
             }, {
@@ -505,4 +496,7 @@ catnip-library(class="{opts.class}").flexrow
 
         if (!this.opts.onrename) {
             throw new Error('[catnip-library] `onrename` attribute was not specified.');
+        }
+        if (!this.opts.onretype) {
+            throw new Error('[catnip-library] `onretype` attribute was not specified.');
         }

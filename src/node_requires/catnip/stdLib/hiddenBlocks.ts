@@ -30,20 +30,6 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     customClass: 'userdefined'
 }, {
-    name: 'Global variable',
-    hideLabel: true,
-    type: 'computed',
-    typeHint: 'wildcard',
-    code: 'global variable',
-    icon: 'circle',
-    jsTemplate: (values) => values.variableName,
-    lib: 'core.hidden',
-    i18nKey: 'property',
-    pieces: [{
-        type: 'propVar'
-    }],
-    customClass: 'userdefined'
-}, {
     name: 'Behavior property',
     hideLabel: true,
     type: 'computed',
@@ -109,5 +95,23 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (values) => `${getTypescriptEnumName(getById('enum', values.enumId))}.${values.enumValue}`
 }];
+
+for (const varType of ['string', 'number', 'boolean', 'raw']) {
+    blocks.push({
+        name: 'Global variable',
+        hideLabel: true,
+        type: 'computed',
+        typeHint: (varType === 'raw' ? 'wildcard' : varType) as blockArgumentType,
+        code: 'global variable ' + varType,
+        icon: 'circle',
+        jsTemplate: (values) => values.variableName,
+        lib: 'core.hidden',
+        i18nKey: 'property',
+        pieces: [{
+            type: 'propVar'
+        }],
+        customClass: 'userdefined userdefined-' + varType
+    });
+}
 
 export default blocks;

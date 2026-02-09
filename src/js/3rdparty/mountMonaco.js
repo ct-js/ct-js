@@ -65,7 +65,6 @@ monaco.editor.create(document.createElement('textarea'), {
     value: ':)'
 });
 setTimeout(() => {
-
     monaco.languages.setMonarchTokensProvider('typescript', typescriptTokenizer);
     monaco.languages.setMonarchTokensProvider('coffeescript', coffeescriptTokenizer);
     monaco.languages.typescript.getTypeScriptWorker()

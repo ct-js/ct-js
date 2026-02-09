@@ -234,6 +234,7 @@
         "createNewProperty": "New property",
         "createNewVariable": "New variable",
         "createNewGlobalVariable": "New global variable",
+        "manageGlobalVariables": "Manage global variables",
         "newPropertyPrompt": "Input the name for the new property:",
         "newVariablePrompt": "Input the name for the new variable. The name must not contain whitespace or any special letters, and must start with a letter.",
         "newGlobalVariablePrompt": "Input the name for the new global variable. The name must not contain whitespace or any special letters, and must start with a letter.",
@@ -770,7 +771,8 @@
             "windowsFileLock": "This is a Windows-specific problem with a locked file. Make sure you've closed all external browsers that launched the game, then try exporting again. If it doesn't help, restart ct.js.",
             "noTemplateTexture": "One of your templates is missing a texture. You need to set a texture to it.",
             "blockArgumentMissing": "An argument in a catnip code is not set or was referring to a now removed asset. Go to the asset and set a value to the block mentioned above.",
-            "blockDeclarationMissing": "A block in your catnip code uses a missing catmod. If you have recently disabled catmods, try turning them back on, or remove the problematic blocks."
+            "blockDeclarationMissing": "A block in your catnip code uses a missing catmod. If you have recently disabled catmods, try turning them back on, or remove the problematic blocks.",
+            "variableNames": "One of your variables has an invalid name. Variable names can only contain letters, numbers, and underscores, and must start with a letter. You can change your variables in the Project tab in the Global Variables section."
         },
         "stacktrace": "Call stack",
         "jumpToProblem": "Jump to the problem",
@@ -1026,6 +1028,22 @@
             "moveUp": "Move up",
             "newScriptComment": "Use scripts to define frequent functions and import small libraries",
             "scriptsHint": "Scripts created here will be injected in the root of your game and thus will always run at the start of the game. Only JavaScript and TypeScript are supported. Variables and types defined here will be available everywhere in your project."
+        },
+        "variables": {
+          "heading": "Global variables",
+          "addVariable": "Add a New Variable",
+          "variableName": "Name",
+          "variableType": "Type",
+          "defaultValue": "Default value",
+          "deleteVariable": "Delete the variable",
+          "noVariablesYet": "No variables yet!",
+          "variablesHint": "Variables created here will be available everywhere in your project, and also during debugging in the console.",
+          "boolean": "Boolean",
+          "number": "Number",
+          "string": "String",
+          "raw": "Raw (output as code)",
+          "invalidName": "Invalid name (should start with a letter and contain only latin letters, numbers, and underscores)",
+          "reservedName": "This name is reserved, pick another one"
         },
         "export": {
             "heading": "Export settings",

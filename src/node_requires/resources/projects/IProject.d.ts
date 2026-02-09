@@ -33,6 +33,12 @@ declare interface IContentType {
     specification: IFieldSchema[];
 }
 
+declare interface IProjectVariable {
+    name: string;
+    type: 'string' | 'number' | 'boolean' | 'raw';
+    value: string;
+}
+
 declare interface IProject {
     ctjsVersion: string;
     notes: string;
@@ -41,7 +47,7 @@ declare interface IProject {
     actions: ICtAction[];
     scripts: IProjectScript[];
     contentTypes: IContentType[];
-    globalVars: string[]; // For Catnip only.
+    globalVars: IProjectVariable[];
     assets: folderEntries;
     startroom: assetRef;
     backups: number;

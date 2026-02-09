@@ -1,4 +1,5 @@
 import {loadModules} from '.';
+import {updateGlobalVarTypings} from '../projects/variables';
 
 interface IDisposable {
     dispose(): void;
@@ -39,6 +40,7 @@ const removeTypedefs = function removeTypedefs(module: ICatmodMeta): void {
 };
 
 const loadAllTypedefs = async function loadAllTypedefs(): Promise<void> {
+    updateGlobalVarTypings();
     for (const module of await loadModules()) {
         if (!(module.name in window.currentProject.libs)) {
             continue;

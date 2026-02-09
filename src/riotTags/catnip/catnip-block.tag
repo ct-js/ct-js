@@ -39,9 +39,12 @@ catnip-block(
     )
         | {(voc.blockDisplayNames[declaration.displayI18nKey] || voc.blockNames[declaration.i18nKey] || localizeField(declaration, 'displayName') || localizeField(declaration, 'name'))}
     virtual(each="{piece in declaration.pieces}" if="{declaration && !opts.block.groupClosed}")
-        span.catnip-block-aTextLabel(if="{piece.type === 'label'}" title="{voc.blockLabels[piece.i18nKey]  || localizeField(piece, 'name')}") {voc.blockLabels[piece.i18nKey]  || localizeField(piece, 'name')}
-        span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}" title="{parent.opts.block.values.variableName}") {parent.opts.block.values.variableName}
-        span.catnip-block-aTextLabel(if="{piece.type === 'enumValue'}" title="{getName('enum', parent.opts.block.values.enumId)}") {getName('enum', parent.opts.block.values.enumId)}
+        span.catnip-block-aTextLabel(if="{piece.type === 'label'}" title="{voc.blockLabels[piece.i18nKey]  || localizeField(piece, 'name')}")
+            | {voc.blockLabels[piece.i18nKey]  || localizeField(piece, 'name')}
+        span.catnip-block-aTextLabel(if="{piece.type === 'propVar'}" title="{parent.opts.block.values.variableName}")
+            | {parent.opts.block.values.variableName}
+        span.catnip-block-aTextLabel(if="{piece.type === 'enumValue'}" title="{getName('enum', parent.opts.block.values.enumId)}")
+            | {getName('enum', parent.opts.block.values.enumId)}
         select.catnip-block-aDropdown(if="{piece.type === 'enumValue'}" onchange="{writeEnumValue}" disabled="{parent.opts.readonly}")
             option(
                 each="{option in getEnumValues(parent.opts.block.values.enumId)}"
