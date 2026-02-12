@@ -28,56 +28,54 @@
         Whether to show assets in the folder tree.
 
 asset-folder-tree
-    .flexrow
-        svg.feather.nogrow.noshrink.anActionableIcon.asset-folder-tree-aToggler(
-            onclick="{toggle}"
-            if="{opts.path.length > 0}"
-            class="{opened: opened, hidden: !hasFolders() && !opts.showassets}"
+    .noshrink
+        .asset-folder-tree-aFolder(
+            onclick="{onOpenFolder}"
+            ondrop="{onDrop}"
+            ondragstart="{onFolderDrag}"
+            ondragend="{updateParent}"
+            draggable="{opts.path.length > 0}"
+            style="top: {(depth - 1) * 2}em; z-index: {50 - depth}"
         )
-            use(xlink:href="#chevron-right")
-        .noshrink
-            .asset-folder-tree-aFolder(
-                onclick="{onOpenFolder}"
-                ondrop="{onDrop}"
-                ondragstart="{onFolderDrag}"
-                ondragend="{updateParent}"
-                draggable="{opts.path.length > 0}"
+            svg.feather(class="{opts.path.length && opts.path[opts.path.length - 1].colorClass}")
+                use(xlink:href="#{opened ? 'folder-open' : 'folder'}")
+            span  {(opts.path.length > 0) ? opts.path[opts.path.length - 1].name : voc.root}
+        .asset-folder-tree-aSubtree(if="{opened}" class="{root: opts.path.length === 0}")
+            asset-folder-tree(
+                each="{entry in entries}"
+                if="{entry.type === 'folder'}"
+                path="{parent.opts.path.concat([entry])}"
+                folderclick="{parent.opts.folderclick}"
+                drop="{parent.opts.drop}"
+                layoutchanged="{parent.opts.layoutchanged}"
+                assetclick="{parent.opts.assetclick}"
+                showassets="{parent.opts.showassets}"
             )
-                svg.feather(class="{opts.path.length && opts.path[opts.path.length - 1].colorClass}")
-                    use(xlink:href="#folder")
-                span  {(opts.path.length > 0) ? opts.path[opts.path.length - 1].name : voc.root}
-            .asset-folder-tree-aSubtree(if="{opened}" class="{root: opts.path.length === 0}")
-                asset-folder-tree(
-                    each="{entry in entries}"
-                    if="{entry.type === 'folder'}"
-                    path="{parent.opts.path.concat([entry])}"
-                    folderclick="{parent.opts.folderclick}"
-                    drop="{parent.opts.drop}"
-                    layoutchanged="{parent.opts.layoutchanged}"
-                    assetclick="{parent.opts.assetclick}"
-                    showassets="{parent.opts.showassets}"
+            .asset-folder-tree-anAsset(
+                each="{entry in entries}"
+                if="{opts.showassets && entry.type !== 'folder'}"
+                onclick="{onAssetClick}"
+                ondragstart="{onAssetDrag}"
+                draggable="true"
+            )
+                img(
+                    if="{!parent.usesIcons(entry)}"
+                    src="{parent.getThumbnail(entry, currentLayout === 'largeCards', false)}"
+                    class="{soundthumbnail: entry.type === 'sound' && entry.variants.length}"
                 )
-                .asset-folder-tree-anAsset(
-                    each="{entry in entries}"
-                    if="{opts.showassets && entry.type !== 'folder'}"
-                    onclick="{onAssetClick}"
-                    ondragstart="{onAssetDrag}"
-                    draggable="true"
-                )
-                    img(
-                        if="{!parent.usesIcons(entry)}"
-                        src="{parent.getThumbnail(entry, currentLayout === 'largeCards', false)}"
-                        class="{soundthumbnail: entry.type === 'sound' && entry.variants.length}"
-                    )
-                    svg.feather.group-icon.act(if="{parent.usesIcons(entry)}")
-                        use(xlink:href="#{parent.getThumbnail(entry)}")
-                    span  {entry.name}
-                    |
-                    |
-                    span.dim {vocGlob.assetTypes[entry.type][0]}
+                svg.feather.group-icon.act(if="{parent.usesIcons(entry)}")
+                    use(xlink:href="#{parent.getThumbnail(entry)}")
+                span  {entry.name}
+                |
+                |
+                span.dim {vocGlob.assetTypes[entry.type][0]}
     script.
         this.namespace = 'assetViewer';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
+
+        this.on('update', () => {
+            this.depth = (this.parent.depth || 0) + 1;
+        });
 
         const resources = require('src/node_requires/resources');
         this.getThumbnail = resources.getThumbnail;
@@ -109,6 +107,7 @@ asset-folder-tree
         this.updateParent = () => this.parent.update();
 
         this.onOpenFolder = e => {
+            this.toggle();
             if (!this.opts.folderclick) {
                 return;
             }

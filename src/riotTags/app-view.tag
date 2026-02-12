@@ -61,7 +61,7 @@ app-view.flexcol
                     path="{[]}" /* this is intentional (top-most folder level) */
                     showassets="{true}"
                     assetclick="{rerouteOpenAsset2}"
-                    folderclick="{navigateToFolder}"
+                    folderclick="{tab === 'assets' ? navigateToFolder : undefined}"
                     drop="{onAsideFolderDrop}"
                 )
         div.flexitem.relative(if="{window.currentProject}")
