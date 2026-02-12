@@ -588,9 +588,9 @@ fieldset
     max-width 100%
     label
         flex 1 1 auto
-    input
-        max-width 100%
-        width calc(100% - 3rem)
+        & > input, & > number-input
+            max-width 100%
+            width calc(100% - 3rem)
     &.compact
         width 15rem
     &.wide

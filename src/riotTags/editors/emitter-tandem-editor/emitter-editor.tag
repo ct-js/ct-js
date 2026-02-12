@@ -32,8 +32,8 @@ emitter-editor.aPanel.pad.nb
         fieldset(if="{parent.opts.emitter.textureBehavior === 'animatedSingle'}")
             label
                 b {parent.voc.animatedFramerate}
-                input.wide(
-                    type="number" step="1" min="1" max="60"
+                number-input.wide(
+                    step="1" min="1" max="60" integeronly="true"
                     value="{parent.opts.emitter.animatedSingleFramerate}"
                     oninput="{parent.wireAndReset('opts.emitter.animatedSingleFramerate')}"
                 )
@@ -187,16 +187,16 @@ emitter-editor.aPanel.pad.nb
             .flexrow
                 label
                     span {parent.voc.from}
-                    input.wide(
-                        type="number" step="8" min="0" max="2500"
+                    number-input.wide(
+                        step="8" min="0" max="2500" allowoutsidemax="true"
                         value="{parent.movement.config.minStart}"
                         oninput="{parent.patchAcceleration('movement.config.minStart', 'minStart')}"
                     )
                 .aSpacer.noshrink
                 label
                     span {parent.voc.to}
-                    input.wide(
-                        type="number" step="8" min="0" max="2500"
+                    number-input.wide(
+                        step="8" min="0" max="2500" allowoutsidemax="true"
                         value="{parent.movement.config.maxStart}"
                         oninput="{parent.patchAcceleration('movement.config.maxStart', 'maxStart')}"
                     )
@@ -204,23 +204,23 @@ emitter-editor.aPanel.pad.nb
             .flexrow
                 label
                     span X:
-                    input.wide(
-                        type="number" step="32" min="-4096" max="4096"
+                    number-input.wide(
+                        step="32" min="-4096" max="4096" allowoutsidemax="true" allowoutsidemin="true"
                         value="{parent.movement.config.accel.x}"
                         oninput="{parent.wireAndReset('movement.config.accel.x')}"
                     )
                 .aSpacer.noshrink
                 label
                     span Y:
-                    input.wide(
-                        type="number" step="32" min="-4096" max="4096"
+                    number-input.wide(
+                        step="32" min="-4096" max="4096" allowoutsidemax="true" allowoutsidemin="true"
                         value="{parent.movement.config.accel.y}"
                         oninput="{parent.wireAndReset('movement.config.accel.y')}"
                     )
             label
                 b {parent.voc.maxSpeed}
-                input.wide(
-                    type="number" min="0" max="1000" step="8"
+                number-input.wide(
+                    min="0" max="1000" step="8" allowoutsidemax="true"
                     value="{parent.movement.config.maxSpeed}"
                     oninput="{parent.wireAndReset('movement.config.maxSpeed')}"
                 )
@@ -243,16 +243,16 @@ emitter-editor.aPanel.pad.nb
             br
             label.fifty.npt.npl.nmt
                 span {parent.voc.from}
-                input.wide(
-                    type="number" step="1" min="-360" max="360"
+                number-input.wide(
+                    step="1" min="-360" max="360"
                     data-wired-force-minmax="yes"
                     value="{parent.rotation.config.minStart}"
                     oninput="{parent.patchRotation('this.rotation.config.minStart', 'minStart')}"
                 )
             label.fifty.npt.npr.nmt
                 span {parent.voc.to}
-                input.wide(
-                    type="number" step="1" min="-360" max="360"
+                number-input.wide(
+                    step="1" min="-360" max="360"
                     data-wired-force-minmax="yes"
                     value="{parent.rotation.config.maxStart}"
                     oninput="{parent.patchRotation('this.rotation.config.maxStart', 'maxStart')}"
@@ -262,15 +262,15 @@ emitter-editor.aPanel.pad.nb
             br
             label.fifty.npt.npl.npb.nmt
                 span {parent.voc.from}
-                input.wide(
-                    type="number" step="8" min="0" max="2500"
+                number-input.wide(
+                    step="8" min="0" max="2500" allowoutsidemax="true"
                     value="{parent.rotation.config.minSpeed}"
                     oninput="{parent.patchRotation('rotation.config.minSpeed', 'minSpeed')}"
                 )
             label.fifty.npt.npr.npb.nmt
                 span {parent.voc.to}
-                input.wide(
-                    type="number" step="8" min="0" max="2500"
+                number-input.wide(
+                    step="8" min="0" max="2500" allowoutsidemax="true"
                     value="{parent.rotation.config.maxSpeed}"
                     oninput="{parent.patchRotation('rotation.config.maxSpeed', 'maxSpeed')}"
                 )
@@ -278,8 +278,8 @@ emitter-editor.aPanel.pad.nb
         fieldset(if="{parent.rotation.type === 'rotation'}")
             label
                 b {parent.voc.rotationAcceleration}
-                input.wide(
-                    type="number" step="30" min="-3000" max="3000"
+                number-input.wide(
+                    step="30" min="-3000" max="3000" allowoutsidemax="true" allowoutsidemin="true"
                     value="{parent.rotation.config.accel}"
                     oninput="{parent.patchRotation('rotation.config.accel', 'accel')}"
                 )
@@ -293,24 +293,24 @@ emitter-editor.aPanel.pad.nb
         fieldset
             label
                 b {parent.voc.spawnAtOnce}
-                input.wide(
-                    type="number" min="1" max="512" step="1"
+                number-input.wide(
+                    min="1" max="512" step="1"
                     data-wired-force-minmax="yes"
                     value="{parent.opts.emitter.settings.particlesPerWave}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.particlesPerWave')}"
                 )
             label
                 b {parent.voc.timeBetweenBursts}
-                input.wide(
-                    type="number" step="0.001" min="0.001" max="10"
+                number-input.wide(
+                    step="0.001" min="0.001" max="10"
                     data-wired-force-minmax="yes"
                     value="{parent.opts.emitter.settings.frequency}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.frequency')}"
                 )
             label
                 b {parent.voc.maxParticles}
-                input.wide(
-                    type="number" step="100" min="1" max="10000"
+                number-input.wide(
+                    step="100" min="1" max="10000"
                     value="{parent.opts.emitter.settings.maxParticles}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.maxParticles')}"
                 )
@@ -327,15 +327,15 @@ emitter-editor.aPanel.pad.nb
             br
             label.fifty.npt.npl.npb.nmt
                 span {parent.voc.from}
-                input.wide(
-                    type="number" step="0.01" min="0.01" max="600"
+                number-input.wide(
+                    step="0.01" min="0.01" max="600"
                     value="{parent.opts.emitter.settings.lifetime.min}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.lifetime.min')}"
                 )
             label.fifty.npt.npr.npb.nmt
                 span {parent.voc.to}
-                input.wide(
-                    type="number" step="0.01" min="0.01" max="600"
+                number-input.wide(
+                    step="0.01" min="0.01" max="600"
                     value="{parent.opts.emitter.settings.lifetime.max}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.lifetime.max')}"
                 )
@@ -344,8 +344,8 @@ emitter-editor.aPanel.pad.nb
         fieldset
             label
                 b {parent.voc.emitterLifetime}
-                input.wide(
-                    type="number" min="-1" step="0.1"
+                number-input.wide(
+                    min="-1" step="0.1"
                     value="{parent.opts.emitter.settings.emitterLifetime}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.emitterLifetime')}"
                 )
@@ -353,8 +353,8 @@ emitter-editor.aPanel.pad.nb
                 b
                     span {parent.voc.prewarmDelay}
                     hover-hint(text="{parent.voc.prewarmDelayNotice}")
-                input.wide(
-                    type="number" min="-100" max="100"
+                number-input.wide(
+                    min="-100" max="100"
                     value="{parent.opts.emitter.settings.delay}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.delay')}"
                 )
@@ -390,15 +390,15 @@ emitter-editor.aPanel.pad.nb
             .clear
             label.fifty.npt.npl.npb.nmt
                 span {parent.voc.from}
-                input.wide(
-                    type="number" step="8" min="1" max="4096"
+                number-input.wide(
+                    step="8" min="0" max="4096" allowoutsidemax="true" integeronly="true"
                     value="{parent.spawnBh.config.data.innerRadius}"
                     oninput="{parent.wireAndReset('spawnBh.config.data.innerRadius')}"
                 )
             label.fifty.npt.npr.npb.nmt
                 span {parent.voc.to}
-                input.wide(
-                    type="number" step="8" min="1" max="4096"
+                 number-input.wide(
+                    step="8" min="0" max="4096" allowoutsidemax="true" integeronly="true"
                     value="{parent.spawnBh.config.data.radius}"
                     oninput="{parent.wireAndReset('spawnBh.config.data.radius')}"
                 )
@@ -425,15 +425,15 @@ emitter-editor.aPanel.pad.nb
             // Rectangles
             label.fifty.npt.npl.npb.nmt
                 b {parent.voc.width}
-                input.wide(
-                    type="number" step="8" min="-4096" max="4096"
+                number-input.wide(
+                    step="8" min="-4096" max="4096"
                     value="{parent.spawnBh.config.data.w}"
                     oninput="{parent.setRectWidth}"
                 )
             label.fifty.npt.npr.npb.nmt
                 b {parent.voc.height}
-                input.wide(
-                    type="number" step="8" min="-4096" max="4096"
+                number-input.wide(
+                    step="8" min="-4096" max="4096"
                     value="{parent.spawnBh.config.data.h}"
                     oninput="{parent.setRectHeight}"
                 )
@@ -450,15 +450,15 @@ emitter-editor.aPanel.pad.nb
             b {parent.voc.relativeEmitterPosition}
             label.fifty.npt.npl.npb.nmt
                 span X:
-                input.wide(
-                    type="number" step="8" min="-1024" max="1024"
+                number-input.wide(
+                    step="8" min="-1024" max="1024" integeronly="true"
                     value="{parent.opts.emitter.settings.pos.x}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.pos.x')}"
                 )
             label.fifty.npt.npr.npb.nmt
                 span Y:
-                input.wide(
-                    type="number" step="8" min="-1024" max="1024"
+                number-input.wide(
+                    step="8" min="-1024" max="1024" integeronly="true"
                     value="{parent.opts.emitter.settings.pos.y}"
                     oninput="{parent.wireAndReset('opts.emitter.settings.pos.y')}"
                 )

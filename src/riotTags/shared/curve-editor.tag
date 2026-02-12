@@ -108,8 +108,7 @@ curve-editor(ref="root")
         div
             label.fifty.npl.npb.nmt
                 span {voc.pointTime}
-                input.wide(
-                    type="number"
+                number-input.wide(
                     min="{minTime}" max="{maxTime}"
                     step="{opts.timestep || 0.01}"
                     value="{selectedPoint.time}"
@@ -118,8 +117,7 @@ curve-editor(ref="root")
                 )
             label.fifty.npr.npb.nmt(if="{opts.type !== 'color'}")
                 span {voc.pointValue}
-                input.wide(
-                    type="number"
+                number-input.wide(
                     min="{min}" max="{max}"
                     step="{opts.valuestep || 0.01}"
                     value="{selectedPoint.value}"

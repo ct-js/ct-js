@@ -54,10 +54,18 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
                     dl.nm.flexrow
                         dt {voc.falloff}
                         dd
-                            input.short.inline(type="number" min="0" step="0.01" value="{asset.panning.rolloffFactor}" onchange="{wire('asset.panning.rolloffFactor')}")
+                            number-input.short(
+                                min="0" step="0.01"
+                                value="{asset.panning.rolloffFactor}"
+                                onchange="{wire('asset.panning.rolloffFactor')}"
+                            )
                         dt {voc.refDistance}
                         dd
-                            input.short.inline(type="number" min="0" step="0.01" value="{asset.panning.refDistance}" onchange="{wire('asset.panning.refDistance')}")
+                            number-input.short(
+                                min="0" step="0.01"
+                                value="{asset.panning.refDistance}"
+                                onchange="{wire('asset.panning.refDistance')}"
+                            )
                 .aSpacer.nogrow.noshrink
                 div
                     h2.nmt {vocGlob.settings}

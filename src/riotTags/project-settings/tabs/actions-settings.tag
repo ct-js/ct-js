@@ -47,8 +47,8 @@ actions-settings
                                 use(xlink:href="#alert-circle")
                         .fifty.npt.npr.npb
                             b {voc.multiplier}:
-                            input.short(
-                                type="number" step="0.1"
+                            numeric-input.short(
+                                step="0.1"
                                 value="{method.multiplier === void 0? 1 : method.multiplier}"
                                 onchange="{wire('window.currentProject.actions.'+ ind +'.methods.'+ mInd +'.multiplier')}"
                             )

@@ -1,0 +1,26 @@
+number-input, [data-is="number-input"]
+    display inline-block
+    position relative
+    input
+        width 100%
+        box-sizing border-box
+    [type="number"]
+        display none
+    .anActionableButton
+        position absolute
+        right 0
+        visibility hidden
+        svg
+            width 1em
+            height @width
+        height 50%
+        padding 0.1em
+        box-sizing border-box
+        line-height 0
+    &:hover .anActionableButton
+        visibility visible
+number-input
+    .&-anIncreaseButton
+        top 0
+    .&-aDecreaseButton
+        bottom 0

@@ -50,9 +50,9 @@ const wire = (that: IRiotTag, field: string, update: boolean) => (e: InputEvent)
     if (target instanceof HTMLInputElement && target.type === 'checkbox') {
         val = target.checked;
     } else if (target instanceof HTMLInputElement && (target.type === 'number' || target.type === 'range')) {
-        val = Number(target.value);
+        val = parseFloat(target.value);
         if (target.hasAttribute('data-wired-force-minmax')) {
-            val = Math.max(Number(target.min), Math.min(Number(target.max), val));
+            val = Math.max(parseFloat(target.min), Math.min(parseFloat(target.max), val));
         }
     } else {
         val = target.value;

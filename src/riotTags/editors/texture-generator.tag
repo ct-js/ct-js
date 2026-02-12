@@ -14,10 +14,10 @@ texture-generator
                 fieldset
                     label.block
                         b {voc.width}
-                        input.wide(type="number" oninput="{wire('textureWidth')}" value="{textureWidth}" min="8" step="8")
+                        number-input.wide(oninput="{wire('textureWidth')}" value="{textureWidth}" min="8" step="8" integeronly="true")
                     label.block
                         b {voc.height}
-                        input.wide(type="number" oninput="{wire('textureHeight')}" value="{textureHeight}" min="8" step="8")
+                        number-input.wide(oninput="{wire('textureHeight')}" value="{textureHeight}" min="8" step="8" integeronly="true")
                     label.block
                         b {voc.color}
                     color-input(onchange="{changeColor}" color="{textureColor}")
