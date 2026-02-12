@@ -1031,6 +1031,9 @@ const place = (function ctPlace() {
     Object.defineProperty(templates.CopyProto, 'editor:defaultCollidingCGroups', {
         set: function (collisionGroups) {
             this.defaultCollidingCGroups = new Set(collisionGroups);
+        },
+        get: function () {
+            return this.defaultCollidingCGroups;
         }
     });
     Object.defineProperty(templates.Tilemap.prototype, 'enableCollisions', {
