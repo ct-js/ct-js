@@ -72,14 +72,13 @@
         import stylesTemp from 'src/ct.release/styles';
         import templatesTemp, {BasicCopy as BasicCopyTemp} from 'src/ct.release/templates';
         ${baseClassesImports}
-        import tilemapsTemp from 'src/ct.release/tilemaps';
+        import tilemapsTemp, {Tile as tileClass, Tilemap as tilemapClass} from 'src/ct.release/tilemaps';
         import timerTemp from 'src/ct.release/timer';
         import uTemp from 'src/ct.release/u';
         import behaviorsTemp from 'src/ct.release/behaviors';
         import {meta as metaTemp, settings as settingsTemp, pixiApp as pixiAppTemp} from 'src/ct.release/index';
         declare global {
             var PIXI: typeof pixiTemp;
-            type Room = roomClass;
             var actions: typeof actionsTemp;
             var backgrounds: typeof backgroundsTemp;
             var behaviors: typeof behaviorsTemp;
@@ -100,6 +99,9 @@
             var u: typeof uTemp;
 
             type BasicCopy = BasicCopyTemp;
+            type Room = roomClass;
+            type Tile = tileClass;
+            type Tilemap = tilemapClass;
             ${baseClassesGlobals}
 
             var pixiApp: typeof pixiAppTemp;

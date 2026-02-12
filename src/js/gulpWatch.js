@@ -26,6 +26,25 @@
             }
         });
 
+        const translationsWatcher = gulp.watch(['./data/i18n/*.json']);
+        translationsWatcher.on('change', src => {
+            const incoming = src.split(/[/\\]/).pop();
+            if (incoming === `${localStorage.appLanguage}.json`) {
+                 // For some reason Windows returns empty files from time to time w/o a delay
+                setTimeout(() => {
+                    const {loadLanguage} = require('src/node_requires/i18n.ts');
+                    try {
+                        loadLanguage(localStorage.appLanguage);
+                        window.signals.trigger('updateLocales');
+                        window.riot.update();
+                        window.alertify.success('Updated the current i18n file ✅');
+                    } catch (e) {
+                        alertify.alert('Could not open a language file: ' + e);
+                    }
+                }, 100);
+            }
+        });
+
         const tagWatcher = gulp.watch(['./data/hotLoadTags/**/*.js']);
         const onChange = src => {
             const fs = require('fs-extra');

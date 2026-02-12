@@ -26,6 +26,7 @@ import {compileEnums} from './enums';
 import {revHash} from './../utils/revHash';
 import {substituteHtmlVars} from './html';
 import {stringifyScripts, getStartupScripts} from './scripts';
+import {validateAllVars, stringifyVariables} from '../resources/projects/variables';
 const typeScript = require('sucrase').transform;
 
 import {getByTypes} from '../resources';
@@ -334,6 +335,8 @@ const exportCtProject = async (
         }
     }
 
+    validateAllVars(project);
+
     let buffer = template(await sources['ct.js'], {
         projectmeta,
         ctversion: process.versions.ctjs,
@@ -352,7 +355,7 @@ const exportCtProject = async (
         startheight: startroom.height,
         viewMode: settings.rendering.viewMode,
         autocloseDesktop: settings.export.autocloseDesktop,
-        globalVars: project.globalVars?.length ? `let ${project.globalVars.join(', ')};` : '',
+        globalVars: stringifyVariables(project, production),
 
         atlases: (await texturesTask).atlases,
         tiledImages: (await texturesTask).tiledImages,

@@ -4,16 +4,6 @@
         Required for assets other than scripts. The currently edited event.
     @attribute [scriptmode] (atomic)
         Enables some features of the editor that make sense for script asset type only.
-    @attribute onrename (riot function)
-        A function that is called when a user renames a property or a variable in Catnip blocks.
-        The function is provided with an object of this structure:
-        {
-            type: 'prop' | 'variable',
-            from: string, // old name of the property/variable
-            to: string // new name of the prop/var
-        }
-        The called function must apply the following changes to all the relevant blocks in an asset.
-        This function is passed to this tag's catnip-library block as an attribute.
 catnip-editor(class="flexrow {opts.class}" onpointermove="{repositionGhost}" ondragover="{repositionGhost}" ondragend="{endGhost}")
     .pad.dim(if="{!opts.event && !opts.scriptmode}") {vocFull.scriptables.createEventHint}
     catnip-block-list.catnip-editor-scriptable-aCanvas(
@@ -34,7 +24,8 @@ catnip-editor(class="flexrow {opts.class}" onpointermove="{repositionGhost}" ond
             behaviorprops="{opts.scriptmode ? [] : getBehaviorFields(opts.asset)}"
             scriptmode="{opts.scriptmode}"
             eventvars="{opts.scriptmode ? [] : getLocals(opts.event.eventKey, opts.event.lib)}"
-            onrename="{opts.onrename}"
+            onrename="{renamePropVar}"
+            onretype="{retypePropVar}"
         )
         .flexfix-footer.catnip-editor-aTrashZone(
             title="{voc.trashZoneHint}"
@@ -58,7 +49,7 @@ catnip-editor(class="flexrow {opts.class}" onpointermove="{repositionGhost}" ond
             }
         };
 
-        const {endBlocksTransmit, clearSelection, isAnythingSelected} = require('src/node_requires/catnip');
+        const {endBlocksTransmit, clearSelection, isAnythingSelected, renamePropVar, changePropVarType} = require('src/node_requires/catnip');
         const {getLocals, getBehaviorFields} = require('src/node_requires/events');
         this.getBehaviorFields = getBehaviorFields;
         this.getLocals = getLocals;
@@ -138,3 +129,33 @@ catnip-editor(class="flexrow {opts.class}" onpointermove="{repositionGhost}" ond
                 e.preventUpdate = true;
             }
         };
+
+        // Global var names are automatically patched everywhere in a project,
+        // but we need to manually rename/retype them in opened assets to not to overwrite
+        // a patch with old variable name/type
+        this.renamePropVar = e => {
+            if (this.opts.asset.type === 'script' && this.opts.asset.language === 'catnip') {
+                renamePropVar(this.opts.asset.code, e);
+            } else {
+                for (const event of this.opts.asset.events) {
+                    renamePropVar(event.code, e);
+                }
+            }
+            this.update();
+        };
+        this.retypePropVar = e => {
+            if (this.opts.asset.type === 'script' && this.opts.asset.language === 'catnip') {
+                changePropVarType(this.opts.asset.code, e);
+            } else {
+                for (const event of this.opts.asset.events) {
+                    changePropVarType(event.code, e);
+                }
+            }
+            this.update();
+        };
+        window.orders.on('catnipGlobalVarRename', this.renamePropVar);
+        window.orders.on('catnipGlobalVarRetype', this.retypePropVar);
+        this.on('unmount', () => {
+            window.orders.off('catnipGlobalVarRename', this.renamePropVar);
+            window.orders.off('catnipGlobalVarRetype', this.retypePropVar);
+        });

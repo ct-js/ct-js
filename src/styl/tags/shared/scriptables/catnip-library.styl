@@ -5,8 +5,8 @@ catnip-library
         padding 1rem
         svg
             right 1.5rem
-    .flexfix-body
-        overflow-y scroll
+    [ref="mainpanel"]
+        overflow-y overlay
         overflow-x hidden
         padding 0 1rem 1rem
     catnip-block
@@ -23,6 +23,9 @@ catnip-library
     & > *
         flex 1 1 100%
         overflow hidden
+    .&-aVariableManager
+        max-width 80vw
+        width fit-content
     .&-CategoriesShortcuts.aButtonGroup.vertical
         flex 0 0 4rem
         overflow-y overlay

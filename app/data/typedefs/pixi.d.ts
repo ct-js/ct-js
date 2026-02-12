@@ -13650,6 +13650,7 @@ declare module "packages/app/src/Application" {
     import { Container } from "packages/display/src/index";
     import type { ICanvas, IRenderer, IRendererOptionsAuto, Rectangle } from "packages/core/src/index";
     import type { IDestroyOptions } from "packages/display/src/index";
+    import type { Ticker } from "packages/ticker/src/Ticker";
     /**
      * Any plugin that's usable for Application should contain these methods.
      * @memberof PIXI
@@ -13703,6 +13704,7 @@ declare module "packages/app/src/Application" {
          * @member {PIXI.Renderer|PIXI.CanvasRenderer}
          */
         renderer: IRenderer<VIEW>;
+        ticker: Ticker;
         /**
          * @param options - The optional application and renderer parameters.
          */

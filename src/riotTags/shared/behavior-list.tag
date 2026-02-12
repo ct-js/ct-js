@@ -38,8 +38,17 @@ behavior-list
 
         this.getBehaviorName = id => resources.getById('behavior', id).name;
         this.openBehavior = id => () => window.orders.trigger('openAsset', id);
-        this.removeBehavior = id => () => this.opts.asset.behaviors
-            .splice(this.opts.asset.behaviors.indexOf(id), 1);
+        this.removeBehavior = id => () => {
+            this.opts.asset.behaviors
+                .splice(this.opts.asset.behaviors.indexOf(id), 1);
+            const behavior = resources.getById('behavior', id);
+            for (const {name} of behavior.specification) {
+                if (name in this.opts.asset.extends) {
+                    delete this.opts.asset.extends[name];
+                }
+            }
+            this.opts.onchanged();
+        };
 
         this.assetFilter = asset => asset.behaviorType === this.opts.asset.type &&
             !this.opts.asset.behaviors.includes(asset.uid);

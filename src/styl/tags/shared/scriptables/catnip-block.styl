@@ -132,19 +132,24 @@ catnip-block, .catnip-block
             &::placeholder
                 color color
                 opacity 0.65
-    &.computed.userdefined, .catnip-block-aConstantInput.userdefined
-        background colors.wildcard
-        border 1px solid (colors.wildcard)
-        &:hover
-            border-color (colors.wildcard)
-        color white
-        font-weight bold
-        & > svg
+    &.computed, .catnip-block-aConstantInput
+        &.userdefined
+            background colors.wildcard
+            border 1px solid (colors.wildcard)
+            &:hover
+                border-color (colors.wildcard)
             color white
-        if lightness(colors.wildcard) > 60%
-            color black
+            font-weight bold
             & > svg
+                color white
+            if lightness(colors.wildcard) > 60%
                 color black
+                & > svg
+                    color black
+        for class, color in colors
+            &.userdefined-{class}
+                border 1px solid color
+                background color
     &.computed.constant
         for class, color in colors
             &.{class}

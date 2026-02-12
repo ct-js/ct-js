@@ -64,21 +64,6 @@ code-editor-scriptable.relative.wide.tall.flexcol
             }, 0);
         };
 
-        const {renamePropVar} = require('src/node_requires/catnip');
-        this.renamePropVar = e => {
-            for (const event of this.opts.asset.events) {
-                renamePropVar(event.code, e);
-            }
-            this.update();
-        };
-        // Global var names are automatically patched everywhere in a project,
-        // but we need to manually rename them in opened assets to not to overwrite
-        // a patch with old variable name
-        window.orders.on('catnipGlobalVarRename', this.renamePropVar);
-        this.on('unmount', () => {
-            window.orders.off('catnipGlobalVarRename', this.renamePropVar);
-        });
-
         const updateEvent = () => {
             if (this.language === 'catnip') {
                 return;

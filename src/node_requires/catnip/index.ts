@@ -353,49 +353,77 @@ export const walkOverScript = (script: IBlock[], onblock: (block: IBlock) => voi
     }
 };
 
-/** Renames a given property or a variable in a script. */
-export const renamePropVar = (script: IBlock[], eventData: {
-    type: 'property' | 'variable' | 'global variable',
-    from: string, // old name of the property/variable
-    to: string // new name of the prop/var
-}) => {
-    walkOverScript(script, block => {
-        if (block.lib === 'core.hidden' && block.code === eventData.type) {
-            if (block.values.variableName === eventData.from) {
-                block.values.variableName = eventData.to;
-            }
-        }
-    });
-};
-
-// Listen to global variable renames and patch all relevant assets.
-window.orders.on('catnipGlobalVarRename', (eventData: {
-    type: 'global variable',
-    from: string, // old name of the property/variable
-    to: string // new name of the prop/var
-}) => {
+export const walkOverAllScripts = (callback: (block: IBlock) => void) => {
     const assets = getByTypes();
-    for (const group of [assets.room, assets.template, assets.behavior]) {
-        for (const asset of group) {
-            for (const event of asset.events) {
-                renamePropVar(event.code as BlockScript, {
-                    type: 'global variable',
-                    from: eventData.from,
-                    to: eventData.to
-                });
-            }
-        }
-    }
     for (const script of assets.script) {
         if (script.language !== 'catnip') {
             continue;
         }
-        renamePropVar(script.code as BlockScript, {
-            type: 'global variable',
-            from: eventData.from,
-            to: eventData.to
-        });
+        walkOverScript(script.code as BlockScript, callback);
     }
+    if (currentProject.language !== 'catnip') {
+        return;
+    }
+    for (const group of [assets.room, assets.template, assets.behavior]) {
+        for (const asset of group) {
+            for (const event of asset.events) {
+                walkOverScript(event.code as BlockScript, callback);
+            }
+        }
+    }
+};
+
+type RenameEventData = {
+    type: 'property' | 'variable' | 'global variable',
+    from: string, // old name of the property/variable
+    to: string // new name of the prop/var
+};
+const renameVarPredicate = (eventData: RenameEventData) => (block: IBlock) => {
+    if (block.lib === 'core.hidden') {
+        if (eventData.type === 'global variable' && block.code.startsWith('global variable')) {
+            if (block.values.variableName === eventData.from) {
+                block.values.variableName = eventData.to;
+            }
+        } else if (block.code === eventData.type &&
+            block.values.variableName === eventData.from
+        ) {
+            block.values.variableName = eventData.to;
+        }
+    }
+};
+/** Renames a given property or a variable in a script. */
+export const renamePropVar = (script: IBlock[], eventData: RenameEventData) => {
+    walkOverScript(script, renameVarPredicate(eventData));
+};
+
+type ChangeTypeEventData = {
+    type: 'global variable', // may additionally be `| 'property' | 'variable'` in the future
+    varName: string,
+    from: 'raw' | 'string' | 'number' | 'boolean', // old type of the property/variable
+    to: 'raw' | 'string' | 'number' | 'boolean' // new type of the property/variable
+};
+const changeVarTypePredicate = (eventData: ChangeTypeEventData) => (block: IBlock) => {
+    if (block.lib === 'core.hidden') {
+        if (eventData.type === 'global variable' && block.code.startsWith('global variable')) {
+            if (block.values.variableName === eventData.varName) {
+                block.code = 'global variable ' + eventData.to;
+            }
+        }
+        // The rest is not implemented, at least for now
+    }
+};
+/** Changes the type of a given property or a variable in a script. */
+export const changePropVarType = (script: IBlock[], eventData: ChangeTypeEventData) => {
+    walkOverScript(script, changeVarTypePredicate(eventData));
+};
+
+// Listen to global variable renames and patch all relevant assets.
+window.orders.on('catnipGlobalVarRename', (eventData: RenameEventData) => {
+    walkOverAllScripts(renameVarPredicate(eventData));
+});
+// Listen to global variable renames and patch all relevant assets.
+window.orders.on('catnipGlobalVarRetype', (eventData: ChangeTypeEventData) => {
+    walkOverAllScripts(changeVarTypePredicate(eventData));
 });
 
 // Shared variables for blocks' drag and drop operations.
