@@ -482,7 +482,8 @@ emitter-tandem-editor.aPanel.aView.flexrow(class="{opts.class}")
             if (!this.draggingGutter) {
                 return;
             }
-            this.panelWidth = Math.max(minSizeW, Math.min(getMaxSizeW(), e.clientX));
+            const box = this.root.getBoundingClientRect();
+            this.panelWidth = Math.max(minSizeW, Math.min(getMaxSizeW(), e.clientX - box.left));
             localStorage.particlesPanelWidth = this.panelWidth;
             this.update();
             this.updatePreviewLayout();
