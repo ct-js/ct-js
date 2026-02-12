@@ -25,6 +25,7 @@ const reservedNames = new Set([
     'styles',
     'templates',
     'Tilemap',
+    'Tile',
     'tilemaps',
     'timer',
     'u',
