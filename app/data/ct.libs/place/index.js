@@ -175,7 +175,7 @@ const place = (function ctPlace() {
     const templateNameFilter = (target, other, template) => other.template === template;
     const cgroupFilter = (target, other, cgroup) => cgroup === other.cgroup;
     const cgroupSetFilter = (target, other, cgroup) => cgroup.has(other.cgroup);
-    const allFilter = (target, other, cgroup) => true;
+    const allFilter = () => true;
 
     /**
      * Returns a collision filter predicate and a suitable argument
@@ -1029,10 +1029,10 @@ const place = (function ctPlace() {
         }
     });
     Object.defineProperty(templates.CopyProto, 'editor:defaultCollidingCGroups', {
-        set: function(collisionGroups) {
+        set: function (collisionGroups) {
             this.defaultCollidingCGroups = new Set(collisionGroups);
         }
-    })
+    });
     Object.defineProperty(templates.Tilemap.prototype, 'enableCollisions', {
         value: function (cgroup) {
             place.enableTilemapCollisions(this, cgroup);
