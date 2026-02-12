@@ -177,23 +177,31 @@ const place = (function ctPlace() {
     const cgroupSetFilter = (target, other, cgroup) => cgroup.has(other.cgroup);
     const allFilter = (target, other, cgroup) => true;
 
-    const getCGroupCollisionFilterPredicate = (target, cgroup) => {
+    /**
+     * Returns a collision filter predicate and a suitable argument
+     * based on the provided collision group.
+     * @param {ICopy} target The copy to check collisions for
+     * @param {*} cgroup The collision group/groups to check against
+     * @returns {[() => boolean, Set<string> | string]} A tuple containing the collision
+     * filter predicate and the argument for the predicate.
+     */
+    const getCollisionFilterPair = (target, cgroup) => {
         if (!cgroup) {
             if (target.defaultCollidingCGroups.size > 0) {
-                return { predicateFilter: cgroupSetFilter, predicateValue: target.defaultCollidingCGroups };
+                return [cgroupSetFilter, target.defaultCollidingCGroups];
             }
-            return { predicateFilter: allFilter, predicateValue: cgroup };
+            return [allFilter, cgroup];
         }
 
         if (typeof cgroup === 'string') {
-            return { predicateFilter: cgroupFilter, predicateValue: cgroup };
+            return [cgroupFilter, cgroup];
         }
 
         if (Array.isArray(cgroup)) {
             cgroup = new Set(cgroup);
         }
 
-        return { predicateFilter: cgroupSetFilter, predicateValue: cgroup };
+        return [cgroupSetFilter, cgroup];
     };
 
     // Core collision-checking method that accepts various filtering predicates
@@ -424,7 +432,7 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
-            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
+            const [predicateFilter, predicateValue] = getCollisionFilterPair(target, cgroup);
             const copies = genericCollisionQuery(
                 target, x, y,
                 place.grid,
@@ -450,7 +458,7 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
-            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
+            const [predicateFilter, predicateValue] = getCollisionFilterPair(target, cgroup);
             const copies = genericCollisionQuery(
                 target, x, y,
                 place.grid,
@@ -503,7 +511,7 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
-            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
+            const [predicateFilter, predicateValue] = getCollisionFilterPair(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.grid,
@@ -518,7 +526,7 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
-            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
+            const [predicateFilter, predicateValue] = getCollisionFilterPair(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.grid,
@@ -533,7 +541,7 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
-            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
+            const [predicateFilter, predicateValue] = getCollisionFilterPair(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.tileGrid,
@@ -548,7 +556,7 @@ const place = (function ctPlace() {
                 x = void 0;
                 y = void 0;
             }
-            const { predicateFilter, predicateValue } = getCGroupCollisionFilterPredicate(target, cgroup);
+            const [predicateFilter, predicateValue] = getCollisionFilterPair(target, cgroup);
             return genericCollisionQuery(
                 target, x, y,
                 place.tileGrid,
