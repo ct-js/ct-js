@@ -308,7 +308,6 @@ mixin canvasTools
 mixin atlas
     .texture-editor-anAtlas.tall(
         if="{asset}"
-        style="background-color: {previewColor};"
         onmousewheel="{onMouseWheel}"
     )
         .texture-editor-aCanvasWrap
@@ -341,9 +340,9 @@ mixin atlas
             )
         +canvasTools()
 
-texture-editor(onclick="{tryClose}")
+texture-editor(onclick="{tryClose}" style="background-color: {previewColor};")
     .flexrow.tall
-        .column.borderright.tall.column1.flexfix.nogrow.noshrink
+        .column.column1.aPanel.flexfix.nogrow.noshrink
             .flexfix-body
                 div(if="{!skeletonMode}")
                     +sliceSettings()
@@ -352,7 +351,7 @@ texture-editor(onclick="{tryClose}")
                 +textureSource()
             +previewPanel()
         +atlas()
-        .column.column2.borderleft.tall.flexfix.nogrow.noshrink
+        .column.column2.aPanel.flexfix.nogrow.noshrink
             .flexfix-body
                 div(if="{!skeletonMode}")
                     +axisSettings()

@@ -1,8 +1,10 @@
 texture-editor, [data-is="texture-editor"]
+    padding 0 1rem
     .column
         width 18em
         padding 1em
     .column1, .column2
+        margin 1rem 0
         .flexfix-body
             margin -1rem -1rem 0
             padding 1rem
@@ -91,7 +93,7 @@ texture-editor
     .&-aCanvasWrap
         width 100%
         height 100%
-        overflow scroll
+        overflow auto
         position relative
     .&-anAnimSpeedField
         width 3em
@@ -111,15 +113,15 @@ texture-editor
             display inline-block
 .textureview-zoom
     position absolute
-    bottom 0.5em
+    bottom 1em
     right 1em
     text-align right
     zoom-slider
         width 20rem
 .textureview-bg
     position absolute
-    left 0.5em
-    bottom 0.5em
+    left 1em
+    bottom 1em
 
 .aStripPointRow
     *
