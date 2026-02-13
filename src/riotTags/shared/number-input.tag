@@ -70,13 +70,18 @@ number-input
             return clamped;
         };
 
-        this.setNumericValue = (num, callback) => {
+        /**
+         * @returns {boolean} `true` if the value was successfully set, `false` otherwise.
+         */
+        this.setNumericValue = (num) => {
             const prevVal = this.value;
             if (this.opts.integeronly) {
                 num = Math.round(num);
             }
             num = clampValue(num);
-            if (isNaN(num)) return;
+            if (isNaN(num)) {
+                return false;
+            }
 
             this.value = num;
             this.rawValue = String(this.value);
@@ -86,19 +91,22 @@ number-input
             if (prevVal !== num) {
                 return true;
             }
+            return false;
         };
 
         this.onInput = (e) => {
             e.stopPropagation();
-            let oldVal = this.value;
-
             // 1. Filter out any non‑allowed characters
             let filtered = e.target.value.replace(this.opts.integeronly ? /[^\d-]/g : /[^\d.-]/g, '');
 
             // Prevent multiple minus signs or dots in wrong places
             const parts = filtered.split('.');
-            if (parts.length > 2) filtered = parts[0] + '.' + parts.slice(1).join('');
-            if ((filtered.match(/-/g) || []).length > 1) filtered = filtered.replace(/-/g, '-');
+            if (parts.length > 2) {
+                filtered = parts[0] + '.' + parts.slice(1).join('');
+            }
+            if ((filtered.match(/-/g) || []).length > 1) {
+                filtered = filtered.replace(/-/g, '-');
+            }
 
             // 2. Update the displayed raw string
             this.rawValue = filtered;
@@ -120,7 +128,7 @@ number-input
                     // Mimic the behavior of regular HTML tags
                     // (riot.js calls an update automatically on html events)
                     this.parent.update();
-                };
+                }
             }
         };
 
@@ -130,9 +138,8 @@ number-input
                 // The tag can be removed right after onInput, skip onChange event in this case
                 return;
             }
-            let oldVal = this.value;
             // Parse the current raw string
-            let filtered = e.target.value.replace(this.opts.integeronly ? /[^\d-]/g : /[^\d.-]/g, '');
+            const filtered = e.target.value.replace(this.opts.integeronly ? /[^\d-]/g : /[^\d.-]/g, '');
             if (filtered === '' || filtered === '-' || filtered === '.' || filtered.endsWith('.')) {
                 // Empty / incomplete → revert to last valid numeric value
                 this.rawValue = String(this.value);
@@ -140,7 +147,7 @@ number-input
             } else {
                 const parsed = parseFloat(filtered);
                 if (!isNaN(parsed)) {
-                    let finalNum = clampValue(parsed);
+                    const finalNum = clampValue(parsed);
                     if (this.setNumericValue(finalNum) && this.opts.onchange) {
                         this.opts.onchange({
                             target: this.refs.hiddenInput
@@ -148,7 +155,7 @@ number-input
                         // Mimic the behavior of regular HTML tags
                         // (riot.js calls an update automatically on html events)
                         this.parent.update();
-                    };
+                    }
                 } else {
                     // Should never happen, but fallback
                     this.rawValue = String(this.value);
@@ -159,7 +166,6 @@ number-input
 
         // Step increase/decrease on scroll and when using UI/keyboard arrows
         this.increase = () => {
-            let oldVal = this.value;
             let newVal = this.value + safeStep;
             if (safeStep < 1) {
                 // Eliminate possible rounding error due to working with floating-point numbers
@@ -179,7 +185,6 @@ number-input
             }
         };
         this.decrease = () => {
-            let oldVal = this.value;
             let newVal = this.value - safeStep;
             if (safeStep < 1) {
                 // Eliminate possible rounding error due to working with floating-point numbers
@@ -222,18 +227,22 @@ number-input
                 this.rawValue === '.' ||
                 this.rawValue.endsWith('.')
             ) {
-                return true;   // incomplete number
+                return true; // incomplete number
             }
             const parsed = parseFloat(this.rawValue);
             if (isNaN(parsed)) {
-                return true;   // truly invalid characters remain
+                return true; // truly invalid characters remain
             }
 
             // 2. Check numeric bounds if disallowed
             const min = parseFloat(this.opts.min);
             const max = parseFloat(this.opts.max);
-            if (!this.opts.allowoutsidemin && !isNaN(min) && this.value < min) return true;
-            if (!this.opts.allowoutsidemax && !isNaN(max) && this.value > max) return true;
+            if (!this.opts.allowoutsidemin && !isNaN(min) && this.value < min) {
+                return true;
+            }
+            if (!this.opts.allowoutsidemax && !isNaN(max) && this.value > max) {
+                return true;
+            }
 
             return false;
         };
