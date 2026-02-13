@@ -15,27 +15,27 @@ mixin templateProperties
         hlevel="4"
     )
         fieldset.aNinePatchGrid
-            input.aNinePatchElement.top(
+            number-input.aNinePatchElement.top(
                 title="{parent.voc.nineSliceTop}"
-                type="number" min="1" step="8"
+                min="1" step="8"
                 value="{parent.asset.nineSliceSettings.top}"
                 oninput="{parent.wire('asset.nineSliceSettings.top')}"
             )
-            input.aNinePatchElement.right(
+            number-input.aNinePatchElement.right(
                 title="{parent.voc.nineSliceRight}"
-                type="number" min="1" step="8"
+                min="1" step="8"
                 value="{parent.asset.nineSliceSettings.right}"
                 oninput="{parent.wire('asset.nineSliceSettings.right')}"
             )
-            input.aNinePatchElement.bottom(
+            number-input.aNinePatchElement.bottom(
                 title="{parent.voc.nineSliceBottom}"
-                type="number" min="1" step="8"
+                min="1" step="8"
                 value="{parent.asset.nineSliceSettings.bottom}"
                 oninput="{parent.wire('asset.nineSliceSettings.bottom')}"
             )
-            input.aNinePatchElement.left(
+            number-input.aNinePatchElement.left(
                 title="{parent.voc.nineSliceLeft}"
-                type="number" min="1" step="8"
+                min="1" step="8"
                 value="{parent.asset.nineSliceSettings.left}"
                 oninput="{parent.wire('asset.nineSliceSettings.left')}"
             )
