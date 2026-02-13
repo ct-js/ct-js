@@ -49,8 +49,12 @@ app-view.flexcol
                         svg.feather.anActionableIcon(if="{!tabsDirty[ind]}" onclick="{closeAsset}")
                             use(xlink:href="#x")
             search-and-recents.nogrow
-    div.flexrow.app-view-anIdeWrap
-        div.app-view-aSideviewBrowser.flexfix(if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}")
+    div.flexrow.app-view-anIdeWrap(ref="container")
+        div.app-view-aSideviewBrowser.flexfix(
+                ref="leftPanel"
+                if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
+                style="width: { localStorage.leftPanelWidth ? localStorage.leftPanelWidth + 'px' : null }"
+            )            
             .flexfix-header
                 asset-tree-pin-toggle.toright
                 h3.nm {voc.assets}
@@ -64,6 +68,10 @@ app-view.flexcol
                     folderclick="{tab === 'assets' ? navigateToFolder : undefined}"
                     drop="{onAsideFolderDrop}"
                 )
+        div.divider(
+            ref="divider"
+            mousedown="{handleMouseDown}"
+        )
         div.flexitem.relative(if="{window.currentProject}")
             main-menu(show="{tab === 'menu'}" ref="mainMenu")
             debugger-screen-multiwindow(if="{tab === 'debug' && !splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
@@ -639,3 +647,50 @@ app-view.flexcol
         this.on('unmount', () => {
             window.hotkeys.off('F11', this.toggleFullscreen);
         });
+
+        this.isDragging = false;
+
+        this.on('mount', () => {
+            document.addEventListener('mousemove', this.handleMouseMove);
+            document.addEventListener('mouseup', this.handleMouseUp);
+        });
+
+        this.on('unmount', () => {
+            document.removeEventListener('mousemove', this.handleMouseMove);
+            document.removeEventListener('mouseup', this.handleMouseUp);
+        });
+
+        this.handleMouseDown = e => {
+            this.isDragging = true;
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+        };
+
+        this.handleMouseMove = e => {
+            if (!this.isDragging) return;
+
+            const container = this.refs.container;
+            const leftPanel = this.refs.leftPanel;
+            
+            const containerRect = container.getBoundingClientRect();
+            const newLeftWidth = e.clientX - containerRect.left;
+
+            const minWidth = 150;
+            const maxWidth = containerRect.width * 0.8;
+
+            if (newLeftWidth >= minWidth && newLeftWidth <= maxWidth) {
+                leftPanel.style.width = `${newLeftWidth}px`;
+            }
+        };
+
+        this.handleMouseUp = () => {
+            this.isDragging = false;
+
+            const leftPanel = this.refs.leftPanel;
+            const width = leftPanel.offsetWidth;
+
+            localStorage.setItem('leftPanelWidth', width);
+
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        };
