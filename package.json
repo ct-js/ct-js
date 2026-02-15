@@ -88,7 +88,7 @@
     "jsdoc-x": "^4.1.0",
     "minimist": "^1.2.8",
     "node-notifier": "^10.0.1",
-    "nw-builder": "4.13.15",
+    "nw-builder": "^4.17.5",
     "pug": "^3.0.3",
     "readysteady": "^1.1.4",
     "resedit-cli": "^2.1.0",
