@@ -79,8 +79,8 @@ catnip-block(
                 showplaceholder="showplaceholder"
                 placeholder="{piece.placeholder}"
                 readonly="{parent.opts.readonly}"
-                asset="{opts.asset}"
-                scriptableevent="{opts.scriptableevent}"
+                asset="{parent.opts.asset}"
+                scriptableevent="{parent.opts.scriptableevent}"
             )
         // Options
         .catnip-block-Options(if="{piece.type === 'options'}")
@@ -105,8 +105,8 @@ catnip-block(
                         ondragend="{parent.onDragEnd}"
                         oncontextmenu="{parent.onContextMenu}"
                         onclick="{parent.tryMutate}"
-                        asset="{opts.asset}"
-                        scriptableevent="{opts.scriptableevent}"
+                        asset="{parent.opts.asset}"
+                        scriptableevent="{parent.opts.scriptableevent}"
                     )
                     input.catnip-block-aConstantInput(
                         ondrop="{parent.onDrop}"
@@ -174,8 +174,8 @@ catnip-block(
                         ondragend="{parent.onOptionDragEnd}"
                         oncontextmenu="{parent.onContextMenu}"
                         onclick="{parent.tryMutateCustomOption}"
-                        asset="{opts.asset}"
-                        scriptableevent="{opts.scriptableevent}"
+                        asset="{parent.opts.asset}"
+                        scriptableevent="{parent.opts.scriptableevent}"
                     )
                     input.catnip-block-aConstantInput(
                         ondrop="{parent.onOptionDrop}"
@@ -207,8 +207,8 @@ catnip-block(
             ondragend="{parent.onDragEnd}"
             oncontextmenu="{parent.onContextMenu}"
             onclick="{parent.tryMutate}"
-            asset="{opts.asset}"
-            scriptableevent="{opts.scriptableevent}"
+            asset="{parent.opts.asset}"
+            scriptableevent="{parent.opts.scriptableevent}"
         )
         input.catnip-block-aConstantInput(
             ondrop="{parent.onDrop}"
