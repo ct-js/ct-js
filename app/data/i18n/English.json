@@ -272,6 +272,7 @@
             "misc": "Miscellaneous",
             "movement": "Movement",
             "objects": "Objects",
+            "propsVars": "Data",
             "rooms": "Rooms",
             "settings": "Settings",
             "sounds": "Sounds",
