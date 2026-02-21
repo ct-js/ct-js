@@ -29,10 +29,10 @@ notepad-panel#notepad.aPanel.dockright(class="{opened: opened}")
         div(show="{tab === 'modulespages'}")
             docs-panel
 
-    button.vertical.dockleft.forcebackground(onclick="{notepadToggle}" ref="toggleButton")
+    button.vertical.dockleft.forcebackground(onclick="{notepadToggle}" ref="toggleButton" class="{compact: opts.compactbutton}")
         svg.feather
             use(xlink:href="#{opened? 'chevron-right' : 'chevron-left'}")
-        span {voc.docsAndNotes}
+        span(if="{!opts.compactbutton}") {voc.docsAndNotes}
     script.
         const glob = require('src/node_requires/glob');
         const updateEditor = () => {
