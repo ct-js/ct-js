@@ -89,7 +89,7 @@ const builtinBlockLibrary: blockMenu[] = [{
     items: arraysBlocks,
     i18nKey: 'arrays',
     opened: true,
-    icon: 'grid'
+    icon: 'array'
 }, {
     name: 'Miscellaneous',
     items: miscBlocks,

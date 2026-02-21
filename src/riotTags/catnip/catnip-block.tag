@@ -87,7 +87,7 @@ catnip-block(
             .catnip-block-anOptionsToggle(onclick="{toggleShowOptions}")
                 svg.feather
                     use(xlink:href="#chevron-{openOptions ? 'up' : 'down'}")
-                span {voc.optionsAdvanced}
+                span {localizeField(piece, 'buttonLabel') || voc.optionsAdvanced}
                 svg.feather
                     use(xlink:href="#chevron-{openOptions ? 'up' : 'down'}")
             // Options defined by the block itself
@@ -151,14 +151,16 @@ catnip-block(
                         span(if="{getValue(option.key) && option.assets !== 'action'}") {getName(option.assets, getValue(option.key))}
                         span(if="{getValue(option.key) && option.assets === 'action'}") {getValue(option.key)}
             // User-defined options
+            h3(if="{openOptions && piece.allowCustom && piece.customHeader}")
+                | {localizeField(piece, 'customHeader')}
             dl(if="{openOptions && piece.allowCustom && parent.opts.block.customOptions}" each="{value, key in parent.opts.block.customOptions}")
                 dt
-                    input.catnip-block-aConstantInput.string(
+                    input.catnip-block-aConstantInput(
                         type="text" value="{key}"
                         onchange="{parent.writeOptionKey}"
                         readonly="{parent.parent.opts.readonly}"
                         style="width: {Math.min(key.length + 0.5, 32)}ch"
-                        class="{invalid: !key}"
+                        class="{invalid: !key} {piece.customKeysType ?? 'string'}"
                     )
                 dd
                     .toright.anActionableIcon(onclick="{parent.removeCustomOption}")
@@ -175,7 +177,7 @@ catnip-block(
                         asset="{opts.asset}"
                         scriptableevent="{opts.scriptableevent}"
                     )
-                    input.catnip-block-aConstantInput.wildcard(
+                    input.catnip-block-aConstantInput(
                         ondrop="{parent.onOptionDrop}"
                         ondragenter="{parent.handleDragEnter}"
                         ondragleave="{parent.removeDropover}"
@@ -188,6 +190,7 @@ catnip-block(
                         if="{!value || typeof value !== 'object'}"
                         readonly="{parent.parent.opts.readonly}"
                         style="width: {Math.min((value !== void 0) ? value.length + 0.5 : 5, 32)}ch"
+                        class="{piece.customValuesType ?? 'wildcard'}"
                     )
             .pad(if="{openOptions && piece.allowCustom}")
                 button.inline.small(onclick="{addCustomOption}")
