@@ -321,6 +321,11 @@ catnip-block-list(
             if (e.button !== 0) {
                 return;
             }
+            // Skip if options were clicked
+            if (e.target.closest('.catnip-block-Options')) {
+                e.stopPropagation();
+                return;
+            }
             const {block, ind} = e.item;
             const blocks = Array.isArray(this.refs.blocks) ? this.refs.blocks : [this.refs.blocks];
             if (e.ctrlKey) {
