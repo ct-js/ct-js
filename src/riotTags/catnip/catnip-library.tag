@@ -37,7 +37,7 @@ mixin propsVars
         block="{({lib: 'core.hidden', code: 'script options', values: {}})}"
         dragoutonly="dragoutonly"
         readonly="readonly"
-        ondragstart="{parent.onVarDragStart}"
+        ondragstart="{onVarDragStart}"
         draggable="draggable"
         ondragend="{parent.resetTarget}"
         data-blockcode="script options"
@@ -321,11 +321,13 @@ catnip-library(class="{opts.class}").flexrow
             const code = e.currentTarget.getAttribute('data-blockcode');
             const value = e.currentTarget.getAttribute('data-blockvalue');
             const values = {};
-            if (code !== 'enum value') {
-                values.variableName = value;
-            } else {
-                values.enumId = value;
-                [values.enumValue] = getById('enum', value).values;
+            if (value) {
+                if (code !== 'enum value') {
+                    values.variableName = value;
+                } else {
+                    values.enumId = value;
+                    [values.enumValue] = getById('enum', value).values;
+                }
             }
             startBlocksTransmit([{
                 lib: 'core.hidden',
