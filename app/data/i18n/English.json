@@ -327,7 +327,7 @@
             "for each 2d": "For each cell in a 2D array",
             "array 2d width": "width of",
             "array 2d height": "height of",
-            "array 2d get": "Get element from a 2D array",
+            "array 2d get": "get element from a 2D array",
             "new object": "Create a new object",
             "new empty object": "new empy object",
             "convert to string": "to string",
