@@ -31,6 +31,8 @@ module.exports = [{
         required: true,
         defaultConstant: 1000
     }, {
+        type: 'filler'
+    }, {
         type: 'asyncMarker'
     }, {
         type: 'break'
@@ -125,6 +127,8 @@ module.exports = [{
         typeHint: 'number',
         required: true,
         defaultConstant: 1000
+    }, {
+        type: 'filler'
     }, {
         type: 'asyncMarker'
     }, {
@@ -221,6 +225,8 @@ module.exports = [{
         required: true,
         defaultConstant: 1000
     }, {
+        type: 'filler'
+    }, {
         type: 'asyncMarker'
     }, {
         type: 'break'
@@ -316,6 +322,8 @@ module.exports = [{
         typeHint: 'number',
         required: true,
         defaultConstant: 1000
+    }, {
+        type: 'filler'
     }, {
         type: 'asyncMarker'
     }, {
