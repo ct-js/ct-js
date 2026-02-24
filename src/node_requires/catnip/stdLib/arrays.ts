@@ -336,9 +336,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'return',
         typeHint: 'wildcard'
     }],
-    jsTemplate: (vals, index) => `${vals.return} = new Array(${vals.columns});
-    for (let _i${index} = 0; _i${index} < ${vals.columns}; _i${index}++) {
-        ${vals.return}[_i${index}] = new Array(${vals.rows});
+    jsTemplate: (vals, index) => `${vals.return} = new Array(${vals.rows});
+    for (let _i${index} = 0; _i${index} < ${vals.rows}; _i${index}++) {
+        ${vals.return}[_i${index}] = new Array(${vals.columns});
     }`
 }, {
     code: 'array 2d set element',
@@ -379,7 +379,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'wildcard',
         required: true
     }],
-    jsTemplate: (vals) => `${vals.array}[${vals.column}][${vals.row}] = ${vals.value};`
+    jsTemplate: (vals) => `${vals.array}[${vals.row}][${vals.column}] = ${vals.value};`
 }, {
     name: 'For each cell of 2d array',
     i18nKey: 'for each 2d',
@@ -417,8 +417,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         type: 'blocks',
         key: 'body'
     }],
-    jsTemplate: (args, index) => `for (const _ix${index} of ${args.array}) {
-        for (const _iy${index} of _ix${index}) {
+    jsTemplate: (args, index) => `for (const _iy${index} of ${args.array}) {
+        for (const _ix${index} of _iy${index}) {
             ${args.x} = _ix${index};
             ${args.y} = _iy${index};
             ${args.body}
@@ -529,7 +529,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         typeHint: 'number',
         required: true
     }],
-    jsTemplate: (values) => `${values.obj}[${values.x}][${values.y}]`,
+    jsTemplate: (values) => `${values.obj}[${values.y}][${values.x}]`,
     typeHint: 'wildcard'
 }, {
     name: 'new array',

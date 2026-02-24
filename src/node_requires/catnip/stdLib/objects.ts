@@ -196,7 +196,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (vals, id, custom) => {
         const entries = Object.entries(custom);
         return entries
-            .map(([propName, writeTarget]) => `${writeTarget} = ${vals.object}[${propName}];`)
+            .map(([propName, writeTarget]) => `${writeTarget} = ${vals.object}[${JSON.stringify(propName)}];`)
             .join('\n');
     }
 }, {
