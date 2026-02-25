@@ -57,6 +57,10 @@ declare interface IBlockAsyncMarker {
 declare interface IBlockOptions {
     type: 'options';
     allowCustom?: boolean;
+    buttonLabel?: string;
+    customKeysType?: blockArgumentType;
+    customValuesType?: blockArgumentType;
+    customHeader?: string;
     options: {
         key: string,
         name: string,

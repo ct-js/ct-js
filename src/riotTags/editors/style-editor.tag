@@ -87,7 +87,7 @@ style-editor.aPanel.aView(class="{opts.class}")
                             b {voc.textWrap}
                         label(if="{asset.font.wrap}").block.nmt
                             b {voc.textWrapWidth}
-                            input.wide(type="number" step="2" min="0" value="{asset.font.wrapPosition || 100}" oninput="{wire('asset.font.wrapPosition')}")
+                            number-input.wide(step="8" min="0" value="{asset.font.wrapPosition || 100}" oninput="{wire('asset.font.wrapPosition')}")
 
             #stylefill.tabbed(show="{tab === 'stylefill'}")
                 label.checkbox
@@ -348,7 +348,7 @@ style-editor.aPanel.aView(class="{opts.class}")
                 };
             }
         };
-        
+
         // Render a preview image in the editor
         this.updateStylePreview = () => {
             this.pixiStyle.reset();

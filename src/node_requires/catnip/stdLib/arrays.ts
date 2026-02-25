@@ -1,8 +1,59 @@
 const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
+    code: 'array create',
+    name: 'Create a new empty array',
+    type: 'command',
+    icon: 'array',
+    lib: 'core.arrays',
+    i18nKey: 'array create',
+    pieces: [{
+        type: 'filler'
+    }, {
+        type: 'label',
+        name: 'store in',
+        i18nKey: 'store in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard'
+    }],
+    jsTemplate: (vals) => `${vals.return} = [];`
+}, {
+    code: 'array set element',
+    name: 'Set an element of an array',
+    type: 'command',
+    icon: 'array',
+    lib: 'core.arrays',
+    i18nKey: 'array set element',
+    pieces: [{
+        type: 'argument',
+        key: 'array',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'at',
+        i18nKey: 'atPosition'
+    }, {
+        type: 'argument',
+        key: 'index',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'label',
+        name: 'to',
+        i18nKey: 'toWrite'
+    }, {
+        type: 'argument',
+        key: 'value',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: (vals) => `${vals.array}[${vals.index}] = ${vals.value};`
+}, {
     code: 'array unshift',
     name: 'add an element at start',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'array unshift',
     pieces: [{
@@ -25,7 +76,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'array push',
     name: 'add an element at end',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'array push',
     pieces: [{
@@ -48,7 +99,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'add element at position',
     name: 'add an element at position',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'add element at position',
     displayName: 'add an element',
@@ -82,7 +133,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'array pop',
     name: 'remove last element',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'array pop',
     pieces: [{
@@ -96,7 +147,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'array shift',
     name: 'remove first element',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'array shift',
     pieces: [{
@@ -110,7 +161,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'remove element',
     name: 'remove element from array',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'remove element from array',
     displayName: 'remove element',
@@ -135,7 +186,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'remove at position',
     name: 'remove element at position',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'remove at position',
     pieces: [{
@@ -158,7 +209,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'filter array',
     name: 'filter array',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'filter array',
     pieces: [{
@@ -208,7 +259,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     code: 'map array',
     name: 'map array',
     type: 'command',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'map array',
     pieces: [{
@@ -255,13 +306,166 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         return ${vals.result};
     });`
 }, {
+    code: 'array create 2d',
+    name: 'Create a new 2D array',
+    type: 'command',
+    icon: 'array-2d',
+    lib: 'core.arrays',
+    i18nKey: 'array create 2d',
+    pieces: [{
+        type: 'argument',
+        key: 'columns',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'label',
+        name: '×'
+    }, {
+        type: 'argument',
+        key: 'rows',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'filler'
+    }, {
+        type: 'label',
+        name: 'store in',
+        i18nKey: 'store in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard'
+    }],
+    jsTemplate: (vals, index) => `${vals.return} = new Array(${vals.columns});
+    for (let _i${index} = 0; _i${index} < ${vals.columns}; _i${index}++) {
+        ${vals.return}[_i${index}] = new Array(${vals.rows});
+    }`
+}, {
+    code: 'array 2d set element',
+    name: 'Set element in 2D array',
+    type: 'command',
+    icon: 'array-2d',
+    lib: 'core.arrays',
+    i18nKey: 'array 2d set element',
+    pieces: [{
+        type: 'argument',
+        key: 'array',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'at',
+        i18nKey: 'at'
+    }, {
+        type: 'argument',
+        key: 'column',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'label',
+        name: '×'
+    }, {
+        type: 'argument',
+        key: 'row',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'label',
+        name: 'set to',
+        i18nKey: 'set to'
+    }, {
+        type: 'argument',
+        key: 'value',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: (vals) => `${vals.array}[${vals.column}][${vals.row}] = ${vals.value};`
+}, {
+    name: 'For each cell of 2d array',
+    i18nKey: 'for each 2d',
+    type: 'command',
+    code: 'for each 2d',
+    lib: 'core.logic',
+    category: 'Logic',
+    icon: 'rotate-cw',
+    pieces: [{
+        type: 'argument',
+        key: 'array',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'filler'
+    }, {
+        type: 'label',
+        name: 'with x as',
+        i18nKey: 'with x as'
+    }, {
+        type: 'argument',
+        key: 'x',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'label',
+        name: 'and y as',
+        i18nKey: 'and y as'
+    }, {
+        type: 'argument',
+        key: 'y',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'blocks',
+        key: 'body'
+    }],
+    jsTemplate: (args, index) => `for (const _ix${index} of ${args.array}) {
+        for (const _iy${index} of _ix${index}) {
+            ${args.x} = _ix${index};
+            ${args.y} = _iy${index};
+            ${args.body}
+        }
+    }`
+}, {
     code: 'array length',
     name: 'array length',
     type: 'computed',
     i18nKey: 'array length',
     displayName: 'length of',
     displayI18nKey: 'lengthOf',
-    icon: 'grid',
+    icon: 'array',
+    lib: 'core.arrays',
+    typeHint: 'number',
+    pieces: [{
+        key: 'array',
+        type: 'argument',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: (values) => `${values.array}.length`
+}, {
+    code: 'array 2d width',
+    name: '2d array width',
+    type: 'computed',
+    i18nKey: 'array 2d width',
+    displayName: 'width of',
+    displayI18nKey: 'widthOf',
+    icon: 'array-2d',
+    lib: 'core.arrays',
+    typeHint: 'number',
+    pieces: [{
+        key: 'array',
+        type: 'argument',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: (values) => `${values.array}[0].length`
+}, {
+    code: 'array 2d height',
+    name: '2d array height',
+    type: 'computed',
+    i18nKey: 'array 2d height',
+    displayName: 'height of',
+    displayI18nKey: 'heightOf',
+    icon: 'array-2d',
     lib: 'core.arrays',
     typeHint: 'number',
     pieces: [{
@@ -276,7 +480,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     i18nKey: 'array get',
     type: 'computed',
     code: 'get',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     pieces: [{
         type: 'argument',
@@ -296,10 +500,42 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (values) => `${values.obj}[${values.index}]`,
     typeHint: 'wildcard'
 }, {
+    name: 'get array 2d element',
+    i18nKey: 'array 2d get',
+    type: 'computed',
+    code: 'get 2d',
+    icon: 'array-2d',
+    lib: 'core.arrays',
+    pieces: [{
+        type: 'argument',
+        key: 'obj',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'label',
+        name: 'at',
+        i18nKey: 'atPosition'
+    }, {
+        type: 'argument',
+        key: 'x',
+        typeHint: 'number',
+        required: true
+    }, {
+        type: 'label',
+        name: '×'
+    }, {
+        type: 'argument',
+        key: 'y',
+        typeHint: 'number',
+        required: true
+    }],
+    jsTemplate: (values) => `${values.obj}[${values.x}][${values.y}]`,
+    typeHint: 'wildcard'
+}, {
     name: 'new array',
     type: 'computed',
     code: 'new array',
-    icon: 'grid',
+    icon: 'array',
     lib: 'core.arrays',
     i18nKey: 'new array',
     pieces: [],

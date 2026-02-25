@@ -10,25 +10,25 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
             svg.feather
                 use(xlink:href="#{currentSoundPlaying ? 'pause' : 'play'}")
     .flexfix-body.sound-editor-aWrapper.flexrow.sound-editor-Columns
-        .fifty.npl.flexfix.tall
-            .flexfix-header
-                h2.nmt {voc.variants}
-            .flexfix-body
-                ul.aStripedList
-                    li.flexrow.wide.npr.npl(each="{variant in asset.variants}")
-                        img.aVariantThumbnail.soundthumbnail(src="{getPreview(variant, true)}")
-                        .aSpacer.nogrow
-                        button.square.inline.alignmiddle.nogrow.large(onclick="{playVariant(variant)}" title="{vocGlob.play}")
-                            svg.feather
-                                use(xlink:href="#{(currentSoundPlaying && currentVariant && currentVariant.uid === variant.uid) ? 'pause' : 'play'}")
-                        // button.square.inline.alignmiddle.nogrow(title="{vocGlob.reimport}")
-                        //     svg.feather
-                        //         use(xlink:href="#refresh-ccw")
-                        button.square.inline.alignmiddle.nogrow.nmr(onclick="{deleteVariant(variant)}" title="{vocGlob.delete}")
-                            svg.feather
-                                use(xlink:href="#x")
-                .aSpacer
-                .flexrow
+        .fifty.np.flexcol
+            .flexfix.aPanel
+                .flexfix-header.pad.npb
+                    h2.nm {voc.variants}
+                .flexfix-body.pad
+                    ul.aStripedList
+                        li.flexrow.wide.npr.npl(each="{variant in asset.variants}")
+                            img.aVariantThumbnail.soundthumbnail(src="{getPreview(variant, true)}")
+                            .aSpacer.nogrow
+                            button.square.inline.alignmiddle.nogrow.large(onclick="{playVariant(variant)}" title="{vocGlob.play}")
+                                svg.feather
+                                    use(xlink:href="#{(currentSoundPlaying && currentVariant && currentVariant.uid === variant.uid) ? 'pause' : 'play'}")
+                            // button.square.inline.alignmiddle.nogrow(title="{vocGlob.reimport}")
+                            //     svg.feather
+                            //         use(xlink:href="#refresh-ccw")
+                            button.square.inline.alignmiddle.nogrow.nmr(onclick="{deleteVariant(variant)}" title="{vocGlob.delete}")
+                                svg.feather
+                                    use(xlink:href="#x")
+                .flexfix-footer.flexrow.pad.npt
                     button(onclick="{openRecorder}")
                         svg.feather
                             use(xlink:href="#mic")
@@ -45,7 +45,8 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
                                 use(xlink:href="#folder-plus")
                             span  {voc.addVariant}
                         input(type="file" ref="inputsound" accept=".mp3,.ogg,.wav" onchange="{importVariant}")
-            .flexfix-footer.flexrow
+            .aSpacer.nogrow.noshrink
+            .flexrow.aPanel.pad.nogrow
                 div
                     h2.nmt
                         span {voc.positionalAudio}
@@ -53,20 +54,28 @@ sound-editor.aView.pad.flexfix(onclick="{tryClose}")
                     dl.nm.flexrow
                         dt {voc.falloff}
                         dd
-                            input.short.inline(type="number" min="0" value="{asset.panning.rolloffFactor}" onchange="{wire('asset.panning.rolloffFactor')}")
+                            number-input.short(
+                                min="0" step="0.01"
+                                value="{asset.panning.rolloffFactor}"
+                                onchange="{wire('asset.panning.rolloffFactor')}"
+                            )
                         dt {voc.refDistance}
                         dd
-                            input.short.inline(type="number" min="0" value="{asset.panning.refDistance}" onchange="{wire('asset.panning.refDistance')}")
+                            number-input.short(
+                                min="0" step="0.01"
+                                value="{asset.panning.refDistance}"
+                                onchange="{wire('asset.panning.refDistance')}"
+                            )
                 .aSpacer.nogrow.noshrink
                 div
                     h2.nmt {vocGlob.settings}
                     label.checkbox
                         input(type="checkbox" checked="{asset.preload}" onchange="{wire('asset.preload')}")
                         b {voc.preload}
-        .fifty.npr.flexfix.tall
-            .flexfix-header
+        .fifty.np.flexfix.aPanel
+            .flexfix-header.pad.npb
                 h2.nmt {voc.effects}
-            .flexfix-body
+            .flexfix-body.pad
                 virtual(each="{prop in ['volume', 'pitch', 'distortion']}")
                     .flexrow.sound-editor-aFilter
                         label.checkbox

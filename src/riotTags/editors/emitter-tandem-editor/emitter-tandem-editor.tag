@@ -24,20 +24,17 @@ emitter-tandem-editor.aPanel.aView.flexrow(class="{opts.class}")
         )
         .emitter-tandem-editor-Tools.flexrow
             button.small.nogrow.forcebackground(onclick="{resetSelf}")
+                svg.feather
+                    use(xlink:href="#rotate-cw")
                 span {voc.reset}
             .aSpacer
-            button.small.nogrow.forcebackground(onclick="{openPreviewTexturePicker}")
-                svg.feather
-                    use(xlink:href="#texture")
-                span {voc.setPreviewTexture}
-            button.small.nogrow.forcebackground(onclick="{changeGrid}")
-                svg.feather
-                    use(xlink:href="#grid")
-                span {voc.changeGrid}
-            button.small.nogrow.forcebackground(onclick="{changePreviewBg}")
-                svg.feather
-                    use(xlink:href="#droplet")
-                span {voc.changeBg}
+            .aButtonGroup.nogrow
+                button.small.forcebackground(onclick="{openPreviewTexturePicker}")
+                    span {voc.setPreviewTexture}
+                button.small.forcebackground(onclick="{changeGrid}")
+                    span {voc.changeGrid}
+                button.small.forcebackground(onclick="{changePreviewBg}")
+                    span {voc.changeBg}
         .zoom.flexrow
             b.aContrastingPlaque
                 span(if="{window.innerWidth - panelWidth > 550}") {vocGlob.zoom}
@@ -482,7 +479,8 @@ emitter-tandem-editor.aPanel.aView.flexrow(class="{opts.class}")
             if (!this.draggingGutter) {
                 return;
             }
-            this.panelWidth = Math.max(minSizeW, Math.min(getMaxSizeW(), e.clientX));
+            const box = this.root.getBoundingClientRect();
+            this.panelWidth = Math.max(minSizeW, Math.min(getMaxSizeW(), e.clientX - box.left));
             localStorage.particlesPanelWidth = this.panelWidth;
             this.update();
             this.updatePreviewLayout();

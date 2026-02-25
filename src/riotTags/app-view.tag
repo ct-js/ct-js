@@ -61,7 +61,7 @@ app-view.flexcol
                     path="{[]}" /* this is intentional (top-most folder level) */
                     showassets="{true}"
                     assetclick="{rerouteOpenAsset2}"
-                    folderclick="{navigateToFolder}"
+                    folderclick="{tab === 'assets' ? navigateToFolder : undefined}"
                     drop="{onAsideFolderDrop}"
                 )
         div.flexitem.relative(if="{window.currentProject}")
@@ -97,7 +97,7 @@ app-view.flexcol
             )
     exporter-error(if="{exporterError}" error="{exporterError}" onclose="{closeExportError}")
     new-project-onboarding(if="{sessionStorage.showOnboarding && localStorage.showOnboarding !== 'off'}")
-    notepad-panel(ref="notepadPanel" show="{tab !== 'debug'}")
+    notepad-panel(ref="notepadPanel" show="{tab !== 'debug'}" compactbutton="{isCatnipOpened}")
     asset-confirm(
         discard="{assetDiscard}"
         cancel="{assetCancel}"
@@ -152,6 +152,7 @@ app-view.flexcol
         window.hotkeys.push('assets');
         this.openedAssets = [];
         this.tabsDirty = [];
+        this.isCatnipOpened = false;
         const webglUsers = ['style', 'tandem', 'room'];
         const canAddWebglEditor = (newAsset) => {
             if (!webglUsers.includes(newAsset.type)) {
@@ -175,6 +176,7 @@ app-view.flexcol
         };
         this.changeTab = tab => () => {
             this.tab = tab;
+            this.isCatnipOpened = false;
             this.refreshDirty();
             window.hotkeys.cleanScope();
             window.signals.trigger('globalTabChanged', tab);
@@ -186,6 +188,13 @@ app-view.flexcol
                 // The current tab is an asset
                 if (['room', 'template', 'behavior', 'script'].includes(tab.type)) {
                     window.orders.trigger('forceCodeEditorLayout');
+                    if (tab.type === 'script') {
+                        if (tab.language === 'catnip') {
+                            this.isCatnipOpened = true;
+                        }
+                    } else if (window.currentProject.language === 'catnip') {
+                        this.isCatnipOpened = true;
+                    }
                 }
                 window.hotkeys.push(tab.uid);
             }

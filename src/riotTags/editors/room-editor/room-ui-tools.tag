@@ -110,26 +110,26 @@ room-ui-tools
             .anAlignmentMap-aContainer.withdots
             .pintopright.small.dim {capitalize(vocGlob.assetTypes.room[0])}
             .x1y1
-                input.inline.nm(
-                    type="number" step="5" min="0" max="100"
+                number-input(
+                    step="5" min="0" max="100"
                     value="{opts.selection.align.frame.x1}"
                     oninput="{wire('opts.selection.align.frame.x1')}"
                 )
                 span.dim  ×
-                input.inline.nm(
-                    type="number" step="5" min="0" max="100"
+                number-input(
+                    step="5" min="0" max="100"
                     value="{opts.selection.align.frame.y1}"
                     oninput="{wire('opts.selection.align.frame.y1')}"
                 )
             .x2y2
-                input.inline.nm(
-                    type="number" step="5" min="0" max="100"
+                number-input(
+                    step="5" min="0" max="100"
                     value="{opts.selection.align.frame.x2}"
                     oninput="{wire('opts.selection.align.frame.x2')}"
                 )
                 span.dim  ×
-                input.inline.nm(
-                    type="number" step="5" min="0" max="100"
+                number-input(
+                    step="5" min="0" max="100"
                     value="{opts.selection.align.frame.y2}"
                     oninput="{wire('opts.selection.align.frame.y2')}"
                 )
@@ -138,23 +138,23 @@ room-ui-tools
         .anAlignmentMap(if="{opts.selection.align}")
             .anAlignmentMap-aContainer
             .pintopright.small.dim {voc.outerFrameMarker}
-            input.inline.nm.top(
-                type="number" step="8" min="0"
+            number-input.top(
+                step="8" min="0"
                 value="{opts.selection.align.padding.top}"
                 oninput="{wire('opts.selection.align.padding.top')}"
             )
-            input.inline.nm.right(
-                type="number" step="8" min="0"
+            number-input.right(
+                step="8" min="0"
                 value="{opts.selection.align.padding.right}"
                 oninput="{wire('opts.selection.align.padding.right')}"
             )
-            input.inline.nm.bottom(
-                type="number" step="8" min="0"
+            number-input.bottom(
+                step="8" min="0"
                 value="{opts.selection.align.padding.bottom}"
                 oninput="{wire('opts.selection.align.padding.bottom')}"
             )
-            input.inline.nm.left(
-                type="number" step="8" min="0"
+            number-input.left(
+                step="8" min="0"
                 value="{opts.selection.align.padding.left}"
                 oninput="{wire('opts.selection.align.padding.left')}"
             )

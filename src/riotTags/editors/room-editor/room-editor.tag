@@ -3,7 +3,7 @@
         The room to edit
     @attribute ondone (riot function)
 
-room-editor.aPanel.aView(data-hotkey-scope="{asset.uid}")
+room-editor.aView(data-hotkey-scope="{asset.uid}")
     canvas(ref="canvas" oncontextmenu="{openMenus}")
     .room-editor-aToolsetHolder
         // Toolbar

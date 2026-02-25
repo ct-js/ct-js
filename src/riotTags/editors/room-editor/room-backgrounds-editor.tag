@@ -1,4 +1,4 @@
-//
+//-
     @attribute backgrounds (Background[])
     @attribute addbackground (riot function)
     @attribute room (IRoom)
@@ -29,8 +29,8 @@ room-backgrounds-editor
         fieldset
             label
                 b {parent.voc.depth}
-                input.wide(
-                    type="number" step="1"
+                number-input.wide(
+                    step="1" integeronly="true"
                     onfocus="{parent.rememberValue}"
                     value="{background.zIndex}"
                     oninput="{parent.tweak(background, 'zIndex')}"
@@ -41,8 +41,8 @@ room-backgrounds-editor
             .aPoint2DInput.compact.wide
                 label.flexrow
                     span.nogrow X:
-                    input.nmr(
-                        type="number" step="8" placeholder="0"
+                    number-input(
+                        step="8" placeholder="0"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background, 'shiftX')}"
                         onchange="{parent.recordChange(background, 'shiftX')}"
@@ -51,8 +51,8 @@ room-backgrounds-editor
                 .aSpacer.noshrink.nogrow
                 label.flexrow
                     span.nogrow Y:
-                    input.nmr(
-                        type="number" step="8" placeholder="0"
+                    number-input(
+                        step="8" placeholder="0"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background, 'shiftY')}"
                         onchange="{parent.recordChange(background, 'shiftY')}"
@@ -62,8 +62,8 @@ room-backgrounds-editor
             .aPoint2DInput.compact.wide
                 label.flexrow
                     span.nogrow X:
-                    input.nmr(
-                        type="number" step="0.1" placeholder="1"
+                    number-input(
+                        step="0.1" placeholder="1"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background.tileScale, 'x')}"
                         onchange="{parent.recordChange(background.tileScale, 'x')}"
@@ -72,8 +72,8 @@ room-backgrounds-editor
                 .aSpacer.noshrink.nogrow
                 label.flexrow
                     span.nogrow Y:
-                    input.nmr(
-                        type="number" step="0.1" placeholder="1"
+                    number-input(
+                        step="0.1" placeholder="1"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background.tileScale, 'y')}"
                         onchange="{parent.recordChange(background.tileScale, 'y')}"
@@ -84,8 +84,8 @@ room-backgrounds-editor
             .aPoint2DInput.compact.wide
                 label.flexrow
                     span.nogrow X:
-                    input.nmr(
-                        type="number" step="1" placeholder="0"
+                    number-input(
+                        step="1" placeholder="0"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background, 'movementX')}"
                         onchange="{parent.recordChange(background, 'movementX')}"
@@ -94,8 +94,8 @@ room-backgrounds-editor
                 .aSpacer.noshrink.nogrow
                 label.flexrow
                     span.nogrow Y:
-                    input.nmr(
-                        type="number" step="1" placeholder="0"
+                    number-input(
+                        step="1" placeholder="0"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background, 'movementY')}"
                         onchange="{parent.recordChange(background, 'movementY')}"
@@ -105,8 +105,8 @@ room-backgrounds-editor
             .aPoint2DInput.compact.wide
                 label.flexrow
                     span.nogrow X:
-                    input.nmr(
-                        type="number" step="0.1" placeholder="1"
+                    number-input(
+                        step="0.1" placeholder="1"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background, 'parallaxX')}"
                         onchange="{parent.recordChange(background, 'parallaxX')}"
@@ -115,8 +115,8 @@ room-backgrounds-editor
                 .aSpacer.noshrink.nogrow
                 label.flexrow
                     span.nogrow Y:
-                    input.nmr(
-                        type="number" step="0.1" placeholder="1"
+                    number-input(
+                        step="0.1" placeholder="1"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.tweak(background, 'parallaxY')}"
                         onchange="{parent.recordChange(background, 'parallaxY')}"
@@ -163,17 +163,6 @@ room-backgrounds-editor
         this.pickingBackground = false;
         this.namespace = 'roomBackgrounds';
         this.mixin(require('src/node_requires/riotMixins/voc').default);
-
-        this.tweak = (obj, field) => e => {
-            const input = e.target;
-            if (input.type === 'radio' || input.type === 'checkbox') {
-                obj[field] = input.checked;
-            } else if (input.type === 'number') {
-                obj[field] = Number(input.value);
-            } else {
-                obj[field] = input.value;
-            }
-        };
 
         // These two are only for newly created backgrounds, for which an asset selection modal
         // is automatically created
@@ -251,12 +240,16 @@ room-backgrounds-editor
             this.update();
         };
 
-        var prevValue;
-        this.rememberValue = e => {
-            if (e.target.type === 'number') {
-                prevValue = Number(e.target.value);
+        var prevValue = null;
+        this.tweak = (obj, field) => e => {
+            prevValue = obj[field];
+            const input = e.target;
+            if (input.type === 'radio' || input.type === 'checkbox') {
+                obj[field] = input.checked;
+            } else if (input.type === 'number') {
+                obj[field] = parseFloat(input.value);
             } else {
-                prevValue = e.target.value;
+                obj[field] = input.value;
             }
         };
         this.recordChange = (entity, key) => e => {
@@ -265,7 +258,7 @@ room-backgrounds-editor
             }
             let {value} = e.target;
             if (e.target.type === 'number') {
-                value = Number(value);
+                value = parseFloat(value);
             }
             this.opts.history.pushChange({
                 type: 'propChange',
@@ -274,6 +267,7 @@ room-backgrounds-editor
                 before: prevValue,
                 after: value
             });
+            prevValue = null;
         };
         this.recordAndTweak = (entity, key) => e => {
             this.tweak(entity, key)(e);

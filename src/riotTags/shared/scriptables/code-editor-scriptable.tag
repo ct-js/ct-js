@@ -14,7 +14,7 @@ code-editor-scriptable.relative.wide.tall.flexcol
         event="{opts.event}" asset="{opts.asset}"
         onrename="{renamePropVar}"
     )
-    .relative.tall.wide(ref="codebox" if="{window.currentProject.language !== 'catnip'}")
+    .relative.tall.wide.aPanel(ref="codebox" if="{window.currentProject.language !== 'catnip'}")
     .code-editor-scriptable-aProblemPanel.flexrow.nogrow(if="{problem}")
         .nogrow
             svg.feather.warning

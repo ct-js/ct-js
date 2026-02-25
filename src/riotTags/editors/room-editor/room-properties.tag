@@ -15,8 +15,8 @@ room-properties.npt(class="{opts.class}")
                 label
                     b {parent.voc.width}
                     br
-                    input.wide(
-                        type="number" min="1" step="8"
+                    number-input.wide(
+                        min="1" step="8" integeronly="true"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.wireAndRealign('opts.room.width')}"
                         onchange="{parent.recordChange(parent.opts.room, 'width')}"
@@ -26,8 +26,8 @@ room-properties.npt(class="{opts.class}")
                 label
                     b {parent.voc.height}
                     br
-                    input.wide(
-                        type="number" min="1" step="8"
+                    number-input.wide(
+                        min="1" step="8" integeronly="true"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.wireAndRealign('opts.room.height')}"
                         onchange="{parent.recordChange(parent.opts.room, 'height')}"
@@ -59,8 +59,8 @@ room-properties.npt(class="{opts.class}")
                 label
                     b {parent.voc.minimumX}:
                     |
-                    input.compact.wide(
-                        step="{parent.opts.room.gridX}" type="number"
+                    number-input.compact.wide(
+                        step="{parent.opts.room.gridX}" integeronly="true"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.wire('opts.room.restrictMinX')}"
                         onchange="{parent.recordChange(parent.opts.room, 'restrictMinX')}"
@@ -70,8 +70,8 @@ room-properties.npt(class="{opts.class}")
                 label
                     b.nogrow {parent.voc.minimumY}:
                     |
-                    input.compact.wide(
-                        step="{parent.opts.room.gridY}" type="number"
+                    number-input.compact.wide(
+                        step="{parent.opts.room.gridY}" integeronly="true"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.wire('opts.room.restrictMinY')}"
                         onchange="{parent.recordChange(opts.room, 'restrictMinY')}"
@@ -81,8 +81,8 @@ room-properties.npt(class="{opts.class}")
                 label
                     b {parent.voc.maximumX}:
                     |
-                    input.compact.wide(
-                        step="{parent.opts.room.gridX}" type="number"
+                    number-input.compact.wide(
+                        step="{parent.opts.room.gridX}" integeronly="true"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.wire('opts.room.restrictMaxX')}"
                         onchange="{parent.recordChange(parent.opts.room, 'restrictMaxX')}"
@@ -92,8 +92,8 @@ room-properties.npt(class="{opts.class}")
                 label
                     b.nogrow {parent.voc.maximumY}:
                     |
-                    input.compact.wide(
-                        step="{parent.opts.room.gridY}" type="number"
+                    number-input.compact.wide(
+                        step="{parent.opts.room.gridY}" integeronly="true"
                         onfocus="{parent.rememberValue}"
                         oninput="{parent.wire('opts.room.restrictMaxY')}"
                         onchange="{parent.recordChange(parent.opts.room, 'restrictMaxY')}"

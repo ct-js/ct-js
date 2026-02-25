@@ -18,7 +18,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (values) => values.blocks
 }, {
-    name: 'Note',
+    name: 'Note (comment)',
     type: 'command',
     code: 'note',
     icon: 'message-circle',

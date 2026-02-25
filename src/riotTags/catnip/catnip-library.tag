@@ -243,7 +243,7 @@ catnip-library(class="{opts.class}").flexrow
         )
             svg.feather.a
                 use(href="#archive")
-            div  {voc.properties}
+            div  {voc.coreLibs.propsVars}
         .catnip-library-aShortcut.button(
             each="{cat, ind in categories}" if="{!cat.hidden && cat.items.length}"
             title="{cat.name}"

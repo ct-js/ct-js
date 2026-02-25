@@ -1,35 +1,36 @@
 asset-folder-tree
-    .&-aToggler
-        {transshort}
-        transform translate(0.35rem, 0.1rem)
-        &.opened
-            transform translate(0.35rem, 0.1rem) rotate(90deg)
-        &.hidden
-            opacity 0
-            cursor default
+    white-space nowrap
     .&-aFolder, .&-anAsset
         {transshort}
         cursor pointer
         border-radius br
-        padding 0 0.5rem
+        padding 0 0.25rem
+        margin 0 0 0 0.25rem
+        width calc(max(max-content, 100%))
         &:hover
-            background borderPale
+            color act
+            background mix(background, act, 90%)
         svg, img
             width 1.25rem
             height @width
             vertical-align -4px
+
+    .&-aFolder
+        position sticky
+        top 0
+        z-index 2
+        background background
     .&-aSubtree
+        padding-left 1.25em
         position relative
         &::before
             content ''
             position absolute
             top -0.25rem
             bottom 0.5rem
-            left -0.5em
+            left 1em
             border-left 2px solid borderPale
         &:hover::before
             border-left 2px solid borderBright
         &.root::before
             content unset
-    .&-anAsset
-        margin-left 1.5em
