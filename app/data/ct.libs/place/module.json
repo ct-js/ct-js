@@ -81,12 +81,13 @@
         "collectScope": "place::cgroup",
         "key": "cgroup"
     }, {
-        "name": "Default colliding groups",
-        "name_Pl": "Domyślne grupy kolidujące",
+        "name": "Colliding groups",
+        "name_Pl": "Grupy kolidujące",
         "type": "array",
         "arrayType": "text",
         "collect": true,
-        "key": "editor:defaultCollidingCGroups"
+        "key": "editor:myCollidingCGroups",
+        "help": "A helper to set groups the body should be colliding with.\nIn JavaScript/CoffeeScript projects this property can be accessed and\nused with methods exposed by the place module, for example:\n\nthis.moveSmart(this.myCollidingCGroups)\n\nIn Catnip projects, these groups can be modified by runtime using\n\"Add/Remove/Clear colliding groups\" blocks, and are used by the movement blocks\nending with \"...stopping at colliding groups\"."
     }],
     "tileLayerExtends": [{
         "name": "Collision group",

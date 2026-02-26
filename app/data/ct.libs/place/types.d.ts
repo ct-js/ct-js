@@ -441,13 +441,11 @@ declare module 'src/ct.release/templates' {
         cgroup: string;
 
         /**
-         * The collision group name or a collection of collision group names the copy
-         * should collide with on `moveBullet` and `moveSmart` if no `cgroup` parameter
-         * is passed.
-         *
-         * If empty, the copy stops at all bodies.
+         * A collection of collision group names that can be set from
+         * within the editor. Can be used as a parameter to `moveSmart`
+         * and `moveBullet`.
          */
-        defaultCollidingCGroups: Set<string>;
+        myCollidingCGroups: Set<string>;
 
         /**
          * Performs a movement step, reading such parameters as `gravity`, `speed`,

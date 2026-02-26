@@ -1025,12 +1025,12 @@ const place = (function ctPlace() {
             return this.moveContinuousByAxes(cgroup, precision);
         }
     });
-    Object.defineProperty(templates.CopyProto, 'editor:defaultCollidingCGroups', {
+    Object.defineProperty(templates.CopyProto, 'editor:myCollidingCGroups', {
         set: function (collisionGroups) {
-            this.defaultCollidingCGroups = new Set(collisionGroups);
+            this.myCollidingCGroups = new Set(collisionGroups);
         },
         get: function () {
-            return this.defaultCollidingCGroups;
+            return this.myCollidingCGroups;
         }
     });
     Object.defineProperty(templates.Tilemap.prototype, 'enableCollisions', {
