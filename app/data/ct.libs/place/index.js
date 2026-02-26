@@ -187,9 +187,6 @@ const place = (function ctPlace() {
      */
     const getCollisionFilterPair = (target, cgroup) => {
         if (!cgroup) {
-            if (target.defaultCollidingCGroups.size > 0) {
-                return [cgroupSetFilter, target.defaultCollidingCGroups];
-            }
             return [allFilter, cgroup];
         }
 

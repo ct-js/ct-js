@@ -455,9 +455,6 @@ declare module 'src/ct.release/templates' {
          * `cgroup`, which can be a collision group name or a collection of
          * collision group names the copy should collide with.
          *
-         * If `cgroup` parameter is not provided, the copy will collide with
-         * groups defined in `defaultCollidingCGroups`.
-         *
          * On collision, the copy comes to a full stop.
          * To make the copy slide on collision, see `moveSmart`.
          */
@@ -472,9 +469,6 @@ declare module 'src/ct.release/templates' {
          * `direction`, just like `move`, but accepts an additional parameter
          * `cgroup`, which can be a collision group name or a collection of
          * collision group names the copy should collide with.
-         *
-         * If `cgroup` parameter is not provided, the copy will collide with
-         * groups defined in `defaultCollidingCGroups`.
          *
          * On collision, the copy slides along the body (copy/tile) it collided with.
          * To make the copy come to a full stop on collision, see `moveBullet`.

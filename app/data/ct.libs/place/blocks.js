@@ -60,9 +60,9 @@ module.exports = [{
     }],
     jsTemplate: (values) => {
         if (values.return !== 'undefined') {
-            return `${values.return} = this.moveSmart(${values.cgroup}, ${values.precision || 1});`;
+            return `${values.return} = this.moveSmart(undefined, ${values.precision || 1});`;
         }
-        return `this.moveSmart(${values.cgroup}, ${values.precision || 1});`;
+        return `this.moveSmart(undefined, ${values.precision || 1});`;
     }
 }, {
     name: 'Move along a line stopping at specific group',
@@ -141,9 +141,9 @@ module.exports = [{
         return `this.moveSmart(${values.cgroup}, ${values.precision || 1});`;
     }
 }, {
-    name: 'Move this copy along a line stopping at colliding groups',
+    name: 'Move along a line stopping at colliding groups',
     type: 'command',
-    code: 'move template bullet with default groups',
+    code: 'move template bullet default groups',
     icon: 'move',
     category: 'Movement',
     pieces: [{
@@ -159,14 +159,14 @@ module.exports = [{
     }],
     jsTemplate: (values) => {
         if (values.return !== 'undefined') {
-            return `${values.return} = this.moveBullet(undefined, ${values.precision || 1});`;
+            return `${values.return} = this.moveBullet(this.defaultCollidingCGroups, ${values.precision || 1});`;
         }
-        return `this.moveBullet(undefined, ${values.precision || 1});`;
+        return `this.moveBullet(this.defaultCollidingCGroups, ${values.precision || 1});`;
     }
 }, {
-    name: 'Move this copy stopping at colliding groups',
+    name: 'Move stopping at colliding groups',
     type: 'command',
-    code: 'move template smart with default groups',
+    code: 'move template smart default groups',
     icon: 'move',
     category: 'Movement',
     pieces: [{
@@ -182,9 +182,9 @@ module.exports = [{
     }],
     jsTemplate: (values) => {
         if (values.return !== 'undefined') {
-            return `${values.return} = this.moveSmart(undefined, ${values.precision || 1});`;
+            return `${values.return} = this.moveSmart(this.defaultCollidingCGroups, ${values.precision || 1});`;
         }
-        return `this.moveSmart(undefined, ${values.precision || 1});`;
+        return `this.moveSmart(this.defaultCollidingCGroups, ${values.precision || 1});`;
     }
 }, {
     name: 'Add colliding group',
