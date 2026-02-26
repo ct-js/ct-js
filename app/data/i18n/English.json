@@ -612,7 +612,8 @@
             "math pow": "power",
             "math log": "log",
             "math min": "minimum of",
-            "math max": "maximum of"
+            "math max": "maximum of",
+            "infinity": "infinity"
         },
         "blockDisplayNames": {
             "write": "Write",

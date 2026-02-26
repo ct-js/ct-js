@@ -102,6 +102,18 @@ const blocks: (IBlockComputedDeclaration | IBlockCommandDeclaration)[] = [
             required: true
         }],
         typeHint: 'number'
+    },
+    {
+        name: 'infinity',
+        i18nKey: 'infinity',
+        type: 'computed',
+        code: 'infinity',
+        icon: 'sort-numerically',
+        jsTemplate: () => 'Infinity',
+        lib: 'core.logic',
+        pieces: [],
+        typeHint: 'number',
+        customClass: 'constant'
     }
 ];
 
