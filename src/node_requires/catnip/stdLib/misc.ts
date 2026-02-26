@@ -44,6 +44,17 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'name',
         required: true
     }, {
+        type: 'filler'
+    }, {
+        type: 'label',
+        name: 'store return value in',
+        i18nKey: 'store result in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: false
+    }, {
         type: 'options',
         allowCustom: true,
         buttonLabelI18nKey: 'options',
@@ -51,35 +62,11 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (values, id, custom) => {
         const options = getOptions({}, [], custom);
+        if (values.return && values.return !== 'undefined') {
+            return `${values.return} = scripts[${values.name}](${options ? optionsToStringObj(options) : ''});`;
+        }
         return `scripts[${values.name}](${options ? optionsToStringObj(options) : ''});`;
     }
-}, {
-    name: 'Execute js javascript code',
-    displayName: 'Execute JavaScript',
-    type: 'command',
-    code: 'js',
-    icon: 'code-alt',
-    lib: 'core.misc',
-    i18nKey: 'plainJs',
-    pieces: [{
-        type: 'code',
-        key: 'code'
-    }],
-    jsTemplate: (values) => String(values.code)
-}, {
-    name: 'throw',
-    type: 'command',
-    code: 'throw',
-    icon: 'alert-triangle',
-    lib: 'core.misc',
-    i18nKey: 'throw',
-    pieces: [{
-        type: 'argument',
-        typeHint: 'string',
-        key: 'message',
-        required: true
-    }],
-    jsTemplate: (values) => `throw new Error(${values.message});`
 }, {
     code: 'define function',
     type: 'command',
@@ -103,20 +90,6 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         key: 'code'
     }],
     jsTemplate: values => `${values.store} = (options) => {\n    ${values.code}\n};`
-}, {
-    code: 'return',
-    type: 'command',
-    name: 'Return a value',
-    i18nKey: 'return',
-    icon: 'function',
-    lib: 'core.misc',
-    pieces: [{
-        type: 'argument',
-        key: 'return',
-        typeHint: 'wildcard',
-        required: true
-    }],
-    jsTemplate: (values) => `return ${values.return};`
 }, {
     code: 'execute function',
     type: 'command',
@@ -153,6 +126,47 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         }
         return `${values.func}(${options ? optionsToStringObj(options) : ''});`;
     }
+}, {
+    code: 'return',
+    type: 'command',
+    name: 'Return a value',
+    i18nKey: 'return',
+    icon: 'function',
+    lib: 'core.misc',
+    pieces: [{
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: (values) => `return ${values.return};`
+}, {
+    name: 'throw',
+    type: 'command',
+    code: 'throw',
+    icon: 'alert-triangle',
+    lib: 'core.misc',
+    i18nKey: 'throw',
+    pieces: [{
+        type: 'argument',
+        typeHint: 'string',
+        key: 'message',
+        required: true
+    }],
+    jsTemplate: (values) => `throw new Error(${values.message});`
+}, {
+    name: 'Execute js javascript code',
+    displayName: 'Execute JavaScript',
+    type: 'command',
+    code: 'js',
+    icon: 'code-alt',
+    lib: 'core.misc',
+    i18nKey: 'plainJs',
+    pieces: [{
+        type: 'code',
+        key: 'code'
+    }],
+    jsTemplate: (values) => String(values.code)
 }, {
     code: 'get function option',
     lib: 'core.misc',
