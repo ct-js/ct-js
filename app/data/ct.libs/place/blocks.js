@@ -147,6 +147,15 @@ module.exports = [{
     icon: 'move',
     category: 'Movement',
     pieces: [{
+        type: 'label',
+        name: 'with precision',
+        name_Ru: 'с точностью'
+    }, {
+        type: 'argument',
+        key: 'precision',
+        typeHint: 'number',
+        required: false
+    }, {
         type: 'filler'
     }, {
         type: 'label',
@@ -170,6 +179,15 @@ module.exports = [{
     icon: 'move',
     category: 'Movement',
     pieces: [{
+        type: 'label',
+        name: 'with precision',
+        name_Ru: 'с точностью'
+    }, {
+        type: 'argument',
+        key: 'precision',
+        typeHint: 'number',
+        required: false
+    }, {
         type: 'filler'
     }, {
         type: 'label',
