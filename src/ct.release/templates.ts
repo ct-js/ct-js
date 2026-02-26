@@ -19,6 +19,11 @@ export interface ICopy {
     uid: number;
     /** The name of the template from which the copy was created */
     template: string | null;
+    /**
+     * If this copy was placed in a room editor, this property is set to true;
+     * dynamically-created copies have this property set to false
+     */
+    placedInRoom: boolean;
     baseClass: ExportedTemplate['baseClass'];
     /** UI alignment information */
     align?: ExportedRoom['objects'][0]['align'];
@@ -337,6 +342,7 @@ const Copy = function (
     this.zIndex = 0;
     this.timer1 = this.timer2 = this.timer3 = this.timer4 = this.timer5 = this.timer6 = 0;
     this.uid = ++uid;
+    this.placedInRoom = false;
     if (template) {
         const templateMixin: Partial<ICopy & pixiMod.DisplayObject> = {
             template: template.name,

@@ -395,6 +395,7 @@
             "templates Templates with copy": "With copy",
             "templates Templates with template": "With all copies of a template",
             "templates templates exists": "template's copies exist",
+            "copy placedInRoom": "was placed in room",
             "rooms Rooms add bg": "Add background",
             "rooms Rooms clear": "Clear the current room",
             "rooms Rooms remove": "Remove a room",
