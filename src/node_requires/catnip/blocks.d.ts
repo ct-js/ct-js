@@ -58,9 +58,11 @@ declare interface IBlockOptions {
     type: 'options';
     allowCustom?: boolean;
     buttonLabel?: string;
+    buttonLabelI18nKey?: string;
     customKeysType?: blockArgumentType;
     customValuesType?: blockArgumentType;
     customHeader?: string;
+    customHeaderI18nKey?: string;
     options: {
         key: string,
         name: string,

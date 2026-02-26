@@ -686,6 +686,10 @@
             "with x as": "with x as",
             "and y as": "and y as"
         },
+        "blockOptionHeaders": {},
+        "blockOptionButtons": {
+          "options": "Options"
+        },
         "blockOptions": {
             "soundVolume": "Volume",
             "loop": "Loop",

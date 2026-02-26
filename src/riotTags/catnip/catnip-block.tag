@@ -87,7 +87,7 @@ catnip-block(
             .catnip-block-anOptionsToggle(onclick="{toggleShowOptions}")
                 svg.feather
                     use(xlink:href="#chevron-{openOptions ? 'up' : 'down'}")
-                span {localizeField(piece, 'buttonLabel') || voc.optionsAdvanced}
+                span {voc.blockOptionButtons[piece.buttonLabelI18nKey] || localizeField(piece, 'buttonLabel') || voc.optionsAdvanced}
                 svg.feather
                     use(xlink:href="#chevron-{openOptions ? 'up' : 'down'}")
             // Options defined by the block itself
@@ -152,7 +152,7 @@ catnip-block(
                         span(if="{getValue(option.key) && option.assets === 'action'}") {getValue(option.key)}
             // User-defined options
             h3(if="{openOptions && piece.allowCustom && piece.customHeader}")
-                | {localizeField(piece, 'customHeader')}
+                | {voc.blockOptionHeaders[piece.customHeaderI18nKey] || localizeField(piece, 'customHeader')}
             dl(if="{openOptions && piece.allowCustom && parent.opts.block.customOptions}" each="{value, key in parent.opts.block.customOptions}")
                 dt
                     input.catnip-block-aConstantInput(

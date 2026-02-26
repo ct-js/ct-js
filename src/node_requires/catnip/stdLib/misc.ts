@@ -46,6 +46,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'options',
         allowCustom: true,
+        buttonLabelI18nKey: 'options',
         options: []
     }],
     jsTemplate: (values, id, custom) => {
@@ -142,6 +143,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'options',
         allowCustom: true,
+        buttonLabelI18nKey: 'options',
         options: []
     }],
     jsTemplate: (values, id, custom) => {
