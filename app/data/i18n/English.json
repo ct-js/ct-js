@@ -565,6 +565,7 @@
             "array shift": "Remove the first array element",
             "remove element from array": "Remove the element from array",
             "remove at position": "Remove an element at position",
+            "clear array": "Clear the array",
             "filter array": "Filter array",
             "map array": "Map elements of array",
             "set text": "Set text",

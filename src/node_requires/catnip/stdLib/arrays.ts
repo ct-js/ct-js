@@ -206,6 +206,20 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (vals) => `${vals.array}.splice(${vals.position}, 1)`
 }, {
+    code: 'array clear',
+    name: 'Clear array',
+    type: 'command',
+    icon: 'array',
+    lib: 'core.arrays',
+    i18nKey: 'clear array',
+    pieces: [{
+    type: 'argument',
+        key: 'array',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: (vals) => `${vals.array}.length = 0;`
+}, {
     code: 'filter array',
     name: 'filter array',
     type: 'command',
