@@ -2,11 +2,13 @@ const niceOperators: Record<string, string> = {
     '*': '×',
     '/': ':',
     '<=': '≤',
-    '>=': '≥'
+    '>=': '≥',
+    '===': '=',
+    '!==': '≠'
 };
 
 const numberOperators = ['+', '-', '*', '/', '%'],
-      boolOperators = ['<', '<=', '>', '>='],
+      boolOperators = ['<', '<=', '>', '>=', '===', '!=='],
       mathUnaryOperators = ['abs', 'sign', 'floor', 'ceil', 'round', 'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan'],
       mathBinaryOperators = ['atan2', 'pow', 'log', 'min', 'max'];
 
