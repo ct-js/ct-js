@@ -63,9 +63,57 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (values, id, custom) => {
         const options = getOptions({}, [], custom);
         if (values.return && values.return !== 'undefined') {
-            return `${values.return} = scripts[${values.name}](${options ? optionsToStringObj(options) : ''});`;
+            return `${values.return} = scripts[${values.name}](${options ? optionsToStringObj(options) : '{}'});`;
         }
-        return `scripts[${values.name}](${options ? optionsToStringObj(options) : ''});`;
+        return `scripts[${values.name}](${options ? optionsToStringObj(options) : '{}'});`;
+    }
+}, {
+    type: 'command',
+    name: 'apply script',
+    code: 'apply script',
+    icon: 'code-alt',
+    lib: 'core.script',
+    i18nKey: 'apply script',
+    pieces: [{
+        type: 'argument',
+        typeHint: 'string',
+        assets: 'script',
+        key: 'name',
+        required: true
+    }, {
+        type: 'label',
+        name: 'to',
+        i18nKey: 'toDestination'
+    }, {
+        type: 'argument',
+        typeHint: 'wildcard',
+        key: 'target',
+        required: true
+    }, {
+        type: 'filler'
+    }, {
+        type: 'label',
+        name: 'store return value in',
+        i18nKey: 'store result in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: false
+    }, {
+        type: 'contextMarker'
+    }, {
+        type: 'options',
+        allowCustom: true,
+        buttonLabelI18nKey: 'options',
+        options: []
+    }],
+    jsTemplate: (values, id, custom) => {
+        const options = getOptions({}, [], custom);
+        if (values.return && values.return !== 'undefined') {
+            return `${values.return} = scripts[${values.name}].call(${values.target}, ${options ? optionsToStringObj(options) : '{}'});`;
+        }
+        return `scripts[${values.name}].call(${values.target}, ${options ? optionsToStringObj(options) : '{}'});`;
     }
 }, {
     code: 'define function',
@@ -122,9 +170,9 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (values, id, custom) => {
         const options = getOptions({}, [], custom);
         if (values.return && values.return !== 'undefined') {
-            return `${values.return} = ${values.func}(${options ? optionsToStringObj(options) : ''});`;
+            return `${values.return} = ${values.func}(${options ? optionsToStringObj(options) : '{}'});`;
         }
-        return `${values.func}(${options ? optionsToStringObj(options) : ''});`;
+        return `${values.func}(${options ? optionsToStringObj(options) : '{}'});`;
     }
 }, {
     code: 'return',

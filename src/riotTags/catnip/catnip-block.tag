@@ -55,6 +55,9 @@ catnip-block(
         span.catnip-block-anAsyncMarker(if="{piece.type === 'asyncMarker'}" title="{voc.asyncHint}")
             svg.feather
                 use(xlink:href="#clock")
+        span.catnip-block-aContextMarker(if="{piece.type === 'contextMarker'}" title="{voc.contextHint}")
+            svg.feather
+                use(xlink:href="#crosshair")
         .catnip-block-aFiller(if="{piece.type === 'filler'}")
         .catnip-block-aBreak(if="{piece.type === 'break'}")
         catnip-js-editor(
@@ -174,8 +177,8 @@ catnip-block(
                         ondragend="{parent.onOptionDragEnd}"
                         oncontextmenu="{parent.onContextMenu}"
                         onclick="{parent.tryMutateCustomOption}"
-                        asset="{parent.opts.asset}"
-                        scriptableevent="{parent.opts.scriptableevent}"
+                        asset="{parent.parent.opts.asset}"
+                        scriptableevent="{parent.parent.opts.scriptableevent}"
                     )
                     input.catnip-block-aConstantInput(
                         ondrop="{parent.onOptionDrop}"

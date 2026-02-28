@@ -54,6 +54,9 @@ declare interface IBlockFiller {
 declare interface IBlockAsyncMarker {
     type: 'asyncMarker'
 }
+declare interface IBlockContextMarker {
+    type: 'contextMarker'
+}
 declare interface IBlockOptions {
     type: 'options';
     allowCustom?: boolean;
@@ -77,7 +80,7 @@ declare interface IBlockOptions {
 declare type blockPiece = IBlockPieceLabel | IBlockPieceIcon | IBlockPieceCode |
                           IBlockPieceArgument | IBlockPieceTextbox | IBlockPieceBlocks |
                           IBlockPropOrVariable | IBlockFiller | IBlockAsyncMarker |
-                          IBlockPieceBreak | IBlockOptions | IBlockEnumValue;
+                          IBlockPieceBreak | IBlockOptions | IBlockEnumValue | IBlockContextMarker;
 
 // eslint-disable-next-line no-use-before-define
 type argumentValues = Record<string, IBlock[] | IBlock | string | number | boolean>;
