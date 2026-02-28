@@ -213,7 +213,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     lib: 'core.arrays',
     i18nKey: 'clear array',
     pieces: [{
-    type: 'argument',
+        type: 'argument',
         key: 'array',
         typeHint: 'wildcard',
         required: true
