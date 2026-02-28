@@ -16,7 +16,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'argument',
         key: 'return',
-        typeHint: 'wildcard'
+        typeHint: 'wildcard',
+        required: true
     }, {
         type: 'options',
         options: [],

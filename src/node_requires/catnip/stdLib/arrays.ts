@@ -14,7 +14,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'argument',
         key: 'return',
-        typeHint: 'wildcard'
+        typeHint: 'wildcard',
+        required: true
     }],
     jsTemplate: (vals) => `${vals.return} = [];`
 }, {
@@ -348,7 +349,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'argument',
         key: 'return',
-        typeHint: 'wildcard'
+        typeHint: 'wildcard',
+        required: true
     }],
     jsTemplate: (vals, index) => `${vals.return} = new Array(${vals.rows});
     for (let _i${index} = 0; _i${index} < ${vals.rows}; _i${index}++) {
