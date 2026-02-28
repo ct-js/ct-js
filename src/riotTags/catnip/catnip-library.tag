@@ -219,7 +219,7 @@ catnip-library(class="{opts.class}").flexrow
                 ondragend="{parent.resetTarget}"
             )
         // Searched blocks
-        .flexfix-body(if="{searchVal.trim() && searchResults.length}")
+        .flexfix-body(if="{searchVal.trim() && searchResults.length}" ref="searchpanel")
             catnip-block(
                 each="{block in searchResults}"
                 block="{({lib: block.lib, code: block.code, values: {}})}"
