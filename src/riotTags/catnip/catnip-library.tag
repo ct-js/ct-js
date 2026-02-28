@@ -404,6 +404,7 @@ catnip-library(class="{opts.class}").flexrow
             this.searchVal = e.target.value;
             if (this.searchVal.trim()) {
                 this.searchResults = searchBlocks(this.searchVal.trim());
+                this.searchResults.length = Math.min(this.searchResults.length, 50);
             }
         };
         this.selectSearch = () => {
