@@ -348,6 +348,7 @@
             "repeat": "Repeat N times",
             "for each": "For each element of array",
             "break loop": "Stop this loop",
+            "continue loop": "Skip this iteration",
             "NOT logic operator": "NOT logic operator",
             "AND logic operator": "AND logic operator",
             "OR logic operator": "OR logic operator",
