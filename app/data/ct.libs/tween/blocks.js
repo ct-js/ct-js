@@ -33,6 +33,15 @@ module.exports = [{
     }, {
         type: 'filler'
     }, {
+        type: 'label',
+        name: 'store in',
+        i18nKey: 'store in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: false
+    }, {
         type: 'asyncMarker'
     }, {
         type: 'break'
@@ -73,7 +82,7 @@ module.exports = [{
         }]
     }],
     jsTemplate: values => `
-        tween.value({
+        ${values.return ? `${values.return} = ` : ''}tween.value({
             from: ${values.value},
             to: ${values.to},
             duration: ${values.ms},
@@ -81,7 +90,7 @@ module.exports = [{
             curve: ${values.curve || 'tween.ease'}
         }, value => {
             ${values.value} = value;
-        }).then(() => {
+        })${values.return ? `;\n${values.return}` : ''}.then(() => {
             ${values.then}
         }).catch(() => {
             ${values.catch}
@@ -130,6 +139,15 @@ module.exports = [{
     }, {
         type: 'filler'
     }, {
+        type: 'label',
+        name: 'store in',
+        i18nKey: 'store in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: false
+    }, {
         type: 'asyncMarker'
     }, {
         type: 'break'
@@ -170,7 +188,7 @@ module.exports = [{
         }]
     }],
     jsTemplate: values => `
-        tween.add({
+        ${values.return ? `${values.return} = ` : ''}tween.add({
             obj: ${values.target},
             duration: ${values.ms},
             isUi: ${values.isUi},
@@ -178,7 +196,7 @@ module.exports = [{
                 ${values.property}: ${values.value}
             },
             curve: ${values.curve || 'tween.ease'}
-        }).then(() => {
+        })${values.return ? `;\n${values.return}` : ''}.then(() => {
             ${values.then}
         }).catch(() => {
             ${values.catch}
@@ -227,6 +245,15 @@ module.exports = [{
     }, {
         type: 'filler'
     }, {
+        type: 'label',
+        name: 'store in',
+        i18nKey: 'store in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: false
+    }, {
         type: 'asyncMarker'
     }, {
         type: 'break'
@@ -267,7 +294,7 @@ module.exports = [{
         }]
     }],
     jsTemplate: values => `
-        tween.add({
+        ${values.return ? `${values.return} = ` : ''}tween.add({
             obj: ${values.target}.scale,
             duration: ${values.ms},
             isUi: ${values.isUi},
@@ -276,7 +303,7 @@ module.exports = [{
                 y: ${values.y}
             },
             curve: ${values.curve || 'tween.ease'}
-        }).then(() => {
+        })${values.return ? `;\n${values.return}` : ''}.then(() => {
             ${values.then}
         }).catch(() => {
             ${values.catch}
@@ -325,6 +352,15 @@ module.exports = [{
     }, {
         type: 'filler'
     }, {
+        type: 'label',
+        name: 'store in',
+        i18nKey: 'store in'
+    }, {
+        type: 'argument',
+        key: 'return',
+        typeHint: 'wildcard',
+        required: false
+    }, {
         type: 'asyncMarker'
     }, {
         type: 'break'
@@ -365,7 +401,7 @@ module.exports = [{
         }]
     }],
     jsTemplate: values => `
-        tween.add({
+        ${values.return ? `${values.return} = ` : ''}tween.add({
             obj: ${values.target},
             duration: ${values.ms},
             isUi: ${values.isUi},
@@ -374,10 +410,22 @@ module.exports = [{
                 y: ${values.y}
             },
             curve: ${values.curve || 'tween.ease'}
-        }).then(() => {
+        })${values.return ? `;\n${values.return}` : ''}.then(() => {
             ${values.then}
         }).catch(() => {
             ${values.catch}
         });
     `
+}, {
+    name: 'Stop an animation',
+    name_Ru: 'Остановить анимацию',
+    code: 'animation stop',
+    type: 'command',
+    pieces: [{
+        type: 'argument',
+        key: 'animation',
+        typeHint: 'wildcard',
+        required: true
+    }],
+    jsTemplate: values => `${values.animation}.stop();`
 }];
