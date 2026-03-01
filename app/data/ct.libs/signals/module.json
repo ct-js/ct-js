@@ -1,0 +1,57 @@
+{
+  "main": {
+    "name": "Signals",
+    "name_Ru": "Сигналы",
+    "tagline": "Tiny Event Emitter / Message system available as events in templates and rooms.",
+    "tagline_Ru": "Маленький Event Emitter / система сообщений, доступная как события в шаблонах и комнатах.",
+    "version": "0.0.0",
+    "authors": [
+      {
+        "name": "Cosmo Myzrail Gorynych",
+        "mail": "admin@nersta.ru"
+      }
+    ],
+    "categories": ["utilities"],
+    "icon": "bell"
+  },
+  "eventCategories": {
+      "signals": {
+        "name": "Signals",
+        "name_Ru": "Сигналы",
+        "icon": "bell"
+      }
+  },
+  "events": {
+    "signal": {
+      "name": "On Signal",
+      "name_Ru": "Сигнал",
+      "parameterizedName": "On \"%%signal%%\" signal",
+      "parameterizedName_Ru": "По сигналу «%%signal%%»",
+      "icon": "bell",
+      "applicable": ["template", "room"],
+      "category": "signals",
+      "arguments": {
+        "signal": {
+          "name": "Signal",
+          "name_Ru": "Сигнал",
+          "type": "string"
+        },
+        "once": {
+          "name": "Execute once",
+          "name_Ru": "Выполнить единожды",
+          "type": "boolean",
+          "defaultValue": false
+        }
+      },
+      "repeatable": true,
+      "codeTargets": ["thisOnCreate"],
+      "locals": {
+        "data": {
+          "type": "any",
+          "description": "Data that was provided with the signal",
+          "description_Ru": "Данные, которые были переданы с этим сигналом"
+        }
+      }
+    }
+  }
+}
