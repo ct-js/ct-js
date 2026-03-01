@@ -433,10 +433,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         type: 'blocks',
         key: 'body'
     }],
-    jsTemplate: (args, index) => `for (const _iy${index} of ${args.array}) {
-        for (const _ix${index} of _iy${index}) {
-            ${args.x} = _ix${index};
-            ${args.y} = _iy${index};
+    jsTemplate: (args) => `for (${args.y} = 0; ${args.y} < ${args.array}.length; ${args.y}++) {
+        for (${args.x} = 0; ${args.x} < ${args.array}[${args.y}].length; ${args.x}++) {
             ${args.body}
         }
     }`
