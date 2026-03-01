@@ -63,7 +63,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
         } else {
             knownCodes.add(useful.name);
         }
-        let documentation = useful.description,
+        let documentation = useful.description || '',
             name = niceBlockName(useful.name),
             displayName: string | undefined;
         const piecesAssets: Record<string, resourceType | 'action'> = {};
@@ -83,9 +83,11 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 // Parse supported tags in JSDoc
                 for (const node of jsDoc.tags) {
                     if (node.tagName.escapedText === 'param') {
-                        documentation += `\n**${(node as any).name.escapedText}** ${node.comment}`;
+                        documentation += `\n- \`${(node as any).name.escapedText}\` ${node.comment}`;
                     } else if (node.tagName.escapedText === 'returns' || node.tagName.escapedText === 'return') {
-                        documentation += `\n\n**Returns** ${node.comment}`;
+                        if (node.comment && node.comment !== 'undefined' && node.comment !== 'void') {
+                            documentation += `\n\n**Returns** ${node.comment}`;
+                        }
                     } else if (node.tagName.escapedText === 'catnipIgnore') {
                         // Hides this block from Catnip
                         // eslint-disable-next-line no-labels

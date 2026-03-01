@@ -14,7 +14,7 @@ catnip-block(
     draggable="{!opts.nodrag}"
     class="{error: !declaration} {declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass} {disabled: opts.block.disabled} {selected: isSelected()}"
     hide="{getHidden}"
-    title="{voc.blockDocumentation[declaration.documentationI18nKey] || localizeField(declaration, 'documentation') || voc.blockNames[declaration.i18nKey] || localizeField(declaration, 'name')}"
+    data-tooltip="{rootTooltip}"
 )
     svg.feather(if="{!declaration}")
         use(xlink:href="#x")
@@ -52,10 +52,10 @@ catnip-block(
             ) {option}
         svg.feather(if="{piece.type === 'icon'}")
             use(xlink:href="#{piece.icon}")
-        span.catnip-block-anAsyncMarker(if="{piece.type === 'asyncMarker'}" title="{voc.asyncHint}")
+        span.catnip-block-anAsyncMarker(if="{piece.type === 'asyncMarker'}" data-tooltip="{voc.asyncHint}")
             svg.feather
                 use(xlink:href="#clock")
-        span.catnip-block-aContextMarker(if="{piece.type === 'contextMarker'}" title="{voc.contextHint}")
+        span.catnip-block-aContextMarker(if="{piece.type === 'contextMarker'}" data-tooltip="{voc.contextHint}")
             svg.feather
                 use(xlink:href="#crosshair")
         .catnip-block-aFiller(if="{piece.type === 'filler'}")
@@ -124,7 +124,6 @@ catnip-block(
                         placeholder="{option.key}"
                         if="{!option.assets && (!getValue(option.key) || (typeof getValue(option.key)) !== 'object')}"
                         class="{option.typeHint} {invalid: parent.getIsInvalid(option)}"
-                        title="{parent.getIsInvalid(option) ? parent.voc.requiredField : ''}"
                         readonly="{parent.parent.opts.readonly}"
                         style="width: {(getValue(option.key) !== (void 0)) ? Math.min((''+getValue(option.key)).length + 0.5, 32) : option.key.length + 0.5}ch"
                     )
@@ -136,7 +135,6 @@ catnip-block(
                         ondragover="{parent.handleDragOver}"
                         if="{option.assets && (!getValue(option.key) || (typeof getValue(option.key)) !== 'object')}"
                         class="{option.typeHint} {invalid: parent.isInvalid(option)}"
-                        title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
                         onclick="{!parent.parent.opts.readonly && promptAsset}"
                     )
                         svg.feather(if="{!getValue(option.key)}")
@@ -212,6 +210,8 @@ catnip-block(
             onclick="{parent.tryMutate}"
             asset="{parent.opts.asset}"
             scriptableevent="{parent.opts.scriptableevent}"
+            tooltip="`{piece.key}`"
+            data-tooltip-position="vertical"
         )
         input.catnip-block-aConstantInput(
             ondrop="{parent.onDrop}"
@@ -226,7 +226,8 @@ catnip-block(
             placeholder="{piece.key}"
             if="{piece.type === 'argument' && !piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint} {invalid: parent.getIsInvalid(piece)}"
-            title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
+            data-tooltip="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ('`'+piece.key+'`')}"
+            data-tooltip-position="vertical"
             readonly="{parent.opts.readonly}"
             style="\
                 width: {(getValue(piece.key) !== (void 0)) ? Math.min((''+getValue(piece.key)).length + 0.5, 32) : piece.key.length + 0.5}ch;\
@@ -243,7 +244,8 @@ catnip-block(
             ondragover="{parent.handleDragOver}"
             if="{piece.type === 'argument' && piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint} {invalid: parent.getIsInvalid(piece)}"
-            title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
+            data-tooltip="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ('`'+piece.key+'`')}"
+            data-tooltip-position="vertical"
             onclick="{!parent.opts.readonly && promptAsset}"
         )
             svg.feather(if="{!getValue(piece.key)}")
@@ -289,8 +291,28 @@ catnip-block(
         this.getThumbnail = (assetType, id) => getThumbnail(getById(assetType, id), false, false);
         this.localizeField = require('src/node_requires/i18n').localizeField;
 
+
+        this.rootTooltip = void 0;
+        const updateTooltip = () => {
+            if (this.opts.tooltip) {
+                this.rootTooltip = this.opts.tooltip;
+            } else if (this.opts.readonly) {
+                this.rootTooltip =
+                    this.voc.blockDocumentation[this.declaration.documentationI18nKey] ||
+                    this.localizeField(this.declaration, 'documentation') ||
+                    this.voc.blockNames[this.declaration.i18nKey] ||
+                    this.localizeField(this.declaration, 'name');
+                if (this.rootTooltip.length < 3) {
+                    // It's probably a title of a math/logic operator and doesn't need to be displayed
+                    this.rootTooltip = void 0;
+                }
+            } else {
+                this.rootTooltip = void 0;
+            }
+        };
         try {
             this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
+            updateTooltip();
         } catch (e) {
             console.error(e);
             this.declaration = false;
@@ -300,6 +322,7 @@ catnip-block(
             if (oldBlock !== this.opts.block) {
                 try {
                     this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
+                    updateTooltip();
                 } catch (e) {
                     console.error(e);
                     this.declaration = false;
