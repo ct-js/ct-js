@@ -53,7 +53,7 @@ app-view.flexcol
         div.app-view-aSideviewBrowser.flexfix(
                 ref="leftPanel"
                 if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
-                style="width: { localStorage.leftPanelWidth ? localStorage.leftPanelWidth + 'px' : null }"
+                style="width: { localStorage.assetsTreeWidth ? localStorage.assetsTreeWidth + 'px' : null }"
             )
             .flexfix-header
                 asset-tree-pin-toggle.toright
@@ -68,7 +68,7 @@ app-view.flexcol
                     folderclick="{tab === 'assets' ? navigateToFolder : undefined}"
                     drop="{onAsideFolderDrop}"
                 )
-        div.divider(
+        div.aVerticalDivider(
             ref="divider"
             mousedown="{handleMouseDown}"
             if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
@@ -699,7 +699,7 @@ app-view.flexcol
             const leftPanel = this.refs.leftPanel;
             const width = leftPanel.offsetWidth;
 
-            localStorage.setItem('leftPanelWidth', width);
+            localStorage.setItem('assetsTreeWidth', width);
 
             document.body.style.cursor = '';
             document.body.style.userSelect = '';

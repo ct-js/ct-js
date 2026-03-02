@@ -209,15 +209,5 @@ icon(icon = 'slash', color = act)
 
 .soundthumbnail // not perfect, but will have to do
     filter hue-rotate(hue(act)) saturate(saturation(act) * 1.1) contrast(0.75) brightness(max(red(act), green(act), blue(act)) / 100)
-.divider
-    width 5px
-    background acttext
-    opacity 0.05
-    cursor col-resize
-    position relative
-    transition opacity 0.2s
-    flex none
-    &:hover 
-        opacity 1
 
 @require 'tooltips.styl'
