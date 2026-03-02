@@ -9,13 +9,15 @@ const keyToEventMap = {
     OnPointerUpOutside: 'pointerupoutside'
 } as Record<string, string>;
 
+const applicableToRoom = ['OnPointerClick', 'OnPointerSecondaryClick', 'OnPointerDown', 'OnPointerUp', 'OnPointerUpOutside'];
+
 const coreEvents = {} as Record<string, IEventDeclaration>;
 
 for (const key in keyToEventMap) {
     const event = keyToEventMap[key];
     coreEvents[`core_${key}`] = {
         name: key,
-        applicable: ['template'],
+        applicable: applicableToRoom.includes(key) ? ['template', 'room'] : ['template'],
         icon: 'ui',
         category: 'pointer',
         codeTargets: ['thisOnCreate'],
@@ -29,4 +31,3 @@ this.on('${event}', () => {
 }
 
 export = coreEvents;
-

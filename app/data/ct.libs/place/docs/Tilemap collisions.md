@@ -25,3 +25,7 @@ tilemap.cache();
 tilemap.enableCollisions('Solid');
 // ...or place.enableTilemapCollisions(tilemap, 'Solid');
 ```
+
+## Removing tiles
+
+To remove a specific tile, you can call `tile.destroy()` on it. If you're deleting a whole tilemap, you must call it with `tilemap.destroy({children: true})` for tiles to remove their collisions.

@@ -159,3 +159,32 @@ catnip-editor(class="flexrow {opts.class}" onpointermove="{repositionGhost}" ond
             window.orders.off('catnipGlobalVarRename', this.renamePropVar);
             window.orders.off('catnipGlobalVarRetype', this.retypePropVar);
         });
+
+        const {TooltipManager} = require('src/node_requires/tooltips');
+        const md = require('markdown-it')({
+            html: false,
+            linkify: true,
+            highlight: function highlight(str, lang) {
+                const hljs = require('highlight.js');
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(lang, str).value;
+                    } catch (oO) {
+                        void 0;
+                    }
+                }
+                return ''; // use external default escaping
+            }
+        });
+        this.on('mount', () => {
+            this.tooltips = new TooltipManager({
+                container: this.root,
+                renderMarkdown: code => md.render(code),
+                showDelay: 500,
+                hideDelay: 250
+            });
+            this.tooltips.mount();
+        });
+        this.on('unmount', () => {
+            this.tooltips.unmount();
+        });

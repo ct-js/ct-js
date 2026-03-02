@@ -14,7 +14,7 @@ catnip-block(
     draggable="{!opts.nodrag}"
     class="{error: !declaration} {declaration.type} {declaration.typeHint} {opts.class} {declaration.customClass} {disabled: opts.block.disabled} {selected: isSelected()}"
     hide="{getHidden}"
-    title="{voc.blockDocumentation[declaration.documentationI18nKey] || localizeField(declaration, 'documentation')}"
+    data-tooltip="{rootTooltip}"
 )
     svg.feather(if="{!declaration}")
         use(xlink:href="#x")
@@ -52,9 +52,12 @@ catnip-block(
             ) {option}
         svg.feather(if="{piece.type === 'icon'}")
             use(xlink:href="#{piece.icon}")
-        span.catnip-block-anAsyncMarker(if="{piece.type === 'asyncMarker'}" title="{voc.asyncHint}")
+        span.catnip-block-anAsyncMarker(if="{piece.type === 'asyncMarker'}" data-tooltip="{voc.asyncHint}")
             svg.feather
                 use(xlink:href="#clock")
+        span.catnip-block-aContextMarker(if="{piece.type === 'contextMarker'}" data-tooltip="{voc.contextHint}")
+            svg.feather
+                use(xlink:href="#crosshair")
         .catnip-block-aFiller(if="{piece.type === 'filler'}")
         .catnip-block-aBreak(if="{piece.type === 'break'}")
         catnip-js-editor(
@@ -79,15 +82,15 @@ catnip-block(
                 showplaceholder="showplaceholder"
                 placeholder="{piece.placeholder}"
                 readonly="{parent.opts.readonly}"
-                asset="{opts.asset}"
-                scriptableevent="{opts.scriptableevent}"
+                asset="{parent.opts.asset}"
+                scriptableevent="{parent.opts.scriptableevent}"
             )
         // Options
         .catnip-block-Options(if="{piece.type === 'options'}")
             .catnip-block-anOptionsToggle(onclick="{toggleShowOptions}")
                 svg.feather
                     use(xlink:href="#chevron-{openOptions ? 'up' : 'down'}")
-                span {voc.optionsAdvanced}
+                span {voc.blockOptionButtons[piece.buttonLabelI18nKey] || localizeField(piece, 'buttonLabel') || voc.optionsAdvanced}
                 svg.feather
                     use(xlink:href="#chevron-{openOptions ? 'up' : 'down'}")
             // Options defined by the block itself
@@ -105,8 +108,8 @@ catnip-block(
                         ondragend="{parent.onDragEnd}"
                         oncontextmenu="{parent.onContextMenu}"
                         onclick="{parent.tryMutate}"
-                        asset="{opts.asset}"
-                        scriptableevent="{opts.scriptableevent}"
+                        asset="{parent.opts.asset}"
+                        scriptableevent="{parent.opts.scriptableevent}"
                     )
                     input.catnip-block-aConstantInput(
                         ondrop="{parent.onDrop}"
@@ -121,7 +124,6 @@ catnip-block(
                         placeholder="{option.key}"
                         if="{!option.assets && (!getValue(option.key) || (typeof getValue(option.key)) !== 'object')}"
                         class="{option.typeHint} {invalid: parent.getIsInvalid(option)}"
-                        title="{parent.getIsInvalid(option) ? parent.voc.requiredField : ''}"
                         readonly="{parent.parent.opts.readonly}"
                         style="width: {(getValue(option.key) !== (void 0)) ? Math.min((''+getValue(option.key)).length + 0.5, 32) : option.key.length + 0.5}ch"
                     )
@@ -133,7 +135,6 @@ catnip-block(
                         ondragover="{parent.handleDragOver}"
                         if="{option.assets && (!getValue(option.key) || (typeof getValue(option.key)) !== 'object')}"
                         class="{option.typeHint} {invalid: parent.isInvalid(option)}"
-                        title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
                         onclick="{!parent.parent.opts.readonly && promptAsset}"
                     )
                         svg.feather(if="{!getValue(option.key)}")
@@ -151,14 +152,16 @@ catnip-block(
                         span(if="{getValue(option.key) && option.assets !== 'action'}") {getName(option.assets, getValue(option.key))}
                         span(if="{getValue(option.key) && option.assets === 'action'}") {getValue(option.key)}
             // User-defined options
+            h3(if="{openOptions && piece.allowCustom && piece.customHeader}")
+                | {voc.blockOptionHeaders[piece.customHeaderI18nKey] || localizeField(piece, 'customHeader')}
             dl(if="{openOptions && piece.allowCustom && parent.opts.block.customOptions}" each="{value, key in parent.opts.block.customOptions}")
                 dt
-                    input.catnip-block-aConstantInput.string(
+                    input.catnip-block-aConstantInput(
                         type="text" value="{key}"
                         onchange="{parent.writeOptionKey}"
                         readonly="{parent.parent.opts.readonly}"
                         style="width: {Math.min(key.length + 0.5, 32)}ch"
-                        class="{invalid: !key}"
+                        class="{invalid: !key} {piece.customKeysType ?? 'string'}"
                     )
                 dd
                     .toright.anActionableIcon(onclick="{parent.removeCustomOption}")
@@ -172,10 +175,10 @@ catnip-block(
                         ondragend="{parent.onOptionDragEnd}"
                         oncontextmenu="{parent.onContextMenu}"
                         onclick="{parent.tryMutateCustomOption}"
-                        asset="{opts.asset}"
-                        scriptableevent="{opts.scriptableevent}"
+                        asset="{parent.parent.opts.asset}"
+                        scriptableevent="{parent.parent.opts.scriptableevent}"
                     )
-                    input.catnip-block-aConstantInput.wildcard(
+                    input.catnip-block-aConstantInput(
                         ondrop="{parent.onOptionDrop}"
                         ondragenter="{parent.handleDragEnter}"
                         ondragleave="{parent.removeDropover}"
@@ -188,6 +191,7 @@ catnip-block(
                         if="{!value || typeof value !== 'object'}"
                         readonly="{parent.parent.opts.readonly}"
                         style="width: {Math.min((value !== void 0) ? value.length + 0.5 : 5, 32)}ch"
+                        class="{piece.customValuesType ?? 'wildcard'}"
                     )
             .pad(if="{openOptions && piece.allowCustom}")
                 button.inline.small(onclick="{addCustomOption}")
@@ -204,8 +208,10 @@ catnip-block(
             ondragend="{parent.onDragEnd}"
             oncontextmenu="{parent.onContextMenu}"
             onclick="{parent.tryMutate}"
-            asset="{opts.asset}"
-            scriptableevent="{opts.scriptableevent}"
+            asset="{parent.opts.asset}"
+            scriptableevent="{parent.opts.scriptableevent}"
+            tooltip="`{piece.key}`"
+            data-tooltip-position="vertical"
         )
         input.catnip-block-aConstantInput(
             ondrop="{parent.onDrop}"
@@ -220,7 +226,8 @@ catnip-block(
             placeholder="{piece.key}"
             if="{piece.type === 'argument' && !piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint} {invalid: parent.getIsInvalid(piece)}"
-            title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
+            data-tooltip="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ('`'+piece.key+'`')}"
+            data-tooltip-position="vertical"
             readonly="{parent.opts.readonly}"
             style="\
                 width: {(getValue(piece.key) !== (void 0)) ? Math.min((''+getValue(piece.key)).length + 0.5, 32) : piece.key.length + 0.5}ch;\
@@ -237,7 +244,8 @@ catnip-block(
             ondragover="{parent.handleDragOver}"
             if="{piece.type === 'argument' && piece.assets && (!getValue(piece.key) || (typeof getValue(piece.key)) !== 'object')}"
             class="{piece.typeHint} {invalid: parent.getIsInvalid(piece)}"
-            title="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ''}"
+            data-tooltip="{parent.getIsInvalid(piece) ? parent.voc.requiredField : ('`'+piece.key+'`')}"
+            data-tooltip-position="vertical"
             onclick="{!parent.opts.readonly && promptAsset}"
         )
             svg.feather(if="{!getValue(piece.key)}")
@@ -283,8 +291,28 @@ catnip-block(
         this.getThumbnail = (assetType, id) => getThumbnail(getById(assetType, id), false, false);
         this.localizeField = require('src/node_requires/i18n').localizeField;
 
+
+        this.rootTooltip = void 0;
+        const updateTooltip = () => {
+            if (this.opts.tooltip) {
+                this.rootTooltip = this.opts.tooltip;
+            } else if (this.opts.readonly) {
+                this.rootTooltip =
+                    this.voc.blockDocumentation[this.declaration.documentationI18nKey] ||
+                    this.localizeField(this.declaration, 'documentation') ||
+                    this.voc.blockNames[this.declaration.i18nKey] ||
+                    this.localizeField(this.declaration, 'name');
+                if (this.rootTooltip.length < 3) {
+                    // It's probably a title of a math/logic operator and doesn't need to be displayed
+                    this.rootTooltip = void 0;
+                }
+            } else {
+                this.rootTooltip = void 0;
+            }
+        };
         try {
             this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
+            updateTooltip();
         } catch (e) {
             console.error(e);
             this.declaration = false;
@@ -294,6 +322,7 @@ catnip-block(
             if (oldBlock !== this.opts.block) {
                 try {
                     this.declaration = getDeclaration(this.opts.block.lib, this.opts.block.code);
+                    updateTooltip();
                 } catch (e) {
                     console.error(e);
                     this.declaration = false;

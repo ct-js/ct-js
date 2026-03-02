@@ -16,7 +16,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'argument',
         key: 'return',
-        typeHint: 'wildcard'
+        typeHint: 'wildcard',
+        required: true
     }, {
         type: 'options',
         options: [],
@@ -176,6 +177,29 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (vals) => `${vals.object}[${vals.property}]`,
     typeHint: 'wildcard'
+}, {
+    name: 'Extract properties from an object',
+    type: 'command',
+    lib: 'core.objects',
+    code: 'object extract props',
+    icon: 'code-alt',
+    i18nKey: 'object extract props',
+    pieces: [{
+        type: 'argument',
+        key: 'object',
+        typeHint: 'wildcard',
+        required: true
+    }, {
+        type: 'options',
+        options: [],
+        allowCustom: true
+    }],
+    jsTemplate: (vals, id, custom) => {
+        const entries = Object.entries(custom);
+        return entries
+            .map(([propName, writeTarget]) => `${writeTarget} = ${vals.object}[${JSON.stringify(propName)}];`)
+            .join('\n');
+    }
 }, {
     name: 'delete property in object',
     type: 'command',

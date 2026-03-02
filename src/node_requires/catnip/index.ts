@@ -89,7 +89,7 @@ const builtinBlockLibrary: blockMenu[] = [{
     items: arraysBlocks,
     i18nKey: 'arrays',
     opened: true,
-    icon: 'grid'
+    icon: 'array'
 }, {
     name: 'Miscellaneous',
     items: miscBlocks,
@@ -646,10 +646,12 @@ export const canPaste = (target: blockArgumentType | 'script'): boolean => {
     }
     return false;
 };
+
+// eslint-disable-next-line max-lines-per-function
 export const paste = (
     target: IBlock | BlockScript,
     index: number | string,
-    owningAsset: IScriptable,
+    owningAsset: IScriptable | IScript,
     owningEvent: IScriptableEvent,
     customOptions?: boolean
 ): void => {
@@ -663,7 +665,9 @@ export const paste = (
     // Use behavior props when possible, and add missing props and variables.
     const vars = new Set<string>(),
           props = new Set<string>();
-    const behaviorFields = getBehaviorFields(owningAsset);
+    const behaviorFields = owningAsset.type === 'script' ?
+        [] :
+        getBehaviorFields(owningAsset as IScriptable);
     const convertToBh = new Set<string>();
     walkOverScript(clipboard!, block => {
         // Filter out visible blocks as props and vars are in a hidden group
@@ -685,22 +689,34 @@ export const paste = (
             vars.add(block.values.variableName as string);
         }
     });
-    // Add missing variables
-    for (const varName of vars) {
-        if (!('variables' in owningEvent)) {
-            owningEvent.variables = [];
+    if (owningAsset.type !== 'script') {
+        const asset = owningAsset as IScriptable;
+        // Add missing variables
+        for (const varName of vars) {
+            if (!('variables' in owningEvent)) {
+                owningEvent.variables = [];
+            }
+            if (!owningEvent.variables!.includes(varName)) {
+                owningEvent.variables!.push(varName);
+            }
         }
-        if (!owningEvent.variables!.includes(varName)) {
-            owningEvent.variables!.push(varName);
+        // Add missing props
+        for (const propName of props) {
+            if (!('properties' in asset)) {
+                asset.properties = [];
+            }
+            if (!asset.properties!.includes(propName)) {
+                asset.properties!.push(propName);
+            }
         }
-    }
-    // Add missing props
-    for (const propName of props) {
-        if (!('properties' in owningAsset)) {
-            owningAsset.properties = [];
-        }
-        if (!owningAsset.properties!.includes(propName)) {
-            owningAsset.properties!.push(propName);
+    } else {
+        // Target asset is a script with a different structure
+        // Add missing variables
+        const script = owningAsset as IScript;
+        for (const varName of vars) {
+            if (!script.variables!.includes(varName)) {
+                script.variables!.push(varName);
+            }
         }
     }
 

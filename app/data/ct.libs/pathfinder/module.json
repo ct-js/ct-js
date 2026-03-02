@@ -1,0 +1,19 @@
+{
+    "main": {
+        "name": "Pathfinder",
+        "name_Ru": "Поиск пути",
+        "tagline": "Use A* algorithm to find the shortest path between two points.",
+        "tagline_Ru": "Используйте алгоритм A* для нахождения кратчайшего пути между двумя точками.",
+        "tagline_Pl": "Użyj algorytmu A* do znalezienia najkrótszej ścieżki między dwoma punktami.",
+        "version": "0.0.0",
+        "authors": [{
+            "name": "Cosmo Myzrail Gorynych",
+            "mail": "admin@nersta.ru"
+        }],
+        "categories": [
+            "motionPlanning"
+        ],
+        "icon": "route"
+    },
+    "optionalDependencies": ["place"]
+}

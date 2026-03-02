@@ -7,6 +7,7 @@ number-input, [data-is="number-input"]
     [type="number"]
         display none
     .anActionableButton
+        cursor pointer
         position absolute
         right 0
         visibility hidden
@@ -17,6 +18,8 @@ number-input, [data-is="number-input"]
         padding 0.1em
         box-sizing border-box
         line-height 0
+        &:hover
+            color act
     &:hover .anActionableButton
         visibility visible
 number-input

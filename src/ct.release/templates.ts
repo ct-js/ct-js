@@ -19,6 +19,11 @@ export interface ICopy {
     uid: number;
     /** The name of the template from which the copy was created */
     template: string | null;
+    /**
+     * If this copy was placed in a room editor, this property is set to true;
+     * dynamically-created copies have this property set to false
+     */
+    placedInRoom: boolean;
     baseClass: ExportedTemplate['baseClass'];
     /** UI alignment information */
     align?: ExportedRoom['objects'][0]['align'];
@@ -337,6 +342,7 @@ const Copy = function (
     this.zIndex = 0;
     this.timer1 = this.timer2 = this.timer3 = this.timer4 = this.timer5 = this.timer6 = 0;
     this.uid = ++uid;
+    this.placedInRoom = false;
     if (template) {
         const templateMixin: Partial<ICopy & pixiMod.DisplayObject> = {
             template: template.name,
@@ -554,7 +560,7 @@ const templatesLib = {
     /**
      * Applies a function to each copy in the current room
      * @param {Function} func The function to apply
-     * @catnipIcon crosshair
+     * @catnipContextChanging
      * @returns {void}
      */
     each(func: (this: BasicCopy, me: BasicCopy) => void): void {
@@ -569,7 +575,7 @@ const templatesLib = {
      * Applies a function to a given object (e.g. to a copy)
      * @param {Copy} obj The copy to perform function upon.
      * @param {Function} function The function to be applied.
-     * @catnipIcon crosshair
+     * @catnipContextChanging
      */
     withCopy<T>(obj: T, func: (this: T) => void): void {
         func.apply(obj, this);
@@ -579,7 +585,7 @@ const templatesLib = {
      * @param {string} template The name of the template to perform function upon.
      * @catnipAsset template:template
      * @param {Function} function The function to be applied.
-     * @catnipIcon crosshair
+     * @catnipContextChanging
      */
     withTemplate(
         template: string,

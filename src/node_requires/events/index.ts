@@ -330,24 +330,27 @@ export const getFieldsTypeScript = (asset: IScriptable | IScriptableBehaviors): 
  * Mainly used for block code editor.
  */
 export const getBehaviorFields = (asset: IScriptable | IScriptableBehaviors): string[] => {
-    const fields: string[] = [];
+    const fields = new Set<string>();
     if ('behaviors' in asset) {
         for (const behaviorId of asset.behaviors) {
             const behavior = getById('behavior', behaviorId);
-            if (behavior.specification.length) {
-                for (const field of behavior.specification) {
-                    fields.push(field.name || field.readableName);
+            if (behavior.properties) {
+                for (const prop of behavior.properties) {
+                    fields.add(prop);
                 }
+            }
+            for (const field of behavior.specification) {
+                fields.add(field.name || field.readableName);
             }
         }
     }
     if (asset.type === 'behavior' && (asset as IBehavior).specification.length) {
         const behavior = asset as IBehavior;
         for (const field of behavior.specification) {
-            fields.push(field.name || field.readableName);
+            fields.add(field.name || field.readableName);
         }
     }
-    return fields;
+    return [...fields];
 };
 
 const importEventsFromCatmod = (manifest: ICatmodManifest, catmodName: string): void => {

@@ -41,11 +41,11 @@ catnip-block-list(
             oncontextmenu="{parent.onContextMenu}"
             ref="blocks"
             onclick="{parent.manageSelection}"
-            asset="{opts.asset}"
-            scriptableevent="{opts.scriptableevent}"
+            asset="{parent.opts.asset}"
+            scriptableevent="{parent.opts.scriptableevent}"
         )
         catnip-insert-mark(
-            if="{!opts.readonly}"
+            if="{!parent.opts.readonly}"
             ondragenter="{parent.handlePreDropInsertMark}"
             ondragover="{parent.handlePreDropInsertMark}"
             ondragleave="{parent.clearInsertMark}"
@@ -319,6 +319,11 @@ catnip-block-list(
             e.preventUpdate = false; // Already gets updated in redrawSelectedBlocks
             // Skip anything that is not a left click (or another main button of the pointer)
             if (e.button !== 0) {
+                return;
+            }
+            // Skip if options were clicked
+            if (e.target.closest('.catnip-block-Options')) {
+                e.stopPropagation();
                 return;
             }
             const {block, ind} = e.item;

@@ -159,7 +159,7 @@ const loadProject = async (projectData: IProject): Promise<void> => {
             loadAllModulesEvents(),
             populatePixiTextureCache(),
             resetDOMTextureCache(),
-            projectData.language === 'catnip' && loadAllBlocks(projectData)
+            loadAllBlocks(projectData) // non-Catnip projects can have catnip scripts
         ]);
         await preparePreviews(projectData, !recoveryExists);
 
