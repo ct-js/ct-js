@@ -612,3 +612,18 @@ fieldset
         opacity 1
     & + &
         margin-left 0.35rem
+
+
+.aVerticalDivider
+    width 0.25rem
+    background-color background
+    border-right 1px solid borderPale
+    border-left @border-right
+    cursor col-resize
+    position relative
+    transition 0.25s ease
+    transition-property background-color border-color
+    flex none
+    &:hover
+        background-color acttext
+        border-color @background-color

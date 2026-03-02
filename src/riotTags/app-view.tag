@@ -49,8 +49,12 @@ app-view.flexcol
                         svg.feather.anActionableIcon(if="{!tabsDirty[ind]}" onclick="{closeAsset}")
                             use(xlink:href="#x")
             search-and-recents.nogrow
-    div.flexrow.app-view-anIdeWrap
-        div.app-view-aSideviewBrowser.flexfix(if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}")
+    div.flexrow.app-view-anIdeWrap(ref="container")
+        div.app-view-aSideviewBrowser.flexfix(
+                ref="leftPanel"
+                if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
+                style="width: { localStorage.assetsTreeWidth ? localStorage.assetsTreeWidth + 'px' : null }"
+            )
             .flexfix-header
                 asset-tree-pin-toggle.toright
                 h3.nm {voc.assets}
@@ -64,6 +68,11 @@ app-view.flexcol
                     folderclick="{tab === 'assets' ? navigateToFolder : undefined}"
                     drop="{onAsideFolderDrop}"
                 )
+        div.aVerticalDivider(
+            ref="divider"
+            onmousedown="{onDividerMouseDown}"
+            if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
+        )
         div.flexitem.relative(if="{window.currentProject}")
             main-menu(show="{tab === 'menu'}" ref="mainMenu")
             debugger-screen-multiwindow(if="{tab === 'debug' && !splitDebugger}" params="{debugParams}" data-hotkey-scope="play" ref="debugger")
@@ -648,3 +657,74 @@ app-view.flexcol
         this.on('unmount', () => {
             window.hotkeys.off('F11', this.toggleFullscreen);
         });
+
+
+        //
+        // Logic for asset tree resizing
+        //
+        this.isDragging = false;
+        const minAssetTreeWidth = 150;
+
+        this.on('mount', () => {
+            window.addEventListener('resize', this.revalidateSidebarWidth);
+        });
+        this.on('unmount', () => {
+            document.removeEventListener('mousemove', this.handleMouseMove);
+            document.removeEventListener('mouseup', this.handleMouseUp);
+            window.removeEventListener('resize', this.revalidateSidebarWidth);
+        });
+
+        this.onDividerMouseDown = e => {
+            e.preventUpdate = true;
+            this.isDragging = true;
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+            document.addEventListener('mousemove', this.handleMouseMove);
+            document.addEventListener('mouseup', this.handleMouseUp);
+        };
+
+        this.revalidateSidebarWidth = () => {
+            if (!localStorage.assetsTreeWidth) {
+                return;
+            }
+            const {container, leftPanel} = this.refs;
+            const containerRect = container.getBoundingClientRect();
+            const maxWidth = containerRect.width * 0.8;
+            const savedWidth = parseInt(localStorage.assetsTreeWidth)
+            let newLeftWidth = savedWidth;
+            newLeftWidth = Math.max(minAssetTreeWidth, Math.min(newLeftWidth, maxWidth));
+            if (newLeftWidth !== savedWidth) {
+                localStorage.assetsTreeWidth = newLeftWidth;
+                leftPanel.style.width = `${newLeftWidth}px`;
+            }
+        };
+
+        this.handleMouseMove = e => {
+            if (!this.isDragging) {
+                return;
+            }
+
+            const {container, leftPanel} = this.refs;
+            const containerRect = container.getBoundingClientRect();
+            let newLeftWidth = e.clientX - containerRect.left;
+
+            const maxWidth = containerRect.width * 0.8;
+
+            newLeftWidth = Math.max(minAssetTreeWidth, Math.min(newLeftWidth, maxWidth));
+            leftPanel.style.width = `${newLeftWidth}px`;
+        };
+
+        this.handleMouseUp = () => {
+            this.isDragging = false;
+
+            const leftPanel = this.refs.leftPanel;
+            const width = leftPanel.offsetWidth;
+
+            localStorage.setItem('assetsTreeWidth', width);
+
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+
+            document.removeEventListener('mousemove', this.handleMouseMove);
+            document.removeEventListener('mouseup', this.handleMouseUp);
+        };
