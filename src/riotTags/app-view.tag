@@ -70,7 +70,7 @@ app-view.flexcol
                 )
         div.aVerticalDivider(
             ref="divider"
-            mousedown="{handleMouseDown}"
+            onmousedown="{onDividerMouseDown}"
             if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
         )
         div.flexitem.relative(if="{window.currentProject}")
@@ -658,39 +658,60 @@ app-view.flexcol
             window.hotkeys.off('F11', this.toggleFullscreen);
         });
 
+
+        //
+        // Logic for asset tree resizing
+        //
         this.isDragging = false;
+        const minAssetTreeWidth = 150;
 
         this.on('mount', () => {
-            document.addEventListener('mousemove', this.handleMouseMove);
-            document.addEventListener('mouseup', this.handleMouseUp);
+            window.addEventListener('resize', this.revalidateSidebarWidth);
         });
-
         this.on('unmount', () => {
             document.removeEventListener('mousemove', this.handleMouseMove);
             document.removeEventListener('mouseup', this.handleMouseUp);
+            window.removeEventListener('resize', this.revalidateSidebarWidth);
         });
 
-        this.handleMouseDown = e => {
+        this.onDividerMouseDown = e => {
+            e.preventUpdate = true;
             this.isDragging = true;
             document.body.style.cursor = 'col-resize';
             document.body.style.userSelect = 'none';
+            document.addEventListener('mousemove', this.handleMouseMove);
+            document.addEventListener('mouseup', this.handleMouseUp);
+        };
+
+        this.revalidateSidebarWidth = () => {
+            if (!localStorage.assetsTreeWidth) {
+                return;
+            }
+            const {container, leftPanel} = this.refs;
+            const containerRect = container.getBoundingClientRect();
+            const maxWidth = containerRect.width * 0.8;
+            const savedWidth = parseInt(localStorage.assetsTreeWidth)
+            let newLeftWidth = savedWidth;
+            newLeftWidth = Math.max(minAssetTreeWidth, Math.min(newLeftWidth, maxWidth));
+            if (newLeftWidth !== savedWidth) {
+                localStorage.assetsTreeWidth = newLeftWidth;
+                leftPanel.style.width = `${newLeftWidth}px`;
+            }
         };
 
         this.handleMouseMove = e => {
-            if (!this.isDragging) return;
+            if (!this.isDragging) {
+                return;
+            }
 
-            const container = this.refs.container;
-            const leftPanel = this.refs.leftPanel;
-
+            const {container, leftPanel} = this.refs;
             const containerRect = container.getBoundingClientRect();
-            const newLeftWidth = e.clientX - containerRect.left;
+            let newLeftWidth = e.clientX - containerRect.left;
 
-            const minWidth = 150;
             const maxWidth = containerRect.width * 0.8;
 
-            if (newLeftWidth >= minWidth && newLeftWidth <= maxWidth) {
-                leftPanel.style.width = `${newLeftWidth}px`;
-            }
+            newLeftWidth = Math.max(minAssetTreeWidth, Math.min(newLeftWidth, maxWidth));
+            leftPanel.style.width = `${newLeftWidth}px`;
         };
 
         this.handleMouseUp = () => {
@@ -703,4 +724,7 @@ app-view.flexcol
 
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+
+            document.removeEventListener('mousemove', this.handleMouseMove);
+            document.removeEventListener('mouseup', this.handleMouseUp);
         };
