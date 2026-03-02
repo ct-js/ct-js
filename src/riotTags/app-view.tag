@@ -690,7 +690,7 @@ app-view.flexcol
             const {container, leftPanel} = this.refs;
             const containerRect = container.getBoundingClientRect();
             const maxWidth = containerRect.width * 0.8;
-            const savedWidth = parseInt(localStorage.assetsTreeWidth)
+            const savedWidth = parseInt(localStorage.assetsTreeWidth, 10);
             let newLeftWidth = savedWidth;
             newLeftWidth = Math.max(minAssetTreeWidth, Math.min(newLeftWidth, maxWidth));
             if (newLeftWidth !== savedWidth) {
@@ -717,7 +717,7 @@ app-view.flexcol
         this.handleMouseUp = () => {
             this.isDragging = false;
 
-            const leftPanel = this.refs.leftPanel;
+            const {leftPanel} = this.refs;
             const width = leftPanel.offsetWidth;
 
             localStorage.setItem('assetsTreeWidth', width);
