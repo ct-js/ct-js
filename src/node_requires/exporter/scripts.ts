@@ -28,6 +28,9 @@ export const stringifyScripts = (scripts: IScript[], debugMode: boolean): string
                 break;
             default: throw new Error(`Unsupported script language: ${script.language}`);
             }
+            if (script?.variables?.length) {
+                code = `let ${script.variables.join(', ')};\n` + code;
+            }
             // Add a preamble to each script for easier debugging by users
             const preamble = `/* 🐱👉 Script asset ${script.name} */\n`;
             return acc + `'${script.name}': function (options) {\n${preamble}\n${code}},`;

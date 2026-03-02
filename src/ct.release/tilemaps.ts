@@ -24,6 +24,7 @@ class TileChunk extends PIXI.Container {
 
 /**
  * @extends {PIXI.Container}
+ * @catnipIgnore
  */
 export class Tilemap extends PIXI.Container {
     pixiTiles: Tile[];
@@ -218,6 +219,7 @@ const tilemapsLib = {
      * Creates a new tilemap at a specified depth, and adds it to the main room (ct.room).
      * @param [depth] The depth of a newly created tilemap. Defaults to 0.
      * @returns {Tilemap} The created tilemap.
+     * @catnipSaveReturn
      */
     create(depth = 0): Tilemap {
         if (!roomsLib.current) {
@@ -238,6 +240,7 @@ const tilemapsLib = {
      * @param y The vertical location of the tile.
      * @param frame The frame to pick from the source texture. Defaults to 0.
      * @returns {PIXI.Sprite} The created tile
+     * @catnipSaveReturn
      */
     addTile(
         tilemap: Tilemap,

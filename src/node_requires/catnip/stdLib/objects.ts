@@ -16,7 +16,8 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }, {
         type: 'argument',
         key: 'return',
-        typeHint: 'wildcard'
+        typeHint: 'wildcard',
+        required: true
     }, {
         type: 'options',
         options: [],
@@ -196,7 +197,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     jsTemplate: (vals, id, custom) => {
         const entries = Object.entries(custom);
         return entries
-            .map(([propName, writeTarget]) => `${writeTarget} = ${vals.object}[${propName}];`)
+            .map(([propName, writeTarget]) => `${writeTarget} = ${vals.object}[${JSON.stringify(propName)}];`)
             .join('\n');
     }
 }, {

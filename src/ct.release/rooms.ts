@@ -291,7 +291,8 @@ export class Room extends PIXI.Container<pixiMod.DisplayObject> {
                         customWordWrap: copy.customWordWrap,
                         customText: copy.customText,
                         customAnchor: copy.customAnchor,
-                        align: copy.align
+                        align: copy.align,
+                        placedInRoom: true
                     }
                 );
                 if (copy.align) {

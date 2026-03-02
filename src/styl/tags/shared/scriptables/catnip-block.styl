@@ -32,7 +32,7 @@ catnip-block, .catnip-block
     &.disabled
         opacity 0.65
         filter grayscale(100%)
-    .catnip-block-aFiller, .catnip-block-anAsyncMarker
+    .catnip-block-aFiller
         flex 1 1 0
         text-align right
     .catnip-block-aGroupName
@@ -83,7 +83,7 @@ catnip-block, .catnip-block
             flex 1 1 25%
         dd
             flex 1 1 70%
-    .catnip-block-anAsyncMarker
+    .catnip-block-anAsyncMarker, .catnip-block-anContextMarker
         cursor help
     .catnip-block-Blocks
         flex 1 1 100%
@@ -225,6 +225,9 @@ catnip-block, .catnip-block
         .catnip-block-Blocks
             background mix(act, backgroundDeeper, 65%)
             border-color mix(borderBright, backgroundDeeper, 85%)
+        .catnip-block-Options
+            color text
+            background background
         if (themeDark)
             .catnip-block-Blocks
                 background mix(act, backgroundDeeper, 35%)

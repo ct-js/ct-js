@@ -602,12 +602,19 @@ const place = (function ctPlace() {
                 throw new Error('[place] The tilemap already has collisions enabled.');
             }
             tilemap.cgroup = cgroup;
+            const onDestroyTile = function () {
+                for (const hash of this.$chashes) {
+                    const ind = place.tileGrid[hash].indexOf(this);
+                    place.tileGrid[hash].splice(ind, 1);
+                }
+            };
             // Prebake hashes and SSCD shapes for all the tiles
             for (const pixiSprite of tilemap.pixiTiles) {
                 // eslint-disable-next-line no-underscore-dangle
                 pixiSprite._shape = getSSCDShape(pixiSprite);
                 pixiSprite.cgroup = cgroup;
                 pixiSprite.$chashes = place.getHashes(pixiSprite);
+                pixiSprite.on('destroyed', onDestroyTile);
                 /* eslint max-depth: 0 */
                 for (const hash of pixiSprite.$chashes) {
                     if (!(hash in place.tileGrid)) {

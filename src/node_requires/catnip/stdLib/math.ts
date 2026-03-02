@@ -2,11 +2,13 @@ const niceOperators: Record<string, string> = {
     '*': '×',
     '/': ':',
     '<=': '≤',
-    '>=': '≥'
+    '>=': '≥',
+    '===': '=',
+    '!==': '≠'
 };
 
 const numberOperators = ['+', '-', '*', '/', '%'],
-      boolOperators = ['<', '<=', '>', '>='],
+      boolOperators = ['<', '<=', '>', '>=', '===', '!=='],
       mathUnaryOperators = ['abs', 'sign', 'floor', 'ceil', 'round', 'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan'],
       mathBinaryOperators = ['atan2', 'pow', 'log', 'min', 'max'];
 
@@ -102,6 +104,18 @@ const blocks: (IBlockComputedDeclaration | IBlockCommandDeclaration)[] = [
             required: true
         }],
         typeHint: 'number'
+    },
+    {
+        name: 'infinity',
+        i18nKey: 'infinity',
+        type: 'computed',
+        code: 'infinity',
+        icon: 'sort-numerically',
+        jsTemplate: () => 'Infinity',
+        lib: 'core.logic',
+        pieces: [],
+        typeHint: 'number',
+        customClass: 'constant'
     }
 ];
 

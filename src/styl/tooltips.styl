@@ -1,0 +1,79 @@
+/* Base tooltip styles */
+.tooltip
+    position fixed
+    z-index 9999
+    /* so the tooltip never blocks mouse events */
+    pointer-events none;
+
+    /* Visual appearance */
+    background-color background
+    border-radius br
+    border 1px solid borderBright
+    line-height 1.5
+    {shadamb}
+
+    /* Fade transition */
+    opacity 0
+    transition all 0.2s ease
+
+/* Visible state */
+.tooltip--visible
+    opacity 1
+    pointer-events auto
+
+/* Pointer – common styles */
+.tooltip__pointer
+    position absolute
+    width 0.5rem
+    height @width
+    border 1px solid borderBright
+    border-color borderBright borderBright transparent transparent
+    background background
+
+/* Pointer when tooltip is placed to the left of the element */
+.tooltip--left .tooltip__pointer
+    left 100%
+    rotate 45deg
+    translate -50% 0
+
+/* Pointer when tooltip is placed to the right of the element */
+.tooltip--right .tooltip__pointer
+    right 100%
+    rotate -135deg
+    translate 50% 0
+
+/* Pointer when tooltip is placed above the element (pointing down) */
+.tooltip--above .tooltip__pointer
+    top 100%
+    left 0
+    rotate 135deg
+    translate 0 -50%
+
+/* Pointer when tooltip is placed below the element (pointing up) */
+.tooltip--below .tooltip__pointer
+    bottom 100%
+    left 0
+    rotate -45deg
+    translate 0 50%
+
+/* Content area */
+.tooltip__content
+    padding 0 1rem
+    position relative
+    /* Size constraints */
+    max-width 20rem
+    max-height 12rem
+    overflow-y auto
+
+    p, ul, ol
+        margin 0.5rem 0
+    ul, ol
+        padding-inline-start 1.125rem
+    code
+        margin 0
+    li code, & > p:only-child > code:only-child
+        /* Inline code in lists and sole inline code strings in tooltips usually describe parameters.
+        We can round them to make them look more like catnip arguments. */
+        border-radius 1rem
+    pre code
+        border-radius br

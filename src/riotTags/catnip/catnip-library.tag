@@ -37,7 +37,7 @@ mixin propsVars
         block="{({lib: 'core.hidden', code: 'script options', values: {}})}"
         dragoutonly="dragoutonly"
         readonly="readonly"
-        ondragstart="{parent.onVarDragStart}"
+        ondragstart="{onVarDragStart}"
         draggable="draggable"
         ondragend="{parent.resetTarget}"
         data-blockcode="script options"
@@ -219,7 +219,7 @@ catnip-library(class="{opts.class}").flexrow
                 ondragend="{parent.resetTarget}"
             )
         // Searched blocks
-        .flexfix-body(if="{searchVal.trim() && searchResults.length}")
+        .flexfix-body(if="{searchVal.trim() && searchResults.length}" ref="searchpanel")
             catnip-block(
                 each="{block in searchResults}"
                 block="{({lib: block.lib, code: block.code, values: {}})}"
@@ -321,11 +321,13 @@ catnip-library(class="{opts.class}").flexrow
             const code = e.currentTarget.getAttribute('data-blockcode');
             const value = e.currentTarget.getAttribute('data-blockvalue');
             const values = {};
-            if (code !== 'enum value') {
-                values.variableName = value;
-            } else {
-                values.enumId = value;
-                [values.enumValue] = getById('enum', value).values;
+            if (value) {
+                if (code !== 'enum value') {
+                    values.variableName = value;
+                } else {
+                    values.enumId = value;
+                    [values.enumValue] = getById('enum', value).values;
+                }
             }
             startBlocksTransmit([{
                 lib: 'core.hidden',
@@ -402,6 +404,7 @@ catnip-library(class="{opts.class}").flexrow
             this.searchVal = e.target.value;
             if (this.searchVal.trim()) {
                 this.searchResults = searchBlocks(this.searchVal.trim());
+                this.searchResults.length = Math.min(this.searchResults.length, 50);
             }
         };
         this.selectSearch = () => {

@@ -171,6 +171,41 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
         required: true
     }],
     jsTemplate: (values) => `templates.valid(${values.copy})`
+}, {
+    name: 'was placed in a room',
+    type: 'computed',
+    code: 'copy placedInRoom',
+    icon: 'template',
+    lib: 'core.templates',
+    i18nKey: 'copy placedInRoom',
+    typeHint: 'boolean',
+    pieces: [],
+    jsTemplate: () => 'this.placedInRoom'
+}, {
+    name: 'is of template',
+    code: 'is of template',
+    type: 'computed',
+    hideLabel: true,
+    icon: 'template',
+    lib: 'core.templates',
+    i18nKey: 'is of template',
+    typeHint: 'boolean',
+    pieces: [{
+        type: 'argument',
+        typeHint: 'wildcard',
+        key: 'copy',
+        required: true
+    }, {
+        type: 'label',
+        name: 'is',
+        i18nKey: 'is'
+    }, {
+        type: 'argument',
+        typeHint: 'string',
+        assets: 'template',
+        key: 'template'
+    }],
+    jsTemplate: (values) => `(${values.copy}.template === ${values.template})`
 }];
 
 export default blocks;

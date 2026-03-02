@@ -21,23 +21,27 @@ const sortHelper = {
 
 const supportedTypes = ['string', 'number', 'boolean', 'wildcard', 'function'];
 
-const getPieces = (piecesAssets: Record<string, resourceType | 'action'>, useful: usableDeclaration): (IBlockPieceArgument | IBlockPieceBlocks)[] =>
-    (useful.kind === 'function' ? useful.args : []).map(arg => {
+const getPieces = (piecesAssets: Record<string, resourceType | 'action'>, useful: usableDeclaration): [IBlockPieceArgument[], IBlockPieceBlocks[]] => {
+    const args: IBlockPieceArgument[] = [];
+    const blocks: IBlockPieceBlocks[] = [];
+    (useful.kind === 'function' ? useful.args : []).forEach(arg => {
         if (arg.type === 'BLOCKS') {
-            return {
+            blocks.push({
                 type: 'blocks',
                 key: arg.name
-            };
+            });
+        } else {
+            args.push({
+                type: 'argument' as const,
+                key: arg.name,
+                typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
+                assets: piecesAssets[arg.name],
+                required: arg.required
+            });
         }
-        return {
-            type: 'argument' as const,
-            key: arg.name,
-            typeHint: supportedTypes.includes(arg.type) ? arg.type : 'wildcard',
-            assets: piecesAssets[arg.name],
-            required: arg.required
-        };
     });
-
+    return [args, blocks];
+};
 const stringifyArg = (values: Record<string, string>) => (arg: {
     type: blockArgumentType | 'BLOCKS';
     name: string;
@@ -59,13 +63,14 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
         } else {
             knownCodes.add(useful.name);
         }
-        let documentation = useful.description,
+        let documentation = useful.description || '',
             name = niceBlockName(useful.name),
             displayName: string | undefined;
         const piecesAssets: Record<string, resourceType | 'action'> = {};
         const piecesDefaults: Record<string, string | number | boolean> = {};
         const extraNames: Record<string, string> = {};
         let returnSave = false,
+            contextMark = false,
             promise: false | 'both' | 'catch' | 'then' = false,
             promiseSave: blockArgumentType | false = false,
             listType: resourceType | false = false;
@@ -78,9 +83,11 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 // Parse supported tags in JSDoc
                 for (const node of jsDoc.tags) {
                     if (node.tagName.escapedText === 'param') {
-                        documentation += `\n**${(node as any).name.escapedText}** ${node.comment}`;
+                        documentation += `\n- \`${(node as any).name.escapedText}\` ${node.comment}`;
                     } else if (node.tagName.escapedText === 'returns' || node.tagName.escapedText === 'return') {
-                        documentation += `\n\n**Returns** ${node.comment}`;
+                        if (node.comment && node.comment !== 'undefined' && node.comment !== 'void') {
+                            documentation += `\n\n**Returns** ${node.comment}`;
+                        }
                     } else if (node.tagName.escapedText === 'catnipIgnore') {
                         // Hides this block from Catnip
                         // eslint-disable-next-line no-labels
@@ -154,6 +161,8 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                         // Adds a slot to the right side of the block so the user can use
                         // the resolved value of a promise.
                         promiseSave = node.comment.toString().trim() as blockArgumentType || 'wildcard';
+                    } else if (node.tagName.escapedText === 'catnipContextChanging') {
+                        contextMark = true;
                     }
                 }
             }
@@ -165,6 +174,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
         if (!displayName) {
             displayName = name;
         }
+        const [args, lists] = getPieces(piecesAssets, useful);
         const draft = {
             code: useful.name,
             lib,
@@ -176,7 +186,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 displayName.toLowerCase()),
             ...extraNames,
             documentation,
-            pieces: getPieces(piecesAssets, useful)
+            pieces: [...args]
         } as Omit<IBlockComputedDeclaration, 'jsTemplate'> & Partial<Pick<IBlockComputedDeclaration, 'jsTemplate'>>;
         if (icon) {
             draft.icon = icon;
@@ -213,6 +223,16 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 type: 'asyncMarker'
             });
         }
+        if (contextMark) {
+            if (!promise && !promiseSave) {
+                draft.pieces.push({
+                    type: 'filler'
+                });
+            }
+            draft.pieces.push({
+                type: 'contextMarker'
+            });
+        }
         if (promise) {
             if (promise === 'then' || promise === 'both') {
                 draft.pieces.push({
@@ -247,6 +267,7 @@ export const convertFromDtsToBlocks = (usefuls: usableDeclaration[], lib: 'core'
                 });
             }
         }
+        draft.pieces.push(...lists);
         if (useful.kind === 'prop') {
             if (listType) {
                 draft.jsTemplate = vals => `${useful.name}[${vals.list}]`;

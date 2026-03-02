@@ -65,6 +65,7 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     displayI18nKey: 'options',
     type: 'computed',
     typeHint: 'wildcard',
+    customClass: 'userdefined',
     icon: 'code-alt',
     jsTemplate: () => 'options',
     pieces: []

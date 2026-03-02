@@ -157,6 +157,15 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     i18nKey: 'break loop',
     pieces: []
 }, {
+    name: 'continue loop',
+    type: 'command',
+    code: 'continue loop',
+    icon: 'log-out',
+    jsTemplate: () => 'continue;\n',
+    lib: 'core.logic',
+    i18nKey: 'continue loop',
+    pieces: []
+}, {
     name: 'AND logic operator',
     type: 'computed',
     code: 'a AND b',
