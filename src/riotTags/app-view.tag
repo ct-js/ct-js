@@ -54,7 +54,7 @@ app-view.flexcol
                 ref="leftPanel"
                 if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
                 style="width: { localStorage.leftPanelWidth ? localStorage.leftPanelWidth + 'px' : null }"
-            )            
+            )
             .flexfix-header
                 asset-tree-pin-toggle.toright
                 h3.nm {voc.assets}
@@ -71,6 +71,7 @@ app-view.flexcol
         div.divider(
             ref="divider"
             mousedown="{handleMouseDown}"
+            if="{tab === 'assets' || (typeof tab !== 'string' && localStorage.pinAssetBrowser === 'on')}"
         )
         div.flexitem.relative(if="{window.currentProject}")
             main-menu(show="{tab === 'menu'}" ref="mainMenu")
@@ -680,7 +681,7 @@ app-view.flexcol
 
             const container = this.refs.container;
             const leftPanel = this.refs.leftPanel;
-            
+
             const containerRect = container.getBoundingClientRect();
             const newLeftWidth = e.clientX - containerRect.left;
 
