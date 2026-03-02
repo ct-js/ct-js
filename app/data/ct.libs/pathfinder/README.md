@@ -233,8 +233,19 @@ var debugPath = pathfinder.drawDebugPath(path, map, color);
 pathfinder.removeAllDebugGraphics();
 ```
 
+## FAQ
+
+**How do I use pathfinding for multi-tile entities, like a 3x3 boss?**  
+This will require a separate pathfinding map, and you can base it off the existing one for regular characters: we can treat a 3x3 boss as a 1x1 character in the center of the 3x3 rectangle, and expand all walls by one cell in all directions. A 2x2 character with its origin in the top-left corner would use a map where every wall is continued by one cell to top, left, and top-left.
+
+**How do I implement movement of a group of characters? For example, in an RTS when ordering to move a group of units.**  
+The simplest way would be to get the clicked cell, and use a flood fill algorithm to find an area around this cell to get all the cells to place other characters. After that, you can find paths for each character. There can be other formations, and you can add optimizations like calculating the path from the center of the group to the destination, slicing off N starting and final points of this path, and pathfinding to the first remaining point -> moving along the common path -> pathfinding itself onto the final location.
+
+**Can I use Pathfinder for games where characters don't move on a grid?**
+While navigation meshes are what is usually used for non-grid-based tasks, a Pathfinder module can be combined with other movement methods for a non-grid-based feel. For example, you can have collision groups `Solid` and `SolidSmall`, and create a pathfinding map that detects only the `Solid` copies and tiles, while the character's movement from point to point smoothly avoids both.
+
 ## Performance Tips
 
-- Use **fast: true** (default) for maps that were designed on-grid.
+- If you're using `generateBasic` or `generateAdvanced`, use **fast: true** (default) for maps that were designed on-grid as collision calculations are costly and can add a noticeable delay when switching to a large room. Use rectangular collision shapes if you're not simulating arcade physics, and adjust the grid size of the `place` catmod in its settings. Ideally this should match the dimensions of the largest tile in your game.
 - Set **iterationsPerCalculation** for large maps to prevent frame drops — long paths will be calculated in multiple frames to keep FPS stable.
 - Avoid regenerating the grid often; use `avoidAdditionalPoint` for temporary obstacles.

@@ -6,6 +6,8 @@ libs:
   place:
     gridX: 1024
     gridY: 1024
+    debugMode: false
+    debugText: 0
   pointer: {}
   pointer.polyfill: {}
   pathfinder: {}
@@ -14,7 +16,7 @@ libs:
   keyboard: {}
   random: {}
   signals: {}
-startroom: -1
+startroom: HjqFjDFGfBG4Rn
 contentTypes: []
 actions:
   - name: Press
@@ -305,7 +307,7 @@ assets:
             opacity: 1
             tint: 16777215
             scale:
-              x: 1
+              x: 0.75
               'y': 0.25
             rotation: 0
             uid: TKM2NCTWLjj8R7
@@ -333,12 +335,12 @@ assets:
             customAnchor:
               x: 0.5
               'y': 0.5
-          - x: 352
+          - x: 288
             'y': 32
             opacity: 1
             tint: 16777215
             scale:
-              x: 1.125
+              x: 1
               'y': 0.25
             rotation: 0
             uid: PJCD43Jc4t6nzK
@@ -348,12 +350,12 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 672
+          - x: 576
             'y': 32
             opacity: 1
             tint: 16777215
             scale:
-              x: 1
+              x: 0.875
               'y': 0.25
             rotation: 0
             uid: Bd3hzwM1zGmdPN
@@ -363,7 +365,7 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 1440
+          - x: 1472
             'y': 32
             opacity: 1
             tint: 16777215
@@ -378,7 +380,7 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 1568
+          - x: 1600
             'y': 32
             opacity: 1
             tint: 16777215
@@ -393,12 +395,12 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 1728
+          - x: 1760
             'y': 32
             opacity: 1
             tint: 16777215
             scale:
-              x: 0.625
+              x: 0.5
               'y': 0.25
             rotation: 0
             uid: L17gFkMznnbnwT
@@ -408,7 +410,7 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 1376
+          - x: 1408
             'y': 64
             opacity: 1
             tint: 16777215
@@ -428,7 +430,7 @@ assets:
             customAnchor:
               x: 0.5
               'y': 0.5
-          - x: 960
+          - x: 1088
             'y': 32
             opacity: 1
             tint: 16777215
@@ -443,7 +445,7 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 960
+          - x: 1088
             'y': 64
             opacity: 1
             tint: 16777215
@@ -458,7 +460,7 @@ assets:
             customSize: !<tag:yaml.org,2002:js/undefined> ''
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings: {}
-          - x: 1088
+          - x: 1216
             'y': 32
             opacity: 1
             tint: 16777215
@@ -474,7 +476,7 @@ assets:
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings:
               text: keys
-          - x: 1088
+          - x: 1216
             'y': 64
             opacity: 1
             tint: 16777215
@@ -490,9 +492,24 @@ assets:
             customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
             bindings:
               text: berries
+          - x: 832
+            'y': 32
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 0.75
+              'y': 0.25
+            rotation: 0
+            uid: mFFhfBwWB34gMb
+            exts: {}
+            customProperties: {}
+            customText: !<tag:yaml.org,2002:js/undefined> ''
+            customSize: !<tag:yaml.org,2002:js/undefined> ''
+            customWordWrap: !<tag:yaml.org,2002:js/undefined> ''
+            bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1772358493516
+        lastmod: 1772439747585
         events: []
         behaviors: []
         extendTypes: ''
@@ -638,13 +655,13 @@ assets:
             variables: []
         extends:
           cgroup: ''
-        lastmod: 1771592688624
+        lastmod: 1772439646006
         uid: TKM2NCTWLjj8R7
         behaviors: []
         extendTypes: ''
         properties: []
         defaultText: Toggle Debug
-        textStyle: -1
+        textStyle: r3MWtmCMqGHwGJ
         nineSliceSettings:
           top: 16
           left: 16
@@ -706,13 +723,13 @@ assets:
             variables: []
         extends:
           cgroup: ''
-        lastmod: 1771593322366
+        lastmod: 1772439630915
         uid: PJCD43Jc4t6nzK
         behaviors: []
         extendTypes: ''
         properties: []
         defaultText: Toggle fair movement
-        textStyle: -1
+        textStyle: r3MWtmCMqGHwGJ
         nineSliceSettings:
           top: 16
           left: 16
@@ -743,7 +760,7 @@ assets:
             variables: []
         extends:
           cgroup: ''
-        lastmod: 1772110489207
+        lastmod: 1772439669404
         uid: Bd3hzwM1zGmdPN
         behaviors: []
         extendTypes: ''
@@ -751,7 +768,7 @@ assets:
         defaultText: |-
           Go to the closest
           strawberry
-        textStyle: -1
+        textStyle: r3MWtmCMqGHwGJ
         nineSliceSettings:
           top: 16
           left: 16
@@ -782,13 +799,13 @@ assets:
             variables: []
         extends:
           cgroup: ''
-        lastmod: 1772106356527
+        lastmod: 1772439619773
         uid: cdzfjgQPNWPQCb
         behaviors: []
         extendTypes: ''
         properties: []
         defaultText: Puddles
-        textStyle: -1
+        textStyle: r3MWtmCMqGHwGJ
         nineSliceSettings:
           top: 16
           left: 16
@@ -819,13 +836,13 @@ assets:
             variables: []
         extends:
           cgroup: ''
-        lastmod: 1772106549565
+        lastmod: 1772439614204
         uid: bJP8fRRBQc2Qc7
         behaviors: []
         extendTypes: ''
         properties: []
         defaultText: Doors
-        textStyle: -1
+        textStyle: r3MWtmCMqGHwGJ
         nineSliceSettings:
           top: 16
           left: 16
@@ -856,13 +873,70 @@ assets:
             variables: []
         extends:
           cgroup: ''
-        lastmod: 1772358514726
+        lastmod: 1772439625225
         uid: L17gFkMznnbnwT
         behaviors: []
         extendTypes: ''
         properties: []
         defaultText: Procedural
-        textStyle: -1
+        textStyle: r3MWtmCMqGHwGJ
+        nineSliceSettings:
+          top: 16
+          left: 16
+          bottom: 16
+          right: 16
+          autoUpdate: false
+        hoverTexture: -1
+        pressedTexture: -1
+        disabledTexture: -1
+      - type: style
+        name: ButtonText
+        uid: r3MWtmCMqGHwGJ
+        typeface: -1
+        font:
+          family: sans-serif
+          halign: center
+          italic: false
+          size: 21
+          weight: '800'
+          wrap: false
+          wrapPosition: 640
+          lineHeight: 27.97
+        fill:
+          type: 0
+          color: '#000000'
+          color1: '#cccccc'
+          color2: '#ffffff'
+          gradtype: 1
+        lastmod: 1772439599945
+      - type: template
+        baseClass: Button
+        name: GoToStrawberry_mFFh
+        depth: 100
+        texture: b4C8Ct6JRCd675
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnPointerClick
+            code:
+              - lib: signals
+                code: signals.emit
+                values:
+                  event: Abort movement
+            arguments: {}
+            lib: core
+            variables: []
+        extends:
+          cgroup: ''
+        lastmod: 1772439678581
+        uid: mFFhfBwWB34gMb
+        behaviors: []
+        extendTypes: ''
+        properties: []
+        defaultText: Abort movement
+        textStyle: r3MWtmCMqGHwGJ
         nineSliceSettings:
           top: 16
           left: 16
@@ -1429,31 +1503,12 @@ assets:
             arguments: {}
             lib: core
             variables: []
-          - eventKey: OnRoomEnd
+          - eventKey: OnPointerClick
             code:
-              - lib: core.misc
-                code: note
+              - lib: signals
+                code: signals.emit
                 values:
-                  note: >-
-                    Obstacles and interactive 1D arrays are for preplaced
-                    copies; 2D interactive map is used for gameplay mechanics
-                    like opening doors and collecting keysd
-              - lib: core.arrays
-                code: array clear
-                values:
-                  array:
-                    lib: core.hidden
-                    code: global variable raw
-                    values:
-                      variableName: interactive
-              - lib: core.arrays
-                code: array clear
-                values:
-                  array:
-                    lib: core.hidden
-                    code: global variable raw
-                    values:
-                      variableName: obstacles
+                  event: Map click
             arguments: {}
             lib: core
             variables: []
@@ -1466,7 +1521,7 @@ assets:
             required: false
             fixedLength: 0
         extendTypes: ''
-        lastmod: 1772354655905
+        lastmod: 1772438045849
         uid: 6mnPwwz71KqNNK
         properties: []
       - uid: P6z92pkgp8NMGz
@@ -2212,7 +2267,7 @@ assets:
           - toX
           - toY
         runAutomatically: false
-        lastmod: 1772112084561
+        lastmod: 1772441482757
         type: script
       - uid: QWHzDdbK2ndRmk
         name: GetTileCost
@@ -2765,6 +2820,20 @@ assets:
                 code: define function
                 values:
                   code:
+                    - lib: core.console
+                      code: log
+                      values:
+                        any: 'Starting a path:'
+                      disabled: true
+                    - lib: core.console
+                      code: log
+                      values:
+                        any:
+                          lib: core.misc
+                          code: get function option
+                          values:
+                            key: path
+                      disabled: true
                     - lib: core.logic
                       code: if branch
                       values:
@@ -2782,6 +2851,15 @@ assets:
                           code: property
                           values:
                             variableName: path
+                    - lib: core.propsVars
+                      code: set
+                      values:
+                        var:
+                          lib: core.hidden
+                          code: property
+                          values:
+                            variableName: pointIndex
+                        value: 0
                     - lib: core.propsVars
                       code: set
                       values:
@@ -3333,6 +3411,11 @@ assets:
                 code: define function
                 values:
                   code:
+                    - lib: core.console
+                      code: log
+                      values:
+                        any: Aborting current movement
+                      disabled: true
                     - lib: core.propsVars
                       code: set
                       values:
@@ -3622,7 +3705,7 @@ assets:
             required: false
             fixedLength: 0
         extendTypes: ''
-        lastmod: 1772293462253
+        lastmod: 1772440106485
         uid: D2RqLdcMm2P2Fb
         properties:
           - goToPoint
@@ -6798,7 +6881,7 @@ assets:
             cache: true
         extends:
           generateFromRoom: true
-        lastmod: 1772354673695
+        lastmod: 1772437861807
         events: []
         behaviors:
           - 6mnPwwz71KqNNK
@@ -9376,7 +9459,7 @@ assets:
     name: Character
     lastmod: 1772361546100
     entries:
-      - lastmod: 1772295640740
+      - lastmod: 1772441489649
         type: texture
         name: Character
         untill: 0
@@ -9793,7 +9876,7 @@ assets:
           - checkY
           - copy
         runAutomatically: false
-        lastmod: 1772361112867
+        lastmod: 1772441495336
         type: script
       - type: template
         baseClass: AnimatedSprite
@@ -9805,54 +9888,6 @@ assets:
         animationFPS: 30
         visible: true
         events:
-          - eventKey: OnActionPress
-            code:
-              - lib: core.misc
-                code: note
-                values:
-                  note: >-
-                    See the options passed to the functions; We shift the
-                    pointer position for half the cell size as the target is not
-                    centered but players want a natural, centered placement 
-              - lib: core.misc
-                code: execute function
-                values:
-                  func:
-                    lib: core.hidden
-                    code: behavior property
-                    values:
-                      variableName: goToPoint
-                customOptions:
-                  x:
-                    lib: core.math
-                    code: '-'
-                    values:
-                      a:
-                        lib: pointer
-                        code: pointer.x
-                        values: {}
-                      b:
-                        lib: core.hidden
-                        code: global variable number
-                        values:
-                          variableName: halfCellWidth
-                  'y':
-                    lib: core.math
-                    code: '-'
-                    values:
-                      b:
-                        lib: core.hidden
-                        code: global variable number
-                        values:
-                          variableName: halfCellHeight
-                      a:
-                        lib: pointer
-                        code: pointer.y
-                        values: {}
-            arguments:
-              action: Press
-            lib: core
-            variables: []
           - eventKey: signal
             code:
               - lib: core.misc
@@ -9918,6 +9953,20 @@ assets:
                             code: if branch
                             values:
                               body1:
+                                - lib: core.console
+                                  code: log
+                                  values:
+                                    any: Finding the best path! Avaliable paths are
+                                  disabled: true
+                                - lib: core.console
+                                  code: log
+                                  values:
+                                    any:
+                                      lib: core.hidden
+                                      code: variable
+                                      values:
+                                        variableName: validPaths
+                                  disabled: true
                                 - lib: core.script
                                   code: run script
                                   values:
@@ -9933,6 +9982,20 @@ assets:
                                       code: variable
                                       values:
                                         variableName: validPaths
+                                - lib: core.console
+                                  code: log
+                                  values:
+                                    any: Best path is
+                                  disabled: true
+                                - lib: core.console
+                                  code: log
+                                  values:
+                                    any:
+                                      lib: core.hidden
+                                      code: variable
+                                      values:
+                                        variableName: bestPath
+                                  disabled: true
                                 - lib: core.misc
                                   code: execute function
                                   values:
@@ -10113,13 +10176,62 @@ assets:
               once: false
             lib: signals
             variables: []
+          - eventKey: signal
+            code:
+              - lib: core.misc
+                code: note
+                values:
+                  note: >-
+                    See the options passed to the functions; We shift the
+                    pointer position for half the cell size as the target is not
+                    centered but players want a natural, centered placement 
+              - lib: core.misc
+                code: execute function
+                values:
+                  func:
+                    lib: core.hidden
+                    code: behavior property
+                    values:
+                      variableName: goToPoint
+                customOptions:
+                  x:
+                    lib: core.math
+                    code: '-'
+                    values:
+                      a:
+                        lib: pointer
+                        code: pointer.x
+                        values: {}
+                      b:
+                        lib: core.hidden
+                        code: global variable number
+                        values:
+                          variableName: halfCellWidth
+                  'y':
+                    lib: core.math
+                    code: '-'
+                    values:
+                      b:
+                        lib: core.hidden
+                        code: global variable number
+                        values:
+                          variableName: halfCellHeight
+                      a:
+                        lib: pointer
+                        code: pointer.y
+                        values: {}
+            arguments:
+              signal: Map click
+              once: false
+            lib: signals
+            variables: []
         extends:
           cgroup: ''
           cellTime: 0.1
           ignoreCost: false
           onCellChanged: WFQm2kKG1nGC3C
           onArrived: -1
-        lastmod: 1772295657955
+        lastmod: 1772441511343
         uid: fg2QgKtzd5qMq8
         behaviors:
           - D2RqLdcMm2P2Fb
