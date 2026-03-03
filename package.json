@@ -10,6 +10,7 @@
     "start": "gulp -f gulpfile.mjs",
     "dev": "gulp -f gulpfile.mjs",
     "lint": "gulp -f gulpfile.mjs lint",
+    "lintI18n": "gulp -f gulpfile.mjs lintI18n",
     "lint:fix": "gulp -f gulpfile.mjs lint --fix",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",

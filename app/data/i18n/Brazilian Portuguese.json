@@ -16,6 +16,7 @@
         "clear": "Limpar",
         "close": "Fechar",
         "confirmDelete": "Você tem certeza que você quer deletar {0}? Porque não pode ser desfeito.",
+        "andNMore": ", e mais {0}",
         "contribute": "Contribua",
         "copy": "Copiar",
         "copyName": "Copiar o nome",
@@ -32,12 +33,12 @@
         "edit": "Editar",
         "filter": "Filtro:",
         "filters": {
-            "everything": "",
-            "rooms": "",
-            "scripts": "",
-            "sounds": "",
-            "templates": "",
-            "textures": ""
+            "everything": "Tudo",
+            "rooms": "Salas",
+            "scripts": "Scripts e comportamentos",
+            "sounds": "Sons",
+            "templates": "Templates",
+            "textures": "Texturas, UI e FX"
         },
         "loading": "Carregando…",
         "name": "Nome:",
@@ -54,6 +55,8 @@
         "required": "Obrigatório",
         "save": "Salvar",
         "selectDialogue": "Selecionar…",
+        "selectDialogueTexture": "Selecionar uma textura…",
+        "selectDialogueStyle": "Selecionar um estilo…",
         "select": "Selecionar",
         "search": "Pesquisar:",
         "settings": "Configurações",
@@ -223,6 +226,7 @@
         "createNewProperty": "Nova propriedade",
         "createNewVariable": "Nova variável",
         "createNewGlobalVariable": "Nova variável global",
+        "manageGlobalVariables": "Gerenciar variáveis globais",
         "newPropertyPrompt": "Insira o nome da nova propriedade:",
         "newVariablePrompt": "Insira o nome da nova variável. O nome não deve conter espaços em branco ou letras especiais e deve começar com uma letra.",
         "newGlobalVariablePrompt": "Insira o nome da nova variável global. O nome não deve conter espaços em branco ou letras especiais e deve começar com uma letra.",
@@ -233,6 +237,7 @@
         "errorBlock": "faltando bloco da biblioteca",
         "errorBlockDeleteHint": "Clique com o botão direito para excluí-lo.",
         "asyncHint": "Este bloco é executado de forma assíncrona, o que significa que ele será executado mais tarde e não bloqueará o resto do script. Use áreas de bloco dentro deste para executar comandos em seu término, mas observe que as coisas podem mudar enquanto este bloco é executado: por exemplo, a cópia que executa este bloco pode ser excluída (dependendo da sua lógica de jogo) e, portanto, se tornará inutilizável quando este bloco terminar.",
+        "contextHint": "Este bloco altera o contexto de execução, ou seja, a palavra-chave \"this\"ará referência a um objeto diferente.",
         "optionsAdvanced": "Avançado",
         "addCustomOption": "Adicionar uma propriedade personalizada",
         "changeBlockTo": "Alterar para \"$1\"",
@@ -242,6 +247,7 @@
         "duplicateBlock": "Duplique este bloco",
         "requiredField": "Este campo é obrigatório e está faltando um valor.",
         "unnamedGroup": "Grupo sem nome",
+        "toggleBlockDisable": "Ativar/desativar os blocos selecionados",
         "placeholders": {
             "putBlocksHere": "Coloque os blocos aqui",
             "doNothing": "Faça nada"
@@ -259,6 +265,7 @@
             "misc": "Miscelânea",
             "movement": "Movimento",
             "objects": "Objetos",
+            "propsVars": "Dados",
             "rooms": "salas",
             "settings": "Configurações",
             "sounds": "Sons",
@@ -270,6 +277,7 @@
         },
         "blockNames": {
             "kill this copy": "Destrói esta cópia",
+            "kill copy": "Destrói a cópia",
             "move copy": "Move esta cópia",
             "set speed": "Definir a velocidade para",
             "set gravity": "Definir a gravidade para",
@@ -303,7 +311,16 @@
             "room read": "propriedade da sala tual",
             "object read": "propriedade do objeto",
             "object delete": "Excluir propriedade em um objeto",
+            "object extract props": "Extrair propriedades de um objeto",
             "new array": "nova matriz",
+            "array create": "Criar uma nova matriz vazia",
+            "array set element": "Definir elemento em uma matriz",
+            "array create 2d": "Criar uma nova matriz 2D",
+            "array 2d set element": "Definir elemento em uma matriz 2D",
+            "for each 2d": "Para cada célula em uma matriz 2D",
+            "array 2d width": "largura de",
+            "array 2d height": "altura de",
+            "array 2d get": "obter elemento de uma matriz 2D",
             "new object": "Criar um novo objeto",
             "new empty object": "novo objeto vazio",
             "convert to string": "para string",
@@ -323,6 +340,7 @@
             "repeat": "Repetir N vezes",
             "for each": "Para cada elemento da matriz",
             "break loop": "Parar esta repetição",
+            "continue loop": "Pular esta iteração",
             "NOT logic operator": "Operator lógico Não",
             "AND logic operator": "Operator lógico E",
             "OR logic operator": "Operator lógico OU",
@@ -337,7 +355,14 @@
             "set skew": "Definir inclinação para",
             "skew x": "inclinar por x",
             "skew y": "inclinar por y",
+            "set anchor": "Definir âncora para",
+            "anchor x": "ancorar por x",
+            "anchor y": "ancorar por y",
+            "set pivot": "Definir pivô para",
+            "pivot x": "pivô por x",
+            "pivot y": "pivô por y",
             "set alpha": "Definir opacidade para",
+            "set visible": "Definir visibilidade para",
             "scale x": "escalar por x",
             "scale y": "escalar por y",
             "get angle": "rotação de textura",
@@ -364,6 +389,8 @@
             "templates Templates with copy": "Com cópia",
             "templates Templates with template": "Com todas as cópias de um template",
             "templates templates exists": "as cópias do template existem",
+            "is of template": "cópia é de um template",
+            "copy placedInRoom": "foi colocada na sala",
             "rooms Rooms add bg": "Adicionar plano de fundo",
             "rooms Rooms clear": "Limpar a sala atual",
             "rooms Rooms remove": "Remover uma sala",
@@ -403,6 +430,10 @@
             "styles styles get": "obter um estilo",
             "backgrounds Backgrounds add": "Adicionar um fundo",
             "backgrounds backgrounds list": "lista de planos de funds",
+            "tiles Tilemaps create": "Criar um tilemap",
+            "tiles Tilemaps add tile": "Adicionar um tile a um tilemap",
+            "tiles Tilemaps cache": "Armazenar um tilemap em cache",
+            "tiles Tilemaps cache diamond": "Armazenar um tilemap em cache em um padrão de diamante",
             "emitter tandems Emitters fire": "Disparar um emissor no local",
             "emitter tandems Emitters append": "Acrescentar um emissor",
             "emitter tandems Emitters follow": "Criar um emissor e seguir",
@@ -420,6 +451,7 @@
             "utilities u direction": "direção",
             "utilities u distance": "distância entre",
             "utilities u pdc": "distância de 2 pontos",
+            "utilities u pdn": "direção de 2 pontos",
             "utilities u deg to rad": "graus para radianos",
             "utilities u rad to deg": "radianos para graus",
             "utilities u rotate": "rotacionar um vetor",
@@ -448,6 +480,8 @@
             "settings settings fullscreen": "tela cheia",
             "settings settings pixelart": "modo de pixelart",
             "settings settings prevent default": "evitar eventos do navegador",
+            "settings settings is debug": "em modo de depuração",
+            "settings settings is production": "em modo de produção",
             "set x": "Definir x para",
             "set y": "Definir y para",
             "get x": "posição x",
@@ -509,6 +543,7 @@
             "get depth": "depth",
             "script options": "Opções de script",
             "run script": "Executar um script",
+            "apply script": "Aplicar um script",
             "hasSubstring": "tem substring",
             "substringPosition": "posição da substring",
             "stringLength": "comprimento da string",
@@ -525,6 +560,7 @@
             "to lowercase": "para minúsculas",
             "array unshift": "Adicionar um elemento no início",
             "array push": "Adicionar um elemento no final",
+            "clear array": "Limpar a matriz",
             "add element at position": "Adicionar um elemento na posição",
             "array pop": "Remover o último elemento da matriz",
             "array shift": "Remover o primeiro elemento da matriz",
@@ -538,6 +574,7 @@
             "get disabled": "desabilitar",
             "define function": "Definir uma função",
             "return": "Retornar o resultado",
+            "throw": "Lançar um erro",
             "execute function": "Executar uma função",
             "get function option": "obter uma opção",
             "set timer 1": "Definir 1º temporizador",
@@ -560,7 +597,25 @@
             "delete from storage": "Excluir do armazenamento a chave",
             "load from storage": "carregar do armazenamento da chave",
             "is key in storage": "é a chave no armazenamento",
-            "owning room": "sala própria"
+            "owning room": "sala própria",
+            "math abs": "valor absoluto",
+            "math sign": "sinal de",
+            "math floor": "arredondar para baixo",
+            "math ceil": "arredondar para cima",
+            "math round": "arredondar",
+            "math sqrt": "raiz quadrada",
+            "math sin": "sen",
+            "math cos": "cos",
+            "math tan": "tg",
+            "math asin": "asen",
+            "math acos": "acos",
+            "math atan": "atan",
+            "math atan2": "atan2",
+            "math pow": "potência",
+            "math log": "log",
+            "math min": "mínimo de",
+            "math max": "máximo de",
+            "infinity": "infinito"
         },
         "blockDisplayNames": {
             "write": "Escrever",
@@ -629,7 +684,13 @@
             "with results in": "com resultados armazenados em",
             "store new array in": "armazenar nova matriz em",
             "and elements": "e elementos",
-            "secondsUnits": "segundo(s)"
+            "secondsUnits": "segundo(s)",
+            "with x as": "com x como",
+            "and y as": "e y como"
+        },
+        "blockOptionHeaders": {},
+        "blockOptionButtons": {
+            "options": "Opções"
         },
         "blockOptions": {
             "soundVolume": "Volume",
@@ -641,7 +702,9 @@
         },
         "blockDocumentation": {
             "serialize object": "Este bloco serializa um objeto em uma string que pode ser salva ou transferida com segurança mais tarde. Este método não suporta datas, funções e estruturas que formam referências cíclicas. Objetos serializados com este bloco devem ser desserializados com o bloco \"Deserialize object\"",
-            "constant string": "Você pode usar este bloco para forçar a criação de uma string: por exemplo, quando você quer escrever um número em uma string ou converter \n em uma quebra de linha ao colocar este valor em slots curinga."
+            "constant string": "Você pode usar este bloco para forçar a criação de uma string: por exemplo, quando você quer escrever um número em uma string ou converter \n em uma quebra de linha ao colocar este valor em slots curinga.",
+            "set anchor": "Define o ponto de ancoragem usando coordenadas normalizadas (0.0 a 1.0). A âncora determina onde a cópia gira e escala. Valores comuns: (0, 0) = superior esquerdo, (0.5, 0.5) = centro, (1, 1) = inferior direito. Funciona em cópias com textura como Sprites Animados.",
+            "set pivot": "Define o ponto de pivô usando coordenadas de pixels. Como a âncora, mas usa pixels absolutos em vez de porcentagens. Uso avançado — use a âncora na maioria dos casos."
         }
     },
     "colorPicker": {
@@ -960,6 +1023,22 @@
             "moveUp": "Mover para cima",
             "newScriptComment": "Use scripts para definir funções comuns e importar pequenas bibliotecas",
             "scriptsHint": "Scripts criados aqui serão injetados na raiz do seu jogo e, portanto, sempre serão executados no início do jogo. Apenas JavaScript e TypeScript são suportados. Variáveis ​​e tipos definidos aqui estarão disponíveis em todos os lugares do seu projeto."
+        },
+        "variables": {
+            "heading": "Variáveis globais",
+            "addVariable": "Adicionar uma nova variável",
+            "variableName": "Nome",
+            "variableType": "Tipo",
+            "defaultValue": "Valor padrão",
+            "deleteVariable": "Excluir a variável",
+            "noVariablesYet": "Nenhuma variável ainda!",
+            "variablesHint": "As variáveis criadas aqui estarão disponíveis em todo o seu projeto e também durante a depuração no console.",
+            "boolean": "Booleano",
+            "number": "Número",
+            "string": "String",
+            "raw": "Bruto (saída como código)",
+            "invalidName": "Nome inválido (deve começar com uma letra e conter apenas letras latinas, números e sublinhados)",
+            "reservedName": "Este nome é reservado, escolha outro"
         },
         "export": {
             "heading": "Exportar as configurações",
@@ -1289,12 +1368,14 @@
                 "multiwindow": "múltiplas janelas",
                 "automatic": "automático"
             },
-            "autoapplyOnLaunch": "Apply assets on game launch",
+            "autoapplyOnLaunch": "Aplicar ativos ao iniciar o jogo",
             "altTemplateLayout": "Layout alternativo para o editor de templates",
             "scrollableCatnipLibrary": "Biblioteca de blocos roláveis ​​para Catnip",
             "disableSounds": "Desativar sons de UI",
             "changeDataFolder": "Definir o local da pasta de dados",
-            "forceProductionForDebug": "Forçar as tarefas de produção para as exportações de depuração"
+            "forceProductionForDebug": "Forçar as tarefas de produção para as exportações de depuração",
+            "specialFont": "Fonte especial de UI",
+            "specialFontDefault": "Padrão"
         },
         "project": {
             "heading": "Projeto",
@@ -1505,7 +1586,9 @@
             "addTiles": "Adicionar tiles",
             "manageBackgrounds": "Gerenciar os planos de fundo",
              "uiTools": "ferramentas de IU",
-            "roomProperties": "Configurações da sala"
+            "roomProperties": "Configurações da sala",
+            "copiesList": "Lista de cópias",
+            "tilesList": "Lista de tiles"
         },
         "emptyTextFiller": "<vazio>"
     },
@@ -1747,7 +1830,11 @@
             "OnAnimationComplete": "É acionado apenas uma vez quando uma animação que não se repete é finalizada.",
             "Timer": "Defina a duração para esse temporizador em segundos com  this.timer$1 = 3;",
             "OnAppFocus": "Aciona quando um usuário volta para sua aplicação.",
-            "OnAppBlur": "É acionado quando um usuário muda do seu jogo para outro — trocando de aba, mudando para outra janela ou minimizando o jogo."
+            "OnAppBlur": "É acionado quando um usuário muda do seu jogo para outro — trocando de aba, mudando para outra janela ou minimizando o jogo.",
+            "OnBehaviorAdded": "Acionado quando um comportamento é adicionado a esta cópia.",
+            "OnBehaviorRemoved": "Acionado quando um comportamento é removido desta cópia.",
+            "OnTextChange": "Dispara quando um usuário termina de editar este campo clicando fora dele ou pressionando a tecla Enter.",
+            "OnTextInput": "Dispara sempre que um usuário altera o valor deste campo."
         }
     },
     "templates": {
@@ -1840,7 +1927,8 @@
             "windowsFileLock": "Este é um problema específico do Windows com um arquivo bloqueado. Certifique-se de ter fechado todos os navegadores externos que iniciaram o jogo e tente exportar novamente. Se não ajudar, reinicie o ct.js.",
             "noTemplateTexture": "Falta uma textura em um de seus modelos. Você precisa definir uma textura para ele.",
             "blockArgumentMissing": "Um argumento em um código catnip não está definido ou estava se referindo a um ativo agora removido. Vá até o ativo e defina um valor para o bloco mencionado acima.",
-            "blockDeclarationMissing": "Um bloco no seu código catnip usa um catmod ausente. Se você desabilitou catmods recentemente, tente ligá-los novamente ou remova os blocos problemáticos."
+            "blockDeclarationMissing": "Um bloco no seu código catnip usa um catmod ausente. Se você desabilitou catmods recentemente, tente ligá-los novamente ou remova os blocos problemáticos.",
+            "variableNames": "Uma das suas variáveis tem um nome inválido. Os nomes das variáveis podem conter apenas letras, números e sublinhados, e devem começar com uma letra. Você pode alterar suas variáveis na aba Projeto na seção Variáveis Globais."
         },
         "stacktrace": "Pilha de chamadas",
         "jumpToProblem": "Ir direto ao problema",

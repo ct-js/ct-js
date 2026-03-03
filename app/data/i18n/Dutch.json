@@ -4,11 +4,16 @@
         "native": "Nederlands",
         "eng": "Dutch"
     },
+    "regionalLinks": {
+        "discord": "https://comigo.games/discord",
+        "telegram": "https://t.me/ctjsnl"
+    },
     "common": {
         "add": "Toevoegen",
         "apply": "Toepassen",
         "cancel": "Annuleren",
         "cannotBeEmpty": "Dit kan niet leeg zijn",
+        "andNMore": ", en nog {0}",
         "confirmDelete": "Weet je zeker dat je {0} wilt verwijderen? Dit kan niet ongedaan worden",
         "contribute": "Bijdragen",
         "copy": "Kopiëren",
@@ -17,6 +22,7 @@
         "delete": "Verwijderen",
         "donate": "Doneren",
         "done": "Klaar!",
+        "download": "Downloaden",
         "duplicate": "Dupliceren",
         "exit": "Afsluiten",
         "loading": "Laden…",
@@ -38,14 +44,16 @@
         "clear": "Wissen",
         "filter": "Filter:",
         "filters": {
-            "everything": "",
-            "rooms": "",
-            "scripts": "",
-            "sounds": "",
-            "templates": "",
-            "textures": ""
+            "everything": "Alles",
+            "rooms": "Kamers",
+            "scripts": "Scripts en gedragingen",
+            "sounds": "Geluiden",
+            "templates": "Sjablonen",
+            "textures": "Textures, UI en FX"
         },
         "selectDialogue": "Selecteren...",
+        "selectDialogueTexture": "Selecteer een texture…",
+        "selectDialogueStyle": "Selecteer een stijl…",
         "search": "Zoeken:",
         "close": "Sluiten",
         "couldNotLoadFromClipboard": "Kon gegevens niet laden van het klembord.",
@@ -86,6 +94,7 @@
         "docsShort": "Docs",
         "docsLong": "Documentatie",
         "openAssetGallery": "Galerij",
+        "createStyleFromIt": "Maak er een stijl van",
         "assetTypes": {
             "texture": [
                 "texture",
@@ -136,6 +145,11 @@
                 "script",
                 "scripts",
                 "scripts"
+            ],
+            "enum": [
+                "enumeratie",
+                "enumeraties",
+                "enumeraties"
             ]
         },
         "next": "Volgende",
@@ -178,6 +192,67 @@
         "projectPalette": "Palet van Project",
         "altClick": "Alt-klik om te verwijderen"
     },
+    "catnip": {
+        "trashZoneHint": "Sleep blokken hierheen om ze snel te verwijderen",
+        "properties": "Eigenschappen",
+        "propertiesHint": "Eigenschappen worden opgeslagen in de kopie of kamer en kunnen later worden opgeroepen, inclusief vanuit andere kopieën.",
+        "variables": "Variabelen",
+        "variablesHint": "Variabelen zijn tijdelijk en bestaan alleen voor de uitvoering van dit event. Ze zijn goed voor het opslaan van resultaten van snelle berekeningen.",
+        "globalVariables": "Globale variabelen",
+        "globalVariablesHint": "Globale variabelen zijn overal toegankelijk in je project. Ze worden niet opgeslagen tussen runs; daarvoor gebruik je 'Opslaan naar opslag' en 'Laden van opslag' blokken.",
+        "createNewProperty": "Nieuwe eigenschap",
+        "createNewVariable": "Nieuwe variabele",
+        "createNewGlobalVariable": "Nieuwe globale variabele",
+        "manageGlobalVariables": "Beheer globale variabelen",
+        "newPropertyPrompt": "Voer de naam in voor de nieuwe eigenschap:",
+        "newVariablePrompt": "Voer de naam in voor de nieuwe variabele. De naam mag geen spaties of speciale letters bevatten en moet beginnen met een letter.",
+        "newGlobalVariablePrompt": "Voer de naam in voor de nieuwe globale variabele. De naam mag geen spaties of speciale letters bevatten en moet beginnen met een letter.",
+        "invalidVarNameError": "Ongeldige variabelenaam. De naam mag geen spaties of speciale letters bevatten en moet beginnen met een letter.",
+        "renamePropertyPrompt": "Voer de nieuwe naam in voor deze eigenschap:",
+        "renameVariablePrompt": "Voer de nieuwe naam in voor deze variabele:",
+        "renamingAcrossProject": "Variabelenaam vervangen in andere onderdelen…",
+        "errorBlock": "Ontbrekend blok van bibliotheek",
+        "errorBlockDeleteHint": "Rechterklik om het te verwijderen.",
+        "asyncHint": "Dit blok wordt asynchroon uitgevoerd, wat betekent dat het later zal worden uitgevoerd en de rest van het script niet zal blokkeren. Gebruik blokgebieden binnen dit blok om commando's uit te voeren bij voltooiing, maar houd er rekening mee dat dingen kunnen veranderen terwijl dit blok wordt uitgevoerd: de kopie die dit blok uitvoert kan bijvoorbeeld worden verwijderd (afhankelijk van je speellogica) en zal dus onbruikbaar worden wanneer dit blok eindigt.",
+        "contextHint": "Dit blok verandert de uitvoeringscontext, wat betekent dat het 'this' sleutelwoord naar een ander object zal verwijzen.",
+        "optionsAdvanced": "Geavanceerd",
+        "addCustomOption": "Voeg een aangepaste eigenschap toe",
+        "changeBlockTo": "Verander naar \"$1\"",
+        "goToActions": "Open Acties instellingen",
+        "copyDocHtml": "Kopieer als HTML voor docs",
+        "copySelection": "Kopieer geselecteerde blokken",
+        "duplicateBlock": "Dupliceer dit blok",
+        "requiredField": "Dit veld is vereist en heeft een ontbrekende waarde.",
+        "unnamedGroup": "Naamloze groep",
+        "toggleBlockDisable": "Schakel de geselecteerde blokken in/uit",
+        "placeholders": {
+            "putBlocksHere": "Plaats je blokken hier",
+            "doNothing": "Doe niets"
+        },
+        "coreLibs": {
+            "appearance": "Uiterlijk",
+            "arrays": "Arrays",
+            "backgrounds": "Achtergronden",
+            "behaviors": "Gedragingen",
+            "camera": "Camera",
+            "console": "Console",
+            "emitter tandems": "Verspreiders",
+            "logic": "Logica",
+            "math": "Wiskunde",
+            "misc": "Overige",
+            "movement": "Beweging",
+            "objects": "Objecten",
+            "propsVars": "Data",
+            "rooms": "Kamers",
+            "settings": "Instellingen",
+            "sounds": "Geluiden",
+            "strings": "Strings",
+            "templates": "Sjablonen",
+            "utilities": "Hulpmiddelen",
+            "actions": "Acties",
+            "timers": "Timers"
+        }
+    },
     "curveEditor": {
         "curveLineHint": "Klik op de kromming om een punt toe te voegen",
         "dragPointHint": "Sleep het punt om het punt te bewegen, rechter-klik verwijdert het punt",
@@ -200,6 +275,12 @@
     },
     "docsShortcut": {
         "openDocs": "De documentatie openen"
+    },
+    "globalSearch": {
+        "buttonTitle": "Zoek onderdelen",
+        "nothingFound": "Niets gevonden.",
+        "searchHint": "Zoek naar elk onderdeel op naam. Recente onderdelen komen ook hier.",
+        "recent": "recent geopend"
     },
     "exportPanel": {
         "hide": "Verbergen",
@@ -226,6 +307,24 @@
     },
     "intro": {
         "loading": "Even geduld: kittens naderen lichtsnelheid!",
+        "newUserHeader": "Welkom bij ct.js!",
+        "welcomeHeaders": [
+            "Welkom terug, Tumblr sexyman!",
+            "Welkom terug, Neo!",
+            "Is het onze epische coder? Welkom terug!",
+            "Leuk je weer te zien!",
+            "Welkom terug, Superster!",
+            "Je bent eindelijk wakker. Welkom terug!",
+            "Generaal Kenobi!",
+            "🖖",
+            "Greetings, reiziger!",
+            "Ohayo, semisai uwu",
+            "Hallo :D hallo :D hallo :D",
+            "Leuk je te zien, boomvoet.",
+            "✉️ Raid: Hackerman piraten",
+            "Welkom bij Summoner's Rift!",
+            "Welkom bij testkamer 20"
+        ],
         "newProject": {
             "input": "(enkel letters en cijfers)",
             "selectProjectFolder": "Selecteer een map waar het project opgeslagen kan worden",
@@ -265,7 +364,17 @@
         "boosty": "Steun ct.js op Boosty!",
         "sponsoredBy": "Trots gesponsord door $1!",
         "supportedBy": "Gesteund door $1",
-        "nothingToShowFiller": "Hier is niets te zien! Neem eens een kijkje bij Voorbeelden of maak hieronder je eigen project aan."
+        "nothingToShowFiller": "Hier is niets te zien! Neem eens een kijkje bij Voorbeelden of maak hieronder je eigen project aan.",
+        "ctDistributions": {
+            "released": "Release branch",
+            "nightly": "Nightly build 🌚",
+            "dev": " Draaien vanuit sources 🤓"
+        },
+        "gamesFromCommunity": "Spellen van de Community",
+        "submitYourOwn": "Dien Je Eigen In",
+        "learningResources": "Leermiddelen",
+        "authorBy": "door $1",
+        "telegram": "Telegram groepschat"
     },
     "onboarding": {
         "hoorayHeader": "Wow! Je hebt zojuist een project gecreëerd!",
@@ -371,8 +480,25 @@
             "deleteScript": "Verwijder het Script",
             "heading": "Aangepast script",
             "newScriptComment": "Gebruik scripts om veelgebruikte functies te definiëren en kleine bibliotheken te importeren",
+            "scriptsHint": "Scripts die hier worden aangemaakt worden geïnjecteerd in de root van je game en zullen dus altijd draaien bij het starten van het spel. Alleen JavaScript en TypeScript worden ondersteund. Variabelen en types die hier worden gedefinieerd zullen overal in je project beschikbaar zijn.",
             "moveDown": "Beweeg naar onder",
             "moveUp": "Beweeg naar boven"
+        },
+        "variables": {
+            "heading": "Globale variabelen",
+            "addVariable": "Voeg een nieuwe variabele toe",
+            "variableName": "Naam",
+            "variableType": "Type",
+            "defaultValue": "Standaardwaarde",
+            "deleteVariable": "Verwijder de variabele",
+            "noVariablesYet": "Nog geen variabelen!",
+            "variablesHint": "Variabelen die hier worden aangemaakt zullen overal in je project beschikbaar zijn, en ook tijdens debuggen in de console.",
+            "boolean": "Booleaans",
+            "number": "Getal",
+            "string": "String",
+            "raw": "Rauw (output als code)",
+            "invalidName": "Ongeldige naam (moet beginnen met een letter en alleen Latijnse letters, cijfers en underscores bevatten)",
+            "reservedName": "Deze naam is gereserveerd, kies een andere"
         },
         "modules": {
             "heading": "Catmods"
@@ -380,6 +506,10 @@
         "catmodsSettings": "Instellingen van Catmods",
         "export": {
             "heading": "Exporteerinstellingen",
+            "errorReporting": "Foutrapportage",
+            "showErrors": "Toon fouten in het spelvenster (ten zeerste aanbevolen)",
+            "showErrorsHint": "Ct.js toont niet-afgevangen fouten in een aangepast venster waar spelers foutberichten kunnen kopiëren en de rapportlink kunnen volgen die je in het volgende veld opgeeft. Dit helpt je spelers om dergelijke fouten te melden zonder devtools te gebruiken.",
+            "errorsLink": "Link om fouten te melden: (Github issues, contactformulier, forum, etc.)",
             "functionWrap": "Plaats alle code in een functie. (Maakt debuggen lastiger, maar isoleert de code van de game van de buitenste context. Activeer dit niet tijdens het ontwikkelen van het spel.)",
             "codeModifier": "Code transformaties",
             "obfuscateWarning": "Deze optie zal je code 15-80% trager doen werken, maar zal het ongelooflijk moeilijk maken om hem te herleiden naar het origineel.",
@@ -411,6 +541,15 @@
             "fieldReadableName": "Leesbare naam",
             "fieldReadableNameHint": "De leesbare versie van de naam, die gebruikt wordt in de inhoudsbewerker.",
             "fieldType": "Type",
+            "fieldStructure": "Structuur",
+            "structureTypes": {
+                "atomic": "Enkele waarde",
+                "array": "Lijst",
+                "map": "Kaart"
+            },
+            "key": "Sleutel",
+            "value": "Waarde",
+            "mappedType": "Getypte kaart",
             "deleteContentType": "Verwijder dit inhoudstype",
             "confirmDeletionMessage": "Ben je zeker dat je dit inhoudstype wil verwijderen? Het is onomkeerbaar en zal ook alle entries van dit inhoudstype verwijderen.",
             "gotoEntries": "Ga naar entries",
@@ -620,6 +759,10 @@
         "documentation": "Documentatie",
         "reference": "Referentie"
     },
+    "enumEditor": {
+        "addVariant": "Voeg een variant toe",
+        "enumUseCases": "Deze enumeratie zal beschikbaar zijn in al je code en kan fungeren als een datatype in inhoudsschema's en gedragsvelden."
+    },
     "extensionsEditor": {
         "noEntries": "Nog geen entries.",
         "addRow": "Voeg een rij toe",
@@ -674,6 +817,9 @@
             "systemInfoDone": "Klaar!",
             "disableAcceleration": "Schakel grafische versnelling uit (moet opnieuw worden opgestart)",
             "disableBuiltInDebugger": "Schakel ingebouwde foutopsporing uit",
+            "disableVulkan": "Schakel Vulkan ondersteuning uit",
+            "disableVulkanSDHint": "Lost \"geen WebGL ondersteuning\" problemen op SteamDeck en sommige andere Linux systemen op. Vereist een herstart om te werken.",
+            "restartMessage": "Gelieve de app te herstarten om de wijzigingen toe te passen.",
             "postAnIssue": "Plaats een probleem op Github",
             "heading": "Probleemoplossen"
         },
@@ -700,7 +846,11 @@
                 "HCBlack": "Hoog-contrast Zwart",
                 "RosePine": "Rosé Pine",
                 "RosePineMoon": "Rosé Pine Maan",
-                "RosePineDawn": "Rosé Pine Ochtendgloren"
+                "RosePineDawn": "Rosé Pine Ochtendgloren",
+                "GoldenEye": "Gouden Oog",
+                "AlmaSakura": "Alma Sakura",
+                "Synthwave": "Synthwave '84",
+                "OneDarkPro": "One Dark Pro"
             },
             "codeFontDefault": "Standaard (Iosevka Licht)",
             "codeFontOldSchool": "Old school",
@@ -710,6 +860,17 @@
             "codeFont": "Lettertype voor code",
             "codeLigatures": "Ligaturen",
             "codeDense": "Dichte indeling",
+            "specialFont": "Speciaal UI lettertype",
+            "specialFontDefault": "Standaard",
+            "changeDebuggerLayout": "Verander debugger's layout",
+            "debuggerLayout": "Debugger layout",
+            "debuggerLayouts": {
+                "split": "gesplitste layout",
+                "multiwindow": "meerdere vensters",
+                "automatic": "automatisch"
+            },
+            "autoapplyOnLaunch": "Pas assets toe bij het starten van het spel",
+            "scrollableCatnipLibrary": "Scrollable blokbibliotheek voor Catnip",
             "heading": "Instellingen",
             "disableSounds": "Schakel UI geluiden uit",
             "changeDataFolder": "Stel maplocatie voor data in",
@@ -749,6 +910,7 @@
         "patrons": "Patrons",
         "restart": "Herstart",
         "project": "Project",
+        "loadingPreviouslyOpened": "Laadt eerder geopende assets…",
         "tour": {
             "header": "Overzicht ct.js",
             "aboutTour": "Welkom bij ct.js! Deze kleine rondleiding zal je de belangrijkste controls in deze editor tonen. Op die manier zal je te weten komen hoe je ct.js kan configuren en hoe je nieuwe onderdelen kan maken.",
@@ -794,7 +956,8 @@
         "unwrapFolder": "De map uitpakken",
         "confirmDeleteFolder": "Ben je zeker dat je deze map wil verwijderen? De inhoud zal mee worden verwijderd.",
         "confirmUnwrapFolder": "Ben je zeker dat je deze map wil uitpakken? De inhoud zal naar de huidige map worden verplaatst.",
-        "exportBehavior": "Dit gedrag exporteren"
+        "exportBehavior": "Dit gedrag exporteren",
+        "exportTandem": "Exporteer deze verspreider tandem"
     },
     "soundRecorder": {
         "recorderHeading": "Recorder",
@@ -823,7 +986,9 @@
         "hide": "De laag verbergen",
         "findTileset": "Een tegelset zoeken",
         "addTileLayer": "Een tegellaag toevoegen",
-        "addTileLayerFirst": "Voeg eerst een tegellaag toe in het linkerpaneel!"
+        "addTileLayerFirst": "Voeg eerst een tegellaag toe in het linkerpaneel!",
+        "cacheLayer": "Cache deze laag",
+        "cacheLayerWarning": "Cachen versnelt het renderen van tegellagen aanzienlijk. Je moet deze optie alleen uitschakelen als je deze tegellaag dynamisch tijdens het spel moet wijzigen."
     },
     "roomView": {
         "name": "Naam:",
@@ -853,6 +1018,8 @@
         "backgroundColor": "Achtergrondkleur:",
         "sortHorizontally": "Horizontaal sorteren",
         "sortVertically": "Verticaal sorteren",
+        "sendToBack": "Naar achtergrond sturen",
+        "sendToFront": "Naar voorgrond sturen",
         "copyProperties": {
             "position": "Positie",
             "rotation": "Rotatie",
@@ -897,7 +1064,9 @@
             "addTiles": "Tegels toevoegen",
             "manageBackgrounds": "Achtergronden beheren",
             "roomProperties": "Kamereigenschappen",
-            "uiTools": "UI gereedschap"
+            "uiTools": "UI gereedschap",
+            "copiesList": "Lijst van kopieën",
+            "tilesList": "Lijst van tegels"
         },
         "resetView": "View resetten",
         "viewportHeading": "Viewport",
@@ -976,7 +1145,9 @@
         "strokeColor": "Lijnkleur:",
         "strokeWeight": "Lijn breedte:",
         "testText": "Test tekst 0123 +",
-        "fontSize": "Lettertype grootte:"
+        "fallbackFontFamily": "Fallback lettertype familie:",
+        "fontSize": "Lettertype grootte:",
+        "notSupportedForBitmap": "Merk op dat deze instellingen niet ondersteund worden voor bitmap lettertypes"
     },
     "textureView": {
         "center": "As",
@@ -1044,7 +1215,10 @@
         },
         "customCharsetHint": "Typ alle letters die je wil opnemen, zowel in hoofdletters als in kleine letters.",
         "fontWeight": "Lettertype breedte:",
-        "typefaceName": "Lettertype naam:"
+        "typefaceName": "Lettertype naam:",
+        "addFont": "Voeg een lettertype toe…",
+        "pixelPerfect": "Pixel-perfecte precisie",
+        "pixelPerfectTooltip": "Dit moet worden ingeschakeld voor pixelart lettertypes. Het inschakelen hiervan verbetert de tekenprecisie van 1-pixel-brede lijnen, maar vermindert de maximale textuurgrootte voor elk lettertypekarakter tot 4k bij 4k. (Wat nog steeds veel is voor pixel fonts.) Daarbovenop moet je weten dat kamer- en stijleditors een andere methode gebruiken voor het tekenen van lettertypes en pixel fonts er wazig in zullen verschijnen - dit is normaal."
     },
     "licensePanel": {
         "ctjsLicense": "Ct.js-licentie (MIT)",
@@ -1136,12 +1310,19 @@
         "eventAlreadyExists": "Hetzelfde event bestaat al!",
         "localEventVars": "Locale variabelen",
         "createEventHint": "Maak je eerste event in de linkerkolom en definieer je logica hier",
+        "jumpToProblem": "Ga naar het probleem",
+        "staticEventWarning": "Dit event maakt dit gedrag statisch. Je zult het niet dynamisch kunnen toevoegen of verwijderen in de game met de Behaviors API, maar anders zal het perfect bruikbaar zijn.",
+        "restrictedEventWarning": "Dit event werkt alleen op sjablonen met de volgende basisklassen: $1. Dit event zal niet werken wanneer toegepast op sjablonen van andere basisklassen.",
+        "baseClassWarning": "Dit event werkt niet met de huidige basisklasse.",
+        "typedefs": "Aanvullende type definities:",
+        "typedefsHint": "Je kunt aanvullende eigenschappen in dit asset beschrijven zodat ze zeker getypt zijn. Voorbeeld:\n\nnaam: string;\nlevens: number;\nmana: number;\ninventaris: any[];\n\nDit is volledig optioneel.",
         "coreEventsCategories": {
             "lifecycle": "Levenscyclus",
             "actions": "Acties",
             "pointer": "Aanwijzerevents",
             "misc": "Overige",
             "animation": "Animatie",
+            "input": "Invoer",
             "timers": "Timers",
             "app": "Toepassing"
         },
@@ -1217,10 +1398,14 @@
         "clueSolutions": {
             "syntax": "Dit is een syntax fout in je code. Ga naar het onderdeel en los het op — de code-editor zal de problematische plek aanduiden.",
             "eventConfiguration": "Een van de events is verkeerd ingesteld, met lege velden. Ga naar het onderdeel en pas zijn parameters aan.",
+            "eventMissing": "Er is een event in je onderdeel die een ontbrekende module gebruikt. Check of je alle vereiste modules hebt geïnstalleerd, en als je onlangs catmods hebt uitgeschakeld, probeer ze dan opnieuw in te schakelen.",
             "emptySound": "Een van je geluiden heeft bevat geen geluidsbestanden. Importeer er een geluidsbestand naar of verwijder dit lege geluid.",
             "emptyEmitter": "Een van je deeltjessystemen mist een texture in zijn verspreider. Je zal een texture moeten instellen of de verspreider verwijderen.",
             "windowsFileLock": "Dit probleem is specifiek voor Windows met een afgesloten bestand. Zorg ervoor dat je alle externe browsers sluit die de game opstarten en probeer dan nog eens te exporteren. Als dat niet helpt, herstart dan ct.js.",
-            "noTemplateTexture": "Een van je templates mist een texture. Je zal het een texture moeten geven."
+            "noTemplateTexture": "Een van je templates mist een texture. Je zal het een texture moeten geven.",
+            "blockArgumentMissing": "Een argument in een catnip code is niet ingesteld of verwijst naar een onderdeel dat nu is verwijderd. Ga naar het onderdeel en stel een waarde in voor het bovenstaande blok.",
+            "blockDeclarationMissing": "Een blok in je catnip code gebruikt een ontbrekende catmod. Als je onlangs catmods hebt uitgeschakeld, schakel ze dan opnieuw in, of verwijder de problematische blokken.",
+            "variableNames": "Een van je variabelen heeft een ongeldige naam. Variabelenamen mogen alleen letters, cijfers en underscores bevatten en moeten beginnen met een letter. Je kunt je variabelen veranderen in het Project tabblad in de sectie Globale Variabelen."
         },
         "stacktrace": "Stack oproepen",
         "jumpToProblem": "Nnaar het probleem",
@@ -1234,7 +1419,10 @@
         "jsAndTs": "JavaScript (en Typescript)",
         "jsTsDescription": "De taal van het web. De syntax is complexer maar fouten worden in de editor aangeduid en er zijn codesuggesties. Kies hiervoor als je al met JS, C# of Java code hebt gewerkt.",
         "pickJsTs": "Ik kies JavaScript!",
-        "acceptAndSpecifyDirectory": "Accepteren en projectenmap selecteren"
+        "acceptAndSpecifyDirectory": "Accepteren en projectenmap selecteren",
+        "catnip": "Catnip",
+        "catnipDescription": "Een visuele scripttaal gemaakt voor ct.js. Je kunt blokken slepen en met het toetsenbord. Een goede keuze als je weinig tot geen ervaring hebt met coderen.",
+        "pickCatnip": "Ik kies Catnip!"
     },
     "assetConfirm": {
         "confirmHeading": "Selecteer je actie",
@@ -1266,7 +1454,9 @@
     "scriptView": {
         "runAutomatically": "Uitvoeren bij het opstarten van de game",
         "language": "Taal:",
-        "convertToJavaScript": "Omzetten naar JavaScript"
+        "convertToJavaScript": "Omzetten naar JavaScript",
+        "confirmSwitchToCatnip": "Overschakelen naar Catnip zal alle code in dit script verwijderen. Weet je zeker dat je wilt doorgaan?",
+        "confirmSwitchFromCatnip": "Overschakelen van Catnip zal alle code in dit script verwijderen. Als je de code wilt behouden, converteer het script dan eerst naar JavaScript. Weet je zeker dat je wilt doorgaan en de code wilt wissen?"
     },
     "soundView": {
         "variants": "Varianten",
