@@ -28,3 +28,7 @@ if (pointer.collides(this)) {
     this.tex = 'Button_Normal';
 }
 ```
+
+> ⚠️ **Note:** we do not recommend to use the `pointer` module for UI elements; instead, use the built-in Pointer events in templates and rooms as they work better for UI elements, accounting for all the possible parent transforms while not causing clicks for background stacked elements. Note that since v5.3.0, the Pointer events are available in room events as well, allowing you to track clicks in the whole viewport.
+>
+> The `pointer` module, however, can be used for more complex interactions, such as drag-and-drop or custom pointer-based controls like harvesting tons of crops in one swipe or slicing fruits in a Fruit Ninja-like game.
