@@ -100,7 +100,7 @@ event-list-scriptable.flexfix(class="{opts.class}")
         .flexrow
             docs-shortcut.nogrow(
                 hidelabel="hidelabel"
-                path="/ct.templates.html"
+                path="/copy.html"
                 button="true"
                 wide="true"
                 title="{voc.learnAboutTemplates}"
