@@ -192,7 +192,7 @@ export let pixiApp: pixiMod.Application;
     // eslint-disable-next-line prefer-destructuring
     PIXI.settings.ROUND_PIXELS = [/*!@pixelatedrender@*/][0];
     if (!pixiApp.renderer.options.antialias) {
-        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+        PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
     }
     settings.targetFps = [/*!@maxfps@*/][0] || 60;
     // eslint-disable-next-line prefer-destructuring
