@@ -43,7 +43,11 @@ const writeArgumentlike = (
         valuesOut[piece.key] = compile([valueIn as IBlock], failureMeta, false);
     } else if (piece.assets && piece.assets !== 'action') {
         try {
-            valuesOut[piece.key] = `'${getById(piece.assets, valueIn as string).name}'`;
+            // Enumerations are output as is as they are global variables,
+            // while other assets are identified as strings
+            valuesOut[piece.key] = piece.assets === 'enum' ?
+                getById(piece.assets, valueIn as string).name :
+                `'${getById(piece.assets, valueIn as string).name}'`;
         } catch (oO) {
             if (piece.required) {
                 throw new ExporterError(`Required asset in field ${piece.key} of block "${declaration.name}" not found: ${valueIn}`, {

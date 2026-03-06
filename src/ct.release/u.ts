@@ -568,6 +568,35 @@ const uLib = {
      */
     getStringNumber(str: string): number {
         return Number(str.split('_').pop());
+    },
+    /**
+     * A helper method to loop over enumeration's keys.
+     * @param en Enumeration to loop over
+     * @param predicate A function that will be executed with enumeration's name at each iteration
+     * @catnipIgnore
+     */
+    eachEnumName<T>(en: T, predicate: (key: keyof T) => void): void {
+        for (const key of Object.values(en as Record<keyof T, number>)) {
+            if (typeof key === 'string') {
+                predicate(key as keyof typeof en);
+            }
+        }
+    },
+    /**
+     * A helper method to loop over enumeration's values.
+     * @param en Enumeration to loop over
+     * @param predicate A function that will be executed with enumeration's value at each iteration
+     * @catnipIgnore
+     */
+    eachEnumValue<T>(
+        en: Record<string, T>,
+        predicate: (key: Exclude<T, string>) => void
+    ): void {
+        for (const key of Object.values(en as Record<keyof T, number>)) {
+            if (typeof key === 'number') {
+                predicate(key as Exclude<T, string>);
+            }
+        }
     }
 };
 
