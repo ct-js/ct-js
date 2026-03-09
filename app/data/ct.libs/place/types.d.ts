@@ -61,8 +61,8 @@ interface IPoint {
     y: number;
 }
 interface ISeparateMovementResult {
-    x: boolean | Copy;
-    y: boolean | Copy;
+    x: false | BasicCopy | Tile;
+    y: false | BasicCopy | Tile;
 }
 
 declare namespace place {
@@ -431,4 +431,50 @@ declare namespace place {
      * @catnipName_Ru Включить столкновения у слоя тайлов
      */
     function enableTilemapCollisions(tilemap: Tilemap, cgroup?: string): void;
+}
+
+declare module 'src/ct.release/templates' {
+    export interface ICopy {
+        /**
+         * The name of a collision group the copy is in.
+         */
+        cgroup: string;
+
+        /**
+         * A collection of collision group names that can be set from
+         * within the editor. Can be used as a parameter to `moveSmart`
+         * and `moveBullet`.
+         */
+        myCollidingCGroups: Set<string>;
+
+        /**
+         * Performs a movement step, reading such parameters as `gravity`, `speed`,
+         * `direction`, just like `move`, but accepts an additional parameter
+         * `cgroup`, which can be a collision group name or a collection of
+         * collision group names the copy should collide with.
+         *
+         * On collision, the copy comes to a full stop.
+         * To make the copy slide on collision, see `moveSmart`.
+         */
+        moveBullet: (
+            this: BasicCopy,
+            cgroup?: string | string[] | Set<string>,
+            precision?: number
+        ) => BasicCopy | Tile | false;
+
+        /**
+         * Performs a movement step, reading such parameters as `gravity`, `speed`,
+         * `direction`, just like `move`, but accepts an additional parameter
+         * `cgroup`, which can be a collision group name or a collection of
+         * collision group names the copy should collide with.
+         *
+         * On collision, the copy slides along the body (copy/tile) it collided with.
+         * To make the copy come to a full stop on collision, see `moveBullet`.
+         */
+        moveSmart: (
+            this: BasicCopy,
+            cgroup?: string | string[] | Set<string>,
+            precision?: number
+        ) => ISeparateMovementResult | false;
+    }
 }
