@@ -217,14 +217,29 @@ script-editor.aPanel.aView.flexfix
             }
         };
         this.convertCatnip = () => {
+            const beautifyOptions = {
+                // eslint-disable-next-line camelcase
+                indent_char: ' ',
+                // eslint-disable-next-line camelcase
+                indent_size: 4,
+                eol: '\n',
+                // eslint-disable-next-line camelcase
+                max_preserve_newlines: 2,
+                // eslint-disable-next-line camelcase
+                jslint_happy: true
+            };
             const {compile} = require('src/node_requires/catnip/compiler');
+            const jsBeautify = require('js-beautify').js_beautify;
             try {
-                const val = compile(this.asset.code, {
+                let val = jsBeautify(compile(this.asset.code, {
                     eventKey: 'script',
                     resourceId: this.asset.uid,
                     resourceName: this.asset.name,
                     resourceType: 'script'
-                });
+                }), beautifyOptions);
+                if (this.asset.variables?.length) {
+                    val = `let ${this.asset.variables.join(', ')};\n${val}`;
+                }
                 this.asset.code = val;
                 this.asset.language = 'typescript';
                 this.update();
