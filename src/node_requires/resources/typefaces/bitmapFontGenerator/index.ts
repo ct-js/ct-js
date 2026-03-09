@@ -49,7 +49,7 @@ const draw = (
                 drawWidth = g.width;
             }
             // Account that the final canvas will be downscaled by x0.5
-            if (drawX + drawWidth > ctx.canvas.width / 2) {
+            if (drawX + drawWidth > (options.pixelPerfect ? ctx.canvas.width / 2 : ctx.canvas.width)) {
                 drawX = 1;
                 drawY += drawHeight + options.margin * 2;
             }
@@ -160,6 +160,7 @@ export const generateBitmapFont = async function generateBitmapFont(
             options.margin || 1
         );
     }
+    console.log(canvasSize);
 
     var drawResult, canvas, ctx;
     canvas = document.createElement('canvas');
@@ -206,11 +207,13 @@ export const generateBitmapFont = async function generateBitmapFont(
     } else {
         await util.outputBitmapFont(outputPath, canvas);
     }
-    return {
+    const returns = {
         map: drawResult.map,
         missingGlyph: drawResult.missingGlyph,
-        width: options.width,
-        height: adjustedHeight,
+        width: canvasSize.width,
+        height: canvasSize.width,
         canvas: options.pixelPerfect ? downscaleCanvas : canvas
     };
+    console.log(returns.canvas, returns);
+    return returns;
 };

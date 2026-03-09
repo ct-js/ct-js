@@ -93,7 +93,7 @@ const calculateCanvasSizeProp = function calculateCanvasSizeProp(
     }
     // Use the average value to calculate the approximate size
     var canvasSize = calculateCanvasSize(text, widthAverage, height, margin);
-    // Increase the vertical width until the text can be entered
+    // Increase the vertical size until the text can be entered
     while (!canGoIn(canvasSize, glyphList, charHeight, margin)) {
         canvasSize.height *= 2;
     }
