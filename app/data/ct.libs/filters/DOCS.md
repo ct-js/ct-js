@@ -1,7 +1,7 @@
-# ct.filters
+# Filters
 
 This module is a collection of shader filters.
-It includes [PixiJS built-in filters](https://pixijs.download/dev/docs/PIXI.filters.html) and [additional PixiJS community-authored filters](https://filters.pixijs.download/main/docs/PIXI.filters.html) (version 3.2.2, 30 december 2020).
+It includes PixiJS built-in filters ([PIXI.AlphaFilter](https://pixijs.download/v7.x/docs/PIXI.AlphaFilter.html) and others) and [additional PixiJS community-authored filters](https://github.com/pixijs/filters/tree/v5.x/) (v5.3.0).
 
 For each filter, you can check the PixiJS doc (links above) or use the ct.js autocomplete (to get all filters, all options of each filter, descriptions, types, and default values).
 
@@ -16,7 +16,7 @@ You can add/remove/enable/disable several filters on the same element (beware of
 ## How to add a filter with default options?
 
 ```js
-const fx = ct.filters.addCRT(this);
+const fx = filters.addCRT(this);
 ```
 
 ## How to add a filter with mandatory params?
@@ -27,13 +27,13 @@ const replacements = [
   [0xff0000, 0x0000ff],
   [0x00ff00, 0xffffff],
 ];
-const fx = ct.filters.addMultiColorReplace(this, replacements);
+const fx = filters.addMultiColorReplace(this, replacements);
 ```
 
 ## How to edit a filter?
 
 ```js
-const fx = ct.filters.addGlow(this);
+const fx = filters.addGlow(this);
 fx.color = 0xff004d;
 fx.innerStrength = 1;
 ```
@@ -45,7 +45,7 @@ Tip: You can `console.log` your `fx`, unfold the object and live tweak propertie
 ## Example of a very interesting filter with presets/methods:
 
 ```js
-const fx = ct.filters.addColorMatrix(this);
+const fx = filters.addColorMatrix(this);
 // You can determine your own color matrix:
 fx.matrix = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1];
 // Or use some nice predefined ones:
@@ -60,7 +60,7 @@ http://pixijs.download/release/docs/PIXI.filters.ColorMatrixFilter.html
 ## How to enable/disable a filter?
 
 ```js
-const fx = ct.filters.addGodray(this);
+const fx = filters.addGodray(this);
 fx.enabled = false;
 ```
 
@@ -69,8 +69,8 @@ If enabled is `true` the filter is applied, if `false` it will not.
 ## How to remove a filter?
 
 ```js
-const fx = ct.filters.addCRT(this);
-ct.filters.removeFilter(this, fx);
+const fx = filters.addCRT(this);
+filters.removeFilter(this, fx);
 ```
 
 It removes a filter (`fx` in this example) from `this.filters`.
@@ -102,7 +102,7 @@ red: 1,
 green: 0.8,
 blue: 0.2}
 
-const fx = ct.filters.custom(this, undefined, fragment, uniforms);
+const fx = filters.custom(this, undefined, fragment, uniforms);
 ```
 Mind, PIXI has a default vertex shader and a default fragment shader.
 For more info, you can check these links:
