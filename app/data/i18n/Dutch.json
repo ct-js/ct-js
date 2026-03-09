@@ -554,9 +554,6 @@
             "confirmDeletionMessage": "Ben je zeker dat je dit inhoudstype wil verwijderen? Het is onomkeerbaar en zal ook alle entries van dit inhoudstype verwijderen.",
             "gotoEntries": "Ga naar entries",
             "entries": "Entries",
-            "structureTypes": {
-                "array": "Lijst"
-            },
             "fixedLength": "Vaste lengte"
         },
         "contentTypes": "Inhoudstypes",
@@ -1257,6 +1254,8 @@
         },
         "animationFPS": "Animatie FPS:",
         "loopAnimation": "Animatie herhalen",
+        "useBitmapText": "Gebruik bitmap-lettertypen",
+        "errorBitmapNotConfigured": "De geselecteerde stijl is niet gekoppeld aan een lettertype dat een bitmap-lettertype gebruikt. Ga naar de stijl, koppel het aan een lettertype en zorg ervoor dat dit lettertype is geconfigureerd om een bitmap te exporteren, en pas de wijzigingen toe.",
         "hoverTexture": "Texture bij aanraken",
         "pressedTexture": "Texture wanneer ingedrukt",
         "disabledTexture": "Texture wanneer uitgeschakeld",
@@ -1265,22 +1264,43 @@
         "baseClass": {
             "AnimatedSprite": "Geanimeerde sprite",
             "Text": "Tekst",
+            "BitmapText": "Bitmap tekst",
             "NineSlicePlane": "Paneel",
             "Container": "Container",
             "Button": "Knop",
             "RepeatingTexture": "Herhaalde texture",
-            "SpritedCounter": "Teller met Sprites"
+            "SpritedCounter": "Teller met Sprites",
+            "TextBox": "Tekstvak",
+            "ScrollBox": "Scrollbox",
+            "Select": "Selectiemenu",
+            "ItemList": "Itemlijst"
         },
+        "fieldType": "Veldtype:",
+        "fieldTypes": {
+            "text": "Tekst",
+            "number": "Nummer",
+            "email": "E-mail",
+            "password": "Wachtwoord"
+        },
+        "useCustomSelectionColor": "Gebruik een aangepaste kleur voor geselecteerde tekst",
+        "maxLength": "Max lengte:",
         "nineSliceTop": "Bovenstuk, in pixels",
         "nineSliceRight": "Rechterstuk, in pixels",
         "nineSliceBottom": "Onderstuk, in pixels",
         "nineSliceLeft": "Linkerstuk, in pixels",
+        "layoutItemsHeading": "Items layout",
+        "horizontalPadding": "Horizontale opvulling, in pixels",
+        "verticalPadding": "Verticale opvulling, in pixels",
+        "horizontalSpacing": "Horizontale itemafstand, in pixels",
+        "verticalSpacing": "Verticale itemafstand, in pixels",
+        "alignItems": "Items uitlijnen:",
         "autoUpdateNineSlice": "Automatisch botsingsvorm updaten",
         "autoUpdateNineSliceHint": "Wanneer een paneel van grootte verandert, zal dat automatisch de botsingsvorm updaten. Meestal heb je dat niet nodig voor elementen die enkel cosmetisch zijn, of voor elementen die na ontstaan nooit meer van grootte zullen vernaderen. Je kunt de botsingsvorm nog steeds op elk moment updaten door u.reshapeNinePatch(this) op te roepen.",
         "panelHeading": "Texturesplitsingsinstellingen",
         "scrollSpeedX": "X-scrollsnelheid",
         "scrollSpeedY": "Y-scrollsnelheid  ",
         "isUi": "UI-tijd gebruiken",
+        "pixelPerfectScroll": "Pixel-perfect scroll",
         "defaultCount": "Standaard spriteteller"
     },
     "assetInput": {
@@ -1310,10 +1330,6 @@
         "eventAlreadyExists": "Hetzelfde event bestaat al!",
         "localEventVars": "Locale variabelen",
         "createEventHint": "Maak je eerste event in de linkerkolom en definieer je logica hier",
-        "jumpToProblem": "Ga naar het probleem",
-        "staticEventWarning": "Dit event maakt dit gedrag statisch. Je zult het niet dynamisch kunnen toevoegen of verwijderen in de game met de Behaviors API, maar anders zal het perfect bruikbaar zijn.",
-        "restrictedEventWarning": "Dit event werkt alleen op sjablonen met de volgende basisklassen: $1. Dit event zal niet werken wanneer toegepast op sjablonen van andere basisklassen.",
-        "baseClassWarning": "Dit event werkt niet met de huidige basisklasse.",
         "typedefs": "Aanvullende type definities:",
         "typedefsHint": "Je kunt aanvullende eigenschappen in dit asset beschrijven zodat ze zeker getypt zijn. Voorbeeld:\n\nnaam: string;\nlevens: number;\nmana: number;\ninventaris: any[];\n\nDit is volledig optioneel.",
         "coreEventsCategories": {
@@ -1349,7 +1365,11 @@
             "OnAnimationComplete": "Animatie klaar",
             "Timer": "Timer $1",
             "OnAppFocus": "App werkt actief",
-            "OnAppBlur": "App werkt op de achtergrond"
+            "OnAppBlur": "App werkt op de achtergrond",
+            "OnBehaviorAdded": "Gedrag toegevoegd",
+            "OnBehaviorRemoved": "Gedrag verwijderd",
+            "OnTextChange": "Tekst veranderd",
+            "OnTextInput": "Tekst invoer"
         },
         "coreParameterizedNames": {
             "OnActionPress": "Bij indrukken van %%action%% ",
@@ -1369,7 +1389,9 @@
         },
         "coreEventsLocals": {
             "OnActionDown_value": "Huidige actiewaarde",
-            "OnActionPress_value": "Huidige actiewaarde"
+            "OnActionPress_value": "Huidige actiewaarde",
+            "OnTextChange_value": "Nieuwe tekstwaarde",
+            "OnTextInput_value": "Ingevoerde tekst"
         },
         "coreEventsDescriptions": {
             "OnCreate": "Triggert wanneer je kopie is gecreëerd.",
@@ -1385,7 +1407,11 @@
             "OnAnimationComplete": "Activeert wanneer een niet-herhalende animatie is afgelopen.",
             "Timer": "Stel de duur in seconden voor deze timer in met this.timer$1 = 3;",
             "OnAppFocus": "Triggert wanneer een gebruiker terugkeert naar je toepassing. ",
-            "OnAppBlur": "Triggert wanneer een gebruiker van jouw spel naar iets anders overschakelt — door van tabblad te veranderen, te wisselen van venster, of het spel te minimaliseren."
+            "OnAppBlur": "Triggert wanneer een gebruiker van jouw spel naar iets anders overschakelt — door van tabblad te veranderen, te wisselen van venster, of het spel te minimaliseren.",
+            "OnBehaviorAdded": "Triggert wanneer een gedrag wordt toegevoegd aan de kopie.",
+            "OnBehaviorRemoved": "Triggert wanneer een gedrag wordt verwijderd van de kopie.",
+            "OnTextChange": "Triggert wanneer de tekstinhoud van een TextBox of een ander tekstinvoerelement verandert.",
+            "OnTextInput": "Triggert wanneer een gebruiker tekst invoert in een TextBox of een ander tekstinvoerelement."
         },
         "jumpToProblem": "Naar het probleem",
         "staticEventWarning": "Dit event maakt je gedrag statisch. Je zal het niet meer het dynamisch tijdens het spel kunnen veranderen met de Gedragingen API, maar daarnaast zal het perfect bruikbaar zijn.",

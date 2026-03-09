@@ -37,6 +37,7 @@
         "cancel": "Annuler",
         "cannotBeEmpty": "Ceci ne peux pas rester vide",
         "confirmDelete": "Êtes-vous certain de vouloir supprimer {0} ? Ceci est irréversible.",
+        "andNMore": ", et {0} de plus",
         "contribute": "Contribuer",
         "copy": "Copier",
         "copyName": "Copier le nom",
@@ -116,6 +117,21 @@
         "docsLong": "Documentation",
         "openAssetGallery": "Galerie",
         "assetTypes": {
+            "behavior": [
+                "comportement",
+                "comportements",
+                "comportements"
+            ],
+            "enum": [
+                "énumération",
+                "énumérations",
+                "énumérations"
+            ],
+            "script": [
+                "script",
+                "scripts",
+                "scripts"
+            ],
             "texture": [
                 "texture",
                 "textures",
@@ -160,7 +176,113 @@
         "next": "Suivant",
         "previous": "Précédent",
         "undo": "Annuler",
-        "redo": "Refaire"
+        "redo": "Refaire",
+        "addBehavior": "Ajouter un comportement",
+        "create": "Créer",
+        "discard": "Abandonner",
+        "download": "Télécharger",
+        "experimentalFeature": "Ceci est une fonctionnalité expérimentale.",
+        "goBack": "Retour",
+        "selectDialogueTexture": "Sélectionner une texture…",
+        "selectDialogueStyle": "Sélectionner un style…",
+        "sortByDate": "Trier par date",
+        "sortByName": "Trier par nom",
+        "sortByType": "Trier par type",
+        "reimportSourceMissing": "Impossible de réimporter : le fichier source a disparu.",
+        "dropToImport": "Déposer ici pour importer",
+        "reimport": "Réimporter",
+        "createStyleFromIt": "Créer un style à partir de celui-ci",
+        "alignModes": {
+            "left": "Gauche",
+            "right": "Droite",
+            "top": "Haut",
+            "bottom": "Bas",
+            "center": "Centre",
+            "topLeft": "Haut gauche",
+            "topCenter": "Haut centre",
+            "topRight": "Haut droite",
+            "bottomLeft": "Bas gauche",
+            "bottomCenter": "Bas centre",
+            "bottomRight": "Bas droite",
+            "fill": "Remplir",
+            "Scale": "Échelle"
+        }
+    },
+    "assetConfirm": {
+        "confirmHeading": "Sélectionner une action",
+        "confirmParagraph": "Le asset $1 a des modifications non appliquées. Que souhaitez-vous faire ?"
+    },
+    "assetViewer": {
+        "root": "Racine",
+        "toggleFolderTree": "Afficher/masquer l'arborescence des dossiers dans les autres onglets",
+        "addNewFolder": "Nouveau dossier",
+        "newFolderName": "Nom du dossier :",
+        "unwrapFolder": "Déplier le dossier",
+        "confirmDeleteFolder": "Êtes-vous sûr de vouloir supprimer ce dossier ?",
+        "confirmUnwrapFolder": "Êtes-vous sûr de vouloir déplier ce dossier ?",
+        "exportBehavior": "Exporter le comportement",
+        "exportTandem": "Exporter le tandem"
+    },
+    "behaviorEditor": {
+        "customFields": "Champs personnalisés",
+        "customFieldsDescription": "Définissez des champs personnalisés pour ce comportement qui seront visibles dans l'éditeur de copies."
+    },
+    "createAsset": {
+        "newAsset": "Nouvel asset",
+        "placeholderTexture": "Texture de substitution",
+        "assetGallery": "Galerie d'assets",
+        "behaviorTemplate": "Modèle de comportement",
+        "behaviorRoom": "Modèle de salle",
+        "importFromFile": "Importer depuis un fichier",
+        "behaviorMissingCatmods": "Ce modèle nécessite des catmods qui ne sont pas installés",
+        "formatError": "Erreur de format"
+    },
+    "enumEditor": {
+        "addVariant": "Ajouter une variante",
+        "enumUseCases": "Cas d'utilisation"
+    },
+    "exporterError": {
+        "exporterErrorHeader": "Une erreur s'est produite lors de l'exportation de votre projet",
+        "errorSource": "Dans un $1 nommé $2",
+        "clueSolutions": {
+            "syntax": "C'est une erreur de syntaxe dans votre code. Allez dans l'asset et corrigez-la — l'éditeur de code indiquera l'endroit problématique.",
+            "eventConfiguration": "Un des événements est mal configuré, avec des champs vides. Allez dans l'asset et ajustez ses paramètres.",
+            "eventMissing": "Un événement dans votre asset utilise un module manquant. Vérifiez si vous avez installé tous les modules requis.",
+            "emptySound": "Un de vos sons est vide. Supprimez-le ou ajoutez du contenu audio.",
+            "emptyEmitter": "Un de vos émetteurs n'a pas de texture définie. Allez dans l'émetteur et sélectionnez une texture.",
+            "windowsFileLock": "Impossible d'écrire sur le fichier car il est utilisé par un autre programme. Fermez les programmes qui pourraient l'utiliser (comme Windows Media Player ou des antivirus).",
+            "noTemplateTexture": "Un de vos modèles n'a pas de texture définie. Sélectionnez une texture dans les paramètres du modèle.",
+            "blockArgumentMissing": "Un argument dans votre code Catnip n'est pas défini ou faisait référence à un asset maintenant supprimé. Allez dans l'asset et définissez une valeur pour le bloc susmentionné.",
+            "blockDeclarationMissing": "Un bloc dans votre code Catnip utilise un catmod manquant. Si vous avez désactivé des catmods récemment, essayez de les réactiver ou supprimez les blocs problématiques.",
+            "variableNames": "Certains noms de variables sont incorrects. Assurez-vous qu'ils ne contiennent pas d'espaces ou de caractères spéciaux."
+        },
+        "stacktrace": "Trace de la pile:",
+        "jumpToProblem": "Aller au problème",
+        "saveAndQuit": "Sauvegarder et quitter"
+    },
+    "folderEditor": {
+        "title": "Paramètres du dossier",
+        "icon": "Icône",
+        "color": "Couleur"
+    },
+    "globalSearch": {
+        "buttonTitle": "Rechercher",
+        "nothingFound": "Rien n'a été trouvé",
+        "searchHint": "Essayez un autre terme",
+        "recent": "Récent"
+    },
+    "languageSelector": {
+        "chooseLanguageHeader": "Choisir un langage",
+        "chooseLanguageExplanation": "Quel langage de scripting voulez-vous utiliser ?",
+        "coffeeScriptDescription": "CoffeeScript est un langage qui se compile en JavaScript. Il possède une syntaxe plus courte et conviviale.",
+        "pickCoffeeScript": "CoffeeScript",
+        "jsAndTs": "JavaScript et TypeScript",
+        "jsTsDescription": "JavaScript est le langage standard du web. TypeScript est une sur-ensemble de JavaScript avec des types statiques.",
+        "pickJsTs": "JavaScript / TypeScript",
+        "acceptAndSpecifyDirectory": "Accepter et spécifier le répertoire",
+        "catnip": "Catnip (Visual)",
+        "catnipDescription": "Catnip est un langage de scripting visuel. Faites glisser des blocs et construisez votre jeu sans écrire de code !",
+        "pickCatnip": "Catnip"
     },
     "exportPanel": {
         "hide": "Cacher",
@@ -179,14 +301,23 @@
         "downloadAndroidStudio": "Télécharger Android Studio",
         "requiresInternetNotice": "Cette opération nécessite une connexion internet pour mettre en place les projet.",
         "noJdkFound": "Le JDK 17 est introuvable (la variable d’environnement JAVA_HOME n’est pas définie ou ne pointe pas vers le JDK 17). Vous pouvez l’obtenir ici :",
-        "downloadJDK": "Télécharger le JDK 17"
+        "downloadJDK": "Télécharger le JDK 17",
+        "goodToGo": "Prêt à exporter !",
+        "nodeJsNotFound": "Node.js est introuvable",
+        "nodeJsDownloadPage": "Téléchargez Node.js ici",
+        "nodeJsIcons": "Node.js est nécessaire pour exporter des applications de bureau."
     },
     "intro": {
         "loading": "Veuillez patientez : nos chatons se préparent à la vitesse de la lumière !",
         "newProject": {
             "input": "Nom du projet (lettres et chiffres)",
             "selectProjectFolder": "Choisissez un dossier pour sauvegarder votre projet",
-            "nameError": "Mauvais nom de projet"
+            "nameError": "Mauvais nom de projet",
+            "header": "Nouveau projet",
+            "projectName": "Nom du projet",
+            "language": "Langage de script",
+            "saveFolder": "Dossier de sauvegarde",
+            "languageError": "Erreur de langage"
         },
         "recovery": {
             "message": "<h2 class=\"nmt\">Récupération</h2><p>ct.js a trouvé un fichier de récupération. Votre projet n’a pas dû être sauvegardé correctement ou ct.js a quitté inopinément. Dates de dernière modification :</p><p>Fichier actuel : {0} {1}<br/>Fichier récupéré : {2} {3}</p><p>Quel fichier doit être ouvert ?</p>",
@@ -216,7 +347,35 @@
         "templatesInfo": "Vous pouvez démarrer rapidement un projet grâce à un de ces modèles. Ils comportent seulement des graphismes temporaires mais les mécaniques de jeu sont fonctionnelles. Sélectionner un projet vous demandera de choisir où enregistrer votre projet dans le sélecteur de dossier.",
         "boosty": "Soutenir ct.js sur Boosty !",
         "sponsoredBy": "Sponsorisé par $1 !",
-        "supportedBy": "Soutenu par $1"
+        "supportedBy": "Soutenu par $1",
+        "newUserHeader": "Bienvenue !",
+        "welcomeHeaders": [
+            "Bon retour parmi nous !",
+            "Ravi de vous revoir !",
+            "Content de vous revoir !",
+            "Bienvenue, développeur !",
+            "Super, vous voilà !",
+            "Ça fait plaisir de vous voir !",
+            "Ah, c'est vous !",
+            "Gloire au développeur !",
+            "👋",
+            "Heureux de vous revoir !",
+            "Le meilleur développeur est de retour !",
+            "Le héros est de retour !",
+            "Un autre projet attends !",
+            "Prêt à coder ?"
+        ],
+        "ctDistributions": {
+            "released": "Branche stable",
+            "nightly": "Build nocturne",
+            "dev": "Exécution depuis les sources"
+        },
+        "gamesFromCommunity": "Jeux de la communauté",
+        "submitYourOwn": "Soumettez le votre !",
+        "learningResources": "Ressources d'apprentissage",
+        "authorBy": "par",
+        "nothingToShowFiller": "Il n'y a rien ici !",
+        "telegram": "Groupe Telegram"
     },
     "onboarding": {
         "hoorayHeader": "Incroyable ! Vous venez de créer un projet !",
@@ -259,67 +418,10 @@
             "appId": "App ID",
             "appIdExplanation": "Il est principalement utilisé pour les jeux mobiles. C’est un identifiant sous forme de texte unique à chaque jeu. Il respecte en général le format `domaine.developpeur.nomDeProjet`. Un bon exemple d’appID serait `rocks.ctjs.catsteroids`."
         },
-        "rendering": {
-            "heading": "Options de rendu",
-            "highDensity": "Prend en charge une densité de pixels élevée (par exemple sur les écrans Retina)",
-            "framerate": "Taux d'images :",
-            "maxFPS": "Taux de rafraichissement maximal :",
-            "launchMode": "Mode de lancement :",
-            "launchModes": {
-                "maximized": "Maximiser",
-                "fullscreen": "Plein écran",
-                "windowed": "Fenêtré"
-            },
-            "desktopBuilds": "Export PC",
-            "hideCursor": "Masquer le curseur du système",
-            "pixelatedRender": "Désactive le lissage d'image ici et dans le projet exporté (conservez les pixels nets)",
-            "usePixiLegacy": "Utiliser une méthode de rendu basé sur le canvas pour supporter les navigateurs plus anciens (ajoute ~20Ko au jeu)",
-            "useTransparent": "",
-            "mobileBuilds": "Export mobile",
-            "screenOrientation": "Orientation de l’écran :",
-            "screenOrientations": {
-                "unspecified": "Toutes",
-                "landscape": "Paysage",
-                "portrait": "Portrait"
-            }
-        },
-        "branding": {
-            "heading": "Identité visuelle",
-            "icon": "Logo du jeu :",
-            "iconNotice": "Votre logo doit être carré et faire au minimum 256x256 pixels.",
-            "accent": "Couleur d’accentuation :",
-            "accentNotice": "Définit la couleur pendant le chargement, ainsi qu’à certains autres endroits s'il est utilisé comme application mobile.",
-            "invertPreloaderScheme": "Inverser le schéma de couleurs lors du chargement",
-            "hideLoadingLogo": "Masquer \"Fait avec ct.js\" lors du chargement",
-            "splashScreen": "Écran de démarrage :",
-            "splashScreenNotice": "Cette image est utilisée pour les applications mobiles. Elle doit faire au minimum 1920×1920px et sera mise à l’échelle et rognée pour s’adapter aux formats portrait et paysage. Assurez-vous de centrer les éléments importants sur l’image.",
-            "forceSmoothIcons": "Lisser les icônes quel que soit le réglage du rendu",
-            "forceSmoothSplashScreen": "Lisser l’image de l’écran de démarrage quel que soit le réglage du rendu"
-        },
-        "scripts": {
-            "heading": "Vos Scripts",
-            "addNew": "Ajouter un nouveau Script",
-            "deleteScript": "Supprimer le Script",
-            "newScriptComment": "Utilisez des scripts pour définir des fonctions fréquentes et importer de petites bibliothèques",
-            "moveUp": "Déplacer vers le haut",
-            "moveDown": "Déplacez vers le bas"
-        },
         "modules": {
             "heading": "Catmods"
         },
         "catmodsSettings": "Réglages des Catmods",
-        "export": {
-            "heading": "Réglage des exports",
-            "functionWrap": "Enrober tout le code dans une fonction (rend le débogage plus compliqué mais isole le code du jeu dans un contexte externe. Il est préférable de ne pas l’activer pendant le développement du jeu).",
-            "codeModifier": "Transformations du code",
-            "obfuscateWarning": "Cette option ralentira l’exécution de 15 à 80%, mais rendra votre code extrêmement difficile à extraire et à déchiffrer.",
-            "codeModifierAndWrapNote": "À noter que ces réglages ne fonctionnent que sur les exports web et PC, car ils rallongent considérablement le temps de compilation et rendent le débogage difficile. Vous pouvez forcer le comportement dans Menu Principal  → Réglages → Réglages de production pour le débogage.",
-            "codeModifiers": {
-                "none": "Aucun",
-                "minify": "Minimiser",
-                "obfuscate": "Brouiller"
-            }
-        },
         "content": {
             "heading": "Éditeur de type de contenu",
             "addContentType": "Ajouter un type de contenu",
@@ -336,15 +438,78 @@
             "fieldReadableName": "Nom affiché",
             "fieldReadableNameHint": "La version affiché du nom, utilisé dans l’éditeur de contenu.",
             "fieldType": "Type",
+            "fieldStructure": "Structure",
             "deleteContentType": "Supprimer ce type de contenu",
             "confirmDeletionMessage": "Êtes-vous sûr de vouloir supprimer ce type de contenu ? Ceci est irréversible et supprimera également tous les objets de ce type de contenu.",
             "gotoEntries": "Voir les objets",
             "entries": "Objets",
             "structureTypes": {
-                "array": "Liste"
-            }
+                "atomic": "Valeur unique",
+                "array": "Liste",
+                "map": "Carte"
+            },
+            "key": "Clé",
+            "value": "Valeur",
+            "mappedType": "Type de carte",
+            "fixedLength": "Longueur fixe"
         },
-        "contentTypes": "Types de contenu"
+        "contentTypes": "Types de contenu",
+        "main": {
+            "heading": "Paramètres principaux",
+            "miscHeading": "Autres paramètres",
+            "backups": "Nombre de sauvegardes à conserver"
+        },
+        "branding": {
+            "heading": "Identité visuelle",
+            "accent": "Accent",
+            "accentNotice": "La couleur d'accentuation est utilisée pour les éléments d'interface et les indicateurs.",
+            "icon": "Icône",
+            "iconNotice": "L'icône de votre jeu. Les formats PNG et JPEG sont recommandés. Pour de meilleurs résultats sur les écrans retina, utilisez des résolutions de 512x512 ou plus.",
+            "splashScreen": "Écran de chargement",
+            "splashScreenNotice": "L'écran de chargement apparaîtra lors du chargement de votre jeu.",
+            "forceSmoothIcons": "Forcer le lissage des icônes",
+            "forceSmoothSplashScreen": "Forcer le lissage de l'écran de chargement",
+            "alternativeCtjsLogo": "Logo ct.js alternatif",
+            "alternativeCtjsNotice": "Affiche un logo ct.js alternatif sur l'écran de chargement.",
+            "hideLoadingLogo": "Masquer le logo de chargement",
+            "customLoadingText": "Texte de chargement personnalisé",
+            "customLoadingTextHint": "Vous pouvez mettre un espace (pas une chaîne vide) si vous souhaitez masquer le texte de chargement."
+        },
+        "rendering": {
+            "heading": "Options de rendu",
+            "viewportMode": "Mode de la fenêtre",
+            "viewportModes": {
+                "asIs": "Non géré",
+                "fastScale": "Mise à l'échelle rapide",
+                "fastScaleInteger": "Mise à l'échelle rapide par entiers",
+                "expand": "Agrandir"
+            },
+            "viewportModesDescriptions": {
+                "asIs": "Ne pas mettre à l'échelle le jeu.",
+                "fastScale": "Mettre le jeu à l'échelle en maintenant les proportions.",
+                "fastScaleInteger": "Mettre à l'échelle le jeu par nombres entiers uniquement.",
+                "expand": "Agrandir le jeu pour remplir l'écran."
+            },
+            "useTransparent": "Utiliser un fond transparent"
+        },
+        "scripts": {
+            "scriptsHint": "Paramètres liés à ct.js scripting."
+        },
+        "variables": {
+            "heading": "Variables"
+        },
+        "export": {
+            "heading": "Exportation",
+            "errorReporting": "Rapport d'erreurs",
+            "showErrors": "Afficher les erreurs",
+            "showErrorsHint": "Affiche les erreurs dans la console du navigateur pendant l'exécution.",
+            "errorsLink": "En savoir plus sur les erreurs",
+            "assetTree": "Exporter la structure des assets",
+            "assetTreeNote": "Crée un fichier JSON avec une liste de tous les assets.",
+            "exportAssetTree": "Exporter la structure des assets",
+            "exportAssetTypes": "Types d'assets à exporter",
+            "autocloseDesktop": "Fermer l'application après l'exportation"
+        }
     },
     "modules": {
         "author": "Auteur de ce CatMod",
@@ -672,7 +837,6 @@
             "buttonStartTutorial": "Ouvrir les tutoriels"
         }
     },
-    "assetViewer": {},
     "soundRecorder": {
         "recorderHeading": "Enregistreur",
         "record": "Démarrer l’enregistrement",
