@@ -1419,7 +1419,8 @@
             "successZipProject": "Successfully zipped the project to {0}.",
             "zipProject": "Pack project to .zip",
             "convertToJs": "Convert project to JavaScript",
-            "confirmationConvertToJs": "This will automatically convert ALL the events in the project to JavaScript. This action is irreversible. (Though it will rollback if it finds an error in your scripts.) Are you sure you want to convert this CoffeeScript project to JavaScript?"
+            "confirmationConvertToJs": "This will automatically convert ALL the events in the project to JavaScript. This action is irreversible. (Though it will rollback if it finds an error in your scripts.) Are you sure you want to convert this project to JavaScript?",
+            "pleaseCloseAssets": "Please close all open assets before converting the project to JavaScript."
         },
         "meta": {
             "heading": "Meta",

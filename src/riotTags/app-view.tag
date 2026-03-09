@@ -159,7 +159,7 @@ app-view.flexcol
         this.tab = 'assets'; // A tab can be either a string ('project', 'assets', etc.) or an asset object
         window.hotkeys.cleanScope();
         window.hotkeys.push('assets');
-        this.openedAssets = [];
+        this.openedAssets = window.openedAssets = [];
         this.tabsDirty = [];
         this.isCatnipOpened = false;
         const webglUsers = ['style', 'tandem', 'room'];
