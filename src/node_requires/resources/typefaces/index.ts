@@ -109,7 +109,7 @@ export const refreshFonts = async (): Promise<void> => {
             };
             const source = getPathToTtf(font),
                   cleanedSource = source.replace(/ /g, '%20').replace(/\\/g, '/');
-            const face = new FontFace(getFontDomName(font), `url(${cleanedSource})`, template);
+            const face = new FontFace(getFontDomName(font), `url("${cleanedSource}")`, template);
             loadPromises.push(face.load()
             .then(loaded => {
                 fontsMap.set(font.uid, loaded);
