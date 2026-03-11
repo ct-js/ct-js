@@ -761,7 +761,8 @@
             "openProject": "打开项目…",
             "openExample": "打开示例项目…",
             "convertToJs": "将项目转换为JavaScript",
-            "confirmationConvertToJs": "这将自动将项目中的所有事件转换为JavaScript. 这种行为是不可逆转的. (但如果在脚本中发现错误, 它将回滚.) 您确定要将这个CoffeeScript项目转换为JavaScript吗?"
+            "confirmationConvertToJs": "这将自动将项目中的所有事件转换为JavaScript. 这种行为是不可逆转的. (但如果在脚本中发现错误, 它将回滚.) 您确定要将这个CoffeeScript项目转换为JavaScript吗?",
+            "pleaseCloseAssets": "在将项目转换为JavaScript之前，请关闭所有打开的资源。"
         },
         "meta": {
             "license": "许可证",

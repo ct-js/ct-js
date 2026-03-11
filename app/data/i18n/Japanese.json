@@ -1421,7 +1421,8 @@
       "successZipProject": "プロジェクトのZip圧縮に成功。 {0} に保存されました。",
       "zipProject": "プロジェクトを.zipに圧縮",
       "convertToJs": "プロジェクトを JavaScript に変換",
-      "confirmationConvertToJs": "これにより、プロジェクト内のすべてのイベントが自動的にJavaScriptに変換されます。この操作は元に戻せません。(ただし、スクリプトにエラーが見つかった場合はロールバックされます。) 本当にこのCoffeeScriptプロジェクトをJavaScriptに変換しますか?"
+      "confirmationConvertToJs": "これにより、プロジェクト内のすべてのイベントが自動的にJavaScriptに変換されます。この操作は元に戻せません。(ただし、スクリプトにエラーが見つかった場合はロールバックされます。) 本当にこのCoffeeScriptプロジェクトをJavaScriptに変換しますか?",
+      "pleaseCloseAssets": "プロジェクトをJavaScriptに変換する前に、開いているすべてのリソースを閉じてください。"
     },
     "meta": {
       "heading": "メタ",

@@ -1392,7 +1392,8 @@
             "successZipProject": "Projeto zipado com sucesso para {0}.",
             "zipProject": "Compactar o projeto para .zip",
             "convertToJs": "Converter o projeto para Javascript",
-            "confirmationConvertToJs": "Isso converterá automaticamente TODOS os eventos do projeto para JavaScript. Esta ação é irreversível. (Embora ele seja revertido se encontrar um erro em seus scripts.) Tem certeza de que deseja converter este projeto para JavaScript?"
+            "confirmationConvertToJs": "Isso converterá automaticamente TODOS os eventos do projeto para JavaScript. Esta ação é irreversível. (Embora ele seja revertido se encontrar um erro em seus scripts.) Tem certeza de que deseja converter este projeto para JavaScript?",
+            "pleaseCloseAssets": "Por favor, feche todos os ativos abertos antes de converter o projeto para JavaScript."
         },
         "meta": {
             "heading": "Meta",

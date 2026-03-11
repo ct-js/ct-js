@@ -717,7 +717,7 @@
             "constant string": "Możesz użyć tego bloku do wymuszenia konwersji wartości na ciąg znaków, np. gdy chcesz zapisać liczbę jako tekst lub zamienić \\n na nową linię przy umieszczaniu tej wartości w zmiennych zastępczych.",
             "set anchor": "Ustawia punkt zaczepienia przy użyciu znormalizowanych współrzędnych (od 0.0 do 1.0). Punkt zaczepienia określa, względem którego miejsca kopia jest obracana i skalowana. Typowe wartości: (0, 0) = lewy górny róg, (0.5, 0.5) = środek, (1, 1) = prawy dolny róg. Działa na kopiach z teksturą, np. Animowanych Sprite'ach.",
             "set pivot": "Ustawia punkt obrotu przy użyciu współrzędnych pikselowych. Działa podobnie do punktu zaczepienia, ale zamiast procentów używa wartości bezwzględnych w pikselach. Opcja zaawansowana - w większości przypadków zaleca się użycie punktu zaczepienia."
-        } 
+        }
     },
     "colorPicker": {
         "current": "Nowy",
@@ -1419,7 +1419,8 @@
             "successZipProject": "Pomyślnie spakowano projekt do {0}.",
             "zipProject": "Spakuj projekt do .ZIP",
             "convertToJs": "Konwertuj projekt do JavaScript",
-            "confirmationConvertToJs": "Wszystkie zdarzenia w projekcie zostaną automatycznie przekonwertowane do JavaScript. Ten proces jest nieodwracalny (jeśli skrypt zawiera błąd, konwersja zostanie cofnięta). Czy na pewno chcesz przekonwertować projekt z CoffeeScript do JavaScript?"
+            "confirmationConvertToJs": "Wszystkie zdarzenia w projekcie zostaną automatycznie przekonwertowane do JavaScript. Ten proces jest nieodwracalny (jeśli skrypt zawiera błąd, konwersja zostanie cofnięta). Czy na pewno chcesz przekonwertować projekt z CoffeeScript do JavaScript?",
+            "pleaseCloseAssets": "Proszę zamknąć wszystkie otwarte zasoby przed konwersją projektu do JavaScript."
         },
         "meta": {
             "heading": "Meta",
