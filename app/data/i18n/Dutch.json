@@ -1020,8 +1020,8 @@
             "media": "Multimedia",
             "misc": "Overig",
             "desktop": "Desktop builds",
-            "motionPlanning": "Motion planning",
-            "inputs": "Input methoden",
+            "motionPlanning": "Bewegingsplanning",
+            "inputs": "Invoermethoden",
             "fx": "FX",
             "mobile": "Mobiele apparaten",
             "integrations": "Integraties",
@@ -1332,7 +1332,7 @@
             "twitter": "Twitterkanaal",
             "vkontakte": "Vkontakte publieke gemeenschap",
             "ctjsForum": "Kom naar het ct.js forum",
-            "openStylebook": "Open CSS stylebook"
+            "openStylebook": "Open het CSS-stijlboek"
         }
     },
     "appView": {

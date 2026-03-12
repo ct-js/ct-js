@@ -583,7 +583,7 @@
         "downloadJDK": "Завантажити JDK 17"
     },
     "intro": {
-        "loading": "Зачекайте, коти набирають швидкість світла...",
+        "loading": "Завантаження...",
         "loadingProject": "Завантаження проекту…",
         "newProject": {
             "input": "Ім'я проекту, латиниця та цифри…",
@@ -614,10 +614,7 @@
         "vkontakte": "Паблік Вконтакті",
         "patreon": "Підтримай кота на Патреоні!",
         "templates": "Шаблони",
-        "templatesInfo": "Почни розробку гри з одним із цих шаблонів. У них графіка-заглушка, але механіки, що чудово працюють. При виборі шаблону відкриється вибір папки для твого нового проекту.",
-        "boosty": "",
-        "sponsoredBy": "",
-        "supportedBy": ""
+        "templatesInfo": "Почни розробку гри з одним із цих шаблонів. У них графіка-заглушка, але механіки, що чудово працюють. При виборі шаблону відкриється вибір папки для твого нового проекту."
     },
     "onboarding": {
         "hoorayHeader": "Ух-ти! Ми зробили новий проект!",
@@ -656,7 +653,7 @@
             "site": "Сайт автора:",
             "title": "Назва:",
             "version": "Версія:",
-            "versionPostfix": "Постфікс:",
+            "versionPostfix": "Суфікс:",
             "appId": "ID програми",
             "appIdExplanation": "В основному використовується для білдів для мобільних пристроїв. Це унікальний рядок, що позначає твою гру. Зазвичай пишеться у форматі домензона.розробник.ім'япроекту - наприклад, rocks.ctjs.catsteroids"
         },
@@ -719,7 +716,11 @@
                 "none": "Ніякі",
                 "minify": "Стиснути",
                 "obfuscate": "Обфусфувати"
-            }
+            },
+            "errorReporting": "Звіти про помилки",
+            "errorsLink": "Посилання на помилки",
+            "assetTree": "Дерево ассетів",
+            "exportAssetTree": "Експортувати дерево"
         },
         "content": {
             "heading": "Редактор типів контенту",
@@ -742,10 +743,34 @@
             "gotoEntries": "Перейти до записів",
             "entries": "Записи",
             "structureTypes": {
-                "array": "Масив"
-            }
+                "atomic": "Атомарний",
+                "array": "Масив",
+                "map": "Мапа"
+            },
+            "fieldStructure": "Структура",
+            "key": "Ключ",
+            "value": "Значення"
         },
-        "contentTypes": "Типи контенту"
+        "contentTypes": "Типи контенту",
+        "main": {
+            "heading": "Налаштування",
+            "miscHeading": "Інші налаштування",
+            "backups": "Кількість резервних копій:"
+        },
+        "variables": {
+            "addVariable": "Додати змінну",
+            "variableName": "Ім'я змінної",
+            "variableType": "Тип змінної",
+            "defaultValue": "Значення за замовчуванням",
+            "deleteVariable": "Видалити змінну",
+            "noVariablesYet": "Ще немає змінних",
+            "boolean": "Логічний",
+            "number": "Число",
+            "string": "Текст",
+            "raw": "Сирий",
+            "invalidName": "Неправильне імя",
+            "reservedName": "Зарезервоване ім'я"
+        }
     },
     "modules": {
         "author": "Автор котомоду",
@@ -805,8 +830,8 @@
     "particleEmitters": {
         "emittersHeading": "Системи частинок",
         "emitterHeading": "Емітер",
-        "from": "Від:",
-        "to": "До:",
+        "from": "Від",
+        "to": "До",
         "textureHeading": "Текстура",
         "selectTexture": "Вибрати…",
         "importBuiltin": "Імпорт вбудованої…",
@@ -846,6 +871,7 @@
         "spawnType": "Форма емітера:",
         "spawnShapes": {
             "rectangle": "Прямокутник",
+            "torus": "Тор",
             "star": "Зірка"
         },
         "width": "Ширіна:",
@@ -864,7 +890,11 @@
         "showShapeVisualizer": "Показати форму емітера",
         "changeGrid": "Розмір сітки",
         "newGridSize": "Новий розмір сітки:",
-        "setPreviewTexture": "Підкласти текстуру"
+        "setPreviewTexture": "Підкласти текстуру",
+        "textureMethods": {
+            "random": "Випадковий",
+            "animated": "Анімований"
+        }
     },
     "rooms": {
         "create": "Додати",
@@ -1090,7 +1120,6 @@
             "buttonStartTutorial": ""
         }
     },
-    "assetViewer": {},
     "soundRecorder": {
         "recorderHeading": "Диктофон",
         "record": "Почати запис",

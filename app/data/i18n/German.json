@@ -725,17 +725,33 @@
         "nodeJsIcons": "Hinweis: Node.js wird nur für Desktop-Builds verwendet",
         "requiresInternetNotice": "Dies erfordert eine Internetverbindung",
         "noJdkFound": "JDK nicht gefunden",
-        "downloadJDK": "JDK herunterladen"
+        "downloadJDK": "JDK herunterladen",
+        "hide": "Ausblenden",
+        "working": "Arbeitet…",
+        "debug": "Debug",
+        "export": "Exportieren",
+        "exportPanel": "Export",
+        "log": "Protokoll",
+        "firstRunNotice": "Erstes Ausführen"
     },
     "intro": {
         "newUserHeader": "Willkommen bei ct.js!",
         "welcomeHeaders": [
             "Willkommen zurück!",
             "Schön dich zu sehen!",
+            "Schon wieder hier?",
+            "Schon wieder hier!",
+            "Schön dich zu sehen!",
             "Willkommen zurück, Entwickler!",
             "Da bist du ja!",
             "Guten Tag!",
-            "Willkommen zurück!"
+            "Willkommen zurück!",
+            "General Kenobi!",
+            "🖖",
+            "Wie es der Zufall will!",
+            "Ein weiterer Tag, ein weiterer Bug!",
+            "Programmierer der Galaxis!",
+            "Sei gegrüßt!"
         ],
         "newProject": {
             "header": "Neues Projekt",
@@ -743,7 +759,9 @@
             "language": "Sprache",
             "saveFolder": "Speicherordner",
             "languageError": "Sprache nicht gefunden",
-            "nameError": "Namen eingeben"
+            "nameError": "Namen eingeben",
+            "input": "Eingabe",
+            "selectProjectFolder": "Projektordner auswählen"
         },
         "ctDistributions": {
             "released": "Release-Branch",
@@ -768,10 +786,33 @@
         "sponsoredBy": "Gesponsert von",
         "supportedBy": "Unterstützt von",
         "createOrBrowseJunction": "Projekt erstellen oder durchsuchen",
-        "loadingProjectError": "Projekt kann nicht geöffnet werden"
+        "loadingProjectError": "Projekt kann nicht geöffnet werden",
+        "loading": "Laden…",
+        "recovery": {
+            "message": "Wiederherstellung",
+            "loadTarget": "Zieldatei",
+            "loadRecovery": "Wiederherstellung",
+            "newer": "(neuer)",
+            "older": "(älter)"
+        },
+        "loadingProject": "Projekt laden…",
+        "homepage": "Startseite",
+        "latestVersion": "Neueste Version",
+        "forgetProject": "Projekt vergessen",
+        "browse": "Durchsuchen",
+        "latest": "Neueste",
+        "unableToWriteToFolders": "Kann nicht in Ordner schreiben",
+        "twitter": "Twitter",
+        "discord": "Discord"
     },
     "onboarding": {
-        "openJettyCatTutorial": "Jetty Cat Tutorial öffnen"
+        "openJettyCatTutorial": "Jetty Cat Tutorial öffnen",
+        "hoorayHeader": "Hurra!",
+        "nowWhatParagraph": "Jetzt können Sie anfangen, Spiele mit ct.js zu erstellen!",
+        "openSpaceShooterTutorial": "Space Shooter Tutorial öffnen",
+        "openPlatformerTutorial": "Platformer Tutorial öffnen",
+        "doNothing": "Nichts tun",
+        "showOnboardingCheckbox": "Diesen Bildschirm beim Start anzeigen"
     },
     "settings": {
         "actions": {
@@ -782,11 +823,28 @@
             "presetCustom": "Benutzerdefiniert",
             "exportActionPreset": "Aktionsvoreinstellung exportieren",
             "importErrorMissingModules": "Importfehler: Fehlende Module",
-            "importErrorNotCtJsPreset": "Dies ist keine ct.js Voreinstellung"
+            "importErrorNotCtJsPreset": "Dies ist keine ct.js Voreinstellung",
+            "heading": "Aktionen",
+            "actions": "Aktionen",
+            "addAction": "Aktion hinzufügen",
+            "addMethod": "Methode hinzufügen",
+            "deleteAction": "Aktion löschen",
+            "deleteMethod": "Methode löschen",
+            "inputActionNamePlaceholder": "Aktionsname eingeben",
+            "methodModuleMissing": "Modul fehlt",
+            "methods": "Methoden",
+            "multiplier": "Multiplikator",
+            "noActionsYet": "Noch keine Aktionen"
         },
         "authoring": {
             "appId": "App-ID",
-            "appIdExplanation": "Eindeutige Kennung des Projekts, normalerweise im umgekehrten Domänenformat (z.B. com.meinspiel)"
+            "appIdExplanation": "Eindeutige Kennung des Projekts, normalerweise im umgekehrten Domänenformat (z.B. com.meinspiel.yay)",
+            "heading": "Erstellung",
+            "author": "Entwickler:",
+            "site": "Homepage:",
+            "title": "Name:",
+            "version": "Version:",
+            "versionPostfix": "Postfix:"
         },
         "rendering": {
             "heading": "Render Optionen",
@@ -838,7 +896,13 @@
             "alternativeCtjsNotice": "Verwendet ein alternatives Logo auf dem Startbildschirm",
             "hideLoadingLogo": "Ladelogo ausblenden",
             "customLoadingText": "Eigener Lade-Text",
-            "customLoadingTextHint": "Eigener Text, der auf dem Startbildschirm angezeigt wird"
+            "customLoadingTextHint": "Eigener Text, der auf dem Startbildschirm angezeigt wird",
+            "heading": "Branding",
+            "accent": "Akzent:",
+            "accentNotice": "Setzt die Farbe des Preloaders",
+            "icon": "Spiel-Icon:",
+            "iconNotice": "Sollte mindestens 256x256px sein",
+            "invertPreloaderScheme": "Farbschema des Preloaders invertieren"
         },
         "scripts": {
             "heading": "Skripte",
@@ -855,42 +919,77 @@
         "catmodsSettings": "Module",
         "export": {
             "heading": "Export",
-            "functionWrap": "",
-            "codeModifier": "",
-            "obfuscateWarning": "",
-            "codeModifierAndWrapNote": "",
+            "functionWrap": "Funktionsumbruch",
+            "codeModifier": "Code-Modifikator",
+            "obfuscateWarning": "Verschleierungswarnung",
+            "codeModifierAndWrapNote": "Modifikator und Wrap",
             "codeModifiers": {
-                "none": "",
-                "minify": "",
-                "obfuscate": ""
+                "none": "Keiner",
+                "minify": "Minimieren",
+                "obfuscate": "Verschleiern"
             },
             "showErrors": "Fehler anzeigen",
-            "showErrorsHint": "Fehler in der Konsole anzeigen"
+            "showErrorsHint": "Fehler in der Konsole anzeigen",
+            "errorReporting": "Fehlerberichte",
+            "errorsLink": "Fehlerlink",
+            "assetTree": "Asset-Baum",
+            "assetTreeNote": "Alle Assets einschließen",
+            "exportAssetTree": "Asset-Baum exportieren",
+            "exportAssetTypes": "Asset-Typen exportieren",
+            "autocloseDesktop": "Desktop automatisch schließen"
         },
         "content": {
             "heading": "Inhaltstypen",
-            "addContentType": "",
-            "missingTypeName": "",
-            "unnamedContentTypeHint": "",
-            "typeName": "",
-            "typeNameHint": "",
-            "typeReadableName": "",
-            "typeReadableNameHint": "",
-            "icon": "",
-            "typeSpecification": "",
-            "fieldName": "",
-            "fieldNameHint": "",
-            "fieldReadableName": "",
-            "fieldReadableNameHint": "",
-            "fieldType": "",
-            "deleteContentType": "",
-            "confirmDeletionMessage": "",
-            "gotoEntries": "",
-            "entries": ""
+            "addContentType": "Inhaltstyp hinzufügen",
+            "missingTypeName": "Typname fehlt",
+            "unnamedContentTypeHint": "Unbenannter Inhaltstyp",
+            "typeName": "Typname",
+            "typeNameHint": "Interner Name",
+            "typeReadableName": "Anzeigename",
+            "typeReadableNameHint": "Wird in der UI angezeigt",
+            "icon": "Symbol",
+            "typeSpecification": "Typ-Spezifikation",
+            "fieldName": "Feldname",
+            "fieldNameHint": "Interner Feldname",
+            "fieldReadableName": "Anzeigename des Feldes",
+            "fieldReadableNameHint": "Wird in der UI angezeigt",
+            "fieldType": "Feldtyp",
+            "deleteContentType": "Inhaltstyp löschen",
+            "confirmDeletionMessage": "Sind Sie sicher?",
+            "gotoEntries": "Zu Einträgen gehen",
+            "entries": "Einträge",
+            "fixedLength": "Feste Länge",
+            "fieldStructure": "Feldstruktur",
+            "structureTypes": {
+                "atomic": "Atomar",
+                "array": "Array",
+                "map": "Map"
+            },
+            "key": "Schlüssel",
+            "value": "Wert",
+            "mappedType": "Zugeordneter Typ"
         },
         "contentTypes": "Inhaltstypen",
         "variables": {
-            "heading": "Variablen"
+            "heading": "Variablen",
+            "addVariable": "Variable hinzufügen",
+            "variableName": "Variablenname",
+            "variableType": "Variablentyp",
+            "defaultValue": "Standardwert",
+            "deleteVariable": "Variable löschen",
+            "noVariablesYet": "Noch keine Variablen",
+            "variablesHint": "Variablen sind Daten, die mit jedem copy gespeichert werden können.",
+            "boolean": "Wahrheitswert",
+            "number": "Zahl",
+            "string": "Text",
+            "raw": "Roh",
+            "invalidName": "Ungültiger Name",
+            "reservedName": "Reservierter Name"
+        },
+        "main": {
+            "heading": "Einstellungen",
+            "miscHeading": "Sonstige Einstellungen",
+            "backups": "Anzahl der Sicherungsdateien:"
         }
     },
     "modules": {
@@ -915,13 +1014,26 @@
             "integrations": "Integrationen",
             "tweaks": "Anpassungen",
             "networking": "Netzwerk"
-        }
+        },
+        "author": "Autor",
+        "help": "Hilfe",
+        "info": "Info",
+        "license": "Lizenz",
+        "logs": "Protokolle",
+        "methods": "Methoden",
+        "parameters": "Parameter",
+        "logs2": "Protokolle",
+        "settings": "Einstellungen",
+        "importModules": "Module importieren"
     },
     "texture": {
         "textures": "Texturen",
         "createTemplate": "Vorlage erstellen",
         "importFromClipboard": "Aus Zwischenablage importieren",
-        "generatePlaceholder": "Platzhalter generieren"
+        "generatePlaceholder": "Platzhalter generieren",
+        "create": "Erstellen",
+        "import": "Importieren",
+        "skeletons": "Skelette"
     },
     "sounds": {
         "record": "Aufnehmen"
@@ -937,7 +1049,10 @@
     },
     "particleEmitters": {
         "textureMethod": "Textur-Methode",
-        "textureMethods": {},
+        "textureMethods": {
+            "random": "Zufällig",
+            "animated": "Animiert"
+        },
         "animatedFramerate": "Animations-Geschwindigkeit",
         "easingHeader": "Interpolation",
         "easing": {
@@ -946,12 +1061,80 @@
             "smooth": "Glatt"
         },
         "movementType": "Bewegungstyp",
-        "movementTypes": {},
+        "movementTypes": {
+            "linear": "Linear",
+            "accelerated": "With gravity"
+        },
         "rotateTexture": "Textur rotieren",
         "rotationMethod": "Rotations-Methode",
-        "rotationMethods": {},
+        "rotationMethods": {
+            "static": "Fixed",
+            "dynamic": "Dynamic"
+        },
         "burstSpacing": "Ausbruch-Abstand",
-        "burstStart": "Ausbruch-Start"
+        "burstStart": "Ausbruch-Start",
+        "emittersHeading": "Emiter",
+        "emitterHeading": "Emiter",
+        "from": "Von",
+        "to": "Zu",
+        "textureHeading": "Textur",
+        "selectTexture": "Textur auswählen",
+        "importBuiltin": "Standard importieren",
+        "colorAndOpacityHeading": "Farbe und Deckkraft",
+        "stepped": "Stufig",
+        "steppedColor": "Stufige Farbe",
+        "steppedAlpha": "Stufige Deckkraft",
+        "blendMode": "Blend-Modus:",
+        "regular": "Normal",
+        "darken": "Verdunkeln",
+        "lighten": "Aufhellen",
+        "burn": "Brennen",
+        "scalingHeading": "Skalierung",
+        "scale": "Skalierung:",
+        "minimumSize": "Minimale Größe:",
+        "minimumSizeHint": "Kleinere Werte randomisieren die Größe",
+        "velocityHeading": "Geschwindigkeit",
+        "velocity": "Geschwindigkeit:",
+        "minimumSpeed": "Minimale Geschwindigkeit:",
+        "minimumSpeedHint": "Kleinere Werte randomisieren die Geschwindigkeit",
+        "maxSpeed": "Maximale Geschwindigkeit:",
+        "gravityHeading": "Schwerkraft",
+        "gravityNotice": "Wirkt auf Partikel mit Schwerkraft",
+        "directionHeading": "Richtung",
+        "startingDirection": "Startrichtung:",
+        "rotationHeading": "Rotation",
+        "rotationSpeed": "Rotationsgeschwindigkeit",
+        "rotationAcceleration": "Rotationsbeschleunigung:",
+        "spawningHeading": "Erzeugung",
+        "timeBetweenBursts": "Zeit zwischen Ausbrüchen:",
+        "spawnAtOnce": "Auf einmal:",
+        "chanceToSpawn": "Chance zu erzeugen:",
+        "maxParticles": "Max. Partikel:",
+        "lifetime": "Lebensdauer:",
+        "emitterLifetime": "Emitter-Lebensdauer:",
+        "prewarmDelay": "Vorbereitungsverzögerung:",
+        "shapeAndPositioningHeading": "Form und Positionierung",
+        "spawnType": "Erzeugungstyp:",
+        "spawnShapes": {
+            "rectangle": "Rechteck",
+            "torus": "Torus",
+            "star": "Stern"
+        },
+        "width": "Breite:",
+        "height": "Höhe:",
+        "radius": "Radius:",
+        "starPoints": "Sternpunkte:",
+        "startAngle": "Startwinkel:",
+        "showShapeVisualizer": "Formvisualisierer anzeigen",
+        "relativeEmitterPosition": "Relative Emitter-Position:",
+        "addEmitter": "Emitter hinzufügen",
+        "reset": "Zurücksetzen",
+        "changeBg": "Hintergrund ändern",
+        "inspectorComplete": "Fertig",
+        "alreadyHasAnImportingTexture": "Hat bereits eine importierende Textur",
+        "changeGrid": "Raster ändern",
+        "newGridSize": "Neue Rastergröße:",
+        "setPreviewTexture": "Vorschau-Textur setzen"
     },
     "rooms": {
         "create": "Neuer Raum",
@@ -1385,7 +1568,8 @@
         "attributionQ": "Muss ich ct.js oder seine Entwickler angeben?",
         "attributionA": "Sie können das ct.js-Logo deaktivieren.",
         "attributionAAssets": "Einige Beispiele enthalten möglicherweise Material, das einer Angabe bedarf.",
-        "theLicense": "Die Lizenz"
+        "theLicense": "Die Lizenz",
+        "ctjsLicense": "Ct.js Lizenz (MIT)"
     },
     "templates": {
         "create": "Erstellen"
@@ -1580,8 +1764,20 @@
         "customFields": "Benutzerdefinierte Felder",
         "customFieldsDescription": "Benutzerdefinierte Felder können verwendet werden, um zusätzliche Eingaben zu Asset-Editoren hinzuzufügen."
     },
-    "createAsset": {},
-    "enumEditor": {},
+    "createAsset": {
+        "newAsset": "Neues Asset",
+        "placeholderTexture": "Platzhalter-Textur",
+        "assetGallery": "Integrierte Asset-Galerie",
+        "behaviorTemplate": "Verhalten für Vorlagen",
+        "behaviorRoom": "Verhalten für Räume",
+        "importFromFile": "Aus Datei importieren",
+        "behaviorMissingCatmods": "Ihrem Projekt fehlen diese Catmods: $1. Aktivieren Sie sie zuerst.",
+        "formatError": "Die geöffnete Datei hat ein fehlerhaftes Format."
+    },
+    "enumEditor": {
+        "addVariant": "Variante hinzufügen",
+        "enumUseCases": "Verwendungszwecke"
+    },
     "exporterError": {
         "exporterErrorHeader": "Exportfehler",
         "errorSource": "Fehlerquelle",
@@ -1601,10 +1797,34 @@
         "jumpToProblem": "Zum Problem springen",
         "saveAndQuit": "Speichern und beenden"
     },
-    "folderEditor": {},
-    "globalSearch": {},
-    "languageSelector": {},
-    "newAssetPrompt": {},
+    "folderEditor": {
+        "title": "Ordner",
+        "icon": "Symbol",
+        "color": "Farbe"
+    },
+    "globalSearch": {
+        "buttonTitle": "Globale Suche",
+        "nothingFound": "Nichts gefunden",
+        "searchHint": "Drücken Sie Strg+F zum Suchen",
+        "recent": "Zuletzt verwendet"
+    },
+    "languageSelector": {
+        "chooseLanguageHeader": "Sprache auswählen",
+        "chooseLanguageExplanation": "Wählen Sie die Sprache für Ihr neues Projekt",
+        "coffeeScriptDescription": "Coffeescript ist eine einfache Sprache, die zu JS kompiliert wird",
+        "pickCoffeeScript": "CoffeeScript",
+        "jsAndTs": "JavaScript und TypeScript",
+        "jsTsDescription": "JavaScript ist die native Sprache des Webs",
+        "pickJsTs": "JavaScript/TypeScript",
+        "acceptAndSpecifyDirectory": "Akzeptieren und Verzeichnis angeben",
+        "catnip": "Visuelle Programmierung",
+        "catnipDescription": "Catnip ist eine blockbasierte visuelle Skriptsprache",
+        "pickCatnip": "Catnip"
+    },
+    "newAssetPrompt": {
+        "heading": "Neues Asset",
+        "selectNewName": "Neuen Namen auswählen"
+    },
     "scriptView": {
         "runAutomatically": "Beim Spielstart ausführen",
         "language": "Sprache:",

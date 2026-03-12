@@ -247,11 +247,11 @@
     },
     "exportPanel": {
         "hide": "Gizle",
-        "working": "Çalışıyor…",
-        "debug": "Versiyonu ayıkla",
-        "export": "Dışa aktar",
+        "working": "Calisiyor...",
+        "debug": "Hata ayiklama",
+        "export": "Aktar",
         "exportPanel": "Projeyi dışa aktar",
-        "log": "Mesaj Günlüğü",
+        "log": "Gunluk",
         "windowsCrossBuildWarning": "Linux/MacOS'dan Windows'a derlemek için, sisteminizde Wine kurulu olmalıdır. Kurulum talimatları bazı platformlar için farklıdır, bu yüzden bunu Google'a yazmanız daha doğru olacaktır :)",
         "cannotBuildForMacOnWin": "Ne yazık ki, Windows sadece bozuk Mac paketleri derleyebiliyor. Bi Linux makine kullanabilirsin; mesela, bir sanal makine. Bu %100 bedava!",
         "projectTitleRequired": "Projene Proje sekmesi → Sahiplenme → İsim kısmından bir başlık girmelisin.",
@@ -426,7 +426,15 @@
             "confirmDeletionMessage": "Bu içerik türünü silmek istediğinden emin misin? Bu geri alınamaz. Ayrıca bu içerik türündeki tüm girişleri de siler.",
             "gotoEntries": "Girişlere git",
             "entries": "Girişler",
-            "fixedLength": "Düzeltilmiş uzunluk"
+            "fixedLength": "Düzeltilmiş uzunluk",
+            "fieldStructure": "Yapi",
+            "key": "Anahtar",
+            "value": "Deger",
+            "structureTypes": {
+                "atomic": "Atomik",
+                "array": "Dizi",
+                "map": "Harita"
+            }
         },
         "modules": {
             "heading": "Catmodlar"
@@ -505,19 +513,33 @@
         "catmodsSettings": "Catmod ayarları",
         "contentTypes": "İçerik türleri",
         "main": {
-            "heading": "Ana ayarlar",
-            "miscHeading": "Diğer ayarlar",
-            "backups": "Tutulacak yedek dosyaların sayısı:"
+          "heading": "Ana ayarlar",
+          "miscHeading": "Diğer ayarlar",
+          "backups": "Tutulacak yedek dosyaların sayısı:"
+        },
+        "variables": {
+            "addVariable": "Degisken ekle",
+            "variableName": "Degisken adi",
+            "variableType": "Degisken tipi",
+            "defaultValue": "Varsayilan deger",
+            "deleteVariable": "Degisken sil",
+            "noVariablesYet": "Henuz degisken yok",
+            "boolean": "Mantiksal",
+            "number": "Sayi",
+            "string": "Metin",
+            "raw": "Ham",
+            "invalidName": "Gecersiz isim",
+            "reservedName": "Adit isim"
         }
     },
     "modules": {
-        "author": "Bu catmod'un sahibi",
+        "author": "Yazar",
         "dependencies": "Bağlılıklar:",
-        "help": "Referans",
+        "help": "Yardim",
         "info": "Bilgi",
         "license": "Lisans",
-        "logs": "Değişim günlüğü",
-        "methods": "Metodlar",
+        "logs": "Gunlukler",
+        "methods": "Metotlar",
         "optionalDependencies": "İsteğe bağlı bağlılıklar:",
         "parameters": "Parametreler",
         "logs2": "Değişim günlüğü",
@@ -545,9 +567,9 @@
         }
     },
     "texture": {
-        "create": "Oluştur",
-        "import": "İçe aktar",
-        "skeletons": "Çatı Animasyon",
+        "create": "Olustur",
+        "import": "Aktar",
+        "skeletons": "Iskeletler",
         "textures": "Dokular",
         "createTemplate": "Ondan bir şablon oluştur",
         "importFromClipboard": "Panodan içe aktar",
@@ -624,7 +646,6 @@
         "lifetime": "Partikül ömrü, san.",
         "emitterLifetime": "Dağıtıcı ömrü, san.:",
         "prewarmDelay": "Ön ısıtma / gecikme, san.:",
-        "prewarmDelayNotice": "Negative values will prepare the particles of the emitter before showing it, which is useful for long effects like dust particles or mist that should already be visible on room start; positive values will delay the simulation.",
         "shapeAndPositioningHeading": "Şekil and Konumlandırma",
         "spawnType": "Şekil türü:",
         "spawnShapes": {
@@ -867,7 +888,6 @@
         "unsavedAssets": "Kaydedilmemiş varlıklar:",
         "runWithoutApplying": "Yine de başlat",
         "applyAndRun": "Uygula ve çalıştır",
-        "cantAddEditor": "Cannot add another editor. Please close some tabs with room, style, or tandem editors.",
         "loadingPreviouslyOpened": "Önceden açılmış varlıklar yükleniyor..."
     },
     "roomBackgrounds": {
@@ -1422,11 +1442,9 @@
         "copyDocHtml": "Dökümantasyon için HTML olarak kopyala",
         "copySelection": "Seçili blokları kopyala",
         "duplicateBlock": "Bu bloğu çoğalt",
-        "requiredField": "Bu alan gereklidir ve değeri eksiktir.",
-        "unnamedGroup": "İsimsiz grup",
-        "toggleBlockDisable": "Seçili blokları etkinleştir/devre dışı bırak",
         "requiredField": "Bu alanın doldurulması zorunludur ve şu an eksiktir.",
         "unnamedGroup": "İsimlendirilmemiş grup",
+        "toggleBlockDisable": "Seçili blokları etkinleştir/devre dışı bırak",
         "placeholders": {
             "putBlocksHere": "Bloklarını buraya koy",
             "doNothing": "Hiçbir şey yapma"
@@ -1769,9 +1787,7 @@
             "serialize object": "Objeyi serileştir",
             "save to storage": "Depolamaya anahtarla kaydet",
             "delete from storage": "Depolamadan anahtarı sil",
-            "load from storage": "Depolamadan anahtarla yükle",
-            "is key in storage": "",
-            "owning room": ""
+            "load from storage": "Depolamadan anahtarla yükle"
         },
         "blockDisplayNames": {
             "write": "Yaz",
@@ -1855,6 +1871,18 @@
             "constant string": "Bu bloğu bir stringin zorla oluşturulması için kullanabilirsin: mesela bir stringe bir sayı yazmak ya da \\n'i bir satır sonuna dönüştürmek istediğinde bunu joker slotuna koyarak yapabilirsin.",
             "set anchor": "Yerleştirme noktasını normalleştirilmiş koordinatları (0.0 ila 1.0) kullanarak ayarlar. Yerleştirme, kopyanın neresinden döndüğünü ve ölçeklendirildiğini belirler. Yaygın değerler: (0, 0) = sol üst, (0.5, 0.5) = merkez, (1, 1) = sağ alt. Doku kaplı kopyalar üzerinde çalışır.",
             "set pivot": "Pivot noktasını piksel koordinatlarını kullanarak ayarlar. Yerleştirme gibi, ancak yüzdeler yerine mutlak pikseller kullanır. Gelişmiş kullanım — çoğu durumda yerleştirmeyi kullanın."
-        }
+        },
+        "blockOptionHeaders": {},
+        "blockOptionButtons": {}
+    },
+    "enumEditor": {
+        "addVariant": "Varyant ekle",
+        "enumUseCases": "Kullanim durumlari"
+    },
+    "globalSearch": {
+        "buttonTitle": "Genel arama",
+        "nothingFound": "Hicbir sey bulunamadi",
+        "searchHint": "Aramak icin Ctrl+F'ye basin",
+        "recent": "Son"
     }
 }

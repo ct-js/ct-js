@@ -18,7 +18,8 @@ const countRemainingFields = node => {
 // and collects paths to untranslated and excess keys
 const recursiveCheck = function recursiveCheck(partial, langNode, referenceNode) {
     const untranslated = [],
-          excess = [];
+          excess = [],
+          matching = [];
     let counted = 0,
         needed = 0;
     for (const i in referenceNode) {
@@ -26,6 +27,9 @@ const recursiveCheck = function recursiveCheck(partial, langNode, referenceNode)
             needed++;
             if (!(i in langNode) || langNode[i].trim() === '') {
                 untranslated.push(partial ? `${partial}.${i}` : i);
+            } else if (langNode[i].trim() === referenceNode[i].trim()) {
+                matching.push(partial ? `${partial}.${i}` : i);
+                counted++;
             } else {
                 counted++;
             }
@@ -36,6 +40,9 @@ const recursiveCheck = function recursiveCheck(partial, langNode, referenceNode)
             }
             if (subresults.excess.length) {
                 excess.push(...subresults.excess);
+            }
+            if (subresults.matching.length) {
+                matching.push(...subresults.matching);
             }
             counted += subresults.counted;
             needed += subresults.needed;
@@ -55,6 +62,7 @@ const recursiveCheck = function recursiveCheck(partial, langNode, referenceNode)
         untranslated,
         excess,
         counted,
+        matching,
         needed
     };
 };
@@ -99,12 +107,14 @@ module.exports = async (verbose) => {
     const report = {
         untranslated: {},
         excess: {},
+        matching: {},
         stats: {}
     };
     for (const lang of fileNames) {
         const rootNode = require(path.join(i18nDir, lang));
         const result = recursiveCheck('', rootNode, referenceLanguage);
         report.untranslated[lang] = result.untranslated;
+        report.matching[lang] = result.matching;
         report.excess[lang] = result.excess;
         report.stats[lang] = Math.floor(result.counted / result.needed * 100);
     }
@@ -118,8 +128,9 @@ module.exports = async (verbose) => {
 `Coverage: ${report.stats[lang]}% ${getSuitableBreakpoint(report.stats[lang])}
 Not translated: ${report.untranslated[lang].length}` +
 ((verbose && report.untranslated[lang].length > 0) ? '\n' + report.untranslated[lang].map(key => `  ${key}`).join('\n') : '') +
-`\nExcess: ${report.excess[lang].length} ${report.excess[lang].length ? '⚠️ '.repeat(Math.min(10, report.excess[lang].length)) : '✅'}\n` +
-(report.excess[lang].length > 0 ? report.excess[lang].map(key => `  ${key}`).join('\n') : '')).join('\n\n');
+`\nExcess: ${report.excess[lang].length} ${report.excess[lang].length ? '⚠️ '.repeat(Math.min(10, report.excess[lang].length)) : '✅'}` +
+`\nKeys matching the English file (this may indicate a translation error): ${report.matching[lang].length} ${report.matching[lang].length ? '⚠️ '.repeat(Math.min(10, report.matching[lang].length)) : '✅'}\n` +
+(report.matching[lang].length > 0 ? report.matching[lang].map(key => `  ${key}`).join('\n') : '')).join('\n\n');
 
     if (!verbose) {
         reportText += '\n👉 Use --verbose flag to log all the untranslated keys.';

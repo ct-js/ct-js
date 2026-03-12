@@ -1538,13 +1538,11 @@
     "shiftCopies": "コピーの移動",
     "sortHorizontally": "横に並べる",
     "sortVertically": "縦に並べる",
-    "sendToBack": "Send to back",
-    "sendToFront": "Send to front",
     "selectAndMove": "選択して移動",
     "customProperties": "カスタムプロパティ",
     "findTileset": "タイルセットの検索",
     "resetView": "ビューをリセット",
-    "emptyTextFiller": "<Empty>",
+    "emptyTextFiller": "<空っぽ>",
     "copyProperties": {
       "position": "位置",
       "rotation": "回転",
@@ -1743,7 +1741,6 @@
     "bitmapFontLineHeight": "線の高さ:",
     "resultingBitmapFontName": "リソース名",
     "charset": "文字セット:",
-    "addFont": "Add a font…",
     "charsets": {
       "punctuation": "数字と句読点(通常は必要です)",
       "basicLatin": "ラテン語の基礎",

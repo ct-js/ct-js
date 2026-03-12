@@ -584,7 +584,6 @@
         "blockDisplayNames": {
             "write": "Scrie",
             "if else branch": "Dacă",
-            "while loop cycle": "While",
             "repeat": "Repetă",
             "for each": "Pentru fiecare",
             "NOT logic operator": "nu",
@@ -688,13 +687,31 @@
         "nodeJsIcons": "Node.js este folosit doar pentru build-uri desktop",
         "requiresInternetNotice": "Necesita conexiune la internet",
         "noJdkFound": "JDK nu a fost gasit",
-        "downloadJDK": "Descarca JDK"
+        "downloadJDK": "Descarca JDK",
+        "hide": "Ascunde",
+        "working": "Lucreaza…",
+        "debug": "Debug",
+        "export": "Exporta",
+        "log": "Jurnal"
     },
     "intro": {
         "newUserHeader": "Bine ai venit la ct.js!",
         "welcomeHeaders": [
             "Bine ai venit la",
-            "ct.js!"
+            "ct.js!",
+            "Te-ai intors?",
+            "Bine ai venit inapoi!",
+            "Frumos sa te vad!",
+            "Bine ai venit inapoi, dezvoltatorule!",
+            "Iata-te!",
+            "Buna ziua!",
+            "Bine ai venit inapoi!",
+            "General Kenobi!",
+            "🖖",
+            "Ce surpriza!",
+            "O alta zi, un alt bug!",
+            "Maestre al codului!",
+            "Fii salutat!"
         ],
         "newProject": {
             "header": "Proiect nou",
@@ -702,7 +719,9 @@
             "language": "Limba",
             "saveFolder": "Folder de salvare",
             "languageError": "Limba nu a fost gasita",
-            "nameError": "Introdu numele"
+            "nameError": "Introdu numele",
+            "input": "Introducere",
+            "selectProjectFolder": "Selecteaza folderul proiectului"
         },
         "ctDistributions": {
             "released": "Versiune lansata",
@@ -727,7 +746,24 @@
         "sponsoredBy": "Sponsorizat de",
         "supportedBy": "Susutinut de",
         "createOrBrowseJunction": "Creeaza sau navigheaza proiect",
-        "loadingProjectError": "Nu se poate deschide proiectul"
+        "loadingProjectError": "Nu se poate deschide proiectul",
+        "loading": "Se incarca…",
+        "recovery": {
+            "message": "Recuperare",
+            "loadTarget": "Fisa tinta",
+            "loadRecovery": "Recuperare",
+            "newer": "(mai nou)",
+            "older": "(mai vechi)"
+        },
+        "loadingProject": "Se incarca proiectul…",
+        "homepage": "Pagina principala",
+        "latestVersion": "Ultima versiune",
+        "forgetProject": "Uita proiectul",
+        "browse": "Răsfoiește",
+        "latest": "Ultimul",
+        "unableToWriteToFolders": "Nu se poate scrie in foldere",
+        "twitter": "Twitter",
+        "discord": "Discord"
     },
     "settings": {
         "actions": {
@@ -738,11 +774,28 @@
             "presetCustom": "Personalizat",
             "exportActionPreset": "Exporta presetare actiune",
             "importErrorMissingModules": "Eroare import: Module lipsa",
-            "importErrorNotCtJsPreset": "Nu este o presetare ct.js"
+            "importErrorNotCtJsPreset": "Nu este o presetare ct.js",
+            "heading": "Actiuni",
+            "actions": "Actiuni",
+            "addAction": "Adauga actiune",
+            "addMethod": "Adauga metoda",
+            "deleteAction": "Sterge actiune",
+            "deleteMethod": "Sterge metoda",
+            "inputActionNamePlaceholder": "Introdu numele actiunii",
+            "methodModuleMissing": "Modul lipsa",
+            "methods": "Metode",
+            "multiplier": "Multiplicator",
+            "noActionsYet": "Nu sunt inca actiuni"
         },
         "authoring": {
             "appId": "App ID",
-            "appIdExplanation": "Identificator unic pentru proiect"
+            "appIdExplanation": "Identificator unic pentru proiect",
+            "heading": "Creare",
+            "author": "Dezvoltator:",
+            "site": "Pagina de start:",
+            "title": "Nume:",
+            "version": "Versiune:",
+            "versionPostfix": "Postfix:"
         },
         "rendering": {
             "heading": "Opțiuni de randare",
@@ -803,22 +856,27 @@
             "alternativeCtjsNotice": "Foloseste logo alternativ",
             "hideLoadingLogo": "Ascunde logo incarcare",
             "customLoadingText": "Text de incarcare personalizat",
-            "customLoadingTextHint": "Text personalizat pentru ecranul de start"
+            "customLoadingTextHint": "Text personalizat pentru ecranul de start",
+            "heading": "Branding",
+            "accent": "Accent:",
+            "accentNotice": "Seteaza culoarea",
+            "icon": "Iconita:",
+            "iconNotice": "Ar trebui 256x256",
+            "invertPreloaderScheme": "Inversare"
         },
         "modules": {
             "heading": "Module"
         },
-        "catmodsSettings": "",
         "export": {
             "heading": "Export",
-            "functionWrap": "Infasurare functii",
+            "functionWrap": "Infasurare functie",
             "codeModifier": "Modificator cod",
-            "obfuscateWarning": "Avertisment: Ofuscarea poate cauza erori",
-            "codeModifierAndWrapNote": "Modificatorul si infasurarea pot fi folosite impreuna",
+            "obfuscateWarning": "Avertisment de obfuscare",
+            "codeModifierAndWrapNote": "Modificator si wrap",
             "codeModifiers": {
                 "none": "Nimic",
                 "minify": "Minimizeaza",
-                "obfuscate": "Ofuscaza"
+                "obfuscate": "Obfuscaza"
             },
             "errorReporting": "Rapoarte de eroare",
             "showErrors": "Arata erorile",
@@ -832,26 +890,42 @@
         },
         "content": {
             "heading": "Tipuri continut",
-            "addContentType": "",
-            "missingTypeName": "",
-            "unnamedContentTypeHint": "",
-            "typeName": "",
-            "typeNameHint": "",
-            "typeReadableName": "",
-            "typeReadableNameHint": "",
-            "icon": "",
-            "typeSpecification": "",
-            "fieldName": "",
-            "fieldNameHint": "",
-            "fieldReadableName": "",
-            "fieldReadableNameHint": "",
-            "fieldType": "",
-            "deleteContentType": "",
-            "confirmDeletionMessage": "",
-            "gotoEntries": "",
-            "entries": ""
+            "addContentType": "Adauga tip",
+            "missingTypeName": "Lipseste numele",
+            "typeName": "Nume tip",
+            "typeNameHint": "Nume intern",
+            "typeReadableName": "Nume afisabil",
+            "icon": "Iconita",
+            "fieldName": "Nume camp",
+            "entries": "Intrari",
+            "fieldStructure": "Structura",
+            "key": "Cheie",
+            "value": "Valoare",
+            "structureTypes": {
+                "atomic": "Atomar",
+                "array": "Array",
+                "map": "Harta"
+            }
         },
-        "contentTypes": ""
+        "main": {
+            "heading": "Setari",
+            "miscHeading": "Alte setari",
+            "backups": "Numarul de copii de rezerva:"
+        },
+        "variables": {
+            "addVariable": "Adauga variabila",
+            "variableName": "Nume variabila",
+            "variableType": "Tip variabila",
+            "defaultValue": "Valoare implicita",
+            "deleteVariable": "Sterge variabila",
+            "noVariablesYet": "Nu sunt variabile",
+            "boolean": "Boolean",
+            "number": "Numar",
+            "string": "Text",
+            "raw": "Brut",
+            "invalidName": "Nume invalid",
+            "reservedName": "Nume rezervat"
+        }
     },
     "modules": {
         "dependencies": "Dependente",
@@ -875,12 +949,22 @@
             "integrations": "Integratii",
             "tweaks": "Ajustari",
             "networking": "Retea"
-        }
+        },
+        "author": "Autor",
+        "help": "Ajutor",
+        "info": "Info",
+        "license": "Licenta",
+        "logs": "Jurnale",
+        "methods": "Metode",
+        "parameters": "Parametri"
     },
     "texture": {
         "textures": "Texturi",
         "importFromClipboard": "Importa din clipboard",
-        "generatePlaceholder": "Genereaza substituent"
+        "generatePlaceholder": "Genereaza substituent",
+        "create": "Creeaza",
+        "import": "Importa",
+        "skeletons": "Schelete"
     },
     "sounds": {
         "record": "Inregistreaza"
@@ -903,37 +987,23 @@
         "docsAndNotes": "Documente si note"
     },
     "curveEditor": {
-        "curveLineHint": "",
-        "dragPointHint": "",
-        "pointTime": "",
-        "pointValue": ""
     },
     "debuggerToolbar": {
-        "pause": "",
-        "resume": "",
-        "restartGame": "",
-        "restartRoom": "",
-        "switchRoom": "",
-        "toggleDevTools": "",
-        "screenshot": "",
-        "enterFullscreen": "",
-        "exitFullscreen": "",
-        "links": "",
-        "openExternal": "",
-        "close": ""
     },
     "onboarding": {
-        "hoorayHeader": "",
-        "nowWhatParagraph": "",
-        "openSpaceShooterTutorial": "",
-        "openPlatformerTutorial": "",
-        "openJettyCatTutorial": "",
-        "doNothing": "",
-        "showOnboardingCheckbox": ""
+        "hoorayHeader": "Hooray!",
+        "nowWhatParagraph": "Acum poti incepe sa creezi jocuri cu ct.js!",
+        "openSpaceShooterTutorial": "Deschide tutorialul Space Shooter",
+        "openPlatformerTutorial": "Deschide tutorialul Platformer",
+        "doNothing": "Nu fa nimic",
+        "showOnboardingCheckbox": "Arata acest ecran la pornire"
     },
     "particleEmitters": {
         "textureMethod": "Metoda texturii",
-        "textureMethods": {},
+        "textureMethods": {
+            "random": "Aleator",
+            "animated": "Animat"
+        },
         "animatedFramerate": "Rata de cadre",
         "easingHeader": "Easing",
         "easing": {
@@ -948,41 +1018,46 @@
         },
         "rotateTexture": "Roteste textura",
         "rotationMethod": "Metoda de rotatie",
-        "rotationMethods": {},
         "burstSpacing": "Spatiere burst",
-        "burstStart": "Inceput burst"
+        "burstStart": "Inceput burst",
+        "emittersHeading": "Emițători",
+        "emitterHeading": "Emițător",
+        "from": "De la",
+        "to": "La",
+        "textureHeading": "Textură",
+        "selectTexture": "Selectează textură",
+        "importBuiltin": "Importă implicit",
+        "colorAndOpacityHeading": "Culoare și opacitate",
+        "stepped": "Pas cu pas",
+        "blendMode": "Mod de amestecare:",
+        "regular": "Normal",
+        "darken": "Întunecare",
+        "lighten": "Luminează",
+        "burn": "Ardere",
+        "scalingHeading": "Scalare",
+        "scale": "Scalare:",
+        "velocityHeading": "Viteză",
+        "velocity": "Viteză:",
+        "gravityHeading": "Gravitație",
+        "directionHeading": "Direcție",
+        "rotationHeading": "Rotație",
+        "spawningHeading": "Generare",
+        "lifetime": "Durată de viață:",
+        "spawnType": "Tip de spawn:",
+        "spawnShapes": {
+            "rectangle": "Dreptunghi",
+            "torus": "Torus",
+            "star": "Stea"
+        },
+        "width": "Lățime:",
+        "height": "Înălțime:",
+        "radius": "Rază:",
+        "addEmitter": "Adaugă emițător",
+        "reset": "Resetează",
+        "changeBg": "Schimbă fundal",
+        "inspectorComplete": "Complet"
     },
     "patreon": {
-        "aboutPatrons": "",
-        "patronsHeader": "",
-        "thankAllPatrons": "",
-        "becomeAPatron": "",
-        "aboutFillers": [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        ],
-        "sponsors": "",
-        "noSponsorsYet": "",
-        "sponsorsDescription": "",
-        "businessCats": "",
-        "businessCatsDescription": "",
-        "cats": "",
-        "catsDescription": ""
     },
     "docsPanel": {
         "documentation": "Documentatie",
@@ -1476,18 +1551,6 @@
         "selectAssetHeader": "Selecteaza un asset"
     },
     "builtinAssetGallery": {
-        "galleryTip": "",
-        "assetGalleryHeader": "",
-        "importIntoProject": "",
-        "importAll": "",
-        "byAuthorPrefix": "",
-        "cannotImportExplanation": "",
-        "nameOccupied": "",
-        "cannotImportNameOccupied": "",
-        "visitSource": "",
-        "visitAuthorsItch": "",
-        "visitAuthorsTwitter": "",
-        "tipAuthor": ""
     },
     "scriptables": {
         "addEvent": "Adauga eveniment",
@@ -1581,11 +1644,43 @@
         "confirmHeading": "Selecteaza actiunea",
         "confirmParagraph": "Assetul $1 are modificari neaplicate."
     },
-    "createAsset": {},
-    "folderEditor": {},
-    "globalSearch": {},
-    "languageSelector": {},
-    "newAssetPrompt": {},
+    "createAsset": {
+        "newAsset": "Asset nou",
+        "placeholderTexture": "Textura substituent",
+        "assetGallery": "Galeria de asset-uri integrata",
+        "behaviorTemplate": "Comportament pentru sabloane",
+        "behaviorRoom": "Comportament pentru camere",
+        "importFromFile": "Importa din fisier",
+        "behaviorMissingCatmods": "Proiectului ii lipsesc aceste module: $1.",
+        "formatError": "Fisierul are format invalid."
+    },
+    "folderEditor": {
+        "title": "Folder",
+        "icon": "Iconita",
+        "color": "Culoare"
+    },
+    "globalSearch": {
+        "buttonTitle": "Cautare globala",
+        "nothingFound": "Nu s-a gasit nimic",
+        "searchHint": "Apasa Ctrl+F pentru a cauta",
+        "recent": "Recente"
+    },
+    "languageSelector": {
+        "chooseLanguageHeader": "Alege limba",
+        "chooseLanguageExplanation": "Alege limba pentru noul tau proiect",
+        "coffeeScriptDescription": "CoffeeScript este un limbaj simplu",
+        "pickCoffeeScript": "CoffeeScript",
+        "jsAndTs": "JavaScript si TypeScript",
+        "jsTsDescription": "JavaScript este limbajul nativ al webului",
+        "pickJsTs": "JavaScript/TypeScript",
+        "acceptAndSpecifyDirectory": "Accepta si specifica directorul",
+        "catnip": "Programare vizuala",
+        "catnipDescription": "Catnip este un limbaj de programare vizual bazat pe blocuri",
+        "pickCatnip": "Catnip"
+    },
+    "newAssetPrompt": {
+        "heading": "Asset nou"
+    },
     "scriptView": {
         "runAutomatically": "Ruleaza la start",
         "language": "Limba:",
@@ -1609,6 +1704,12 @@
         "falloff": "Attenuare:",
         "refDistance": "Inceput attenuare:"
     },
-    "exporterError": {},
-    "enumEditor": {}
+    "exporterError": {
+    },
+    "enumEditor": {
+        "addVariant": "Adauga varianta",
+        "enumUseCases": "Cazuri de utilizare"
+    },
+    "behaviorEditor": {
+    }
 }

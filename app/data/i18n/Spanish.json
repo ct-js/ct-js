@@ -47,11 +47,8 @@
             "textures": "Texturas, UI y FX"
         },
         "search": "Buscar:",
-        "close": "",
         "couldNotLoadFromClipboard": "No se pudo cargar desde el portapapeles",
-        "pastedFromClipboard": "",
         "edit": "Editar",
-        "nothingToShowFiller": "",
         "required": "Requerido",
         "settings": "Configuracion",
         "fieldTypes": {
@@ -87,46 +84,6 @@
         "docsLong": "Documentacion",
         "openAssetGallery": "Galeria",
         "assetTypes": {
-            "texture": [
-                "",
-                "",
-                ""
-            ],
-            "template": [
-                "",
-                "",
-                ""
-            ],
-            "tandem": [
-                "",
-                "",
-                ""
-            ],
-            "room": [
-                "",
-                "",
-                ""
-            ],
-            "typeface": [
-                "",
-                "",
-                ""
-            ],
-            "style": [
-                "",
-                "",
-                ""
-            ],
-            "sound": [
-                "",
-                "",
-                ""
-            ],
-            "skeleton": [
-                "",
-                "",
-                ""
-            ],
             "behavior": [
                 "comportamiento",
                 "comportamientos",
@@ -183,7 +140,6 @@
     "colorPicker": {
         "current": "Nuevo",
         "globalPalette": "Paleta Global",
-        "altClick": "",
         "old": "Antigua",
         "projectPalette": "Paleta del proyecto"
     },
@@ -698,13 +654,31 @@
         "nodeJsIcons": "Nota: Node.js solo se usa para builds de escritorio",
         "requiresInternetNotice": "Esto requiere conexion a internet",
         "noJdkFound": "JDK no encontrado",
-        "downloadJDK": "Descargar JDK"
+        "downloadJDK": "Descargar JDK",
+        "hide": "Ocultar",
+        "working": "Trabajando…",
+        "debug": "Depurar",
+        "export": "Exportar",
+        "log": "Registro"
     },
     "intro": {
         "newUserHeader": "Bienvenido a ct.js!",
         "welcomeHeaders": [
             "Bienvenido a",
-            "ct.js!"
+            "ct.js!",
+            "De nuevo aqui?",
+            "Bienvenido de nuevo!",
+            "Encantado de verte!",
+            "Bienvenido de nuevo, desarrollador!",
+            "Ahi estas!",
+            "Buenas!",
+            "Bienvenido de nuevo!",
+            "General Kenobi!",
+            "🖖",
+            "Que sorpresa!",
+            "Otro dia, otro bug!",
+            "Maestro del codigo!",
+            "Seas saludado!"
         ],
         "newProject": {
             "header": "Nuevo proyecto",
@@ -712,7 +686,9 @@
             "language": "Lenguaje",
             "saveFolder": "Carpeta de guardado",
             "languageError": "Lenguaje no encontrado",
-            "nameError": "Ingresa el nombre"
+            "nameError": "Ingresa el nombre",
+            "input": "Entrada",
+            "selectProjectFolder": "Seleccionar carpeta del proyecto"
         },
         "ctDistributions": {
             "released": "Rama de lanzamiento",
@@ -737,11 +713,30 @@
         "sponsoredBy": "Patrocinado por",
         "supportedBy": "Apoyado por",
         "createOrBrowseJunction": "Crear o buscar proyecto",
-        "loadingProjectError": "No se puede abrir el proyecto"
+        "loadingProjectError": "No se puede abrir el proyecto",
+        "loading": "Cargando…",
+        "recovery": {
+            "message": "Recuperacion",
+            "loadTarget": "Archivo objetivo",
+            "loadRecovery": "Recuperacion",
+            "newer": "(mas reciente)",
+            "older": "(mas antiguo)"
+        },
+        "loadingProject": "Cargando proyecto…",
+        "homepage": "Pagina de inicio",
+        "latestVersion": "Ultima version",
+        "forgetProject": "Olvidar proyecto",
+        "browse": "Explorar",
+        "latest": "Ultimo",
+        "unableToWriteToFolders": "No se puede escribir en carpetas",
+        "twitter": "Twitter",
+        "discord": "Discord"
     },
     "settings": {
         "main": {
-            "heading": "Configuracion"
+            "heading": "Configuracion",
+            "miscHeading": "Otros ajustes",
+            "backups": "Numero de archivos:"
         },
         "actions": {
             "makeFromScratch": "Crear desde cero",
@@ -751,11 +746,28 @@
             "presetCustom": "Personalizado",
             "exportActionPreset": "Exportar preajuste de accion",
             "importErrorMissingModules": "Error import: Faltan modulos",
-            "importErrorNotCtJsPreset": "Esto no es un preajuste ct.js"
+            "importErrorNotCtJsPreset": "Esto no es un preajuste ct.js",
+            "heading": "Acciones",
+            "actions": "Acciones",
+            "addAction": "Agregar accion",
+            "addMethod": "Agregar metodo",
+            "deleteAction": "Eliminar accion",
+            "deleteMethod": "Eliminar metodo",
+            "inputActionNamePlaceholder": "Ingresa el nombre de la accion",
+            "methodModuleMissing": "Modulo faltante",
+            "methods": "Metodos",
+            "multiplier": "Multiplicador",
+            "noActionsYet": "Aun no hay acciones"
         },
         "authoring": {
             "appId": "App ID",
-            "appIdExplanation": "Identificador unico del proyecto"
+            "appIdExplanation": "Identificador unico del proyecto",
+            "heading": "Creacion",
+            "author": "Desarrollador:",
+            "site": "Pagina de inicio:",
+            "title": "Nombre:",
+            "version": "Version:",
+            "versionPostfix": "Posfijo:"
         },
         "branding": {
             "splashScreen": "Pantalla de inicio",
@@ -766,10 +778,33 @@
             "alternativeCtjsNotice": "Usa un logo alternativo",
             "hideLoadingLogo": "Ocultar logo de carga",
             "customLoadingText": "Texto de carga personalizado",
-            "customLoadingTextHint": "Texto personalizado para la pantalla de inicio"
+            "customLoadingTextHint": "Texto personalizado para la pantalla de inicio",
+            "heading": "Marca",
+            "accent": "Acento:",
+            "accentNotice": "Establece el color",
+            "icon": "Icono:",
+            "iconNotice": "Debe ser 256x256",
+            "invertPreloaderScheme": "Invertir"
         },
         "content": {
-            "heading": "Tipos de contenido"
+            "heading": "Tipos de contenido",
+            "addContentType": "Agregar tipo",
+            "missingTypeName": "Falta nombre",
+            "typeName": "Nombre del tipo",
+            "typeNameHint": "Nombre interno",
+            "typeReadableName": "Nombre para mostrar",
+            "icon": "Icono",
+            "fieldName": "Nombre del campo",
+            "fieldType": "Tipo de campo",
+            "fieldStructure": "Estructura",
+            "key": "Clave",
+            "value": "Valor",
+            "entries": "Entradas",
+            "structureTypes": {
+                "atomic": "Atomico",
+                "array": "Array",
+                "map": "Mapa"
+            }
         },
         "modules": {
             "heading": "Modulos"
@@ -778,21 +813,33 @@
             "scriptsHint": "Los scripts son archivos de codigo usados en tu proyecto."
         },
         "variables": {
-            "heading": "Variables"
+            "heading": "Variables",
+            "addVariable": "Agregar variable",
+            "variableName": "Nombre de variable",
+            "variableType": "Tipo de variable",
+            "defaultValue": "Valor por defecto",
+            "deleteVariable": "Eliminar variable",
+            "noVariablesYet": "No hay variables",
+            "boolean": "Booleano",
+            "number": "Numero",
+            "string": "Texto",
+            "raw": "Crudo",
+            "invalidName": "Nombre invalido",
+            "reservedName": "Nombre reservado"
         },
         "export": {
             "heading": "Exportacion",
             "errorReporting": "Informe de errores",
             "showErrors": "Mostrar errores",
             "showErrorsHint": "Mostrar errores en consola",
-            "errorsLink": "Enlace de errores",
-            "functionWrap": "Envuelto de funciones",
+            "errorsLink": "Link de errores",
+            "functionWrap": "Envuelto de funcion",
             "codeModifier": "Modificador de codigo",
-            "obfuscateWarning": "Advertencia: la ofuscacion puede causar errores",
-            "codeModifierAndWrapNote": "El modificador y el envuelto pueden usarse juntos",
+            "obfuscateWarning": "Advertencia de ofuscacion",
+            "codeModifierAndWrapNote": "Modificador y wrapper",
             "codeModifiers": {
                 "none": "Nada",
-                "minify": "Minificar",
+                "minify": "Minimizar",
                 "obfuscate": "Ofuscar"
             },
             "assetTree": "Arbol de assets",
@@ -802,7 +849,9 @@
             "autocloseDesktop": "Cerrar automaticamente escritorio"
         },
         "catmodsSettings": "Configuracion de modulos",
-        "contentTypes": "Tipos de contenido"
+        "contentTypes": "Tipos de contenido",
+        "rendering": {
+        }
     },
     "modules": {
         "dependencies": "Dependencias",
@@ -826,12 +875,22 @@
             "integrations": "Integraciones",
             "tweaks": "Ajustes",
             "networking": "Redes"
-        }
+        },
+        "author": "Autor",
+        "help": "Ayuda",
+        "info": "Info",
+        "license": "Licencia",
+        "logs": "Registros",
+        "methods": "Metodos",
+        "parameters": "Parametros"
     },
     "texture": {
         "textures": "Texturas",
         "importFromClipboard": "Importar del portapapeles",
-        "generatePlaceholder": "Generar marcador"
+        "generatePlaceholder": "Generar marcador",
+        "create": "Crear",
+        "import": "Importar",
+        "skeletons": "esqueletos"
     },
     "sounds": {
         "record": "Grabar"
@@ -874,17 +933,20 @@
         "close": "Cerrar"
     },
     "onboarding": {
-        "hoorayHeader": "¡Wow! !Acabas de crear un proyecto!",
-        "nowWhatParagraph": "Ahora ¿Que deberiamos hacer?",
-        "openSpaceShooterTutorial": "Aprender como hacer un space shooter",
-        "openPlatformerTutorial": "Aprender como hacer un juego de plataforma",
+        "hoorayHeader": "Hurra!",
+        "nowWhatParagraph": "Ahora puedes empezar a crear juegos con ct.js!",
+        "openSpaceShooterTutorial": "Abrir tutorial de Space Shooter",
+        "openPlatformerTutorial": "Abrir tutorial de Platformer",
         "openJettyCatTutorial": "Aprender como hacer un juego de Jetty Cat",
-        "doNothing": "¡Brincate esta página y crea un juego grandiaso!",
-        "showOnboardingCheckbox": "Mostrar esta página al crear un proyecto nuevo"
+        "doNothing": "No hacer nada",
+        "showOnboardingCheckbox": "Mostrar esta pantalla al iniciar"
     },
     "particleEmitters": {
         "textureMethod": "Metodo de textura",
-        "textureMethods": {},
+        "textureMethods": {
+            "random": "Aleatorio",
+            "animated": "Animado"
+        },
         "animatedFramerate": "Velocidad de animacion",
         "easingHeader": "Interpolacion",
         "easing": {
@@ -893,12 +955,48 @@
             "smooth": "Suave"
         },
         "movementType": "Tipo de movimiento",
-        "movementTypes": {},
+        "movementTypes": {
+        },
         "rotateTexture": "Rotar textura",
         "rotationMethod": "Metodo de rotacion",
-        "rotationMethods": {},
         "burstSpacing": "Espaciado de rafaga",
-        "burstStart": "Inicio de rafaga"
+        "burstStart": "Inicio de rafaga",
+        "emittersHeading": "Emisores",
+        "emitterHeading": "Emisor",
+        "from": "Desde",
+        "to": "Hasta",
+        "textureHeading": "Textura",
+        "selectTexture": "Seleccionar textura",
+        "importBuiltin": "Importar predeterminado",
+        "colorAndOpacityHeading": "Color y opacidad",
+        "stepped": "Paso a paso",
+        "blendMode": "Modo de fusion:",
+        "regular": "Regular",
+        "darken": "Oscurecer",
+        "lighten": "Aclarar",
+        "burn": "Quemar",
+        "scalingHeading": "Escalado",
+        "scale": "Escala:",
+        "velocityHeading": "Velocidad",
+        "velocity": "Velocidad:",
+        "gravityHeading": "Gravedad",
+        "directionHeading": "Direccion",
+        "rotationHeading": "Rotacion",
+        "spawningHeading": "Generacion",
+        "lifetime": "Tiempo de vida:",
+        "spawnType": "Tipo de generacion:",
+        "spawnShapes": {
+            "rectangle": "Rectangulo",
+            "torus": "Toro",
+            "star": "Estrella"
+        },
+        "width": "Ancho:",
+        "height": "Alto:",
+        "radius": "Radio:",
+        "addEmitter": "Agregar emisor",
+        "reset": "Reiniciar",
+        "changeBg": "Cambiar fondo",
+        "inspectorComplete": "Completar"
     },
     "patreon": {
         "sponsors": "Patrocinadores",
@@ -973,9 +1071,7 @@
         "deploy": {
             "exportDesktop": "Exportar para escritorio",
             "successZipExport": "Exportado exitosamente a {0}.",
-            "zipExport": "Exportar para la web",
-            "heading": "",
-            "exportAndroid": ""
+            "zipExport": "Exportar para la web"
         },
         "latestProjects": {
             "recentProjects": "Proyectos recientes"
@@ -989,12 +1085,7 @@
                 "Day": "Claro",
                 "Night": "Oscuro",
                 "SpringStream": "Corriente de Primavera",
-                "LucasDracula": "Lucas Dracula",
-                "Horizon": "",
-                "HCBlack": "",
-                "RosePine": "",
-                "RosePineMoon": "",
-                "RosePineDawn": ""
+                "LucasDracula": "Lucas Dracula"
             },
             "codeFontDefault": "Predeterminado (Iosevka Light)",
             "codeFontOldSchool": "Vieja Escuela",
@@ -1003,12 +1094,7 @@
             "newFont": "Fuente nueva:",
             "codeFont": "Fuente para el código",
             "codeLigatures": "Ligaduras",
-            "codeDense": "Diseño Denso",
-            "disableSounds": "",
-            "changeDataFolder": "",
-            "forceProductionForDebug": "",
-            "prideMode": "",
-            "altTemplateLayout": ""
+            "codeDense": "Diseño Denso"
         },
         "project": {
             "save": "Guardar proyecto",
@@ -1016,20 +1102,12 @@
             "openProject": "Abrir proyecto...",
             "openExample": "Abrir un proyecto de ejemplo...",
             "startScreen": "Regresar a la pantalla de inicio",
-            "startNewWindow": "",
             "successZipProject": "El proyecto se comprimió con éxito en {0}.",
-            "zipProject": "Comprimir proyecto en .zip",
-            "heading": ""
+            "zipProject": "Comprimir proyecto en .zip"
         },
         "meta": {
             "license": "Licencia",
-            "visitDiscordForGamedevSupport": "Unete a nuestro servidor de Discord para obtener ayuda",
-            "openIconList": "",
-            "heading": "",
-            "twitter": "",
-            "vkontakte": "",
-            "ctjsForum": "",
-            "openStylebook": ""
+            "visitDiscordForGamedevSupport": "Unete a nuestro servidor de Discord para obtener ayuda"
         }
     },
     "appView": {
@@ -1041,33 +1119,6 @@
         "restart": "Reiniciar",
         "project": "Proyecto",
         "tour": {
-            "header": "",
-            "aboutTour": "",
-            "helpPanel": "",
-            "helpPanelTabs": "",
-            "projectResources": "",
-            "tabTextures": "",
-            "tabTexturesImport": "",
-            "tabTexturesGallery": "",
-            "tabTexturesClipboard": "",
-            "tabTexturesPlaceholders": "",
-            "tabTemplates": "",
-            "tabRooms": "",
-            "tabSounds": "",
-            "tabSoundsImport": "",
-            "tabSoundsGallery": "",
-            "tabSoundsRecord": "",
-            "tabInterlude": "",
-            "tabUI": "",
-            "tabFX": "",
-            "tabProject": "",
-            "tabProjectModules": "",
-            "tabProjectModuleDocs": "",
-            "tabMainMenu": "",
-            "tabMainMenuSettings": "",
-            "tabMainMenuMeta": "",
-            "helpPanelReminder": "",
-            "buttonStartTutorial": ""
         }
     },
     "assetViewer": {
@@ -1295,7 +1346,8 @@
         "attributionQ": "Debo atribuir ct.js?",
         "attributionA": "Puedes desactivar el logo de ct.js.",
         "attributionAAssets": "Algunos ejemplos pueden contener material que requiere atribucion.",
-        "theLicense": "La licencia"
+        "theLicense": "La licencia",
+        "ctjsLicense": "Ct.js licencia (MIT)"
     },
     "templates": {
         "create": "Crear"
@@ -1371,18 +1423,6 @@
         "selectAssetHeader": "Seleccionar un asset"
     },
     "builtinAssetGallery": {
-        "galleryTip": "",
-        "assetGalleryHeader": "",
-        "importIntoProject": "",
-        "importAll": "",
-        "byAuthorPrefix": "",
-        "cannotImportExplanation": "",
-        "nameOccupied": "",
-        "cannotImportNameOccupied": "",
-        "visitSource": "",
-        "visitAuthorsItch": "",
-        "visitAuthorsTwitter": "",
-        "tipAuthor": ""
     },
     "scriptables": {
         "addEvent": "Agregar evento",
@@ -1476,11 +1516,43 @@
         "confirmHeading": "Seleccionar accion",
         "confirmParagraph": "El asset $1 tiene cambios sin aplicar."
     },
-    "createAsset": {},
-    "folderEditor": {},
-    "globalSearch": {},
-    "languageSelector": {},
-    "newAssetPrompt": {},
+    "createAsset": {
+        "newAsset": "Nuevo Asset",
+        "placeholderTexture": "Textura de marcador",
+        "assetGallery": "Galeria de assets integrada",
+        "behaviorTemplate": "Comportamiento para plantillas",
+        "behaviorRoom": "Comportamiento para habitaciones",
+        "importFromFile": "Importar de archivo",
+        "behaviorMissingCatmods": "Tu proyecto carece de estos modulos: $1.",
+        "formatError": "El archivo tiene un formato incorrecto."
+    },
+    "folderEditor": {
+        "title": "Carpeta",
+        "icon": "Icono",
+        "color": "Color"
+    },
+    "globalSearch": {
+        "buttonTitle": "Busqueda global",
+        "nothingFound": "No se encontro nada",
+        "searchHint": "Presiona Ctrl+F para buscar",
+        "recent": "Recientes"
+    },
+    "languageSelector": {
+        "chooseLanguageHeader": "Elegir idioma",
+        "chooseLanguageExplanation": "Elige el idioma para tu nuevo proyecto",
+        "coffeeScriptDescription": "CoffeeScript es un lenguaje simple",
+        "pickCoffeeScript": "CoffeeScript",
+        "jsAndTs": "JavaScript y TypeScript",
+        "jsTsDescription": "JavaScript es el lenguaje nativo de la web",
+        "pickJsTs": "JavaScript/TypeScript",
+        "acceptAndSpecifyDirectory": "Aceptar y especificar directorio",
+        "catnip": "Programacion visual",
+        "catnipDescription": "Catnip es un lenguaje de programacion visual basado en bloques",
+        "pickCatnip": "Catnip"
+    },
+    "newAssetPrompt": {
+        "heading": "Nuevo asset"
+    },
     "scriptView": {
         "runAutomatically": "Ejecutar al inicio del juego",
         "language": "Lenguaje:",
@@ -1504,6 +1576,16 @@
         "falloff": "Atentuacion:",
         "refDistance": "Inicio de atenuacion:"
     },
-    "exporterError": {},
-    "enumEditor": {}
+    "exporterError": {
+    },
+    "enumEditor": {
+        "addVariant": "Agregar variante",
+        "enumUseCases": "Casos de uso"
+    },
+    "regionalLinks": {
+        "discord": "https://comigo.games/discord",
+        "telegram": "https://t.me/ctjsen"
+    },
+    "behaviorEditor": {
+    }
 }
