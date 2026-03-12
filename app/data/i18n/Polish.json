@@ -1420,7 +1420,7 @@
             "zipProject": "Spakuj projekt do .ZIP",
             "convertToJs": "Konwertuj projekt do JavaScript",
             "confirmationConvertToJs": "Wszystkie zdarzenia w projekcie zostaną automatycznie przekonwertowane do JavaScript. Ten proces jest nieodwracalny (jeśli skrypt zawiera błąd, konwersja zostanie cofnięta). Czy na pewno chcesz przekonwertować projekt z CoffeeScript do JavaScript?",
-            "pleaseCloseAssets": "Proszę zamknąć wszystkie otwarte zasoby przed konwersją projektu do JavaScript."
+            "pleaseCloseAssets": "Zamknij wszystkie otwarte zasoby przed konwertowaniem projektu do JavaScript."
         },
         "meta": {
             "heading": "Meta",
