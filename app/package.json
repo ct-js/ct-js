@@ -52,7 +52,7 @@
   },
   "chromium-args": "--enable-features=nw2 --load-extensions --force-color-profile=srgb --disable-features=ColorCorrectRendering --disable-features=Vulkan",
   "dependencies": {
-    "@neutralinojs/neu": "^11.0.1",
+    "@neutralinojs/neu": "^11.7.0",
     "png2icons": "^2.0.1",
     "resedit-cli": "^2.0.0"
   }
