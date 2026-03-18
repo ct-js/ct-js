@@ -67,8 +67,8 @@ export const highlightProblem = (
         firstColumn = lastColumn = location!.column;
         firstLine = lastLine = location!.line - 1;
     }
-    // Take a couple of lines before the error
-    output.push(...lines.slice(Math.max(0, firstLine - 2), firstLine + 1));
+    // Take few lines before the error
+    output.push(...lines.slice(Math.max(0, firstLine - 4), firstLine + 1));
     // Draw an arrow poking at the error
     output.push('_'.repeat(firstColumn) + '⮭'.repeat(firstLine === lastLine ? (lastColumn - firstColumn + 1) : 1));
     // Add subsequent lines if possible
