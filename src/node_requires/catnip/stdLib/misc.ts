@@ -189,6 +189,46 @@ const blocks: (IBlockCommandDeclaration | IBlockComputedDeclaration)[] = [{
     }],
     jsTemplate: (values) => `return ${values.return};`
 }, {
+    name: 'Try/catch block',
+    displayName: 'Try',
+    type: 'command',
+    code: 'tryCatch',
+    icon: 'help-circle',
+    lib: 'core.misc',
+    i18nKey: 'try catch',
+    displayI18nKey: 'try',
+    pieces: [{
+        type: 'blocks',
+        key: 'tryCode'
+    }, {
+        type: 'icon',
+        icon: 'alert-circle'
+    }, {
+        type: 'label',
+        name: 'On error',
+        i18nKey: 'catch'
+    }, {
+        type: 'filler'
+    }, {
+        type: 'label',
+        name: 'store error in',
+        i18nKey: 'store error in'
+    }, {
+        type: 'argument',
+        key: 'error',
+        typeHint: 'wildcard',
+        required: false
+    }, {
+        type: 'blocks',
+        key: 'catchCode'
+    }],
+    jsTemplate: (values, safeId) => {
+        if (values.error && values.error !== 'undefined') {
+            return `try {\n    ${values.tryCode}\n} catch (error${safeId}) {\n    ${values.error} = error${safeId};\n    ${values.catchCode}\n}`;
+        }
+        return `try {\n    ${values.tryCode}\n} catch (error${safeId}) {\n    ${values.catchCode}\n}`;
+    }
+}, {
     name: 'throw',
     type: 'command',
     code: 'throw',

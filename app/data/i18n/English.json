@@ -582,6 +582,7 @@
             "set disabled": "Set disabled state",
             "get text": "get text",
             "get disabled": "get disabled",
+            "try catch": "Try/catch block",
             "throw": "Throw an error",
             "define function": "Define a function",
             "return": "Return the result",
@@ -654,7 +655,8 @@
             "timer": "timer",
             "read": "read",
             "set game speed to": "Set game speed to",
-            "game speed": "game speed"
+            "game speed": "game speed",
+            "try": "Try to execute"
         },
         "blockLabels": {
             "value": "value",
@@ -688,6 +690,7 @@
             "and": "and",
             "then": "Then",
             "catch": "On error",
+            "store error in": "store the error in",
             "and play animation": "and play the animation",
             "and stop animation": "and stop the animation",
             "scale": "scale",
