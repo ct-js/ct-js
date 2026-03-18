@@ -44,7 +44,10 @@ export const stringifyScripts = (scripts: IScript[], debugMode: boolean): string
                     resourceId: script.uid,
                     resourceName: script.name,
                     resourceType: script.type,
-                    problematicCode: highlightProblem(e.code || code, e.location || e.loc),
+                    problematicCode: highlightProblem(
+                        e.code ?? script.code,
+                        e.location ?? e.loc
+                    ),
                     clue: 'syntax'
                 }, e);
                 throw exporterError;
