@@ -171,3 +171,22 @@ Ct.js is supported by these wonderful people:
 <p align="center">
 <img src="https://ctjs.rocks/patronsWidgetInlined.svg"/>
 </p>
+
+## Translations
+
+App translations are made by community. You can find the folder with translations and instructions on how to make them [here](https://github.com/ct-js/ct-js/tree/develop/app/data/i18n).
+
+Glory to all these people who made, improved, or helped maintain ct.js translations:
+
+* Brazilian Portuguese: araujo921, Gustavo M. Paes, markmehere, Omkar Pattanaik, Henrique aka hlbarone
+* Chinese Simplified: emaoshushu, markmehere, naturecodevoid, Omkar Pattanaik
+* Dutch: Bart in 't Veld, GambleBranch, markmehere, Omkar Pattanaik
+* French: Alexis Schad, FoobarIT, markmehere, naturecodevoid, Omkar Pattanaik, Rémy Tauziac, Victor Guyard
+* Japanese: Karintou, markmehere, Omkar Pattanaik, taxi13245
+* German: Alexis Schad, araujo921 markmehere, naturecodevoid, Wend1go
+* Polish: markmehere, naturecodevoid, NoNameDeleted, ReptiIe
+* Romanian: Alexis Schad, araujo921 markmehere, naturecodevoid
+* Russian: Alexis Schad, araujo921 markmehere, naturecodevoid, Omkar Pattanaik
+* Spanish: Alexis Schad, araujo921 markmehere, naturecodevoid, Stuck Up Creations
+* Turkish: markmehere, Omkar Pattanaik, Sarpmanon
+* Ukranian: Diablo, markmehere, Omkar Pattanaik, sk757a
