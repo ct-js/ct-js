@@ -566,7 +566,9 @@
             "infinity": "бесконечность",
             "x prev": "предыдущий x",
             "y prev": "предыдущий y",
-            "content type entries": "записи контента"
+            "content type entries": "записи контента",
+            "global variable": "Глобальная переменная",
+            "try catch": "Попытаться выполнить"
         },
         "blockDisplayNames": {
             "if else branch": "Если",
@@ -595,7 +597,8 @@
             "timer": "таймер",
             "read": "считать",
             "set game speed to": "Поменять скорость игры на",
-            "game speed": "скорость игры"
+            "game speed": "скорость игры",
+            "try": "Попытаться выполнить"
         },
         "blockLabels": {
             "value": "значение",
@@ -639,7 +642,8 @@
             "secondsUnits": "сек.",
             "with x as": "с x как",
             "and y as": "и y как",
-            "store result in": "сохранить результат в"
+            "store result in": "сохранить результат в",
+            "store error in": "хранить ошибку в"
         },
         "blockOptionHeaders": {},
         "blockOptionButtons": {
