@@ -14,6 +14,7 @@ const builtInThemes: [string, string[]][] = [
     ['Ghost', ['#fff1eb', '#70579c']],
     ['AlmaSakura', ['#372D2D', '#C4B0B3', '#DB5A6B']],
     ['Forest', ['#3c474d', '#a7c080']],
+    ['Teracat', ['#1f3134', '#587b7b', '#b4765a']],
     ['GoldenEye', ['#144000', '#ffd700']],
     ['Nord', ['#3B4252', '#88C0D0']],
     ['OneDarkPro', ['#282C34', '#D7DAE0']],

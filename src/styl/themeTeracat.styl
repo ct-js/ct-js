@@ -1,0 +1,73 @@
+@charset "utf-8"
+
+foreground = #eaeeee
+text = #e6eaeacc
+background = #1f3134
+backgroundDeeper = #152528
+shadows = #000
+
+borderPale = #24373a
+borderBright = mix(#2d4f56, #24373a, 30%)
+
+
+/* Frequently used properties */
+trans =
+    transition 0.35s ease all
+transshort =
+    transition 0.15s ease all
+shad =
+    box-shadow 0 0.15rem 0.25rem rgba(shadows, 0.15)
+shadamb =
+    box-shadow 0 0.35rem 0.5rem rgba(shadows, 0.25)
+
+/* Base fonts for UI */
+fonts = font = 'Open Sans', sans-serif, serif
+font-mono = mono = Iosevka, monospace
+body
+    --ui-font fonts
+
+br = 0.15rem
+iconsize = 1.5rem
+
+/* Colors used by this theme */
+act = #587b7b
+acttext = #b4765a
+accent1 = mix(#587b7b, #eaeeee, 80%)
+error = #e85c51
+red = error
+success = #7aa4a1
+green = success
+warning = #fda47f
+orange = warning
+homecolor = #152528
+homedarkcolor = darken(homecolor, 15%)
+
+theme = 'Forest'
+themeDark = true
+themeThickBorders = false
+
+@require 'hvost.styl'
+
+@require '3rdParty/*.styl'
+@require './../../node_modules/highlight.js/styles/atom-one-dark.css'
+
+@require 'common.styl'
+@require 'inputs.styl'
+@require 'typography.styl'
+@require 'confetti.styl'
+@require 'buildingBlocks.styl'
+@require 'tabs.styl'
+
+@require 'tags/**/*.styl'
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.button
+    &:hover, &.active, &:active, &.selected
+        color backgroundDeeper
+        svg
+            color backgroundDeeper
+    &:hover, &.active, &:active
+        border-color acttext
