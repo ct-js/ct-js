@@ -107,7 +107,7 @@ for (const varType of ['string', 'number', 'boolean', 'raw']) {
         icon: 'circle',
         jsTemplate: (values) => values.variableName,
         lib: 'core.hidden',
-        i18nKey: 'property',
+        i18nKey: 'global variable',
         pieces: [{
             type: 'propVar'
         }],

@@ -340,6 +340,7 @@
             "color": "color",
             "variable": "Variable",
             "property": "Property",
+            "global variable": "Global variable",
             "behavior property": "Behavior's property",
             "content type entries": "Content type entries",
             "if else branch": "If-else branch",
