@@ -176,7 +176,10 @@
             "Scale": "common.alignModes.Scale"
         },
         "download": "common.download",
-        "createStyleFromIt": "common.createStyleFromIt"
+        "createStyleFromIt": "common.createStyleFromIt",
+        "andNMore": "common.andNMore",
+        "selectDialogueTexture": "common.selectDialogueTexture",
+        "selectDialogueStyle": "common.selectDialogueStyle"
     },
     "colorPicker": {
         "current": "colorPicker.current",
@@ -664,6 +667,22 @@
             "heading": "settings.main.heading",
             "miscHeading": "settings.main.miscHeading",
             "backups": "settings.main.backups"
+        },
+        "variables": {
+            "heading": "settings.variables.heading",
+            "addVariable": "settings.variables.addVariable",
+            "variableName": "settings.variables.variableName",
+            "variableType": "settings.variables.variableType",
+            "defaultValue": "settings.variables.defaultValue",
+            "deleteVariable": "settings.variables.deleteVariable",
+            "noVariablesYet": "settings.variables.noVariablesYet",
+            "variablesHint": "settings.variables.variablesHint",
+            "boolean": "settings.variables.boolean",
+            "number": "settings.variables.number",
+            "string": "settings.variables.string",
+            "raw": "settings.variables.raw",
+            "invalidName": "settings.variables.invalidName",
+            "reservedName": "settings.variables.reservedName"
         }
     },
     "extensionsEditor": {
@@ -777,7 +796,9 @@
                 "automatic": "mainMenu.settings.debuggerLayouts.automatic"
             },
             "autoapplyOnLaunch": "mainMenu.settings.autoapplyOnLaunch",
-            "scrollableCatnipLibrary": "mainMenu.settings.scrollableCatnipLibrary"
+            "scrollableCatnipLibrary": "mainMenu.settings.scrollableCatnipLibrary",
+            "specialFont": "mainMenu.settings.specialFont",
+            "specialFontDefault": "mainMenu.settings.specialFontDefault"
         },
         "project": {
             "save": "mainMenu.project.save",
@@ -790,7 +811,8 @@
             "zipProject": "mainMenu.project.zipProject",
             "heading": "mainMenu.project.heading",
             "convertToJs": "mainMenu.project.convertToJs",
-            "confirmationConvertToJs": "mainMenu.project.confirmationConvertToJs"
+            "confirmationConvertToJs": "mainMenu.project.confirmationConvertToJs",
+            "pleaseCloseAssets": "mainMenu.project.pleaseCloseAssets"
         },
         "meta": {
             "license": "mainMenu.meta.license",
@@ -963,7 +985,9 @@
             "addTiles": "roomView.tools.addTiles",
             "manageBackgrounds": "roomView.tools.manageBackgrounds",
             "roomProperties": "roomView.tools.roomProperties",
-            "uiTools": "roomView.tools.uiTools"
+            "uiTools": "roomView.tools.uiTools",
+            "copiesList": "roomView.tools.copiesList",
+            "tilesList": "roomView.tools.tilesList"
         },
         "resetView": "roomView.resetView",
         "viewportHeading": "roomView.viewportHeading",
@@ -1019,7 +1043,6 @@
         "fill": "styleView.fill",
         "font": "styleView.font",
         "italic": "styleView.italic",
-        "padding": "styleView.padding",
         "lineHeight": "styleView.lineHeight",
         "shadow": "styleView.shadow",
         "stroke": "styleView.stroke",
@@ -1046,7 +1069,8 @@
         "testText": "styleView.testText",
         "fontSize": "styleView.fontSize",
         "fallbackFontFamily": "styleView.fallbackFontFamily",
-        "notSupportedForBitmap": "styleView.notSupportedForBitmap"
+        "notSupportedForBitmap": "styleView.notSupportedForBitmap",
+        "padding": "styleView.padding"
     },
     "textureView": {
         "center": "textureView.center",
@@ -1202,7 +1226,8 @@
         "verticalPadding": "templateView.verticalPadding",
         "horizontalSpacing": "templateView.horizontalSpacing",
         "verticalSpacing": "templateView.verticalSpacing",
-        "alignItems": "templateView.alignItems"
+        "alignItems": "templateView.alignItems",
+        "pixelPerfectScroll": "templateView.pixelPerfectScroll"
     },
     "assetInput": {
         "changeAsset": "assetInput.changeAsset",
@@ -1349,7 +1374,8 @@
             "noTemplateTexture": "exporterError.clueSolutions.noTemplateTexture",
             "blockArgumentMissing": "exporterError.clueSolutions.blockArgumentMissing",
             "blockDeclarationMissing": "exporterError.clueSolutions.blockDeclarationMissing",
-            "eventMissing": "exporterError.clueSolutions.eventMissing"
+            "eventMissing": "exporterError.clueSolutions.eventMissing",
+            "variableNames": "exporterError.clueSolutions.variableNames"
         },
         "stacktrace": "exporterError.stacktrace",
         "jumpToProblem": "exporterError.jumpToProblem",
@@ -1443,10 +1469,11 @@
             "templates": "catnip.coreLibs.templates",
             "utilities": "catnip.coreLibs.utilities",
             "actions": "catnip.coreLibs.actions",
-            "timers": "catnip.coreLibs.timers"
+            "timers": "catnip.coreLibs.timers",
+            "propsVars": "catnip.coreLibs.propsVars"
         },
         "blockNames": {
-            "kill this copy": "catnip.blockNames.kill copy",
+            "kill this copy": "catnip.blockNames.kill this copy",
             "move copy": "catnip.blockNames.move copy",
             "set speed": "catnip.blockNames.set speed",
             "set gravity": "catnip.blockNames.set gravity",
@@ -1736,7 +1763,60 @@
             "action value": "catnip.blockNames.action value",
             "is action pressed": "catnip.blockNames.is action pressed",
             "is action down": "catnip.blockNames.is action down",
-            "is action released": "catnip.blockNames.is action released"
+            "is action released": "catnip.blockNames.is action released",
+            "kill copy": "catnip.blockNames.kill copy",
+            "object extract props": "catnip.blockNames.object extract props",
+            "array create": "catnip.blockNames.array create",
+            "array set element": "catnip.blockNames.array set element",
+            "array create 2d": "catnip.blockNames.array create 2d",
+            "array 2d set element": "catnip.blockNames.array 2d set element",
+            "for each 2d": "catnip.blockNames.for each 2d",
+            "array 2d width": "catnip.blockNames.array 2d width",
+            "array 2d height": "catnip.blockNames.array 2d height",
+            "array 2d get": "catnip.blockNames.array 2d get",
+            "global variable": "catnip.blockNames.global variable",
+            "continue loop": "catnip.blockNames.continue loop",
+            "set anchor": "catnip.blockNames.set anchor",
+            "anchor x": "catnip.blockNames.anchor x",
+            "anchor y": "catnip.blockNames.anchor y",
+            "set pivot": "catnip.blockNames.set pivot",
+            "pivot x": "catnip.blockNames.pivot x",
+            "pivot y": "catnip.blockNames.pivot y",
+            "set visible": "catnip.blockNames.set visible",
+            "is of template": "catnip.blockNames.is of template",
+            "copy placedInRoom": "catnip.blockNames.copy placedInRoom",
+            "tiles Tilemaps create": "catnip.blockNames.tiles Tilemaps create",
+            "tiles Tilemaps add tile": "catnip.blockNames.tiles Tilemaps add tile",
+            "tiles Tilemaps cache": "catnip.blockNames.tiles Tilemaps cache",
+            "tiles Tilemaps cache diamond": "catnip.blockNames.tiles Tilemaps cache diamond",
+            "utilities u direction": "catnip.blockNames.utilities u direction",
+            "utilities u distance": "catnip.blockNames.utilities u distance",
+            "u loopOverEnumNames": "catnip.blockNames.u loopOverEnumNames",
+            "u loopOverEnumValues": "catnip.blockNames.u loopOverEnumValues",
+            "settings settings is debug": "catnip.blockNames.settings settings is debug",
+            "settings settings is production": "catnip.blockNames.settings settings is production",
+            "apply script": "catnip.blockNames.apply script",
+            "clear array": "catnip.blockNames.clear array",
+            "try catch": "catnip.blockNames.try catch",
+            "throw": "catnip.blockNames.throw",
+            "math abs": "catnip.blockNames.math abs",
+            "math sign": "catnip.blockNames.math sign",
+            "math floor": "catnip.blockNames.math floor",
+            "math ceil": "catnip.blockNames.math ceil",
+            "math round": "catnip.blockNames.math round",
+            "math sqrt": "catnip.blockNames.math sqrt",
+            "math sin": "catnip.blockNames.math sin",
+            "math cos": "catnip.blockNames.math cos",
+            "math tan": "catnip.blockNames.math tan",
+            "math asin": "catnip.blockNames.math asin",
+            "math acos": "catnip.blockNames.math acos",
+            "math atan": "catnip.blockNames.math atan",
+            "math atan2": "catnip.blockNames.math atan2",
+            "math pow": "catnip.blockNames.math pow",
+            "math log": "catnip.blockNames.math log",
+            "math min": "catnip.blockNames.math min",
+            "math max": "catnip.blockNames.math max",
+            "infinity": "catnip.blockNames.infinity"
         },
         "blockDisplayNames": {
             "write": "catnip.blockDisplayNames.write",
@@ -1763,7 +1843,10 @@
             "timer": "catnip.blockDisplayNames.timer",
             "read": "catnip.blockDisplayNames.read",
             "set game speed to": "catnip.blockDisplayNames.set game speed to",
-            "game speed": "catnip.blockDisplayNames.game speed"
+            "game speed": "catnip.blockDisplayNames.game speed",
+            "u loopOverEnumNames": "catnip.blockDisplayNames.u loopOverEnumNames",
+            "u loopOverEnumValues": "catnip.blockDisplayNames.u loopOverEnumValues",
+            "try": "catnip.blockDisplayNames.try"
         },
         "blockLabels": {
             "value": "catnip.blockLabels.value",
@@ -1805,7 +1888,10 @@
             "with results in": "catnip.blockLabels.with results in",
             "store new array in": "catnip.blockLabels.store new array in",
             "and elements": "catnip.blockLabels.and elements",
-            "secondsUnits": "catnip.blockLabels.secondsUnits"
+            "secondsUnits": "catnip.blockLabels.secondsUnits",
+            "store error in": "catnip.blockLabels.store error in",
+            "with x as": "catnip.blockLabels.with x as",
+            "and y as": "catnip.blockLabels.and y as"
         },
         "blockOptions": {
             "soundVolume": "catnip.blockOptions.soundVolume",
@@ -1823,7 +1909,9 @@
         "unnamedGroup": "catnip.unnamedGroup",
         "blockDocumentation": {
             "serialize object": "catnip.blockDocumentation.serialize object",
-            "constant string": "catnip.blockDocumentation.constant string"
+            "constant string": "catnip.blockDocumentation.constant string",
+            "set anchor": "catnip.blockDocumentation.set anchor",
+            "set pivot": "catnip.blockDocumentation.set pivot"
         },
         "globalVariables": "catnip.globalVariables",
         "globalVariablesHint": "catnip.globalVariablesHint",
@@ -1832,7 +1920,14 @@
         "invalidVarNameError": "catnip.invalidVarNameError",
         "renamePropertyPrompt": "catnip.renamePropertyPrompt",
         "renameVariablePrompt": "catnip.renameVariablePrompt",
-        "renamingAcrossProject": "catnip.renamingAcrossProject"
+        "renamingAcrossProject": "catnip.renamingAcrossProject",
+        "manageGlobalVariables": "catnip.manageGlobalVariables",
+        "contextHint": "catnip.contextHint",
+        "toggleBlockDisable": "catnip.toggleBlockDisable",
+        "blockOptionHeaders": {},
+        "blockOptionButtons": {
+            "options": "catnip.blockOptionButtons.options"
+        }
     },
     "regionalLinks": {
         "discord": "regionalLinks.discord",
@@ -1841,5 +1936,11 @@
     "enumEditor": {
         "addVariant": "enumEditor.addVariant",
         "enumUseCases": "enumEditor.enumUseCases"
+    },
+    "globalSearch": {
+        "buttonTitle": "globalSearch.buttonTitle",
+        "nothingFound": "globalSearch.nothingFound",
+        "searchHint": "globalSearch.searchHint",
+        "recent": "globalSearch.recent"
     }
 }
