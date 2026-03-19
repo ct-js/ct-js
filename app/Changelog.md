@@ -1,3 +1,140 @@
+## v5.3.0
+
+*Thu Mar 19 2026*
+
+### ✨ New features
+
+- Add methods `u.eachEnumName`, `u.eachEnumValue` as helpers for working with Enumeration assets. Includes blocks for Catnip.
+- Catmods: Allow colliding with multiple groups at once to the `place` catmod (#99 by @abam-iksde)
+- Catmods: HTTP requests for Catnip (#33 by @Banbury)
+- Catnip: Add a "Throw an error" block
+- Catnip: Add a button to template and behavior editors for Catnip projects to hide left column and enlarge the blocks, useful for displaying them on a big screen or screencasting
+- Catnip: Add a Try-Catch block
+- Catnip: Add anchor and pivot blocks to Catnip. (#85 by @ej-sanmartin)
+- Catnip: Add new array- and object-related blocks
+- Catnip: Allow catmods to change types of custom options (cosmetic only, everything is still serialized as strings) and add headers, as well as change the "Advanced" label on the spoiler of these options to a custom one.
+- Catnip: Disable or enable blocks in a Catnip script by right-clicking it
+- Catnip: You can now convert Catnip projects to JavaScript
+- Copies: Add a property `placedInRoom` (In Catnip: Templates -> was placed in room) to differenciate copies preplaced in a room from dynamically created ones
+- Debugger: Console will now print the source of the error (entity name and event) for most circumstances
+- Exporter: Create proper macOS .app bundles for desktop exports (#88 by @ej-sanmartin)
+- Project settings: Global variables for all coding languages, can be found in the Project tab -> Global Variables
+- UI Themes: New Teracat theme
+- UI: Dockable asset tree (co-authored with @achubutkin, including #104)
+
+### ⚡ Improvements
+
+- Asset browser: Add asset filters to the asset browser (#66 by @markmehere)
+- Catmods, Catnip: Add a block to cancel an ongoing animation to `tween`
+- Catmods: `matter` update to 0.20, add compound bodies  (#87 by @returnworld)
+- Catmods: Resurrect the `filters` catmod, add simple blocks for Catnip
+- Catnip & Debugger: Derive the block name that caused a runtime error
+- Catnip blocks will use the block name for their tooltip if no documentation was provided; this is useful for compact blocks which text greatly differs from the full name
+- Catnip: "Run script" block can now return values
+- Catnip: Add "+" sign to string concatenation blocks' names for easier search
+- Catnip: Add "=" and "≠" blocks to the Math category as a more strictly typed (and more handy) alternative to Logic's "is" and "is not"
+- Catnip: Add "Clear array" block
+- Catnip: Add "copy is of template" block to the Templates category (equivalent to `this.template === 'templateName'`)
+- Catnip: Add "Destory copy (ref)" block
+- Catnip: Add a "continue;" block to the Logic category called "Skip this iteration"
+- Catnip: Add a new "Infinity" block to the Math category
+- Catnip: add hover effects when dropping onto an empty field
+- Catnip: add markers indicating a context change to blocks like "With copy"
+- Catnip: Add translation keys for settings.isDebug, settings.isProduction
+- Catnip: Better feedback for block dropping in block lists, plus minor improvements to hover animation of the in-between block insert menu
+- Catnip: better tooltips for block library and nice tooltips for arguments
+- Catnip: Blocks' Options sections can now fetch translations for spoiler buttons and headers for from ct.js UI language files through `customHeaderI18nKey` and `buttonLabelI18nKey` fields
+- Catnip: Cap the amount of blocks that can be shown in the library search to 50. This greatly improves the responsiveness of the searchbar.
+- Catnip: Ensure that all blocks generated from type definitions have their block lists at the end
+- Catnip: Expose properties of used behaviors for templates' and rooms' scripts
+- Catnip: Fix double scrollbars in the modal with variable manager
+- Catnip: Improve performance of dragging blocks into larger block lists; fixes unbearable lags on MacOS.
+- Catnip: Prevent block selection when clicking inside advanced options, make options readable when its parent block is selected
+- Catnip: Remove animation flicker when rapidly moving mouse across catnip scripts
+- Catnip: Remove the extra space on the left side of async blocks to let it combine better visually with "store in…" side blocks
+- Catnip: Rename the "Properties" category to "Data"
+- Catnip: Simplify code for dropover effects on arguments/options
+- Catnip: The "store the result" portion of the "Run a function" block is now optional
+- Code editor: Add typings for pixiApp.ticker
+- Code editors: Expose classes Tile and Tilemap to the global TypeScript context in ct.js games
+- Examples: Add a pathfinding example
+- Exporter: Show more preceding lines when highlighting problems in user's code
+- Main menu: Formatted recent projects list (#73 by @markmehere)
+- Project settings: Add confirmation dialogs before deleting project scripts and actions (#89 by @ej-sanmartin)
+- Project settings: simplify layout a bit and make paddings of sections consistent
+- Room editor: Expose pointer events for rooms
+- Style editor: Adds padding and improves style editor (#69 by @markmehere)
+- Support transparent room backgrounds (#67 by @markmehere)
+- Template editor: the "Default text" field for Text-based templates is now a textarea instead of a string input, which allows multiline text and longer strings in general.
+- Texture editor: Add specific labels "Select a texture" and "Select a style" for template editors' main asset picker
+- Texture editor: No errors in the console when opening a texture
+- Texture editor: When reimporting a texture, if the new image is smaller than the source one and the slicing settings cannot fit inti the new image size, the slicing settings will now reset to prevent further errors.
+- UI: Apply the intended styles for export-desktop-panel, previously they were global due to a coding mistake
+- UI: Introduce a custom variant of number input that considers a wider amount of values valid while still retaining step and mix/max values. You will notice that fields in the emitter tandem editor, in room editor, and in some other places hate you less.
+- UI: Make the button that opens and closes the sidebar smaller when a Catnip editor is open, so that it doesn't cover the block categories much
+- UI: More uniform styles (mainly affects sound-editor and texture-editor)
+
+### 🐞 Bug fixes
+- Asset browser: Fix data loss during unwrap (#65 by @markmehere)
+- Catmods: `place.enableTilemapCollisions`: Deleted tiles will properly remove themselves from the collision system now.
+- Catmods: `place`: Add the missing precision argument to movement blocks, make some names terser, and add two blocks to check for any collisions (not just against a specific collision group)
+- Catmods: Remove tween from tween list if timer was rejected  (#49 by @firecakes)
+- Catnip, Exporter: Fix variables not being declared in Script assets
+- Catnip: Expose Tiles category that apparently was always there but not exposed in UI. Oops!
+- Catnip: Fix a typo in "high dpi" block
+- Catnip: Fix block paste functionality for options and arguments
+- Catnip: Fix capitalization of block "get element from a 2D array"
+- Catnip: Fix missing translation key for global variables
+- Catnip: Fix the Scripts' options block not being draggable
+- Catnip: Mark the "store in" slot of "Create a new object", "Create a new empty array", "Create a new 2D array" blocks mandatory to fill
+- Catnip: Prevent Note's textareas from being fully collapsed
+- Catnip: Properly pad the search results in the library panel
+- Code editor: Better bracket colors for Forest and Horizon themes
+- Exporter: Fix Bitmap typefaces raising texture dimensions errors
+- Exporter: Fix compilation errors when exporting Script assets throwing an error instead of highlighting a problem in user's code
+- Exporter: Fix modded asset inputs in templates and rooms writing to the same field "key". This, among other things, fixes the `light` catmod.
+- Fix PixiJS Deprecation Warning on pixelart projects
+- Fix Script assets written in Catnip not working in non-Catnip projects
+- Fix syntax issue in the Polish translation (#93 by @NoNameDeleted)
+- Fix typeface preview when a project's path has special symbols
+- Fix: `var nextRoom` in custom scripts will no longer break `rooms.switch`
+- Main menu: Fix blank page in CSS stylebook (solution by @Tekkitslime)
+- Room editor: Fixes unexpected reversion to default text of text copies (#72 by @markmehere)
+- Room editor: Placed copies use template's opacity (#68 by @markmehere)
+- Script editor: Fix missing variable declarations & beautify code when converting a Catnip Script asset to JS.
+- Sound editor: Fix sound variant continuing after deletion. (#83 by @ej-sanmartin)
+- Template & Behavior editors: Fix a broken documentation shortcut in template editors
+- Template & Room editors: Clean up behavior's fields from a template after removing the behavior (#101 by @abam-iksde)
+- Themes: Fixes for the AlmaSakura theme
+- UI: Fix invalid styles for `exports-panel` that affected other modals and code blocks
+- Windows: Prevent NW.js from caching filesystem items when in debug mode
+
+### 🌐 Translations
+
+- Catnip: Fix a Russian translation for behavior.has block
+- Update English.json (correction for - set maxY) (#43 by @ReptiIe)
+- Update Japanese translation (#549 by @taxi13245)
+- Update matter catmod translation — added Pl comments (#92 by @ReptiIe)
+- Update module.json - added comments for *_PL for the `place` module (#40 by @ReptiIe)
+- Update module.json (Desktop) - added missing comments (#53 by @ReptiIe)
+- Update module.json (gamepad) - added comments for *_PL (#54 by @ReptiIe)
+- Update module.json (keyboard) - added comments for *_PL (#55 by @ReptiIe)
+- Update module.json (light) - added comments PL (#56 by @ReptiIe)
+- Update module.json (Pointer) - added comments for *_PL (#52 by @ReptiIe)
+- Update module.json (random) - added PL (#61 by @ReptiIe)
+- Update module.json (splashscreen) - added PL (#60 by @ReptiIe)
+- Update module.json (transition) - added PL (#59 by @ReptiIe)
+- Update module.json (vkeys) - added PL comments (#58 by @ReptiIe)
+- Update Polish.json (#84, #90, #111 by ReptiIe)
+- Update Russian i18n file
+
+### 💭 Other
+
+- Add notices to the `pointer` method to indicate when it is better to use the built-in Pointer events instead of `pointer`'s methods
+- Catmods: `place` catmod: Note the requirements on tile and tilemap removal
+- Update ESBuild to 0.25.0
+- Update Neutralino used for game exports to v6.5.0
+
 ## v5.2.1
 
 *Mon Nov 04 2024*
