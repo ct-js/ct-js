@@ -340,6 +340,7 @@
             "color": "kolor",
             "variable": "Zmienna",
             "property": "Własność",
+            "global variable": "Zmienna globalna",
             "behavior property": "Właściwości zachowania",
             "content type entries": "Wpisy treści",
             "if else branch": "Jeżeli - w przeciwnym razie",
@@ -582,6 +583,7 @@
             "set disabled": "Ustaw stan wyłączony",
             "get text": "pobierz tekst",
             "get disabled": "pobierz stan wyłączenia",
+            "try catch": "Spróbuj wykonać (z obsługą błędów)",
             "throw": "Wyrzuć błąd",
             "define function": "Zdefiniuj funkcję",
             "return": "Zwróć wynik",
@@ -654,7 +656,8 @@
             "timer": "stoper",
             "read": "odczytaj",
             "set game speed to": "Ustaw szybkość gry",
-            "game speed": "szybkość gry"
+            "game speed": "szybkość gry",
+            "try": "Spróbuj wykonać"
         },
         "blockLabels": {
             "value": "wartość",
@@ -688,6 +691,7 @@
             "and": "i",
             "then": "Następnie",
             "catch": "W przypadku błędu",
+            "store error in": "Zapisz błąd w",
             "and play animation": "i odtwarzaj animację",
             "and stop animation": "i zatrzymaj animację",
             "scale": "skaluj",
@@ -717,7 +721,7 @@
             "constant string": "Możesz użyć tego bloku do wymuszenia konwersji wartości na ciąg znaków, np. gdy chcesz zapisać liczbę jako tekst lub zamienić \\n na nową linię przy umieszczaniu tej wartości w zmiennych zastępczych.",
             "set anchor": "Ustawia punkt zaczepienia przy użyciu znormalizowanych współrzędnych (od 0.0 do 1.0). Punkt zaczepienia określa, względem którego miejsca kopia jest obracana i skalowana. Typowe wartości: (0, 0) = lewy górny róg, (0.5, 0.5) = środek, (1, 1) = prawy dolny róg. Działa na kopiach z teksturą, np. Animowanych Sprite'ach.",
             "set pivot": "Ustawia punkt obrotu przy użyciu współrzędnych pikselowych. Działa podobnie do punktu zaczepienia, ale zamiast procentów używa wartości bezwzględnych w pikselach. Opcja zaawansowana - w większości przypadków zaleca się użycie punktu zaczepienia."
-        }
+        } 
     },
     "colorPicker": {
         "current": "Nowy",
