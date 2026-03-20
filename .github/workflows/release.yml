@@ -6,6 +6,8 @@ on:
 jobs:
   Build-and-Deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -17,4 +19,11 @@ jobs:
       run: gulp deploy --buildNum=$GITHUB_SHA
       env:
         BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "build/ctjs*/ct.js*.zip"
+        allowUpdates: true
+        replacesArtifacts: true
+        draft: true
+      env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
