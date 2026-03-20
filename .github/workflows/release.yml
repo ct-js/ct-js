@@ -17,3 +17,4 @@ jobs:
       run: gulp deploy --buildNum=$GITHUB_SHA
       env:
         BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
