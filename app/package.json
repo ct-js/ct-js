@@ -54,6 +54,8 @@
   "dependencies": {
     "@neutralinojs/neu": "^11.0.1",
     "png2icons": "^2.0.1",
-    "resedit-cli": "^2.0.0"
+    "resedit-cli": "^2.0.0",
+    "zip-a-folder": "^6.1.0",
+    "html2pug": "^4.0.0"
   }
 }

@@ -30,7 +30,6 @@
     "@pixi/sound": "^5.2.3",
     "@trapezedev/project": "^7.1.3",
     "@tscole/mic-recorder-to-mp3": "^2.2.4",
-    "adm-zip": "^0.5.16",
     "coffeescript": "^2.7.0",
     "csswring": "7.0.0",
     "dragonbones-tools": "^0.1.2",
@@ -62,11 +61,11 @@
     "sucrase": "^3.35.1",
     "terser": "^5.44.1",
     "ttf2woff": "^2.0.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zip-a-folder": "^6.1.0"
   },
   "devDependencies": {
     "@ct.js/gulp-typescript": "^6.0.0",
-    "@types/adm-zip": "^0.5.7",
     "@types/css-font-loading-module": "0.0.7",
     "@types/fs-extra": "^9.0.13",
     "@types/js-beautify": "^1.14.3",
