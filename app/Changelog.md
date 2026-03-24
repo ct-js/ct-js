@@ -1,3 +1,11 @@
+## v5.3.1
+
+*Tue Mar 24 2026*
+
+### 🐞 Bug fixes
+
+- Main menu: Fix zipping commands ("Export for web" and "Pack project to .zip")
+
 ## v5.3.0
 
 *Thu Mar 19 2026*

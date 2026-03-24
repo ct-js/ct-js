@@ -725,26 +725,9 @@ export const deployItchOnly = async () => {
         }
     }
 };
-/* eslint-enable no-await-in-loop */
-export const sendGithubDraft = async () => {
-    if (nightly) {
-        return; // Do not create github releases for nightlies
-    }
-    const readySteady = (await import('readysteady')).default;
-    const v = pack.version;
-    const draftData = await readySteady({
-        owner: 'ct-js',
-        repo: 'ct-js',
-        // eslint-disable-next-line id-blacklist
-        tag: `v${pack.version}`,
-        force: true,
-        files: platforms.map(platform => `./build/ctjs - v${v}/ct.js v${v} for ${platform[2]}.zip`)
-    });
-    console.log(draftData);
-};
 
 export const deployItch = gulp.series([installButler, deployItchOnly]);
-export const deploy = gulp.series([packages, deployItch, zipPackages, sendGithubDraft]);
+export const deploy = gulp.series([packages, deployItch, zipPackages]);
 
 const launchDevMode = done => {
     watch();
