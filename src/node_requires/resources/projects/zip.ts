@@ -1,9 +1,8 @@
-
 import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import {getWritableDir} from '../../platformUtils';
-import Archive from 'adm-zip';
+import {zip} from 'zip-a-folder';
 
 export const zipProject = async (): Promise<string> => {
     const savePromise = new Promise<void>((resolve) => {
@@ -23,8 +22,6 @@ export const zipProject = async (): Promise<string> => {
     await fs.copy(window.projdir + '.ict', path.join(inDir, sessionStorage.projname));
     await fs.copy(window.projdir, path.join(inDir, sessionStorage.projname.slice(0, -4)));
 
-    const archive = new Archive();
-    await archive.addLocalFolderPromise(inDir, {});
-    await archive.writeZipPromise(outName);
+    await zip(inDir, outName);
     return outName;
 };

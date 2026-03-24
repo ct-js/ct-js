@@ -277,6 +277,7 @@ const bundleIdeScripts = () => esbuild({
         // just breaks when run in a separated context
         'png2icons',
         'html-minifier',
+        'zip-a-folder',
         // Archiver.js breaks when run in a separated context (setImmediate not defined)
         '@neutralinojs/neu',
         // is used for checking if we run ct.js in a dev environment
