@@ -706,7 +706,7 @@
         },
         "blockOptionHeaders": {},
         "blockOptionButtons": {
-          "options": "Options"
+            "options": "Options"
         },
         "blockOptions": {
             "soundVolume": "Volume",
@@ -1065,20 +1065,20 @@
             "scriptsHint": "Scripts created here will be injected in the root of your game and thus will always run at the start of the game. Only JavaScript and TypeScript are supported. Variables and types defined here will be available everywhere in your project."
         },
         "variables": {
-          "heading": "Global variables",
-          "addVariable": "Add a New Variable",
-          "variableName": "Name",
-          "variableType": "Type",
-          "defaultValue": "Default value",
-          "deleteVariable": "Delete the variable",
-          "noVariablesYet": "No variables yet!",
-          "variablesHint": "Variables created here will be available everywhere in your project, and also during debugging in the console.",
-          "boolean": "Boolean",
-          "number": "Number",
-          "string": "String",
-          "raw": "Raw (output as code)",
-          "invalidName": "Invalid name (should start with a letter and contain only latin letters, numbers, and underscores)",
-          "reservedName": "This name is reserved, pick another one"
+            "heading": "Global variables",
+            "addVariable": "Add a New Variable",
+            "variableName": "Name",
+            "variableType": "Type",
+            "defaultValue": "Default value",
+            "deleteVariable": "Delete the variable",
+            "noVariablesYet": "No variables yet!",
+            "variablesHint": "Variables created here will be available everywhere in your project, and also during debugging in the console.",
+            "boolean": "Boolean",
+            "number": "Number",
+            "string": "String",
+            "raw": "Raw (output as code)",
+            "invalidName": "Invalid name (should start with a letter and contain only latin letters, numbers, and underscores)",
+            "reservedName": "This name is reserved, pick another one"
         },
         "export": {
             "heading": "Export settings",
@@ -1895,6 +1895,7 @@
         "loopAnimation": "Loop animation",
         "useBitmapText": "Use bitmap fonts",
         "errorBitmapNotConfigured": "The style you selected is not linked to a typeface that uses a bitmap font. Go to the style, link it to a typeface, and make sure that this typeface is configured to export a bitmap, and apply the changes.",
+        "circularCollisionWarning": "This texture uses a circular collision shape. It is not supported by Button/Panel stretching.",
         "blendModes": {
             "normal": "Normal",
             "add": "Add (burn)",

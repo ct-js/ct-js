@@ -267,6 +267,13 @@ template-editor.aPanel.aView.flexrow(class="{opts.class} {demonstrationmode: dem
                     span.a(onclick="{parent.fixTilingTexture}") 🔧{parent.vocFull.roomBackgrounds.fixBackground}
                     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     span.a(onclick="{parent.dismissTilingWarning}") 🫸{parent.vocFull.roomBackgrounds.dismissWarning}
+                error-notice(
+                    if="{['Button', 'NineSlicePlane'].includes(asset.baseClass) && needsCircularCollisionWarning()}"
+                    target="{refs.texturePicker}"
+                )
+                    | {parent.voc.circularCollisionWarning}
+                    br
+                    span.a(onclick="{parent.dismissCircularCollisionWarning}") 🫸{parent.vocFull.roomBackgrounds.dismissWarning}
                 .aSpacer
                 .relative
                     button.wide.flexrow(onclick="{showbaseClassMenu}")
@@ -452,6 +459,18 @@ template-editor.aPanel.aView.flexrow(class="{opts.class} {demonstrationmode: dem
         this.dismissTilingWarning = () => {
             const tex = resources.getById('texture', this.asset.texture);
             tex.ignoreTiledUse = true;
+            this.update();
+        };
+        this.needsCircularCollisionWarning = () => {
+            if (this.asset.texture === -1 || !this.asset.texture) {
+                return false;
+            }
+            const tex = resources.getById('texture', this.asset.texture);
+            return tex.shape === 'circle' && !tex.ignoreCircularCollisionUse;
+        };
+        this.dismissCircularCollisionWarning = () => {
+            const tex = resources.getById('texture', this.asset.texture);
+            tex.ignoreCircularCollisionUse = true;
             this.update();
         };
 
