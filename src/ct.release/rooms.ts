@@ -322,10 +322,7 @@ export class Room extends PIXI.Container<pixiMod.DisplayObject> {
         return -this.position.x;
     }
     set x(value: number) {
-        if (this.isUi) {
-            this.position.x = value;
-        }
-        this.position.x = -value;
+        this.position.x = this.isUi ? value : -value;
     }
     get y(): number {
         if (this.isUi) {
@@ -334,10 +331,7 @@ export class Room extends PIXI.Container<pixiMod.DisplayObject> {
         return -this.position.y;
     }
     set y(value: number) {
-        if (this.isUi) {
-            this.position.y = value;
-        }
-        this.position.y = -value;
+        this.position.y = this.isUi ? value : -value;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
