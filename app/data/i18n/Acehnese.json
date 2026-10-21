@@ -1,7 +1,7 @@
 {
   "me": {
     "id": "ace",
-    "native": "Bahasa Aceh",
+    "native": "Acehnese",
     "eng": "Acehnese"
   },
   "regionalLinks": {
@@ -843,7 +843,7 @@
       "Seunang that ta kalon teuma!",
       "Selamat teuka lom, Bintang Super!",
       "Kamoe akhe jih ka beudoh. Selamat teuka lom!",
-      "Jeundral Keunobi nyan!",
+      "Jeundral Kenobi nyan!",
       "🖖",
       "Salam, ureueng meujak!",
       "Ohyo, sempai uwu",
@@ -883,7 +883,7 @@
     "loadingProjectError": "Hana jeuet neubuka proyek nyoe kareuna keusalahan lagee nyoe:",
     "homepage": "Laman utama",
     "latestVersion": "Versi $1 ka na .",
-    "forgetProject": "Lupa keu proyek nyoe .",
+    "forgetProject": "Lupakan proyek nyoe .",
     "cloneProject": "Kloning proyek nyoe keu lokasi baro .",
     "browse": "Jeulajah",
     "latest": "Proyek-proyek nyang barô",
